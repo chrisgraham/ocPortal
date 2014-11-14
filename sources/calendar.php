@@ -465,12 +465,23 @@ function get_days_between($initial_start_month, $initial_start_day, $initial_sta
  * Get a list of event types, taking security into account against the current member.
  *
  * @param  ?AUTO_LINK                   The event type to select by default (NULL: none)
+ * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
  * @return tempcode                     The list
  */
-function create_selection_list_event_types($it = null)
+function create_selection_list_event_types($it = null, $updated_since = null)
 {
     $type_list = new Tempcode();
-    $types = $GLOBALS['SITE_DB']->query_select('calendar_types', array('id', 't_title'));
+    $where = '1=1';
+    if (!is_null($updated_since)) {
+        $privacy_join = '';
+        $privacy_where = '';
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('event', 'e', $GLOBALS['FORUM_DRIVER']->get_guest_id());
+        }
+        $where .= ' AND EXISTS(SELECT * FROM ' . get_table_prefix() . 'calendar_events e' . $privacy_join . ' WHERE validated=1 AND e_add_date>' . strval($updated_since) . $privacy_where . ')';
+    }
+    $types = $GLOBALS['SITE_DB']->query('SELECT id,t_title FROM ' . get_table_prefix() . 'calendar_types WHERE ' . $where, null, null, false, true);
     $first_type = null;
     foreach ($types as $i => $type) {
         $types[$i]['t_title_deref'] = get_translated_text($type['t_title']);

@@ -131,21 +131,77 @@ function ocf_get_topic_tree($forum_id = null, $breadcrumbs = null, $title = null
 }
 
 /**
- * Generate a tempcode tree based selection list (ala create_selection_list_*) for choosing a forum OR a map of details. Also capable of getting comma-separated ancester forum lists. Also capable of displaying topic lists in the tree. In other words... this function is incredibly powerful, and complex.
+ * Generate a tempcode tree based selection list for choosing a forum. Also capable of getting comma-separated ancester forum lists.
  *
  * @param  ?MEMBER                      The member that the view privileges are done for (NULL: current member).
  * @param  ?AUTO_LINK                   The forum we are starting from (NULL: capture the whole tree).
- * @param  boolean                      Whether to get a tempcode list (as opposed to a list of maps).
  * @param  ?array                       The forum(s) to select by default (NULL: no preference). Only applies if !$topics_too. An array of AUTO_LINK's (for IDs) or strings (for names).
+ * @param  boolean                      Whether to generate a compound list (a list of all the ancesters, for each point in the forum tree) as well as the tree.
+ * @param  ?integer                     The number of recursive levels to search (NULL: all)
+ * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
+ * @return tempcode                     Forum selection list.
+ */
+function create_selection_list_forum_tree($member_id = null, $base_forum = null, $selected_forum = null, $use_compound_list = false, $levels = null, $updated_since = null)
+{
+    $tree = ocf_get_forum_tree($member_id, $base_forum, '', null, null, $use_compound_list, $levels, $updated_since !== null, $updated_since);
+    if ($use_compound_list) {
+        list($tree) = $tree;
+    }
+
+    // Flatten out
+    for ($i = 0; $i < count($tree); $i++) {
+        array_splice($tree, $i + 1, 0, $tree[$i]['children']);
+    }
+
+    $real_out = '';
+    foreach ($tree as $t) {
+        if (($updated_since !== null) && (($t['updated_since'] === null) || ($t['updated_since'] < $updated_since))) {
+            continue;
+        }
+
+        $selected = false;
+        if (!is_null($selected_forum)) {
+            foreach ($selected_forum as $s) {
+                if ((is_integer($s)) && ($s == $t['id'])) {
+                    $selected = true;
+                }
+                if ((is_string($s)) && ($s == $t['title'])) {
+                    $selected = true;
+                }
+            }
+        }
+
+        $line = do_template('OCF_FORUM_LIST_LINE', array(
+            '_GUID' => '2fb4bd9ed5c875de6155bef588c877f9',
+            'PRE' => $t['breadcrumbs'],
+            'NAME' => $t['title'],
+            'CAT_BIT' => $t['second_cat'],
+        ));
+
+        $real_out .= '<option value="' . (!$use_compound_list ? strval($t['id']) : $t['compound_list']) . '"' . ($selected ? ' selected="selected"' : '') . '>' . $line->evaluate() . '</option>' . "\n";
+    }
+
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($real_out);
+    }
+    return make_string_tempcode($real_out);
+}
+
+/**
+ * Generate a map of details for choosing a forum. Also capable of getting comma-separated ancester forum lists.
+ *
+ * @param  ?MEMBER                      The member that the view privileges are done for (NULL: current member).
+ * @param  ?AUTO_LINK                   The forum we are starting from (NULL: capture the whole tree).
  * @param  string                       The breadcrumbs at this point of the recursion (blank for the start).
  * @param  ?AUTO_LINK                   ID of a forum to skip display/recursion for (NULL: none).
- * @param  ?boolean                     Whether the child forums are ordered alphabetically (NULL: find from DB).
+ * @param  ?array                       Details of the current forum in the recursion (NULL: find from DB).
  * @param  boolean                      Whether to generate a compound list (a list of all the ancesters, for each point in the forum tree) as well as the tree.
  * @param  ?integer                     The number of recursive levels to search (NULL: all)
  * @param  boolean                      Whether to generate tree statistics.
- * @return mixed                        Each tempcode of the tree if $field_format or else a list of maps, OR (if $use_compound_list) a pair of the tempcode and the compound list.
+ * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
+ * @return array                        A list of maps, OR (if $use_compound_list) a pair of the tempcode and the compound list.
  */
-function ocf_get_forum_tree_secure($member_id = null, $base_forum = null, $field_format = false, $selected_forum = null, $breadcrumbs = '', $skip = null, $order_sub_alpha = null, $use_compound_list = false, $levels = null, $do_stats = false)
+function ocf_get_forum_tree($member_id = null, $base_forum = null, $breadcrumbs = '', $skip = null, $forum_details = null, $use_compound_list = false, $levels = null, $do_stats = false, $updated_since = null)
 {
     if (($levels == -1) && (!$use_compound_list)) {
         return $use_compound_list ? array(array(), '') : array();
@@ -156,13 +212,19 @@ function ocf_get_forum_tree_secure($member_id = null, $base_forum = null, $field
     if (is_null($member_id)) {
         $member_id = get_member();
     }
-    if (is_null($order_sub_alpha)) {
+
+    if (is_null($forum_details)) {
         if (is_null($base_forum)) {
-            $order_sub_alpha = false;
+            $forum_details = array('f_order_sub_alpha' => 0); // Optimisation
         } else {
-            $order_sub_alpha = $GLOBALS['FORUM_DB']->query_select_value('f_forums', 'f_order_sub_alpha', array('id' => $base_forum));
+            $_forum_details = $GLOBALS['FORUM_DB']->query_select('f_forums', array('f_order_sub_alpha'), array('id' => $base_forum), '', 1);
+            if (!array_key_exists(0, $_forum_details)) {
+                warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+            }
+            $forum_details = $_forum_details[0];
         }
     }
+    $order_sub_alpha = $forum_details['f_order_sub_alpha'];
 
     $out = array();
     $order = $order_sub_alpha ? 'f_name' : 'f_position,id';
@@ -173,10 +235,10 @@ function ocf_get_forum_tree_secure($member_id = null, $base_forum = null, $field
         $FORUM_TREE_SECURE_CACHE = ($num_forums >= 300); // Mark it as 'huge'
     }
     if ($FORUM_TREE_SECURE_CACHE === true) {
-        $forums = $GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE id IS NOT NULL AND ' . db_string_equal_to('f_redirection', '') . ' AND ' . (is_null($base_forum) ? 'f_parent_forum IS NULL' : ('f_parent_forum=' . strval($base_forum))) . ' ORDER BY f_position', intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
+        $forums = $GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position,f_cache_last_time FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE id IS NOT NULL AND ' . db_string_equal_to('f_redirection', '') . ' AND ' . (is_null($base_forum) ? 'f_parent_forum IS NULL' : ('f_parent_forum=' . strval($base_forum))) . ' ORDER BY f_position', intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
     } else {
         if ((is_null($FORUM_TREE_SECURE_CACHE)) || ($FORUM_TREE_SECURE_CACHE === false)) {
-            $FORUM_TREE_SECURE_CACHE = $GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE id IS NOT NULL AND ' . db_string_equal_to('f_redirection', '') . ' ORDER BY f_position');
+            $FORUM_TREE_SECURE_CACHE = $GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position,f_cache_last_time FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE id IS NOT NULL AND ' . db_string_equal_to('f_redirection', '') . ' ORDER BY f_position');
         }
         foreach ($FORUM_TREE_SECURE_CACHE as $x) {
             if ($x['f_parent_forum'] === $base_forum) {
@@ -186,6 +248,7 @@ function ocf_get_forum_tree_secure($member_id = null, $base_forum = null, $field
     }
     sort_maps_by($forums, $order);
     $compound_list = '';
+    $child_breadcrumbs = ($breadcrumbs == '') ? '' : ($breadcrumbs . ' > ');
     foreach ($forums as $forum) {
         $access = has_category_access($member_id, 'forums', strval($forum['id']));
         $cat_sort_key = '!' . (is_null($forum['f_forum_grouping_id']) ? '' : strval($forum['f_forum_grouping_id']));
@@ -199,70 +262,38 @@ function ocf_get_forum_tree_secure($member_id = null, $base_forum = null, $field
                 }
                 $cat_bit = array_key_exists($forum['f_forum_grouping_id'], $FORUM_GROUPINGS_TITLES_CACHE) ? $FORUM_GROUPINGS_TITLES_CACHE[$forum['f_forum_grouping_id']] : do_lang('NA');
             }
-            if ($field_format) {
-                $pre = ($breadcrumbs == '') ? '' : ($breadcrumbs . ' > ');
-                $below = ocf_get_forum_tree_secure($member_id, $forum['id'], true, $selected_forum, $pre . $forum['f_name'], $skip, $forum['f_order_sub_alpha'], $use_compound_list, null, $do_stats);
-                if ($use_compound_list) {
-                    list($below, $_compound_list) = $below;
-                    $compound_list .= strval($forum['id']) . ',' . $_compound_list;
-                }
-                $selected = false;
-                if (!is_null($selected_forum)) {
-                    foreach ($selected_forum as $s) {
-                        if ((is_integer($s)) && ($s == $forum['id'])) {
-                            $selected = true;
-                        }
-                        if ((is_string($s)) && ($s == $forum['f_name'])) {
-                            $selected = true;
-                        }
-                    }
-                }
-                $line = do_template('OCF_FORUM_LIST_LINE', array('_GUID' => '2fb4bd9ed5c875de6155bef588c877f9', 'PRE' => $pre, 'NAME' => $forum['f_name'], 'CAT_BIT' => $cat_bit));
-                if (!array_key_exists($cat_sort_key, $out)) {
-                    $out[$cat_sort_key] = '';
-                }
 
-                $out[$cat_sort_key] .= '<option value="' . (!$use_compound_list ? strval($forum['id']) : (strval($forum['id']) . ',' . $_compound_list)) . '"' . ($selected ? ' selected="selected"' : '') . '>' . $line->evaluate() . '</option>';
-                if ($levels !== 0) {
-                    $out[$cat_sort_key] .= $below->evaluate();
-                }
-            } else {
-                if ($use_compound_list) {
-                    $below = ocf_get_forum_tree_secure($member_id, $forum['id'], true, $selected_forum, $forum['f_name'], $skip, $forum['f_order_sub_alpha'], $use_compound_list, null, $do_stats);
-                    list($below, $_compound_list) = $below;
-                    $compound_list .= strval($forum['id']) . ',' . $_compound_list;
-                }
-                $element = array('id' => $forum['id'], 'compound_list' => (!$use_compound_list ? strval($forum['id']) : (strval($forum['id']) . ',' . $_compound_list)), 'second_cat' => $cat_bit, 'title' => $forum['f_name'], 'group' => $forum['f_forum_grouping_id'], 'children' => ocf_get_forum_tree_secure($member_id, $forum['id'], false, $selected_forum, $breadcrumbs, $skip, false, false, $levels, $do_stats));
-                if ($do_stats) {
-                    $element['child_count'] = $GLOBALS['FORUM_DB']->query_select_value('f_forums', 'COUNT(*)', array('f_parent_forum' => $forum['id']));
-                }
-                if (!array_key_exists($cat_sort_key, $out)) {
-                    $out[$cat_sort_key] = array();
-                }
-                $out[$cat_sort_key][] = $element;
+            $below = ocf_get_forum_tree($member_id, $forum['id'], $child_breadcrumbs, $skip, $forum, $use_compound_list, $levels, $do_stats, $updated_since);
+            if ($use_compound_list) {
+                list($below, $_compound_list) = $below;
+                $compound_list .= strval($forum['id']) . ',' . $_compound_list;
             }
+
+            $child = array(
+                'id' => $forum['id'],
+                'title' => $forum['f_name'],
+                'breadcrumbs' => $child_breadcrumbs,
+                'compound_list' => (!$use_compound_list ? strval($forum['id']) : (strval($forum['id']) . ',' . $_compound_list)),
+                'second_cat' => $cat_bit,
+                'group' => $forum['f_forum_grouping_id'],
+                'children' => $below,
+            );
+            if ($do_stats) {
+                $child['child_count'] = $GLOBALS['FORUM_DB']->query_select_value('f_forums', 'COUNT(*)', array('f_parent_forum' => $forum['id']));
+                $child['updated_since'] = $forum['f_cache_last_time'];
+            }
+
+            if (!array_key_exists($cat_sort_key, $out)) {
+                $out[$cat_sort_key] = array();
+            }
+            $out[$cat_sort_key][] = $child;
         }
     }
 
     // Up to now we worked into an array, so we could benefit from how it would auto-sort into the grouping>forum-position ordering ocPortal uses. Now we need to unzip it
-    $real_out = mixed();
-    if ($field_format) {
-        $real_out = '';
-        foreach ($out as $str) {
-            $real_out .= $str;
-        }
-    } else {
-        $real_out = array();
-        foreach ($out as $arr) {
-            $real_out = array_merge($real_out, $arr);
-        }
-    }
-
-    if ($field_format) {
-        if ($GLOBALS['XSS_DETECT']) {
-            ocp_mark_as_escaped($real_out);
-        }
-        $real_out = make_string_tempcode($real_out);
+    $real_out = array();
+    foreach ($out as $arr) {
+        $real_out = array_merge($real_out, $arr);
     }
 
     if ($use_compound_list) {

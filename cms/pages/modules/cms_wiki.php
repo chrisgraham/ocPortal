@@ -346,7 +346,7 @@ class Module_cms_wiki
      */
     public function choose_page_to_edit()
     {
-        $list = wiki_show_tree();
+        $list = create_selection_list_wiki_page_tree();
         require_code('form_templates');
         $fields = form_input_list(do_lang_tempcode('_WIKI_PAGE'), '', 'id', $list, null, true);
 
@@ -560,7 +560,7 @@ class Module_cms_wiki
         }
         $post_url = build_url(array('page' => '_SELF', 'id' => get_param('id', false, true), 'redirect' => $redir_url, 'type' => '_edit_tree'), '_SELF');
 
-        $wiki_tree = wiki_show_tree($id, null, '', true, false, true);
+        $wiki_tree = create_selection_list_wiki_page_tree($id, null, '', true, false, true);
 
         require_code('form_templates');
         list($warning_details, $ping_url) = handle_conflict_resolution();

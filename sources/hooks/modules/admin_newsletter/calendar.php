@@ -26,9 +26,10 @@ class Hook_whatsnew_calendar
     /**
      * Find selectable (filterable) categories.
      *
+     * @param  TIME                     The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
      */
-    public function choose_categories()
+    public function choose_categories($updated_since)
     {
         if (!addon_installed('calendar')) {
             return null;
@@ -37,7 +38,8 @@ class Hook_whatsnew_calendar
         require_lang('calendar');
 
         require_code('calendar');
-        return array(create_selection_list_event_types(), do_lang('CALENDAR'));
+        $cats = create_selection_list_event_types(null, $updated_since);
+        return array($cats, do_lang('CALENDAR'));
     }
 
     /**
@@ -82,7 +84,7 @@ class Hook_whatsnew_calendar
             $name = get_translated_text($row['e_title'], null, $lang);
             $description = get_translated_text($row['e_content'], null, $lang);
             $member_id = (is_guest($row['e_submitter'])) ? null : strval($row['e_submitter']);
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '654cafa75ec9f9b8e0e0fb666f28fb37', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'event', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '654cafa75ec9f9b8e0e0fb666f28fb37', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'event', 'CONTENT_ID' => strval($id))));
         }
 
         return array($new, do_lang('CALENDAR', '', '', '', $lang));

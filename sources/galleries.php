@@ -524,7 +524,7 @@ function only_member_galleries_of_id($cat, $member_id, $child_count)
 }
 
 /**
- * Gets a gallery selection tree list, extending deeper from the given category_id, showing all sub(sub...)galleries.
+ * Gets a gallery selection tree list, extending deeper from the given gallery, showing all sub(sub...)galleries.
  *
  * @param  ?ID_TEXT                     The gallery to select by default (NULL: no specific default)
  * @param  ?string                      A function name to filter galleries with (NULL: no filter)
@@ -535,11 +535,12 @@ function only_member_galleries_of_id($cat, $member_id, $child_count)
  * @param  ?MEMBER                      Member we are filtering for (NULL: not needed)
  * @param  boolean                      Whether to only show for what may be added to by the current member
  * @param  boolean                      Whether to only show for what may be edited by the current member
+ * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
  * @return tempcode                     The tree list
  */
-function create_selection_list_gallery_tree($it = null, $filter = null, $must_accept_images = false, $must_accept_videos = false, $purity = false, $use_compound_list = false, $member_id = null, $addable_filter = false, $editable_filter = false)
+function create_selection_list_gallery_tree($it = null, $filter = null, $must_accept_images = false, $must_accept_videos = false, $purity = false, $use_compound_list = false, $member_id = null, $addable_filter = false, $editable_filter = false, $updated_since = null)
 {
-    $tree = get_gallery_tree('root', '', null, false, $filter, $must_accept_images, $must_accept_videos, $purity, $use_compound_list, null, $member_id, $addable_filter, $editable_filter);
+    $tree = get_gallery_tree('root', '', null, $updated_since !== null, $filter, $must_accept_images, $must_accept_videos, $purity, $use_compound_list, null, $member_id, $addable_filter, $editable_filter, $updated_since);
     if ($use_compound_list) {
         $tree = $tree[0];
     }
@@ -550,8 +551,12 @@ function create_selection_list_gallery_tree($it = null, $filter = null, $must_ac
             continue;
         }
 
+        if (($updated_since !== null) && (($category['updated_since'] === null) || ($category['updated_since'] < $updated_since))) {
+            continue;
+        }
+
         $selected = ($category['id'] == $it);
-        $out .= '<option value="' . (!$use_compound_list ? $category['id'] : $category['compound_list']) . '"' . ($selected ? ' selected="selected"' : '') . '>' . escape_html($category['breadcrumbs']) . '</option>';
+        $out .= '<option value="' . (!$use_compound_list ? $category['id'] : $category['compound_list']) . '"' . ($selected ? ' selected="selected"' : '') . '>' . escape_html($category['breadcrumbs']) . '</option>' . "\n";
     }
 
     if ($GLOBALS['XSS_DETECT']) {
@@ -562,11 +567,11 @@ function create_selection_list_gallery_tree($it = null, $filter = null, $must_ac
 }
 
 /**
- * Gets a gallery selection tree list, extending deeper from the given category_id, showing all sub(sub...)galleries.
+ * Gets a gallery selection tree list, extending deeper from the given gallery, showing all sub(sub...)galleries.
  *
  * @param  ?ID_TEXT                     The gallery we are getting the tree starting from (NULL: root)
  * @param  string                       The parent breadcrumbs at this point of the recursion
- * @param  ?array                       The database row for the $category_id gallery (NULL: get it from the DB)
+ * @param  ?array                       The database row for the $gallery gallery (NULL: get it from the DB)
  * @param  boolean                      Whether to include video/image statistics in the returned tree
  * @param  ?string                      A function name to filter galleries with (NULL: no filter)
  * @param  boolean                      Whether displayed galleries must support images
@@ -579,37 +584,38 @@ function create_selection_list_gallery_tree($it = null, $filter = null, $must_ac
  * @param  boolean                      Whether to only show for what may be edited by the current member
  * @return array                        The tree structure, or if $use_compound_list, the tree structure built with pairs containing the compound list in addition to the child branches
  */
-function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_info = null, $do_stats = true, $filter = null, $must_accept_images = false, $must_accept_videos = false, $purity = false, $use_compound_list = false, $levels = null, $member_id = null, $addable_filter = false, $editable_filter = false)
+function get_gallery_tree($gallery = 'root', $breadcrumbs = '', $gallery_info = null, $do_stats = false, $filter = null, $must_accept_images = false, $must_accept_videos = false, $purity = false, $use_compound_list = false, $levels = null, $member_id = null, $addable_filter = false, $editable_filter = false)
 {
     if ($levels == -1) {
         return $use_compound_list ? array(array(), '') : array();
     }
 
-    if (is_null($category_id)) {
-        $category_id = 'root';
+    if (is_null($gallery)) {
+        $gallery = 'root';
     }
 
-    if (!has_category_access(get_member(), 'galleries', $category_id)) {
+    if (!has_category_access(get_member(), 'galleries', $gallery)) {
         return $use_compound_list ? array(array(), '') : array();
     }
 
-    // Put our title onto our breadcrumbs
     if (is_null($gallery_info)) {
-        $_gallery_info = $GLOBALS['SITE_DB']->query_select('galleries', array('fullname', 'is_member_synched', 'accept_images', 'accept_videos'), array('name' => $category_id), '', 1);
+        $_gallery_info = $GLOBALS['SITE_DB']->query_select('galleries', array('fullname', 'is_member_synched', 'accept_images', 'accept_videos'), array('name' => $gallery), '', 1);
         if (!array_key_exists(0, $_gallery_info)) {
-            warn_exit(do_lang_tempcode('_MISSING_RESOURCE', escape_html('gallery:' . $category_id)));
+            warn_exit(do_lang_tempcode('_MISSING_RESOURCE', escape_html('gallery:' . $gallery)));
         }
         $gallery_info = $_gallery_info[0];
     }
+
     $title = get_translated_text($gallery_info['fullname']);
+    $breadcrumbs .= $title;
+
     $is_member_synched = $gallery_info['is_member_synched'] == 1;
     $accept_images = $gallery_info['accept_images'] == 1;
     $accept_videos = $gallery_info['accept_videos'] == 1;
-    $breadcrumbs .= $title;
 
     $children = array();
     $sub = false;
-    $query = 'FROM ' . get_table_prefix() . 'galleries g WHERE ' . db_string_equal_to('parent_id', $category_id);
+    $query = 'FROM ' . get_table_prefix() . 'galleries g WHERE ' . db_string_equal_to('parent_id', $gallery);
     if ((!is_null($filter)) && (!is_callable($filter))) {
         require_code('ocfiltering');
         $ocfilter = ocfilter_to_sqlfragment($filter, 'name', 'galleries', 'parent_id', 'parent_id', 'name', false, false);
@@ -620,20 +626,20 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
     } else {
         $rows = $GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname ' . $query . ' ORDER BY ' . $GLOBALS['SITE_DB']->translate_field_ref('fullname') . ' ASC', null, null, false, false, array('fullname' => 'SHORT_TRANS__COMCODE'));
     }
-    if (((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter, array($category_id, $member_id, count($rows))))) && ((!$must_accept_images) || (($accept_images) && (!$is_member_synched))) && ((!$must_accept_videos) || (($accept_videos) && (!$is_member_synched)))) {
+    if (((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter, array($gallery, $member_id, count($rows))))) && ((!$must_accept_images) || (($accept_images) && (!$is_member_synched))) && ((!$must_accept_videos) || (($accept_videos) && (!$is_member_synched)))) {
         // We'll be putting all children in this entire tree into a single list
-        $children[0]['id'] = $category_id;
-        $children[0]['breadcrumbs'] = $breadcrumbs;
+        $children[0]['id'] = $gallery;
         $children[0]['title'] = $title;
+        $children[0]['breadcrumbs'] = $breadcrumbs;
         $children[0]['accept_images'] = $gallery_info['accept_images'];
         $children[0]['accept_videos'] = $gallery_info['accept_videos'];
         $children[0]['is_member_synched'] = $gallery_info['is_member_synched'];
         if ($addable_filter) {
-            $children[0]['addable'] = (can_submit_to_gallery($category_id) !== false) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries', array('galleries', $category_id)));
+            $children[0]['addable'] = (can_submit_to_gallery($gallery) !== false) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries', array('galleries', $gallery)));
         }
         if ($editable_filter) {
-            $can_submit = can_submit_to_gallery($category_id);
-            $children[0]['editable'] = has_edit_permission('cat_mid', get_member(), ($can_submit === false) ? null : $can_submit, 'cms_galleries', array('galleries', $category_id));
+            $can_submit = can_submit_to_gallery($gallery);
+            $children[0]['editable'] = has_edit_permission('cat_mid', get_member(), ($can_submit === false) ? null : $can_submit, 'cms_galleries', array('galleries', $gallery));
         }
         if ($do_stats) {
             $good_row_count = 0;
@@ -644,10 +650,13 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
             }
             $children[0]['child_count'] = $good_row_count;
             if (($good_row_count == 0) && (!$purity) && ($gallery_info['is_member_synched'])) {
-                $children[0]['child_count'] = 1; // XHTMLXHTML
+                $children[0]['child_count'] = 1;
             }
-            $children[0]['video_count'] = $GLOBALS['SITE_DB']->query_select_value('videos', 'COUNT(*)', array('cat' => $category_id));
-            $children[0]['image_count'] = $GLOBALS['SITE_DB']->query_select_value('images', 'COUNT(*)', array('cat' => $category_id));
+            $video_stats = $GLOBALS['SITE_DB']->query_select('videos', array('COUNT(*) AS video_count', 'MAX(add_date) AS updated_since'), array('cat' => $gallery));
+            $image_stats = $GLOBALS['SITE_DB']->query_select('images', array('COUNT(*) AS image_count', 'MAX(add_date) AS updated_since'), array('cat' => $gallery));
+            $children[0]['video_count'] = $video_stats[0]['video_count'];
+            $children[0]['image_count'] = $image_stats[0]['image_count'];
+            $children[0]['updated_since'] = @max($video_stats[0]['updated_since'], $image_stats[0]['updated_since']);
         }
         $sub = true;
     }
@@ -655,10 +664,10 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
     $can_submit = mixed();
 
     // Children of this category
-    $breadcrumbs .= ' > ';
+    $child_breadcrumbs = ($breadcrumbs == '') ? '' : ($breadcrumbs . ' > ');
     $found_own_gallery = false;
     $found_member_galleries = array($GLOBALS['FORUM_DRIVER']->get_guest_id() => 1);
-    $compound_list = $category_id . ',';
+    $compound_list = $gallery . ',';
     foreach ($rows as $child) {
         if ($child['name'] == 'root') {
             continue;
@@ -672,7 +681,6 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
 
         if (($levels !== 0) || ($use_compound_list)) {
             $child_id = $child['name'];
-            $child_breadcrumbs = $breadcrumbs;
 
             $child_children = get_gallery_tree($child_id, $child_breadcrumbs, $child, $do_stats, $filter, $must_accept_images, $must_accept_videos, $purity, $use_compound_list, is_null($levels) ? null : ($levels - 1), $member_id, $addable_filter, $editable_filter);
             if ($use_compound_list) {
@@ -703,7 +711,7 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
                     $member = $_member['id'];
                     $username = $_member['m_username'];
 
-                    $this_category_id = 'member_' . strval($member) . '_' . $category_id;
+                    $this_gallery = 'member_' . strval($member) . '_' . $gallery;
                     if ($member == get_member()) {
                         $has_permission = true;
                     } else {
@@ -728,17 +736,20 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
                             }
                         }
                     }
-                    if (($has_permission) && (!array_key_exists($member, $found_member_galleries)) && ((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter, array($this_category_id, $member_id, 0))))) {
+                    if (($has_permission) && (!array_key_exists($member, $found_member_galleries)) && ((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter, array($this_gallery, $member_id, 0))))) {
                         $own_gallery = array();
-                        $own_gallery['id'] = $this_category_id;
+                        $own_gallery['id'] = $this_gallery;
                         if ($title == do_lang('GALLERIES_HOME')) {
                             $title = do_lang('GALLERY');
                         }
                         $this_title = do_lang('NEW_PERSONAL_GALLERY_OF', $username, $title);
                         $own_gallery['breadcrumbs'] = $breadcrumbs . $this_title;
-                        $own_gallery['video_count'] = 0;
-                        $own_gallery['image_count'] = 0;
-                        $own_gallery['child_count'] = 0;
+                        if ($do_stats) {
+                            $own_gallery['video_count'] = 0;
+                            $own_gallery['image_count'] = 0;
+                            $own_gallery['child_count'] = 0;
+                            $own_gallery['updated_since'] = 0;
+                        }
                         $own_gallery['title'] = $this_title;
                         $own_gallery['accept_images'] = $gallery_info['accept_images'];
                         $own_gallery['accept_videos'] = $gallery_info['accept_videos'];
@@ -756,18 +767,21 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
         }
 
         if (((!$done_for_all) || (!$found_own_gallery)) && (!array_key_exists(get_member(), $found_member_galleries)) && (!is_guest()) && (!$purity) && (has_privilege(get_member(), 'have_personal_category'))) {
-            $this_category_id = 'member_' . strval(get_member()) . '_' . $category_id;
-            if ((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter, array($this_category_id, $member_id, 0)))) {
+            $this_gallery = 'member_' . strval(get_member()) . '_' . $gallery;
+            if ((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter, array($this_gallery, $member_id, 0)))) {
                 $own_gallery = array();
-                $own_gallery['id'] = $this_category_id;
+                $own_gallery['id'] = $this_gallery;
                 if ($title == do_lang('GALLERIES_HOME')) {
                     $title = do_lang('GALLERY');
                 }
                 $this_title = do_lang('NEW_PERSONAL_GALLERY_OF', $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true), $title);
                 $own_gallery['breadcrumbs'] = $breadcrumbs . $this_title;
-                $own_gallery['video_count'] = 0;
-                $own_gallery['image_count'] = 0;
-                $own_gallery['child_count'] = 0;
+                if ($do_stats) {
+                    $own_gallery['video_count'] = 0;
+                    $own_gallery['image_count'] = 0;
+                    $own_gallery['child_count'] = 0;
+                    $own_gallery['updated_since'] = 0;
+                }
                 $own_gallery['title'] = $this_title;
                 $own_gallery['accept_images'] = $gallery_info['accept_images'];
                 $own_gallery['accept_videos'] = $gallery_info['accept_videos'];
@@ -825,40 +839,40 @@ function can_submit_to_gallery($name)
  * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode                     The navigation element
  */
-function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir = true, $zone = '', $attach_to_url_filter = false)
+function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = true, $zone = '', $attach_to_url_filter = false)
 {
     if (is_null($root)) {
         $root = 'root';
     }
 
-    if ($category_id == '') {
-        $category_id = 'root'; // To fix corrupt data
+    if ($gallery == '') {
+        $gallery = 'root'; // To fix corrupt data
     }
 
-    $url_map = array('page' => 'galleries', 'type' => 'misc', 'id' => $category_id, 'keep_gallery_root' => ($root == 'root') ? null : $root);
+    $url_map = array('page' => 'galleries', 'type' => 'misc', 'id' => $gallery, 'keep_gallery_root' => ($root == 'root') ? null : $root);
     if (get_page_name() == 'galleries') {
         $url_map += propagate_ocselect();
     }
     $url = build_url($url_map, $zone);
 
-    if (($category_id == $root) || ($category_id == 'root')) {
+    if (($gallery == $root) || ($gallery == 'root')) {
         if ($no_link_for_me_sir) {
             return new Tempcode();
         }
-        $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries', 'fullname', array('name' => $category_id)));
+        $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries', 'fullname', array('name' => $gallery)));
         return hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up');
     }
 
     global $PT_PAIR_CACHE_G;
-    if (!array_key_exists($category_id, $PT_PAIR_CACHE_G)) {
-        $category_rows = $GLOBALS['SITE_DB']->query_select('galleries', array('parent_id', 'fullname'), array('name' => $category_id), '', 1);
+    if (!array_key_exists($gallery, $PT_PAIR_CACHE_G)) {
+        $category_rows = $GLOBALS['SITE_DB']->query_select('galleries', array('parent_id', 'fullname'), array('name' => $gallery), '', 1);
         if (!array_key_exists(0, $category_rows)) {
             return new Tempcode();
-        }//fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html($category_id)));
-        $PT_PAIR_CACHE_G[$category_id] = $category_rows[0];
+        }//fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html($gallery)));
+        $PT_PAIR_CACHE_G[$gallery] = $category_rows[0];
     }
 
-    $title = get_translated_text($PT_PAIR_CACHE_G[$category_id]['fullname']);
+    $title = get_translated_text($PT_PAIR_CACHE_G[$gallery]['fullname']);
     if (!$no_link_for_me_sir) {
         $tpl_url = do_template('BREADCRUMB_SEPARATOR');
         $tpl_url->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
@@ -866,12 +880,12 @@ function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir =
         $tpl_url = new Tempcode();
     }
 
-    if ($PT_PAIR_CACHE_G[$category_id]['parent_id'] == $category_id) {
-        fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN', escape_html($category_id)));
+    if ($PT_PAIR_CACHE_G[$gallery]['parent_id'] == $gallery) {
+        fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN', escape_html($gallery)));
     }
 
     if ((get_option('personal_under_members') == '1') && (get_forum_type() == 'ocf')) {
-        $owner = get_member_id_from_gallery_name($category_id, null, true);
+        $owner = get_member_id_from_gallery_name($gallery, null, true);
         if (!is_null($owner)) {
             $below = new Tempcode();
             foreach (array(array('_SEARCH:members:misc', do_lang_tempcode('MEMBERS')), array('_SEARCH:members:view:' . strval($owner) . '#tab__galleries', do_lang_tempcode('ocf:MEMBER_PROFILE', escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner, true))))) as $i => $bits) {
@@ -891,7 +905,7 @@ function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir =
         }
     }
 
-    $below = gallery_breadcrumbs($PT_PAIR_CACHE_G[$category_id]['parent_id'], $root, false, $zone, $attach_to_url_filter);
+    $below = gallery_breadcrumbs($PT_PAIR_CACHE_G[$gallery]['parent_id'], $root, false, $zone, $attach_to_url_filter);
 
     $below->attach($tpl_url);
     return $below;
@@ -920,7 +934,7 @@ function create_selection_list_gallery_content_tree($table, $it = null, $submitt
         foreach ($gallery['entries'] as $eid => $etitle) {
             $selected = ($eid == $it);
             $line = do_template('GALLERY_ENTRY_LIST_LINE', array('_GUID' => '5a6fac8a768e049f9cc6c2d4ec77eeca', 'BREADCRUMBS' => $gallery['breadcrumbs'], 'URL' => $etitle));
-            $out .= '<option value="' . (!$use_compound_list ? strval($eid) : $gallery['compound_list']) . '"' . ($selected ? 'selected="selected"' : '') . '>' . $line->evaluate() . '</option>';
+            $out .= '<option value="' . (!$use_compound_list ? strval($eid) : $gallery['compound_list']) . '"' . ($selected ? 'selected="selected"' : '') . '>' . $line->evaluate() . '</option>' . "\n";
         }
     }
 

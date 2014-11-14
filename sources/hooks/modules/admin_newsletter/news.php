@@ -26,9 +26,10 @@ class Hook_whatsnew_news
     /**
      * Find selectable (filterable) categories.
      *
+     * @param  TIME                     The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
      */
-    public function choose_categories()
+    public function choose_categories($updated_since)
     {
         if (!addon_installed('news')) {
             return null;
@@ -37,7 +38,8 @@ class Hook_whatsnew_news
         require_lang('news');
 
         require_code('news');
-        return array(create_selection_list_news_categories(null, false, false, true), do_lang('NEWS'));
+        $cats = create_selection_list_news_categories(null, false, false, true, null, false, $updated_since);
+        return array($cats, do_lang('NEWS'));
     }
 
     /**
@@ -97,7 +99,7 @@ class Hook_whatsnew_news
             } else {
                 $thumbnail = mixed();
             }
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '4eaf5ec00db1f0b89cef5120c2486521', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'news', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '4eaf5ec00db1f0b89cef5120c2486521', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'news', 'CONTENT_ID' => strval($id))));
         }
 
         return array($new, do_lang('NEWS', '', '', '', $lang));

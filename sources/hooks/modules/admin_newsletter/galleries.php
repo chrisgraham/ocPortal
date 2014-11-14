@@ -26,9 +26,10 @@ class Hook_whatsnew_galleries
     /**
      * Find selectable (filterable) categories.
      *
+     * @param  TIME                     The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
      */
-    public function choose_categories()
+    public function choose_categories($updated_since)
     {
         if (!addon_installed('galleries')) {
             return null;
@@ -37,7 +38,8 @@ class Hook_whatsnew_galleries
         require_lang('galleries');
 
         require_code('galleries');
-        return array(create_selection_list_gallery_tree(null, null, false, false, true), do_lang('GALLERIES'));
+        $cats = create_selection_list_gallery_tree(null, null, false, false, true, false, null, false, false, $updated_since);
+        return array($cats, do_lang('GALLERIES'));
     }
 
     /**
@@ -109,7 +111,7 @@ class Hook_whatsnew_galleries
             } else {
                 $thumbnail = mixed();
             }
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => 'dfe5850aa67c0cd00ff7d465248b87a5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'video', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => 'dfe5850aa67c0cd00ff7d465248b87a5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'video', 'CONTENT_ID' => strval($id))));
         }
 
         return array($new, do_lang('GALLERIES', '', '', '', $lang));

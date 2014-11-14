@@ -292,9 +292,10 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
  * @param  ?ID_TEXT                     The zone in the list to select by default (NULL: use first)
  * @param  ?array                       A list of zone to not put into the list (NULL: none to skip)
  * @param  ?array                       A reordering (NULL: no reordering)
+ * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
  * @return tempcode                     The list
  */
-function create_selection_list_zones($sel = null, $no_go = null, $reorder = null)
+function create_selection_list_zones($sel = null, $no_go = null, $reorder = null, $updated_since = null)
 {
     if (is_null($no_go)) {
         $no_go = array();
@@ -304,7 +305,15 @@ function create_selection_list_zones($sel = null, $no_go = null, $reorder = null
         $sel = '';
     }
 
-    $zones = find_all_zones(false, true);
+    if (!is_null($updated_since)) {
+        $rows = $GLOBALS['SITE_DB']->query('SELECT zone_name,zone_title FROM ' . get_table_prefix() . 'zones z WHERE EXISTS (SELECT * FROM ' . get_table_prefix() . 'comcode_pages c WHERE z.zone_name=c.the_zone AND p_add_date>' . strval($updated_since) . ') ORDER BY zone_name');
+        $zones = array();
+        foreach ($rows as $row) {
+            $zones[] = array($row['zone_name'], get_translated_text($row['zone_title']));
+        }
+    } else {
+        $zones = find_all_zones(false, true);
+    }
     $content = new Tempcode();
     if (!is_null($reorder)) {
         $_zones_a = array();

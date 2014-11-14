@@ -190,9 +190,10 @@ function render_news_category_box($row, $zone = '_SEARCH', $give_context = true,
  * @param  boolean                      Whether to limit to only existing cats (otherwise we dynamically add unstarted blogs)
  * @param  ?boolean                     Whether to limit to only show blog categories (NULL: don't care, true: blogs only, false: no blogs)
  * @param  boolean                      Whether to prefer to choose a non-blog category as the default
+ * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
  * @return tempcode                     The tempcode for the news category select list
  */
-function create_selection_list_news_categories($it = null, $show_all_personal_categories = false, $addable_filter = false, $only_existing = false, $only_blogs = null, $prefer_not_blog_selected = false)
+function create_selection_list_news_categories($it = null, $show_all_personal_categories = false, $addable_filter = false, $only_existing = false, $only_blogs = null, $prefer_not_blog_selected = false, $updated_since = null)
 {
     if (!is_array($it)) {
         $it = array($it);
@@ -205,7 +206,16 @@ function create_selection_list_news_categories($it = null, $show_all_personal_ca
     } else {
         $where = 'WHERE 1=1';
     }
-    $count = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'news_categories ' . $where . ' ORDER BY id');
+    if (!is_null($updated_since)) {
+        $privacy_join = '';
+        $privacy_where = '';
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('news', 'n', $GLOBALS['FORUM_DRIVER']->get_guest_id());
+        }
+        $where .= ' AND EXISTS(SELECT * FROM ' . get_table_prefix() . 'news n LEFT JOIN ' . get_table_prefix() . 'news_category_entries ON news_entry=id' . $privacy_join . ' WHERE validated=1 AND date_and_time>' . strval($updated_since) . $privacy_where . ')';
+    }
+    $count = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'news_categories c ' . $where . ' ORDER BY id');
     if ($count > 500) { // Uh oh, loads, need to limit things more
         $where .= ' AND (nc_owner IS NULL OR nc_owner=' . strval(get_member()) . ')';
     }

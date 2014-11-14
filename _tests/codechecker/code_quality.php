@@ -1824,7 +1824,7 @@ function check_expression($e, $assignment = false, $equate_false = false, $funct
                 check_expression($param, false, false, $function_guard);
             }
             if (count($inner[2]) != 0) {
-                check_call(array('CALL_METHOD', $inner[1], $inner[2]), $c_pos, $inner[1], $function_guard);
+                check_call(array('CALL_METHOD', '__construct', $inner[2]), $c_pos, $inner[1], $function_guard);
             }
             if ($inner[1] == 'Tempcode') {
                 return 'tempcode';

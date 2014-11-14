@@ -56,7 +56,7 @@ class Hook_whatsnew_quiz
             $name = get_translated_text($row['q_name'], null, $lang);
             $description = get_translated_text($row['q_start_text'], null, $lang);
             $member_id = null;
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '1a8cad8defc5b92eded5aee376250ae5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'quiz', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '1a8cad8defc5b92eded5aee376250ae5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'quiz', 'CONTENT_ID' => strval($id))));
         }
 
         return array($new, do_lang('QUIZZES', '', '', '', $lang));

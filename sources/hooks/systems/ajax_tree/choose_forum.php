@@ -40,7 +40,7 @@ class Hook_choose_forum
         $addable_filter = array_key_exists('addable_filter', $options) ? ($options['addable_filter']) : false;
         $stripped_id = ($compound_list ? preg_replace('#,.*$#', '', $id) : $id);
 
-        $tree = ocf_get_forum_tree_secure(null, is_null($id) ? null : intval($id), false, null, '', null, null, $compound_list, 1, true);
+        $tree = ocf_get_forum_tree(null, is_null($id) ? null : intval($id), '', null, null, $compound_list, 1, true);
 
         $levels_to_expand = array_key_exists('levels_to_expand', $options) ? ($options['levels_to_expand']) : intval(get_long_value('levels_to_expand__' . substr(get_class($this), 5)));
         $options['levels_to_expand'] = max(0, $levels_to_expand - 1);
@@ -113,7 +113,7 @@ class Hook_choose_forum
         require_code('ocf_forums');
         require_code('ocf_forums2');
 
-        $tree = ocf_get_forum_tree_secure(null, null, true, is_null($it) ? null : array(intval($it)), '', null, null, $compound_list, null, false);
+        $tree = create_selection_list_forum_tree(null, null, is_null($it) ? null : array(intval($it)), '', null, null, $compound_list, null, false);
 
         if ($compound_list) {
             list($tree,) = $tree;

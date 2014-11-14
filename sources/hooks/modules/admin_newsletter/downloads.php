@@ -26,9 +26,10 @@ class Hook_whatsnew_downloads
     /**
      * Find selectable (filterable) categories.
      *
+     * @param  TIME                     The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
      */
-    public function choose_categories()
+    public function choose_categories($updated_since)
     {
         if (!addon_installed('downloads')) {
             return null;
@@ -37,7 +38,9 @@ class Hook_whatsnew_downloads
         require_lang('downloads');
 
         require_code('downloads');
-        return array(create_selection_list_download_category_tree(), do_lang('SECTION_DOWNLOADS'));
+        $cats = create_selection_list_download_category_tree(null, false, false, $updated_since);
+
+        return array($cats, do_lang('SECTION_DOWNLOADS'));
     }
 
     /**
@@ -96,7 +99,7 @@ class Hook_whatsnew_downloads
                     }
                 }
             }
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => 'bbd85ed54500b9d6df998e3c835b45e9', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'download', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => 'bbd85ed54500b9d6df998e3c835b45e9', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'download', 'CONTENT_ID' => strval($id))));
         }
 
         return array($new, do_lang('SECTION_DOWNLOADS', '', '', '', $lang));

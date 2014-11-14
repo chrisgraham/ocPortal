@@ -26,16 +26,18 @@ class Hook_whatsnew_ocf_forumview
     /**
      * Find selectable (filterable) categories.
      *
+     * @param  TIME                     The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
      */
-    public function choose_categories()
+    public function choose_categories($updated_since)
     {
         if (get_forum_type() != 'ocf') {
             return null;
         }
 
         require_code('ocf_forums2');
-        return array(ocf_get_forum_tree_secure(null, null, true), do_lang('SECTION_FORUMS'));
+        $cats = create_selection_list_forum_tree(null, null, null, false, null, $updated_since);
+        return array($cats, do_lang('SECTION_FORUMS'));
     }
 
     /**
@@ -69,7 +71,7 @@ class Hook_whatsnew_ocf_forumview
                 $url = $_url->evaluate();
                 $name = $row['t_cache_first_title'];
                 $member_id = (is_guest($row['t_cache_first_member_id'])) ? null : strval($row['t_cache_first_member_id']);
-                $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '14a328f973ac44eb54aa9b31e5a4ae34', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'CONTENT_TYPE' => 'topic', 'CONTENT_ID' => strval($id))));
+                $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '14a328f973ac44eb54aa9b31e5a4ae34', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'CONTENT_TYPE' => 'topic', 'CONTENT_ID' => strval($id))));
             }
         }
 

@@ -24,14 +24,16 @@
 class Hook_whatsnew_comcode_pages
 {
     /**
-     * Run function for newsletter hooks.
+     * Find selectable (filterable) categories.
      *
-     * @return array                    Tuple of result details: HTML list of all types that can be choosed, title for selection list
+     * @param  TIME                     The time that there must be entries found newer than
+     * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
      */
-    public function choose_categories()
+    public function choose_categories($updated_since)
     {
         require_code('zones3');
-        return array(create_selection_list_zones(), do_lang('PAGES'));
+        $cats = create_selection_list_zones(null, null, null, $updated_since);
+        return array($cats, do_lang('PAGES'));
     }
 
     /**
@@ -101,7 +103,7 @@ class Hook_whatsnew_comcode_pages
                 if (array_key_exists($id, $rows2)) {
                     $description = get_translated_text($rows2[$id]['meta_description']);
                 }
-                $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '67f165847dacd54d2965686d561b57ee', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'comcode_page', 'CONTENT_ID' => $zone . ':' . $page)));
+                $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '67f165847dacd54d2965686d561b57ee', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'comcode_page', 'CONTENT_ID' => $zone . ':' . $page)));
             }
         }
 

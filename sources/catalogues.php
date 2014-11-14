@@ -1060,50 +1060,6 @@ function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root
 }
 
 /**
- * Get a nice, formatted, XHTML list of all the catalogues.
- *
- * @param  ?ID_TEXT                     The name of the currently selected catalogue (NULL: none selected)
- * @param  boolean                      If there are too many to list prefer to get ones with entries rather than just the newest
- * @param  boolean                      Whether to only show catalogues that can be submitted to
- * @return tempcode                     Catalogue selection list
- */
-function create_selection_list_catalogues($it = null, $prefer_ones_with_entries = false, $only_submittable = false)
-{
-    $query = 'SELECT c.* FROM ' . get_table_prefix() . 'catalogues c';
-    if ($prefer_ones_with_entries) {
-        if (can_arbitrary_groupby()) {
-            $query .= ' JOIN ' . get_table_prefix() . 'catalogue_entries e ON e.c_name=c.c_name GROUP BY c.c_name';
-        }
-    }
-    $query .= ' ORDER BY c_add_date DESC';
-    $rows = $GLOBALS['SITE_DB']->query($query, intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
-    if (count($rows) == intval(get_option('general_safety_listing_limit'))) {
-        attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
-    }
-    $out = new Tempcode();
-    foreach ($rows as $row) {
-        if (substr($row['c_name'], 0, 1) == '_') {
-            continue;
-        }
-
-        if (!has_category_access(get_member(), 'catalogues_catalogue', $row['c_name'])) {
-            continue;
-        }
-
-        if (($only_submittable) && (!has_privilege(get_member(), 'submit_midrange_content', 'cms_catalogues', array('catalogues_catalogue', $row['c_name'])))) {
-            continue;
-        }
-
-        if (($row['c_ecommerce'] == 0) || (addon_installed('shopping'))) {
-            $selected = ($row['c_name'] == $it);
-            $out->attach(form_input_list_entry($row['c_name'], $selected, get_translated_text($row['c_title'])));
-        }
-    }
-
-    return $out;
-}
-
-/**
  * Get the values for the specified fields, for the stated catalogue entry.
  *
  * @param  ?ID_TEXT                     The catalogue name we are getting an entry in (NULL: lookup)
@@ -1315,6 +1271,202 @@ function _get_catalogue_entry_field($field_id, $entry_id, $type = 'short', $only
 }
 
 /**
+ * Get a nice, formatted, XHTML list of all the catalogues.
+ *
+ * @param  ?ID_TEXT                     The name of the currently selected catalogue (NULL: none selected)
+ * @param  boolean                      If there are too many to list prefer to get ones with entries rather than just the newest
+ * @param  boolean                      Whether to only show catalogues that can be submitted to
+ * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
+ * @return tempcode                     Catalogue selection list
+ */
+function create_selection_list_catalogues($it = null, $prefer_ones_with_entries = false, $only_submittable = false, $updated_since = null)
+{
+    $query = 'SELECT c.* FROM ' . get_table_prefix() . 'catalogues c';
+    if (!is_null($updated_since)) {
+        $privacy_join = '';
+        $privacy_where = '';
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('catalogue_entry', 'e', $GLOBALS['FORUM_DRIVER']->get_guest_id());
+        }
+        $query .= ' WHERE EXISTS(SELECT * FROM ' . get_table_prefix() . 'catalogue_entries e' . $privacy_join . ' WHERE ce_validated=1 AND ce_add_date>' . strval($updated_since) . $privacy_where . ')';
+    } else {
+        if ($prefer_ones_with_entries) {
+            if (can_arbitrary_groupby()) {
+                $query .= ' JOIN ' . get_table_prefix() . 'catalogue_entries e ON e.c_name=c.c_name GROUP BY c.c_name';
+            }
+        }
+    }
+    $query .= ' ORDER BY c_add_date DESC';
+    $rows = $GLOBALS['SITE_DB']->query($query, intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
+    if (count($rows) == intval(get_option('general_safety_listing_limit'))) {
+        attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
+    }
+    $out = new Tempcode();
+    foreach ($rows as $row) {
+        if (substr($row['c_name'], 0, 1) == '_') {
+            continue;
+        }
+
+        if (!has_category_access(get_member(), 'catalogues_catalogue', $row['c_name'])) {
+            continue;
+        }
+
+        if (($only_submittable) && (!has_privilege(get_member(), 'submit_midrange_content', 'cms_catalogues', array('catalogues_catalogue', $row['c_name'])))) {
+            continue;
+        }
+
+        if (($row['c_ecommerce'] == 0) || (addon_installed('shopping'))) {
+            $selected = ($row['c_name'] == $it);
+            $out->attach(form_input_list_entry($row['c_name'], $selected, get_translated_text($row['c_title'])));
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Get a nice, formatted XHTML list extending from the root, and showing all subcategories, and their subcategories (ad infinitum).
+ *
+ * @param  ID_TEXT                      The catalogue name
+ * @param  ?AUTO_LINK                   The currently selected entry (NULL: none)
+ * @param  boolean                      Whether to only show for what may be added to by the current member
+ * @param  boolean                      Whether to make the list elements store comma-separated child lists instead of IDs
+ * @return tempcode                     The list of categories
+ */
+function create_selection_list_catalogue_category_tree($catalogue_name, $it = null, $addable_filter = false, $use_compound_list = false)
+{
+    if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)', array('c_name' => $catalogue_name)) > 1000) {
+        return new Tempcode(); // Too many!
+    }
+
+    $tree = array();
+    $temp_rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('id', 'cc_title'), array('c_name' => $catalogue_name, 'cc_parent_id' => null), 'ORDER BY id DESC', intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);
+    if (count($temp_rows) == intval(get_option('general_safety_listing_limit'))) {
+        attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
+    }
+    foreach ($temp_rows as $row) {
+        $category_id = $row['id'];
+        $title = get_translated_text($row['cc_title']);
+        $subtree = get_catalogue_category_tree($catalogue_name, $category_id, null, $title, null, $addable_filter, $use_compound_list);
+        if (($use_compound_list) && (array_key_exists(0, $subtree))) {
+            $subtree = $subtree[0];
+        }
+        $tree = array_merge($tree, $subtree);
+    }
+
+    $out = new Tempcode();
+    foreach ($tree as $category) {
+        if (($addable_filter) && (!$category['addable'])) {
+            continue;
+        }
+
+        $selected = ($category['id'] == $it);
+        $line = do_template('CATALOGUE_CATEGORIES_LIST_LINE', array('_GUID' => '9f6bfc4f28c154c8f5d8887ce0d47c1c', 'BREADCRUMBS' => $category['breadcrumbs'], 'COUNT' => integer_format($category['entries_count'])));
+        $out->attach(form_input_list_entry(!$use_compound_list ? strval($category['id']) : $category['compound_list'], $selected, protect_from_escaping($line->evaluate())));
+    }
+
+    return $out;
+}
+
+/**
+ * Get a list of maps containing all the subcategories, and path information, of the specified category - and those beneath it, recursively.
+ *
+ * @param  ID_TEXT                      The catalogue name
+ * @param  ?AUTO_LINK                   The category being at the root of our recursion (NULL: true root category)
+ * @param  ?tempcode                    The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
+ * @param  ?string                      The category details of the $category_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs details
+ * @param  ?integer                     The number of recursive levels to search (NULL: all)
+ * @param  boolean                      Whether to only show for what may be added to by the current member
+ * @param  boolean                      Whether to make the list elements store comma-separated child lists instead of IDs
+ * @param  boolean                      Whether to collect entry counts with our tree information
+ * @return array                        A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title), and 'entries_count' (the number of entries in the category).
+ */
+function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs = null, $category_details = null, $levels = null, $addable_filter = false, $use_compound_list = false, $do_stats = false)
+{
+    if ($levels == -1) {
+        return $use_compound_list ? array(array(), '') : array();
+    }
+
+    if ($breadcrumbs === null) {
+        $breadcrumbs = new Tempcode();
+    }
+
+    if (!has_category_access(get_member(), 'catalogues_catalogue', $catalogue_name)) {
+        return $use_compound_list ? array(array(), '') : array();
+    }
+    if (($category_id !== null) && (get_value('disable_cat_cat_perms') !== '1') && (!has_category_access(get_member(), 'catalogues_category', strval($category_id)))) {
+        return $use_compound_list ? array(array(), '') : array();
+    }
+
+    if ($category_details === null) {
+        $_category_details = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories', array('cc_title'), array('id' => $category_id), '', 1);
+        if (!array_key_exists(0, $_category_details)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $category_details = $_category_details[0];
+    }
+ 
+    $title = ($category_details === null) ? do_lang('HOME') : get_translated_text($category_details['cc_title']);
+    $breadcrumbs->attach($title);
+
+    // We'll be putting all children in this entire tree into a single list
+    $children = array();
+    $is_tree = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogues', 'c_is_tree', array('c_name' => $catalogue_name));
+    if ($is_tree === null) {
+        warn_exit(do_lang_tempcode('_MISSING_RESOURCE', 'catalogue:' . escape_html($catalogue_name)));
+    }
+    if ($category_id !== null) {
+        $children[0]['id'] = $category_id;
+        $children[0]['title'] = $title;
+        $children[0]['breadcrumbs'] = $breadcrumbs;
+        $children[0]['compound_list'] = strval($category_id) . ',';
+        $children[0]['entries_count'] = $GLOBALS['SITE_DB']->query_select_value('catalogue_entries', 'COUNT(*)', array('cc_id' => $category_id));
+        if ($addable_filter) {
+            $children[0]['addable'] = has_submit_permission('mid', get_member(), get_ip_address(), 'cms_catalogues', array('catalogues_catalogue', $catalogue_name) + ((get_value('disable_cat_cat_perms') !== '1') ? array('catalogues_category', $category_id) : array()));
+        }
+    }
+
+    // Children of this category
+    $rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('id', 'cc_title'), array('c_name' => $catalogue_name, 'cc_parent_id' => $category_id), 'ORDER BY id DESC', intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);
+    foreach ($rows as $i => $child) {
+        $rows[$i]['_cc_title'] = get_translated_text($child['cc_title']);
+    }
+    if (get_page_name() == 'cms_catalogues') {
+        if (count($rows) == intval(get_option('general_safety_listing_limit'))) {
+            attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
+        }
+    }
+    sort_maps_by($rows, '_cc_title');
+    $no_root = !array_key_exists(0, $children);
+    if (!$no_root) {
+        $children[0]['child_count'] = count($rows);
+    }
+    $child_breadcrumbs = new Tempcode();
+    $child_breadcrumbs->attach($breadcrumbs);
+    $child_breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+    if ($levels !== 0) {
+        foreach ($rows as $child) {
+            $child_id = $child['id'];
+
+            $child_children = get_catalogue_category_tree($catalogue_name, $child_id, clone $child_breadcrumbs, $child, ($levels === null) ? null : ($levels - 1), $addable_filter, $use_compound_list, $do_stats);
+            if ($child_children != array()) {
+                if ($use_compound_list) {
+                    list($child_children, $_compound_list) = $child_children;
+                    if (!$no_root) {
+                        $children[0]['compound_list'] .= $_compound_list;
+                    }
+                }
+
+                $children = array_merge($children, $child_children);
+            }
+        }
+    }
+
+    return $use_compound_list ? array($children, $no_root ? '' : $children[0]['compound_list']) : $children;
+}
+
+/**
  * Get a nice, formatted XHTML list of entries, in catalogue category tree structure
  *
  * @param  ID_TEXT                      The catalogue name
@@ -1332,7 +1484,7 @@ function create_selection_list_catalogue_entries_tree($catalogue_name, $it = nul
         foreach ($category['entries'] as $eid => $etitle) {
             $selected = ($eid == $it);
             $line = do_template('CATALOGUE_ENTRIES_LIST_LINE', array('_GUID' => '0ccffeff5b80b1840188b83aaee8d9f2', 'BREADCRUMBS' => $category['breadcrumbs'], 'NAME' => $etitle));
-            $out .= '<option value="' . strval($eid) . '"' . ($selected ? 'selected="selected"' : '') . '>' . $line->evaluate() . '</option>';
+            $out .= '<option value="' . strval($eid) . '"' . ($selected ? 'selected="selected"' : '') . '>' . $line->evaluate() . '</option>' . "\n";
         }
     }
 
@@ -1464,149 +1616,6 @@ function get_catalogue_entries_tree($catalogue_name, $submitter = null, $categor
     }
 
     return $children;
-}
-
-/**
- * Get a nice, formatted XHTML list extending from the root, and showing all subcategories, and their subcategories (ad infinitum).
- *
- * @param  ID_TEXT                      The catalogue name
- * @param  ?AUTO_LINK                   The currently selected entry (NULL: none)
- * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  boolean                      Whether to make the list elements store comma-separated child lists instead of IDs
- * @return tempcode                     The list of categories
- */
-function create_selection_list_catalogue_category_tree($catalogue_name, $it = null, $addable_filter = false, $use_compound_list = false)
-{
-    if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)', array('c_name' => $catalogue_name)) > 1000) {
-        return new Tempcode(); // Too many!
-    }
-
-    $tree = array();
-    $temp_rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('id', 'cc_title'), array('c_name' => $catalogue_name, 'cc_parent_id' => null), 'ORDER BY id DESC', intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);
-    if (count($temp_rows) == intval(get_option('general_safety_listing_limit'))) {
-        attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
-    }
-    foreach ($temp_rows as $row) {
-        $category_id = $row['id'];
-        $title = get_translated_text($row['cc_title']);
-        $subtree = get_catalogue_category_tree($catalogue_name, $category_id, null, $title, null, $addable_filter, $use_compound_list);
-        if (($use_compound_list) && (array_key_exists(0, $subtree))) {
-            $subtree = $subtree[0];
-        }
-        $tree = array_merge($tree, $subtree);
-    }
-
-    $out = new Tempcode();
-    foreach ($tree as $category) {
-        if (($addable_filter) && (!$category['addable'])) {
-            continue;
-        }
-
-        $selected = ($category['id'] == $it);
-        $line = do_template('CATALOGUE_CATEGORIES_LIST_LINE', array('_GUID' => '9f6bfc4f28c154c8f5d8887ce0d47c1c', 'BREADCRUMBS' => $category['breadcrumbs'], 'COUNT' => integer_format($category['count'])));
-        $out->attach(form_input_list_entry(!$use_compound_list ? strval($category['id']) : $category['compound_list'], $selected, protect_from_escaping($line->evaluate())));
-    }
-
-    return $out;
-}
-
-/**
- * Get a list of maps containing all the subcategories, and path information, of the specified category - and those beneath it, recursively.
- *
- * @param  ID_TEXT                      The catalogue name
- * @param  ?AUTO_LINK                   The category being at the root of our recursion (NULL: true root category)
- * @param  ?tempcode                    The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
- * @param  ?string                      The category name of the $category_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
- * @param  ?integer                     The number of recursive levels to search (NULL: all)
- * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  boolean                      Whether to make the list elements store comma-separated child lists instead of IDs
- * @return array                        A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title), and 'count' (the number of entries in the category).
- */
-function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs = null, $title = null, $levels = null, $addable_filter = false, $use_compound_list = false)
-{
-    if ($levels == -1) {
-        return array();
-    }
-
-    if (!has_category_access(get_member(), 'catalogues_catalogue', $catalogue_name)) {
-        return array();
-    }
-    if (($category_id !== null) && (get_value('disable_cat_cat_perms') !== '1') && (!has_category_access(get_member(), 'catalogues_category', strval($category_id)))) {
-        return array();
-    }
-
-    if ($breadcrumbs === null) {
-        $breadcrumbs = new Tempcode();
-    }
-
-    // Put our title onto our breadcrumbs
-    if ($title === null) {
-        if ($category_id === null) {
-            $_title = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'cc_title', array('id' => $category_id));
-        } else {
-            $_title = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'cc_title', array('id' => $category_id));
-        }
-        $title = ($_title === null) ? do_lang('HOME') : get_translated_text($_title);
-    }
-    $breadcrumbs->attach($title);
-
-    // We'll be putting all children in this entire tree into a single list
-    $children = array();
-    $is_tree = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogues', 'c_is_tree', array('c_name' => $catalogue_name));
-    if ($is_tree === null) {
-        warn_exit(do_lang_tempcode('_MISSING_RESOURCE', 'catalogue:' . escape_html($catalogue_name)));
-    }
-    if ($category_id !== null) {
-        $children[0]['id'] = $category_id;
-        $children[0]['title'] = $title;
-        $children[0]['breadcrumbs'] = $breadcrumbs;
-        $children[0]['compound_list'] = strval($category_id) . ',';
-        $children[0]['count'] = $GLOBALS['SITE_DB']->query_select_value('catalogue_entries', 'COUNT(*)', array('cc_id' => $category_id));
-        if ($addable_filter) {
-            $children[0]['addable'] = has_submit_permission('mid', get_member(), get_ip_address(), 'cms_catalogues', array('catalogues_catalogue', $catalogue_name) + ((get_value('disable_cat_cat_perms') !== '1') ? array('catalogues_category', $category_id) : array()));
-        }
-    }
-
-    // Children of this category
-    $breadcrumbs2 = new Tempcode();
-    $breadcrumbs2->attach($breadcrumbs);
-    $breadcrumbs2->attach(do_template('BREADCRUMB_SEPARATOR'));
-    $rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('id', 'cc_title'), array('c_name' => $catalogue_name, 'cc_parent_id' => $category_id), 'ORDER BY id DESC', intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);
-    foreach ($rows as $i => $child) {
-        $rows[$i]['_cc_title'] = get_translated_text($child['cc_title']);
-    }
-    if (get_page_name() == 'cms_catalogues') {
-        if (count($rows) == intval(get_option('general_safety_listing_limit'))) {
-            attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
-        }
-    }
-    sort_maps_by($rows, '_cc_title');
-    $no_root = !array_key_exists(0, $children);
-    if (!$no_root) {
-        $children[0]['child_count'] = count($rows);
-    }
-    if ($levels !== 0) {
-        foreach ($rows as $child) {
-            $child_id = $child['id'];
-            $child_title = $child['_cc_title'];
-            $child_breadcrumbs = new Tempcode();
-            $child_breadcrumbs->attach($breadcrumbs2);
-
-            $child_children = get_catalogue_category_tree($catalogue_name, $child_id, $child_breadcrumbs, $child_title, ($levels === null) ? null : ($levels - 1), $addable_filter, $use_compound_list);
-            if ($child_children != array()) {
-                if ($use_compound_list) {
-                    list($child_children, $_compound_list) = $child_children;
-                    if (!$no_root) {
-                        $children[0]['compound_list'] .= $_compound_list;
-                    }
-                }
-
-                $children = array_merge($children, $child_children);
-            }
-        }
-    }
-
-    return $use_compound_list ? array($children, $no_root ? '' : $children[0]['compound_list']) : $children;
 }
 
 /**

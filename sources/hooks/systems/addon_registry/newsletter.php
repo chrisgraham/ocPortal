@@ -118,12 +118,12 @@ class Hook_addon_registry_newsletter
             'sources/hooks/systems/cron/newsletter_drip_send.php',
             'sources/hooks/systems/cron/newsletter_periodic.php',
             'sources/hooks/modules/admin_import_types/newsletter.php',
-            'themes/default/templates/NEWSLETTER_AUTOMATED_FCOMCODE.tpl',
-            'themes/default/templates/NEWSLETTER_AUTOMATE_SECTION_FCOMCODE.tpl',
+            'themes/default/templates/NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.tpl',
+            'themes/default/templates/NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.tpl',
+            'themes/default/templates/NEWSLETTER_WHATSNEW_FCOMCODE.tpl',
             'themes/default/templates/NEWSLETTER_CONFIRM_WRAP.tpl',
             'themes/default/templates/NEWSLETTER_SUBSCRIBER.tpl',
             'themes/default/templates/NEWSLETTER_SUBSCRIBERS_SCREEN.tpl',
-            'themes/default/templates/NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl',
             'adminzone/pages/modules/admin_newsletter.php',
             'lang/EN/newsletter.ini',
             'site/pages/modules/newsletter.php',
@@ -156,15 +156,15 @@ class Hook_addon_registry_newsletter
     public function tpl_previews()
     {
         return array(
-            'NEWSLETTER_AUTOMATE_SECTION_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
-            'NEWSLETTER_AUTOMATED_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
+            'NEWSLETTER_WHATSNEW_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
+            'NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
+            'NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
             'NEWSLETTER_SUBSCRIBER.tpl' => 'administrative__newsletter_subscribers_screen',
             'NEWSLETTER_SUBSCRIBERS_SCREEN.tpl' => 'administrative__newsletter_subscribers_screen',
             'NEWSLETTER_DEFAULT_FCOMCODE.tpl' => 'newsletter_default',
             'NEWSLETTER_CONFIRM_WRAP.tpl' => 'administrative__newsletter_confirm_wrap',
             'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl' => 'block_main_newsletter_signup_done',
             'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl' => 'block_main_newsletter_signup',
-            'NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl' => 'newsletter_new_resource_fcomcode',
             'PERIODIC_NEWSLETTER_REMOVE.tpl' => 'periodic_newsletter_remove',
         );
     }
@@ -180,10 +180,20 @@ class Hook_addon_registry_newsletter
     {
         $automatic = array();
         foreach (placeholder_array() as $k => $v) {
-            $tmp = do_lorem_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE', array(
+            $_content = do_lorem_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array(
+                'MEMBER_ID' => placeholder_id(),
+                'URL' => placeholder_url(),
+                'NAME' => lorem_word(),
+                'DESCRIPTION' => lorem_paragraph(),
+                'THUMBNAIL' => placeholder_image_url(),
+                'CONTENT_TYPE' => lorem_word(),
+                'CONTENT_ID' => placeholder_id(),
+            ));
+
+            $tmp = do_lorem_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array(
                 'I' => lorem_word(),
                 'TITLE' => lorem_phrase(),
-                'CONTENT' => lorem_sentence(),
+                'CONTENT' => $_content,
             ));
             $automatic[] = $tmp->evaluate();
         }
@@ -194,7 +204,7 @@ class Hook_addon_registry_newsletter
         }
 
         return array(
-            lorem_globalise(do_lorem_template('NEWSLETTER_AUTOMATED_FCOMCODE', array(
+            lorem_globalise(do_lorem_template('NEWSLETTER_WHATSNEW_FCOMCODE', array(
                 'CONTENT' => $content,
             )), null, '', true)
         );
@@ -288,23 +298,6 @@ class Hook_addon_registry_newsletter
      *
      * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
      */
-    public function tpl_preview__block_main_newsletter_signup_done()
-    {
-        return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE', array(
-                'PASSWORD' => lorem_phrase(),
-                'NEWSLETTER_TITLE' => lorem_word(),
-            )), null, '', true)
-        );
-    }
-
-    /**
-     * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-     * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-     * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
-     *
-     * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-     */
     public function tpl_preview__block_main_newsletter_signup()
     {
         require_lang('javascript');
@@ -324,17 +317,12 @@ class Hook_addon_registry_newsletter
      *
      * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
      */
-    public function tpl_preview__newsletter_new_resource_fcomcode()
+    public function tpl_preview__block_main_newsletter_signup_done()
     {
         return array(
-            lorem_globalise(do_lorem_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array(
-                'MEMBER_ID' => placeholder_id(),
-                'URL' => placeholder_url(),
-                'NAME' => lorem_word(),
-                'DESCRIPTION' => lorem_paragraph(),
-                'THUMBNAIL' => placeholder_image_url(),
-                'CONTENT_TYPE' => lorem_word(),
-                'CONTENT_ID' => placeholder_id(),
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE', array(
+                'PASSWORD' => lorem_phrase(),
+                'NEWSLETTER_TITLE' => lorem_word(),
             )), null, '', true)
         );
     }

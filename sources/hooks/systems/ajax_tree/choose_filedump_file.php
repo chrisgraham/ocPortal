@@ -124,7 +124,7 @@ class Hook_choose_filedump_file
             foreach ($tree as $f) {
                 if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f))) {
                     $rel = preg_replace('#^' . preg_quote($id, '#') . '/#', '', $f);
-                    $out .= '<option value="' . escape_html('uploads/filedump/' . $f) . '"' . (($it === $f) ? ' selected="selected"' : '') . '>' . escape_html($rel) . '</option>';
+                    $out .= '<option value="' . escape_html('uploads/filedump/' . $f) . '"' . (($it === $f) ? ' selected="selected"' : '') . '>' . escape_html($rel) . '</option>' . "\n";
                 }
             }
         }

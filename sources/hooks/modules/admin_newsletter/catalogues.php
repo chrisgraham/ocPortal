@@ -26,9 +26,10 @@ class Hook_whatsnew_catalogues
     /**
      * Find selectable (filterable) categories.
      *
+     * @param  TIME                     The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
      */
-    public function choose_categories()
+    public function choose_categories($updated_since)
     {
         if (!addon_installed('catalogues')) {
             return null;
@@ -37,7 +38,8 @@ class Hook_whatsnew_catalogues
         require_lang('catalogues');
 
         require_code('catalogues');
-        return array(create_selection_list_catalogues(null, true), do_lang('CATALOGUE_ENTRIES'));
+        $cats = create_selection_list_catalogues(null, true, false, $updated_since);
+        return array($cats, do_lang('CATALOGUE_ENTRIES'));
     }
 
     /**
@@ -148,7 +150,7 @@ class Hook_whatsnew_catalogues
 
             $member_id = (is_guest($row['ce_submitter'])) ? null : strval($row['ce_submitter']);
 
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '4ae604e5d0e9cf4d28e7d811dc4558e5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'CATALOGUE' => $catalogue, 'NAME' => $name, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'catalogue_entry', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '4ae604e5d0e9cf4d28e7d811dc4558e5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'CATALOGUE' => $catalogue, 'NAME' => $name, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'catalogue_entry', 'CONTENT_ID' => strval($id))));
         }
 
         return array($new, do_lang('CATALOGUE_ENTRIES', '', '', '', $lang));

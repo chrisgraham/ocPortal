@@ -215,7 +215,7 @@ function ocf_get_forum_multi_code_field($forum_multi_code)
         $type = '+';
     }
     require_code('ocf_forums2');
-    $list = ocf_get_forum_tree_secure(null, null, true, $selected);
+    $list = create_selection_list_forum_tree(null, null, $selected);
     return form_input_all_and_not(do_lang_tempcode('SECTION_FORUMS'), do_lang_tempcode('USE_IN_ALL_FORUMS'), 'forum_multi_code', $list, $type);
 }
 

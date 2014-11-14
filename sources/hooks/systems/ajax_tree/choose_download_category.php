@@ -40,7 +40,7 @@ class Hook_choose_download_category
         $addable_filter = array_key_exists('addable_filter', $options) ? ($options['addable_filter']) : false;
         $stripped_id = ($compound_list ? preg_replace('#,.*$#', '', $id) : $id);
 
-        $tree = get_download_category_tree(is_null($id) ? null : intval($id), null, null, true, $compound_list, is_null($id) ? 0 : 1, $addable_filter);
+        $tree = get_download_category_tree(is_null($id) ? null : intval($id), null, null, false, $compound_list, is_null($id) ? 0 : 1, $addable_filter);
 
         $levels_to_expand = array_key_exists('levels_to_expand', $options) ? ($options['levels_to_expand']) : intval(get_long_value('levels_to_expand__' . substr(get_class($this), 5)));
         $options['levels_to_expand'] = max(0, $levels_to_expand - 1);

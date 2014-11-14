@@ -134,7 +134,7 @@ class Hook_cron_newsletter_periodic
                             continue;
                         }
                         if (!$temp[0]->is_empty()) {
-                            $automatic[$last_find_id] = do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE', array('_GUID' => '88e90623e3ae6c58222010a8a1d50965', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
+                            $automatic[$last_find_id] = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '88e90623e3ae6c58222010a8a1d50965', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
                             $i++;
                         }
 
@@ -166,7 +166,7 @@ class Hook_cron_newsletter_periodic
                     continue;
                 }
                 if (!$temp[0]->is_empty()) {
-                    $automatic[$find_id] = do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE', array('_GUID' => '0a24698f1072c0e3e7d6f5ec65825ab6', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
+                    $automatic[$find_id] = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '0a24698f1072c0e3e7d6f5ec65825ab6', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
                     $i++;
                 }
             } elseif ($filter != '') {
@@ -175,7 +175,7 @@ class Hook_cron_newsletter_periodic
                     continue;
                 }
                 if (!$temp[0]->is_empty()) {
-                    $automatic[$last_find_id] = do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE', array('_GUID' => 'a20519cc04ba5e98c1c6fc05a39d86a5', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
+                    $automatic[$last_find_id] = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => 'a20519cc04ba5e98c1c6fc05a39d86a5', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
                     $i++;
                 }
             }
@@ -188,7 +188,7 @@ class Hook_cron_newsletter_periodic
         foreach ($automatic as $tp) {
             $_automatic->attach($tp);
         }
-        $completed = do_template('NEWSLETTER_AUTOMATED_FCOMCODE', array('_GUID' => 'b8897fb43a341f6b7058ea6125630f5a', 'CONTENT' => $_automatic));
+        $completed = do_template('NEWSLETTER_WHATSNEW_FCOMCODE', array('_GUID' => 'b8897fb43a341f6b7058ea6125630f5a', 'CONTENT' => $_automatic));
 
         // Now we have the contents of our newsletter, we can send it to all of
         // those listed in the newsletter_periodic row

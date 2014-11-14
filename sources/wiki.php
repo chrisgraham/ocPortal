@@ -673,7 +673,7 @@ function wiki_derive_chain($id, $root = null)
  * @param  boolean                      Whether to use titles in IDs after a ! (used on tree edit page)
  * @return mixed                        Tempcode for the list / pair of tempcode and compound
  */
-function wiki_show_tree($select = null, $id = null, $breadcrumbs = '', $include_orphans = true, $use_compound_list = false, $ins_format = false)
+function create_selection_list_wiki_page_tree($select = null, $id = null, $breadcrumbs = '', $include_orphans = true, $use_compound_list = false, $ins_format = false)
 {
     if (is_null($id)) {
         $id = db_get_first_id();
@@ -685,7 +685,7 @@ function wiki_show_tree($select = null, $id = null, $breadcrumbs = '', $include_
 
     $wiki_seen = array();
     $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages', 'title', array('id' => $id)));
-    $out = _wiki_show_tree($wiki_seen, $select, $id, $breadcrumbs, $title, $use_compound_list, $ins_format);
+    $out = _create_selection_list_wiki_page_tree($wiki_seen, $select, $id, $breadcrumbs, $title, $use_compound_list, $ins_format);
 
     if ($include_orphans) {
         if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) {
@@ -736,7 +736,7 @@ function wiki_show_tree($select = null, $id = null, $breadcrumbs = '', $include_
  * @param  boolean                      Whether to use titles in IDs after a ! (used on tree edit page)
  * @return mixed                        Tempcode for the list / pair of tempcode and compound
  */
-function _wiki_show_tree(&$wiki_seen, $select, $id, $breadcrumbs, $title, $use_compound_list = false, $ins_format = false)
+function _create_selection_list_wiki_page_tree(&$wiki_seen, $select, $id, $breadcrumbs, $title, $use_compound_list = false, $ins_format = false)
 {
     $wiki_seen[] = $id;
 
@@ -757,7 +757,7 @@ function _wiki_show_tree(&$wiki_seen, $select, $id, $breadcrumbs, $title, $use_c
                 $rows[$i]['title'] = $myrow['title'];
                 $GLOBALS['SITE_DB']->query_update('wiki_children', array('title' => $myrow['title']), array('parent_id' => $id, 'child_id' => $myrow['child_id']));
             }
-            $below = _wiki_show_tree($wiki_seen, $select, $myrow['child_id'], $sub_breadcrumbs, $myrow['title'], $use_compound_list, $ins_format);
+            $below = _create_selection_list_wiki_page_tree($wiki_seen, $select, $myrow['child_id'], $sub_breadcrumbs, $myrow['title'], $use_compound_list, $ins_format);
             if ($use_compound_list) {
                 list($below, $_compound_list) = $below;
                 $compound_list .= $_compound_list;
@@ -766,9 +766,9 @@ function _wiki_show_tree(&$wiki_seen, $select, $id, $breadcrumbs, $title, $use_c
         }
     }
 
-// $out=form_input_list_entry(strval($id),($select==$id),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'d9d4a951df598edd3f08f87be634965b','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'ID'=>$id)));
-// $out='<option value="'.(!$use_compound_list?$id:$compound_list).'">'.$breadcrumbs.$title.'</option>';
-// $out.=$_below;
+    // $out=form_input_list_entry(strval($id),($select==$id),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'d9d4a951df598edd3f08f87be634965b','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'ID'=>$id)));
+    // $out='<option value="'.(!$use_compound_list?$id:$compound_list).'">'.$breadcrumbs.$title.'</option>' . "\n";
+    // $out.=$_below;
     $out = form_input_list_entry(((!$use_compound_list) ? strval($id) : $compound_list) . ($ins_format ? ('!' . $title) : ''), false, $breadcrumbs . $title);
     $out->attach($_below);
 
@@ -785,31 +785,36 @@ function _wiki_show_tree(&$wiki_seen, $select, $id, $breadcrumbs, $title, $use_c
  * @param  array                        A list of pages we've already seen (we don't repeat them in multiple list positions)
  * @param  ?AUTO_LINK                   The page being at the root of our recursion (NULL: true root page)
  * @param  ?string                      The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
- * @param  ?ID_TEXT                     The name of the $page_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
+ * @param  ?array                       The details of the $page_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
  * @param  boolean                      Whether to collect post counts with our breadcrumbs information
  * @param  boolean                      Whether to make a compound list (a pair of a comma-separated list of children, and the child array)
  * @param  ?integer                     The number of recursive levels to search (NULL: all)
  * @return array                        A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
  */
-function get_wiki_page_tree(&$wiki_seen, $page_id = null, $breadcrumbs = null, $title = null, $do_stats = true, $use_compound_list = false, $levels = null)
+function get_wiki_page_tree(&$wiki_seen, $page_id = null, $breadcrumbs = null, $page_details = null, $do_stats = false, $use_compound_list = false, $levels = null)
 {
     if ($levels == -1) {
-        return array();
+        return $use_compound_list ? array(array(), '') : array();
     }
 
     if (is_null($page_id)) {
         $page_id = db_get_first_id();
     }
-    $wiki_seen[] = $page_id;
-
     if (is_null($breadcrumbs)) {
         $breadcrumbs = '';
     }
 
-    // Put our title onto our breadcrumbs
-    if (is_null($title)) {
-        $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages', 'title', array('id' => $page_id)));
+    $wiki_seen[] = $page_id;
+
+    if (is_null($page_details)) {
+        $_page_details = $GLOBALS['SITE_DB']->query_select('wiki_pages', array('title'), array('id' => $page_id), '', 1);
+        if (!array_key_exists(0, $_page_details)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $page_details = $_page_details[0];
     }
+
+    $title = get_translated_text($page_details['title']);
     $breadcrumbs .= $title;
 
     // We'll be putting all children in this entire tree into a single list
@@ -820,13 +825,13 @@ function get_wiki_page_tree(&$wiki_seen, $page_id = null, $breadcrumbs = null, $
     $children[0]['breadcrumbs'] = $breadcrumbs;
     $children[0]['compound_list'] = strval($page_id) . ',';
     if ($do_stats) {
-        $children[0]['filecount'] = $GLOBALS['SITE_DB']->query_select_value('wiki_posts', 'COUNT(*)', array('page_id' => $page_id));
+        $children[0]['post_count'] = $GLOBALS['SITE_DB']->query_select_value('wiki_posts', 'COUNT(*)', array('page_id' => $page_id));
     }
 
     // Children of this category
     $rows = $GLOBALS['SITE_DB']->query_select('wiki_children', array('*'), array('parent_id' => $page_id), 'ORDER BY title', intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
     $children[0]['child_count'] = count($rows);
-    $breadcrumbs .= ' > ';
+    $child_breadcrumbs = ($breadcrumbs == '') ? '' : ($breadcrumbs . ' > ');
     if ($levels !== 0) {
         foreach ($rows as $child) {
             if (!in_array($child['child_id'], $wiki_seen)) {
@@ -834,6 +839,7 @@ function get_wiki_page_tree(&$wiki_seen, $page_id = null, $breadcrumbs = null, $
                     continue;
                 }
 
+                // Fix child title
                 if (is_null($child['title'])) {
                     $temp_rows = $GLOBALS['SITE_DB']->query_select('wiki_pages', array('title'), array('id' => $child['child_id']), '', 1);
                     $child['title'] = get_translated_text($temp_rows[0]['title']);
@@ -842,10 +848,8 @@ function get_wiki_page_tree(&$wiki_seen, $page_id = null, $breadcrumbs = null, $
                 }
 
                 $child_id = $child['child_id'];
-                $child_title = $child['title'];
-                $child_breadcrumbs = $breadcrumbs;
 
-                $child_children = get_wiki_page_tree($wiki_seen, $child_id, $child_breadcrumbs, $child_title, $do_stats, $use_compound_list, is_null($levels) ? null : ($levels - 1));
+                $child_children = get_wiki_page_tree($wiki_seen, $child_id, $breadcrumbs, $child, $do_stats, $use_compound_list, is_null($levels) ? null : ($levels - 1));
                 if ($use_compound_list) {
                     list($child_children, $_compound_list) = $child_children;
                     $children[0]['compound_list'] .= $_compound_list;

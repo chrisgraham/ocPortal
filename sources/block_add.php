@@ -335,7 +335,7 @@ function block_helper_script()
                     if (!addon_installed('ocf_forum')) {
                         warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
                     }
-                    $list = ocf_get_forum_tree_secure(null, null, true, explode(',', $default));
+                    $list = create_selection_list_forum_tree(null, null, explode(',', $default));
                     $fields->attach(form_input_multi_list(titleify($parameter), escape_html($description), $parameter, $list));
                 } elseif ($parameter == 'font') { // font choice
                     $fonts = array();
