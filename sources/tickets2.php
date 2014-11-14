@@ -22,6 +22,7 @@
  * Get ticket details.
  *
  * @param  string                       The ticket ID
+ * @param  boolean                      Exit with an error message if it cannot find the ticket
  * @return ?array                       A tuple: The ticket title, the topic ID, the ticket type ID, the ticket owner (NULL: not found)
  */
 function get_ticket_details($ticket_id, $hard_error = true)

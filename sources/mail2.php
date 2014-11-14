@@ -25,7 +25,7 @@
  *
  * @param  string                       The server hostname.
  * @param  integer                      The port.
- * @param  string                       The protocol (NULL: autodetect).
+ * @param  ?string                      The protocol (NULL: autodetect).
  * @set pop3 pop3s imap imaps
  * @return string                       Connection string.
  */
@@ -100,7 +100,7 @@ function find_mail_folders($server, $port, $username, $password)
  * @param  ?string                      The IMAP inbox identifier (NULL: use configured).
  * @param  ?string                      The IMAP username (NULL: use configured).
  * @param  ?string                      The IMAP password (NULL: use configured).
- * @param  ?TIME                        Last bounce time (NULL: not bounced).
+ * @return ?TIME                        Last bounce time (NULL: not bounced).
  */
 function can_email_member($member_id, $server = null, $port = null, $folder = null, $username = null, $password = null)
 {
@@ -125,7 +125,7 @@ function can_email_member($member_id, $server = null, $port = null, $folder = nu
  * @param  ?string                      The IMAP inbox identifier (NULL: use configured).
  * @param  ?string                      The IMAP username (NULL: use configured).
  * @param  ?string                      The IMAP password (NULL: use configured).
- * @param  ?TIME                        Last bounce time (NULL: not bounced).
+ * @return ?TIME                        Last bounce time (NULL: not bounced).
  */
 function is_mail_bounced($email, $server = null, $port = null, $folder = null, $username = null, $password = null)
 {
@@ -229,6 +229,7 @@ function find_mail_bounces($server, $port, $folder, $username, $password, $since
  * @param  string                       The IMAP inbox identifier.
  * @param  string                       The IMAP username.
  * @param  string                       The IMAP password.
+ * @param  boolean                      Only find bounces (otherwise will find anything).
  * @param  ?TIME                        Only find bounces since this date (NULL: no limit). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
  * @return array                        Bounces (a map between email address and details of the bounce).
  */

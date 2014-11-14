@@ -61,8 +61,7 @@ function initialise_special_page_types($special_page_type)
  * @param  tempcode                     The normal script tempcode output
  * @param  string                       The normal script evaluated output
  */
-function special_page_types($special_page_type, &$out,/*&*/
-                            $out_evaluated)
+function special_page_types($special_page_type, &$out, $out_evaluated)
 {
     global $RECORDED_TEMPLATES_USED;
 

@@ -165,10 +165,10 @@ function get_php_file_api($filename, $include_code = true)
                         }
                         $parts = _cleanup_array(preg_split('/\s/', substr($ltrim, 6)));
                         if (($parts[0][0] != '?') && (array_key_exists('default', $parameters[$arg_counter])) && (is_null($parameters[$arg_counter]['default']))) {
-                            fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($parameters[$arg_counter]['name']), escape_html($function_name), array(escape_html('NULL'))));
+                            fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($parameters[$arg_counter]['name']), escape_html($function_name), array(escape_html('null'))));
                             continue 2;
                         }
-                        if ((!in_array($parts[0], array('~mixed', 'mixed', 'boolean'))) && ($parts[0][0] != '~') && (array_key_exists('default', $parameters[$arg_counter])) && ($parameters[$arg_counter]['default'] === false)) {
+                        if ((array_key_exists('default', $parameters[$arg_counter])) && ($parameters[$arg_counter]['default'] === false) && (!in_array(preg_replace('#[^\w]#', '', $parts[0]), array('mixed', 'boolean')))) {
                             fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($parameters[$arg_counter]['name']), escape_html($function_name), array(escape_html('false'))));
                             continue 2;
                         }
@@ -605,14 +605,14 @@ function test_fail_php_type_check($type, $function_name, $name, $value, $echo = 
 {
     $null_allowed = ($type[0] == '?');
     $false_allowed = ($type[0] == '~');
-    $_type = ($null_allowed || $false_allowed) ? substr($type, 1) : $type;
+    $_type = preg_replace('#[^\w]#', '', $type);
+
+    if ((is_null($value)) && (!$null_allowed)) {
+        fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($name), escape_html($function_name), array('null')));
+    }
 
     if (($value === false) && (!$false_allowed) && (!in_array($_type, array('mixed', 'boolean')))) {
         fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($name), escape_html($function_name), array('false')));
-    }
-
-    if ((is_null($value)) && (!$null_allowed)) {
-        fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($name), escape_html($function_name), array('NULL')));
     }
 
     if ($_type == 'mixed') {
