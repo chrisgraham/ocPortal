@@ -749,8 +749,8 @@ function js_check_expression($e, $secondary = false, $is_guarded = false)
  *
  * @param  list                         The (possibly complex) variable that is the function identifier
  * @param  integer                      The position this is at in the parse
- * @param  ?string                      The class the given variable is in (NULL: global/as-specified-internally-in-c)
- * @return ?string                      The return type (NULL: nothing returned)
+ * @param  ?string                      The class the given variable is in (null: global/as-specified-internally-in-c)
+ * @return ?string                      The return type (null: nothing returned)
  */
 function js_check_call($c, $c_pos, $class = null)
 {
@@ -774,7 +774,7 @@ function js_check_call($c, $c_pos, $class = null)
  * @param  list                         The (possibly complex) variable
  * @param  boolean                      Whether the variable is being used referentially (i.e. not being set)
  * @param  boolean                      Whether to return the type and function-return-type pair, rather than just the type
- * @param  ?string                      The class the variable is referencing within (NULL: global)
+ * @param  ?string                      The class the variable is referencing within (null: global)
  * @param  boolean                      Whether the given class is being referenced directly in static form
  * @param  boolean                      Whether this is for a function call
  * @return mixed                        The return type and possibly function return type (if requested)
@@ -980,7 +980,7 @@ function js_set_ocportal_type($identifier, $type)
  * @param  integer                      Where the first mention of the variable is
  * @param  boolean                      Whether this is an instantiation reference
  * @param  boolean                      Whether this is a reference (as opposed to instantiation/setting)
- * @param  ?string                      The result-type (NULL: not a function)
+ * @param  ?string                      The result-type (null: not a function)
  * @param  boolean                      Whether this is a function call
  */
 function js_add_variable_reference($identifier, $first_mention, $instantiation = true, $reference = false, $function_return = null, $is_call = false)
@@ -1018,7 +1018,7 @@ function js_infer_expression_type_to_variable_type($type, $expr)
  * @param  list                         List of allowed types
  * @param  string                       Actual type involved
  * @param  integer                      Current parse position
- * @param  ?string                      Specific error message to give (NULL: use default)
+ * @param  ?string                      Specific error message to give (null: use default)
  * @return boolean                      Whether it type-checks
  */
 function js_ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null)

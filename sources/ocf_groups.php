@@ -75,7 +75,7 @@ function render_group_box($row, $zone = '_SEARCH', $give_context = true, $guid =
 /**
  * Get a nice list for selection from the usergroups. Suitable for admin use only (does not check hidden status).
  *
- * @param  ?AUTO_LINK                   Usergroup selected by default (NULL: no specific default).
+ * @param  ?AUTO_LINK                   Usergroup selected by default (null: no specific default).
  * @return tempcode                     The list.
  */
 function ocf_create_selection_list_usergroups($it = null)
@@ -315,7 +315,7 @@ function ocf_get_best_group_property($groups, $property)
 /**
  * Get a list of the usergroups a member is in (keys say the usergroups, values are irrelevant).
  *
- * @param  ?MEMBER                      The member to find the usergroups of (NULL: current member).
+ * @param  ?MEMBER                      The member to find the usergroups of (null: current member).
  * @param  boolean                      Whether to skip looking at secret usergroups.
  * @param  boolean                      Whether to take probation into account
  * @param  boolean                      Whether to include implicit groups
@@ -430,7 +430,7 @@ function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle
  * Get the ID for a usergroup if we only know the title. Warning: Only use this with custom code, never core code! It assumes a single language and that usergroups aren't renamed.
  *
  * @param  SHORT_TEXT                   The title.
- * @return ?AUTO_LINK                   The ID (NULL: could not find).
+ * @return ?AUTO_LINK                   The ID (null: could not find).
  */
 function find_usergroup_id($title)
 {

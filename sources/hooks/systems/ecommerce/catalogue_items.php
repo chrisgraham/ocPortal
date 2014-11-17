@@ -26,7 +26,7 @@ class Hook_ecommerce_catalogue_items
      *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
      *
      * @param  boolean                  Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
-     * @param  ?ID_TEXT                 Product being searched for (NULL: none).
+     * @param  ?ID_TEXT                 Product being searched for (null: none).
      * @param  boolean                  Whether $search refers to the item name rather than the product codename.
      * @return array                    A map of product name to list of product details.
      */
@@ -104,7 +104,7 @@ class Hook_ecommerce_catalogue_items
      * Check whether the product codename is available for purchase by the member.
      *
      * @param  ID_TEXT                  The product codename.
-     * @param  ?MEMBER                  The member we are checking against (NULL: current meber).
+     * @param  ?MEMBER                  The member we are checking against (null: current meber).
      * @param  integer                  The number required.
      * @return integer                  The availability code (a ECOMMERCE_PRODUCT_* constant).
      */
@@ -157,7 +157,7 @@ class Hook_ecommerce_catalogue_items
      * Get currently available quantity of selected product.
      *
      * @param  ID_TEXT                  The product codename.
-     * @return ?integer                 Quantity (NULL: no limit).
+     * @return ?integer                 Quantity (null: no limit).
      */
     public function get_available_quantity($type_code)
     {
@@ -240,7 +240,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Get the product's details.
      *
-     * @param  ?AUTO_LINK               Product ID (NULL: read from environment, product_id).
+     * @param  ?AUTO_LINK               Product ID (null: read from environment, product_id).
      * @return    array       A map of product name to list of product details.
      */
     public function get_product_details($pid = null)
@@ -545,7 +545,7 @@ class Hook_ecommerce_catalogue_items
      *
      * @param  ID_TEXT                  Catalogue name.
      * @param  AUTO_LINK                Catalogue entry ID.
-     * @return ?SHORT_TEXT              Image name (NULL: no image).
+     * @return ?SHORT_TEXT              Image name (null: no image).
      */
     public function get_product_image($catalogue_name, $entry_id)
     {

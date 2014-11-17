@@ -26,7 +26,7 @@ class Block_main_contact_catalogues
     /**
      * Find details of the block.
      *
-     * @return ?array                   Map of block info (NULL: block is disabled).
+     * @return ?array                   Map of block info (null: block is disabled).
      */
     public function info()
     {
@@ -44,12 +44,12 @@ class Block_main_contact_catalogues
     /**
      * Find cacheing details for the block.
      *
-     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
      */
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = '(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\',array_key_exists(\'redirect\',$map)?$map[\'redirect\']:\'\',array_key_exists(\'subject\',$map)?$map[\'subject\']:\'\',array_key_exists(\'body_prefix\',$map)?$map[\'body_prefix\']:\'\',array_key_exists(\'body_suffix\',$map)?$map[\'body_suffix\']:\'\',array_key_exists(\'subject_prefix\',$map)?$map[\'subject_prefix\']:\'\',array_key_exists(\'subject_suffix\',$map)?$map[\'subject_suffix\']:\'\')';
+        $info['cache_on'] = '(post_param(\'subject\',\'\')!=\'\')?null:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\',array_key_exists(\'redirect\',$map)?$map[\'redirect\']:\'\',array_key_exists(\'subject\',$map)?$map[\'subject\']:\'\',array_key_exists(\'body_prefix\',$map)?$map[\'body_prefix\']:\'\',array_key_exists(\'body_suffix\',$map)?$map[\'body_suffix\']:\'\',array_key_exists(\'subject_prefix\',$map)?$map[\'subject_prefix\']:\'\',array_key_exists(\'subject_suffix\',$map)?$map[\'subject_suffix\']:\'\')';
         $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 24 * 7;
         return $info;
     }

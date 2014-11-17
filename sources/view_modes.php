@@ -343,7 +343,7 @@ function special_page_types($special_page_type, &$out, $out_evaluated)
  * Finds the path of the given template codename.
  *
  * @param  ID_TEXT                      The template codename
- * @return ?PATH                        A path (NULL: no such template)
+ * @return ?PATH                        A path (null: no such template)
  */
 function find_template_path($name)
 {

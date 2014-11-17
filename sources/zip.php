@@ -61,7 +61,7 @@ function zip_scan_folder($path, $subpath = '')
  * Calculate CRC32 for a file. Based on a function in the PHP docs.
  *
  * @param  PATH                         The file
- * @return ?integer                     The CRC (NULL: error)
+ * @return ?integer                     The CRC (null: error)
  */
 function crc32_file($filename)
 {
@@ -95,7 +95,7 @@ function crc32_file($filename)
  * @param  array                        A list of maps (time,data/full_path,name) covering everything to zip up
  * @param  boolean                      Whether to stream the output direct to the browser
  * @param  boolean                      Whether to return the tuple
- * @param  ?PATH                        File to spool into (NULL: none). $stream will be forced to false
+ * @param  ?PATH                        File to spool into (null: none). $stream will be forced to false
  * @return mixed                        The data for the zip file OR a tuple: data, offsets, sizes; will be blank if $stream is true or $outfile_path is not NULL
  */
 function create_zip_file($file_array, $stream = false, $get_offsets = false, $outfile_path = null)

@@ -23,7 +23,7 @@
  *
  * @param  MEMBER                       The member blocking
  * @param  MEMBER                       The member being blocked
- * @param  ?TIME                        The logged time of the block (NULL: now)
+ * @param  ?TIME                        The logged time of the block (null: now)
  */
 function blocking_add($blocker, $blocked, $time = null)
 {
@@ -66,7 +66,7 @@ function blocking_remove($blocker, $blocked)
  *
  * @param  MEMBER                       The member befriending
  * @param  MEMBER                       The member being befriended
- * @param  ?TIME                        The logged time of the friendship (NULL: now)
+ * @param  ?TIME                        The logged time of the friendship (null: now)
  */
 function friend_add($likes, $liked, $time = null)
 {
@@ -130,7 +130,7 @@ function friend_remove($likes, $liked)
 /**
  * Get form fields for adding/editing a chatroom.
  *
- * @param  ?AUTO_LINK                   The chat room ID (NULL: new)
+ * @param  ?AUTO_LINK                   The chat room ID (null: new)
  * @param  boolean                      Whether the room is being made as a private room by the current member
  * @param  SHORT_TEXT                   The room name
  * @param  LONG_TEXT                    The welcome message

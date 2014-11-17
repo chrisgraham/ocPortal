@@ -22,9 +22,9 @@
  * Outputs the shoutbox iframe.
  *
  * @param  boolean                      Whether to get the output instead of outputting it directly
- * @param  ?AUTO_LINK                   Chat room ID (NULL: read from environment)
- * @param  ?integer                     The maximum number of messages to show (NULL: read from environment)
- * @return ?object                      Output (NULL: outputted it already)
+ * @param  ?AUTO_LINK                   Chat room ID (null: read from environment)
+ * @param  ?integer                     The maximum number of messages to show (null: read from environment)
+ * @return ?object                      Output (null: outputted it already)
  */
 function shoutbox_script($ret = false, $room_id = null, $num_messages = null)
 {

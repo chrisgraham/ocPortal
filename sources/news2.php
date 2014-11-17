@@ -28,8 +28,8 @@ RSS IMPORT (works very well with Wordpress and Blogger, which use RSS as an inte
  * @param  SHORT_TEXT                   The news category title
  * @param  ID_TEXT                      The theme image ID of the picture to use for the news category
  * @param  LONG_TEXT                    Notes for the news category
- * @param  ?MEMBER                      The owner (NULL: public)
- * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?MEMBER                      The owner (null: public)
+ * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
  * @return AUTO_LINK                    The ID of our new news category
  */
 function add_news_category($title, $img, $notes, $owner = null, $id = null)
@@ -67,10 +67,10 @@ function add_news_category($title, $img, $notes, $owner = null, $id = null)
  * Edit a news category.
  *
  * @param  AUTO_LINK                    The news category to edit
- * @param  ?SHORT_TEXT                  The title (NULL: keep as-is)
- * @param  ?SHORT_TEXT                  The image (NULL: keep as-is)
- * @param  ?LONG_TEXT                   The notes (NULL: keep as-is)
- * @param  ?MEMBER                      The owner (NULL: public)
+ * @param  ?SHORT_TEXT                  The title (null: keep as-is)
+ * @param  ?SHORT_TEXT                  The image (null: keep as-is)
+ * @param  ?LONG_TEXT                   The notes (null: keep as-is)
+ * @param  ?MEMBER                      The owner (null: public)
  */
 function edit_news_category($id, $title, $img, $notes, $owner)
 {
@@ -213,23 +213,23 @@ function delete_news_category($id)
  *
  * @param  SHORT_TEXT                   The news title
  * @param  LONG_TEXT                    The news summary (or if not an article, the full news)
- * @param  ?ID_TEXT                     The news author (possibly, a link to an existing author in the system, but does not need to be) (NULL: current username)
+ * @param  ?ID_TEXT                     The news author (possibly, a link to an existing author in the system, but does not need to be) (null: current username)
  * @param  BINARY                       Whether the news has been validated
  * @param  BINARY                       Whether the news may be rated
  * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
  * @param  BINARY                       Whether the news may have trackbacks
  * @param  LONG_TEXT                    Notes for the news
  * @param  LONG_TEXT                    The news entry (blank means no entry)
- * @param  ?AUTO_LINK                   The primary news category (NULL: personal)
- * @param  ?array                       The IDs of the news categories that this is in (NULL: none)
- * @param  ?TIME                        The time of submission (NULL: now)
- * @param  ?MEMBER                      The news submitter (NULL: current member)
+ * @param  ?AUTO_LINK                   The primary news category (null: personal)
+ * @param  ?array                       The IDs of the news categories that this is in (null: none)
+ * @param  ?TIME                        The time of submission (null: now)
+ * @param  ?MEMBER                      The news submitter (null: current member)
  * @param  integer                      The number of views the article has had
- * @param  ?TIME                        The edit date (NULL: never)
- * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?TIME                        The edit date (null: never)
+ * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
  * @param  URLPATH                      URL to the image for the news entry (blank: use cat image)
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit) (blank: implicit)
  * @return AUTO_LINK                    The ID of the news just added
  */
 function add_news($title, $news, $author = null, $validated = 1, $allow_rating = 1, $allow_comments = 1, $allow_trackbacks = 1, $notes = '', $news_article = '', $main_news_category = null, $news_categories = null, $time = null, $submitter = null, $views = 0, $edit_date = null, $id = null, $image = '', $meta_keywords = '', $meta_description = '')
@@ -471,15 +471,15 @@ function send_rss_ping($show_errors = true)
  * @param  BINARY                       Whether the news may have trackbacks
  * @param  LONG_TEXT                    Notes for the news
  * @param  LONG_TEXT                    The news entry (blank means no entry)
- * @param  AUTO_LINK                    The primary news category (NULL: personal)
- * @param  ?array                       The IDs of the news categories that this is in (NULL: do not change)
+ * @param  AUTO_LINK                    The primary news category (null: personal)
+ * @param  ?array                       The IDs of the news categories that this is in (null: do not change)
  * @param  SHORT_TEXT                   Meta keywords
  * @param  LONG_TEXT                    Meta description
- * @param  ?URLPATH                     URL to the image for the news entry (blank: use cat image) (NULL: don't delete existing)
- * @param  ?TIME                        Add time (NULL: do not change)
- * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?integer                     Number of views (NULL: do not change)
- * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  ?URLPATH                     URL to the image for the news entry (blank: use cat image) (null: don't delete existing)
+ * @param  ?TIME                        Add time (null: do not change)
+ * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?integer                     Number of views (null: do not change)
+ * @param  ?MEMBER                      Submitter (null: do not change)
  * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_news($id, $title, $news, $author, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $news_article, $main_news_category, $news_categories, $meta_keywords, $meta_description, $image, $add_time = null, $edit_time = null, $views = null, $submitter = null, $null_is_literal = false)

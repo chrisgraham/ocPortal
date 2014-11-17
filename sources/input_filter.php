@@ -105,7 +105,7 @@ function get_allowed_partner_sites()
  * Filter to alter form field values based on fields.xml. Usually a no-op.
  *
  * @param  string                       The name of the parameter
- * @param  ?string                      The current value of the parameter (NULL: none)
+ * @param  ?string                      The current value of the parameter (null: none)
  * @return string                       The filtered value of the parameter
  */
 function filter_form_field_default($name, $val)
@@ -256,8 +256,8 @@ function deshout_callback($matches)
 /**
  * Find all restrictions that apply to our page/type.
  *
- * @param  ?string                      The page name scoped for (NULL: current page)
- * @param  ?string                      The page type scoped for (NULL: current type)
+ * @param  ?string                      The page name scoped for (null: current page)
+ * @param  ?string                      The page type scoped for (null: current type)
  * @return array                        List of fields, each of which is a map (restriction => attributes)
  */
 function load_field_restrictions($this_page = null, $this_type = null)

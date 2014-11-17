@@ -193,7 +193,7 @@ class Forum_driver_base
      *
      * @param  MEMBER                   The member
      * @param  boolean                  Whether to use the displayname rather than the username (if we have them)
-     * @return ?SHORT_TEXT              The username (NULL: deleted member)
+     * @return ?SHORT_TEXT              The username (null: deleted member)
      */
     public function get_username($id, $use_displayname = false)
     {
@@ -358,8 +358,8 @@ class Forum_driver_base
      * @param  boolean                  Whether to obscure the name of hidden usergroups
      * @param  boolean                  Whether to only grab permissive usergroups
      * @param  boolean                  Do not limit things even if there are huge numbers of usergroups
-     * @param  ?array                   Usergroups that must be included in the results (NULL: no extras must be)
-     * @param  ?MEMBER                  Always return usergroups of this member (NULL: current member)
+     * @param  ?array                   Usergroups that must be included in the results (null: no extras must be)
+     * @param  ?MEMBER                  Always return usergroups of this member (null: current member)
      * @param  boolean                  Whether to completely skip hidden usergroups
      * @return array                    The map
      */
@@ -411,7 +411,7 @@ class Forum_driver_base
     /**
      * Get the current member's theme identifier.
      *
-     * @param  ?ID_TEXT                 The zone we are getting the theme for (NULL: current zone)
+     * @param  ?ID_TEXT                 The zone we are getting the theme for (null: current zone)
      * @return ID_TEXT                  The theme identifier
      */
     public function get_theme($zone_for = null)

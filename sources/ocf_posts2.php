@@ -25,7 +25,7 @@
  * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content). Also uses the post title, as opposed to the post's topic's title.
  * @param  boolean                      Whether to embed a link to the topic.
  * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @param  ?AUTO_LINK                   Virtual root to use (null: none)
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The isolated post.
  */

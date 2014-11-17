@@ -12,12 +12,12 @@ if (!function_exists('_do_lang')) {
      * Get the human-readable form of a language ID, or a language entry from a language INI file.
      *
      * @param  ID_TEXT                  The language ID
-     * @param  ?mixed                   The first token [string or tempcode] (replaces {1}) (NULL: none)
-     * @param  ?mixed                   The second token [string or tempcode] (replaces {2}) (NULL: none)
-     * @param  ?mixed                   The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
-     * @param  ?LANGUAGE_NAME           The language to use (NULL: users language)
+     * @param  ?mixed                   The first token [string or tempcode] (replaces {1}) (null: none)
+     * @param  ?mixed                   The second token [string or tempcode] (replaces {2}) (null: none)
+     * @param  ?mixed                   The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (null: none)
+     * @param  ?LANGUAGE_NAME           The language to use (null: users language)
      * @param  boolean                  Whether to cause ocPortal to exit if the lookup does not succeed
-     * @return ?mixed                   The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
+     * @return ?mixed                   The human-readable content (null: not found). String normally. Tempcode if tempcode parameters.
      */
     function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
     {
@@ -286,8 +286,8 @@ if (!function_exists('get_translated_text')) {
      * Try to return the human-readable version of the language ID, passed in as $entry.
      *
      * @param  mixed                    The ID (if multi-lang-content on), or the string itself
-     * @param  ?object                  The database connection to use (NULL: standard site connection)
-     * @param  ?LANGUAGE_NAME           The language (NULL: uses the current language)
+     * @param  ?object                  The database connection to use (null: standard site connection)
+     * @param  ?LANGUAGE_NAME           The language (null: uses the current language)
      * @return string                   The human-readable version
      */
     function get_translated_text($entry, $connection = null, $lang = null)

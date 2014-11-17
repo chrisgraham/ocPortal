@@ -31,10 +31,10 @@ class Hook_activities_activities
      * @param  string                   Page-link 3
      * @param  string                   Addon that caused the event
      * @param  BINARY                   Whether this post should be public or friends-only
-     * @param  ?MEMBER                  Member being written for (NULL: current member)
+     * @param  ?MEMBER                  Member being written for (null: current member)
      * @param  boolean                  Whether to push this out as a site event if user requested
-     * @param  ?MEMBER                  Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
-     * @return ?AUTO_LINK               ID of the row in the activities table (NULL: N/A)
+     * @param  ?MEMBER                  Member also 'intimately' involved, such as a content submitter who is a friend (null: none)
+     * @return ?AUTO_LINK               ID of the row in the activities table (null: N/A)
      */
     public function syndicate_described_activity($a_language_string_code = '', $a_label_1 = '', $a_label_2 = '', $a_label_3 = '', $a_page_link_1 = '', $a_page_link_2 = '', $a_page_link_3 = '', $a_addon = '', $a_is_public = 1, $a_member_id = null, $sitewide_too = false, $also_involving = null)
     {

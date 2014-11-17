@@ -83,10 +83,10 @@ function peek_media_mode()
  * @param  URLPATH                      The URL
  * @param  array                        Attributes (e.g. width, height, length)
  * @param  boolean                      Whether there are admin privileges, to render dangerous media types
- * @param  ?MEMBER                      Member to run as (NULL: current member)
+ * @param  ?MEMBER                      Member to run as (null: current member)
  * @param  integer                      Bitmask of media that we will support
- * @param  ?ID_TEXT                     Limit to a media rendering hook (NULL: no limit)
- * @return ?array                       The hooks (NULL: cannot find one)
+ * @param  ?ID_TEXT                     Limit to a media rendering hook (null: no limit)
+ * @return ?array                       The hooks (null: cannot find one)
  */
 function find_media_renderers($url, $attributes, $as_admin, $source_member, $acceptable_media = 15, $limit_to = null)
 {
@@ -183,11 +183,11 @@ function find_media_renderers($url, $attributes, $as_admin, $source_member, $acc
  * @param  mixed                        URL to render (no sessions etc)
  * @param  array                        Attributes (e.g. width, height, length). IMPORTANT NOTE: Only pass in 'mime_type' from user data if you have verified privileges to do so, no verification is done within the media API.
  * @param  boolean                      Whether there are admin privileges, to render dangerous media types
- * @param  ?MEMBER                      Member to run as (NULL: current member)
+ * @param  ?MEMBER                      Member to run as (null: current member)
  * @param  integer                      Bitmask of media that we will support
- * @param  ?ID_TEXT                     Limit to a media rendering hook (NULL: no limit)
- * @param  ?URLPATH                     The URL to do media detection against (NULL: use $url)
- * @return ?tempcode                    The rendered version (NULL: cannot render)
+ * @param  ?ID_TEXT                     Limit to a media rendering hook (null: no limit)
+ * @param  ?URLPATH                     The URL to do media detection against (null: use $url)
+ * @return ?tempcode                    The rendered version (null: cannot render)
  */
 function render_media_url($url, $url_safe, $attributes, $as_admin = false, $source_member = null, $acceptable_media = 15, $limit_to = null, $url_to_scan_against = null)
 {
@@ -220,7 +220,7 @@ function render_media_url($url, $url_safe, $attributes, $as_admin = false, $sour
  * @param  mixed                        The URL
  * @param  array                        Attributes (Any combination of: thumb_url, width, height, length, filename, mime_type, description, filesize, framed, wysiwyg_editable, num_downloads, click_url, thumb)
  * @param  boolean                      Whether there are admin privileges, to render dangerous media types
- * @param  ?MEMBER                      Member to run as (NULL: current member)
+ * @param  ?MEMBER                      Member to run as (null: current member)
  * @return array                        Template-ready parameters
  */
 function _create_media_template_parameters($url, $attributes, $as_admin = false, $source_member = null)
@@ -332,9 +332,9 @@ abstract class Media_renderer_with_fallback
      * @param  mixed                    URL to render (no sessions etc)
      * @param  array                    Attributes (e.g. width, height, length)
      * @param  boolean                  Whether there are admin privileges, to render dangerous media types
-     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @param  ?MEMBER                  Member to run as (null: current member)
      * @param  mixed                    URL to route clicks through to
-     * @return ?tempcode                Rendered version (NULL: do not render)
+     * @return ?tempcode                Rendered version (null: do not render)
      */
     public function fallback_render($url, $url_safe, $attributes, $as_admin, $source_member, $click_url = null)
     {

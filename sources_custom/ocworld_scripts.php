@@ -58,7 +58,7 @@ function ocworld_map_script()
  * Wrapper function for the direct download of a map (wraps so as to download the map 'for where a member is at' [unless a direct realm given]).
  *
  * @param  MEMBER                       The member to get the map of
- * @param  ?integer                     The realm they are wanting to get (NULL: where they are at)
+ * @param  ?integer                     The realm they are wanting to get (null: where they are at)
  */
 function download_map_wrap($member_id, $realm)
 {

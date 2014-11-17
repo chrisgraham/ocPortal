@@ -468,7 +468,7 @@ class Database_driver
      * @param string       The connection password
      * @param string       The table prefix
      * @param boolean         Whether to on error echo an error and return with a NULL, rather than giving a critical error
-     * @param ?object         Static call object (NULL: use global static call object)
+     * @param ?object         Static call object (null: use global static call object)
      */
     public function __construct($db_name, $db_host, $db_user, $db_password, $table_prefix, $fail_ok = false, $static = null)
     {
@@ -676,8 +676,8 @@ class Database_driver
      * Create a SELECT query from some abstract data.
      *
      * @param  string                   The table to select from
-     * @param  ?array                   List of field selections (NULL: all fields)
-     * @param  ?array                   Map of conditions to enforce (NULL: no conditions)
+     * @param  ?array                   List of field selections (null: all fields)
+     * @param  ?array                   Map of conditions to enforce (null: no conditions)
      * @param  string                   Additional stuff to tack onto the query
      * @return string                   SQL query
      */
@@ -743,10 +743,10 @@ class Database_driver
      *
      * @param  string                   The table name
      * @param  string                   The field to select
-     * @param  ?array                   The WHERE map [will all be AND'd together] (NULL: no where conditions)
+     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no where conditions)
      * @param  string                   Something to tack onto the end
      * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
+     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @return mixed                    The first value of the first row returned
      */
     public function query_select_value($table, $selected_value, $where_map = null, $end = '', $fail_ok = false, $lang_fields = null)
@@ -782,11 +782,11 @@ class Database_driver
      *
      * @param  string                   The table name
      * @param  string                   The field to select
-     * @param  ?array                   The WHERE map [will all be AND'd together] (NULL: no where conditions)
+     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no where conditions)
      * @param  string                   Something to tack onto the end
      * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
-     * @return ?mixed                   The first value of the first row returned (NULL: nothing found, or null value found)
+     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @return ?mixed                   The first value of the first row returned (null: nothing found, or null value found)
      */
     public function query_select_value_if_there($table, $select, $where_map = null, $end = '', $fail_ok = false, $lang_fields = null)
     {
@@ -803,8 +803,8 @@ class Database_driver
      * @param  string                   The complete SQL query
      * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
      * @param  boolean                  Whether to skip the query safety check
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
-     * @return ?mixed                   The first value of the first row returned (NULL: nothing found, or null value found)
+     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @return ?mixed                   The first value of the first row returned (null: nothing found, or null value found)
      */
     public function query_value_if_there($query, $fail_ok = false, $skip_safety_check = false, $lang_fields = null)
     {
@@ -840,13 +840,13 @@ class Database_driver
      * Only use this if you're where condition is a series of AND clauses doing simple property comparisons.
      *
      * @param  string                   The table name
-     * @param  ?array                   The SELECT map (NULL: all fields)
-     * @param  ?array                   The WHERE map [will all be AND'd together] (NULL: no conditions)
+     * @param  ?array                   The SELECT map (null: all fields)
+     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
      * @param  string                   Something to tack onto the end of the SQL query
-     * @param  ?integer                 The maximum number of rows to select (NULL: get all)
-     * @param  ?integer                 The starting row to select (NULL: start at first)
+     * @param  ?integer                 The maximum number of rows to select (null: get all)
+     * @param  ?integer                 The starting row to select (null: start at first)
      * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
+     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @return array                    The results
      */
     public function query_select($table, $select = null, $where_map = null, $end = '', $max = null, $start = null, $fail_ok = false, $lang_fields = null)
@@ -880,9 +880,9 @@ class Database_driver
      * @param  string                   The table name
      * @param  string                   The table name, with prefix too
      * @param  array                    The SELECT map
-     * @param  ?array                   The WHERE map [will all be AND'd together] (NULL: no conditions)
+     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
      * @param  string                   Something to tack onto the end of the SQL query
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
+     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      */
     protected function _automatic_lang_fields(&$table, &$full_table, &$select, &$where_map, &$end, &$lang_fields)
     {
@@ -945,13 +945,13 @@ class Database_driver
      * This function is a raw query executor. It shouldn't usually be used unless you need to write SQL involving 'OR' statements or other complexities. There are abstracted versions available which you probably want instead (mainly, query_select).
      *
      * @param  string                   The complete SQL query
-     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
-     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 The start row to affect (null: no specification)
      * @param  boolean                  Whether to output an error on failure
      * @param  boolean                  Whether to skip the query safety check
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
+     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @param  string                   All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
-     * @return ?mixed                   The results (NULL: no results)
+     * @return ?mixed                   The results (null: no results)
      */
     public function query($query, $max = null, $start = null, $fail_ok = false, $skip_safety_check = false, $lang_fields = null, $field_prefix = '')
     {
@@ -998,14 +998,14 @@ class Database_driver
      * This function is a very basic query executor. It shouldn't usually be used by you, as there are specialised abstracted versions available.
      *
      * @param  string                   The complete SQL query
-     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
-     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 The start row to affect (null: no specification)
      * @param  boolean                  Whether to output an error on failure
      * @param  boolean                  Whether to get an insert ID
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
+     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @param  string                   All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
      * @param  boolean                  Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
-     * @return ?mixed                   The results (NULL: no results)
+     * @return ?mixed                   The results (null: no results)
      */
     public function _query($query, $max = null, $start = null, $fail_ok = false, $get_insert_id = false, $lang_fields = null, $field_prefix = '', $save_as_volatile = false)
     {
@@ -1264,13 +1264,13 @@ class Database_driver
      *
      * @param  string                   The table name
      * @param  array                    The UPDATE map
-     * @param  ?array                   The WHERE map [will all be AND'd together] (NULL: no conditions)
+     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
      * @param  string                   Something to tack onto the end of the statement
-     * @param  ?integer                 The maximum number of rows to update (NULL: no limit)
-     * @param  ?integer                 The starting row to update (NULL: no specific start)
+     * @param  ?integer                 The maximum number of rows to update (null: no limit)
+     * @param  ?integer                 The starting row to update (null: no specific start)
      * @param  boolean                  Whether to get the number of touched rows. WARNING: Do not use in core ocPortal code as it does not work on all database drivers
      * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @return ?integer                 The number of touched records (NULL: hasn't been asked / error)
+     * @return ?integer                 The number of touched records (null: hasn't been asked / error)
      */
     public function query_update($table, $update_map, $where_map = null, $end = '', $max = null, $start = null, $num_touched = false, $fail_ok = false)
     {
@@ -1343,10 +1343,10 @@ class Database_driver
      * Deletes rows from the specified table, that match the specified conditions (if any). It may be limited to a row range (it is likely, only a maximum, of 1, will be used, if any kind of range at all).
      *
      * @param  string                   The table name
-     * @param  ?array                   The WHERE map [will all be AND'd together] (NULL: no conditions)
+     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
      * @param  string                   Something to tack onto the end of the statement
-     * @param  ?integer                 The maximum number of rows to delete (NULL: no limit)
-     * @param  ?integer                 The starting row to delete (NULL: no specific start)
+     * @param  ?integer                 The maximum number of rows to delete (null: no limit)
+     * @param  ?integer                 The starting row to delete (null: no specific start)
      * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
      */
     public function query_delete($table, $where_map = null, $end = '', $max = null, $start = null, $fail_ok = false)
@@ -1444,7 +1444,7 @@ class Database_driver
      * @param  ID_TEXT                  The table name
      * @param  ID_TEXT                  The field name
      * @param  ID_TEXT                  The field type
-     * @param  ?mixed                   The default value (NULL: no default)
+     * @param  ?mixed                   The default value (null: no default)
      */
     public function add_table_field($table_name, $name, $_type, $default = null)
     {
@@ -1458,7 +1458,7 @@ class Database_driver
      * @param  ID_TEXT                  The table name
      * @param  ID_TEXT                  The field name
      * @param  ID_TEXT                  The new field type
-     * @param  ?ID_TEXT                 The new field name (NULL: leave name)
+     * @param  ?ID_TEXT                 The new field name (null: leave name)
      */
     public function alter_table_field($table_name, $name, $_type, $new_name = null)
     {

@@ -176,7 +176,7 @@ function get_language_title($lang)
 /**
  * Get a nice formatted XHTML listed language selector.
  *
- * @param  ?LANGUAGE_NAME               The language to have selected by default (NULL: uses the current language)
+ * @param  ?LANGUAGE_NAME               The language to have selected by default (null: uses the current language)
  * @param  boolean                      Whether to show languages that have no language details currently defined for them
  * @return tempcode                     The language selector
  */
@@ -215,13 +215,13 @@ function _create_selection_list_langs($select_lang = null, $show_unset = false)
  * @param  string                       The text
  * @param  integer                      The level of importance this language string holds
  * @set    1 2 3 4
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  * @param  boolean                      Whether it is to be parsed as Comcode
- * @param  ?integer                     The ID to use for the language entry (NULL: work out next available)
- * @param  ?LANGUAGE_NAME               The language (NULL: uses the current language)
+ * @param  ?integer                     The ID to use for the language entry (null: work out next available)
+ * @param  ?LANGUAGE_NAME               The language (null: uses the current language)
  * @param  boolean                      Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges)
- * @param  ?string                      The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
- * @param  ?string                      Assembled Tempcode portion (NULL: work it out)
+ * @param  ?string                      The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (null: none)
+ * @param  ?string                      Assembled Tempcode portion (null: work it out)
  * @param  integer                      Comcode parser wrap position
  * @param  boolean                      Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean                      Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
@@ -319,10 +319,10 @@ function _insert_lang($field_name, $text, $level, $connection = null, $comcode =
  * @param  ID_TEXT                      The field name
  * @param  mixed                        The ID (if multi-lang-content on), or the string itself
  * @param  string                       The text to remap to
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  * @param  boolean                      Whether it is to be parsed as Comcode
- * @param  ?string                      The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
- * @param  ?MEMBER                      The member that owns the content this is for (NULL: current member)
+ * @param  ?string                      The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (null: none)
+ * @param  ?MEMBER                      The member that owns the content this is for (null: current member)
  * @param  boolean                      Whether to generate Comcode as arbitrary admin
  * @param  boolean                      Whether to backup the language string before changing it
  * @param  boolean                      Whether to leave the source member as-is (as opposed to resetting it to the current member)
@@ -438,11 +438,11 @@ function _lang_remap($field_name, $id, $text, $connection = null, $comcode = fal
  * @param  ID_TEXT                      The table name
  * @param  array                        The database row
  * @param  ID_TEXT                      The field name
- * @param  ?object                      The database connection to use (NULL: standard site connection)
- * @param  ?LANGUAGE_NAME               The language (NULL: uses the current language)
+ * @param  ?object                      The database connection to use (null: standard site connection)
+ * @param  ?LANGUAGE_NAME               The language (null: uses the current language)
  * @param  boolean                      Whether to force it to the specified language
  * @param  boolean                      Whether to force as_admin, even if the lang string isn't stored against an admin (designed for Comcode page cacheing)
- * @return ?tempcode                    The parsed Comcode (NULL: the text couldn't be looked up)
+ * @return ?tempcode                    The parsed Comcode (null: the text couldn't be looked up)
  */
 function parse_translated_text($table, &$row, $field_name, $connection, $lang, $force, $as_admin)
 {

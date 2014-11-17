@@ -73,7 +73,7 @@ function process_overridden_comment_forum($feedback_code, $id, $category_id, $ol
  * Get the comment topic forum for a feedback scenario.
  *
  * @param  ID_TEXT                      The feedback code, which we may have overridden the comment forum against
- * @param  ?ID_TEXT                     The category ID, which we may have overridden the comment forum against (NULL: no category ID to override against)
+ * @param  ?ID_TEXT                     The category ID, which we may have overridden the comment forum against (null: no category ID to override against)
  * @return ID_TEXT                      The comment topic forum (may be integer as string, or string forum name - so use forum_id_from_name on the result)
  */
 function find_overridden_comment_forum($feedback_code, $category_id = null)
@@ -99,7 +99,7 @@ function find_overridden_comment_forum($feedback_code, $category_id = null)
  *
  * @param  ID_TEXT                      Content type
  * @param  ID_TEXT                      Content ID
- * @return array                        A tuple: Content title (NULL: unknown), Submitter (NULL: unknown), URL (for use within current browser session), URL (for use in emails / sharing), Content meta aware info array
+ * @return array                        A tuple: Content title (null: unknown), Submitter (null: unknown), URL (for use within current browser session), URL (for use in emails / sharing), Content meta aware info array
  */
 function get_details_behind_feedback_code($content_type, $content_id)
 {
@@ -127,11 +127,11 @@ function get_details_behind_feedback_code($content_type, $content_id)
  * @set 0 1 2
  * @param  BINARY                       Whether trackbacks are allowed
  * @param  BINARY                       Whether the content is validated
- * @param  ?MEMBER                      Content owner (NULL: none)
+ * @param  ?MEMBER                      Content owner (null: none)
  * @param  mixed                        URL to view the content
  * @param  SHORT_TEXT                   Content title
- * @param  ?string                      Forum to post comments in (NULL: site-wide default)
- * @param  ?TIME                        Time of comment topic (NULL: now)
+ * @param  ?string                      Forum to post comments in (null: site-wide default)
+ * @param  ?TIME                        Time of comment topic (null: now)
  * @return array                        Tuple: Rating details, Comment details, Trackback details
  */
 function embed_feedback_systems($page_name, $content_id, $allow_rating, $allow_comments, $allow_trackbacks, $validated, $submitter, $content_url, $content_title, $forum, $time = null)
@@ -228,11 +228,11 @@ function post_comment_script()
  * Get tempcode for doing ratings (sits above get_rating_simple_array)
  *
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
- * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
+ * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (null: don't know, but not first post so not important)
  * @param  ID_TEXT                      The type (download, etc) that this rating is for
  * @param  ID_TEXT                      The ID of the type that this rating is for
  * @param  boolean                      Whether this resource allows rating (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
- * @param  ?MEMBER                      Content owner (NULL: none)
+ * @param  ?MEMBER                      Content owner (null: none)
  * @return tempcode                     Tempcode for complete rating box
  */
 function get_rating_box($content_url, $content_title, $content_type, $content_id, $allow_rating, $submitter = null)
@@ -248,11 +248,11 @@ function get_rating_box($content_url, $content_title, $content_type, $content_id
  * Display rating using images
  *
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
- * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
+ * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (null: don't know, but not first post so not important)
  * @param  ID_TEXT                      The type (download, etc) that this rating is for
  * @param  ID_TEXT                      The ID of the type that this rating is for
  * @param  ID_TEXT                      The template to use to display the rating box
- * @param  ?MEMBER                      Content owner (NULL: none)
+ * @param  ?MEMBER                      Content owner (null: none)
  * @return tempcode                     Tempcode for complete trackback box
  */
 function display_rating($content_url, $content_title, $content_type, $content_id, $display_tpl = 'RATING_INLINE_STATIC', $submitter = null)
@@ -270,12 +270,12 @@ function display_rating($content_url, $content_title, $content_type, $content_id
  * Get rating information for the specified resource.
  *
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
- * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
+ * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (null: don't know, but not first post so not important)
  * @param  ID_TEXT                      The type (download, etc) that this rating is for
  * @param  ID_TEXT                      The ID of the type that this rating is for
  * @param  ID_TEXT                      The template to use to display the rating box
- * @param  ?MEMBER                      Content owner (NULL: none)
- * @return ?array                       Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS is the number of ratings so far, RATING_FORM is the tempcode of the rating box (NULL: rating disabled)
+ * @param  ?MEMBER                      Content owner (null: none)
+ * @return ?array                       Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS is the number of ratings so far, RATING_FORM is the tempcode of the rating box (null: rating disabled)
  */
 function get_rating_simple_array($content_url, $content_title, $content_type, $content_id, $form_tpl = 'RATING_FORM', $submitter = null)
 {
@@ -456,7 +456,7 @@ function already_rated($rating_for_types, $content_id)
  * @param  ID_TEXT                      The type (download, etc) that this rating is for
  * @param  ID_TEXT                      The ID of the type that this rating is for
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
- * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
+ * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (null: don't know, but not first post so not important)
  */
 function actualise_rating($allow_rating, $content_type, $content_id, $content_url, $content_title)
 {
@@ -504,14 +504,14 @@ function actualise_give_rating_points()
 /**
  * Implement a rating at the quantum level.
  *
- * @param  ?integer                     Rating given (NULL: unrate)
+ * @param  ?integer                     Rating given (null: unrate)
  * @range 1 10
  * @param  ID_TEXT                      The page name the rating is on
  * @param  MEMBER                       The member doing the rating
  * @param  ID_TEXT                      The type (download, etc) that this rating is for
  * @param  ID_TEXT                      The second level type (probably blank)
  * @param  ID_TEXT                      The ID of the type that this rating is for
- * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know)
+ * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (null: don't know)
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
  */
 function actualise_specific_rating($rating, $page_name, $member_id, $content_type, $type, $content_id, $content_url, $content_title)
@@ -636,14 +636,14 @@ function actualise_specific_rating($rating, $page_name, $member_id, $content_typ
  * @param  boolean                      Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
  * @param  ID_TEXT                      The ID of the type that this commenting is for
  * @param  boolean                      Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
- * @param  ?string                      The name of the forum to use (NULL: default comment forum)
- * @param  ?string                      The default post to use (NULL: standard courtesy warning)
- * @param  ?mixed                       The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
+ * @param  ?string                      The name of the forum to use (null: default comment forum)
+ * @param  ?string                      The default post to use (null: standard courtesy warning)
+ * @param  ?mixed                       The raw comment array (null: lookup). This is useful if we want to pass it through a filter
  * @param  boolean                      Whether to skip permission checks
- * @param  ?boolean                     Whether to show in reverse date order (affects default search order only) (NULL: read config)
- * @param  ?MEMBER                      User to highlight the posts of (NULL: none)
+ * @param  ?boolean                     Whether to show in reverse date order (affects default search order only) (null: read config)
+ * @param  ?MEMBER                      User to highlight the posts of (null: none)
  * @param  boolean                      Whether to allow ratings along with the comment (like reviews)
- * @param  ?integer                     Maximum to load (NULL: default)
+ * @param  ?integer                     Maximum to load (null: default)
  * @return tempcode                     The tempcode for the comment topic
  */
 function get_comments($content_type, $allow_comments, $content_id, $invisible_if_no_comments = false, $forum = null, $post_warning = null, $_comments = null, $explicit_allow = false, $reverse = null, $highlight_by_user = null, $allow_reviews = false, $num_to_show_limit = null)
@@ -684,16 +684,16 @@ function extract_topic_identifier($full_text)
  * @param  ID_TEXT                      The type (download, etc) that this commenting is for
  * @param  ID_TEXT                      The ID of the type that this commenting is for
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
- * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
- * @param  ?string                      The name of the forum to use (NULL: default comment forum)
+ * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (null: don't know, but not first post so not important)
+ * @param  ?string                      The name of the forum to use (null: default comment forum)
  * @param  boolean                      Whether to not require a captcha
- * @param  ?BINARY                      Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver (hence is the last parameter).
+ * @param  ?BINARY                      Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver (hence is the last parameter).
  * @param  boolean                      Whether to force allowance
  * @param  boolean                      Whether to skip a success message
  * @param  boolean                      Whether posts made should not be shared
- * @param  ?string                      Title of the post (NULL: lookup from POST environment)
- * @param  ?string                      Body of the post (NULL: lookup from POST environment)
- * @param  ?TIME                        Time of comment topic (NULL: now)
+ * @param  ?string                      Title of the post (null: lookup from POST environment)
+ * @param  ?string                      Body of the post (null: lookup from POST environment)
+ * @param  ?TIME                        Time of comment topic (null: now)
  * @return boolean                      Whether a hidden post has been made
  */
 function actualise_post_comment($allow_comments, $content_type, $content_id, $content_url, $content_title, $forum = null, $avoid_captcha = false, $validated = null, $explicit_allow = false, $no_success_message = false, $private = false, $post_title = null, $post = null, $time = null)
@@ -926,9 +926,9 @@ function actualise_post_comment($allow_comments, $content_type, $content_id, $co
  * @param  ID_TEXT                      The type (download, etc) that this commenting is for
  * @param  ID_TEXT                      The ID of the type that this commenting is for
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
- * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
- * @param  ?string                      The name of the forum to use (NULL: default comment forum)
- * @param  ?AUTO_LINK                   ID of spacer post (NULL: unknown)
+ * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (null: don't know, but not first post so not important)
+ * @param  ?string                      The name of the forum to use (null: default comment forum)
+ * @param  ?AUTO_LINK                   ID of spacer post (null: unknown)
  */
 function update_spacer_post($allow_comments, $content_type, $content_id, $content_url, $content_title, $forum = null, $post_id = null)
 {

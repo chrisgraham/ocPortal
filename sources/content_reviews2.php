@@ -22,8 +22,8 @@
  * Get a form to control how some content should be reviewed.
  *
  * @param  ID_TEXT                      The content type
- * @param  ?ID_TEXT                     The content ID (NULL: not added yet)
- * @param  ?ID_TEXT                     The catalogue name where to grab default settings from (NULL: content type has no bound catalogue / try and auto-detect)
+ * @param  ?ID_TEXT                     The content ID (null: not added yet)
+ * @param  ?ID_TEXT                     The catalogue name where to grab default settings from (null: content type has no bound catalogue / try and auto-detect)
  * @return tempcode                     The fields
  */
 function content_review_get_fields($content_type, $content_id = null, $catalogue_name = null)
@@ -153,7 +153,7 @@ function content_review_get_fields($content_type, $content_id = null, $catalogue
  *
  * @param  ID_TEXT                      The content type
  * @param  ID_TEXT                      The content ID
- * @param  ?ID_TEXT                     The old content ID (NULL: not being renamed)
+ * @param  ?ID_TEXT                     The old content ID (null: not being renamed)
  */
 function content_review_set($content_type, $content_id, $old_content_id = null)
 {
@@ -200,8 +200,8 @@ function content_review_set($content_type, $content_id, $old_content_id = null)
  *
  * @param  ID_TEXT                      The content type
  * @param  ID_TEXT                      The content ID
- * @param  ?integer                     The review frequency in seconds (NULL: no repeat review pattern)
- * @param  ?TIME                        Manual next review time (NULL: work out from review frequency)
+ * @param  ?integer                     The review frequency in seconds (null: no repeat review pattern)
+ * @param  ?TIME                        Manual next review time (null: work out from review frequency)
  * @param  ID_TEXT                      Automatic action to perform upon review time
  * @set leave unvalidate delete
  * @param  BINARY                       Whether to display the review status publicly

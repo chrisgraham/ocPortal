@@ -31,8 +31,8 @@ function init__lang_compile()
  * Load up a language file, compiling it (it's not cached yet).
  *
  * @param  ID_TEXT                      The language file name
- * @param  ?LANGUAGE_NAME               The language (NULL: uses the current language)
- * @param  ?string                      The language type (lang_custom, or custom) (NULL: normal priorities are used)
+ * @param  ?LANGUAGE_NAME               The language (null: uses the current language)
+ * @param  ?string                      The language type (lang_custom, or custom) (null: normal priorities are used)
  * @set    lang_custom custom
  * @param  PATH                         Where we are cacheing too
  * @param  boolean                      Whether to just return if there was a loading error
@@ -228,7 +228,7 @@ function get_lang_file_map($lang, $file, $non_custom = false)
  *
  * @param  PATH                         The path to the language file
  * @param  array                        The currently loaded language map
- * @param  ?boolean                     Whether to get descriptions rather than strings (NULL: no, but we might pick up some descriptions accidently)
+ * @param  ?boolean                     Whether to get descriptions rather than strings (null: no, but we might pick up some descriptions accidently)
  * @param  boolean                      Whether $b is infact not a path, but the actual file contents
  */
 function _get_lang_file_map($b, &$entries, $descriptions = null, $given_whole_file = false)

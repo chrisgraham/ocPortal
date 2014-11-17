@@ -33,7 +33,7 @@ function init__css_and_js()
  * @param  ID_TEXT                      Source CSS file
  * @param  ID_TEXT                      Source theme
  * @param  ID_TEXT                      Destination theme
- * @param  ?ID_TEXT                     Seed (NULL: do not re-seed)
+ * @param  ?ID_TEXT                     Seed (null: do not re-seed)
  * @param  boolean                      Whether it is a dark theme
  * @param  ID_TEXT                      The algorithm to use
  * @set equations hsv

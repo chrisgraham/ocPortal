@@ -26,7 +26,7 @@ class Module_topics
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -44,10 +44,10 @@ class Module_topics
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -79,7 +79,7 @@ class Module_topics
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run()
     {
@@ -270,8 +270,8 @@ class Module_topics
      *
      * @param  ID_TEXT                  The language ID for the title to use in the page
      * @param  AUTO_LINK                The ID of the topic to redirect to
-     * @param  ?mixed                   What to output (Tempcode or string) (NULL: default)
-     * @param  ?AUTO_LINK               The ID of the post to redirect to (NULL: redirect to topic instead)
+     * @param  ?mixed                   What to output (Tempcode or string) (null: default)
+     * @param  ?AUTO_LINK               The ID of the post to redirect to (null: redirect to topic instead)
      * @return tempcode                 The UI
      */
     public function redirect_to($_title, $topic_id, $lang = null, $post_id = null)
@@ -298,7 +298,7 @@ class Module_topics
      *
      * @param  ID_TEXT                  The language ID for the title to use in the page
      * @param  AUTO_LINK                The ID of the forum to redirect to
-     * @param  ?mixed                   What to output (Tempcode or string) (NULL: default)
+     * @param  ?mixed                   What to output (Tempcode or string) (null: default)
      * @return tempcode                 The UI
      */
     public function redirect_to_forum($_title, $forum_id, $lang = null)
@@ -1463,9 +1463,9 @@ class Module_topics
      * The UI to create a new topic.
      *
      * @param  boolean                  Whether a new Private Topic is being created
-     * @param  ?MEMBER                  The member ID being whispered too (NULL: N/A)
+     * @param  ?MEMBER                  The member ID being whispered too (null: N/A)
      * @param  string                   Theme image code
-     * @param  ?tempcode                Text of screen (NULL: none)
+     * @param  ?tempcode                Text of screen (null: none)
      * @return tempcode                 The UI
      */
     public function new_topic($private_topic = false, $member_id = null, $img_path = '', $text = null) // Type
@@ -2694,7 +2694,7 @@ END;
      * Get tempcode for a poll adding/editing form.
      *
      * @param  SHORT_TEXT               The poll question
-     * @param  ?array                   A list of current answers for the poll (NULL: none yet)
+     * @param  ?array                   A list of current answers for the poll (null: none yet)
      * @param  BINARY                   Whether it is a private poll (blind poll, where the results aren't visible until made public)
      * @param  BINARY                   Whether the poll is open for voting
      * @param  BINARY                   Whether a reply to the poll topic is required before voting
@@ -2731,7 +2731,7 @@ END;
     /**
      * The UI to add a poll.
      *
-     * @param  ?AUTO_LINK               The topic ID to add the poll to (NULL: it is instead gettable from a GET parameter named 'id')
+     * @param  ?AUTO_LINK               The topic ID to add the poll to (null: it is instead gettable from a GET parameter named 'id')
      * @return tempcode                 The UI
      */
     public function add_poll($topic_id = null) // Type

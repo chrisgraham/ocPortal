@@ -135,8 +135,8 @@ function clean_file_size($bytes)
 /**
  * Parse the specified INI file, and get an array of what it found.
  *
- * @param  ?PATH                        The path to the ini file to open (NULL: given contents in $file instead)
- * @param  ?string                      The contents of the file (NULL: the file needs opening)
+ * @param  ?PATH                        The path to the ini file to open (null: given contents in $file instead)
+ * @param  ?string                      The contents of the file (null: the file needs opening)
  * @return array                        A map of the contents of the ini files
  */
 function better_parse_ini_file($filename, $file = null)

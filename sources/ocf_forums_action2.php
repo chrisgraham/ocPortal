@@ -56,7 +56,7 @@ function ocf_edit_forum_grouping($forum_grouping_id, $title, $description, $expa
  * Delete a forum grouping.
  *
  * @param  AUTO_LINK                    The ID of the forum grouping we are editing.
- * @param  ?AUTO_LINK                   The ID of the forum grouping that we will move all the contained forum to (NULL: the first one).
+ * @param  ?AUTO_LINK                   The ID of the forum grouping that we will move all the contained forum to (null: the first one).
  */
 function ocf_delete_forum_grouping($forum_grouping_id, $target_forum_grouping_id = null)
 {
@@ -87,7 +87,7 @@ function ocf_delete_forum_grouping($forum_grouping_id, $target_forum_grouping_id
  * @param  SHORT_TEXT                   The name of the forum.
  * @param  SHORT_TEXT                   The description for the forum.
  * @param  AUTO_LINK                    What forum grouping the forum will be filed with.
- * @param  ?AUTO_LINK                   The ID of the parent forum (NULL: this is the root forum).
+ * @param  ?AUTO_LINK                   The ID of the parent forum (null: this is the root forum).
  * @param  integer                      The position of this forum relative to other forums viewable on the same screen (if parent forum hasn't specified automatic ordering).
  * @param  BINARY                       Whether post counts will be incremented if members post in the forum.
  * @param  BINARY                       Whether the ordering of subforums is done automatically, alphabetically).
@@ -186,7 +186,7 @@ function ocf_edit_forum($forum_id, $name, $description, $forum_grouping_id, $new
  * Delete a forum.
  *
  * @param  AUTO_LINK                    The ID of the forum we are deleting.
- * @param  ?AUTO_LINK                   The ID of the forum that topics will be moved to (NULL: root forum).
+ * @param  ?AUTO_LINK                   The ID of the forum that topics will be moved to (null: root forum).
  * @param  BINARY                       Whether to delete topics instead of moving them to the target forum.
  */
 function ocf_delete_forum($forum_id, $target_forum_id = null, $delete_topics = 0)

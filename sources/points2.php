@@ -185,7 +185,7 @@ function charge_member($member_id, $amount, $reason)
  * @param  MEMBER                       The member that is being charged
  * @param  integer                      The amount being charged
  * @param  SHORT_TEXT                   The reason for the charging
- * @param  ?TIME                        The time this is recorded to have happened (NULL: use current time)
+ * @param  ?TIME                        The time this is recorded to have happened (null: use current time)
  */
 function add_to_charge_log($member_id, $amount, $reason, $time = null)
 {

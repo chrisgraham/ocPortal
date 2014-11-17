@@ -25,12 +25,12 @@
  *
  * @param  URLPATH                      URL of the video to be transcoded
  * @param  ID_TEXT                      The table we are saving into
- * @param  ?AUTO_LINK                   The ID of the video being transcoded (NULL: don't save into DB)
- * @param  ?ID_TEXT                     Name of the ID field in the table (NULL: don't save into DB)
+ * @param  ?AUTO_LINK                   The ID of the video being transcoded (null: don't save into DB)
+ * @param  ?ID_TEXT                     Name of the ID field in the table (null: don't save into DB)
  * @param  ID_TEXT                      Name of the URL field in the table
- * @param  ?ID_TEXT                     Name of the original filename field in the table (NULL: built into URL field)
- * @param  ?ID_TEXT                     Name of the width field in the table (NULL: none)
- * @param  ?ID_TEXT                     Name of the height field in the table (NULL: none)
+ * @param  ?ID_TEXT                     Name of the original filename field in the table (null: built into URL field)
+ * @param  ?ID_TEXT                     Name of the width field in the table (null: none)
+ * @param  ?ID_TEXT                     Name of the height field in the table (null: none)
  * @return URLPATH                      Transcoded file (or original URL if no change was made)
  */
 function transcode_video($url, $table, $local_id, $local_id_field, $url_field, $orig_filename_field, $width_field, $height_field)
@@ -233,7 +233,7 @@ function store_transcoding_failure($transcoder_id)
  * Handle that a transcode has worked.
  *
  * @param  ID_TEXT                      Transcoding ID
- * @param  ?URLPATH                     Transcoded URL (NULL: Discerned using t_output_filename field, which we assume is where transcoder has copied file to)
+ * @param  ?URLPATH                     Transcoded URL (null: Discerned using t_output_filename field, which we assume is where transcoder has copied file to)
  */
 function store_transcoding_success($transcoder_id, $new_url = null)
 {

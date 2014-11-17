@@ -329,7 +329,7 @@ function ocp_eatcookie($name)
  * @param  string                       The value to store in the cookie
  * @param  boolean                      Whether it is a session cookie (gets removed once the browser window closes)
  * @param  boolean                      Whether the cookie should not be readable by JavaScript
- * @param  ?integer                     Days to store (NULL: default)
+ * @param  ?integer                     Days to store (null: default)
  * @return boolean                      The result of the PHP setcookie command
  */
 function ocp_setcookie($name, $value, $session = false, $http_only = false, $days = null)

@@ -25,7 +25,7 @@
  * @param  string                       The method name to call.
  * @param  array                        An array of parameters.
  * @param  boolean                      Whether to accept failure.
- * @return ?string                      The result (NULL: failed).
+ * @return ?string                      The result (null: failed).
  */
 function xml_rpc($url, $method, $params, $accept_failure = false)
 {

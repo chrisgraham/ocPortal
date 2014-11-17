@@ -26,7 +26,7 @@ class Hook_occle_fs_extended_config__redirect
     /**
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
-     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_edit_date()
     {

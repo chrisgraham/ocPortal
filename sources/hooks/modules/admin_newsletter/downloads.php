@@ -27,7 +27,7 @@ class Hook_whatsnew_downloads
      * Find selectable (filterable) categories.
      *
      * @param  TIME                     The time that there must be entries found newer than
-     * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
+     * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (null: disabled)
      */
     public function choose_categories($updated_since)
     {

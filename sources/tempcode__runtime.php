@@ -222,9 +222,9 @@ function apply_tempcode_escaping_inline($escaped, $value)
  * This will create a new tempcode object that is containing a single specifed language code
  *
  * @param  ID_TEXT                      The ID of the symbol to use
- * @param  ?mixed                       The first token [string or tempcode] (replaces {1}) (NULL: none)
- * @param  ?mixed                       The second token [string or tempcode] (replaces {2}) (NULL: none)
- * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+ * @param  ?mixed                       The first token [string or tempcode] (replaces {1}) (null: none)
+ * @param  ?mixed                       The second token [string or tempcode] (replaces {2}) (null: none)
+ * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (null: none)
  * @return tempcode                     A language tempcode object
  */
 function do_lang_tempcode($symbol, $token1 = null, $token2 = null, $token3 = null)
@@ -253,8 +253,8 @@ function do_lang_tempcode($symbol, $token1 = null, $token2 = null, $token3 = nul
  * This will create a new tempcode object that is containing a single specifed symbol
  *
  * @param  ID_TEXT                      The ID of the symbol to use
- * @param  ?array                       Symbol parameters (NULL: none)
- * @param  ?array                       Escaping (NULL: none)
+ * @param  ?array                       Symbol parameters (null: none)
+ * @param  ?array                       Escaping (null: none)
  * @return tempcode                     A symbol tempcode object
  */
 function symbol_tempcode($symbol, $parameters = null, $escape = null)
@@ -272,7 +272,7 @@ function symbol_tempcode($symbol, $parameters = null, $escape = null)
  *
  * @param  ID_TEXT                      The ID of the symbol to use
  * @param  tempcode                     The contents
- * @param  ?array                       Directive parameters (NULL: none)
+ * @param  ?array                       Directive parameters (null: none)
  * @return tempcode                     A directive tempcode object
  */
 function directive_tempcode($directive, $content, $parameters = null)
@@ -301,10 +301,10 @@ function static_evaluate_tempcode($ob)
  * Get a tempcoded version of a normal XHTML template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the tempcode attach method.
  *
  * @param  ID_TEXT                      The codename of the template being loaded
- * @param  ?array                       A map of parameters for the template (key to value) (NULL: no parameters)
- * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (NULL: users own language)
+ * @param  ?array                       A map of parameters for the template (key to value) (null: no parameters)
+ * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (null: users own language)
  * @param  boolean                      Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (NULL: none)
+ * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
  * @param  string                       File type suffix of template file (e.g. .tpl)
  * @param  string                       Subdirectory type to look in
  * @set    templates css
@@ -787,7 +787,7 @@ class Tempcode
     /**
      * Constructor of tempcode
      *
-     * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
+     * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (null: start as empty)
      */
     public function __construct($details = null)
     {
@@ -884,7 +884,7 @@ class Tempcode
      *
      * @param  mixed                    The tempcode/string to attach
      * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
-     * @param  ?array                   Extra escaping (NULL: none)
+     * @param  ?array                   Extra escaping (null: none)
      */
     public function attach($attach, $avoid_children_merge = false, $escape = null)
     {
@@ -976,7 +976,7 @@ class Tempcode
     /**
      * Assemble the current tempcode object into a single serialised (compiled) tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current users language)
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current users language)
      * @return string                   The assembly result
      */
     public function to_assembly($lang = null)
@@ -1182,7 +1182,7 @@ class Tempcode
     /**
      * Parse the current tempcode object, then echo it to the browser.
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current users language)
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current users language)
      * @return string                   Blank string. Allows chaining within echo statements
      */
     public function evaluate_echo($lang = null)
@@ -1283,7 +1283,7 @@ class Tempcode
     /**
      * Parses the current tempcode object, then return the parsed string
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current user's language)
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current user's language)
      * @return string                   The evaluated thing. Voila, it's all over!
      */
     public function evaluate($lang = null)

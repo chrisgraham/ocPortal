@@ -26,8 +26,8 @@ class Hook_resource_meta_aware_award_type
     /**
      * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
      *
-     * @param  ?ID_TEXT                 The zone to link through to (NULL: autodetect).
-     * @return ?array                   Map of award content-type info (NULL: disabled).
+     * @param  ?ID_TEXT                 The zone to link through to (null: autodetect).
+     * @return ?array                   Map of award content-type info (null: disabled).
      */
     public function info($zone = null)
     {

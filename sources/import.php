@@ -80,7 +80,7 @@ function ocf_over_msn()
  * @param  ID_TEXT                      An importation type code, from those ocPortal has defined (E.g. 'download', 'news', ...)
  * @param  string                       The source (old, original) ID of the mapping
  * @param  boolean                      If it is okay to fail to find a mapping
- * @return ?AUTO_LINK                   The new ID (NULL: not found)
+ * @return ?AUTO_LINK                   The new ID (null: not found)
  */
 function import_id_remap_get($type, $id_old, $fail_ok = false)
 {

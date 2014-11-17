@@ -24,8 +24,8 @@
  * We prefer Comcode with [html]HTML goes here[/html] usage
  *
  * @param  PATH                         The relative (to ocPortals base directory) path to the HTML page
- * @param  ?PATH                        The file base to load from (NULL: standard)
- * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @param  ?PATH                        The file base to load from (null: standard)
+ * @param  ?object                      Semi-filled output template (null: definitely not doing output streaming)
  * @return string                       The page
  */
 function load_html_page($string, $file_base = null, &$out = null)

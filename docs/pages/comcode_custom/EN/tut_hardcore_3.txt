@@ -90,7 +90,7 @@ Knowing how to program, I now have written my code, with my modified files saved
  * @param  tempcode   The module output that we are wrapping.
  * @param  boolean    Whether to include the personal bar in the wrap.
  * @param  boolean    Whether to include statistics in the wrap.
- * @param  ?AUTO_LINK The forum to make the search link search under (NULL: Users own PT forum/unknown).
+ * @param  ?AUTO_LINK The forum to make the search link search under (null: Users own PT forum/unknown).
  * @return tempcode   The wrapped output.
  */
 function ocf_wrapper($title,$content,$show_personal_bar = true,$show_stats = true,$forum_id = null)

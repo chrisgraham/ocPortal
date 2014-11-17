@@ -264,10 +264,10 @@ function dload_script()
  * @param  LONG_TEXT                    A description
  * @param  LONG_TEXT                    Hidden notes pertaining to this download category
  * @param  URLPATH                      The representative image for the category (blank: none)
- * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
- * @param  ?TIME                        Add time (NULL: now)
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
+ * @param  ?TIME                        Add time (null: now)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit) (blank: implicit)
  * @return AUTO_LINK                    The ID of the newly added download category
  */
 function add_download_category($category, $parent_id, $description, $notes, $rep_image = '', $id = null, $add_time = null, $meta_keywords = '', $meta_description = '')
@@ -326,9 +326,9 @@ function add_download_category($category, $parent_id, $description, $notes, $rep
  * @param  LONG_TEXT                    A description
  * @param  LONG_TEXT                    Hidden notes pertaining to this download category
  * @param  URLPATH                      The representative image for the category (blank: none)
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit)
- * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit)
- * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit)
+ * @param  ?TIME                        Add time (null: do not change)
  */
 function edit_download_category($category_id, $category, $parent_id, $description, $notes, $rep_image, $meta_keywords, $meta_description, $add_time = null)
 {
@@ -428,8 +428,8 @@ function delete_download_category($category_id)
  * Create a data-mash from the file at a URL. This is data useful for the search engine.
  *
  * @param  URLPATH                      The URL to make a data-mash of, or a filename if $data isn't blank
- * @param  ?string                      Data (NULL: use URL)
- * @param  ?ID_TEXT                     File extension (NULL: get from URL)
+ * @param  ?string                      Data (null: use URL)
+ * @param  ?ID_TEXT                     File extension (null: get from URL)
  * @param  boolean                      Whether a direct file path was given instead of a URL
  * @return LONG_TEXT                    The data-mash
  */
@@ -741,7 +741,7 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
  * @param  LONG_TEXT                    The description of the download
  * @param  ID_TEXT                      The author of the download (not necessarily same as the submitter)
  * @param  LONG_TEXT                    The supplementary description for the download
- * @param  ?AUTO_LINK                   The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (NULL: none)
+ * @param  ?AUTO_LINK                   The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (null: none)
  * @param  BINARY                       Whether the download has been validated
  * @param  BINARY                       Whether the download may be rated
  * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
@@ -751,13 +751,13 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
  * @param  integer                      The file size of the download (we can't really detect this in real-time for remote URLs)
  * @param  integer                      The cost of the download that members will have to pay to get it
  * @param  BINARY                       Whether the submitter gets the points for the download (they are selling it) (otherwise they are just thrown out, which is an alternative model - one of enforcing community point building)
- * @param  ?AUTO_LINK                   The licence to use (NULL: none)
- * @param  ?TIME                        The add date for the download (NULL: now)
+ * @param  ?AUTO_LINK                   The licence to use (null: none)
+ * @param  ?TIME                        The add date for the download (null: now)
  * @param  integer                      The number of downloads that this download has had
  * @param  integer                      The number of views that this download has had
- * @param  ?MEMBER                      The submitter (NULL: current user)
- * @param  ?TIME                        The edit date (NULL: never)
- * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?MEMBER                      The submitter (null: current user)
+ * @param  ?TIME                        The edit date (null: never)
+ * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
  * @param  SHORT_TEXT                   Meta keywords for this resource (blank: implicit)
  * @param  LONG_TEXT                    Meta description for this resource (blank: implicit)
  * @param  integer                      The ordered number of the gallery image to use as the download representative image
@@ -877,8 +877,8 @@ function add_download($category_id, $name, $url, $description, $author, $additio
 /**
  * Set the permissions for a download gallery.
  *
- * @param  ?AUTO_LINK                   The ID of the download (NULL: lookup from download)
- * @param  ?MEMBER                      The submitter (NULL: work out automatically)
+ * @param  ?AUTO_LINK                   The ID of the download (null: lookup from download)
+ * @param  ?MEMBER                      The submitter (null: work out automatically)
  */
 function set_download_gallery_permissions($id, $submitter = null)
 {
@@ -918,7 +918,7 @@ function set_download_gallery_permissions($id, $submitter = null)
  * @param  LONG_TEXT                    The description of the download
  * @param  ID_TEXT                      The author of the download (not necessarily same as the submitter)
  * @param  LONG_TEXT                    The supplementary description for the download
- * @param  ?AUTO_LINK                   The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (NULL: none)
+ * @param  ?AUTO_LINK                   The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (null: none)
  * @param  integer                      The ordered number of the gallery image to use as the download representative image
  * @param  BINARY                       Whether the download has been validated
  * @param  BINARY                       Whether the download may be rated
@@ -929,14 +929,14 @@ function set_download_gallery_permissions($id, $submitter = null)
  * @param  integer                      The file size of the download (we can't really detect this in real-time for remote URLs)
  * @param  integer                      The cost of the download that members will have to pay to get it
  * @param  BINARY                       Whether the submitter gets the points for the download (they are selling it) (otherwise they are just thrown out, which is an alternative model - one of enforcing community point building)
- * @param  ?AUTO_LINK                   The licence to use (NULL: none)
+ * @param  ?AUTO_LINK                   The licence to use (null: none)
  * @param  SHORT_TEXT                   Meta keywords
  * @param  LONG_TEXT                    Meta description
- * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME                        Add time (NULL: do not change)
- * @param  ?integer                     Number of views (NULL: do not change)
- * @param  ?MEMBER                      Submitter (NULL: do not change)
- * @param  ?integer                     The number of downloads that this download has had (NULL: do not change)
+ * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (null: do not change)
+ * @param  ?integer                     Number of views (null: do not change)
+ * @param  ?MEMBER                      Submitter (null: do not change)
+ * @param  ?integer                     The number of downloads that this download has had (null: do not change)
  * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_download($id, $category_id, $name, $url, $description, $author, $additional_details, $out_mode_id, $default_pic, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $original_filename, $file_size, $cost, $submitter_gets_points, $licence, $meta_keywords, $meta_description, $edit_time = null, $add_time = null, $views = null, $submitter = null, $num_downloads = null, $null_is_literal = false)

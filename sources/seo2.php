@@ -43,7 +43,7 @@ function seo_meta_erase_storage($type, $id)
  * Get template fields to insert into a form page, for manipulation of seo fields.
  *
  * @param  ID_TEXT                      The type of resource (e.g. download)
- * @param  ?ID_TEXT                     The ID of the resource (NULL: adding)
+ * @param  ?ID_TEXT                     The ID of the resource (null: adding)
  * @param  boolean                      Whether to show a header
  * @return tempcode                     Form page tempcode fragment
  */

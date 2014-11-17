@@ -34,7 +34,7 @@ function has_leader_board_since($cutoff)
  * Calculate the leader-board.
  *
  * @param  boolean                      Whether to retrieve results too (no retrieve -> faster call)
- * @return ?array                       A map of member-IDs to points, sorted by leader-board status (NULL: not retrieving)
+ * @return ?array                       A map of member-IDs to points, sorted by leader-board status (null: not retrieving)
  */
 function calculate_latest_leader_board($retrieve = true)
 {

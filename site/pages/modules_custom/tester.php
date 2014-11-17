@@ -32,7 +32,7 @@ class Module_tester
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -62,8 +62,8 @@ class Module_tester
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (NULL: new install)
-     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 What version we're upgrading from (null: new install)
+     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -72,17 +72,17 @@ class Module_tester
             's_section' => 'SHORT_TEXT',
             's_notes' => 'LONG_TEXT',
             's_inheritable' => 'BINARY',
-            's_assigned_to' => '?MEMBER' // NULL: no assignee, as it's meant to be inherited
+            's_assigned_to' => '?MEMBER' // null: no assignee, as it's meant to be inherited
         ));
 
         $GLOBALS['SITE_DB']->create_table('tests', array(
             'id' => '*AUTO',
             't_section' => 'AUTO_LINK',
             't_test' => 'LONG_TEXT',
-            't_assigned_to' => '?MEMBER', // NULL: section assignee
+            't_assigned_to' => '?MEMBER', // null: section assignee
             't_enabled' => 'BINARY',
             't_status' => 'INTEGER', // 0=not done, 1=success, 2=failure
-            't_inherit_section' => '?AUTO_LINK' // NULL: none
+            't_inherit_section' => '?AUTO_LINK' // null: none
         ));
 
         add_privilege('TESTER', 'perform_tests', false);
@@ -104,10 +104,10 @@ class Module_tester
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -128,7 +128,7 @@ class Module_tester
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run()
     {
@@ -443,7 +443,7 @@ class Module_tester
     /**
      * Get a list to choose a section.
      *
-     * @param  ?AUTO_LINK               The section to select by default (NULL: no specific default)
+     * @param  ?AUTO_LINK               The section to select by default (null: no specific default)
      * @param  boolean                  Whether to only select inheritable sections
      * @return tempcode                 The list
      */
@@ -477,7 +477,7 @@ class Module_tester
     /**
      * Get a list to choose a tester.
      *
-     * @param  ?MEMBER                  The member to select by default (NULL: Select N/A)
+     * @param  ?MEMBER                  The member to select by default (null: Select N/A)
      * @return tempcode                 The list
      */
     public function get_tester_list($it)
@@ -504,7 +504,7 @@ class Module_tester
      *
      * @param  string                   A short stub to prefix the field name
      * @param  SHORT_TEXT               The text of the test
-     * @param  ?MEMBER                  The member the test is assigned to (NULL: test section member)
+     * @param  ?MEMBER                  The member the test is assigned to (null: test section member)
      * @param  BINARY                   Whether the test is enabled
      * @param  string                   The section this test inherits from (blank: none)
      * @return tempcode                 The tempcode for the visible fields
@@ -530,7 +530,7 @@ class Module_tester
      *
      * @param  SHORT_TEXT               The name of the section
      * @param  LONG_TEXT                Notes for the section
-     * @param  ?MEMBER                  The member the tests are assigned to (NULL: not a normal section, one that gets inherited into tests)
+     * @param  ?MEMBER                  The member the tests are assigned to (null: not a normal section, one that gets inherited into tests)
      * @param  BINARY                   Whether this test section is intended to be inherited, not used by itself
      * @return tempcode                 The tempcode for the visible fields
      */

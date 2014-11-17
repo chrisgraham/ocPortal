@@ -40,8 +40,8 @@ class Hook_notification_order_dispatched extends Hook_Notification
      * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
-     * @param  ?array                   List of member IDs we are restricting to (NULL: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
      * @param  integer                  Start position (for pagination)
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more

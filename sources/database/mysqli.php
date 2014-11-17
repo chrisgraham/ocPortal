@@ -40,7 +40,7 @@ class Database_Static_mysqli extends Database_super_mysql
      * @param  string                   The database connection username
      * @param  string                   The database connection password
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
-     * @return ?array                   A database connection (note for mySQL, it's actually a pair, containing the database name too: because we need to select the name before each query on the connection) (NULL: error)
+     * @return ?array                   A database connection (note for mySQL, it's actually a pair, containing the database name too: because we need to select the name before each query on the connection) (null: error)
      */
     public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
@@ -176,11 +176,11 @@ class Database_Static_mysqli extends Database_super_mysql
      *
      * @param  string                   The complete SQL query
      * @param  array                    A DB connection
-     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
-     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 The start row to affect (null: no specification)
      * @param  boolean                  Whether to output an error on failure
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
-     * @return ?mixed                   The results (NULL: no results), or the insert ID
+     * @return ?mixed                   The results (null: no results), or the insert ID
      */
     public function db_query($query, $db_parts, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {

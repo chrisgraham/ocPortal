@@ -26,7 +26,7 @@ class Hook_config_enable_privacy_tab
     /**
      * Gets the details relating to the config option.
      *
-     * @return ?array                   The details (NULL: disabled)
+     * @return ?array                   The details (null: disabled)
      */
     public function get_details()
     {
@@ -46,7 +46,7 @@ class Hook_config_enable_privacy_tab
     /**
      * Gets the default value for the config option.
      *
-     * @return ?string                  The default value (NULL: option is disabled)
+     * @return ?string                  The default value (null: option is disabled)
      */
     public function get_default()
     {

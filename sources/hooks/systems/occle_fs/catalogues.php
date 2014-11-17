@@ -97,9 +97,9 @@ class Hook_occle_fs_catalogues extends Resource_fs_base
     /**
      * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
      *
-     * @param  ?ID_TEXT                 Folder resource type (NULL: root)
+     * @param  ?ID_TEXT                 Folder resource type (null: root)
      * @param  ID_TEXT                  Resource type (may be file or folder)
-     * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
+     * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (null: cannot be under)
      */
     protected function _has_parent_child_relationship($above, $under)
     {
@@ -188,7 +188,7 @@ class Hook_occle_fs_catalogues extends Resource_fs_base
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
      * @param  array                    Resource row (not full, but does contain the ID)
-     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_folder_edit_date($row)
     {
@@ -201,7 +201,7 @@ class Hook_occle_fs_catalogues extends Resource_fs_base
      *
      * @param  ID_TEXT                  The resource type
      * @param  ID_TEXT                  The resource ID
-     * @return ?ID_TEXT                 The filename (NULL: could not find)
+     * @return ?ID_TEXT                 The filename (null: could not find)
      */
     public function folder_convert_id_to_filename($resource_type, $resource_id)
     {
@@ -220,7 +220,7 @@ class Hook_occle_fs_catalogues extends Resource_fs_base
      * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
      *
      * @param  ID_TEXT                  The filename, or filepath
-     * @param  ?ID_TEXT                 The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+     * @param  ?ID_TEXT                 The resource type (null: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
      * @return array                    A pair: The resource type, the resource ID
      */
     public function folder_convert_filename_to_id($filename, $resource_type = null)
@@ -624,7 +624,7 @@ class Hook_occle_fs_catalogues extends Resource_fs_base
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
      * @param  array                    Resource row (not full, but does contain the ID)
-     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_file_edit_date($row)
     {

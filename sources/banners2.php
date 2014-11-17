@@ -30,12 +30,12 @@
  * @param  LONG_TEXT                    Any notes associated with the banner
  * @param  integer                      The banners "importance modulus"
  * @range  1 max
- * @param  ?integer                     The number of hits the banner may have (NULL: not applicable for this banner type)
+ * @param  ?integer                     The number of hits the banner may have (null: not applicable for this banner type)
  * @range  0 max
  * @param  SHORT_INTEGER                The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
- * @param  ?TIME                        The banner expiry date (NULL: never expires)
- * @param  ?MEMBER                      The banners submitter (NULL: current member)
+ * @param  ?TIME                        The banner expiry date (null: never expires)
+ * @param  ?MEMBER                      The banners submitter (null: current member)
  * @param  BINARY                       Whether the banner has been validated
  * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
  * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
@@ -237,7 +237,7 @@ function check_banner($title_text = '', $direct_code = '', $b_type = '', $url_pa
  * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
  * @param  SHORT_TEXT                   The caption of the banner
  * @param  LONG_TEXT                    Complete HTML/PHP for the banner
- * @param  ?integer                     The number of hits the banner may have (NULL: not applicable for this banner type)
+ * @param  ?integer                     The number of hits the banner may have (null: not applicable for this banner type)
  * @range  0 max
  * @param  URLPATH                      The URL to the site the banner leads to
  * @param  integer                      The banners "importance modulus"
@@ -245,16 +245,16 @@ function check_banner($title_text = '', $direct_code = '', $b_type = '', $url_pa
  * @param  LONG_TEXT                    Any notes associated with the banner
  * @param  SHORT_INTEGER                The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
- * @param  ?TIME                        The banner expiry date (NULL: never)
- * @param  ?MEMBER                      The banners submitter (NULL: current member)
+ * @param  ?TIME                        The banner expiry date (null: never)
+ * @param  ?MEMBER                      The banners submitter (null: current member)
  * @param  BINARY                       Whether the banner has been validated
  * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
- * @param  ?TIME                        The time the banner was added (NULL: now)
+ * @param  ?TIME                        The time the banner was added (null: now)
  * @param  integer                      The number of return hits from this banners site
  * @param  integer                      The number of banner hits to this banners site
  * @param  integer                      The number of return views from this banners site
  * @param  integer                      The number of banner views to this banners site
- * @param  ?TIME                        The banner edit date  (NULL: never)
+ * @param  ?TIME                        The banner edit date  (null: never)
  * @param  boolean                      Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT                      The name
  */
@@ -332,7 +332,7 @@ function add_banner($name, $imgurl, $title_text, $caption, $direct_code, $campai
  * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
  * @param  SHORT_TEXT                   The caption of the banner
  * @param  LONG_TEXT                    Complete HTML/PHP for the banner
- * @param  ?integer                     The number of hits the banner may have (NULL: not applicable for this banner type)
+ * @param  ?integer                     The number of hits the banner may have (null: not applicable for this banner type)
  * @range  0 max
  * @param  URLPATH                      The URL to the site the banner leads to
  * @param  integer                      The banners "importance modulus"
@@ -340,12 +340,12 @@ function add_banner($name, $imgurl, $title_text, $caption, $direct_code, $campai
  * @param  LONG_TEXT                    Any notes associated with the banner
  * @param  SHORT_INTEGER                The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
- * @param  ?TIME                        The banner expiry date (NULL: never)
- * @param  ?MEMBER                      The banners submitter (NULL: leave unchanged)
+ * @param  ?TIME                        The banner expiry date (null: never)
+ * @param  ?MEMBER                      The banners submitter (null: leave unchanged)
  * @param  BINARY                       Whether the banner has been validated
  * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
- * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (null: do not change)
  * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  * @param  boolean                      Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT                      The name

@@ -261,7 +261,7 @@ class Database_Static_sqlite
      * @param  string                   The database connection username
      * @param  string                   The database connection password
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
-     * @return ?array                   A database connection (NULL: failed)
+     * @return ?array                   A database connection (null: failed)
      */
     public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
@@ -325,11 +325,11 @@ class Database_Static_sqlite
      *
      * @param  string                   The complete SQL query
      * @param  array                    A DB connection
-     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
-     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 The start row to affect (null: no specification)
      * @param  boolean                  Whether to output an error on failure
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
-     * @return ?mixed                   The results (NULL: no results), or the insert ID
+     * @return ?mixed                   The results (null: no results), or the insert ID
      */
     public function db_query($query, $db, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {
@@ -380,7 +380,7 @@ class Database_Static_sqlite
      * Get the rows returned from a SELECT query.
      *
      * @param  resource                 The query result pointer
-     * @param  ?integer                 Whether to start reading from (NULL: irrelevant for this forum driver)
+     * @param  ?integer                 Whether to start reading from (null: irrelevant for this forum driver)
      * @return array                    A list of row maps
      */
     public function db_get_query_rows($results, $start = null)

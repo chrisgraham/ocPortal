@@ -21,7 +21,7 @@
 /**
  * Get a map of notification types available to our member.
  *
- * @param  ?MEMBER                      Member this is for (NULL: just check globally)
+ * @param  ?MEMBER                      Member this is for (null: just check globally)
  * @return array                        Map of notification types (integer code to language string code)
  */
 function _get_available_notification_types($member_id_of = null)
@@ -225,8 +225,8 @@ function notifications_ui($member_id_of)
  * Put out a user interface for managing notifications for a notification-category supporting content type. Also toggle notifications if an ID is passed.
  *
  * @param  ID_TEXT                      The notification code to work with
- * @param  ?tempcode                    Special message to output if we have toggled to enable (NULL: use standard)
- * @param  ?tempcode                    Special message to output if we have toggled to disable (NULL: use standard)
+ * @param  ?tempcode                    Special message to output if we have toggled to enable (null: use standard)
+ * @param  ?tempcode                    Special message to output if we have toggled to disable (null: use standard)
  * @return tempcode                     UI
  */
 function notifications_ui_advanced($notification_code, $enable_message = null, $disable_message = null)
@@ -355,9 +355,9 @@ function notifications_ui_advanced($notification_code, $enable_message = null, $
  * @param  array                        Notification types
  * @param  ID_TEXT                      The notification code to work with
  * @param  object                       Notificiation hook object
- * @param  ?ID_TEXT                     Category we're looking under (NULL: root)
+ * @param  ?ID_TEXT                     Category we're looking under (null: root)
  * @param  integer                      Recursion depth
- * @param  ?boolean                     Value to change setting to (NULL: do not change)
+ * @param  ?boolean                     Value to change setting to (null: do not change)
  * @return tempcode                     UI
  */
 function _notifications_build_category_tree($_notification_types, $notification_code, $ob, $id, $depth = 0, $force_change_children_to = null)

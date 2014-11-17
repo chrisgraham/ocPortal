@@ -41,7 +41,7 @@ class Hook_profiles_tabs_edit_notifications
      * @param  MEMBER                   The ID of the member who is being viewed
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-     * @return ?array                   A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
+     * @return ?array                   A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (null: if $leave_to_ajax_if_possible was set), the icon
      */
     public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {

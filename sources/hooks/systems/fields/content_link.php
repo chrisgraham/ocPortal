@@ -56,7 +56,7 @@ class Hook_fields_content_link
      * Get special Tempcode for inputting this field.
      *
      * @param  array                    The row for the field to input
-     * @return ?array                   List of specially encoded input detail rows (NULL: nothing special)
+     * @return ?array                   List of specially encoded input detail rows (null: nothing special)
      */
     public function get_search_inputter($row)
     {
@@ -68,7 +68,7 @@ class Hook_fields_content_link
      *
      * @param  array                    The row for the field to input
      * @param  integer                  We're processing for the ith row
-     * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
+     * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (null: nothing special)
      */
     public function inputted_to_sql_for_search($row, $i)
     {
@@ -82,9 +82,9 @@ class Hook_fields_content_link
     /**
      * Get some info bits relating to our field type, that helps us look it up / set defaults.
      *
-     * @param  ?array                   The field details (NULL: new field)
-     * @param  ?boolean                 Whether a default value cannot be blank (NULL: don't "lock in" a new default value)
-     * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
+     * @param  ?array                   The field details (null: new field)
+     * @param  ?boolean                 Whether a default value cannot be blank (null: don't "lock in" a new default value)
+     * @param  ?string                  The given default value as a string (null: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
     public function get_field_value_row_bits($field, $required = null, $default = null)
@@ -134,9 +134,9 @@ class Hook_fields_content_link
      * @param  string                   The field name
      * @param  string                   The field description
      * @param  array                    The field details
-     * @param  ?string                  The actual current value of the field (NULL: none)
+     * @param  ?string                  The actual current value of the field (null: none)
      * @param  boolean                  Whether this is for a new entry
-     * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
+     * @return ?tempcode                The Tempcode for the input field (null: skip the field - it's not input)
      */
     public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
@@ -189,9 +189,9 @@ class Hook_fields_content_link
      *
      * @param  boolean                  Whether we were editing (because on edit, it could be a fractional edit)
      * @param  array                    The field details
-     * @param  ?string                  Where the files will be uploaded to (NULL: do not store an upload, return NULL if we would need to do so)
-     * @param  ?array                   Former value of field (NULL: none)
-     * @return ?string                  The value (NULL: could not process)
+     * @param  ?string                  Where the files will be uploaded to (null: do not store an upload, return NULL if we would need to do so)
+     * @param  ?array                   Former value of field (null: none)
+     * @return ?string                  The value (null: could not process)
      */
     public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {

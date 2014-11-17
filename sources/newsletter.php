@@ -48,9 +48,9 @@ function incoming_bounced_email_script()
  * @param  EMAIL                        The email address of the subscriber
  * @param  integer                      The interest level
  * @range  1 4
- * @param  ?LANGUAGE_NAME               The language (NULL: users)
+ * @param  ?LANGUAGE_NAME               The language (null: users)
  * @param  boolean                      Whether to require a confirmation mail
- * @param  ?AUTO_LINK                   The newsletter to join (NULL: the first)
+ * @param  ?AUTO_LINK                   The newsletter to join (null: the first)
  * @param  string                       Subscribers forename
  * @param  string                       Subscribers surname
  * @return string                       Newsletter password

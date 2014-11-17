@@ -21,19 +21,19 @@
 /**
  * Edit a topic.
  *
- * @param  ?AUTO_LINK                   The ID of the topic to edit (NULL: Private Topic).
- * @param  ?SHORT_TEXT                  Description of the topic (NULL: do not change).
- * @param  ?SHORT_TEXT                  The image code of the emoticon for the topic (NULL: do not change).
- * @param  ?BINARY                      Whether the topic is validated (NULL: do not change).
- * @param  ?BINARY                      Whether the topic is open (NULL: do not change).
- * @param  ?BINARY                      Whether the topic is pinned (NULL: do not change).
- * @param  ?BINARY                      Whether the topic is sunk (NULL: do not change).
- * @param  ?BINARY                      Whether the topic is cascading (NULL: do not change).
+ * @param  ?AUTO_LINK                   The ID of the topic to edit (null: Private Topic).
+ * @param  ?SHORT_TEXT                  Description of the topic (null: do not change).
+ * @param  ?SHORT_TEXT                  The image code of the emoticon for the topic (null: do not change).
+ * @param  ?BINARY                      Whether the topic is validated (null: do not change).
+ * @param  ?BINARY                      Whether the topic is open (null: do not change).
+ * @param  ?BINARY                      Whether the topic is pinned (null: do not change).
+ * @param  ?BINARY                      Whether the topic is sunk (null: do not change).
+ * @param  ?BINARY                      Whether the topic is cascading (null: do not change).
  * @param  LONG_TEXT                    The reason for this action.
- * @param  ?string                      New title for the topic (NULL: do not change).
- * @param  ?SHORT_TEXT                  Link related to the topic (e.g. link to view a ticket) (NULL: do not change).
+ * @param  ?string                      New title for the topic (null: do not change).
+ * @param  ?SHORT_TEXT                  Link related to the topic (e.g. link to view a ticket) (null: do not change).
  * @param  boolean                      Whether to check permissions.
- * @param  ?integer                     Number of views (NULL: do not change)
+ * @param  ?integer                     Number of views (null: do not change)
  * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function ocf_edit_topic($topic_id, $description = null, $emoticon = null, $validated = null, $open = null, $pinned = null, $sunk = null, $cascading = null, $reason = '', $title = null, $description_link = null, $check_perms = true, $views = null, $null_is_literal = false)
@@ -146,7 +146,7 @@ function ocf_edit_topic($topic_id, $description = null, $emoticon = null, $valid
  *
  * @param  AUTO_LINK                    The ID of the topic to delete.
  * @param  LONG_TEXT                    The reason for this action .
- * @param  ?AUTO_LINK                   Where topic to move posts in this topic to (NULL: delete the posts).
+ * @param  ?AUTO_LINK                   Where topic to move posts in this topic to (null: delete the posts).
  * @param  boolean                      Whether to check permissions.
  * @return AUTO_LINK                    The forum ID the topic is in (could be found without calling the function, but as we've looked it up, it is worth keeping).
  */
@@ -289,7 +289,7 @@ function ocf_delete_topic($topic_id, $reason = '', $post_target_topic_id = null,
  *
  * @param  AUTO_LINK                    The forum the topics are currently in.
  * @param  AUTO_LINK                    The forum the topics are being moved to.
- * @param  ?array                       A list of the topic IDs to move (NULL: move all topics from source forum).
+ * @param  ?array                       A list of the topic IDs to move (null: move all topics from source forum).
  * @param  boolean                      Whether to check permissions.
  */
 function ocf_move_topics($from, $to, $topics = null, $check_perms = true) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
@@ -507,8 +507,8 @@ function ocf_invite_to_pt($member_id, $topic_id)
  * @param  SHORT_TEXT                   PT title
  * @param  AUTO_LINK                    ID of the topic
  * @param  MEMBER                       Member getting the PT
- * @param  ?MEMBER                      Member posting the PT (NULL: current member)
- * @param  ?string                      Post text (NULL: unknown, lookup from $post_id)
+ * @param  ?MEMBER                      Member posting the PT (null: current member)
+ * @param  ?string                      Post text (null: unknown, lookup from $post_id)
  * @param  boolean                      Whether to also mark the topic as unread
  */
 function send_pt_notification($post_id, $subject, $topic_id, $to_id, $from_id = null, $post_comcode = null, $mark_unread = false)

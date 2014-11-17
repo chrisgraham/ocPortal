@@ -378,8 +378,8 @@ function chat_room_prune($room_id)
  *
  * @param  AUTO_LINK                    Room ID (or -1 to mean 'all' as used for IM global process, -2 to mean none)
  * @param  boolean                      Output the backlog?
- * @param  ?AUTO_LINK                   Latest received message ID (NULL: we're not getting latest messages)
- * @param  ?AUTO_LINK                   Latest event ID (NULL: we're not getting events, but we do request a null event so we can use that as a future reference point)
+ * @param  ?AUTO_LINK                   Latest received message ID (null: we're not getting latest messages)
+ * @param  ?AUTO_LINK                   Latest event ID (null: we're not getting events, but we do request a null event so we can use that as a future reference point)
  * @param  string                       Events output to append
  */
 function _chat_messages_script_ajax($room_id, $backlog = false, $message_id = null, $event_id = null, $events_output = '')
@@ -655,7 +655,7 @@ function _chat_messages_script_ajax($room_id, $backlog = false, $message_id = nu
  * Find whether a member is active in chat (i.e. not away).
  *
  * @param  MEMBER                       Member ID
- * @param  ?AUTO_LINK                   Room ID (NULL: lobby)
+ * @param  ?AUTO_LINK                   Room ID (null: lobby)
  * @return boolean                      Whether the member is active
  */
 function chatter_active($member_id, $room_id = null)
@@ -674,7 +674,7 @@ function chatter_active($member_id, $room_id = null)
  *
  * @param  MEMBER                       Member ID
  * @param  AUTO_LINK                    Room ID
- * @param  ?MEMBER                      Room owner (NULL: none)
+ * @param  ?MEMBER                      Room owner (null: none)
  * @return boolean                      Whether the member is a moderator of the chat room
  */
 function is_chat_moderator($member_id, $room_id, $room_owner)
@@ -1011,7 +1011,7 @@ function chat_post_message($room_id, $message, $font_name, $text_colour, $wrap_p
 /**
  * Get the people who have posted a message in the specified room within the last x minutes (defaults to five). Note that this function performs no pruning- the chat lobby will do that. It does do an activity time-range select though.
  *
- * @param   ?AUTO_LINK     The room ID (NULL: lobby)
+ * @param   ?AUTO_LINK     The room ID (null: lobby)
  * @return  array          A map of members in the room. User ID=>Username
  */
 function get_chatters_in_room($room_id)
@@ -1076,7 +1076,7 @@ function get_chatters_in_room_tpl($users)
  *
  * @param  AUTO_LINK                    The room ID
  * @param  boolean                      Allow the chatroom to not be found (i.e. don't die if it can't be)
- * @return ?SHORT_TEXT                  The room name (NULL: not found)
+ * @return ?SHORT_TEXT                  The room name (null: not found)
  */
 function get_chatroom_name($room_id, $allow_null = false)
 {
@@ -1091,7 +1091,7 @@ function get_chatroom_name($room_id, $allow_null = false)
  *
  * @param  SHORT_TEXT                   The name of the chatroom
  * @param  boolean                      Make sure the room is not an IM room. If it is an IM room, pretend it does not exist.
- * @return ?AUTO_LINK                   The ID of the chatroom (NULL: no such chat room)
+ * @return ?AUTO_LINK                   The ID of the chatroom (null: no such chat room)
  */
 function get_chatroom_id($room_name, $must_not_be_im = false)
 {
@@ -1119,14 +1119,14 @@ function chat_get_all_rooms()
  *
  * @param  AUTO_LINK                    The room ID (-1 for IM)
  * @param  array                        Rooms database rows that we'll need
- * @param  ?integer                     The maximum number of messages to be returned (NULL: no maximum)
+ * @param  ?integer                     The maximum number of messages to be returned (null: no maximum)
  * @param  boolean                      Whether to dereference the returned messages
  * @param  boolean                      Whether to return the messages in a downloadeable format (using the templates for log downloading)
- * @param  ?integer                     The datetime stamp to start gathering messages from (NULL: all)
- * @param  ?integer                     The datetime stamp to stop gathering messages at (NULL: current time)
- * @param  ?integer                     The lowest message ID to return (NULL: no special lowest number)
- * @param  ?ID_TEXT                     The zone the chat module is in (NULL: find it)
- * @param  ?AUTO_LINK                   The language ID for the "entering room" message (NULL: not entering the room)
+ * @param  ?integer                     The datetime stamp to start gathering messages from (null: all)
+ * @param  ?integer                     The datetime stamp to stop gathering messages at (null: current time)
+ * @param  ?integer                     The lowest message ID to return (null: no special lowest number)
+ * @param  ?ID_TEXT                     The zone the chat module is in (null: find it)
+ * @param  ?AUTO_LINK                   The language ID for the "entering room" message (null: not entering the room)
  * @param  boolean                      Return the current user's messages?
  * @param  boolean                      Return system messages
  * @return array                        An array of all the messages collected according to the search criteria
@@ -1306,7 +1306,7 @@ function chat_get_room_content($room_id, $_rooms, $cutoff = null, $dereference =
  * @param  string 1st param
  * @param  string 2nd param
  * @param  SHORT_TEXT                   The username of who made this chatcode
- * @param  ?integer                     The maximum number of messages to be returned (NULL: no maximum)
+ * @param  ?integer                     The maximum number of messages to be returned (null: no maximum)
  * @param  ID_TEXT                      The zone that our chat module is in
  * @param  AUTO_LINK                    The room ID the message is in
  * @param  BINARY                       Whether this is within a system message
@@ -1429,7 +1429,7 @@ function _deal_with_chatcode_invite($pm_user, $pm_message, $username, $text, $zo
  * @param  string                       Comma-separated list of members to allow in
  * @param  SHORT_TEXT                   The username of who made this chatcode
  * @param  string                       The text we are using
- * @param  ?integer                     The maximum number of messages to be returned (NULL: no maximum)
+ * @param  ?integer                     The maximum number of messages to be returned (null: no maximum)
  * @return array                        A pair: whether the message was deleted, and the new text of the message
  */
 function _deal_with_chatcode_newroom($pm_user, $pm_message, $username, $text, $cutoff)
@@ -1531,7 +1531,7 @@ function parse_allow_list_input($_allow)
  *
  * @param  mixed                        The row of the chat room to check for access OR it's ID (AUTO_LINK)
  * @param  boolean                      Whether to return false if there is no access (as opposed to bombing out)
- * @param  ?MEMBER                      The member to check as (NULL: current member)
+ * @param  ?MEMBER                      The member to check as (null: current member)
  * @param  boolean                      Whether to also ensure for $member_id having explicit access
  * @return boolean                      Whether the current member has access to the chatroom
  */

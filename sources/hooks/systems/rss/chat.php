@@ -32,7 +32,7 @@ class Hook_rss_chat
      * @set    RSS_ ATOM_
      * @param  string                   The standard format of date to use for the syndication type represented in the prefix
      * @param  integer                  The maximum number of entries to return, ordering by date
-     * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
+     * @return ?array                   A pair: The main syndication section, and a title (null: error)
      */
     public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {

@@ -82,8 +82,8 @@ class Hook_media_rendering_image_websafe
      * @param  mixed                    URL to render (no sessions etc)
      * @param  array                    Attributes (e.g. width, height, length)
      * @param  boolean                  Whether there are admin privileges, to render dangerous media types
-     * @param  ?MEMBER                  Member to run as (NULL: current member)
-     * @param  ?URLPATH                 Direct URL (not via a script) (NULL: just use the normal URL)
+     * @param  ?MEMBER                  Member to run as (null: current member)
+     * @param  ?URLPATH                 Direct URL (not via a script) (null: just use the normal URL)
      * @return tempcode                 Rendered version
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null, $url_direct_filesystem = null)

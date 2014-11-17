@@ -537,7 +537,7 @@ function fu_link($url, $text, $disabled = false, $js = '')
 /**
  * Output a login page.
  *
- * @param  ?string                      Error message (NULL: none)
+ * @param  ?string                      Error message (null: none)
  */
 function up_do_login($message = null)
 {

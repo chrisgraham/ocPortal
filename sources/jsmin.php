@@ -103,7 +103,7 @@ class JSMin
 	 * Handle internal parse situation
 	 *
 	 * @param 	integer		Action type
-	 * @return	?array		Error (NULL: no error)
+	 * @return	?array		Error (null: no error)
 	 */
 	function action($d)
 	{
@@ -194,7 +194,7 @@ class JSMin
 	/**
 	 * Get the next stream token
 	 *
-	 * @return 	?string		Next stream token (NULL: no next token)
+	 * @return 	?string		Next stream token (null: no next token)
 	 */
 	function get()
 	{
@@ -400,7 +400,7 @@ class JSMin
 								}
 								break;
 
-							case NULL:
+							case null:
 								return '';
 								//return array('Unterminated comment.');	We don't need to handle errors
 						}

@@ -86,14 +86,14 @@ class OCP_Topic
      * @param  ID_TEXT                  Content ID of content type to show topic for
      * @param  boolean                  Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
      * @param  boolean                  Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
-     * @param  ?string                  The name of the forum to use (NULL: default comment forum)
-     * @param  ?string                  The default post to use (NULL: standard courtesy warning)
-     * @param  ?mixed                   The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
+     * @param  ?string                  The name of the forum to use (null: default comment forum)
+     * @param  ?string                  The default post to use (null: standard courtesy warning)
+     * @param  ?mixed                   The raw comment array (null: lookup). This is useful if we want to pass it through a filter
      * @param  boolean                  Whether to skip permission checks
      * @param  boolean                  Whether to reverse the posts
-     * @param  ?MEMBER                  Member to highlight the posts of (NULL: none)
+     * @param  ?MEMBER                  Member to highlight the posts of (null: none)
      * @param  boolean                  Whether to allow ratings along with the comment (like reviews)
-     * @param  ?integer                 Maximum to load (NULL: default)
+     * @param  ?integer                 Maximum to load (null: default)
      * @return tempcode                 The tempcode for the comment topic
      */
     public function render_as_comment_topic($content_type, $content_id, $allow_comments, $invisible_if_no_comments, $forum_name, $post_warning, $preloaded_comments, $explicit_allow, $reverse, $highlight_by_member, $allow_reviews, $num_to_show_limit)
@@ -232,11 +232,11 @@ class OCP_Topic
      * @param  integer                  Maximum to load
      * @param  boolean                  Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
      * @param  boolean                  Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
-     * @param  ?string                  The name of the forum to use (NULL: default comment forum)
-     * @param  ?mixed                   The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
+     * @param  ?string                  The name of the forum to use (null: default comment forum)
+     * @param  ?mixed                   The raw comment array (null: lookup). This is useful if we want to pass it through a filter
      * @param  boolean                  Whether to reverse the posts
      * @param  boolean                  Whether the current user may reply to the topic (influences what buttons show)
-     * @param  ?MEMBER                  Member to highlight the posts of (NULL: none)
+     * @param  ?MEMBER                  Member to highlight the posts of (null: none)
      * @param  boolean                  Whether to allow ratings along with the comment (like reviews)
      * @param  array                    List of post IDs to load
      * @param  AUTO_LINK                Parent node being loaded to
@@ -294,7 +294,7 @@ class OCP_Topic
     /**
      * Get the sort order.
      *
-     * @param  ?boolean                 Whether to show in reverse date order (affects default search order only) (NULL: read config)
+     * @param  ?boolean                 Whether to show in reverse date order (affects default search order only) (null: read config)
      * @return ID_TEXT                  Sort order
      * @set relevance rating newest oldest
      */
@@ -323,11 +323,11 @@ class OCP_Topic
     /**
      * Load from a given topic ID.
      *
-     * @param  ?AUTO_LINK               Topic ID (NULL: none yet, set up empty structure)
+     * @param  ?AUTO_LINK               Topic ID (null: none yet, set up empty structure)
      * @param  integer                  Maximum to load
      * @param  integer                  Pagination start if non-threaded
-     * @param  ?boolean                 Whether to show in reverse date order (affects default search order only) (NULL: read config)
-     * @param  ?array                   List of post IDs to load (NULL: no filter)
+     * @param  ?boolean                 Whether to show in reverse date order (affects default search order only) (null: read config)
+     * @param  ?array                   List of post IDs to load (null: no filter)
      * @param  boolean                  Whether to allow spacer posts to flow through the renderer
      * @return boolean                  Success status
      */
@@ -423,14 +423,14 @@ class OCP_Topic
     /**
      * Render a topic.
      *
-     * @param  ?integer                 Number of posts to show initially (NULL: no limit)
+     * @param  ?integer                 Number of posts to show initially (null: no limit)
      * @param  integer                  Maximum thread depth
      * @param  boolean                  Whether the current user may reply to the topic (influences what buttons show)
-     * @param  ?MEMBER                  Member to highlight the posts of (NULL: none)
+     * @param  ?MEMBER                  Member to highlight the posts of (null: none)
      * @param  array                    Review ratings rows
      * @param  AUTO_LINK                ID of forum this topic in in
-     * @param  ?array                   The topic row (NULL: not running OCF).
-     * @param  ?AUTO_LINK               Only show posts under here (NULL: show posts from root)
+     * @param  ?array                   The topic row (null: not running OCF).
+     * @param  ?AUTO_LINK               Only show posts under here (null: show posts from root)
      * @param  boolean                  Whether to just render everything as flat (used when doing AJAX post loading). NOT actually used since we wrote better post-orphaning-fixing code.
      * @return array                    Tuple: Rendered topic, serialized options to render more posts, secure hash of serialized options to prevent tampering
      */
@@ -608,7 +608,7 @@ class OCP_Topic
     /**
      * Grab posts at or underneath a reference post.
      *
-     * @param  ?AUTO_LINK               Reference post in thread (NULL: root)
+     * @param  ?AUTO_LINK               Reference post in thread (null: root)
      * @param  array                    Posts to choose from
      * @return array                    Relevant posts
      */
@@ -662,7 +662,7 @@ class OCP_Topic
     /**
      * Arrange posts underneath a post in the thread (not including the post itself).
      *
-     * @param  ?AUTO_LINK               Reference post in thread (NULL: root)
+     * @param  ?AUTO_LINK               Reference post in thread (null: root)
      * @param  array                    Posts we will be rendering and have not arranged yet (only some of which will be underneath $post_id)
      * @param  array                    Posts we won't be rendering
      * @param  integer                  Maximum depth to render to
@@ -715,10 +715,10 @@ class OCP_Topic
      * @param  integer                  Maximum to load
      * @param  array                    Tree structure of posts
      * @param  boolean                  Whether the current user may reply to the topic (influences what buttons show)
-     * @param  ?AUTO_LINK               Only show posts under here (NULL: show posts from root)
+     * @param  ?AUTO_LINK               Only show posts under here (null: show posts from root)
      * @param  array                    Review ratings rows
      * @param  AUTO_LINK                ID of forum this topic in in
-     * @param  ?array                   The topic row (NULL: not running OCF).
+     * @param  ?array                   The topic row (null: not running OCF).
      * @param  integer                  The recursion depth
      * @return tempcode                 Rendered tree structure
      */
@@ -971,7 +971,7 @@ class OCP_Topic
      * @param  ID_TEXT                  The content ID of what this posting will be for
      * @param  boolean                  Whether to accept reviews
      * @param  tempcode                 URL where form submit will go
-     * @param  ?string                  The default post to use (NULL: standard courtesy warning)
+     * @param  ?string                  The default post to use (null: standard courtesy warning)
      * @return tempcode                 Posting form
      */
     public function get_posting_form($type, $id, $allow_reviews, $post_url, $post_warning)

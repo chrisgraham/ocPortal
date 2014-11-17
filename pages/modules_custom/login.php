@@ -26,7 +26,7 @@ class Mx_login extends Module_login
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run()
     {

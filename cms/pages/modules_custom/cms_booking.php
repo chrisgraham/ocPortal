@@ -37,10 +37,10 @@ class Module_cms_booking extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -74,8 +74,8 @@ class Module_cms_booking extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -215,10 +215,10 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Get a form for entering a bookable.
      *
-     * @param  ?array                   Details of the bookable (NULL: new).
-     * @param  ?array                   List of supplements (NULL: new).
-     * @param  ?array                   List of blacks (NULL: new).
-     * @param  ?array                   List of codes (NULL: new).
+     * @param  ?array                   Details of the bookable (null: new).
+     * @param  ?array                   List of supplements (null: new).
+     * @param  ?array                   List of blacks (null: new).
+     * @param  ?array                   List of codes (null: new).
      * @return array                    Tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $supplements = null, $blacks = null, $codes = null)
@@ -386,7 +386,7 @@ class Module_cms_booking extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -464,8 +464,8 @@ class Module_cms_booking_supplements extends Standard_crud_module
     /**
      * Get a form for entering a bookable supplement.
      *
-     * @param  ?array                   Details of the supplement (NULL: new).
-     * @param  ?array                   List of bookables this is for (NULL: new).
+     * @param  ?array                   Details of the supplement (null: new).
+     * @param  ?array                   List of bookables this is for (null: new).
      * @return array                    Tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $bookables = null)
@@ -584,7 +584,7 @@ class Module_cms_booking_supplements extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -662,8 +662,8 @@ class Module_cms_booking_blacks extends Standard_crud_module
     /**
      * Get a form for entering a bookable black.
      *
-     * @param  ?array                   Details of the black (NULL: new).
-     * @param  ?array                   List of bookables this is for (NULL: new).
+     * @param  ?array                   Details of the black (null: new).
+     * @param  ?array                   List of bookables this is for (null: new).
      * @return array                    Tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $bookables = null)
@@ -770,7 +770,7 @@ class Module_cms_booking_blacks extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -802,8 +802,8 @@ class Module_cms_booking_bookings extends Standard_crud_module
      * Standard CRUD-module entry function to get rows for selection from.
      *
      * @param  boolean                  Whether to force a recache
-     * @param  ?ID_TEXT                 Order to use (NULL: automatic)
-     * @param  ?array                   Extra where clauses (NULL: none)
+     * @param  ?ID_TEXT                 Order to use (null: automatic)
+     * @param  ?array                   Extra where clauses (null: none)
      * @param  boolean                  Whether to always access using the site database
      * @param  string                   Extra join clause for our query (blank: none)
      * @return array                    A pair: Rows for selection from, Total results
@@ -942,8 +942,8 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * Get a form for entering a booking.
      *
-     * @param  ?array                   Details of the booking (NULL: new).
-     * @param  ?MEMBER                  Who the booking is for (NULL: current member).
+     * @param  ?array                   Details of the booking (null: new).
+     * @param  ?MEMBER                  Who the booking is for (null: current member).
      * @return mixed                    Either Tempcode; or a tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $member_id = null)
@@ -1162,7 +1162,7 @@ class Module_cms_booking_bookings extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)

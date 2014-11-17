@@ -163,7 +163,7 @@ function edit_bookmark($id, $member, $title, $page_link)
  * Delete a bookmark.
  *
  * @param  AUTO_LINK                    The ID
- * @param  ?MEMBER                      Member who it belongs to (NULL: do not check)
+ * @param  ?MEMBER                      Member who it belongs to (null: do not check)
  */
 function delete_bookmark($id, $member = null)
 {

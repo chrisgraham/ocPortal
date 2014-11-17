@@ -55,7 +55,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
      * Attempt to to find the member's language from their forum profile. It converts between language-identifiers using a map (lang/map.ini).
      *
      * @param  MEMBER                   The member who's language needs to be fetched
-     * @return ?LANGUAGE_NAME           The member's language (NULL: unknown)
+     * @return ?LANGUAGE_NAME           The member's language (null: unknown)
      */
     public function forum_get_lang($member)
     {
@@ -337,7 +337,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
      *
      * @param  string                   The forum name / ID
      * @param  SHORT_TEXT               The topic identifier
-     * @return ?integer                 The topic ID (NULL: not found)
+     * @return ?integer                 The topic ID (null: not found)
      */
     public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
     {
@@ -385,9 +385,9 @@ class Forum_driver_ipb_shared extends Forum_driver_base
      * Get an array of members who are in at least one of the given array of usergroups.
      *
      * @param  array                    The array of usergroups
-     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
      * @param  integer                  Return primary members after this offset and secondary members after this offset
-     * @return ?array                   The array of members (NULL: no members)
+     * @return ?array                   The array of members (null: no members)
      */
     public function member_group_query($groups, $max = null, $start = 0)
     {
@@ -405,7 +405,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
      * This is the opposite of the get_next_member function.
      *
      * @param  MEMBER                   The member ID to decrement
-     * @return ?MEMBER                  The previous member ID (NULL: no previous member)
+     * @return ?MEMBER                  The previous member ID (null: no previous member)
      */
     public function get_previous_member($member)
     {
@@ -418,7 +418,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
      * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
      *
      * @param  MEMBER                   The member ID to increment
-     * @return ?MEMBER                  The next member ID (NULL: no next member)
+     * @return ?MEMBER                  The next member ID (null: no next member)
      */
     public function get_next_member($member)
     {

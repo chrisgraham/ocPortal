@@ -119,7 +119,7 @@ function render_news_box($row, $zone = '_SEARCH', $give_context = true, $brief =
  * @param  ID_TEXT                      The zone to use
  * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
- * @param  ?integer                     What to show (NULL: news and blogs, 0: news, 1: blogs)
+ * @param  ?integer                     What to show (null: news and blogs, 0: news, 1: blogs)
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     A box for it, linking to the full page
  */
@@ -184,13 +184,13 @@ function render_news_category_box($row, $zone = '_SEARCH', $give_context = true,
 /**
  * Get a nice formatted XHTML list of news categories.
  *
- * @param  ?mixed                       The selected news category. Array or AUTO_LINK (NULL: personal)
+ * @param  ?mixed                       The selected news category. Array or AUTO_LINK (null: personal)
  * @param  boolean                      Whether to add all personal categories into the list (for things like the adminzone, where all categories must be shown, regardless of permissions)
  * @param  boolean                      Whether to only show for what may be added to by the current member
  * @param  boolean                      Whether to limit to only existing cats (otherwise we dynamically add unstarted blogs)
- * @param  ?boolean                     Whether to limit to only show blog categories (NULL: don't care, true: blogs only, false: no blogs)
+ * @param  ?boolean                     Whether to limit to only show blog categories (null: don't care, true: blogs only, false: no blogs)
  * @param  boolean                      Whether to prefer to choose a non-blog category as the default
- * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
+ * @param  ?TIME                        Time from which content must be updated (null: no limit).
  * @return tempcode                     The tempcode for the news category select list
  */
 function create_selection_list_news_categories($it = null, $show_all_personal_categories = false, $addable_filter = false, $only_existing = false, $only_blogs = null, $prefer_not_blog_selected = false, $updated_since = null)
@@ -275,8 +275,8 @@ function create_selection_list_news_categories($it = null, $show_all_personal_ca
 /**
  * Get a nice formatted XHTML list of news.
  *
- * @param  ?AUTO_LINK                   The selected news entry (NULL: none)
- * @param  ?MEMBER                      Limit news to those submitted by this member (NULL: show all)
+ * @param  ?AUTO_LINK                   The selected news entry (null: none)
+ * @param  ?MEMBER                      Limit news to those submitted by this member (null: show all)
  * @param  boolean                      Whether to only show for what may be edited by the current member
  * @param  boolean                      Whether to only show blog posts
  * @return tempcode                     The list

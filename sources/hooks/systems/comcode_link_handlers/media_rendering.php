@@ -41,8 +41,8 @@ class Hook_comcode_link_handler_media_rendering
      * @param  string                   The whole chunk of Comcode
      * @param  boolean                  Whether this is only a structure sweep
      * @param  boolean                  Whether we are in semi-parse-mode (some tags might convert differently)
-     * @param  ?array                   A list of words to highlight (NULL: none)
-     * @return ?tempcode                Handled link (NULL: reject due to inappropriate link pattern)
+     * @param  ?array                   A list of words to highlight (null: none)
+     * @return ?tempcode                Handled link (null: reject due to inappropriate link pattern)
      */
     public function bind($url, $comcode_dangerous, $pass_id, $pos, $source_member, $as_admin, $connection, $comcode, $structure_sweep, $semiparse_mode, $highlight_bits)
     {

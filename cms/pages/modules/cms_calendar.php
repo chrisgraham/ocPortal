@@ -52,10 +52,10 @@ class Module_cms_calendar extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -108,8 +108,8 @@ class Module_cms_calendar extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -353,36 +353,36 @@ class Module_cms_calendar extends Standard_crud_module
     /**
      * Get the form fields for an event input form.
      *
-     * @param  ?AUTO_LINK               The event ID (NULL: new)
-     * @param  ?AUTO_LINK               The event type (NULL: default)
-     * @param  ?integer                 The year the event starts at (NULL: default)
-     * @param  ?integer                 The month the event starts at (NULL: default)
-     * @param  ?integer                 The day the event starts at (NULL: default)
+     * @param  ?AUTO_LINK               The event ID (null: new)
+     * @param  ?AUTO_LINK               The event type (null: default)
+     * @param  ?integer                 The year the event starts at (null: default)
+     * @param  ?integer                 The month the event starts at (null: default)
+     * @param  ?integer                 The day the event starts at (null: default)
      * @param  ID_TEXT                  In-month specification type for start date
      * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
-     * @param  ?integer                 The hour the event starts at (NULL: default)
-     * @param  ?integer                 The minute the event starts at (NULL: default)
+     * @param  ?integer                 The hour the event starts at (null: default)
+     * @param  ?integer                 The minute the event starts at (null: default)
      * @param  SHORT_TEXT               The title of the event
      * @param  LONG_TEXT                The full text describing the event
      * @param  SHORT_TEXT               The recurrence code
-     * @param  ?integer                 The number of recurrences (NULL: none/infinite)
+     * @param  ?integer                 The number of recurrences (null: none/infinite)
      * @param  BINARY                   Whether to segregate the comment-topics/rating/trackbacks per-recurrence
      * @param  integer                  The priority
      * @range  1 5
-     * @param  ?integer                 The year the event ends at (NULL: not a multi day event)
-     * @param  ?integer                 The month the event ends at (NULL: not a multi day event)
-     * @param  ?integer                 The day the event ends at (NULL: not a multi day event)
+     * @param  ?integer                 The year the event ends at (null: not a multi day event)
+     * @param  ?integer                 The month the event ends at (null: not a multi day event)
+     * @param  ?integer                 The day the event ends at (null: not a multi day event)
      * @param  ID_TEXT                  In-month specification type for end date
      * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
-     * @param  ?integer                 The hour the event ends at (NULL: not a multi day event)
-     * @param  ?integer                 The minute the event ends at (NULL: not a multi day event)
-     * @param  ?ID_TEXT                 The timezone for the event (NULL: current user's timezone)
+     * @param  ?integer                 The hour the event ends at (null: not a multi day event)
+     * @param  ?integer                 The minute the event ends at (null: not a multi day event)
+     * @param  ?ID_TEXT                 The timezone for the event (null: current user's timezone)
      * @param  BINARY                   Whether the time should be presented in the viewer's own timezone
-     * @param  ?MEMBER                  The member's calendar it will be on (NULL: not on a specific member's calendar)
+     * @param  ?MEMBER                  The member's calendar it will be on (null: not on a specific member's calendar)
      * @param  BINARY                   Whether the event is validated
-     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
      * @param  LONG_TEXT                Notes
      * @return array                    A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
      */
@@ -1159,7 +1159,7 @@ class Module_cms_calendar extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1276,7 +1276,7 @@ class Module_cms_calendar_cat extends Standard_crud_module
     /**
      * Get tempcode for a post template adding/editing form.
      *
-     * @param  ?AUTO_LINK               ID of category (NULL: new category)
+     * @param  ?AUTO_LINK               ID of category (null: new category)
      * @param  SHORT_TEXT               The title
      * @param  SHORT_TEXT               The theme image code
      * @param  URLPATH                  URL to external feed to associate with this event type
@@ -1449,7 +1449,7 @@ class Module_cms_calendar_cat extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1462,8 +1462,8 @@ class Module_cms_calendar_cat extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
-     * @param  ?AUTO_LINK               The category ID we were working in (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  ?AUTO_LINK               The category ID we were working in (null: N/A)
      * @param  string                   The Y-m-d of the added/edited event (first occurence) (blank: whatever)
      * @return tempcode                 The UI
      */

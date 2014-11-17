@@ -1260,7 +1260,7 @@ function ecv_TRUNCATE_SPREAD($lang, $escaped, $param)
  * @param  array                        Parameters passed to the symbol (0=text, 1=amount, 2=tooltip?, 3=is_html?, 4=use as grammatical length rather than HTML byte length, 5=fractional-deviation-tolerance for grammar-preservation)
  * @param  string                       The type of truncation to do
  * @set    left right spread
- * @param  ?mixed                       Tooltip to add on, but only if we end up creating our own tooltip (NULL: none)
+ * @param  ?mixed                       Tooltip to add on, but only if we end up creating our own tooltip (null: none)
  * @return string                       The result.
  */
 function symbol_truncator($param, $type, $tooltip_if_truncated = null)

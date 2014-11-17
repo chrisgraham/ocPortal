@@ -49,7 +49,7 @@ function auto_decache($changed_base_url)
 /**
  * Rebuild the specified caches.
  *
- * @param  ?array                       The caches to rebuild (NULL: all)
+ * @param  ?array                       The caches to rebuild (null: all)
  * @return tempcode                     Any messages returned
  */
 function ocportal_cleanup($caches = null)

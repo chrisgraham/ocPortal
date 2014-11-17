@@ -423,8 +423,8 @@ function will_be_unicode_neutered($data)
  * Convert some data from one encoding to the internal encoding.
  *
  * @param  string                       Data to convert.
- * @param  ?string                      Charset to convert from (NULL: that read by the last http_download_file call).
- * @param  ?string                      Charset to convert to (NULL: current encoding).
+ * @param  ?string                      Charset to convert from (null: that read by the last http_download_file call).
+ * @param  ?string                      Charset to convert to (null: current encoding).
  * @return string                       Converted data.
  */
 function convert_to_internal_encoding($data, $input_charset = null, $internal_charset = null)

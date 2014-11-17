@@ -46,7 +46,7 @@ function find_awards_for($content_type, $id)
  *
  * @param  AUTO_LINK                    The award ID
  * @param  ID_TEXT                      The content ID
- * @param  ?TIME                        Time the award was given (NULL: now)
+ * @param  ?TIME                        Time the award was given (null: now)
  */
 function give_award($award_id, $content_id, $time = null)
 {
@@ -125,7 +125,7 @@ function give_award($award_id, $content_id, $time = null)
  * Get all the award selection fields for a content type and content ID
  *
  * @param  ID_TEXT                      The content type
- * @param  ?ID_TEXT                     The content ID (NULL: not added yet - therefore can't be holding the award yet)
+ * @param  ?ID_TEXT                     The content ID (null: not added yet - therefore can't be holding the award yet)
  * @return tempcode                     The fields
  */
 function get_award_fields($content_type, $id = null)

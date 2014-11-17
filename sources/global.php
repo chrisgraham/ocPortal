@@ -348,7 +348,7 @@ function tacit_https()
  *
  * @param  string                       The class name
  * @param  boolean                      Whether to return NULL if there is no such class
- * @return ?object                      The object (NULL: no such class)
+ * @return ?object                      The object (null: no such class)
  */
 function object_factory($class, $failure_ok = false)
 {
@@ -448,7 +448,7 @@ function filter_naughty_harsh($in, $preg = false)
  * Include some PHP code, compiling to HHVM's hack, for type strictness (uses ocPortal phpdoc comments).
  *
  * @param  PATH                         Include path
- * @return ?mixed                       Code return code (NULL: actual NULL)
+ * @return ?mixed                       Code return code (null: actual NULL)
  */
 function hhvm_include($path)
 {

@@ -51,11 +51,11 @@ class Module_cms_catalogues extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @param  boolean                  Whether to simplify this down for only a specific catalogue (only applied to cms_catalogues module).
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false, $simplified = false)
     {
@@ -114,8 +114,8 @@ class Module_cms_catalogues extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -375,7 +375,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module list function.
      *
-     * @return ?array                   A triple: The tree field (tempcode), Search URL, Archive URL (NULL: nothing here)
+     * @return ?array                   A triple: The tree field (tempcode), Search URL, Archive URL (null: nothing here)
      */
     public function create_selection_list_ajax_tree()
     {
@@ -401,14 +401,14 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Get tempcode for a catalogue entry adding/editing form.
      *
-     * @param  ?ID_TEXT                 The catalogue for the entry (NULL: detect)
-     * @param  ?AUTO_LINK               The category for the entry (NULL: first)
+     * @param  ?ID_TEXT                 The catalogue for the entry (null: detect)
+     * @param  ?AUTO_LINK               The category for the entry (null: first)
      * @param  BINARY                   Whether the entry is validated
      * @param  LONG_TEXT                Staff notes
-     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-     * @param  ?AUTO_LINK               The ID of the entry (NULL: not yet added)
+     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
+     * @param  ?AUTO_LINK               The ID of the entry (null: not yet added)
      * @return array                    Tuple: the tempcode for the visible fields, and the tempcode for the hidden fields, ..., extra templating details
      */
     public function get_form_fields($catalogue_name = null, $category_id = null, $validated = 1, $notes = '', $allow_rating = null, $allow_comments = null, $allow_trackbacks = null, $id = null)
@@ -660,7 +660,7 @@ class Module_cms_catalogues extends Standard_crud_module
      *
      * @param  ID_TEXT                  The name of the catalogue that was used
      * @param  MEMBER                   The entry submitter
-     * @param  ?AUTO_LINK               ID of entry being edited (NULL: not being edited)
+     * @param  ?AUTO_LINK               ID of entry being edited (null: not being edited)
      * @return array                    The map
      */
     public function get_set_field_map($catalogue_name, $submitter, $editing_id = null)
@@ -903,7 +903,7 @@ class Module_cms_catalogues extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1185,7 +1185,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Standard crud_module list function.
      *
-     * @return ?array                   A triple: The tree field (tempcode), Search URL, Archive URL (NULL: nothing here)
+     * @return ?array                   A triple: The tree field (tempcode), Search URL, Archive URL (null: nothing here)
      */
     public function create_selection_list_ajax_tree()
     {
@@ -1206,16 +1206,16 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Get tempcode for a catalogue category adding/editing form.
      *
-     * @param  ?ID_TEXT                 The name of the catalogue the category is in (NULL: detect)
+     * @param  ?ID_TEXT                 The name of the catalogue the category is in (null: detect)
      * @param  SHORT_TEXT               The title of the category
      * @param  LONG_TEXT                Description for the category
      * @param  LONG_TEXT                Admin notes
-     * @param  ?AUTO_LINK               The ID of the parent category (NULL: no parent) (-1: arbitrary default)
-     * @param  ?AUTO_LINK               The ID of this category (NULL: we're adding, not editing)
+     * @param  ?AUTO_LINK               The ID of the parent category (null: no parent) (-1: arbitrary default)
+     * @param  ?AUTO_LINK               The ID of this category (null: we're adding, not editing)
      * @param  URLPATH                  The rep-image for the catalogue category
      * @param  integer                  The number of days before expiry (lower limit)
      * @param  integer                  The number of days before expiry (higher limit)
-     * @param  ?AUTO_LINK               The expiry category (NULL: do not expire)
+     * @param  ?AUTO_LINK               The expiry category (null: do not expire)
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function get_form_fields($catalogue_name = null, $title = '', $description = '', $notes = '', $parent_id = -1, $id = null, $rep_image = '', $move_days_lower = 30, $move_days_higher = 60, $move_target = null) // Not the fields in a category (no such thing: fields are in catalogues) - the HTML form fields to input the details for a category
@@ -1464,7 +1464,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever catalogue category was just handled (NULL: deleted)
+     * @param  ?AUTO_LINK               The ID of whatever catalogue category was just handled (null: deleted)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1554,7 +1554,7 @@ class Module_cms_catalogues_alt extends Standard_crud_module
      * @param  BINARY                   Whether the catalogue is an eCommerce catalogue
      * @param  ID_TEXT                  How to send view reports
      * @set    never daily weekly monthly quarterly
-     * @param  ?integer                 Default review frequency for catalogue entries (NULL: none)
+     * @param  ?integer                 Default review frequency for catalogue entries (null: none)
      * @return array                    A tuple: the tempcode for the visible fields, and the tempcode for the hidden fields, ..., and action fields
      */
     public function get_form_fields($name = '', $title = '', $description = '', $display_type = 0, $is_tree = 1, $notes = '', $submit_points = 0, $ecommerce = 0, $send_view_reports = 'never', $default_review_freq = null)
@@ -2099,7 +2099,7 @@ class Module_cms_catalogues_alt extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?ID_TEXT                 The catalogue name we were working with (NULL: deleted)
+     * @param  ?ID_TEXT                 The catalogue name we were working with (null: deleted)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $name)

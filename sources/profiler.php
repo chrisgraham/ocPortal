@@ -112,7 +112,7 @@ function _ocp_profile_start_for($identifier)
  * End a profiling block, for a specified identifier (of your own choosing - but you must have started it with ocp_profile_start_for).
  *
  * @param  ID_TEXT                      Identifier
- * @param  ?string                      Longer details of what happened (e.g. a specific SQL query that ran) (NULL: none provided)
+ * @param  ?string                      Longer details of what happened (e.g. a specific SQL query that ran) (null: none provided)
  */
 function _ocp_profile_end_for($identifier, $specifics = null)
 {

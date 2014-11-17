@@ -29,9 +29,9 @@ Adding attachments.
  * @param  ID_TEXT                      The type the attachment will be used for (e.g. download)
  * @param  ID_TEXT                      The ID the attachment will be used for
  * @param  boolean                      Whether we are only previewing the attachments (i.e. don't store them!)
- * @param  ?object                      The database connection to use (NULL: standard site connection)
- * @param  ?boolean                     Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges) (NULL: autodetect)
- * @param  ?MEMBER                      The member to use for ownership permissions (NULL: current member)
+ * @param  ?object                      The database connection to use (null: standard site connection)
+ * @param  ?boolean                     Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges) (null: autodetect)
+ * @param  ?MEMBER                      The member to use for ownership permissions (null: current member)
  * @return array                        A map containing 'Comcode' (after substitution for tying down the new attachments) and 'tempcode'
  */
 function do_comcode_attachments($comcode, $type, $id, $previewing_only = false, $connection = null, $insert_as_admin = null, $for_member = null)
@@ -449,9 +449,9 @@ function _check_attachment_count()
  * @param  LONG_TEXT                    The Comcode content
  * @param  ID_TEXT                      The arbitrary type that the attached is for (e.g. download)
  * @param  ID_TEXT                      The ID in the set of the arbitrary types that the attached is for
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  * @param  boolean                      Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges)
- * @param  ?MEMBER                      The member to use for ownership permissions (NULL: current member)
+ * @param  ?MEMBER                      The member to use for ownership permissions (null: current member)
  * @return array                        The language ID save fields
  */
 function insert_lang_comcode_attachments($field_name, $level, $text, $type, $id, $connection = null, $insert_as_admin = false, $for_member = null)
@@ -515,7 +515,7 @@ function insert_lang_comcode_attachments($field_name, $level, $text, $type, $id,
  * Finalise attachments which were created during a preview, so that they have the proper reference IDs.
  *
  * @param  ID_TEXT                      The ID in the set of the arbitrary types that the attached is for
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  */
 function final_attachments_from_preview($id, $connection = null)
 {

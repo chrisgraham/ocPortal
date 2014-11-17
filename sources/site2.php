@@ -327,7 +327,7 @@ function page_not_found($codename, $zone)
  * @param  ID_TEXT                      The zone the page is being loaded from
  * @param  ID_TEXT                      The codename of the page
  * @param  PATH                         The file base to load from
- * @param  ?array                       Row from database (holds submitter etc) (NULL: no row, originated first from disk)
+ * @param  ?array                       Row from database (holds submitter etc) (null: no row, originated first from disk)
  * @param  array                        New row for database, used if necessary (holds submitter etc)
  * @param  boolean                      Whether the page is being included from another
  * @return array                        A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode

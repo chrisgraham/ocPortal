@@ -125,7 +125,7 @@ function get_site_timezone()
 /**
  * Get a user's timezone.
  *
- * @param  ?MEMBER                      Member for which the date is being rendered (NULL: current user)
+ * @param  ?MEMBER                      Member for which the date is being rendered (null: current user)
  * @return string                       Users timezone in "boring" format.
  */
 function get_users_timezone($member = null)
@@ -207,8 +207,8 @@ function convert_timezone_offset_to_formal_timezone($offset)
  * Convert a UTC timestamp to a user timestamp. The user timestamp should not be pumped through get_timezoned_date as this already performs the conversions internally.
  * What complicate understanding of matters is that "user time" is not the timestamp that would exist on a user's PC, as all timestamps are meant to be stored in UTC. "user time" is offsetted to compensate, a virtual construct.
  *
- * @param  ?TIME                        Input timestamp (NULL: now)
- * @param  ?MEMBER                      Member for which the date is being rendered (NULL: current member)
+ * @param  ?TIME                        Input timestamp (null: now)
+ * @param  ?MEMBER                      Member for which the date is being rendered (null: current member)
  * @return TIME                         Output timestamp
  */
 function utctime_to_usertime($timestamp = null, $member = null)
@@ -226,8 +226,8 @@ function utctime_to_usertime($timestamp = null, $member = null)
  * Convert a user timestamp to a UTC timestamp. This is not a function to use much- you probably want utctime_to_usertime.
  * What complicate understanding of matters is that "user time" is not the timestamp that would exist on a user's PC, as all timestamps are meant to be stored in UTC. "user time" is offsetted to compensate, a virtual construct.
  *
- * @param  ?TIME                        Input timestamp (NULL: now)
- * @param  ?MEMBER                      Member for which the date is being rendered (NULL: current member)
+ * @param  ?TIME                        Input timestamp (null: now)
+ * @param  ?MEMBER                      Member for which the date is being rendered (null: current member)
  * @return TIME                         Output timestamp
  */
 function usertime_to_utctime($timestamp = null, $member = null)
@@ -246,7 +246,7 @@ function usertime_to_utctime($timestamp = null, $member = null)
  * Format a local time/date according to locale settings. Combines best features of 'strftime' and 'date'.
  *
  * @param  string                       The formatting string.
- * @param  ?TIME                        The timestamp (NULL: now). Assumed to already be timezone-shifted as required
+ * @param  ?TIME                        The timestamp (null: now). Assumed to already be timezone-shifted as required
  * @return string                       The formatted string.
  */
 function my_strftime($format, $timestamp = null)
@@ -273,7 +273,7 @@ function my_strftime($format, $timestamp = null)
  * @param  boolean                      Whether to make this a verbose date (longer than usual)
  * @param  boolean                      Whether to work in UTC time
  * @param  boolean                      Whether contextual dates will be avoided
- * @param  ?MEMBER                      Member for which the date is being rendered (NULL: current member)
+ * @param  ?MEMBER                      Member for which the date is being rendered (null: current member)
  * @return string                       Formatted time
  */
 function get_timezoned_date($timestamp, $include_time = true, $verbose = false, $utc_time = false, $avoid_contextual_dates = false, $member = null)
@@ -365,7 +365,7 @@ function locale_filter($ret)
  *
  * @param  TIME                         Input timestamp
  * @param  boolean                      Whether contextual times will be avoided. Note that we don't currently use contextual (relative) times. This parameter may be used in the future.
- * @param  ?MEMBER                      Member for which the time is being rendered (NULL: current member)
+ * @param  ?MEMBER                      Member for which the time is being rendered (null: current member)
  * @param  boolean                      Whether to work in UTC time
  * @return string                       Formatted time
  */
@@ -392,7 +392,7 @@ function get_timezoned_time($timestamp, $avoid_contextual_dates = false, $member
  * @param  ID_TEXT                      The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
  * @param  boolean                      Whether to allow over get parameters also
  * @param  boolean                      Whether to do timezone conversion
- * @return ?TIME                        The timestamp of the date (NULL: no input date was chosen)
+ * @return ?TIME                        The timestamp of the date (null: no input date was chosen)
  */
 function get_input_date($stub, $get_also = false, $do_timezone_conversion = true)
 {

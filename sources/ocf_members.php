@@ -64,7 +64,7 @@ function ocf_get_filter_cats($only_exists_now = false)
  * Find whether a member of a certain username is bound to HTTP authentication (an exceptional situation, only for sites that use it).
  *
  * @param  string                       The username.
- * @return ?integer                     The member ID, if it is (NULL: not bound).
+ * @return ?integer                     The member ID, if it is (null: not bound).
  */
 function ocf_authusername_is_bound_via_httpauth($authusername)
 {
@@ -107,15 +107,15 @@ function ocf_is_httpauth_member($member_id)
 /**
  * Gets all the system custom fields that match certain parameters.
  *
- * @param  ?array                       That are applicable only to one of the usergroups in this list (empty: CPFs with no restriction) (NULL: disregard restriction).
- * @param  ?BINARY                      That are publicly viewable (NULL: don't care).
- * @param  ?BINARY                      That are owner viewable (NULL: don't care).
- * @param  ?BINARY                      That are owner settable (NULL: don't care).
- * @param  ?BINARY                      That are required (NULL: don't care).
- * @param  ?BINARY                      That are to be shown in posts (NULL: don't care).
- * @param  ?BINARY                      That are to be shown in post previews (NULL: don't care).
+ * @param  ?array                       That are applicable only to one of the usergroups in this list (empty: CPFs with no restriction) (null: disregard restriction).
+ * @param  ?BINARY                      That are publicly viewable (null: don't care).
+ * @param  ?BINARY                      That are owner viewable (null: don't care).
+ * @param  ?BINARY                      That are owner settable (null: don't care).
+ * @param  ?BINARY                      That are required (null: don't care).
+ * @param  ?BINARY                      That are to be shown in posts (null: don't care).
+ * @param  ?BINARY                      That are to be shown in post previews (null: don't care).
  * @param  BINARY                       That start 'ocp_'
- * @param  ?boolean                     That are to go on the join form (NULL: don't care).
+ * @param  ?boolean                     That are to go on the join form (null: don't care).
  * @return array                        A list of rows of such fields.
  */
 function ocf_get_all_custom_fields_match($groups = null, $public_view = null, $owner_view = null, $owner_set = null, $required = null, $show_in_posts = null, $show_in_post_previews = null, $special_start = 0, $show_on_join_form = null)
@@ -201,15 +201,15 @@ function ocf_get_all_custom_fields_match($groups = null, $public_view = null, $o
  * Gets all a member's custom fields that match certain parameters.
  *
  * @param  MEMBER                       The member.
- * @param  ?BINARY                      That are publicly viewable (NULL: don't care).
- * @param  ?BINARY                      That are owner viewable (NULL: don't care).
- * @param  ?BINARY                      That are owner settable (NULL: don't care).
- * @param  ?BINARY                      That are encrypted (NULL: don't care).
- * @param  ?BINARY                      That are required (NULL: don't care).
- * @param  ?BINARY                      That are to be shown in posts (NULL: don't care).
- * @param  ?BINARY                      That are to be shown in post previews (NULL: don't care).
+ * @param  ?BINARY                      That are publicly viewable (null: don't care).
+ * @param  ?BINARY                      That are owner viewable (null: don't care).
+ * @param  ?BINARY                      That are owner settable (null: don't care).
+ * @param  ?BINARY                      That are encrypted (null: don't care).
+ * @param  ?BINARY                      That are required (null: don't care).
+ * @param  ?BINARY                      That are to be shown in posts (null: don't care).
+ * @param  ?BINARY                      That are to be shown in post previews (null: don't care).
  * @param  BINARY                       That start 'ocp_'
- * @param  ?boolean                     That are to go on the join form (NULL: don't care).
+ * @param  ?boolean                     That are to go on the join form (null: don't care).
  * @return array                        A mapping of field title to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value, 'FIELD_ID' to the field ID, 'EDITABILITY' defining if fractional editing can work on this
  */
 function ocf_get_all_custom_fields_match_member($member_id, $public_view = null, $owner_view = null, $owner_set = null, $encrypted = null, $required = null, $show_in_posts = null, $show_in_post_previews = null, $special_start = 0, $show_on_join_form = null)
@@ -351,7 +351,7 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
  * Get the ID for a CPF if we only know the title. Warning: Only use this with custom code, never core code! It assumes a single language and that fields aren't renamed.
  *
  * @param  SHORT_TEXT                   The title.
- * @return ?AUTO_LINK                   The ID (NULL: could not find).
+ * @return ?AUTO_LINK                   The ID (null: could not find).
  */
 function find_cpf_field_id($title)
 {

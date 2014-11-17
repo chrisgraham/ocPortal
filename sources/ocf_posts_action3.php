@@ -22,10 +22,10 @@
  * Validate a post.
  *
  * @param  AUTO_LINK                    The ID of the post.
- * @param  ?AUTO_LINK                   The ID of the topic that contains the post (NULL: find out from the DB).
- * @param  ?AUTO_LINK                   The forum that the topic containing the post is in (NULL: find out from the DB).
- * @param  ?MEMBER                      The member that made the post being validated (NULL: find out from the DB).
- * @param  ?LONG_TEXT                   The post, in Comcode format (NULL: It'll have to be looked-up).
+ * @param  ?AUTO_LINK                   The ID of the topic that contains the post (null: find out from the DB).
+ * @param  ?AUTO_LINK                   The forum that the topic containing the post is in (null: find out from the DB).
+ * @param  ?MEMBER                      The member that made the post being validated (null: find out from the DB).
+ * @param  ?LONG_TEXT                   The post, in Comcode format (null: It'll have to be looked-up).
  * @return AUTO_LINK                    The ID of the topic (whilst this could be known without calling this function, as we've gone to effort and grabbed it from the DB, it might turn out useful for something).
  */
 function ocf_validate_post($post_id, $topic_id = null, $forum_id = null, $poster = null, $post = null)
@@ -92,14 +92,14 @@ function ocf_validate_post($post_id, $topic_id = null, $forum_id = null, $poster
  * @param  LONG_TEXT                    The post.
  * @param  BINARY                       Whether to skip showing the posters signature in the post.
  * @param  BINARY                       Whether the post is marked emphasised.
- * @param  ?MEMBER                      The member that this post is intended solely for (NULL: none).
+ * @param  ?MEMBER                      The member that this post is intended solely for (null: none).
  * @param  boolean                      Whether to show the post as edited.
  * @param  boolean                      Whether to mark the topic as unread by those previous having read this post.
  * @param  LONG_TEXT                    The reason for this action.
  * @param  boolean                      Whether to check permissions.
- * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME                        Add time (NULL: do not change)
- * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (null: do not change)
+ * @param  ?MEMBER                      Submitter (null: do not change)
  * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  * @param  boolean                      Whether to run checks
  * @return AUTO_LINK                    The ID of the topic (whilst this could be known without calling this function, as we've gone to effort and grabbed it from the DB, it might turn out useful for something).
@@ -353,9 +353,9 @@ function ocf_delete_posts_topic($topic_id, $posts, $reason = '', $check_perms = 
  * @param  AUTO_LINK                    The ID of the destination topic.
  * @param  array                        A list of post IDs to move.
  * @param  LONG_TEXT                    The reason for this action.
- * @param  ?AUTO_LINK                   The forum the destination topic is in (NULL: find from DB).
+ * @param  ?AUTO_LINK                   The forum the destination topic is in (null: find from DB).
  * @param  boolean                      Whether to delete the topic if all posts in it have been moved.
- * @param  ?SHORT_TEXT                  The title for the new topic (NULL: work out / irrelevant).
+ * @param  ?SHORT_TEXT                  The title for the new topic (null: work out / irrelevant).
  * @return boolean                      Whether the topic was deleted.
  */
 function ocf_move_posts($from_topic_id, $to_topic_id, $posts, $reason, $to_forum_id = null, $delete_if_empty = false, $title = null)

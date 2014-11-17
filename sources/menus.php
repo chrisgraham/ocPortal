@@ -353,7 +353,7 @@ function _append_to_page_links(&$branches, $page_link_append)
  * Render a menu to Tempcode.
  *
  * @param  array                        Menu details
- * @param  ?MEMBER                      The member the menu is being built as (NULL: current member)
+ * @param  ?MEMBER                      The member the menu is being built as (null: current member)
  * @param  ID_TEXT                      The menu type (determines what templates get used)
  * @param  boolean                      Whether to generate Comcode with admin privilege
  * @return tempcode                     The generated tempcode of the menu

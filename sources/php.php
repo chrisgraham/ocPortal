@@ -160,18 +160,20 @@ function get_php_file_api($filename, $include_code = true)
                     if (substr($ltrim, 0, 6) == '@param') {
                         $arg_counter++;
                         if (!array_key_exists($arg_counter, $parameters)) {
-                            fatal_exit(do_lang_tempcode('PARAMETER_MISMATCH', escape_html($function_name)));
+                            attach_message(do_lang_tempcode('PARAMETER_MISMATCH', escape_html($function_name)), 'warn');
                             continue 2;
                         }
+
                         $parts = _cleanup_array(preg_split('/\s/', substr($ltrim, 6)));
                         if (($parts[0][0] != '?') && (array_key_exists('default', $parameters[$arg_counter])) && (is_null($parameters[$arg_counter]['default']))) {
-                            fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($parameters[$arg_counter]['name']), escape_html($function_name), array(escape_html('null'))));
+                            attach_message(do_lang_tempcode('UNALLOWED_NULL', escape_html($parameters[$arg_counter]['name']), escape_html($function_name), array(escape_html('null'))), 'warn');
                             continue 2;
                         }
                         if ((array_key_exists('default', $parameters[$arg_counter])) && ($parameters[$arg_counter]['default'] === false) && (!in_array(preg_replace('#[^\w]#', '', $parts[0]), array('mixed', 'boolean')))) {
-                            fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($parameters[$arg_counter]['name']), escape_html($function_name), array(escape_html('false'))));
+                            attach_message(do_lang_tempcode('UNALLOWED_NULL', escape_html($parameters[$arg_counter]['name']), escape_html($function_name), array(escape_html('false'))), 'warn');
                             continue 2;
                         }
+
                         $parameters[$arg_counter]['type'] = $parts[0];
                         unset($parts[0]);
                         $parameters[$arg_counter]['description'] = implode(' ', $parts);
@@ -214,7 +216,7 @@ function get_php_file_api($filename, $include_code = true)
             }
 
             if (array_key_exists($arg_counter + 1, $parameters)) {
-                fatal_exit(do_lang_tempcode('PARAMETER_MISMATCH', escape_html($function_name)));
+                attach_message(do_lang_tempcode('PARAMETER_MISMATCH', escape_html($function_name)), 'warn');
                 continue;
             }
 
@@ -237,13 +239,13 @@ function get_php_file_api($filename, $include_code = true)
 
                 // Check that null is fully specified
                 if ($parameter['type'][0] == '?') {
-                    if (strpos($parameter['description'], '(NULL: ') === false) {
-                        fatal_exit(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html($parameter['name']), escape_html($function_name), array(escape_html('NULL'))));
+                    if (strpos($parameter['description'], '(null: ') === false) {
+                        attach_message(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html($parameter['name']), escape_html($function_name), array(escape_html('null'))), 'warn');
                     }
                 }
                 if ($parameter['type'][0] == '~') {
                     if (strpos($parameter['description'], '(false: ') === false) {
-                        fatal_exit(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html($parameter['name']), escape_html($function_name), array(escape_html('false'))));
+                        attach_message(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html($parameter['name']), escape_html($function_name), array(escape_html('false'))), 'warn');
                     }
                 }
             }
@@ -253,13 +255,13 @@ function get_php_file_api($filename, $include_code = true)
 
                 // Check that null is fully specified
                 if ($return['type'][0] == '?') {
-                    if (strpos($return['description'], '(NULL: ') === false) {
-                        fatal_exit(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html('(return)'), escape_html($function_name), array(escape_html('NULL'))));
+                    if (strpos($return['description'], '(null: ') === false) {
+                        attach_message(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html('(return)'), escape_html($function_name), array(escape_html('NULL'))), 'warn');
                     }
                 }
                 if ($return['type'][0] == '~') {
                     if (strpos($return['description'], '(false: ') === false) {
-                        fatal_exit(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html('(return)'), escape_html($function_name), array(escape_html('false'))));
+                        attach_message(do_lang_tempcode('NULL_MEANING_NOT_SPECIFIED', escape_html('(return)'), escape_html($function_name), array(escape_html('false'))), 'warn');
                     }
                 }
             } else {
@@ -317,7 +319,7 @@ function get_php_file_api($filename, $include_code = true)
             if (!function_exists('do_lang_tempcode')) {
                 exit('Missing function comment for: ' . $line);
             }
-            fatal_exit(do_lang_tempcode('MISSING_FUNCTION_COMMENT', rtrim($line)));
+            attach_message(do_lang_tempcode('MISSING_FUNCTION_COMMENT', rtrim($line)), 'warn');
         }
     }
 
@@ -332,7 +334,7 @@ function get_php_file_api($filename, $include_code = true)
             if (!function_exists('do_lang_tempcode')) {
                 exit('Missing class comment for: ' . $line);
             }
-            fatal_exit(do_lang_tempcode('MISSING_CLASS_COMMENT', rtrim($class)));
+            attach_message(do_lang_tempcode('MISSING_CLASS_COMMENT', rtrim($class)), 'warn');
 
             $classes[$class]['comment'] = '';
         } else {
@@ -373,12 +375,14 @@ function _read_php_function_line($_line)
                     $k++;
                 }
                 break;
+
             case 'in_comment_default':
                 if (($char == '*') && ($_line[$k + 1] == '/')) {
                     $parse = 'in_default';
                     $k++;
                 }
                 break;
+
             case 'in_default':
                 if (($char == '/') && ($_line[$k + 1] == '*')) {
                     $parse = 'in_comment_default';
@@ -417,6 +421,7 @@ function _read_php_function_line($_line)
                     $arg_default .= $char;
                 }
                 break;
+
             case 'in_args':
                 if (($char == '/') && ($_line[$k + 1] == '*')) {
                     $parse = 'in_comment';
@@ -438,6 +443,7 @@ function _read_php_function_line($_line)
                     $parse = 'done';
                 }
                 break;
+
             case 'function_name':
                 if (is_alphanumeric($char)) {
                     $function_name .= $char;
@@ -445,15 +451,18 @@ function _read_php_function_line($_line)
                     $parse = 'in_args';
                     $ref = false;
                     $arg_name = '';
+                    $_line = substr($_line, 0, $k) . substr(str_replace(' ', '', $_line), $k); // Make parsing easier
                 } else {
                     $parse = 'between_name_and_args';
                 }
                 break;
+
             case 'between_name_and_args':
                 if ($char == '(') {
                     $parse = 'in_args';
                     $ref = false;
                     $arg_name = '';
+                    $_line = substr($_line, 0, $k) . substr(str_replace(' ', '', $_line), $k); // Make parsing easier
                 }
         }
     }
@@ -484,9 +493,9 @@ function _cleanup_array($in)
  * @param  ID_TEXT                      The parameter type
  * @param  string                       The functions name (used in error message)
  * @param  string                       The parameter name (used in error message)
- * @param  ?mixed                       The parameters value (NULL: value actually is null)
- * @param  ?string                      The string of value range of the parameter (NULL: no range constraint)
- * @param  ?string                      The string of value set limitation for the parameter (NULL: no set constraint)
+ * @param  ?mixed                       The parameters value (null: value actually is null)
+ * @param  ?string                      The string of value range of the parameter (null: no range constraint)
+ * @param  ?string                      The string of value set limitation for the parameter (null: no set constraint)
  * @param  boolean                      Whether we just echo errors instead of exiting
  */
 function check_function_type($type, $function_name, $name, $value, $range, $set, $echo = false)
@@ -526,7 +535,7 @@ function check_function_type($type, $function_name, $name, $value, $range, $set,
     $_type = (($type[0] == '?') || ($type[0] == '~')) ? substr($type, 1) : $type;
 
     if (!in_array($_type, $valid_types)) {
-        fatal_exit(do_lang_tempcode('INVALID_PARAMETER_TYPE', escape_html($type), escape_html($function_name)));
+        attach_message(do_lang_tempcode('INVALID_PARAMETER_TYPE', escape_html($type), escape_html($function_name)), 'warn');
     }
 
     if (!is_null($value)) {
@@ -550,7 +559,7 @@ function check_function_type($type, $function_name, $name, $value, $range, $set,
             'string',
         );
         if ((!in_array($_type, $allowed)) && (!in_array($_type, $allowed_string)) && ($type != 'array') && ($type != 'list') && ($type != 'map')) {
-            fatal_exit(do_lang_tempcode('BAD_RANGE_SPECIFICATION', escape_html($_type), escape_html($function_name)));
+            attach_message(do_lang_tempcode('BAD_RANGE_SPECIFICATION', escape_html($_type), escape_html($function_name)), 'warn');
         }
 
         list($min, $max) = explode(' ', $range);
@@ -558,19 +567,19 @@ function check_function_type($type, $function_name, $name, $value, $range, $set,
         if (in_array($_type, $allowed)) {
             if ($value != '') {
                 if ((($min != 'min') && ($value < intval($min))) || (($max != 'max') && ($value > intval($max)))) {
-                    fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))));
+                    attach_message(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))), 'warn');
                 }
             }
         } elseif (in_array($_type, $allowed_string)) {
             if ($value != '') {
                 if ((($min != 'min') && (strlen($value) < intval($min))) || (($max != 'max') && (strlen($value) > intval($max)))) {
-                    fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))));
+                    attach_message(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))), 'warn');
                 }
             }
         } else {
             if ($value != '') {
                 if ((($min != 'min') && (count($value) < intval($min))) || (($max != 'max') && (count($value) > intval($max)))) {
-                    fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))));
+                    attach_message(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))), 'warn');
                 }
             }
         }
@@ -586,7 +595,7 @@ function check_function_type($type, $function_name, $name, $value, $range, $set,
         }
         if (!in_array(is_string($value) ? $value : strval($value), $_set)) {
             if ($value != '') {
-                fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))));
+                attach_message(do_lang_tempcode('OUT_OF_RANGE_VALUE', escape_html($name), escape_html($function_name), array(escape_html($value))), 'warn');
             }
         }
     }
@@ -608,11 +617,11 @@ function test_fail_php_type_check($type, $function_name, $name, $value, $echo = 
     $_type = preg_replace('#[^\w]#', '', $type);
 
     if ((is_null($value)) && (!$null_allowed)) {
-        fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($name), escape_html($function_name), array('null')));
+        attach_message(do_lang_tempcode('UNALLOWED_NULL', escape_html($name), escape_html($function_name), array('null')), 'warn');
     }
 
     if (($value === false) && (!$false_allowed) && (!in_array($_type, array('mixed', 'boolean')))) {
-        fatal_exit(do_lang_tempcode('UNALLOWED_NULL', escape_html($name), escape_html($function_name), array('false')));
+        attach_message(do_lang_tempcode('UNALLOWED_NULL', escape_html($name), escape_html($function_name), array('false')), 'warn');
     }
 
     if ($_type == 'mixed') {
@@ -772,7 +781,7 @@ function _fail_php_type_check($type, $function_name, $name, $value, $echo = fals
     if ($echo) {
         echo 'TYPE_MISMATCH in \'' . $function_name . '\' (' . $name . ' is ' . (is_string($value) ? $value : strval($value)) . ' which is not a ' . $type . ')<br />';
     } else {
-        fatal_exit(do_lang_tempcode('TYPE_MISMATCH', escape_html($function_name), escape_html($name), is_string($value) ? $value : strval($value)/*,$type*/));
+        attach_message(do_lang_tempcode('TYPE_MISMATCH', escape_html($function_name), escape_html($name), is_string($value) ? $value : strval($value)/*,$type*/), 'warn');
     }
 }
 

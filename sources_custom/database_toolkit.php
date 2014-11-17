@@ -174,9 +174,9 @@ function find_all_tables($db)
  *
  * @param  boolean                      Whether to include 'DROP' statements
  * @param  boolean                      Whether to output status as we go
- * @param  ?ID_TEXT                     Table to look from (NULL: first table)
- * @param  ?array                       Array of table names to skip (NULL: none)
- * @param  ?array                       Array of only table names to do (NULL: all)
+ * @param  ?ID_TEXT                     Table to look from (null: first table)
+ * @param  ?array                       Array of table names to skip (null: none)
+ * @param  ?array                       Array of only table names to do (null: all)
  * @param  boolean                      Whether to echo out
  * @return array                        The SQL statements
  */

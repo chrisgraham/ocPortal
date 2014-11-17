@@ -220,7 +220,7 @@ function find_theme_dark($theme)
  * Called by find_theme_image to allow on-the-fly previewing of what theme wizard output would look like.
  *
  * @param  ID_TEXT                      The theme image ID
- * @return ?URLPATH                     URL to image (NULL: use standard one, this one is not theme wizard influenced).
+ * @return ?URLPATH                     URL to image (null: use standard one, this one is not theme wizard influenced).
  */
 function find_theme_image_themewizard_preview($id)
 {
@@ -262,7 +262,7 @@ function find_theme_image_themewizard_preview($id)
  * @param  string                       The logo theme image.
  * @param  string                       The background theme image.
  * @param  boolean                      Whether to output the logo to the browser, destroy then image, and exit the script (i.e. never returns)
- * @param  ?string                      The theme to use the logo template from (NULL: default root zone theme).
+ * @param  ?string                      The theme to use the logo template from (null: default root zone theme).
  * @param  boolean                      Whether we are generating the standalone version (smaller, used in e-mails etc).
  * @return resource                     The image resource.
  */
@@ -417,7 +417,7 @@ function generate_logo($name, $font_choice = 'Vera', $logo_theme_image = 'logo/d
  * @set equations hsv
  * @param  string                       Seed colour to use.
  * @param  boolean                      Whether to use the theme immediately.
- * @param  ?boolean                     Whether it will be a dark theme (NULL: autodetect).
+ * @param  ?boolean                     Whether it will be a dark theme (null: autodetect).
  * @param  boolean                      Whether to inherit the CSS, for easier theme upgrading.
  */
 function make_theme($themename, $source_theme, $algorithm, $seed, $use, $dark = false, $inherit_css = false)
@@ -632,10 +632,10 @@ function themewizard_script()
  * @param  ID_TEXT                      The algorithm to use
  * @set equations hsv
  * @param  ID_TEXT                      What to generate ('colours', or the name of a theme image).
- * @param  ?boolean                     Whether it will be a dark theme (NULL: autodetect).
- * @param  ?array                       The colour map to use (NULL: compute).
- * @param  ?array                       The computed colour landscape to use (NULL: compute).
- * @param  ?LANGUAGE_NAME               The language to work in (NULL: default).
+ * @param  ?boolean                     Whether it will be a dark theme (null: autodetect).
+ * @param  ?array                       The colour map to use (null: compute).
+ * @param  ?array                       The computed colour landscape to use (null: compute).
+ * @param  ?LANGUAGE_NAME               The language to work in (null: default).
  * @return mixed                        Image resource OR A pair: extended map of colours, colour expression landscape
  */
 function calculate_theme($seed, $source_theme, $algorithm, $show = 'colours', $dark = null, $colours = null, $landscape = null, $lang = null)
@@ -867,7 +867,7 @@ function calculate_dynamic_css_colours($colours, $source_theme)
  * Convert a textual CSS colour expression into an expression tree.
  *
  * @param  string                       Textual expression.
- * @return ?array                       Expression tree (NULL: not real).
+ * @return ?array                       Expression tree (null: not real).
  */
 function parse_css_colour_expression($textual)
 {
@@ -888,7 +888,7 @@ function parse_css_colour_expression($textual)
  * Convert CSS colour tokens into an expression tree.
  *
  * @param  array                        Tokens.
- * @return ?array                       Expression tree (NULL: error).
+ * @return ?array                       Expression tree (null: error).
  */
 function _parse_css_colour_expression($tokens)
 {
@@ -945,7 +945,7 @@ function _parse_css_colour_expression($tokens)
  *
  * @param  mixed                        Expression tree (array) OR leaf (string).
  * @param  array                        Known colours at this point.
- * @return ?string                      RRGGBB colour or possibly just a number (NULL: answer cannot be computed).
+ * @return ?string                      RRGGBB colour or possibly just a number (null: answer cannot be computed).
  */
 function execute_css_colour_expression($expression, $colours)
 {
@@ -1444,11 +1444,11 @@ function generate_gradient($top, $bottom)
  * @param  string                       The colour code of what we want as our "minor" colour (often a border colour)
  * @param  string                       The colour code of what we have as our first major colour (often the only major colour)
  * @param  string                       The colour code of what we want as our first major colour (often the only major colour)
- * @param  ?string                      The colour code of what we have as our second major colour (the gradient target, at the bottom/right of the image) (NULL: not gradiented)
- * @param  ?string                      The colour code of what we want as our second major colour (the gradient target, at the bottom/right of the image) (NULL: not gradiented)
+ * @param  ?string                      The colour code of what we have as our second major colour (the gradient target, at the bottom/right of the image) (null: not gradiented)
+ * @param  ?string                      The colour code of what we want as our second major colour (the gradient target, at the bottom/right of the image) (null: not gradiented)
  * @param  string                       The directional code for the gradient
  * @set    vertical horizontal
- * @param  ?array                       An array that is used to limit where we do our conversion on. It specifies, for each y-offset, the x-offset we start from (NULL: no such limitation)
+ * @param  ?array                       An array that is used to limit where we do our conversion on. It specifies, for each y-offset, the x-offset we start from (null: no such limitation)
  * @param  integer                      What the gradient assumed start-position will be offset by (in the gradient direction).
  * @param  boolean                      Whether the pixel_x_start array is actually an end array.
  * @return resource                     The image

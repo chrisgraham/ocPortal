@@ -1664,7 +1664,7 @@ if (!function_exists(\'git_repos\')) {
     /**
      * Find the git branch name. This is useful for making this config file context-adaptive (i.e. dev settings vs production settings).
      *
-     * @return ?ID_TEXT                 Branch name (NULL: not in git)
+     * @return ?ID_TEXT                 Branch name (null: not in git)
      */
     function git_repos()
     {
@@ -2612,7 +2612,7 @@ function test_writable($file)
  * Using the current forum driver, find the forum path.
  *
  * @param  string                       What the user manually gave as the forum path (may be blank)
- * @return ?URLPATH                     The answer (NULL: could not find the forum)
+ * @return ?URLPATH                     The answer (null: could not find the forum)
  */
 function find_forum_path($given)
 {

@@ -55,8 +55,8 @@ class Persistent_cacheing_memcache extends Memcache
      * Get data from the persistent cache.
      *
      * @param  string                   Key
-     * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (NULL: don't care)
-     * @return ?mixed                   The data (NULL: not found / NULL entry)
+     * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (null: don't care)
+     * @return ?mixed                   The data (null: not found / NULL entry)
      */
     public function get($key, $min_cache_date = null)
     {
@@ -76,7 +76,7 @@ class Persistent_cacheing_memcache extends Memcache
      * @param  string                   Key
      * @param  mixed                    The data
      * @param  integer                  Various flags (parameter not used)
-     * @param  ?integer                 The expiration time in seconds (NULL: no expiry)
+     * @param  ?integer                 The expiration time in seconds (null: no expiry)
      */
     public function set($key, $data, $flags = 0, $expire_secs = null)
     {

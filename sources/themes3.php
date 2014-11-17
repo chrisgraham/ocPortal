@@ -53,8 +53,8 @@ function tempcode_tester_script()
  * Delete a theme image.
  *
  * @param  SHORT_TEXT                   The theme image ID
- * @param  ?ID_TEXT                     The theme to delete in (NULL: all themes)
- * @param  ?LANGUAGE_NAME               The language to delete in (NULL: all languages) (blank: all languages)
+ * @param  ?ID_TEXT                     The theme to delete in (null: all themes)
+ * @param  ?LANGUAGE_NAME               The language to delete in (null: all languages) (blank: all languages)
  */
 function actual_delete_theme_image($id, $theme = null, $lang = null)
 {
@@ -86,8 +86,8 @@ function actual_delete_theme_image($id, $theme = null, $lang = null)
  * Regenerate all the theme image paths in the database.
  *
  * @param  ID_TEXT                      The theme we're searching in.
- * @param  ?array                       A map of languages (lang=>1) (NULL: find it in-function).
- * @param  ?ID_TEXT                     The theme we're storing in (NULL: same as $theme).
+ * @param  ?array                       A map of languages (lang=>1) (null: find it in-function).
+ * @param  ?ID_TEXT                     The theme we're storing in (null: same as $theme).
  */
 function regen_theme_images($theme, $langs = null, $target_theme = null)
 {

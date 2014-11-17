@@ -141,10 +141,10 @@ function rain_get_country_image($ip_address)
 /**
  * Returns a map with an icon and multiplicity parameter (that may be NULL).
  *
- * @param  ?IP                          An IP address (used to check against bots) (NULL: no IP).
+ * @param  ?IP                          An IP address (used to check against bots) (null: no IP).
  * @param  TIME                         A timestamp (used to check for logged sent emails).
- * @param  ?string                      A user agent (used to check against phones) (NULL: no user agent).
- * @param  ?string                      News ticker news (NULL: no news ticker news).
+ * @param  ?string                      A user agent (used to check against phones) (null: no user agent).
+ * @param  ?string                      News ticker news (null: no news ticker news).
  * @return array                        Map with an icon and multiplicity parameter.
  */
 function rain_get_special_icons($ip_address, $timestamp, $user_agent = null, $news = null)

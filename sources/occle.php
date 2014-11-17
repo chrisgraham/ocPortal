@@ -146,8 +146,8 @@ class Virtual_shell
      * Constructor function. Starts command parsing on the supplied command.
      *
      * @param  string                   The inputted command, unparsed
-     * @param  ?array                   An array of prior output to be prepended (NULL: none)
-     * @param  ?array                   An array of prior parameters (NULL: none)
+     * @param  ?array                   An array of prior output to be prepended (null: none)
+     * @param  ?array                   An array of prior parameters (null: none)
      */
     public function Virtual_shell($inputted_command, $prior_output = null, $parameters = null)
     {
@@ -1248,7 +1248,7 @@ class Virtual_shell
      * Find a script file.
      *
      * @param  string                   Script name
-     * @param  ?string                  Directory (NULL: OcCLE module data dir)
+     * @param  ?string                  Directory (null: OcCLE module data dir)
      * @return ~string                  Path or failure (false: failure)
      */
     protected function _find_script_file($script_name, $dir = null)

@@ -53,7 +53,7 @@ function array_count_values($input)
  *
  * @param  array                        First array.
  * @param  array                        Second array.
- * @param  ?array                       Third array (NULL: only 2).
+ * @param  ?array                       Third array (null: only 2).
  * @return array                        The difference.
  */
 function array_diff($array1, $array2, $array3 = null)
@@ -66,7 +66,7 @@ function array_diff($array1, $array2, $array3 = null)
  *
  * @param  array                        First array.
  * @param  array                        Second array.
- * @param  ?array                       Third array (NULL: only 2).
+ * @param  ?array                       Third array (null: only 2).
  * @return array                        The difference.
  */
 function array_diff_assoc($array1, $array2, $array3 = null)
@@ -101,7 +101,7 @@ function array_key_exists($key, $search)
  * Return all the keys of an array.
  *
  * @param  array                        Input array.
- * @param  ?mixed                       Only find keys with this value (NULL: no such filter).
+ * @param  ?mixed                       Only find keys with this value (null: no such filter).
  * @return array                        The keys of the array.
  */
 function array_keys($input, $search_value = null)
@@ -114,7 +114,7 @@ function array_keys($input, $search_value = null)
  *
  * @param  array                        First array.
  * @param  array                        Second array.
- * @param  ?array                       Third array (NULL: only 2).
+ * @param  ?array                       Third array (null: only 2).
  * @return array                        The intersection.
  */
 function array_intersect($array1, $array2, $array3 = null)
@@ -127,7 +127,7 @@ function array_intersect($array1, $array2, $array3 = null)
  *
  * @param  array                        First array.
  * @param  array                        Second array.
- * @param  ?array                       Third array (NULL: only 2).
+ * @param  ?array                       Third array (null: only 2).
  * @return array                        The intersection.
  */
 function array_intersect_assoc($array1, $array2, $array3 = null)
@@ -140,9 +140,9 @@ function array_intersect_assoc($array1, $array2, $array3 = null)
  *
  * @param  array                        First array.
  * @param  array                        Second array.
- * @param  ?array                       Third array (NULL: only 2).
- * @param  ?array                       Fourth array to merge (NULL: not this one).
- * @param  ?array                       Fifth array to merge (NULL: not this one).
+ * @param  ?array                       Third array (null: only 2).
+ * @param  ?array                       Fourth array to merge (null: not this one).
+ * @param  ?array                       Fifth array to merge (null: not this one).
  * @return array                        Merged array.
  */
 function array_merge($array1, $array2, $array3 = null, $array4 = null, $array5 = null)
@@ -154,7 +154,7 @@ function array_merge($array1, $array2, $array3 = null, $array4 = null, $array5 =
  * Pop the element off the end of array.
  *
  * @param  array                        The array.
- * @return ?mixed                       The value (NULL: no value).
+ * @return ?mixed                       The value (null: no value).
  */
 function array_pop(&$array)
 {
@@ -201,7 +201,7 @@ function array_search($needle, $haystack)
  * Shift an element off the beginning of array.
  *
  * @param  array                        The array.
- * @return ?mixed                       Shifted element (NULL: empty array given).
+ * @return ?mixed                       Shifted element (null: empty array given).
  */
 function array_shift(&$array)
 {
@@ -213,7 +213,7 @@ function array_shift(&$array)
  *
  * @param  array                        The array.
  * @param  integer                      The offset.
- * @param  ?integer                     The length (NULL: up to the end of the array).
+ * @param  ?integer                     The length (null: up to the end of the array).
  * @return array                        The slice.
  */
 function array_slice($array, $offset, $length = null)
@@ -226,8 +226,8 @@ function array_slice($array, $offset, $length = null)
  *
  * @param  array                        The array.
  * @param  integer                      The offset.
- * @param  ?integer                     The length (NULL: up to the end of the array).
- * @param  ?array                       The replacement (NULL: nothing put in, just bit taken out).
+ * @param  ?integer                     The length (null: up to the end of the array).
+ * @param  ?array                       The replacement (null: nothing put in, just bit taken out).
  * @return array                        The spliced result.
  */
 function array_splice($input, $offset, $length = null, $replacement = null)
@@ -303,10 +303,10 @@ function base64_encode($data)
  * Call a user function given by the first parameter.
  *
  * @param  mixed                        Function callback.
- * @param  ?mixed                       Optional parameter (NULL: none).
- * @param  ?mixed                       Optional parameter (NULL: none).
- * @param  ?mixed                       Optional parameter (NULL: none).
- * @param  ?mixed                       Optional parameter (NULL: none).
+ * @param  ?mixed                       Optional parameter (null: none).
+ * @param  ?mixed                       Optional parameter (null: none).
+ * @param  ?mixed                       Optional parameter (null: none).
+ * @param  ?mixed                       Optional parameter (null: none).
  * @return mixed                        Whatever the function returns.
  */
 function call_user_func($function, $param_a = null, $param_b = null, $param_c = null, $param_d = null)
@@ -428,7 +428,7 @@ function constant($name)
  *
  * @param  PATH                         The source path.
  * @param  PATH                         The destination path.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function copy($source, $dest, $context = null)
@@ -462,7 +462,7 @@ function count($var)
  * One-way string hashing (not encryption, as not reversible).
  *
  * @param  string                       The string to hash.
- * @param  ?string                      The salt (NULL: generate a random salt).
+ * @param  ?string                      The salt (null: generate a random salt).
  * @return string                       The hash. The start of the hash determines parameters (encoding, salt).
  */
 function crypt($string, $salt = null)
@@ -485,7 +485,7 @@ function current($array)
  * Format a local time/date.
  *
  * @param  string                       The format string.
- * @param  ?TIME                        The timestamp (NULL: current time).
+ * @param  ?TIME                        The timestamp (null: current time).
  * @return string                       The string representation of the local time/date.
  */
 function date($format, $timestamp = null)
@@ -577,7 +577,7 @@ function error_log($message, $message_type = 0, $destination = '')
 /**
  * Sets which PHP errors are reported.
  *
- * @param  ?integer                     OR'd combination of error type constants. (E_ERROR, E_WARNING,  E_PARSE, E_NOTICE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE, E_ALL) (NULL: find current level).
+ * @param  ?integer                     OR'd combination of error type constants. (E_ERROR, E_WARNING,  E_PARSE, E_NOTICE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE, E_ALL) (null: find current level).
  * @return integer                      Current error reporting level.
  */
 function error_reporting($level = null)
@@ -599,7 +599,7 @@ function exit($message = '')
  *
  * @param  string                       The separator.
  * @param  string                       The string to split.
- * @param  ?integer                     The maximum number of splits (the last element containing the remainder) (NULL: no limit).
+ * @param  ?integer                     The maximum number of splits (the last element containing the remainder) (null: no limit).
  * @return array                        The split list.
  */
 function explode($separator, $string, $limit = null)
@@ -633,7 +633,7 @@ function feof($handle)
  * Gets line from file pointer.
  *
  * @param  resource                     The file pointer.
- * @param  ?integer                     The maximum length of the line (NULL: no limit).
+ * @param  ?integer                     The maximum length of the line (null: no limit).
  * @return string                       The string read.
  */
 function fgets($handle, $length = null)
@@ -788,7 +788,7 @@ function get_defined_functions()
  * @param  PATH                         Filename.
  * @param  string                       Mode (e.g. at).
  * @param  boolean                      Whether to search within the include path.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return ~resource                    The file handle (false: could not be opened).
  */
 function fopen($filename, $mode, $use_include_path = false, $context = null)
@@ -1021,7 +1021,7 @@ function function_exists($function_name)
  *
  * @param  resource                     The file handle.
  * @param  string                       The string to write to the file.
- * @param  ?integer                     The length of data to write (NULL: all of $string).
+ * @param  ?integer                     The length of data to write (null: all of $string).
  * @return ~integer                     The number of bytes written (false: error).
  */
 function fwrite($handle, $string, $length = null)
@@ -1054,7 +1054,7 @@ function get_class($obj)
  * Gets the class methods' names.
  *
  * @param  mixed                        The class name or an object instance.
- * @return ?array                       An array of method names defined (NULL: error).
+ * @return ?array                       An array of method names defined (null: error).
  */
 function get_class_methods($class_name)
 {
@@ -1119,7 +1119,7 @@ function getcwd()
 /**
  * Get date/time information.
  *
- * @param  ?TIME                        Timestamp to get information for (NULL: now).
+ * @param  ?TIME                        Timestamp to get information for (null: now).
  * @return array                        The information.
  */
 function getdate($timestamp = null)
@@ -1142,7 +1142,7 @@ function getenv($string)
  * Format a GMT/UTC date/time (uses different format to 'date' function).
  *
  * @param  string                       The 'gm' format string.
- * @param  ?TIME                        Timestamp to use (NULL: now).
+ * @param  ?TIME                        Timestamp to use (null: now).
  * @return string                       The formatted string.
  */
 function gmdate($format, $timestamp = null)
@@ -1178,7 +1178,7 @@ function gzopen($filename, $mode)
  *
  * @param  resource                     The file handle.
  * @param  string                       The string to write to the file.
- * @param  ?integer                     The length of data to write (NULL: full length of input string).
+ * @param  ?integer                     The length of data to write (null: full length of input string).
  * @return ~integer                     The number of bytes written (false: error).
  */
 function gzwrite($handle, $string, $length = null)
@@ -1286,7 +1286,7 @@ function imagecolorallocatealpha($image, $red, $green, $blue, $alpha)
  * Define a color as transparent.
  *
  * @param  resource                     The image handle.
- * @param  ?integer                     Transparency colour identifier (NULL: get it, don't set it).
+ * @param  ?integer                     Transparency colour identifier (null: get it, don't set it).
  * @return integer                      Transparency colour identifier.
  */
 function imagecolortransparent($image, $color = null)
@@ -1488,8 +1488,8 @@ function imagefontwidth($font)
  * Output image to browser or file as JPEG.
  *
  * @param  resource                     The image handle.
- * @param  ?string                      The filename (NULL: output to browser).
- * @param  ?integer                     Quality level (NULL: default).
+ * @param  ?string                      The filename (null: output to browser).
+ * @param  ?integer                     Quality level (null: default).
  * @return boolean                      Success status.
  */
 function imagejpeg($image, $filename = null, $quality = null)
@@ -1501,7 +1501,7 @@ function imagejpeg($image, $filename = null, $quality = null)
  * Output image to browser or file as PNG.
  *
  * @param  resource                     The image handle.
- * @param  ?string                      The filename (NULL: output to browser).
+ * @param  ?string                      The filename (null: output to browser).
  * @param  integer                      Compression level (0-9, 9 being highest compression).
  * @return boolean                      Success status.
  */
@@ -2420,15 +2420,15 @@ function mail($to, $subject, $message, $additional_headers = '', $additional_fla
  * Find highest value between arguments.
  *
  * @param  mixed                        First argument (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Second argument (NULL: no second argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Third argument (NULL: no third argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fourth argument (NULL: no fourth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fifth argument (NULL: no fith argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Sixth argument (NULL: no sixth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Seventh argument (NULL: no seventh argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Eighth argument (NULL: no eighth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Ninth argument (NULL: no ninth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Tenth argument (NULL: no tenth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Second argument (null: no second argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Third argument (null: no third argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Fourth argument (null: no fourth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Fifth argument (null: no fith argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Sixth argument (null: no sixth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Seventh argument (null: no seventh argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Eighth argument (null: no eighth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Ninth argument (null: no ninth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Tenth argument (null: no tenth argument) (if array, then each treated as a separate parameter).
  * @return mixed                        The highest valued argument.
  */
 function max($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null, $arg10 = null)
@@ -2474,15 +2474,15 @@ function microtime($as_float)
  * Find lowest value between arguments.
  *
  * @param  mixed                        First argument (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Second argument (NULL: no second argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Third argument (NULL: no third argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fourth argument (NULL: no fourth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fifth argument (NULL: no fith argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Sixth argument (NULL: no sixth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Seventh argument (NULL: no seventh argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Eighth argument (NULL: no eighth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Ninth argument (NULL: no ninth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Tenth argument (NULL: no tenth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Second argument (null: no second argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Third argument (null: no third argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Fourth argument (null: no fourth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Fifth argument (null: no fith argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Sixth argument (null: no sixth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Seventh argument (null: no seventh argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Eighth argument (null: no eighth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Ninth argument (null: no ninth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       Tenth argument (null: no tenth argument) (if array, then each treated as a separate parameter).
  * @return mixed                        The lowest valued argument.
  */
 function min($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null, $arg10 = null)
@@ -2496,7 +2496,7 @@ function min($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg
  * @param  PATH                         The path to the directory to make.
  * @param  integer                      The mode (e.g. 0777).
  * @param  boolean                      Whether to do recursively.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function mkdir($path, $mode, $recursive = false, $context = null)
@@ -2508,11 +2508,11 @@ function mkdir($path, $mode, $recursive = false, $context = null)
  * Get UNIX timestamp for a componentialised date.
  *
  * @param  integer                      The hour.
- * @param  ?integer                     The minute (NULL: now).
- * @param  ?integer                     The second (NULL: now).
- * @param  ?integer                     The month (NULL: now).
- * @param  ?integer                     The day (NULL: now).
- * @param  ?integer                     The year (NULL: now).
+ * @param  ?integer                     The minute (null: now).
+ * @param  ?integer                     The second (null: now).
+ * @param  ?integer                     The month (null: now).
+ * @param  ?integer                     The day (null: now).
+ * @param  ?integer                     The year (null: now).
  * @param  integer                      Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
  * @return TIME                         The timestamp.
  */
@@ -2733,36 +2733,36 @@ function ord($string)
  * Pack data into binary string.
  *
  * @param  string                       The formatting string.
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
- * @param  ?mixed                       Argument that binds to the formatting string (NULL: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       Argument that binds to the formatting string (null: none).
  * @return string                       The binary string.
  */
 function pack($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null, $arg10 = null, $arg11 = null, $arg12 = null, $arg13 = null, $arg14 = null, $arg15 = null, $arg16 = null, $arg17 = null, $arg18 = null, $arg19 = null, $arg20 = null, $arg21 = null, $arg22 = null, $arg23 = null, $arg24 = null, $arg25 = null, $arg26 = null, $arg27 = null, $arg28 = null, $arg29 = null, $arg30 = null)
@@ -2818,7 +2818,7 @@ function posix_getuid()
  *
  * @param  string                       The pattern.
  * @param  string                       The subject string.
- * @param  ?array                       Where matches will be put (note that it is a list of maps, except the arrays are turned inside out) (NULL: do not store matches). Note that this is actually passed by reference, but is also optional.
+ * @param  ?array                       Where matches will be put (note that it is a list of maps, except the arrays are turned inside out) (null: do not store matches). Note that this is actually passed by reference, but is also optional.
  * @param  integer                      Either 0, or PREG_OFFSET_CAPTURE.
  * @return ~integer                     The number of matches (false: error).
  */
@@ -2860,7 +2860,7 @@ function preg_match_all($pattern, $subject, &$matches, $flags = 0)
  * @param  mixed                        The pattern (string or array).
  * @param  mixed                        The replacement string (string or array).
  * @param  string                       The subject string.
- * @param  ?integer                     The limit of replacements (NULL: no limit).
+ * @param  ?integer                     The limit of replacements (null: no limit).
  * @return ~string                      The string with replacements made (false: error).
  */
 function preg_replace($pattern, $replacement, $subject, $limit = null)
@@ -2874,7 +2874,7 @@ function preg_replace($pattern, $replacement, $subject, $limit = null)
  * @param  string                       The pattern.
  * @param  mixed                        The callback.
  * @param  string                       The subject string.
- * @param  ?integer                     The limit of replacements (NULL: no limit).
+ * @param  ?integer                     The limit of replacements (null: no limit).
  * @return ~string                      The string with replacements made (false: error).
  */
 function preg_replace_callback($pattern, $callback, $subject, $limit = null)
@@ -2887,8 +2887,8 @@ function preg_replace_callback($pattern, $callback, $subject, $limit = null)
  *
  * @param  string                       The pattern.
  * @param  string                       The subject.
- * @param  ?integer                     The maximum number of splits to make (NULL: no limit).
- * @param  ?integer                     The special mode (NULL: none).
+ * @param  ?integer                     The maximum number of splits to make (null: no limit).
+ * @param  ?integer                     The special mode (null: none).
  * @return array                        The array due to splitting.
  */
 function preg_split($pattern, $subject, $max_splits = null, $mode = null)
@@ -2964,23 +2964,23 @@ function realpath($path)
  * Register a function for execution on shutdown.
  *
  * @param  mixed                        Callback.
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
- * @param  ?mixed                       Parameter (NULL: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
+ * @param  ?mixed                       Parameter (null: not used).
  */
 function register_shutdown_function($callback, $parama = null, $paramb = null, $paramc = null, $paramd = null, $parame = null, $paramf = null, $paramg = null, $paramh = null, $parami = null, $paramj = null, $paramk = null, $paraml = null, $paramm = null, $paramn = null, $paramo = null, $paramp = null, $paramq = null)
 {
@@ -2991,7 +2991,7 @@ function register_shutdown_function($callback, $parama = null, $paramb = null, $
  *
  * @param  PATH                         Old name.
  * @param  PATH                         New name.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function rename($oldname, $newname, $context = null)
@@ -3036,7 +3036,7 @@ function reset($array)
  * Removes directory.
  *
  * @param  PATH                         Directory path.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function rmdir($dirname, $context = null)
@@ -3105,10 +3105,10 @@ function set_error_handler($error_handler)
  * @sets_output_state
  *
  * @param  string                       The name.
- * @param  ?string                      The value (NULL: unset existing cookie).
- * @param  ?integer                     Expiration timestamp (NULL: session cookie).
- * @param  ?string                      Path (NULL: current URL path).
- * @param  ?string                      Domain (NULL: current URL domain).
+ * @param  ?string                      The value (null: unset existing cookie).
+ * @param  ?integer                     Expiration timestamp (null: session cookie).
+ * @param  ?string                      Path (null: current URL path).
+ * @param  ?string                      Domain (null: current URL domain).
  * @param  BINARY                       Whether the cookie is only for HTTPS.
  * @return boolean                      Success status (fails if output already started).
  */
@@ -3164,14 +3164,14 @@ function sort(&$array)
  * Return a formatted string.
  *
  * @param  string                       Formatting string.
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
  * @return string                       Formatted string.
  */
 function sprintf($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null)
@@ -3184,14 +3184,14 @@ function sprintf($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null
  *
  * @param  resource                     File to write to.
  * @param  string                       Formatting string.
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
- * @param  ?mixed                       Argument for the formatting string (NULL: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  ?mixed                       Argument for the formatting string (null: none required).
  * @return string                       Formatted string.
  */
 function fprintf($handle, $format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null)
@@ -3263,7 +3263,7 @@ function strcmp($str1, $str2)
  * Format a local time/date according to locale settings (uses alternative formatting to 'date' function).
  *
  * @param  string                       The formatting string.
- * @param  ?TIME                        The timestamp (NULL: now).
+ * @param  ?TIME                        The timestamp (null: now).
  * @return string                       The formatted string.
  */
 function strftime($format, $timestamp = null)
@@ -3359,7 +3359,7 @@ function strstr($haystack, $needle)
  * Tokenize string.
  *
  * @param  string                       String to tokenise. EXCEPT if $deliminators=NULL, then this has actual deliminators.
- * @param  ?string                      Deliminators (NULL: continue with previous tokenisation).
+ * @param  ?string                      Deliminators (null: continue with previous tokenisation).
  * @return ~string                      Next token (false: could not return a token, no more tokens to return).
  */
 function strtok($subject, $deliminators = null)
@@ -3382,7 +3382,7 @@ function strtolower($str)
  * Parse about any English textual datetime description into a UNIX timestamp.
  *
  * @param  string                       The subject.
- * @param  ?TIME                        The timestamp to find times relative to (NULL: now).
+ * @param  ?TIME                        The timestamp to find times relative to (null: now).
  * @return TIME                         The timetamp (-1: failed).
  */
 function strtotime($time, $now = null)
@@ -3406,7 +3406,7 @@ function strtoupper($str)
  *
  * @param  string                       Subject.
  * @param  mixed                        Map of translations to do OR from string.
- * @param  ?mixed                       To string (NULL: previous parameter was a map).
+ * @param  ?mixed                       To string (null: previous parameter was a map).
  * @return string                       Result.
  */
 function strtr($string, $replace_pairs, $to = null)
@@ -3430,7 +3430,7 @@ function strval($var)
  *
  * @param  string                       The subject.
  * @param  integer                      The start position.
- * @param  ?integer                     The length to extract (NULL: all remaining).
+ * @param  ?integer                     The length to extract (null: all remaining).
  * @return ~string                      String part (false: $start was over the end of the string).
  */
 function substr($string, $start, $length = null)
@@ -3540,7 +3540,7 @@ function uniqid($prefix, $lcg)
  * Deletes a file.
  *
  * @param  PATH                         The filename.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function unlink($filename, $context = null)
@@ -3696,7 +3696,7 @@ function xml_parse($parser, $data, $is_final = false)
 /**
  * Create an XML parser with namespace support.
  *
- * @param  ?string                      Encoding (NULL: PHP4: as-for-input/PHP5: autodetect).
+ * @param  ?string                      Encoding (null: PHP4: as-for-input/PHP5: autodetect).
  * @return ~resource                    XML parser (false: could not create, happens on default PHP5 on Windows).
  */
 function xml_parser_create_ns($encoding = null)
@@ -3856,7 +3856,7 @@ function assert($assertion)
  * Set/get the various assert flags (and sometimes, options for them).
  *
  * @param  integer                      The option (ASSERT_ACTIVE, ASSERT_WARNING, ASSERT_BAIL, ASSERT_QUIET_EVAL, ASSERT_CALLBACK).
- * @param  ?mixed                       The value for flag (NULL: N/A).
+ * @param  ?mixed                       The value for flag (null: N/A).
  * @return ~mixed                       Old value (false: error).
  */
 function assert_options($option, $value = null)
@@ -4103,7 +4103,7 @@ function gmmktime($hour, $minute, $second, $month, $day, $year, $is_dst = -1)
  * Format a GMT/UTC time/date according to locale settings.
  *
  * @param  string                       The formatting string.
- * @param  ?TIME                        The timestamp (NULL: now).
+ * @param  ?TIME                        The timestamp (null: now).
  * @return string                       The formatted string.
  */
 function gmstrftime($format, $timestamp = null)
@@ -4286,7 +4286,7 @@ function range($from, $to, $step = 1)
  *
  * @param  PATH                         The filename.
  * @param  boolean                      Whether to search within the include path.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return ~integer                     The number of bytes read (false: error).
  */
 function readfile($filename, $use_include_path = false, $context = null)
@@ -4308,7 +4308,7 @@ function shuffle($array)
  *
  * @param  string                       First string.
  * @param  string                       Second string.
- * @param  ?float                       Returns the percentage of similarity (NULL: do not get).
+ * @param  ?float                       Returns the percentage of similarity (null: do not get).
  * @return integer                      The number of matching characters.
  */
 function similar_text($first, $second, &$percent = null)
@@ -4467,7 +4467,7 @@ function strspn($string, $mask)
  * @param  string                       The subject string.
  * @param  string                       The replacement string.
  * @param  integer                      The start position of what's being replaced.
- * @param  ?integer                     The run-length of what is being replaced (NULL: go to end of string).
+ * @param  ?integer                     The run-length of what is being replaced (null: go to end of string).
  * @return string                       A copy of string delimited by the start and (optionally) length parameters with the string given in replacement.
  */
 function substr_replace($string, $replacement, $start, $length = null)
@@ -4503,7 +4503,7 @@ function unpack($format, $data)
  *
  * @param  string                       First version number.
  * @param  string                       Second version number.
- * @param  ?string                      The operator to compare with (NULL: unified).
+ * @param  ?string                      The operator to compare with (null: unified).
  * @return mixed                        For unified: -1 if v1<v2, 0 if v1=v2, 1 if v1>v2. Else BINARY or boolean.
  */
 function version_compare($version1, $version2, $compare_symbol = null)
@@ -4555,7 +4555,7 @@ function xml_get_current_column_number($parser)
 /**
  * Create an XML parser.
  *
- * @param  ?string                      Encoding (NULL: PHP4: as-for-input/PHP5: autodetect).
+ * @param  ?string                      Encoding (null: PHP4: as-for-input/PHP5: autodetect).
  * @return ~resource                    XML parser (false: could not create, happens on default PHP5 on Windows) (false: error).
  */
 function xml_parser_create($encoding = null)
@@ -4581,7 +4581,7 @@ function xml_parser_get_option($parser, $option)
  * @param  resource                     The parser.
  * @param  string                       The XML.
  * @param  array                        Where to put the values.
- * @param  ?array                       Where to put the indices into the XML for where the values are at (NULL: don't collect). Note that this is actually passed by reference, but is also optional.
+ * @param  ?array                       Where to put the indices into the XML for where the values are at (null: don't collect). Note that this is actually passed by reference, but is also optional.
  * @return BINARY                       0 is failure, 1=pass.
  */
 function xml_parse_into_struct($parser, $data, &$values, $index = null)
@@ -4686,8 +4686,8 @@ function vsprintf($format, $args)
  * Sets access and modification time of file.
  *
  * @param  PATH                         File to touch.
- * @param  ?TIME                        New modification time (NULL: do not change).
- * @param  ?TIME                        New access time (NULL: do not change).
+ * @param  ?TIME                        New modification time (null: do not change).
+ * @param  ?TIME                        New access time (null: do not change).
  * @return boolean                      Success status.
  */
 function touch($filename, $time = null, $atime = null)
@@ -4864,7 +4864,7 @@ function lcg_value()
 /**
  * Get the local time.
  *
- * @param  ?TIME                        Timestamp (NULL: now).
+ * @param  ?TIME                        Timestamp (null: now).
  * @param  boolean                      If set to FALSE or not supplied than the array is returned as a regular, numerically indexed array. If the argument is set to TRUE then localtime() is an associative array containing all the different elements of the structure returned by the C function call to localtime.
  * @return array                        Components.
  */
@@ -4889,7 +4889,7 @@ function addcslashes($str, $charlist)
  * Filters elements of an array using a callback function.
  *
  * @param  array                        In.
- * @param  ?mixed                       The filter function callback (NULL: filter out false's).
+ * @param  ?mixed                       The filter function callback (null: filter out false's).
  * @return array                        Out.
  */
 function array_filter($input, $callback = null)
@@ -4926,9 +4926,9 @@ function array_sum($array)
  *
  * @param  array                        First array to merge.
  * @param  array                        Second array to merge.
- * @param  ?array                       Third array to merge (NULL: not this one).
- * @param  ?array                       Fourth array to merge (NULL: not this one).
- * @param  ?array                       Fifth array to merge (NULL: not this one).
+ * @param  ?array                       Third array to merge (null: not this one).
+ * @param  ?array                       Fourth array to merge (null: not this one).
+ * @param  ?array                       Fifth array to merge (null: not this one).
  * @return array                        Result.
  */
 function array_merge_recursive($array1, $array2, $array3 = null, $array4 = null, $array5 = null)
@@ -4940,7 +4940,7 @@ function array_merge_recursive($array1, $array2, $array3 = null, $array4 = null,
  * Sort multiple or multi-dimensional array.
  *
  * @param  array                        Array to sort.
- * @param  ?integer                     Argument code (NULL: none given).
+ * @param  ?integer                     Argument code (null: none given).
  * @return array                        Result.
  */
 function array_multisort($array, $args = null)
@@ -4966,8 +4966,8 @@ function array_pad($input, $pad_size, $pad_value)
  *
  * @param  array                        Input.
  * @param  mixed                        Process function.
- * @param  ?integer                     Initial value (NULL: no initial).
- * @return ?integer                     Result (NULL: no initial given, and empty array given).
+ * @param  ?integer                     Initial value (null: no initial).
+ * @return ?integer                     Result (null: no initial given, and empty array given).
  */
 function array_reduce($input, $callback, $initial = null)
 {
@@ -5012,7 +5012,7 @@ function fgetc($handle)
  * Gets line from file pointer and parse for CSV fields.
  *
  * @param  resource                     File handle.
- * @param  ?integer                     The maximum length of the line (NULL: no limit).
+ * @param  ?integer                     The maximum length of the line (null: no limit).
  * @param  string                       Delimiter.
  * @return ~array                       Line (false: error).
  */
@@ -5025,7 +5025,7 @@ function fgetcsv($handle, $length = null, $delimiter = ',')
  * Gets line from file pointer and strip HTML tags.
  *
  * @param  resource                     File handle.
- * @param  ?integer                     The maximum length of the line (NULL: no limit).
+ * @param  ?integer                     The maximum length of the line (null: no limit).
  * @param  string                       Allowable HTML tags separated by spaces.
  * @return ~string                      Line (false: error).
  */
@@ -5350,11 +5350,11 @@ function popen($command, $mode)
  * Output a formatted string.
  *
  * @param  string                       Formatting string.
- * @param  ?mixed                       Argument (NULL: not given).
- * @param  ?mixed                       Argument (NULL: not given).
- * @param  ?mixed                       Argument (NULL: not given).
- * @param  ?mixed                       Argument (NULL: not given).
- * @param  ?mixed                       Argument (NULL: not given).
+ * @param  ?mixed                       Argument (null: not given).
+ * @param  ?mixed                       Argument (null: not given).
+ * @param  ?mixed                       Argument (null: not given).
+ * @param  ?mixed                       Argument (null: not given).
+ * @param  ?mixed                       Argument (null: not given).
  * @return string                       Assembled string.
  */
 function printf($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
@@ -5437,7 +5437,7 @@ function gethostbynamel($hostname)
  * Get the size of an image.
  *
  * @param  PATH                         Filename.
- * @param  ?array                       Extra details will be put here (NULL: return-only). Note that this is actually passed by reference, but is also optional.
+ * @param  ?array                       Extra details will be put here (null: return-only). Note that this is actually passed by reference, but is also optional.
  * @return ~array                       List of details: $width, $height, $type, $attr (false: error).
  */
 function getimagesize($filename, $image_info = null)
@@ -5605,7 +5605,7 @@ function gzuncompress($data, $length)
  * Convert logical Hebrew text to visual text.
  *
  * @param  string                       In.
- * @param  ?integer                     Maximum number of characters per line (NULL: no limit).
+ * @param  ?integer                     Maximum number of characters per line (null: no limit).
  * @return string                       Out.
  */
 function hebrev($hebrew_text, $max_chars_per_line = null)
@@ -5617,7 +5617,7 @@ function hebrev($hebrew_text, $max_chars_per_line = null)
  * Convert logical Hebrew text to visual text with newline conversion.
  *
  * @param  string                       In.
- * @param  ?integer                     Maximum number of characters per line (NULL: no limit).
+ * @param  ?integer                     Maximum number of characters per line (null: no limit).
  * @return string                       Out.
  */
 function hebrevc($hebrew_text, $max_chars_per_line = null)
@@ -5673,7 +5673,7 @@ function ocp_is_escaped($var)
  *
  * @param  SHORT_TEXT                   The file name.
  * @param  boolean                      Whether to search within the include path.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return ~LONG_TEXT                   The file contents (false: error).
  */
 function file_get_contents($filename, $use_include_path = false, $context = null)
@@ -5699,7 +5699,7 @@ function str_word_count($input, $format = 0)
  *
  * @param  string                       The text to decode.
  * @param  integer                      The quote style code.
- * @param  ?string                      Character set to decode to (NULL: default).
+ * @param  ?string                      Character set to decode to (null: default).
  * @return string                       The decoded text.
  */
 function html_entity_decode($input, $quote_style, $charset = null)
@@ -5772,7 +5772,7 @@ function array_udiff_uassoc($a, $b)
  *
  * @param  array                        The input array.
  * @param  mixed                        Callback.
- * @param  ?mixed                       If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (NULL: no user data).
+ * @param  ?mixed                       If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (null: no user data).
  * @return boolean                      Result.
  */
 function array_walk_recursive($input, $funcname, $userdata = null)
@@ -5846,7 +5846,7 @@ function strpbrk($haystack, $char_list)
  * @param  string                       The main string being compared.
  * @param  string                       The secondary string being compared.
  * @param  integer                      The start position for the comparison. If negative, it starts counting from the end of the string.
- * @param  ?integer                     The length of the comparison (NULL: the largest of the length of the str compared to the length of main_str less the offset).
+ * @param  ?integer                     The length of the comparison (null: the largest of the length of the str compared to the length of main_str less the offset).
  * @param  boolean                      Whether to compare as case insensitive.
  * @return ~integer                     Returns < 0 if main_str from position offset is less than str, > 0 if it is greater than str, and 0 if they are equal (false: out of bounds).
  */
@@ -5861,7 +5861,7 @@ function substr_compare($main_str, $str, $offset, $length = null, $case_insensit
  * @param  PATH                         Path to the file where to write the data.
  * @param  string                       The data to write.
  * @param  integer                      Supported flags.
- * @param  ?resource                    A stream context to attach to (NULL: no special context).
+ * @param  ?resource                    A stream context to attach to (null: no special context).
  * @return ~integer                     Bytes written (false: error).
  */
 function file_put_contents($filename, $data, $flags = 0, $context = null)
@@ -5919,10 +5919,10 @@ function image_type_to_extension($imagetype, $include_dot = true)
  *
  * @param  resource                     Image.
  * @param  integer                      A constant indicating the filter type.
- * @param  ?mixed                       Parameter (NULL: don't read).
- * @param  ?mixed                       Parameter (NULL: don't read).
- * @param  ?mixed                       Parameter (NULL: don't read).
- * @param  ?mixed                       Parameter (NULL: don't read).
+ * @param  ?mixed                       Parameter (null: don't read).
+ * @param  ?mixed                       Parameter (null: don't read).
+ * @param  ?mixed                       Parameter (null: don't read).
+ * @param  ?mixed                       Parameter (null: don't read).
  * @return boolean                      Success status.
  */
 function imagefilter($image, $filtertype, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null)
@@ -6194,7 +6194,7 @@ function array_change_key_case($input, $case)
  * Reads the EXIF headers from JPEG or TIFF.
  *
  * @param  PATH                         The name of the image file being read. This cannot be an URL.
- * @param  ?string                      Is a comma separated list of sections that need to be present in file to produce a result array (NULL: no filter).
+ * @param  ?string                      Is a comma separated list of sections that need to be present in file to produce a result array (null: no filter).
  * @param  boolean                      Specifies whether or not each section becomes an array.
  * @param  boolean                      When set to TRUE the thumbnail itself is read. Otherwise, only the tagged data is read.
  * @return ~array                       An associative array where the array indexes are the header names and the array values are the values associated with those headers (false: error).
@@ -6209,7 +6209,7 @@ function exif_read_data($filename, $sections = null, $arrays = false, $thumbnail
  *
  * @param  mixed                        The variable you want to export.
  * @param  boolean                      If used and set to TRUE, var_export() will return the variable representation instead of outputting it.
- * @return ?string                      Variable representation (NULL: asked to not return a value).
+ * @return ?string                      Variable representation (null: asked to not return a value).
  */
 function var_export($expression, $return = false)
 {
@@ -6219,8 +6219,8 @@ function var_export($expression, $return = false)
 /**
  * Creates a stream context.
  *
- * @param  ?array                       Options (NULL: none).
- * @param  ?array                       Parameters (NULL: none). Usually options is used, parameters not needed and refers to standard parameters for all context types.
+ * @param  ?array                       Options (null: none).
+ * @param  ?array                       Parameters (null: none). Usually options is used, parameters not needed and refers to standard parameters for all context types.
  * @return resource                     Stream context.
  */
 function stream_context_create($options = null, $params = null)

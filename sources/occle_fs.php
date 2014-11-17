@@ -113,7 +113,7 @@ class OcCLE_fs
     /**
      * Return the contents of the given directory in $this->occle_fs (i.e. ls without the fancy bits).
      *
-     * @param  ?array                   Directory (NULL: current directory is used)
+     * @param  ?array                   Directory (null: current directory is used)
      * @param  boolean                  Whether to use full paths
      * @return ~array                   Directory contents (false: failure)
      */
@@ -218,7 +218,7 @@ class OcCLE_fs
     /**
      * Convert an array-form path to a string.
      *
-     * @param  ?array                   Path (NULL: use $this->pwd)
+     * @param  ?array                   Path (null: use $this->pwd)
      * @return string                   String-form path
      */
     protected function _pwd_to_string($pwd = null)
@@ -252,7 +252,7 @@ class OcCLE_fs
     /**
      * Is it a directory?
      *
-     * @param  ?array                   Path to check (NULL: current dir is used)
+     * @param  ?array                   Path to check (null: current dir is used)
      * @return boolean                  Directory?
      */
     protected function _is_dir($dir = null)
@@ -310,7 +310,7 @@ class OcCLE_fs
      * @param  array                    Meta directory result: returned by reference
      * @param  string                   Meta root node result: returned by reference
      * @param  string                   Meta root node type result: returned by reference
-     * @param  ?array                   Directory (NULL: current directory is used)
+     * @param  ?array                   Directory (null: current directory is used)
      * @return ~array                   Current directory contents (false: error)
      */
     protected function _discern_meta_dir(&$meta_dir, &$meta_root_node, &$meta_root_node_type, $target_dir = null)
@@ -408,7 +408,7 @@ class OcCLE_fs
     /**
      * Return a directory and file listing of the current working directory. Equivalent to Unix "ls".
      *
-     * @param  ?array                   An alternate directory in which to perform the action (NULL: current directory is used)
+     * @param  ?array                   An alternate directory in which to perform the action (null: current directory is used)
      * @return array                    Directories and files in the current working directory
      */
     public function listing($dir = null)
@@ -447,7 +447,7 @@ class OcCLE_fs
      * @param  boolean                  Should the search be recursive?
      * @param  boolean                  Should files be included in the results?
      * @param  boolean                  Should directories be included in the results?
-     * @param  ?array                   Directory (NULL: current directory is used)
+     * @param  ?array                   Directory (null: current directory is used)
      * @return array                    The search results
      */
     public function search($pattern, $regexp = false, $recursive = false, $files = true, $directories = false, $dir = null)

@@ -155,7 +155,7 @@ function _solemnly_enter()
 /**
  * Leave the most recent security scope (i.e. a custom block or module).
  *
- * @param  ?string                      Output to filter, if I_UNDERSTAND_XSS is not set (NULL: nothing to filter).
+ * @param  ?string                      Output to filter, if I_UNDERSTAND_XSS is not set (null: nothing to filter).
  */
 function _solemnly_leave(&$out = null)
 {
@@ -301,10 +301,10 @@ function get_zone_name()
  *
  * @param  ID_TEXT                      The page name to find
  * @param  ID_TEXT                      The type of the page we are looking for
- * @param  ?string                      The special subcategorisation of page we are looking for (e.g. 'EN' for a Comcode page) (NULL: none)
+ * @param  ?string                      The special subcategorisation of page we are looking for (e.g. 'EN' for a Comcode page) (null: none)
  * @param  string                       The file extension for the page type
  * @param  boolean                      Whether ocPortal should bomb out if the page was not found
- * @return ?ID_TEXT                     The zone the page is in (NULL: not found)
+ * @return ?ID_TEXT                     The zone the page is in (null: not found)
  */
 function get_module_zone($module_name, $type = 'modules', $dir2 = null, $ftype = 'php', $error = true)
 {
@@ -413,7 +413,7 @@ function get_module_zone($module_name, $type = 'modules', $dir2 = null, $ftype =
  *
  * @param  ID_TEXT                      The Comcode page name to find
  * @param  boolean                      Whether ocPortal should bomb out if the page was not found
- * @return ?ID_TEXT                     The zone the Comcode page is in (NULL: missing)
+ * @return ?ID_TEXT                     The zone the Comcode page is in (null: missing)
  */
 function get_comcode_zone($page_name, $error = true)
 {
@@ -440,7 +440,7 @@ function get_comcode_zone($page_name, $error = true)
  *
  * @param  ID_TEXT                      The page name to find
  * @param  boolean                      Whether ocPortal should bomb out if the page was not found
- * @return ?ID_TEXT                     The zone the page is in (NULL: missing)
+ * @return ?ID_TEXT                     The zone the page is in (null: missing)
  */
 function get_page_zone($page_name, $error = true)
 {
@@ -479,7 +479,7 @@ function get_page_zone($page_name, $error = true)
  * The module result is returned.
  *
  * @param  PATH                         The relative path to the module file
- * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @param  ?object                      Semi-filled output template (null: definitely not doing output streaming)
  * @return tempcode                     The result of executing the module
  */
 function load_minimodule_page($string, &$out = null)
@@ -500,7 +500,7 @@ function load_minimodule_page($string, &$out = null)
  * The returned/output result is returned, in Tempcode form.
  *
  * @param  PATH                         The relative path to the code file
- * @param  ?array                       The block parameters (NULL: none)
+ * @param  ?array                       The block parameters (null: none)
  * @return tempcode                     The result of executing the code
  */
 function _load_mini_code($string, $map = null)
@@ -563,7 +563,7 @@ function _load_mini_code($string, $map = null)
  *
  * @param  PATH                         The relative path to the module file
  * @param  ID_TEXT                      The page name to load
- * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @param  ?object                      Semi-filled output template (null: definitely not doing output streaming)
  * @return tempcode                     The result of executing the module
  */
 function load_module_page($string, $codename, &$out = null)
@@ -920,8 +920,8 @@ function get_block_id($map)
  * Get the processed tempcode for the specified block. Please note that you pass multiple parameters in as an array, but single parameters go in as a string or other flat variable.
  *
  * @param  ID_TEXT                      The block name
- * @param  ?array                       The block parameter map (NULL: no parameters)
- * @param  ?integer                     The TTL to use in minutes (NULL: block default)
+ * @param  ?array                       The block parameter map (null: no parameters)
+ * @param  ?integer                     The TTL to use in minutes (null: block default)
  * @return tempcode                     The generated tempcode
  */
 function do_block($codename, $map = null, $ttl = null)
@@ -1155,7 +1155,7 @@ function block_params_str_to_arr($_map, $block_symbol_style = false)
  * Get the block object for a given block codename.
  *
  * @param  ID_TEXT                      The block name
- * @param  ?array                       The block parameter map (NULL: no parameters)
+ * @param  ?array                       The block parameter map (null: no parameters)
  * @return array                        A pair: Either the block object, or the string output of a miniblock ; and whether we entered a new security scope
  */
 function do_block_hunt_file($codename, $map = null)
@@ -1234,8 +1234,8 @@ function do_block_hunt_file($codename, $map = null)
  * We see if we have something cached by looking for a matching identifier.
  *
  * @param  mixed                        PHP expression over $map (the parameter map of the block) OR a call_user_func specifier that will return a result (which will be used if cacheing is really very important, even for Hip Hop PHP)
- * @param  ?array                       The block parameter map (NULL: no parameters)
- * @return ?LONG_TEXT                   The derived cache identifier (NULL: the identifier is CURRENTLY null meaning cannot be cached)
+ * @param  ?array                       The block parameter map (null: no parameters)
+ * @return ?LONG_TEXT                   The derived cache identifier (null: the identifier is CURRENTLY null meaning cannot be cached)
  */
 function do_block_get_cache_identifier($cache_on, $map)
 {
@@ -1307,7 +1307,7 @@ function block_installed($block)
  * @param  boolean                      Whether to take transparent redirects into account
  * @param  integer                      Selection algorithm constant
  * @set 0 1 2
- * @param  ?ID_TEXT                     Page type to show (NULL: all)
+ * @param  ?ID_TEXT                     Page type to show (null: all)
  * @set    modules comcode html
  * @return array                        A map of page name to type (modules_custom, etc)
  */
@@ -1325,7 +1325,7 @@ function find_all_pages_wrap($zone, $keep_ext_on = false, $consider_redirects = 
  * @set    modules comcode html
  * @param  string                       The file extension to limit us to (without a dot)
  * @param  boolean                      Whether to leave file extensions on the page name
- * @param  ?TIME                        Only show pages newer than (NULL: no restriction)
+ * @param  ?TIME                        Only show pages newer than (null: no restriction)
  * @param  integer                      Selection algorithm constant
  * @set 0 1 2
  * @return array                        A map of page name to type (modules_custom, etc)
@@ -1354,9 +1354,9 @@ function find_all_modules($zone)
  *
  * @param  PATH                         The path to the module (or any PHP file with a class)
  * @param  array                        Array of functions to be executing
- * @param  ?array                       A list of parameters to pass to our functions (NULL: none)
+ * @param  ?array                       A list of parameters to pass to our functions (null: none)
  * @param  boolean                      Whether to do this "properly" (via proper OOP), which will consume more memory
- * @param  ?string                      Class name to use (NULL: autodetect, which is a little slower)
+ * @param  ?string                      Class name to use (null: autodetect, which is a little slower)
  * @return array                        A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
  */
 function extract_module_functions($path, $functions, $params = null, $prefer_direct_code_call = false, $class_name = null)

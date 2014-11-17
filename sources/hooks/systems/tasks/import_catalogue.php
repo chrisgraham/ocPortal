@@ -38,7 +38,7 @@ class Hook_task_import_catalogue
      * @param  boolean                  Whether comments are allowed for this resource
      * @param  boolean                  Whether trackbacks are allowed for this resource
      * @param  PATH                     The CSV file being imported
-     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($catalogue_name, $key_field, $new_handling, $delete_handling, $update_handling, $meta_keywords_field, $meta_description_field, $notes_field, $allow_rating, $allow_comments, $allow_trackbacks, $csv_name)
     {
@@ -160,7 +160,7 @@ class Hook_task_import_catalogue
      *
      * @param  ID_TEXT                  The name of the catalogue that was used
      * @param  array                    Data array of CSV imported file's lines
-     * @param  ?AUTO_LINK               Catalogue root ID (NULL: Not a tree catalogue)
+     * @param  ?AUTO_LINK               Catalogue root ID (null: Not a tree catalogue)
      * @param  array                    Array of catalogue fields
      * @param  array                    Array of categories
      * @param  array                    Array of csv field titles
@@ -175,7 +175,7 @@ class Hook_task_import_catalogue
      * @param  boolean                  Whether rating is allowed for this resource
      * @param  boolean                  Whether comments are allowed for this resource
      * @param  boolean                  Whether trackbacks are allowed for this resource
-     * @return ?array                   Return to propagate [immediate exit] (NULL: nothing to propagate)
+     * @return ?array                   Return to propagate [immediate exit] (null: nothing to propagate)
      */
     public function import_csv_lines($catalogue_name, $csv_data, $catalog_root, $fields, &$categories, $csv_field_titles, $key_field, $new_handling, $delete_handling, $update_handling, &$matched_ids, $notes_field, $meta_keywords_field, $meta_description_field, $allow_rating, $allow_comments, $allow_trackbacks)
     {

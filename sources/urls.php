@@ -65,7 +65,7 @@ function get_self_url_easy()
  *
  * @param  boolean                      Whether to evaluate the URL (so as we don't return tempcode)
  * @param  boolean                      Whether to direct to the default page if there was a POST request leading to where we are now (i.e. to avoid missing post fields when we go to this URL)
- * @param  ?array                       A map of extra parameters for the URL (NULL: none)
+ * @param  ?array                       A map of extra parameters for the URL (null: none)
  * @param  boolean                      Whether to also keep POSTed data, in the GET request (useful if either_param is used to get the data instead of post_param - of course the POST data must be of the not--persistent-state-changing variety)
  * @param  boolean                      Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
  * @return mixed                        The URL (tempcode or string)
@@ -132,7 +132,7 @@ function get_self_url($evaluate = false, $root_if_posted = false, $extra_params 
  * Encode a URL component in such a way that it won't get nuked by Apache %2F blocking security and url encoded '&' screwing. The get_param function will map it back. Hackerish but necessary.
  *
  * @param  URLPATH                      The URL to encode
- * @param  ?boolean                     Whether we have to consider mod_rewrite (NULL: don't know, look up)
+ * @param  ?boolean                     Whether we have to consider mod_rewrite (null: don't know, look up)
  * @return URLPATH                      The encoded result
  */
 function ocp_url_encode($url_part, $consider_rewrite = null)
@@ -158,7 +158,7 @@ function ocp_url_encode($url_part, $consider_rewrite = null)
  * Encode a URL component, as per ocp_url_encode but without slashes being encoded.
  *
  * @param  URLPATH                      The URL to encode
- * @param  ?boolean                     Whether we have to consider mod_rewrite (NULL: don't know, look up)
+ * @param  ?boolean                     Whether we have to consider mod_rewrite (null: don't know, look up)
  * @return URLPATH                      The encoded result
  */
 function ocp_url_encode_mini($url_part, $consider_rewrite = null)
@@ -279,7 +279,7 @@ function can_try_mod_rewrite($avoid_remap = false)
  *
  * @param  array                        A map of parameter names to parameter values. E.g. array('page'=>'example','type'=>'foo','id'=>2). Values may be strings or integers, or Tempcode, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
  * @param  ID_TEXT                      The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
- * @param  ?array                       Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (NULL: don't skip any)
+ * @param  ?array                       Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (null: don't skip any)
  * @param  boolean                      Whether to keep all non-skipped parameters that were in the current URL, in this URL
  * @param  boolean                      Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
  * @param  boolean                      Whether to skip actually putting on keep_ parameters (rarely will this skipping be desirable)
@@ -409,7 +409,7 @@ function url_monikers_enabled()
  *
  * @param  array                        A map of parameter names to parameter values. Values may be strings or integers, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
  * @param  ID_TEXT                      The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
- * @param  ?array                       Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (NULL: don't skip any)
+ * @param  ?array                       Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (null: don't skip any)
  * @param  boolean                      Whether to keep all non-skipped parameters that were in the current URL, in this URL
  * @param  boolean                      Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
  * @param  boolean                      Whether to skip actually putting on keep_ parameters (rarely will this skipping be desirable)
@@ -615,7 +615,7 @@ function _handle_array_var_append($key, $val, &$vars)
  * @param  ID_TEXT                      The name of the zone for this
  * @param  array                        A map of variables to include in our URL
  * @param  boolean                      Force inclusion of the index.php name into a short URL, so something may tack on extra parameters to the result here
- * @return ?URLPATH                     The improved URL (NULL: couldn't do anything)
+ * @return ?URLPATH                     The improved URL (null: couldn't do anything)
  */
 function _url_rewrite_params($zone_name, $vars, $force_index_php = false)
 {
@@ -807,7 +807,7 @@ function looks_like_url($value, $lax = false)
  *
  * @param  ID_TEXT                      The page for the form to go to (blank: don't attach)
  * @param  boolean                      Whether to keep all elements of the current URL represented in this form (rather than just the keep_ fields, and page)
- * @param  ?array                       A list of parameters to exclude (NULL: don't exclude any)
+ * @param  ?array                       A list of parameters to exclude (null: don't exclude any)
  * @return tempcode                     The builtup hidden form fields
  */
 function build_keep_form_fields($page = '', $keep_all = false, $exclude = null)
@@ -819,7 +819,7 @@ function build_keep_form_fields($page = '', $keep_all = false, $exclude = null)
 /**
  * Relay all POST variables for this URL, to the URL embedded in the form.
  *
- * @param  ?array                       A list of parameters to exclude (NULL: exclude none)
+ * @param  ?array                       A list of parameters to exclude (null: exclude none)
  * @return tempcode                     The builtup hidden form fields
  */
 function build_keep_post_fields($exclude = null)
@@ -942,7 +942,7 @@ function page_link_decode($page_link)
  * Convert a URL to a local file path.
  *
  * @param  URLPATH                      The value to convert
- * @return ?PATH                        File path (NULL: is not local)
+ * @return ?PATH                        File path (null: is not local)
  */
 function convert_url_to_path($url)
 {
@@ -1044,7 +1044,7 @@ function load_moniker_hooks()
  *
  * @param  array                        The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
  * @param  ID_TEXT                      The URL zone name (only used for Comcode Page URL monikers).
- * @return ?string                      The moniker ID (NULL: could not find)
+ * @return ?string                      The moniker ID (null: could not find)
  */
 function find_id_moniker($url_parts, $zone)
 {

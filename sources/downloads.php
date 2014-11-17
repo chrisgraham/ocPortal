@@ -50,10 +50,10 @@ function download_licence_script()
  * @param  array                        The database field row of this download
  * @param  boolean                      Whether to show a picture
  * @param  boolean                      Whether to show breadcrumbs
- * @param  ?ID_TEXT                     The zone the download module we're using is in (NULL: find it)
- * @param  ?string                      Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
+ * @param  ?ID_TEXT                     The zone the download module we're using is in (null: find it)
+ * @param  ?string                      Text summary for result (e.g. highlighted portion of actual file from search result) (null: none)
  * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ?AUTO_LINK                   The virtual root (NULL: read from environment)
+ * @param  ?AUTO_LINK                   The virtual root (null: read from environment)
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     A box for this download, linking to the full download page
  */
@@ -175,7 +175,7 @@ function render_download_box($row, $pic = true, $include_breadcrumbs = true, $zo
  * @param  ID_TEXT                      The zone to use
  * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @param  ?AUTO_LINK                   Virtual root to use (null: none)
  * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     A box for it, linking to the full page
@@ -227,9 +227,9 @@ function render_download_category_box($row, $zone = '_SEARCH', $give_context = t
 /**
  * Get a nice, formatted XHTML list of downloads, in download tree structure
  *
- * @param  ?AUTO_LINK                   The currently selected entry (NULL: none selected)
- * @param  ?AUTO_LINK                   Only show entries submitted by this member (NULL: no filter)
- * @param  ?AUTO_LINK                   Download we do not want to show (NULL: none to not show)
+ * @param  ?AUTO_LINK                   The currently selected entry (null: none selected)
+ * @param  ?AUTO_LINK                   Only show entries submitted by this member (null: no filter)
+ * @param  ?AUTO_LINK                   Download we do not want to show (null: none to not show)
  * @param  boolean                      Whether to get a list of child categories (not just direct ones, recursively), instead of just IDs
  * @param  boolean                      Whether to only show for what may be edited by the current member
  * @return tempcode                     The list of entries
@@ -260,12 +260,12 @@ function create_selection_list_downloads_tree($it = null, $submitter = null, $sh
 /**
  * Get a list of maps containing all the downloads, and path information, under the specified category - and those beneath it, recursively.
  *
- * @param  ?MEMBER                      Only show images/videos submitted by this member (NULL: no filter)
- * @param  ?AUTO_LINK                   The category being at the root of our recursion (NULL: true root)
- * @param  ?string                      The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
- * @param  ?ID_TEXT                     The name of the $category_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
- * @param  ?integer                     The number of recursive levels to search (NULL: all)
- * @param  ?AUTO_LINK                   Download we do not want to show (NULL: none to not show)
+ * @param  ?MEMBER                      Only show images/videos submitted by this member (null: no filter)
+ * @param  ?AUTO_LINK                   The category being at the root of our recursion (null: true root)
+ * @param  ?string                      The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
+ * @param  ?ID_TEXT                     The name of the $category_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
+ * @param  ?integer                     The number of recursive levels to search (null: all)
+ * @param  ?AUTO_LINK                   Download we do not want to show (null: none to not show)
  * @param  boolean                      Whether to get a list of child categories (not just direct ones, recursively), instead of just IDs
  * @param  boolean                      Whether to only show for what may be edited by the current member
  * @param  boolean                      Whether to only show entries that are tar files (addons)
@@ -355,10 +355,10 @@ function get_downloads_tree($submitter = null, $category_id = null, $breadcrumbs
 /**
  * Get a nice, formatted XHTML list extending from the root, and showing all subcategories, and their subcategories (ad infinitum). The tree bit is because each entry in the list is shown to include the path through the tree that gets to it
  *
- * @param  ?AUTO_LINK                   The currently selected category (NULL: none selected)
+ * @param  ?AUTO_LINK                   The currently selected category (null: none selected)
  * @param  boolean                      Whether to make the list elements store comma-separated child lists instead of IDs
  * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
+ * @param  ?TIME                        Time from which content must be updated (null: no limit).
  * @return tempcode                     The list of categories
  */
 function create_selection_list_download_category_tree($it = null, $use_compound_list = false, $addable_filter = false, $updated_since = null)
@@ -393,12 +393,12 @@ function create_selection_list_download_category_tree($it = null, $use_compound_
 /**
  * Get a list of maps containing all the subcategories, and path information, of the specified category - and those beneath it, recursively.
  *
- * @param  ?AUTO_LINK                   The category being at the root of our recursion (NULL: true root category)
- * @param  ?string                      The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
- * @param  ?ID_TEXT                     The category row of the $category_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs details
+ * @param  ?AUTO_LINK                   The category being at the root of our recursion (null: true root category)
+ * @param  ?string                      The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
+ * @param  ?ID_TEXT                     The category row of the $category_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs details
  * @param  boolean                      Whether to collect download counts with our tree information
  * @param  boolean                      Whether to make a compound list (a pair of a comma-separated list of children, and the child array)
- * @param  ?integer                     The number of recursive levels to search (NULL: all)
+ * @param  ?integer                     The number of recursive levels to search (null: all)
  * @param  boolean                      Whether to only show for what may be added to by the current member
  * @return array                        A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
  */
@@ -472,7 +472,7 @@ function get_download_category_tree($category_id = null, $breadcrumbs = null, $c
 /**
  * Get a nice, formatted XHTML list to select a download licence
  *
- * @param  ?AUTO_LINK                   The currently selected licence (NULL: none selected)
+ * @param  ?AUTO_LINK                   The currently selected licence (null: none selected)
  * @param  boolean                      Whether to allow an N/A selection
  * @return tempcode                     The list of categories
  */
@@ -493,9 +493,9 @@ function create_selection_list_download_licences($it = null, $allow_na = false)
  * Get a formatted XHTML string of the route back to the specified root, from the specified category.
  *
  * @param  AUTO_LINK                    The category we are finding for
- * @param  ?AUTO_LINK                   The root of the tree (NULL: the true root)
+ * @param  ?AUTO_LINK                   The root of the tree (null: the true root)
  * @param  boolean                      Whether to include category links at this level (the recursed levels will always contain links - the top level is optional, hence this parameter)
- * @param  ?ID_TEXT                     The zone the download module we're using is in (NULL: find it)
+ * @param  ?ID_TEXT                     The zone the download module we're using is in (null: find it)
  * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode                     The breadcrumbs
  */

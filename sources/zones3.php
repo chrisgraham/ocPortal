@@ -239,7 +239,7 @@ function actual_delete_zone_lite($zone)
  * The do-next manager for after content management.
  *
  * @param  tempcode                     The title (output of get_screen_title)
- * @param  ?ID_TEXT                     The name of the page just handled (NULL: none)
+ * @param  ?ID_TEXT                     The name of the page just handled (null: none)
  * @param  ID_TEXT                      The name of the zone just handled (blank: none/welcome-zone)
  * @param  tempcode                     The text to show (blank: default)
  * @return tempcode                     The UI
@@ -289,10 +289,10 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
 /**
  * Get a list of zones.
  *
- * @param  ?ID_TEXT                     The zone in the list to select by default (NULL: use first)
- * @param  ?array                       A list of zone to not put into the list (NULL: none to skip)
- * @param  ?array                       A reordering (NULL: no reordering)
- * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
+ * @param  ?ID_TEXT                     The zone in the list to select by default (null: use first)
+ * @param  ?array                       A list of zone to not put into the list (null: none to skip)
+ * @param  ?array                       A reordering (null: no reordering)
+ * @param  ?TIME                        Time from which content must be updated (null: no limit).
  * @return tempcode                     The list
  */
 function create_selection_list_zones($sel = null, $no_go = null, $reorder = null, $updated_since = null)
@@ -341,8 +341,8 @@ function create_selection_list_zones($sel = null, $no_go = null, $reorder = null
  * Get a zone chooser interface.
  *
  * @param  boolean                      Whether the zone chooser will be shown inline to something else (as opposed to providing it's own borderings)
- * @param  ?array                       A list of zone to not put into the list (NULL: none to skip)
- * @param  ?array                       A reordering (NULL: no reordering)
+ * @param  ?array                       A list of zone to not put into the list (null: none to skip)
+ * @param  ?array                       A reordering (null: no reordering)
  * @return tempcode                     The zone chooser
  */
 function get_zone_chooser($inline = false, $no_go = null, $reorder = null)
@@ -361,12 +361,12 @@ function get_zone_chooser($inline = false, $no_go = null, $reorder = null)
  * @param  LANGUAGE_NAME                The language
  * @param  ID_TEXT                      The page text
  * @param  BINARY                       The validated status
- * @param  ?ID_TEXT                     The page parent (NULL: none)
- * @param  ?TIME                        Add time (NULL: now)
- * @param  ?TIME                        Edit time (NULL: not edited)
+ * @param  ?ID_TEXT                     The page parent (null: none)
+ * @param  ?TIME                        Add time (null: now)
+ * @param  ?TIME                        Edit time (null: not edited)
  * @param  BINARY                       Whether to show as edited
- * @param  ?MEMBER                      The submitter (NULL: current member)
- * @param  ?ID_TEXT                     The old page name (NULL: not being renamed)
+ * @param  ?MEMBER                      The submitter (null: current member)
+ * @param  ?ID_TEXT                     The old page name (null: not being renamed)
  * @param  SHORT_TEXT                   Meta keywords for this resource (blank: implicit)
  * @param  LONG_TEXT                    Meta description for this resource (blank: implicit)
  * @return PATH                         The save path
@@ -525,7 +525,7 @@ function save_comcode_page($zone, $new_file, $lang, $text, $validated, $parent_p
  *
  * @param  ID_TEXT                      The zone
  * @param  ID_TEXT                      The page
- * @param  ?ID_TEXT                     The page type (NULL: Comcode page in ocPortal's fallback language) [NB: page is deleted in all languages regardless of which is given]
+ * @param  ?ID_TEXT                     The page type (null: Comcode page in ocPortal's fallback language) [NB: page is deleted in all languages regardless of which is given]
  * @param  boolean                      Whether to use the AFM
  */
 function delete_ocp_page($zone, $page, $type = null, $use_afm = false)

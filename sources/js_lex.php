@@ -571,7 +571,7 @@ function js_pos_to_line_details($i, $absolute = false)
  * @param  string                       The line
  * @param  string                       The error
  * @param  integer                      The global position
- * @return ?boolean                     Always NULL (NULL: exit)
+ * @return ?boolean                     Always NULL (null: exit)
  */
 function js_die_error($system, $pos, $line, $message, $i)
 {

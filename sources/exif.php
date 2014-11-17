@@ -23,7 +23,7 @@
  * Also gets GPS data and canonicalises in decimal as Latitude and Longitude.
  *
  * @param  PATH                         This is the path of the photo which may contain metadata
- * @param  ?string                      This is the original filename of the photo which may contain metadata (NULL: derive from path)
+ * @param  ?string                      This is the original filename of the photo which may contain metadata (null: derive from path)
  * @return array                        Map of meta data, using standard EXIF naming
  */
 function get_exif_data($path, $filename = null)
@@ -238,7 +238,7 @@ function get_exif_image_caption($path, $filename)
  * @param  ID_TEXT                      The content type
  * @param  ID_TEXT                      The content ID
  * @param  array                        The EXIF data
- * @param  ?array                       Extra meta data to store, against explicit field IDs (NULL: none)
+ * @param  ?array                       Extra meta data to store, against explicit field IDs (null: none)
  */
 function store_exif($content_type, $content_id, $exif, $map = null)
 {

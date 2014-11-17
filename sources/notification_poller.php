@@ -185,7 +185,7 @@ function notification_poller_script()
 /**
  * Get web notification templating.
  *
- * @param  ?integer                     Number of notifications to show (NULL: no limit)
+ * @param  ?integer                     Number of notifications to show (null: no limit)
  * @param  integer                      Start offset
  * @return array                        A pair: Templating, Max rows
  */
@@ -304,7 +304,7 @@ function web_notification_to_xml($row)
 /**
  * Get PTs templating.
  *
- * @param  ?integer                     Number of PTs to show (NULL: no limit)
+ * @param  ?integer                     Number of PTs to show (null: no limit)
  * @param  integer                      Start offset
  * @return array                        A pair: Templating, Max rows
  */

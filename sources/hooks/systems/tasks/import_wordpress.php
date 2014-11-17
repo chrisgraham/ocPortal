@@ -32,7 +32,7 @@ class Hook_task_import_wordpress
      * @param  BINARY                   Whether to import comments
      * @param  BINARY                   Whether to import everything to blog news categories
      * @param  boolean                  Whether to import Wordpress users
-     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($is_validated, $download_images, $to_own_account, $import_blog_comments, $import_to_blog, $import_wordpress_users)
     {

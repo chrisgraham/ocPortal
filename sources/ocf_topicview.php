@@ -250,7 +250,7 @@ function ocf_get_details_to_show_post($_postdetails, $topic_info, $only_post = f
 /**
  * Read in a great big map of details relating to a topic.
  *
- * @param  ?AUTO_LINK                   The ID of the topic we are getting details of (NULL: whispers).
+ * @param  ?AUTO_LINK                   The ID of the topic we are getting details of (null: whispers).
  * @param  integer                      The start row for getting details of posts in the topic (i.e. 0 is start of topic, higher is further through).
  * @param  integer                      The maximum number of posts to get detail of.
  * @param  boolean                      Whether we are viewing poll results for the topic (if there is no poll for the topic, this is irrelevant).

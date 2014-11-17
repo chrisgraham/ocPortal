@@ -26,7 +26,7 @@ class Block_main_cc_embed
     /**
      * Find details of the block.
      *
-     * @return ?array                   Map of block info (NULL: block is disabled).
+     * @return ?array                   Map of block info (null: block is disabled).
      */
     public function info()
     {
@@ -44,12 +44,12 @@ class Block_main_cc_embed
     /**
      * Find cacheing details for the block.
      *
-     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
      */
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = '(preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0 || addon_installed(\'content_privacy\'))?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',get_param($block_id.\'_order\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\'),array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',/*legacy*/array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id())';
+        $info['cache_on'] = '(preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0 || addon_installed(\'content_privacy\'))?null:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',get_param($block_id.\'_order\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\'),array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',/*legacy*/array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id())';
         $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 2;
         return $info;
     }

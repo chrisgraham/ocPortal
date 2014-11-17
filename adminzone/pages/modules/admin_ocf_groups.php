@@ -43,10 +43,10 @@ class Module_admin_ocf_groups extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -71,8 +71,8 @@ class Module_admin_ocf_groups extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -158,7 +158,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Get tempcode for a adding/editing form.
      *
-     * @param  ?GROUP                   The usergroup being edited (NULL: adding, not editing)
+     * @param  ?GROUP                   The usergroup being edited (null: adding, not editing)
      * @param  SHORT_TEXT               The usergroup name
      * @param  BINARY                   Whether this is a default usergroup
      * @param  BINARY                   Whether members of the usergroup are super-administrators
@@ -166,22 +166,22 @@ class Module_admin_ocf_groups extends Standard_crud_module
      * @param  ID_TEXT                  The username of the usergroup leader
      * @param  SHORT_TEXT               The default title for members with this as their primary usergroup
      * @param  URLPATH                  The usergroup rank image
-     * @param  ?GROUP                   The target for promotion from this usergroup (NULL: no promotion prospects)
-     * @param  ?integer                 The point threshold upon which promotion occurs (NULL: no promotion prospects)
-     * @param  ?integer                 The number of seconds between submission flood controls (NULL: average for existing usergroups)
-     * @param  ?integer                 The number of seconds between access flood controls (NULL: average for existing usergroups)
-     * @param  ?integer                 The number of gift points members of this usergroup get when they start (NULL: average for existing usergroups)
-     * @param  ?integer                 The number of gift points members of this usergroup get per-day (NULL: average for existing usergroups)
-     * @param  ?integer                 The number of megabytes members can upload per day (NULL: average for existing usergroups)
-     * @param  ?integer                 The maximum number of attachments members of this usergroup may have per post (NULL: average for existing usergroups)
-     * @param  ?integer                 The maximum avatar width members of this usergroup may have (NULL: average for existing usergroups)
-     * @param  ?integer                 The maximum avatar height members of this usergroup may have (NULL: average for existing usergroups)
-     * @param  ?integer                 The maximum post length members of this usergroup may have (NULL: average for existing usergroups)
-     * @param  ?integer                 The maximum signature length members of this usergroup may have (NULL: average for existing usergroups)
+     * @param  ?GROUP                   The target for promotion from this usergroup (null: no promotion prospects)
+     * @param  ?integer                 The point threshold upon which promotion occurs (null: no promotion prospects)
+     * @param  ?integer                 The number of seconds between submission flood controls (null: average for existing usergroups)
+     * @param  ?integer                 The number of seconds between access flood controls (null: average for existing usergroups)
+     * @param  ?integer                 The number of gift points members of this usergroup get when they start (null: average for existing usergroups)
+     * @param  ?integer                 The number of gift points members of this usergroup get per-day (null: average for existing usergroups)
+     * @param  ?integer                 The number of megabytes members can upload per day (null: average for existing usergroups)
+     * @param  ?integer                 The maximum number of attachments members of this usergroup may have per post (null: average for existing usergroups)
+     * @param  ?integer                 The maximum avatar width members of this usergroup may have (null: average for existing usergroups)
+     * @param  ?integer                 The maximum avatar height members of this usergroup may have (null: average for existing usergroups)
+     * @param  ?integer                 The maximum post length members of this usergroup may have (null: average for existing usergroups)
+     * @param  ?integer                 The maximum signature length members of this usergroup may have (null: average for existing usergroups)
      * @param  BINARY                   Whether to lock out unverified IP addresses until e-mail confirmation
      * @param  BINARY                   Whether the usergroup is presented for joining at joining (implies anyone may be in the usergroup, but only choosable at joining)
      * @param  BINARY                   Whether the name and membership of the usergroup is hidden
-     * @param  ?integer                 The display order this usergroup will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (NULL: last).
+     * @param  ?integer                 The display order this usergroup will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (null: last).
      * @param  BINARY                   Whether the rank image will not be shown for secondary membership
      * @param  BINARY                   Whether members may join this usergroup without requiring any special permission
      * @param  BINARY                   Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
@@ -663,7 +663,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
      * Standard crud_module edit actualiser.
      *
      * @param  ID_TEXT                  The entry being edited
-     * @return ?tempcode                Confirm message (NULL: continue)
+     * @return ?tempcode                Confirm message (null: continue)
      */
     public function edit_actualisation($id)
     {

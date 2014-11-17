@@ -284,8 +284,8 @@ function get_max_image_size()
  * @param  mixed                        The caption for the thumbnail (string or Tempcode)
  * @param  boolean                      Whether to use a JS tooltip. Forcibly set to true if you pass Tempcode
  * @param  boolean                      Whether already a thumbnail (if not, function will make one)
- * @param  ?integer                     Thumbnail width to use (NULL: default)
- * @param  ?integer                     Thumbnail height to use (NULL: default)
+ * @param  ?integer                     Thumbnail width to use (null: default)
+ * @param  ?integer                     Thumbnail height to use (null: default)
  * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return tempcode                     The thumbnail
  */
@@ -351,7 +351,7 @@ function do_image_thumb($url, $caption, $js_tooltip = false, $is_thumbnail_alrea
  * @param  ID_TEXT                      The name of the table that is storing what we are doing the thumbnail for
  * @param  AUTO_LINK                    The ID of the table record that is storing what we are doing the thumbnail for
  * @param  ID_TEXT                      The name of the table field where thumbnails are saved
- * @param  ?integer                     The thumbnail width to use (NULL: default)
+ * @param  ?integer                     The thumbnail width to use (null: default)
  * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return URLPATH                      The URL to the thumbnail
  */
@@ -514,10 +514,10 @@ function check_memory_limit_for($file_path, $exit_on_error = true)
  * @param  integer                      The maximum height we want our new image to be (-1 means "don't factor this in")
  * @param  integer                      This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
  * @param  boolean                      Whether to exit ocPortal if an error occurs
- * @param  ?string                      The file extension to save with (NULL: same as our input file)
+ * @param  ?string                      The file extension to save with (null: same as our input file)
  * @param  boolean                      Whether $from was in fact a path, not a URL
  * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
- * @param  ?array                       This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (NULL: no details passed)
+ * @param  ?array                       This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (null: no details passed)
  * @return boolean                      Success
  */
 function convert_image($from, $to, $width, $height, $box_width = -1, $exit_on_error = true, $ext2 = null, $using_path = false, $only_make_smaller = true, $thumb_options = null)
@@ -537,10 +537,10 @@ function convert_image($from, $to, $width, $height, $box_width = -1, $exit_on_er
  * @param  integer                      The maximum height we want our new image to be (-1 means "don't factor this in")
  * @param  integer                      This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
  * @param  boolean                      Whether to exit ocPortal if an error occurs
- * @param  ?string                      The file extension to save with (NULL: same as our input file)
+ * @param  ?string                      The file extension to save with (null: same as our input file)
  * @param  boolean                      Whether $from was in fact a path, not a URL
  * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
- * @param  ?array                       This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (NULL: no details passed)
+ * @param  ?array                       This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (null: no details passed)
  * @return boolean                      Success
  */
 function _convert_image($from, $to, $width, $height, $box_width = -1, $exit_on_error = true, $ext2 = null, $using_path = false, $only_make_smaller = false, $thumb_options = null)

@@ -292,7 +292,7 @@ function ocf_is_on_ldap($cn)
  * Find the LDAP servers password for a certain member.
  *
  * @param  string                       The username.
- * @return ?string                      The password (NULL: no such user).
+ * @return ?string                      The password (null: no such user).
  */
 function ocf_get_ldap_hash($cn)
 {
@@ -396,7 +396,7 @@ function ldap_get_login_string($cn)
  * Authorise an LDAP login.
  *
  * @param  string                       The username.
- * @param  ?string                      The password (NULL: no such user).
+ * @param  ?string                      The password (null: no such user).
  * @return array                        Part of the member row to put back in and authorise normally (hackerish, but it works kind of like a filter / stage in a chain).
  */
 function ocf_ldap_authorise_login($cn, $password)
@@ -445,7 +445,7 @@ function ocf_ldap_authorise_login($cn, $password)
  * Find the ocPortal member-ID for an LDAP username.
  *
  * @param  string                       The username.
- * @return ?integer                     The ocPortal member-ID (NULL: none).
+ * @return ?integer                     The ocPortal member-ID (null: none).
  */
 function ocf_member_ldapcn_to_ocfid($cn)
 {
@@ -460,7 +460,7 @@ function ocf_member_ldapcn_to_ocfid($cn)
  * Find the LDAP username for an ocPortal member-ID.
  *
  * @param  integer                      The ocPortal member-ID.
- * @return ?SHORT_TEXT                  The username (NULL: none).
+ * @return ?SHORT_TEXT                  The username (null: none).
  */
 function ocf_member_ocfid_to_ldapcn($id)
 {
@@ -517,7 +517,7 @@ function ocf_get_all_ldap_groups()
  * Find the ocPortal-ID for a named LDAP usergroup.
  *
  * @param  string                       The usergroup.
- * @return ?GROUP                       The ocPortal-ID (NULL: none).
+ * @return ?GROUP                       The ocPortal-ID (null: none).
  */
 function ocf_group_ldapcn_to_ocfid($cn)
 {
@@ -543,7 +543,7 @@ function ocf_group_ldapcn_to_ocfid($cn)
  * Find the named LDAP usergroup for an OCF ID. Note that the returned MAY NOT ACTUALLY EXIST!
  *
  * @param  GROUP                        The OCF ID.
- * @return ?SHORT_TEXT                  The named LDAP usergroup (NULL: none).
+ * @return ?SHORT_TEXT                  The named LDAP usergroup (null: none).
  */
 function ocf_group_ocfid_to_ldapcn($id)
 {
@@ -688,7 +688,7 @@ function ocf_get_group_members_raw_ldap(&$members, $group_id, $include_primaries
 /**
  * (LDAP helper for ocf_get_members_groups) Get a list of the usergroups a member is in (keys say the usergroups, values are irrelevant).
  *
- * @param  ?MEMBER                      The member to find the usergroups of (NULL: current member).
+ * @param  ?MEMBER                      The member to find the usergroups of (null: current member).
  * @return array                        The list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)). The keys are all that matters, values are arbitrary.
  */
 function ocf_get_members_groups_ldap($member_id)
@@ -824,7 +824,7 @@ function ocf_ldap_get_member_primary_group($member_id)
  * Find the ocPortal-ID for an LDAP usergroup-ID. POSIX Only.
  *
  * @param  integer                      The LDAP ID.
- * @return ?GROUP                       The ocPortal-ID (NULL: could not find).
+ * @return ?GROUP                       The ocPortal-ID (null: could not find).
  */
 function ocf_group_ldapgid_to_ocfid($gid)
 {
@@ -848,7 +848,7 @@ function ocf_group_ldapgid_to_ocfid($gid)
  * Find the LDAP ID for a named LDAP usergroup. POSIX Only.
  *
  * @param  string                       The named LDAP usergroup.
- * @return ?integer                     The LDAP usergroup ID (NULL: none).
+ * @return ?integer                     The LDAP usergroup ID (null: none).
  */
 function ocf_group_ldapcn_to_ldapgid($cn)
 {

@@ -148,10 +148,10 @@ function is_plupload($fake_prepopulation = false)
  * @param  boolean                      Whether to accept upload errors
  * @param  boolean                      Whether to give a (deferred?) error if no file was given at all
  * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
- * @param  ?MEMBER                      Member ID to run permissions with (NULL: current member)
- * @param  ?PATH                        Full path to upload folder, in case it is not relative to the base directory (NULL: work out)
- * @param  ?PATH                        Full path to thumb folder, in case it is not relative to the base directory (NULL: work out)
- * @param  ?string                      Filename to use (NULL: choose one)
+ * @param  ?MEMBER                      Member ID to run permissions with (null: current member)
+ * @param  ?PATH                        Full path to upload folder, in case it is not relative to the base directory (null: work out)
+ * @param  ?PATH                        Full path to thumb folder, in case it is not relative to the base directory (null: work out)
+ * @param  ?string                      Filename to use (null: choose one)
  * @return array                        An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
  */
 function get_url($specify_name, $attach_name, $upload_folder, $obfuscate = 0, $enforce_type = 15, $make_thumbnail = false, $thumb_specify_name = '', $thumb_attach_name = '', $copy_to_server = false, $accept_errors = false, $should_get_something = false, $only_make_smaller = false, $member_id = null, $upload_folder_full = null, $thumb_folder_full = null, $filename = null)
@@ -670,7 +670,7 @@ function _check_enforcement_of_type($member_id, $file, $enforce_type, $accept_er
  * @param  integer                      Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well)
  * @set    0 1 2
  * @param  boolean                      Whether to accept upload errors
- * @param  ?string                      Filename to use (NULL: choose one)
+ * @param  ?string                      Filename to use (null: choose one)
  * @return array                        A pair: the URL and the filename
  */
 function _get_upload_url($member_id, $attach_name, $upload_folder, $upload_folder_full, $enforce_type = 15, $obfuscate = 0, $accept_errors = false, $filename = null)

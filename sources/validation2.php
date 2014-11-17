@@ -1218,7 +1218,7 @@ function __check_tag($tag, $attributes, $self_close, $close, $errors)
  * @param  map                          A map of attributes (name=>value) the tag has
  * @param  boolean                      Whether this is a self-closing tag
  * @param  boolean                      Whether this is a closing tag
- * @return ?list                        Array of errors (NULL: none)
+ * @return ?list                        Array of errors (null: none)
  */
 function _check_blockyness($tag, $attributes, $self_close, $close)
 {
@@ -1272,7 +1272,7 @@ function _check_blockyness($tag, $attributes, $self_close, $close)
  * @param  map                          A map of attributes (name=>value) the tag has
  * @param  boolean                      Whether this is a self-closing tag
  * @param  boolean                      Whether this is a closing tag
- * @return ?list                        Array of errors (NULL: none)
+ * @return ?list                        Array of errors (null: none)
  */
 function _check_attributes($tag, $attributes, $self_close, $close)
 {
@@ -1429,7 +1429,7 @@ function validate_spelling($value)
  * @param  map                          A map of attributes (name=>value) the tag has
  * @param  boolean                      Whether this is a self-closing tag
  * @param  boolean                      Whether this is a closing tag
- * @return ?list                        Array of errors (NULL: none)
+ * @return ?list                        Array of errors (null: none)
  */
 function _check_externals($tag, $attributes, $self_close, $close)
 {
@@ -1510,7 +1510,7 @@ function _check_externals($tag, $attributes, $self_close, $close)
  * @param  map                          A map of attributes (name=>value) the tag has
  * @param  boolean                      Whether this is a self-closing tag
  * @param  boolean                      Whether this is a closing tag
- * @return ?list                        Array of errors (NULL: none)
+ * @return ?list                        Array of errors (null: none)
  */
 function _check_link_accessibility($tag, $attributes, $self_close, $close)
 {
@@ -1577,7 +1577,7 @@ function _check_link_accessibility($tag, $attributes, $self_close, $close)
  * @param  map                          A map of attributes (name=>value) the tag has
  * @param  boolean                      Whether this is a self-closing tag
  * @param  boolean                      Whether this is a closing tag
- * @return ?list                        Array of errors (NULL: none)
+ * @return ?list                        Array of errors (null: none)
  */
 function _check_labelling($tag, $attributes, $self_close, $close)
 {
@@ -1629,7 +1629,7 @@ function _check_labelling($tag, $attributes, $self_close, $close)
  * Checks a CSS style sheet (high level).
  *
  * @param  string                       The data of the style sheet
- * @return ?map                         Error information (NULL: no error)
+ * @return ?map                         Error information (null: no error)
  */
 function check_css($data)
 {
@@ -1656,7 +1656,7 @@ function check_css($data)
  * Checks a CSS style sheet.
  *
  * @param  string                       The data of the style sheet
- * @return ?map                         Error information (NULL: no error)
+ * @return ?map                         Error information (null: no error)
  */
 function _validate_css_sheet($data)
 {
@@ -1941,7 +1941,7 @@ function _validate_css_sheet($data)
  * @param  string                       The data of the CSS class
  * @param  integer                      Current parse position
  * @param  integer                      The higher-level line number we are checking for (to give better debug output)
- * @return ?map                         Error information (NULL: no error)
+ * @return ?map                         Error information (null: no error)
  */
 function _validate_css_class($data, $_i, $line = 0)
 {
@@ -2062,7 +2062,7 @@ function _validate_css_class($data, $_i, $line = 0)
  * @param  string                       The name of the attribute
  * @param  string                       The value of the attribute
  * @param  integer                      Current parse position
- * @return ?map                         Error information (NULL: no error)
+ * @return ?map                         Error information (null: no error)
  */
 function _check_css_value($key, $value, $_i)
 {

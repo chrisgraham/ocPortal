@@ -45,10 +45,10 @@ class Module_cms_downloads extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -98,8 +98,8 @@ class Module_cms_downloads extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -309,24 +309,24 @@ class Module_cms_downloads extends Standard_crud_module
     /**
      * Get tempcode for a download adding/editing form.
      *
-     * @param  ?AUTO_LINK               The ID of the download (NULL: new)
+     * @param  ?AUTO_LINK               The ID of the download (null: new)
      * @param  SHORT_TEXT               The name of the download
-     * @param  ?AUTO_LINK               The download category (NULL: first)
+     * @param  ?AUTO_LINK               The download category (null: first)
      * @param  URLPATH                  The URL for the downloadable file
      * @param  SHORT_TEXT               The name of the author
      * @param  LONG_TEXT                Description for the download
      * @param  LONG_TEXT                Supplementary description for the download
-     * @param  ?AUTO_LINK               The ID of the download this download is out-moding (NULL: none)
+     * @param  ?AUTO_LINK               The ID of the download this download is out-moding (null: none)
      * @param  BINARY                   Whether the download is validated
-     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
      * @param  LONG_TEXT                Notes
-     * @param  ?integer                 The file size (NULL: not added yet therefore unknown)
+     * @param  ?integer                 The file size (null: not added yet therefore unknown)
      * @param  integer                  The point cost of the download
      * @param  BINARY                   Whether the submitter gets the point cost
-     * @param  ?SHORT_TEXT              The original file name for the file (we can't rely on the one on disk) (NULL: not added yet therefore unknown)
-     * @param  ?AUTO_LINK               The licence to use (NULL: none)
+     * @param  ?SHORT_TEXT              The original file name for the file (we can't rely on the one on disk) (null: not added yet therefore unknown)
+     * @param  ?AUTO_LINK               The licence to use (null: none)
      * @param  integer                  Which image to use for the downloads representative image (counts from 1)
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
@@ -728,7 +728,7 @@ class Module_cms_downloads extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -837,7 +837,7 @@ class Module_cms_downloads_alt extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -878,12 +878,12 @@ class Module_cms_downloads_cat extends Standard_crud_module
     /**
      * Get tempcode for a download category adding/editing form.
      *
-     * @param  ?AUTO_LINK               The download ID (NULL: new)
+     * @param  ?AUTO_LINK               The download ID (null: new)
      * @param  SHORT_TEXT               The name of the download category
-     * @param  ?AUTO_LINK               The download category parent (NULL: use root)
+     * @param  ?AUTO_LINK               The download category parent (null: use root)
      * @param  LONG_TEXT                Description
      * @param  LONG_TEXT                Notes
-     * @param  ?AUTO_LINK               The ID of the download category (NULL: we're adding, not editing)
+     * @param  ?AUTO_LINK               The ID of the download category (null: we're adding, not editing)
      * @param  URLPATH                  The rep-image for the download category
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
@@ -1026,7 +1026,7 @@ class Module_cms_downloads_cat extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1039,9 +1039,9 @@ class Module_cms_downloads_cat extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: delete/NA)
-     * @param  ?AUTO_LINK               The category ID we were working in (NULL: deleted/NA)
-     * @param  ?AUTO_LINK               The download licence ID we were working in (NULL: deleted/NA)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: delete/NA)
+     * @param  ?AUTO_LINK               The category ID we were working in (null: deleted/NA)
+     * @param  ?AUTO_LINK               The download licence ID we were working in (null: deleted/NA)
      * @return tempcode                 The UI
      */
     public function _do_next_manager($title, $description, $id = null, $category_id = null, $download_licence_id = null)

@@ -93,7 +93,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Attempt to to find the member's language from their forum profile. It converts between language-identifiers using a map (lang/map.ini).
      *
      * @param  MEMBER                   The member who's language needs to be fetched
-     * @return ?LANGUAGE_NAME           The member's language (NULL: unknown)
+     * @return ?LANGUAGE_NAME           The member's language (null: unknown)
      */
     public function forum_get_lang($member)
     {
@@ -160,7 +160,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * @param  string                   Description
      * @param  string                   The field type
      * @param  BINARY                   Whether the field is encrypted
-     * @param  ?string                  Default field value (NULL: standard for field type)
+     * @param  ?string                  Default field value (null: standard for field type)
      * @return boolean                  Whether the custom field was created successfully
      */
     public function install_create_custom_field($name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0, $description = '', $type = 'long_text', $encrypted = 0, $default = null)
@@ -218,19 +218,19 @@ class Forum_driver_ocf extends Forum_driver_base
      * @param  LONG_TEXT                The post content in Comcode format
      * @param  string                   The topic title; must be same as content title if this is for a comment topic
      * @param  string                   This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
-     * @param  ?URLPATH                 URL to the content (NULL: do not make spacer post)
-     * @param  ?TIME                    The post time (NULL: use current time)
-     * @param  ?IP                      The post IP address (NULL: use current members IP address)
-     * @param  ?BINARY                  Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
-     * @param  ?BINARY                  Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  ?URLPATH                 URL to the content (null: do not make spacer post)
+     * @param  ?TIME                    The post time (null: use current time)
+     * @param  ?IP                      The post IP address (null: use current members IP address)
+     * @param  ?BINARY                  Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  ?BINARY                  Whether the topic is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
      * @param  boolean                  Whether to skip post checks
      * @param  SHORT_TEXT               The name of the poster
-     * @param  ?AUTO_LINK               ID of post being replied to (NULL: N/A)
+     * @param  ?AUTO_LINK               ID of post being replied to (null: N/A)
      * @param  boolean                  Whether the reply is only visible to staff
-     * @param  ?ID_TEXT                 DO NOT send notifications to: The notification code (NULL: no restriction)
-     * @param  ?SHORT_TEXT              DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
-     * @param  ?TIME                    The post time (NULL: use current time)
-     * @param  ?MEMBER                  Owner of comment topic (NULL: Guest)
+     * @param  ?ID_TEXT                 DO NOT send notifications to: The notification code (null: no restriction)
+     * @param  ?SHORT_TEXT              DO NOT send notifications to: The category within the notification code (null: none / no restriction)
+     * @param  ?TIME                    The post time (null: use current time)
+     * @param  ?MEMBER                  Owner of comment topic (null: Guest)
      * @return array                    Topic ID (may be NULL), and whether a hidden post has been made
      */
     public function make_post_forum_topic($forum_name, $topic_identifier, $member_id, $post_title, $post, $content_title, $topic_identifier_encapsulation_prefix, $content_url = null, $time = null, $ip = null, $validated = null, $topic_validated = 1, $skip_post_checks = false, $poster_name_if_guest = '', $parent_id = null, $staff_only = false, $no_notify_for__notification_code = null, $no_notify_for__code_category = null, $time_post = null, $spacer_post_member_id = null)
@@ -259,7 +259,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * @set    lasttime firsttime
      * @param  boolean                  Whether to limit to hot topics
      * @param  SHORT_TEXT               The topic description filter
-     * @return ?array                   The array of topics (NULL: error/none)
+     * @return ?array                   The array of topics (null: error/none)
      */
     public function show_forum_topics($name, $limit, $start, &$max_rows, $filter_topic_title = '', $show_first_posts = false, $date_key = 'lasttime', $hot = false, $filter_topic_description = '')
     {
@@ -277,7 +277,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * @param  boolean                  Whether to mark the topic read
      * @param  boolean                  Whether to show in reverse
      * @param  boolean                  Whether to only load minimal details if it is a threaded topic
-     * @param  ?array                   List of post IDs to load (NULL: no filter)
+     * @param  ?array                   List of post IDs to load (null: no filter)
      * @param  boolean                  Whether to load spacer posts
      * @param  ID_TEXT                  Preferred sort order (appropriate will use rating if threaded, other
      * @set date rating
@@ -355,7 +355,7 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
      *
-     * @param  ?MEMBER                  Only emoticons the given member can see (NULL: don't care)
+     * @param  ?MEMBER                  Only emoticons the given member can see (null: don't care)
      * @return array                    The map
      */
     public function find_emoticons($member = null)
@@ -431,7 +431,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Get custom profile fields values for all 'ocp_' prefixed keys.
      *
      * @param  MEMBER                   The member ID
-     * @return ?array                   A map of the custom profile fields, key_suffix=>value (NULL: no fields)
+     * @return ?array                   A map of the custom profile fields, key_suffix=>value (null: no fields)
      */
     public function get_custom_fields($member)
     {
@@ -455,7 +455,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Get a member row for the member of the given name.
      *
      * @param  SHORT_TEXT               The member name
-     * @return ?array                   The profile-row (NULL: could not find)
+     * @return ?array                   The profile-row (null: could not find)
      */
     public function get_mrow($name)
     {
@@ -699,7 +699,7 @@ class Forum_driver_ocf extends Forum_driver_base
      *
      * @param  string                   The forum name / ID
      * @param  SHORT_TEXT               The topic identifier
-     * @return ?integer                 The topic ID (NULL: not found)
+     * @return ?integer                 The topic ID (null: not found)
      */
     public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
     {
@@ -801,9 +801,9 @@ class Forum_driver_ocf extends Forum_driver_base
      * Get an array of members who are in at least one of the given array of usergroups.
      *
      * @param  array                    The array of usergroups
-     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
      * @param  integer                  Return primary members after this offset and secondary members after this offset
-     * @return ?array                   The map of members, member ID to details (NULL: no members)
+     * @return ?array                   The map of members, member ID to details (null: no members)
      */
     public function member_group_query($groups, $max = null, $start = 0)
     {
@@ -863,7 +863,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * This is the opposite of the get_next_member function.
      *
      * @param  MEMBER                   The member ID to decrement
-     * @return ?MEMBER                  The previous member ID (NULL: no previous member)
+     * @return ?MEMBER                  The previous member ID (null: no previous member)
      */
     public function get_previous_member($member)
     {
@@ -879,7 +879,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
      *
      * @param  MEMBER                   The member ID to increment
-     * @return ?MEMBER                  The next member ID (NULL: no next member)
+     * @return ?MEMBER                  The next member ID (null: no next member)
      */
     public function get_next_member($member)
     {
@@ -910,7 +910,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
      * @param  MEMBER                   The member ID
-     * @return ?SHORT_TEXT              The member name (NULL: member deleted)
+     * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
     {
@@ -1091,9 +1091,9 @@ class Forum_driver_ocf extends Forum_driver_base
      * Find all members with a name matching the given SQL LIKE string.
      *
      * @param  string                   The pattern
-     * @param  ?integer                 Maximum number to return (limits to the most recent active) (NULL: no limit)
+     * @param  ?integer                 Maximum number to return (limits to the most recent active) (null: no limit)
      * @param  boolean                  Whether to limit to friends of the current member, if possible
-     * @return ?array                   The array of matched members (NULL: none found)
+     * @return ?array                   The array of matched members (null: none found)
      */
     public function get_matching_members($pattern, $limit = null, $friends = false)
     {
@@ -1190,7 +1190,7 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get the number of members currently online on the forums.
      *
-     * @return ?integer                 The number of members (NULL: the same as the site number)
+     * @return ?integer                 The number of members (null: the same as the site number)
      */
     public function get_num_users_forums()
     {
@@ -1268,7 +1268,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Get a member ID from the given member's username. If there is no match and the input is numeric, it will also try it as a member ID.
      *
      * @param  SHORT_TEXT               The member name
-     * @return ?MEMBER                  The member ID (NULL: not found)
+     * @return ?MEMBER                  The member ID (null: not found)
      */
     public function get_member_from_username($name)
     {
@@ -1293,7 +1293,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Get a member ID from the given member's username.
      *
      * @param  SHORT_TEXT               The member email address
-     * @return ?MEMBER                  The member ID (NULL: not found)
+     * @return ?MEMBER                  The member ID (null: not found)
      */
     public function get_member_from_email_address($email_address)
     {
@@ -1338,8 +1338,8 @@ class Forum_driver_ocf extends Forum_driver_base
      * @param  boolean                  Whether to obscure the name of hidden usergroups
      * @param  boolean                  Whether to only grab permissive usergroups
      * @param  boolean                  Do not limit things even if there are huge numbers of usergroups
-     * @param  ?array                   Usergroups that must be included in the results (NULL: no extras must be)
-     * @param  ?MEMBER                  Always return usergroups of this member (NULL: current member)
+     * @param  ?array                   Usergroups that must be included in the results (null: no extras must be)
+     * @param  ?MEMBER                  Always return usergroups of this member (null: current member)
      * @param  boolean                  Whether to completely skip hidden usergroups
      * @return array                    The usergroup list, a map of usergroup ID to usergroup name
      */
@@ -1441,7 +1441,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Create a member login cookie.
      *
      * @param  MEMBER                   The member ID
-     * @param  ?SHORT_TEXT              The username (NULL: lookup)
+     * @param  ?SHORT_TEXT              The username (null: lookup)
      * @param  string                   The password
      */
     public function forum_create_cookie($id, $name, $password)
@@ -1491,8 +1491,8 @@ class Forum_driver_ocf extends Forum_driver_base
      * All authorisation, cookies, and form-logins, are passed through this function.
      * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
      *
-     * @param  ?SHORT_TEXT              The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
-     * @param  ?MEMBER                  The member ID (NULL: use member name)
+     * @param  ?SHORT_TEXT              The member username (null: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  ?MEMBER                  The member ID (null: use member name)
      * @param  MD5                      The md5-hashed password
      * @param  string                   The raw password
      * @param  boolean                  Whether this is a cookie login, determines how the hashed password is treated for the value passed in
@@ -1662,7 +1662,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Gets a whole member row from the database.
      *
      * @param  MEMBER                   The member ID
-     * @return ?array                   The member row (NULL: no such member)
+     * @return ?array                   The member row (null: no such member)
      */
     public function get_member_row($member)
     {

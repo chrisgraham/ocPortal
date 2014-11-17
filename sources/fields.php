@@ -21,7 +21,7 @@
 /**
  * Ensure a catalogues fields are loaded up in a cache, and return them.
  *
- * @param  ?ID_TEXT                     The name of the catalogue (NULL: all catalogues)
+ * @param  ?ID_TEXT                     The name of the catalogue (null: all catalogues)
  * @return array                        The fields (empty array if the catalogue does not exist)
  */
 function get_catalogue_fields($catalogue_name = null)
@@ -166,7 +166,7 @@ function has_tied_catalogue($content_type)
  *
  * @param  ID_TEXT                      Content type hook codename
  * @param  ID_TEXT                      Content entry ID
- * @return ?AUTO_LINK                   Bound catalogue entry ID (NULL: none)
+ * @return ?AUTO_LINK                   Bound catalogue entry ID (null: none)
  */
 function get_bound_content_entry($content_type, $id)
 {
@@ -180,10 +180,10 @@ function get_bound_content_entry($content_type, $id)
  * Append fields to content add/edit form for gathering custom fields.
  *
  * @param  ID_TEXT                      Content type hook codename
- * @param  ?ID_TEXT                     Content entry ID (NULL: new entry)
+ * @param  ?ID_TEXT                     Content entry ID (null: new entry)
  * @param  tempcode                     Fields (passed by reference)
  * @param  tempcode                     Hidden Fields (passed by reference)
- * @param  ?array                       Limit fields to a set (NULL: no limit)
+ * @param  ?array                       Limit fields to a set (null: no limit)
  * @param  boolean                      Whether $field_filter is a whitelist (if false, it is a blacklist)
  */
 function append_form_custom_fields($content_type, $id, &$fields, &$hidden, $field_filter = null, $field_filter_whitelist = true)
@@ -271,7 +271,7 @@ function append_form_custom_fields($content_type, $id, &$fields, &$hidden, $fiel
  *
  * @param  ID_TEXT                      Content type hook codename
  * @param  ID_TEXT                      Content entry ID
- * @param  ?ID_TEXT                     Content entry ID (prior to possible rename) (NULL: definitely unchanged)
+ * @param  ?ID_TEXT                     Content entry ID (prior to possible rename) (null: definitely unchanged)
  */
 function save_form_custom_fields($content_type, $id, $old_id = null)
 {

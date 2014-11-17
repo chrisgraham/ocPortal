@@ -87,7 +87,7 @@ function may_view_content_behind($member_id, $content_type, $content_id, $type_h
  * Get the CMA hook object for a content type. Also works for resource types (i.e. if it's a resource, although not actually considered content technically).
  *
  * @param  ID_TEXT                      The content type
- * @return ?object                      The object (NULL: could not get one)
+ * @return ?object                      The object (null: could not get one)
  */
 function get_content_object($content_type)
 {
@@ -291,7 +291,7 @@ function content_get_details($content_type, $content_id, $resourcefs_style = fal
  *
  * @param  ID_TEXT                      The content ID
  * @param  array                        The info array for the content type
- * @return ?array                       The row (NULL: not found)
+ * @return ?array                       The row (null: not found)
  */
 function content_get_row($content_id, $cma_info)
 {
@@ -339,7 +339,7 @@ function extract_content_str_id_from_data($data, $cma_info)
  *
  * @param  ID_TEXT                      The ID
  * @param  array                        The info array for the content type
- * @param  ?string                      The table alias (NULL: none)
+ * @param  ?string                      The table alias (null: none)
  * @return array                        The mapping
  */
 function get_content_where_for_str_id($str_id, $cma_info, $table_alias = null)
@@ -360,7 +360,7 @@ function get_content_where_for_str_id($str_id, $cma_info, $table_alias = null)
  *
  * @param  array                        The ID
  * @param  array                        The info array for the content type
- * @param  ?string                      The table alias (NULL: none)
+ * @param  ?string                      The table alias (null: none)
  */
 function append_content_select_for_id(&$select, $cma_info, $table_alias = null)
 {

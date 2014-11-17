@@ -26,7 +26,7 @@ class Block_side_friends
     /**
      * Find details of the block.
      *
-     * @return ?array                   Map of block info (NULL: block is disabled).
+     * @return ?array                   Map of block info (null: block is disabled).
      */
     public function info()
     {

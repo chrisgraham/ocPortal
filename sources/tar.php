@@ -21,7 +21,7 @@
 /**
  * Open up a TAR archive, and return the resource.
  *
- * @param  ?PATH                        The path to the TAR archive (NULL: write out directly to stdout)
+ * @param  ?PATH                        The path to the TAR archive (null: write out directly to stdout)
  * @param  string                       The mode to open the TAR archive (rb=read, wb=write)
  * @set    rb wb w+b
  * @return array                        The TAR file handle
@@ -66,7 +66,7 @@ function tar_open($path, $mode)
  *
  * @param  array                        The TAR file handle
  * @param  boolean                      Whether to tolerate errors (returns NULL if error)
- * @return ?array                       A list of maps that stores 'path', 'mode', 'size' and 'mtime', for each file in the archive (NULL: error)
+ * @return ?array                       A list of maps that stores 'path', 'mode', 'size' and 'mtime', for each file in the archive (null: error)
  */
 function tar_get_directory(&$resource, $tolerate_errors = false)
 {
@@ -171,10 +171,10 @@ function file_size_to_tar_block_size($size)
  * Add a folder to the TAR archive, however only store files modifed after a threshold time. It is incremental (incremental backup), by comparing against a threshold before adding a file (threshold being time of last backup)
  *
  * @param  array                        The TAR file handle
- * @param  ?resource                    The logfile to write to (NULL: no logging)
+ * @param  ?resource                    The logfile to write to (null: no logging)
  * @param  PATH                         The full path to the folder to add
  * @param  TIME                         The threshold time
- * @param  ?integer                     The maximum file size to add (NULL: no limit)
+ * @param  ?integer                     The maximum file size to add (null: no limit)
  * @param  PATH                         The subpath relative to the path (should be left as the default '', as this is used for the recursion to distinguish the adding base path from where it's currently looking)
  * @param  boolean                      Whether to not skip "special files" (ones not normally archive)
  * @return array                        A list of maps that stores 'path', 'mode' and 'size', for each newly added file in the archive
@@ -234,12 +234,12 @@ function tar_add_folder_incremental(&$resource, $logfile, $path, $threshold, $ma
  * Add a folder to the TAR archive
  *
  * @param  array                        The TAR file handle
- * @param  ?resource                    The logfile to write to (NULL: no logging)
+ * @param  ?resource                    The logfile to write to (null: no logging)
  * @param  PATH                         The full path to the folder to add
- * @param  ?integer                     The maximum file size to add (NULL: no limit)
+ * @param  ?integer                     The maximum file size to add (null: no limit)
  * @param  PATH                         The subpath relative to the path (should be left as the default '', as this is used for the recursion to distinguish the adding base path from where it's currently looking)
- * @param  ?array                       A map (filename=>1) of files to not back up (NULL: none)
- * @param  ?array                       A list of directories ONLY to back up from the root (NULL: no restriction)
+ * @param  ?array                       A map (filename=>1) of files to not back up (null: none)
+ * @param  ?array                       A list of directories ONLY to back up from the root (null: no restriction)
  * @param  boolean                      Whether to output spaces as we go to keep the connection alive
  * @param  boolean                      Whether to not skip "special files" (ones not normally archive)
  */
@@ -292,7 +292,7 @@ function tar_add_folder(&$resource, $logfile, $path, $max_size = null, $subpath 
  * @param  array                        The TAR file handle
  * @param  PATH                         The path to the folder to extract to, relative to the base directory
  * @param  boolean                      Whether to extract via the AFM (assumes AFM has been set up prior to this function call)
- * @param  ?array                       The files to extract (NULL: all)
+ * @param  ?array                       The files to extract (null: all)
  * @param  boolean                      Whether to take backups of Comcode pages
  */
 function tar_extract_to_folder(&$resource, $path, $use_afm = false, $files = null, $comcode_backups = false)
@@ -408,8 +408,8 @@ function tar_extract_to_folder(&$resource, $path, $use_afm = false, $files = nul
  * @param  array                        The TAR file handle
  * @param  PATH                         The full path to the file we want to get
  * @param  boolean                      Whether to tolerate errors (returns NULL if error)
- * @param  ?PATH                        Write data to here (NULL: return within array)
- * @return ?array                       A map, containing 'data' (the file), 'size' (the filesize), 'mtime' (the modification timestamp), and 'mode' (the permissions) (NULL: not found / TAR possibly corrupt if we turned tolerate errors on)
+ * @param  ?PATH                        Write data to here (null: return within array)
+ * @return ?array                       A map, containing 'data' (the file), 'size' (the filesize), 'mtime' (the modification timestamp), and 'mode' (the permissions) (null: not found / TAR possibly corrupt if we turned tolerate errors on)
  */
 function tar_get_file(&$resource, $path, $tolerate_errors = false, $write_data_to = null)
 {
@@ -473,7 +473,7 @@ function tar_get_file(&$resource, $path, $tolerate_errors = false, $write_data_t
  * @param  PATH                         The relative path to where we wish to add the file to the archive (including filename)
  * @param  string                       The data of the file to add
  * @param  integer                      The file mode (permissions)
- * @param  ?TIME                        The modification time we wish for our file (NULL: now)
+ * @param  ?TIME                        The modification time we wish for our file (null: now)
  * @param  boolean                      Whether the $data variable is actually a full file path
  * @param  boolean                      Whether to return on errors
  */

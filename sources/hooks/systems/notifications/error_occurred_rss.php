@@ -27,7 +27,7 @@ class Hook_notification_error_occurred_rss extends Hook_notification__Staff
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
      * @return integer                  Initial setting
      */
     public function get_initial_setting($notification_code, $category = null)

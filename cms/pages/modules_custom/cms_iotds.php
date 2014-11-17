@@ -37,8 +37,8 @@ class Module_cms_iotds extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -97,10 +97,10 @@ class Module_cms_iotds extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -140,15 +140,15 @@ class Module_cms_iotds extends Standard_crud_module
     /**
      * Get tempcode for an IOTD adding/editing form.
      *
-     * @param  ?AUTO_LINK               The IOTD ID (NULL: new)
+     * @param  ?AUTO_LINK               The IOTD ID (null: new)
      * @param  URLPATH                  The URL to the image
      * @param  URLPATH                  The URL to the thumbnail
      * @param  SHORT_TEXT               The title
      * @param  LONG_TEXT                The caption
      * @param  boolean                  Whether the IOTD is/will-be currently active
-     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
      * @param  LONG_TEXT                Notes for the IOTD
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
@@ -247,7 +247,7 @@ class Module_cms_iotds extends Standard_crud_module
      *
      * @param  BINARY                   Whether to show used IOTDs
      * @param  BINARY                   Whether to show the current IOTD
-     * @param  ?MEMBER                  The member to only show iotds submitted-by (NULL: do not filter)
+     * @param  ?MEMBER                  The member to only show iotds submitted-by (null: do not filter)
      * @return tempcode                 The UI
      */
     public function _get_iotd_boxes($used = 0, $current = 0, $submitter = null)

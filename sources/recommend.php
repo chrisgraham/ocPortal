@@ -25,9 +25,9 @@
  * @param  mixed                        Their e-mail address (string or array of alternates)
  * @param  string                       The recommendation message
  * @param  boolean                      Whether this is an invitation
- * @param  ?string                      Email address of the recommender (NULL: current user's)
- * @param  ?string                      The subject (NULL: default)
- * @param  ?array                       List of names (NULL: use email addresses as names)
+ * @param  ?string                      Email address of the recommender (null: current user's)
+ * @param  ?string                      The subject (null: default)
+ * @param  ?array                       List of names (null: use email addresses as names)
  */
 function send_recommendation_email($name, $email_address, $message, $is_invite = false, $recommender_email = null, $subject = null, $names = null)
 {

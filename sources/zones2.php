@@ -33,7 +33,7 @@ function init__zones2()
  * @param  array                        Row to render
  * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?ID_TEXT                     Virtual root to use (NULL: none)
+ * @param  ?ID_TEXT                     Virtual root to use (null: none)
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     Rendered box
  */
@@ -607,7 +607,7 @@ function uninstall_block($block)
  * @param  ID_TEXT                      The zone it is in
  * @param  ID_TEXT                      The page name
  * @param  array                        Array of functions to be executing
- * @param  ?array                       A list of parameters to pass to our functions (NULL: none)
+ * @param  ?array                       A list of parameters to pass to our functions (null: none)
  * @return array                        A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
  */
 function extract_module_functions_page($zone, $page, $functions, $params = null)
@@ -635,7 +635,7 @@ function extract_module_functions_page($zone, $page, $functions, $params = null)
  * Extract the info function from a module at a given path.
  *
  * @param  PATH                         The path to the module
- * @return ?array                       A module information map (NULL: module contains no info method)
+ * @return ?array                       A module information map (null: module contains no info method)
  */
 function extract_module_info($path)
 {
@@ -654,7 +654,7 @@ function extract_module_info($path)
  * @param  boolean                      Whether to take transparent redirects into account
  * @param  integer                      Selection algorithm constant
  * @set 0 1 2
- * @param  ?ID_TEXT                     Page type to show (NULL: all)
+ * @param  ?ID_TEXT                     Page type to show (null: all)
  * @return array                        A map of page name to type (modules_custom, etc)
  */
 function _find_all_pages_wrap($zone, $keep_ext_on = false, $consider_redirects = false, $show_method = 0, $page_type = null)
@@ -712,10 +712,10 @@ function _find_all_pages_wrap($zone, $keep_ext_on = false, $consider_redirects =
  * @set    modules modules_custom comcode/EN comcode_custom/EN html/EN html_custom/EN
  * @param  string                       The file extension to limit us to (without a dot)
  * @param  boolean                      Whether to leave file extensions on the page name
- * @param  ?TIME                        Only show pages newer than (NULL: no restriction)
+ * @param  ?TIME                        Only show pages newer than (null: no restriction)
  * @param  integer                      Selection algorithm constant
  * @set 0 1 2
- * @param  ?boolean                     Whether to search under the custom-file-base (NULL: auto-decide)
+ * @param  ?boolean                     Whether to search under the custom-file-base (null: auto-decide)
  * @return array                        A map of page name to type (modules_custom, etc)
  */
 function _find_all_pages($zone, $type, $ext = 'php', $keep_ext_on = false, $cutoff_time = null, $show_method = 0, $custom = null)

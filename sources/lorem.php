@@ -518,10 +518,10 @@ function placeholder_breadcrumbs()
  * Lorem version of do_template. It will reprocess the template into something that is "stable XHTML" and thus can work inside an XHTML editor
  *
  * @param  ID_TEXT                      The codename of the template being loaded
- * @param  ?array                       A map of parameters for the template (key to value) (NULL: no parameters)
- * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (NULL: users own language)
+ * @param  ?array                       A map of parameters for the template (key to value) (null: no parameters)
+ * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (null: users own language)
  * @param  boolean                      Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (NULL: none)
+ * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
  * @param  string                       File type suffix of template file (e.g. .tpl)
  * @param  string                       Subdirectory type to look in
  * @set    templates css
@@ -536,7 +536,7 @@ function do_lorem_template($codename, $parameters = null, $lang = null, $light_e
  * Lorem version of globalise. It will wrap the input into something that is "stable XHTML" and thus can work inside an XHTML editor.
  *
  * @param  tempcode                     The tempcode to put into a nice frame
- * @param  ?mixed                       'Additional' message (NULL: none)
+ * @param  ?mixed                       'Additional' message (null: none)
  * @param  string                       The type of special message
  * @set    inform warn ""
  * @param  boolean                      Whether to include the header/footer/panels
@@ -831,7 +831,7 @@ function find_all_previews__by_screen()
  * Shows the preview of a screen
  *
  * @param  ID_TEXT                      The template to be previewed
- * @param  ?ID_TEXT                     The hook the preview is in (NULL: search)
+ * @param  ?ID_TEXT                     The hook the preview is in (null: search)
  * @param  ID_TEXT                      The name of the screen preview
  * @return tempcode                     The previewed screen
  */
@@ -967,8 +967,8 @@ function is_plain_text_template($temp_name)
 /**
  * Checks if the template is a full screen template
  *
- * @param  ?string                      Name of the template (NULL: do not use as criteria, use other as criteria, which must iself be non-NULL)
- * @param  ?tempcode                    The instantiated template (NULL: do not use as criteria, use other as criteria, which must iself be non-NULL)
+ * @param  ?string                      Name of the template (null: do not use as criteria, use other as criteria, which must iself be non-NULL)
+ * @param  ?tempcode                    The instantiated template (null: do not use as criteria, use other as criteria, which must iself be non-NULL)
  * @return boolean                      Whether it is
  */
 function is_full_screen_template($temp_name = null, $tempcode = null)

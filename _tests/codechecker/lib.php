@@ -336,7 +336,7 @@ function escape_html($in)
     return $in;
 }
 
-function fatal_exit($message)
+function attach_message($message, $message_type)
 {
     global $TO_USE, $LINE, $OCPORTAL_PATH;
     echo('ISSUE "' . substr($TO_USE, strlen($OCPORTAL_PATH) + 1) . '" ' . strval($LINE) . ' 0 ' . $message . cnl());

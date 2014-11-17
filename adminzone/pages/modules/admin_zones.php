@@ -26,7 +26,7 @@ class Module_admin_zones
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -44,10 +44,10 @@ class Module_admin_zones
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -94,7 +94,7 @@ class Module_admin_zones
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run()
     {
@@ -551,9 +551,9 @@ class Module_admin_zones
      * @param  SHORT_TEXT               The zone title
      * @param  ID_TEXT                  The zones default page
      * @param  SHORT_TEXT               The header text
-     * @param  ?ID_TEXT                 The theme (NULL: no override)
+     * @param  ?ID_TEXT                 The theme (null: no override)
      * @param  BINARY                   Whether the zone requires a session for pages to be used
-     * @param  ?ID_TEXT                 Name of the zone (NULL: unknown)
+     * @param  ?ID_TEXT                 Name of the zone (null: unknown)
      * @return array                    A tuple: The tempcode for the fields, hidden fields, and extra JavaScript
      */
     public function get_form_fields($in_zone_editor = false, $title = '', $default_page = 'start', $header_text = '', $theme = null, $require_session = 0, $zone = null)
@@ -751,7 +751,7 @@ class Module_admin_zones
      * The UI to choose a zone to edit.
      *
      * @param  string                   The follow-on type
-     * @param  ?tempcode                The title to use (NULL: the EDIT_ZONE title)
+     * @param  ?tempcode                The title to use (null: the EDIT_ZONE title)
      * @return tempcode                 The UI
      */
     public function edit_zone($type = '_edit', $title = null)

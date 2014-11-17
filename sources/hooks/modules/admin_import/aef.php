@@ -45,7 +45,7 @@ class Hook_aef
     /**
      * Standard importer hook info function.
      *
-     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
+     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (null: importer is disabled).
      */
     public function info()
     {

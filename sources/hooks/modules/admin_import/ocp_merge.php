@@ -26,7 +26,7 @@ class Hook_ocp_merge
     /**
      * Standard importer hook info function.
      *
-     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
+     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (null: importer is disabled).
      */
     public function info()
     {
@@ -149,7 +149,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
-     * @return ?tempcode                Error/warning UI (NULL: no error/warning)
+     * @return ?tempcode                Error/warning UI (null: no error/warning)
      */
     public function pre_import_tests($db, $table_prefix, $file_base)
     {
@@ -3617,7 +3617,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      * @param  ID_TEXT                  The rating type.
-     * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
+     * @param  ?ID_TEXT                 The import type to get remapping from (null: no remapping).
      */
     protected function _import_review_supplement($db, $table_prefix, $rating_type, $import_type)
     {
@@ -3653,7 +3653,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      * @param  ID_TEXT                  The content type.
-     * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
+     * @param  ?ID_TEXT                 The import type to get remapping from (null: no remapping).
      */
     protected function _import_content_reviews($db, $table_prefix, $content_type, $import_type)
     {
@@ -3680,7 +3680,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      * @param  ID_TEXT                  The content type.
-     * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
+     * @param  ?ID_TEXT                 The import type to get remapping from (null: no remapping).
      */
     protected function _import_catalogue_entry_linkage($db, $table_prefix, $content_type, $import_type)
     {

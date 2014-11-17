@@ -21,13 +21,13 @@
 /**
  * Render the OCF forumview.
  *
- * @param  ?integer                     Forum ID (NULL: private topics).
- * @param  ?array                       The forum row (NULL: private topics).
+ * @param  ?integer                     Forum ID (null: private topics).
+ * @param  ?array                       The forum row (null: private topics).
  * @param  string                       The filter category (blank if no filter)
  * @param  integer                      Maximum results to show
  * @param  integer                      Offset for result showing
  * @param  AUTO_LINK                    Virtual root
- * @param  ?MEMBER                      The member to show private topics of (NULL: not showing private topics)
+ * @param  ?MEMBER                      The member to show private topics of (null: not showing private topics)
  * @param  tempcode                     The breadcrumbs
  * @return mixed                        Either Tempcode (an interface that must be shown) or a pair: The main Tempcode, the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
  */
@@ -503,7 +503,7 @@ function ocf_get_topic_array($topic_row, $member_id, $hot_topic_definition, $inv
  * @param  array                        The details (array containing: last_post_id, id, modifiers, emoticon, first_member_id, first_username, first_post, num_posts, num_views).
  * @param  boolean                      Whether the viewing member has the facility to mark off topics (send as false if there are no actions for them to perform).
  * @param  boolean                      Whether the topic is a Private Topic.
- * @param  ?string                      The forum name (NULL: do not show the forum name).
+ * @param  ?string                      The forum name (null: do not show the forum name).
  * @return tempcode                     The topic row.
  */
 function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum = null)
@@ -643,7 +643,7 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
  * @param  AUTO_LINK                    The forum ID.
  * @param  array                        The forum row.
  * @param  integer                      The start row for getting details of topics in the forum (i.e. 0 is newest, higher is starting further back in time).
- * @param  ?integer                     The maximum number of topics to get detail of (NULL: default).
+ * @param  ?integer                     The maximum number of topics to get detail of (null: default).
  * @return array                        The details.
  */
 function ocf_get_forum_view($forum_id, $forum_info, $start = 0, $max = null)

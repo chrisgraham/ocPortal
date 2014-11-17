@@ -271,7 +271,7 @@ function actual_add_theme_image($theme, $lang, $id, $path, $fail_ok = false)
  * @param  boolean                      Allow no code to be given
  * @param  ID_TEXT                      Form field for uploading
  * @param  ID_TEXT                      Form field for choosing
- * @param  ?object                      Database connection (NULL: site database)
+ * @param  ?object                      Database connection (null: site database)
  * @return ID_TEXT                      The (possibly randomised) theme image code
  */
 function get_theme_img_code($type, $allow_skip = false, $field_file = 'file', $field_choose = 'theme_img_code', $db = null)
@@ -351,11 +351,11 @@ function find_images_do_dir($theme, $subdir, $langs)
  *
  * @param  ID_TEXT                      The type of image (e.g. 'ocf_emoticons')
  * @param  boolean                      Whether to search recursively; i.e. in subdirectories of the type subdirectory
- * @param  ?object                      The database connection to work over (NULL: site db)
- * @param  ?ID_TEXT                     The theme to search in, in addition to the default theme (NULL: current theme)
+ * @param  ?object                      The database connection to work over (null: site db)
+ * @param  ?ID_TEXT                     The theme to search in, in addition to the default theme (null: current theme)
  * @param  boolean                      Whether to only return directories (advanced option, rarely used)
  * @param  boolean                      Whether to only return from the database (advanced option, rarely used)
- * @param  ?array                       The list of files/directories to skip (NULL: none)
+ * @param  ?array                       The list of files/directories to skip (null: none)
  * @return array                        The list of image IDs
  */
 function get_all_image_ids_type($type, $recurse = false, $db = null, $theme = null, $dirs_only = false, $db_only = false, $skip = null)
@@ -586,8 +586,8 @@ function get_all_image_codes($base_path, $search_under, $recurse = true)
 /**
  * Get tempcode for a dropdown to choose a theme from the themes present.
  *
- * @param  ?ID_TEXT                     The currently selected image ID (NULL: none selected)
- * @param  ?string                      An SQL where clause (including the WHERE), that filters the query somehow (NULL: none)
+ * @param  ?ID_TEXT                     The currently selected image ID (null: none selected)
+ * @param  ?string                      An SQL where clause (including the WHERE), that filters the query somehow (null: none)
  * @param  boolean                      Whether to show IDs as the list entry captions, rather than paths
  * @param  boolean                      Whether to include images not yet used (i.e not in theme_images map yet)
  * @return tempcode                     Tempcode for a list selection of theme images
@@ -628,7 +628,7 @@ function create_selection_list_theme_images($it = null, $filter = null, $do_id =
 /**
  * Get a UI list for choosing a theme.
  *
- * @param  ?ID_TEXT                     The theme to select by default (NULL: no specific default)
+ * @param  ?ID_TEXT                     The theme to select by default (null: no specific default)
  * @param  boolean                      Whether to skip the 'rely on forums' entry
  * @param  boolean                      Whether to forget about permissions for this list
  * @param  ID_TEXT                      The language string to use for the default answer
@@ -733,11 +733,11 @@ function find_all_themes($full_details = false)
 /**
  * Delete a theme image used for a resource that was added, but only if the theme image is now unused.
  *
- * @param  ?ID_TEXT                     The new theme image (NULL: no new one)
+ * @param  ?ID_TEXT                     The new theme image (null: no new one)
  * @param  ID_TEXT                      The old theme image we might be tidying up
  * @param  ID_TEXT                      Table to check against
  * @param  ID_TEXT                      Field in table
- * @param  ?object                      Database connection to check against (NULL: site database)
+ * @param  ?object                      Database connection to check against (null: site database)
  */
 function tidy_theme_img_code($new, $old, $table, $field, $db = null)
 {

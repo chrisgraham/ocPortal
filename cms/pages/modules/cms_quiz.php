@@ -59,10 +59,10 @@ class Module_cms_quiz extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -83,8 +83,8 @@ class Module_cms_quiz extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -240,24 +240,24 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Get tempcode for a adding/editing form.
      *
-     * @param  ?AUTO_LINK               The quiz ID (NULL: new)
+     * @param  ?AUTO_LINK               The quiz ID (null: new)
      * @param  SHORT_TEXT               The name of the quiz
-     * @param  ?integer                 The number of minutes allowed for completion (NULL: NA)
+     * @param  ?integer                 The number of minutes allowed for completion (null: NA)
      * @param  LONG_TEXT                The text shown at the start of the quiz
      * @param  LONG_TEXT                The text shown at the end of the quiz
      * @param  LONG_TEXT                The text shown at the end of the quiz on failure
      * @param  LONG_TEXT                Notes
      * @param  integer                  Percentage correctness required for competition
-     * @param  ?TIME                    The time the quiz is opened (NULL: now)
-     * @param  ?TIME                    The time the quiz is closed (NULL: never)
+     * @param  ?TIME                    The time the quiz is opened (null: now)
+     * @param  ?TIME                    The time the quiz is closed (null: never)
      * @param  integer                  The number of winners for this if it is a competition
-     * @param  ?integer                 The minimum number of hours between attempts (NULL: no restriction)
+     * @param  ?integer                 The minimum number of hours between attempts (null: no restriction)
      * @param  ID_TEXT                  The type
      * @set    SURVEY COMPETITION TEST
      * @param  BINARY                   Whether this is validated
-     * @param  ?string                  Text for questions (NULL: default)
+     * @param  ?string                  Text for questions (null: default)
      * @param  integer                  The number of points awarded for completing/passing the quiz/test
-     * @param  ?AUTO_LINK               Newsletter for which a member must be on to enter (NULL: none)
+     * @param  ?AUTO_LINK               Newsletter for which a member must be on to enter (null: none)
      * @param  BINARY                   Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
      * @param  BINARY                   Whether to shuffle questions, to make cheating a bit harder
      * @param  BINARY                   Whether to shuffle multiple-choice answers, to make cheating a bit harder

@@ -26,7 +26,7 @@ class Module_admin_themes
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -61,8 +61,8 @@ class Module_admin_themes
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (NULL: new install)
-     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 What version we're upgrading from (null: new install)
+     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -101,10 +101,10 @@ class Module_admin_themes
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -131,7 +131,7 @@ class Module_admin_themes
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run()
     {
@@ -551,7 +551,7 @@ class Module_admin_themes
      * @param  string                   The name of the theme
      * @param  string                   The theme title
      * @param  string                   The theme description
-     * @param  ?string                  The theme author (NULL: current member)
+     * @param  ?string                  The theme author (null: current member)
      * @param  string                   Comma-separated list mobile-supporting pages (blank: all do)
      * @param  BINARY                   Whether the theme supports 'wide' screens
      * @param  boolean                  Whether to use this theme on all zones
@@ -853,7 +853,7 @@ class Module_admin_themes
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
      * @param  ID_TEXT                  The theme that was just handled
-     * @param  ?LANGUAGE_NAME           The language we were working in (NULL: autodetect) (blank: autodetect)
+     * @param  ?LANGUAGE_NAME           The language we were working in (null: autodetect) (blank: autodetect)
      * @param  ID_TEXT                  Code to determine what kind of links to show
      * @param  ID_TEXT                  ID of file that an edit link should load (blank: N/A)
      * @return tempcode                 The UI

@@ -127,8 +127,8 @@ function ocf_delete_poll($poll_id, $reason = '', $check_perms = true)
  *
  * @param  AUTO_LINK                    The ID of the poll we're voting in.
  * @param  array                        A list of poll answers that are being voted for.
- * @param  ?MEMBER                      The member that's voting (NULL: current member).
- * @param  ?array                       The row of the topic the poll is for (NULL: get it from the DB).
+ * @param  ?MEMBER                      The member that's voting (null: current member).
+ * @param  ?array                       The row of the topic the poll is for (null: get it from the DB).
  */
 function ocf_vote_in_poll($poll_id, $votes, $member_id = null, $topic_info = null)
 {

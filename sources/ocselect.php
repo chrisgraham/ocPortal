@@ -22,7 +22,7 @@
  * Read an ocSelect parameter value from GET/POST.
  *
  * @param  ID_TEXT                      The field name
- * @param  ?ID_TEXT                     The field type (NULL: work out what is there to read automatically)
+ * @param  ?ID_TEXT                     The field type (null: work out what is there to read automatically)
  * @return string                       The parameter value
  */
 function read_ocselect_parameter_from_env($field_name, $field_type = null)
@@ -55,9 +55,9 @@ function read_ocselect_parameter_from_env($field_name, $field_type = null)
  * Get a form for inputting unknown variables within a filter.
  *
  * @param  string                       String-based search filter (blank: make one up to cover everything, but only works if $table is known)
- * @param  ?array                       Labels for field names (NULL: none, use auto-generated)
- * @param  ?ID_TEXT                     Content-type to auto-probe from (NULL: none, use string inputs)
- * @param  ?array                       Field types (NULL: none, use string inputs / defaults for table)
+ * @param  ?array                       Labels for field names (null: none, use auto-generated)
+ * @param  ?ID_TEXT                     Content-type to auto-probe from (null: none, use string inputs)
+ * @param  ?array                       Field types (null: none, use string inputs / defaults for table)
  * @return array                        The form fields, The modded filter, Merger links
  */
 function form_for_ocselect($filter, $labels = null, $content_type = null, $types = null)
@@ -457,14 +457,14 @@ function unparse_ocselect($parsed)
  *
  * @param  object                       Database connection
  * @param  array                        Content type info
- * @param  ?ID_TEXT                     Name of the catalogue (NULL: unknown; reduces performance)
+ * @param  ?ID_TEXT                     Name of the catalogue (null: unknown; reduces performance)
  * @param  array                        List of joins (passed as reference)
  * @param  array                        List of selects (passed as reference)
  * @param  ID_TEXT                      The field to get
  * @param  string                       The field value for this
  * @param  array                        Database field data
  * @param  string                       What MySQL will join the table with
- * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
+ * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _fields_api_ocselect_named($db, $info, $catalogue_name, &$extra_join, &$extra_select, $filter_key, $filter_val, $db_fields, $table_join_code)
 {
@@ -504,14 +504,14 @@ function _fields_api_ocselect_named($db, $info, $catalogue_name, &$extra_join, &
  *
  * @param  object                       Database connection
  * @param  array                        Content type info
- * @param  ?ID_TEXT                     Name of the catalogue (NULL: unknown; reduces performance)
+ * @param  ?ID_TEXT                     Name of the catalogue (null: unknown; reduces performance)
  * @param  array                        List of joins (passed as reference)
  * @param  array                        List of selects (passed as reference)
  * @param  ID_TEXT                      The field to get
  * @param  string                       The field value for this
  * @param  array                        Database field data
  * @param  string                       What MySQL will join the table with
- * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
+ * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _fields_api_ocselect($db, $info, $catalogue_name, &$extra_join, &$extra_select, $filter_key, $filter_val, $db_fields, $table_join_code)
 {
@@ -574,14 +574,14 @@ function generate_ocselect_join_key_from_string($str)
  *
  * @param  object                       Database connection
  * @param  array                        Content type info
- * @param  ?ID_TEXT                     Name of the catalogue (NULL: unknown; reduces performance)
+ * @param  ?ID_TEXT                     Name of the catalogue (null: unknown; reduces performance)
  * @param  array                        List of joins (passed as reference)
  * @param  array                        List of selects (passed as reference)
  * @param  ID_TEXT                      The field to get
  * @param  string                       The field value for this
  * @param  array                        Database field data
  * @param  string                       What MySQL will join the table with
- * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
+ * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _default_conv_func($db, $info, $catalogue_name, &$extra_join, &$extra_select, $filter_key, $filter_val, $db_fields, $table_join_code)
 {

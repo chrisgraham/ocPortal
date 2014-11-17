@@ -46,8 +46,8 @@ class Module_cms_banners extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -160,10 +160,10 @@ class Module_cms_banners extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -326,12 +326,12 @@ class Module_cms_banners extends Standard_crud_module
      * @param  LONG_TEXT                Any notes associated with the banner
      * @param  integer                  The banners "importance modulus"
      * @range  1 max
-     * @param  ?integer                 The number of hits the banner may have (NULL: not applicable for this banner type)
+     * @param  ?integer                 The number of hits the banner may have (null: not applicable for this banner type)
      * @range  0 max
      * @param  SHORT_INTEGER            The type of banner (0=permanent, 1=campaign, 2=default)
      * @set    0 1 2
-     * @param  ?TIME                    The banner expiry date (NULL: never expires)
-     * @param  ?MEMBER                  The banners submitter (NULL: current member)
+     * @param  ?TIME                    The banner expiry date (null: never expires)
+     * @param  ?MEMBER                  The banners submitter (null: current member)
      * @param  BINARY                   Whether the banner has been validated
      * @param  ID_TEXT                  The banner type (can be anything, where blank means 'normal')
      * @param  SHORT_TEXT               The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
@@ -505,7 +505,7 @@ class Module_cms_banners extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -709,7 +709,7 @@ class Module_cms_banners_cat extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -722,8 +722,8 @@ class Module_cms_banners_cat extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
-     * @param  ID_TEXT                  The type ID we were working in (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  ID_TEXT                  The type ID we were working in (null: N/A)
      * @return tempcode                 The UI
      */
     public function _do_next_manager($title, $description, $id, $type)

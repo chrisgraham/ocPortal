@@ -46,7 +46,7 @@ function get_session_cookie()
 /**
  * Get the ocPortal cookie path.
  *
- * @return ?string                      The ocPortal cookie path (NULL: no special path, global)
+ * @return ?string                      The ocPortal cookie path (null: no special path, global)
  */
 function get_cookie_path()
 {
@@ -58,7 +58,7 @@ function get_cookie_path()
 /**
  * Get the ocPortal cookie domain.
  *
- * @return ?string                      The ocPortal cookie domain (NULL: current domain)
+ * @return ?string                      The ocPortal cookie domain (null: current domain)
  */
 function get_cookie_domain()
 {

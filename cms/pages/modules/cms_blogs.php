@@ -48,10 +48,10 @@ class Module_cms_blogs extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -71,8 +71,8 @@ class Module_cms_blogs extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -154,7 +154,7 @@ class Module_cms_blogs extends Standard_crud_module
      * Standard crud_module table function.
      *
      * @param  array                    Details to go to build_url for link to the next screen.
-     * @return ?array                   A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL (NULL: nothing to select).
+     * @return ?array                   A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL (null: nothing to select).
      */
     public function create_selection_list_choose_table($url_map)
     {
@@ -230,20 +230,20 @@ class Module_cms_blogs extends Standard_crud_module
     /**
      * Get tempcode for a news adding/editing form.
      *
-     * @param  ?AUTO_LINK               The news ID (NULL: new)
-     * @param  ?AUTO_LINK               The primary category for the news (NULL: personal)
-     * @param  ?array                   A list of categories the news is in (NULL: not known)
+     * @param  ?AUTO_LINK               The news ID (null: new)
+     * @param  ?AUTO_LINK               The primary category for the news (null: personal)
+     * @param  ?array                   A list of categories the news is in (null: not known)
      * @param  SHORT_TEXT               The news title
      * @param  LONG_TEXT                The news summary
      * @param  SHORT_TEXT               The name of the author
      * @param  BINARY                   Whether the news is validated
-     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
      * @param  BINARY                   Whether to show the "send trackback" field
      * @param  LONG_TEXT                Notes for the video
      * @param  URLPATH                  URL to the image for the news entry (blank: use cat image)
-     * @param  ?array                   Scheduled go-live time (NULL: N/A)
+     * @param  ?array                   Scheduled go-live time (null: N/A)
      * @return array                    A tuple of lots of info (fields, hidden fields, trailing fields)
      */
     public function get_form_fields($id = null, $main_news_category = null, $news_category = null, $title = '', $news = '', $author = '', $validated = 1, $allow_rating = null, $allow_comments = null, $allow_trackbacks = null, $send_trackbacks = 1, $notes = '', $image = '', $scheduled = null)
@@ -609,7 +609,7 @@ class Module_cms_blogs extends Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id = null)

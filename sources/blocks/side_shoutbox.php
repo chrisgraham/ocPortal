@@ -26,7 +26,7 @@ class Block_side_shoutbox
     /**
      * Find details of the block.
      *
-     * @return ?array                   Map of block info (NULL: block is disabled).
+     * @return ?array                   Map of block info (null: block is disabled).
      */
     public function info()
     {
@@ -44,12 +44,12 @@ class Block_side_shoutbox
     /**
      * Find cacheing details for the block.
      *
-     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
      */
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = '((get_value(\'no_frames\')===\'1\') && (count($_POST)!=0))?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()),array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'param\',$map)?intval($map[\'param\']):NULL)';
+        $info['cache_on'] = '((get_value(\'no_frames\')===\'1\') && (count($_POST)!=0))?null:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()),array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'param\',$map)?intval($map[\'param\']):NULL)';
         $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 24;
         return $info;
     }

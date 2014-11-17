@@ -23,7 +23,7 @@
  *
  * @param  ID_TEXT                      The content type
  * @param  ID_TEXT                      The content ID
- * @param  ?MEMBER                      The content submitter (NULL: current user)
+ * @param  ?MEMBER                      The content submitter (null: current user)
  */
 function dispatch_member_mention_notifications($content_type, $content_id, $submitter = null)
 {

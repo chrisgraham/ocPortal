@@ -178,7 +178,7 @@ function get_group_colour($gid)
 /**
  * Find all the birthdays in a certain day.
  *
- * @param  ?TIME                        A timestamps that exists in the certain day (NULL: now).
+ * @param  ?TIME                        A timestamps that exists in the certain day (null: now).
  * @return array                        List of maps describing the members whose birthday it is on the certain day.
  */
 function ocf_find_birthdays($time = null)

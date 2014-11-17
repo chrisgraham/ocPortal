@@ -63,7 +63,7 @@ function init__tempcode()
     $RECORD_TEMPLATES_USED = false;
     $RECORDED_TEMPLATES_USED = array();
     $RECORD_TEMPLATES_TREE = false;
-    /** The name of a template that was called to render the current screen (NULL: not rendering a screen), auto-populated within the template system. This is tracked during dev mode to confirm that each screen really does wrap itself in a proper screen template.
+    /** The name of a template that was called to render the current screen (null: not rendering a screen), auto-populated within the template system. This is tracked during dev mode to confirm that each screen really does wrap itself in a proper screen template.
      *
      * @global ?ID_TEXT $SCREEN_TEMPLATE_CALLED
      */
@@ -202,8 +202,8 @@ function missing_template_parameter($origin)
  * @param  integer                      The type of symbol this is (TC_SYMBOL, TC_LANGUAGE_REFERENCE)
  * @set    0 2
  * @param  ID_TEXT                      The name of the symbol
- * @param  ?array                       Parameters to the symbol (NULL: none). In same format as expected by ecv.
- * @param  ?array                       Escaping for the symbol (NULL: none)
+ * @param  ?array                       Parameters to the symbol (null: none). In same format as expected by ecv.
+ * @param  ?array                       Escaping for the symbol (null: none)
  * @return tempcode                     Tempcode object.
  */
 function build_closure_tempcode($type, $name, $parameters, $escaping = null)
@@ -284,8 +284,8 @@ function build_closure_tempcode($type, $name, $parameters, $escaping = null)
  * This will create a new Tempcode object that is containing a single specifed symbol
  *
  * @param  ID_TEXT                      The ID of the symbol to use
- * @param  ?array                       Symbol parameters (NULL: none)
- * @param  ?array                       Escaping (NULL: none)
+ * @param  ?array                       Symbol parameters (null: none)
+ * @param  ?array                       Escaping (null: none)
  * @return tempcode                     A symbol Tempcode object
  */
 function symbol_tempcode($symbol, $parameters = null, $escape = null)
@@ -302,7 +302,7 @@ function symbol_tempcode($symbol, $parameters = null, $escape = null)
  *
  * @param  ID_TEXT                      The ID of the directive to use
  * @param  mixed                        The contents (Tempcode or string)
- * @param  ?array                       Directive parameters (NULL: none)
+ * @param  ?array                       Directive parameters (null: none)
  * @return tempcode                     A directive Tempcode object
  */
 function directive_tempcode($directive, $content, $parameters = null)
@@ -575,9 +575,9 @@ function apply_tempcode_escaping_inline($escaped, $value)
  * This will create a new Tempcode object that is containing a single specifed language code
  *
  * @param  ID_TEXT                      The ID of the language string to use
- * @param  ?mixed                       The first token [string or Tempcode] (replaces {1}) (NULL: none)
- * @param  ?mixed                       The second token [string or Tempcode] (replaces {2}) (NULL: none)
- * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+ * @param  ?mixed                       The first token [string or Tempcode] (replaces {1}) (null: none)
+ * @param  ?mixed                       The second token [string or Tempcode] (replaces {2}) (null: none)
+ * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (null: none)
  * @return tempcode                     A language Tempcode object
  */
 function do_lang_tempcode($lang_string, $token1 = null, $token2 = null, $token3 = null)
@@ -634,14 +634,14 @@ function kid_gloves_html_escaping_singular(&$param)
  * Get a Tempcoded version of an ocPortal template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the Tempcode attach method.
  *
  * @param  ID_TEXT                      The codename of the template being loaded
- * @param  ?array                       A map of parameters for the template (key to value) (NULL: no parameters)
- * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (NULL: users own language)
+ * @param  ?array                       A map of parameters for the template (key to value) (null: no parameters)
+ * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (null: users own language)
  * @param  boolean                      Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (NULL: none)
+ * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
  * @param  string                       File type suffix of template file (e.g. .tpl)
  * @param  string                       Subdirectory type to look in
  * @set    templates css
- * @param  ?ID_TEXT                     Theme to use (NULL: current theme)
+ * @param  ?ID_TEXT                     Theme to use (null: current theme)
  * @return tempcode                     The Tempcode for this template
  */
 function do_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $type = 'templates', $theme = null)
@@ -1179,7 +1179,7 @@ class Tempcode
     /**
      * Constructor of Tempcode
      *
-     * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
+     * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (null: start as empty)
      */
     public function __construct($details = null)
     {
@@ -1768,7 +1768,7 @@ class Tempcode
     /**
      * Parses the current Tempcode object, then return the parsed string
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current user's language)
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current user's language)
      * @return string                   The evaluated thing. Voila, it's all over!
      */
     public function evaluate($current_lang = null)
@@ -1856,7 +1856,7 @@ class Tempcode
     /**
      * Parse the current Tempcode object, then echo it to the browser.
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current users language)
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current users language)
      * @param  boolean                  Whether to stop if we are stuck of a seq_part with parameters yet-unbound, and to continue from last resume point
      * @return string                   Blank string. Allows chaining within echo statements
      */
@@ -1996,10 +1996,10 @@ function tempcode_include($filepath)
  * Evaluate some PHP, with ability to better debug.
  * In a way this can also quash problems, so only use when debugging. The "@" before eval turns off attach_message.
  *
- * @param  ?string                      Code to evaluate (NULL: code not found)
- * @param  ?array                       Evaluation code context (NULL: N/A)
- * @param  ?array                       Evaluation parameters (NULL: N/A)
- * @param  ?ID_TEXT                     Language (NULL: N/A)
+ * @param  ?string                      Code to evaluate (null: code not found)
+ * @param  ?array                       Evaluation code context (null: N/A)
+ * @param  ?array                       Evaluation parameters (null: N/A)
+ * @param  ?ID_TEXT                     Language (null: N/A)
  * @return string                       Result
  */
 function debug_eval($code, &$tpl_funcs = null, $parameters = null, $cl = null)
@@ -2029,8 +2029,8 @@ function debug_eval($code, &$tpl_funcs = null, $parameters = null, $cl = null)
  *
  * @param  string                       Function to call
  * @param  mixed                        First parameter
- * @param  ?mixed                       Second parameter (NULL: null/none)
- * @param  ?mixed                       Third parameter (NULL: null/none)
+ * @param  ?mixed                       Second parameter (null: null/none)
+ * @param  ?mixed                       Third parameter (null: null/none)
  * @return string                       Result
  */
 function debug_call_user_func($function, $a, $b = null, $c = null)

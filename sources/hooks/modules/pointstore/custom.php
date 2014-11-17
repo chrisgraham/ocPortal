@@ -37,7 +37,7 @@ class Hook_pointstore_custom
      * @param  SHORT_TEXT               Title
      * @param  LONG_TEXT                Description
      * @param  BINARY                   Whether it is enabled
-     * @param  ?integer                 The cost in points (NULL: not set)
+     * @param  ?integer                 The cost in points (null: not set)
      * @param  BINARY                   Whether it is restricted to one per member
      * @param  SHORT_TEXT               Confirmation mail subject
      * @param  LONG_TEXT                Confirmation mail body
@@ -65,7 +65,7 @@ class Hook_pointstore_custom
     /**
      * Standard pointstore item configuration function.
      *
-     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
+     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (null: disabled)
      */
     public function config()
     {

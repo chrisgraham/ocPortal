@@ -797,7 +797,7 @@ function compile_template($data, $template_name, $theme, $lang, $tolerate_errors
  * @param  ID_TEXT                      The actual codename to use for the template (e.g. foo_mobile)
  * @param  LANGUAGE_NAME                The language the template is in the context of
  * @param  string                       File type suffix of template file (e.g. .tpl)
- * @param  ?ID_TEXT                     The theme to cache in (NULL: main theme)
+ * @param  ?ID_TEXT                     The theme to cache in (null: main theme)
  * @return tempcode                     The compiled tempcode
  */
 function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $theme_orig = null)
@@ -899,8 +899,8 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
  * @param  integer                      The position we are looking at in the text
  * @param  boolean                      Whether this text is infact a directive, about to be put in the context of a wider template
  * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ?ID_TEXT                     The theme it is for (NULL: current theme)
- * @param  ?ID_TEXT                     The language it is for (NULL: current language)
+ * @param  ?ID_TEXT                     The theme it is for (null: current theme)
+ * @param  ?ID_TEXT                     The language it is for (null: current language)
  * @param  boolean                      Whether to tolerate errors
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */

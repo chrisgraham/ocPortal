@@ -31,7 +31,7 @@ class Hook_block_ui_renderers_newsletters
      * @param  boolean                  Whether there is a default value for the field, due to this being an edit
      * @param  string                   Default value for field
      * @param  tempcode                 Field description
-     * @return ?tempcode                Rendered field (NULL: not handled).
+     * @return ?tempcode                Rendered field (null: not handled).
      */
     public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {

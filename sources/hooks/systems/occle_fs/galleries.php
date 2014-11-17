@@ -106,7 +106,7 @@ class Hook_occle_fs_galleries extends Resource_fs_base
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
      * @param  array                    Resource row (not full, but does contain the ID)
-     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_folder_edit_date($row)
     {
@@ -327,7 +327,7 @@ class Hook_occle_fs_galleries extends Resource_fs_base
      * @param  LONG_TEXT                Filename OR Resource label
      * @param  string                   The path (blank: root / not applicable)
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-     * @param  ?ID_TEXT                 Resource type to try to force (NULL: do not force)
+     * @param  ?ID_TEXT                 Resource type to try to force (null: do not force)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function file_add($filename, $path, $properties, $force_type = null)

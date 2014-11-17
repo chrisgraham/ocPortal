@@ -24,8 +24,8 @@
  * @param  SHORT_TEXT                   Label for new instance
  * @param  ID_TEXT                      What the instance is of
  * @param  array                        Additional parameters
- * @param  ?TIME                        Add time (NULL: now)
- * @param  ?TIME                        Edit time (NULL: not edited yet)
+ * @param  ?TIME                        Add time (null: now)
+ * @param  ?TIME                        Edit time (null: not edited yet)
  * @param  boolean                      Whether to activate it
  * @param  boolean                      Whether to force the name as unique, if there's a conflict
  * @return AUTO_LINK                    ID of the new instance
@@ -407,7 +407,7 @@ function parse_aggregate_xml($display_errors = false)
 /**
  * Re-sync all aggregate type instances.
  *
- * @param  ?ID_TEXT                     Restrict to this aggregate type (NULL: no restriction)
+ * @param  ?ID_TEXT                     Restrict to this aggregate type (null: no restriction)
  */
 function resync_all_aggregate_type_instances($type = null)
 {
@@ -432,11 +432,11 @@ function resync_all_aggregate_type_instances($type = null)
  * Sync an aggregate type instance.
  *
  * @param  AUTO_LINK                    The ID
- * @param  ?SHORT_TEXT                  Label for instance (NULL: lookup)
- * @param  ?SHORT_TEXT                  Old label for instance (NULL: lookup)
- * @param  ?ID_TEXT                     What the instance is of (NULL: lookup)
- * @param  ?array                       Additional parameters (NULL: lookup)
- * @param  ?array                       Old additional parameters (NULL: lookup)
+ * @param  ?SHORT_TEXT                  Label for instance (null: lookup)
+ * @param  ?SHORT_TEXT                  Old label for instance (null: lookup)
+ * @param  ?ID_TEXT                     What the instance is of (null: lookup)
+ * @param  ?array                       Additional parameters (null: lookup)
+ * @param  ?array                       Old additional parameters (null: lookup)
  */
 function sync_aggregate_type_instance($id, $aggregate_label = null, $old_aggregate_label = null, $aggregate_type = null, $other_parameters = null, $old_parameters = null)
 {

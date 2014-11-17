@@ -32,7 +32,7 @@ class Module_admin_ocdeadpeople extends Standard_crud_module
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -50,8 +50,8 @@ class Module_admin_ocdeadpeople extends Standard_crud_module
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (NULL: new install)
-     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 What version we're upgrading from (null: new install)
+     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -109,10 +109,10 @@ class Module_admin_ocdeadpeople extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -127,8 +127,8 @@ class Module_admin_ocdeadpeople extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -331,7 +331,7 @@ class Module_admin_ocdeadpeople extends Standard_crud_module
      * Standard crud_module edit actualiser.
      *
      * @param  ID_TEXT                  The entry being edited
-     * @return ?tempcode                Confirm message (NULL: continue)
+     * @return ?tempcode                Confirm message (null: continue)
      */
     public function edit_actualisation($id)
     {

@@ -36,32 +36,32 @@ function ocf_may_control_group($group_id, $member_id)
  * Edit a usergroup.
  *
  * @param  AUTO_LINK                    The ID of the usergroup to edit.
- * @param  ?SHORT_TEXT                  The name of the usergroup. (NULL: do not change)
- * @param  ?BINARY                      Whether members are automatically put into the when they join. (NULL: do not change)
- * @param  ?BINARY                      Whether members of this usergroup are all super administrators. (NULL: do not change)
- * @param  ?BINARY                      Whether members of this usergroup are all super moderators. (NULL: do not change)
- * @param  ?SHORT_TEXT                  The title for primary members of this usergroup that don't have their own title. (NULL: do not change)
- * @param  ?URLPATH                     The rank image for this. (NULL: do not change)
- * @param  ?GROUP                       The that members of this usergroup get promoted to at point threshold (NULL: no promotion prospects).
- * @param  ?integer                     The point threshold for promotion (NULL: no promotion prospects).
- * @param  ?MEMBER                      The leader of this usergroup (NULL: none).
- * @param  ?integer                     The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The maximum avatar width that members of this usergroup may have (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The maximum avatar height that members of this usergroup may have (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The maximum post length that members of this usergroup may make (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The maximum signature length that members of this usergroup may make (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The number of gift points that members of this usergroup start with (group 'best of' applies). (NULL: do not change)
- * @param  ?integer                     The number of gift points that members of this usergroup get per day (group 'best of' applies). (NULL: do not change)
- * @param  ?BINARY                      Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies). (NULL: do not change)
- * @param  ?BINARY                      Whether the is presented for joining at joining (implies anyone may be in the, but only choosable at joining) (NULL: do not change)
- * @param  ?BINARY                      Whether the name and membership of the is hidden (NULL: do not change)
- * @param  ?integer                     The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups. (NULL: do not change)
- * @param  ?BINARY                      Whether the rank image will not be shown for secondary membership (NULL: do not change)
- * @param  ?BINARY                      Whether members may join this usergroup without requiring any special permission (NULL: do not change)
- * @param  ?BINARY                      Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum. (NULL: do not change)
+ * @param  ?SHORT_TEXT                  The name of the usergroup. (null: do not change)
+ * @param  ?BINARY                      Whether members are automatically put into the when they join. (null: do not change)
+ * @param  ?BINARY                      Whether members of this usergroup are all super administrators. (null: do not change)
+ * @param  ?BINARY                      Whether members of this usergroup are all super moderators. (null: do not change)
+ * @param  ?SHORT_TEXT                  The title for primary members of this usergroup that don't have their own title. (null: do not change)
+ * @param  ?URLPATH                     The rank image for this. (null: do not change)
+ * @param  ?GROUP                       The that members of this usergroup get promoted to at point threshold (null: no promotion prospects).
+ * @param  ?integer                     The point threshold for promotion (null: no promotion prospects).
+ * @param  ?MEMBER                      The leader of this usergroup (null: none).
+ * @param  ?integer                     The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The maximum avatar width that members of this usergroup may have (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The maximum avatar height that members of this usergroup may have (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The maximum post length that members of this usergroup may make (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The maximum signature length that members of this usergroup may make (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The number of gift points that members of this usergroup start with (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     The number of gift points that members of this usergroup get per day (group 'best of' applies). (null: do not change)
+ * @param  ?BINARY                      Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies). (null: do not change)
+ * @param  ?BINARY                      Whether the is presented for joining at joining (implies anyone may be in the, but only choosable at joining) (null: do not change)
+ * @param  ?BINARY                      Whether the name and membership of the is hidden (null: do not change)
+ * @param  ?integer                     The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups. (null: do not change)
+ * @param  ?BINARY                      Whether the rank image will not be shown for secondary membership (null: do not change)
+ * @param  ?BINARY                      Whether members may join this usergroup without requiring any special permission (null: do not change)
+ * @param  ?BINARY                      Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum. (null: do not change)
  * @param  boolean                      Whether to force the title as unique, if there's a conflict
  */
 function ocf_edit_group($group_id, $name, $is_default, $is_super_admin, $is_super_moderator, $title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club, $uniqify = false)
@@ -179,7 +179,7 @@ function ocf_edit_group($group_id, $name, $is_default, $is_super_admin, $is_supe
  * Delete a usergroup.
  *
  * @param  AUTO_LINK                    The ID of the usergroup to delete.
- * @param  ?GROUP                       The usergroup to move primary members to (NULL: main members).
+ * @param  ?GROUP                       The usergroup to move primary members to (null: main members).
  */
 function ocf_delete_group($group_id, $target_group = null)
 {
@@ -244,7 +244,7 @@ function ocf_delete_group($group_id, $target_group = null)
  * Mark a member as applying to be in a certain, and inform the leader.
  *
  * @param  GROUP                        The usergroup to apply to.
- * @param  ?MEMBER                      The member applying (NULL: current member).
+ * @param  ?MEMBER                      The member applying (null: current member).
  */
 function ocf_member_ask_join_group($group_id, $member_id = null)
 {
@@ -314,7 +314,7 @@ function ocf_member_ask_join_group($group_id, $member_id = null)
  * Remove a member from a certain usergroup.
  *
  * @param  GROUP                        The usergroup to remove from.
- * @param  ?MEMBER                      The member leaving (NULL: current member).
+ * @param  ?MEMBER                      The member leaving (null: current member).
  */
 function ocf_member_leave_group($group_id, $member_id = null)
 {

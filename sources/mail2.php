@@ -25,7 +25,7 @@
  *
  * @param  string                       The server hostname.
  * @param  integer                      The port.
- * @param  ?string                      The protocol (NULL: autodetect).
+ * @param  ?string                      The protocol (null: autodetect).
  * @set pop3 pop3s imap imaps
  * @return string                       Connection string.
  */
@@ -95,12 +95,12 @@ function find_mail_folders($server, $port, $username, $password)
  * Find if a member can be e-mailed.
  *
  * @param  MEMBER                       The member ID.
- * @param  ?string                      The IMAP server hostname (NULL: use configured).
- * @param  ?integer                     The IMAP port (NULL: use configured).
- * @param  ?string                      The IMAP inbox identifier (NULL: use configured).
- * @param  ?string                      The IMAP username (NULL: use configured).
- * @param  ?string                      The IMAP password (NULL: use configured).
- * @return ?TIME                        Last bounce time (NULL: not bounced).
+ * @param  ?string                      The IMAP server hostname (null: use configured).
+ * @param  ?integer                     The IMAP port (null: use configured).
+ * @param  ?string                      The IMAP inbox identifier (null: use configured).
+ * @param  ?string                      The IMAP username (null: use configured).
+ * @param  ?string                      The IMAP password (null: use configured).
+ * @return ?TIME                        Last bounce time (null: not bounced).
  */
 function can_email_member($member_id, $server = null, $port = null, $folder = null, $username = null, $password = null)
 {
@@ -120,12 +120,12 @@ function can_email_member($member_id, $server = null, $port = null, $folder = nu
  * Find if an e-mail address is bounced.
  *
  * @param  EMAIL                        The email address.
- * @param  ?string                      The IMAP server hostname (NULL: use configured).
- * @param  ?integer                     The IMAP port (NULL: use configured).
- * @param  ?string                      The IMAP inbox identifier (NULL: use configured).
- * @param  ?string                      The IMAP username (NULL: use configured).
- * @param  ?string                      The IMAP password (NULL: use configured).
- * @return ?TIME                        Last bounce time (NULL: not bounced).
+ * @param  ?string                      The IMAP server hostname (null: use configured).
+ * @param  ?integer                     The IMAP port (null: use configured).
+ * @param  ?string                      The IMAP inbox identifier (null: use configured).
+ * @param  ?string                      The IMAP username (null: use configured).
+ * @param  ?string                      The IMAP password (null: use configured).
+ * @return ?TIME                        Last bounce time (null: not bounced).
  */
 function is_mail_bounced($email, $server = null, $port = null, $folder = null, $username = null, $password = null)
 {
@@ -159,7 +159,7 @@ function is_mail_bounced($email, $server = null, $port = null, $folder = null, $
  * @param  string                       The IMAP inbox identifier.
  * @param  string                       The IMAP username.
  * @param  string                       The IMAP password.
- * @param  ?TIME                        Only find bounces since this date (NULL: 8 weeks ago). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
+ * @param  ?TIME                        Only find bounces since this date (null: 8 weeks ago). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
  */
 function update_bounce_storage($server, $port, $folder, $username, $password, $since = null)
 {
@@ -194,7 +194,7 @@ function update_bounce_storage($server, $port, $folder, $username, $password, $s
  * @param  string                       The IMAP inbox identifier.
  * @param  string                       The IMAP username.
  * @param  string                       The IMAP password.
- * @param  ?TIME                        Only find bounces since this date (NULL: 8 weeks ago). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
+ * @param  ?TIME                        Only find bounces since this date (null: 8 weeks ago). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
  * @return array                        Bounces (a map between email address and details of the bounce).
  */
 function find_mail_bounces($server, $port, $folder, $username, $password, $since = null)
@@ -230,7 +230,7 @@ function find_mail_bounces($server, $port, $folder, $username, $password, $since
  * @param  string                       The IMAP username.
  * @param  string                       The IMAP password.
  * @param  boolean                      Only find bounces (otherwise will find anything).
- * @param  ?TIME                        Only find bounces since this date (NULL: no limit). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
+ * @param  ?TIME                        Only find bounces since this date (null: no limit). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
  * @return array                        Bounces (a map between email address and details of the bounce).
  */
 function _find_mail_bounces($server, $port, $folder, $username, $password, $bounces_only = true, $since = null)

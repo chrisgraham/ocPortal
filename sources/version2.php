@@ -56,8 +56,8 @@ function get_future_version_information()
 /**
  * Get branch version number for an ocPortal version.
  *
- * @param  ?float                       General version number (NULL: on disk version)
- * @return string                       Branch version number (NULL: on disk version)
+ * @param  ?float                       General version number (null: on disk version)
+ * @return string                       Branch version number (null: on disk version)
  */
 function get_version_branch($general = null)
 {
@@ -71,8 +71,8 @@ function get_version_branch($general = null)
 /**
  * Get dotted version from given ocPortal-version-registry (version.php) supplied components.
  *
- * @param  ?integer                     Main version number (NULL: on disk version)
- * @param  ?string                      Minor version number (NULL: on disk version)
+ * @param  ?integer                     Main version number (null: on disk version)
+ * @param  ?string                      Minor version number (null: on disk version)
  * @return string                       Dotted version number
  */
 function get_version_dotted($main = null, $minor = null)

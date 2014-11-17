@@ -60,9 +60,9 @@ function ocf_get_post_templates($forum_id)
  * Check a post would be valid.
  *
  * @param  LONG_TEXT                    The post.
- * @param  ?AUTO_LINK                   The ID of the topic the post would be in (NULL: don't check with regard to any particular topic).
- * @param  ?MEMBER                      The poster (NULL: current member).
- * @return ?array                       Row of the existing post if a double post (single row map-element in a list of rows) (NULL: not a double post).
+ * @param  ?AUTO_LINK                   The ID of the topic the post would be in (null: don't check with regard to any particular topic).
+ * @param  ?MEMBER                      The poster (null: current member).
+ * @return ?array                       Row of the existing post if a double post (single row map-element in a list of rows) (null: not a double post).
  */
 function ocf_check_post($post, $topic_id = null, $poster = null)
 {
@@ -109,28 +109,28 @@ function ocf_check_post($post, $topic_id = null, $poster = null)
  * @param  SHORT_TEXT                   The title of the post (may be blank).
  * @param  LONG_TEXT                    The post.
  * @param  BINARY                       Whether to skip showing the posters signature in the post.
- * @param  ?boolean                     Whether the post is the first in the topic (NULL: work it out).
- * @param  ?BINARY                      Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially).
+ * @param  ?boolean                     Whether the post is the first in the topic (null: work it out).
+ * @param  ?BINARY                      Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially).
  * @param  BINARY                       Whether the post is marked emphasised.
- * @param  ?string                      The name of the person making the post (NULL: username of current member).
- * @param  ?IP                          The IP address the post is to be made under (NULL: IP of current user).
- * @param  ?TIME                        The time of the post (NULL: now).
- * @param  ?MEMBER                      The poster (NULL: current member).
- * @param  ?MEMBER                      The member that this post is intended solely for (NULL: public).
- * @param  ?TIME                        The last edit time of the post (NULL: never edited).
- * @param  ?MEMBER                      The member that was last to edit the post (NULL: never edited).
+ * @param  ?string                      The name of the person making the post (null: username of current member).
+ * @param  ?IP                          The IP address the post is to be made under (null: IP of current user).
+ * @param  ?TIME                        The time of the post (null: now).
+ * @param  ?MEMBER                      The poster (null: current member).
+ * @param  ?MEMBER                      The member that this post is intended solely for (null: public).
+ * @param  ?TIME                        The last edit time of the post (null: never edited).
+ * @param  ?MEMBER                      The member that was last to edit the post (null: never edited).
  * @param  boolean                      Whether to check permissions for whether the post may be made as it is given.
  * @param  boolean                      Whether to update the caches after making the post.
- * @param  ?AUTO_LINK                   The forum the post will be in (NULL: find out from the DB).
+ * @param  ?AUTO_LINK                   The forum the post will be in (null: find out from the DB).
  * @param  boolean                      Whether to allow attachments in this post.
- * @param  ?string                      The title of the topic (NULL: find from the DB).
+ * @param  ?string                      The title of the topic (null: find from the DB).
  * @param  BINARY                       Whether the topic is a sunk topic.
- * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
  * @param  boolean                      Whether to make the post anonymous
  * @param  boolean                      Whether to skip post checks
- * @param  ?boolean                     Whether this is for a new Private Topic (NULL: work it out)
+ * @param  ?boolean                     Whether this is for a new Private Topic (null: work it out)
  * @param  boolean                      Whether to explicitly insert the Comcode with admin privileges
- * @param  ?AUTO_LINK                   Parent post ID (NULL: none-threaded/root-of-thread)
+ * @param  ?AUTO_LINK                   Parent post ID (null: none-threaded/root-of-thread)
  * @param  boolean                      Whether to send out notifications
  * @return AUTO_LINK                    The ID of the new post.
  */
@@ -424,7 +424,7 @@ function ocf_make_post($topic_id, $title, $post, $skip_sig = 0, $is_starter = fa
  * Force a members post count to be recalculated.
  *
  * @param  MEMBER                       The member.
- * @param  ?integer                     The amount to add to the post count (NULL: fully recalculate the post count).
+ * @param  ?integer                     The amount to add to the post count (null: fully recalculate the post count).
  */
 function ocf_force_update_member_post_count($member_id, $member_post_count_dif = null)
 {
@@ -458,8 +458,8 @@ function ocf_force_update_member_post_count($member_id, $member_post_count_dif =
  * Decache cached OCF elements depending on a certain forum, and optionally a certain member.
  *
  * @param  AUTO_LINK                    The ID of the forum.
- * @param  ?string                      The name of the forum (NULL: find it from the DB).
- * @param  ?MEMBER                      The member (NULL: do no member decacheing).
+ * @param  ?string                      The name of the forum (null: find it from the DB).
+ * @param  ?MEMBER                      The member (null: do no member decacheing).
  */
 function ocf_decache_ocp_blocks($updated_forum_id, $forum_name = null, $member = null)
 {

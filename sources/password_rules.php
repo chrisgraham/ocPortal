@@ -96,7 +96,7 @@ function member_password_too_old($member_id)
  * @param  ID_TEXT                      The username this is for
  * @param  string                       New password
  * @param  boolean                      Whether to return errors instead of dieing on them.
- * @return ?tempcode                    Error (NULL: none).
+ * @return ?tempcode                    Error (null: none).
  */
 function check_password_complexity($username, $password, $return_errors = false)
 {
@@ -143,7 +143,7 @@ function check_password_complexity($username, $password, $return_errors = false)
  * @param  string                       Hashed password
  * @param  string                       Password salt
  * @param  boolean                      Whether to skip enforcement checks
- * @param  ?TIME                        The time this is logged to be happening at (NULL: now)
+ * @param  ?TIME                        The time this is logged to be happening at (null: now)
  */
 function bump_password_change_date($member_id, $password, $password_salted, $salt, $skip_checks = false, $time = null)
 {

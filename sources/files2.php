@@ -259,7 +259,7 @@ function _deldir_contents($dir, $default_preserve = false, $just_files = false)
  * @param  ID_TEXT                      Filename to output
  * @param  boolean                      Whether to output CSV headers
  * @param  boolean                      Whether to output/exit when we're done instead of return
- * @param  ?PATH                        File to spool into (NULL: none)
+ * @param  ?PATH                        File to spool into (null: none)
  * @return string                       CSV data (we might not return though, depending on $exit; if $outfile_path is not NULL, this will be blank)
  */
 function make_csv($data, $filename = 'data.csv', $headers = true, $output_and_exit = true, $outfile_path = null)
@@ -462,7 +462,7 @@ function get_directory_size($path, $recurse = true)
 /**
  * Get the URL to the config option group for editing limits
  *
- * @return ?URLPATH                     The URL to the config option group for editing limits (NULL: no access)
+ * @return ?URLPATH                     The URL to the config option group for editing limits (null: no access)
  */
 function get_upload_limit_config_url()
 {
@@ -478,8 +478,8 @@ function get_upload_limit_config_url()
 /**
  * Get the maximum allowed upload filesize, as specified in the configuration
  *
- * @param  ?MEMBER                      Member we consider quota for (NULL: do not consider quota)
- * @param  ?object                      Database connection to get quota from (NULL: site DB)
+ * @param  ?MEMBER                      Member we consider quota for (null: do not consider quota)
+ * @param  ?object                      Database connection to get quota from (null: site DB)
  * @return integer                      The maximum allowed upload filesize, in bytes
  */
 function get_max_file_size($source_member = null, $connection = null)
@@ -531,7 +531,7 @@ function get_max_file_size($source_member = null, $connection = null)
  *
  * @param  string                       The filename
  * @param  boolean                      Whether to skip the server side security check
- * @param  ?string                      Delete this file if we have to exit (NULL: no file to delete)
+ * @param  ?string                      Delete this file if we have to exit (null: no file to delete)
  * @param  boolean                      Whether to allow errors without dying
  * @return boolean                      Success status
  */
@@ -605,7 +605,7 @@ function check_extension($name, $skip_server_side_security_check = false, $file_
  * @param  ID_TEXT                      The table field name
  * @param  mixed                        The table ID field name, or a map array
  * @param  mixed                        The table ID
- * @param  ?string                      The new URL to use (NULL: deleting without replacing: no change check)
+ * @param  ?string                      The new URL to use (null: deleting without replacing: no change check)
  */
 function delete_upload($upload_path, $table, $field, $id_field, $id, $new_url = null)
 {
@@ -690,26 +690,26 @@ function check_shared_space_usage($extra)
  * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
  *
  * @param  URLPATH                      The URL to download
- * @param  ?integer                     The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
+ * @param  ?integer                     The number of bytes to download. This is not a guarantee, it is a minimum (null: all bytes)
  * @range  1 max
  * @param  boolean                      Whether to throw an ocPortal error, on error
  * @param  boolean                      Whether to block redirects (returns NULL when found)
  * @param  string                       The user-agent to identify as
- * @param  ?array                       An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
- * @param  ?array                       An optional array of cookies to send (NULL: none)
- * @param  ?string                      'accept' header value (NULL: don't pass one)
- * @param  ?string                      'accept-charset' header value (NULL: don't pass one)
- * @param  ?string                      'accept-language' header value (NULL: don't pass one)
- * @param  ?resource                    File handle to write to (NULL: do not do that)
- * @param  ?string                      The HTTP referer (NULL: none)
- * @param  ?array                       A pair: authentication username and password (NULL: none)
+ * @param  ?array                       An optional array of POST parameters to send; if this is NULL, a GET request is used (null: none)
+ * @param  ?array                       An optional array of cookies to send (null: none)
+ * @param  ?string                      'accept' header value (null: don't pass one)
+ * @param  ?string                      'accept-charset' header value (null: don't pass one)
+ * @param  ?string                      'accept-language' header value (null: don't pass one)
+ * @param  ?resource                    File handle to write to (null: do not do that)
+ * @param  ?string                      The HTTP referer (null: none)
+ * @param  ?array                       A pair: authentication username and password (null: none)
  * @param  float                        The timeout
  * @param  boolean                      Whether to treat the POST parameters as a raw POST (rather than using MIME)
- * @param  ?array                       Files to send. Map between field to file path (NULL: none)
- * @param  ?array                       Extra headers to send (NULL: none)
- * @param  ?string                      HTTP verb (NULL: auto-decide based on other parameters)
+ * @param  ?array                       Files to send. Map between field to file path (null: none)
+ * @param  ?array                       Extra headers to send (null: none)
+ * @param  ?string                      HTTP verb (null: auto-decide based on other parameters)
  * @param  string                       The content type to use if a raw HTTP post
- * @return ?string                      The data downloaded (NULL: error)
+ * @return ?string                      The data downloaded (null: error)
  */
 function _http_download_file($url, $byte_limit = null, $trigger_error = true, $no_redirect = false, $ua = 'ocPortal', $post_params = null, $cookies = null, $accept = null, $accept_charset = null, $accept_language = null, $write_to_file = null, $referer = null, $auth = null, $timeout = 6.0, $raw_post = false, $files = null, $extra_headers = null, $http_verb = null, $raw_content_type = 'application/xml')
 {

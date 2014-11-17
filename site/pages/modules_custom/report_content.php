@@ -20,7 +20,7 @@ class Module_report_content
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -46,8 +46,8 @@ class Module_report_content
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (NULL: new install)
-     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 What version we're upgrading from (null: new install)
+     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -71,7 +71,7 @@ class Module_report_content
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run()
     {

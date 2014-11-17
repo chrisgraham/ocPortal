@@ -179,7 +179,7 @@ function reconstitute_booking_requests(&$request)
 /**
  * Find the future booking(s) IDs owned by a member.
  *
- * @param  ?MEMBER                      Member ID (NULL: current user).
+ * @param  ?MEMBER                      Member ID (null: current user).
  * @return array                        Booking IDs.
  */
 function get_future_member_booking_ids($member = null)
@@ -352,10 +352,10 @@ function get_bookable_blacked_details_from_form()
  *
  * @param  array                        Bookable details.
  * @param  array                        List of codes.
- * @param  ?array                       List of black-outs (NULL: none).
- * @param  ?array                       List of supplements (NULL: none).
- * @param  ?TIME                        Add date (NULL: now).
- * @param  ?MEMBER                      Submitting user (NULL: current user).
+ * @param  ?array                       List of black-outs (null: none).
+ * @param  ?array                       List of supplements (null: none).
+ * @param  ?TIME                        Add date (null: now).
+ * @param  ?MEMBER                      Submitting user (null: current user).
  * @return AUTO_LINK                    Bookable ID.
  */
 function add_bookable($bookable_details, $codes, $blacked = null, $supplements = null, $add_date = null, $submitter = null)
@@ -429,8 +429,8 @@ function add_bookable($bookable_details, $codes, $blacked = null, $supplements =
  * @param  AUTO_LINK                    Bookable ID.
  * @param  array                        Bookable details.
  * @param  array                        List of codes.
- * @param  ?array                       List of black-outs (NULL: no change).
- * @param  ?array                       List of supplements (NULL: no change).
+ * @param  ?array                       List of black-outs (null: no change).
+ * @param  ?array                       List of supplements (null: no change).
  */
 function edit_bookable($bookable_id, $bookable_details, $codes, $blacked = null, $supplements = null)
 {
@@ -532,7 +532,7 @@ function delete_bookable($bookable_id)
  * Add a bookable supplement.
  *
  * @param  array                        Supplement details.
- * @param  ?array                       List of bookables to associate to (NULL: none).
+ * @param  ?array                       List of bookables to associate to (null: none).
  * @return AUTO_LINK                    Supplement ID.
  */
 function add_bookable_supplement($details, $bookables = null)
@@ -567,7 +567,7 @@ function add_bookable_supplement($details, $bookables = null)
  *
  * @param  AUTO_LINK                    Supplement ID.
  * @param  array                        Supplement details.
- * @param  ?array                       List of bookables to associate to (NULL: no change).
+ * @param  ?array                       List of bookables to associate to (null: no change).
  */
 function edit_bookable_supplement($supplement_id, $details, $bookables = null)
 {
@@ -627,7 +627,7 @@ function delete_bookable_supplement($supplement_id)
  * Add a bookable blacked.
  *
  * @param  array                        Blacked details.
- * @param  ?array                       List of bookables to associate to (NULL: none).
+ * @param  ?array                       List of bookables to associate to (null: none).
  * @return AUTO_LINK                    Blacked ID.
  */
 function add_bookable_blacked($details, $bookables = null)
@@ -659,7 +659,7 @@ function add_bookable_blacked($details, $bookables = null)
  *
  * @param  AUTO_LINK                    Blacked ID.
  * @param  array                        Blacked details.
- * @param  ?array                       List of bookables to associate to (NULL: no change).
+ * @param  ?array                       List of bookables to associate to (null: no change).
  */
 function edit_bookable_blacked($blacked_id, $details, $bookables = null)
 {

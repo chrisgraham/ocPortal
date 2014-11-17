@@ -88,9 +88,9 @@ function put_in_standard_box($content, $title = '', $type = 'default', $width = 
  *
  * @param  mixed                        The title to use (usually, a language string code, see below)
  * @param  boolean                      Whether the given title is actually a language string code, and hence gets dereferenced
- * @param  ?array                       Parameters sent to the language string (NULL: none)
- * @param  ?tempcode                    Separate title to put into the 'currently viewing' data (NULL: use $title)
- * @param  ?array                       Awards to say this has won (NULL: none)
+ * @param  ?array                       Parameters sent to the language string (null: none)
+ * @param  ?tempcode                    Separate title to put into the 'currently viewing' data (null: use $title)
+ * @param  ?array                       Awards to say this has won (null: none)
  * @return tempcode                     The title tempcode
  */
 function get_screen_title($title, $dereference_lang = true, $params = null, $user_online_title = null, $awards = null)
@@ -165,10 +165,10 @@ function get_screen_title($title, $dereference_lang = true, $params = null, $use
  * @param  boolean                      Whether the link is an external one (by default, the external template makes it open in a new window)
  * @param  boolean                      Whether to escape the hyperlink caption (only applies if it is not passed as tempcode)
  * @param  mixed                        Link title (either tempcode or string) (blank: none)
- * @param  ?string                      The access key to use (NULL: none)
- * @param  ?tempcode                    Data to post (NULL: an ordinary link)
- * @param  ?string                      Rel (link type) (NULL: no special type)
- * @param  ?ID_TEXT                     Open in overlay with the default link/form target being as follows (e.g. _top or _self) (NULL: an ordinary link)
+ * @param  ?string                      The access key to use (null: none)
+ * @param  ?tempcode                    Data to post (null: an ordinary link)
+ * @param  ?string                      Rel (link type) (null: no special type)
+ * @param  ?ID_TEXT                     Open in overlay with the default link/form target being as follows (e.g. _top or _self) (null: an ordinary link)
  * @return tempcode                     The generated hyperlink
  */
 function hyperlink($url, $caption, $external = false, $escape = false, $title = '', $accesskey = null, $post_data = null, $rel = null, $overlay = null)
@@ -190,7 +190,7 @@ function hyperlink($url, $caption, $external = false, $escape = false, $title = 
  *
  * @param  mixed                        The text to put into the paragraph (string or tempcode)
  * @param  string                       GUID for call
- * @param  ?string                      CSS classname (NULL: none)
+ * @param  ?string                      CSS classname (null: none)
  * @return tempcode                     The generated paragraph
  */
 function paragraph($text, $guid = '', $class = null)
@@ -318,7 +318,7 @@ function with_whitespace($in)
  *
  * @param  tempcode                     Title to display on redirect page
  * @param  mixed                        Destination URL (may be Tempcode)
- * @param  ?mixed                       Message to show (may be Tempcode) (NULL: standard redirection message)
+ * @param  ?mixed                       Message to show (may be Tempcode) (null: standard redirection message)
  * @param  boolean                      For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
  * @param  ID_TEXT                      Code of message type to show
  * @set    warn inform fatal

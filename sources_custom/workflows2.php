@@ -28,7 +28,7 @@
  *
  * @param  array                        Language string bits
  * @param  AUTO_LINK                    The ID of the workflow to add this approval point to
- * @param  ?integer                     The position in the workflow that this approval point will have. NULL adds it to the end (NULL: default)
+ * @param  ?integer                     The position in the workflow that this approval point will have. NULL adds it to the end (null: default)
  * @return AUTO_LINK                    Requirement ID
  */
 function add_approval_point_to_workflow($bits, $workflow_id, $position = null)

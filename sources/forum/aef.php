@@ -49,7 +49,7 @@ class Forum_driver_aef extends Forum_driver_base
      * Attempt to to find the member's language from their forum profile. It converts between language-identifiers using a map (lang/map.ini).
      *
      * @param  MEMBER                   The member who's language needs to be fetched
-     * @return ?LANGUAGE_NAME           The member's language (NULL: unknown)
+     * @return ?LANGUAGE_NAME           The member's language (null: unknown)
      */
     public function forum_get_lang($member)
     {
@@ -232,7 +232,7 @@ class Forum_driver_aef extends Forum_driver_base
      * Get custom profile fields values for all 'ocp_' prefixed keys.
      *
      * @param  MEMBER                   The member ID
-     * @return ?array                   A map of the custom profile fields, key_suffix=>value (NULL: no fields)
+     * @return ?array                   A map of the custom profile fields, key_suffix=>value (null: no fields)
      */
     public function get_custom_fields($member)
     {
@@ -250,7 +250,7 @@ class Forum_driver_aef extends Forum_driver_base
      * Get a member row for the member of the given name.
      *
      * @param  SHORT_TEXT               The member name
-     * @return ?array                   The profile-row (NULL: not found)
+     * @return ?array                   The profile-row (null: not found)
      */
     public function get_mrow($name)
     {
@@ -475,14 +475,14 @@ class Forum_driver_aef extends Forum_driver_base
      * @param  LONG_TEXT                The post content in Comcode format
      * @param  string                   The topic title; must be same as content title if this is for a comment topic
      * @param  string                   This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
-     * @param  ?URLPATH                 URL to the content (NULL: do not make spacer post)
-     * @param  ?TIME                    The post time (NULL: use current time)
-     * @param  ?IP                      The post IP address (NULL: use current members IP address)
-     * @param  ?BINARY                  Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
-     * @param  ?BINARY                  Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  ?URLPATH                 URL to the content (null: do not make spacer post)
+     * @param  ?TIME                    The post time (null: use current time)
+     * @param  ?IP                      The post IP address (null: use current members IP address)
+     * @param  ?BINARY                  Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  ?BINARY                  Whether the topic is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
      * @param  boolean                  Whether to skip post checks
      * @param  SHORT_TEXT               The name of the poster
-     * @param  ?AUTO_LINK               ID of post being replied to (NULL: N/A)
+     * @param  ?AUTO_LINK               ID of post being replied to (null: N/A)
      * @param  boolean                  Whether the reply is only visible to staff
      * @return array                    Topic ID (may be NULL), and whether a hidden post has been made
      */
@@ -613,7 +613,7 @@ class Forum_driver_aef extends Forum_driver_base
      *
      * @param  string                   The forum name / ID
      * @param  SHORT_TEXT               The topic identifier
-     * @return ?integer                 The topic ID (NULL: not found)
+     * @return ?integer                 The topic ID (null: not found)
      */
     public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
     {
@@ -648,7 +648,7 @@ class Forum_driver_aef extends Forum_driver_base
      * @set    lasttime firsttime
      * @param  boolean                  Whether to limit to hot topics
      * @param  SHORT_TEXT               The topic description filter
-     * @return ?array                   The array of topics (NULL: error)
+     * @return ?array                   The array of topics (null: error)
      */
     public function show_forum_topics($name, $limit, $start, &$max_rows, $filter_topic_title = '', $show_first_posts = false, $date_key = 'lasttime', $hot = false, $filter_topic_description = '')
     {
@@ -773,9 +773,9 @@ class Forum_driver_aef extends Forum_driver_base
      * Get an array of members who are in at least one of the given array of groups.
      *
      * @param  array                    The array of groups
-     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
      * @param  integer                  Return primary members after this offset and secondary members after this offset
-     * @return ?array                   The array of members (NULL: no members)
+     * @return ?array                   The array of members (null: no members)
      */
     public function member_group_query($groups, $max = null, $start = 0)
     {
@@ -798,7 +798,7 @@ class Forum_driver_aef extends Forum_driver_base
      * This is the opposite of the get_next_member function.
      *
      * @param  MEMBER                   The member ID to decrement
-     * @return ?MEMBER                  The previous member ID (NULL: no previous member)
+     * @return ?MEMBER                  The previous member ID (null: no previous member)
      */
     public function get_previous_member($member)
     {
@@ -811,7 +811,7 @@ class Forum_driver_aef extends Forum_driver_base
      * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
      *
      * @param  MEMBER                   The member ID to increment
-     * @return ?MEMBER                  The next member ID (NULL: no next member)
+     * @return ?MEMBER                  The next member ID (null: no next member)
      */
     public function get_next_member($member)
     {
@@ -835,7 +835,7 @@ class Forum_driver_aef extends Forum_driver_base
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
      * @param  MEMBER                   The member ID
-     * @return ?SHORT_TEXT              The member name (NULL: member deleted)
+     * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
     {
@@ -886,8 +886,8 @@ class Forum_driver_aef extends Forum_driver_base
      * Find all members with a name matching the given SQL LIKE string.
      *
      * @param  string                   The pattern
-     * @param  ?integer                 Maximum number to return (limits to the most recent active) (NULL: no limit)
-     * @return ?array                   The array of matched members (NULL: none found)
+     * @param  ?integer                 Maximum number to return (limits to the most recent active) (null: no limit)
+     * @return ?array                   The array of matched members (null: none found)
      */
     public function get_matching_members($pattern, $limit = null)
     {
@@ -1241,7 +1241,7 @@ class Forum_driver_aef extends Forum_driver_base
      * Create a member login cookie.
      *
      * @param  MEMBER                   The member ID
-     * @param  ?SHORT_TEXT              The username (NULL: lookup)
+     * @param  ?SHORT_TEXT              The username (null: lookup)
      * @param  string                   The password
      */
     public function forum_create_cookie($id, $name, $password)
@@ -1311,7 +1311,7 @@ class Forum_driver_aef extends Forum_driver_base
      * All authorisation, cookies, and form-logins, are passed through this function.
      * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
      *
-     * @param  ?SHORT_TEXT              The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  ?SHORT_TEXT              The member username (null: don't use this in the authentication - but look it up using the ID if needed)
      * @param  MEMBER                   The member ID
      * @param  MD5                      The md5-hashed password
      * @param  string                   The raw password
@@ -1389,7 +1389,7 @@ class Forum_driver_aef extends Forum_driver_base
      * Gets a whole member row from the database.
      *
      * @param  MEMBER                   The member ID
-     * @return ?array                   The member row (NULL: no such member)
+     * @return ?array                   The member row (null: no such member)
      */
     public function get_member_row($member)
     {

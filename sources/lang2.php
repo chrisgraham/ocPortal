@@ -22,7 +22,7 @@
  * Edit a language string direct from something saved into the code.
  *
  * @param  ID_TEXT                      The language ID
- * @param  ?LANGUAGE_NAME               The language to use (NULL: users language)
+ * @param  ?LANGUAGE_NAME               The language to use (null: users language)
  */
 function inline_language_editing($codename, $lang)
 {
@@ -70,7 +70,7 @@ function inline_language_editing($codename, $lang)
 /**
  * Get a list of languages files for the given language. ONLY those that are overridden.
  *
- * @param  ?LANGUAGE_NAME               The language (NULL: uses the current language)
+ * @param  ?LANGUAGE_NAME               The language (null: uses the current language)
  * @return array                        The language files
  */
 function get_lang_files($lang = null)
@@ -214,7 +214,7 @@ function find_lang_content_names($ids)
 /**
  * Get a nice formatted XHTML listed language file selector for the given language.
  *
- * @param  ?LANGUAGE_NAME               The language (NULL: uses the current language)
+ * @param  ?LANGUAGE_NAME               The language (null: uses the current language)
  * @return tempcode                     The language file selector
  */
 function create_selection_list_lang_files($lang = null)
@@ -284,7 +284,7 @@ function lookup_language_full_name($code)
  * Get an array of all the INI description entries in the specified language.
  *
  * @param  LANGUAGE_NAME                The language
- * @param  ?ID_TEXT                     The language file (NULL: all non-custom language files)
+ * @param  ?ID_TEXT                     The language file (null: all non-custom language files)
  * @return array                        The language descriptions
  */
 function get_lang_file_descriptions($lang, $file = null)

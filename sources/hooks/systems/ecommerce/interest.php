@@ -27,7 +27,7 @@ class Hook_ecommerce_interest
      * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
      *
      * @param  ID_TEXT                  Product codename.
-     * @return ?tempcode                Input field in standard Tempcode format for fields (NULL: no identifier).
+     * @return ?tempcode                Input field in standard Tempcode format for fields (null: no identifier).
      */
     public function get_identifier_manual_field_inputter($type_code)
     {

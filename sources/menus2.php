@@ -30,7 +30,7 @@ function init__menus2()
 /**
  * Export a menu structure to a CSV file.
  *
- * @param  ?PATH                        The path to the CSV file (NULL: uploads/website_specific/ocp_menu_items.csv).
+ * @param  ?PATH                        The path to the CSV file (null: uploads/website_specific/ocp_menu_items.csv).
  */
 function export_menu_csv($file_path = null)
 {
@@ -58,7 +58,7 @@ function export_menu_csv($file_path = null)
  * This function is intended for programmers, writing upgrade scripts for a custom site (dev>staging>live).
  * Assumes CSV was generated with export_menu_csv.
  *
- * @param  ?PATH                        The path to the CSV file (NULL: uploads/website_specific/ocp_menu_items.csv).
+ * @param  ?PATH                        The path to the CSV file (null: uploads/website_specific/ocp_menu_items.csv).
  */
 function import_menu_csv($file_path = null)
 {
@@ -148,7 +148,7 @@ function menu_management_script()
  * Add a menu item, without giving tedious/unnecessary detail.
  *
  * @param  SHORT_TEXT                   The name of the menu to add the item to.
- * @param  ?mixed                       The menu item ID of the parent branch of the menu item (AUTO_LINK) / the URL of something else on the same menu (URLPATH) (NULL: is on root).
+ * @param  ?mixed                       The menu item ID of the parent branch of the menu item (AUTO_LINK) / the URL of something else on the same menu (URLPATH) (null: is on root).
  * @param  SHORT_TEXT                   The caption.
  * @param  SHORT_TEXT                   The URL (in entry point form).
  * @param  BINARY                       Whether it is an expanded branch.
@@ -158,7 +158,7 @@ function menu_management_script()
  * @param  BINARY                       Whether the link will open in a new window.
  * @param  ID_TEXT                      The theme image code.
  * @param  SHORT_INTEGER                An INCLUDE_SITEMAP_* constant
- * @param  ?integer                     Order to use (NULL: automatic, after the ones that have it specified).
+ * @param  ?integer                     Order to use (null: automatic, after the ones that have it specified).
  * @return AUTO_LINK                    The ID of the newly added menu item.
  */
 function add_menu_item_simple($menu, $parent, $caption, $url = '', $expanded = 0, $check_permissions = 0, $dereference_caption = true, $caption_long = '', $new_window = 0, $theme_image_code = '', $include_sitemap = 0, $order = null)
@@ -204,7 +204,7 @@ function delete_menu_item_simple($url)
  *
  * @param  SHORT_TEXT                   The name of the menu to add the item to.
  * @param  integer                      The relative order of this item on the menu.
- * @param  ?AUTO_LINK                   The menu item ID of the parent branch of the menu item (NULL: is on root).
+ * @param  ?AUTO_LINK                   The menu item ID of the parent branch of the menu item (null: is on root).
  * @param  SHORT_TEXT                   The caption.
  * @param  SHORT_TEXT                   The URL (in entry point form).
  * @param  BINARY                       Whether people who may not view the entry point do not see the link.
@@ -214,7 +214,7 @@ function delete_menu_item_simple($url)
  * @param  SHORT_TEXT                   The tooltip (blank: none).
  * @param  ID_TEXT                      The theme image code.
  * @param  SHORT_INTEGER                An INCLUDE_SITEMAP_* constant
- * @param  ?AUTO_LINK                   The ID (NULL: auto-increment)
+ * @param  ?AUTO_LINK                   The ID (null: auto-increment)
  * @return AUTO_LINK                    The ID of the newly added menu item.
  */
 function add_menu_item($menu, $order, $parent, $caption, $url, $check_permissions, $page_only, $expanded, $new_window, $caption_long, $theme_image_code = '', $include_sitemap = 0, $id = null)
@@ -254,7 +254,7 @@ function add_menu_item($menu, $order, $parent, $caption, $url, $check_permission
  * @param  AUTO_LINK                    The ID of the menu item to edit.
  * @param  SHORT_TEXT                   The name of the menu to add the item to.
  * @param  integer                      The relative order of this item on the menu.
- * @param  ?AUTO_LINK                   The menu item ID of the parent branch of the menu item (NULL: is on root).
+ * @param  ?AUTO_LINK                   The menu item ID of the parent branch of the menu item (null: is on root).
  * @param  SHORT_TEXT                   The caption.
  * @param  SHORT_TEXT                   The URL (in entry point form).
  * @param  BINARY                       Whether people who may not view the entry point do not see the link.
@@ -362,7 +362,7 @@ function copy_from_sitemap_to_new_menu($target_menu, $source)
  * @param  ID_TEXT                      The ID of the menu to save into.
  * @param  array                        Sitemap node, containing children.
  * @param  integer                      Sequence order to save with.
- * @param  ?AUTO_LINK                   Menu parent ID (NULL: root).
+ * @param  ?AUTO_LINK                   Menu parent ID (null: root).
  */
 function _copy_from_sitemap_to_new_menu($target_menu, $node, &$order, $parent = null)
 {

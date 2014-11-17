@@ -253,7 +253,7 @@ function extract_html_body($html)
  *
  * @param  string                       The text to perform on.
  * @param  integer                      The start position of the cut (HTML tags will be taken from before this though).
- * @param  ?integer                     The length you want the concatenated text to be (NULL: go to end).
+ * @param  ?integer                     The length you want the concatenated text to be (null: go to end).
  * @param  boolean                      Whether to do a substr based on literal position in XHTML, rather than based on number of visible characters.
  * @param  boolean                      Whether to add ellipses.
  * @param  float                        A fraction of the length we may exceed by in order to maintain grammar tolerance (finish sentences, finish paragraphs, finish the whole thing).

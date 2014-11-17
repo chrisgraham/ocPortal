@@ -26,7 +26,7 @@ class Block_main_members
     /**
      * Find details of the block.
      *
-     * @return ?array                   Map of block info (NULL: block is disabled).
+     * @return ?array                   Map of block info (null: block is disabled).
      */
     public function info()
     {
@@ -61,12 +61,12 @@ class Block_main_members
     /**
      * Find cacheing details for the block.
      *
-     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
      */
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = '(strpos(serialize($_GET),\'filter_\')!==false)?NULL:array(
+        $info['cache_on'] = '(strpos(serialize($_GET),\'filter_\')!==false)?null:array(
             array_key_exists(\'display_mode\',$map)?$map[\'display_mode\']:\'avatars\',
             array_key_exists(\'must_have_avatar\',$map)?($map[\'must_have_avatar\']==\'1\'):false,
             array_key_exists(\'must_have_photo\',$map)?($map[\'must_have_photo\']==\'1\'):false,

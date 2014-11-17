@@ -33,8 +33,8 @@ Viewing attachments (but not direct rendering - that is in media_rendering.php).
  * @param  MEMBER                       The member who is responsible for this Comcode
  * @param  boolean                      Whether to check as arbitrary admin
  * @param  object                       The database connection to use
- * @param  ?array                       A list of words to highlight (NULL: none)
- * @param  ?MEMBER                      The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
+ * @param  ?array                       A list of words to highlight (null: none)
+ * @param  ?MEMBER                      The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (null: member evaluating)
  * @param  boolean                      Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
  * @return tempcode                     The tempcode for the attachment
  */
@@ -124,7 +124,7 @@ function render_attachment($tag, $attributes, $attachment_row, $pass_id, $source
  *
  * @param  MEMBER                       The member being checked whether to have the access
  * @param  AUTO_LINK                    The ID code for the attachment being checked
- * @param  ?object                      The database connection to use (NULL: site DB)
+ * @param  ?object                      The database connection to use (null: site DB)
  * @return boolean                      Whether the member has attachment access
  */
 function has_attachment_access($member, $id, $connection = null)

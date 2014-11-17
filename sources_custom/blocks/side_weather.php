@@ -21,7 +21,7 @@ class Block_side_weather
     /**
      * Find details of the block.
      *
-     * @return ?array                   Map of block info (NULL: block is disabled).
+     * @return ?array                   Map of block info (null: block is disabled).
      */
     public function info()
     {
@@ -48,8 +48,8 @@ class Block_side_weather
     /**
      * Install the block.
      *
-     * @param  ?integer                 What version we're upgrading from (NULL: new install)
-     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 What version we're upgrading from (null: new install)
+     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -63,12 +63,12 @@ class Block_side_weather
     /**
      * Find cacheing details for the block.
      *
-     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
      */
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = 'array(isset($map[\'max_days\'])?intval($map[\'max_days\']):2,cron_installed()?NULL:$GLOBALS[\'FORUM_DRIVER\']->is_staff(get_member()),(array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+        $info['cache_on'] = 'array(isset($map[\'max_days\'])?intval($map[\'max_days\']):2,cron_installed()?null:$GLOBALS[\'FORUM_DRIVER\']->is_staff(get_member()),(array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
         $info['ttl'] = 60;
         return $info;
     }

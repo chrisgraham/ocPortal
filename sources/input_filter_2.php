@@ -74,7 +74,7 @@ function array_count_recursive($arr)
  * Parse raw HTTP request data.
  * Based on https://gist.github.com/chlab/4283560
  *
- * @return  ?array   Associative array of request data (NULL: could not rescue)
+ * @return  ?array   Associative array of request data (null: could not rescue)
  */
 function parse_raw_http_request()
 {

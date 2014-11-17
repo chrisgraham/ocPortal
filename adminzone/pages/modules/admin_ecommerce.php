@@ -62,7 +62,7 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -80,10 +80,10 @@ class Module_admin_ecommerce extends Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -100,8 +100,8 @@ class Module_admin_ecommerce extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -184,14 +184,14 @@ class Module_admin_ecommerce extends Standard_crud_module
      * @param  SHORT_TEXT               The units for the length
      * @set    y m d w
      * @param  BINARY                   Auto-recur
-     * @param  ?GROUP                   The usergroup that purchasing gains membership to (NULL: super members)
+     * @param  ?GROUP                   The usergroup that purchasing gains membership to (null: super members)
      * @param  BINARY                   Whether this is applied to primary usergroup membership
      * @param  BINARY                   Whether this is currently enabled
-     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription is start (NULL: default)
-     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription is ended (NULL: default)
-     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (NULL: default)
-     * @param  ?array                   Other e-mails to send (NULL: none)
-     * @param  ?AUTO_LINK               ID of existing subscription (NULL: new)
+     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription is start (null: default)
+     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription is ended (null: default)
+     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (null: default)
+     * @param  ?array                   Other e-mails to send (null: none)
+     * @param  ?AUTO_LINK               ID of existing subscription (null: new)
      * @return array                    Tuple: The input fields, The hidden fields, The delete fields
      */
     public function get_form_fields($title = '', $description = '', $cost = '9.99', $length = 12, $length_units = 'm', $auto_recur = 1, $group_id = null, $uses_primary = 0, $enabled = 1, $mail_start = null, $mail_end = null, $mail_uhoh = null, $mails = null, $id = null)

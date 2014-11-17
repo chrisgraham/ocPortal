@@ -27,23 +27,23 @@
  * @param  BINARY                       Whether members of this usergroup are all super moderators.
  * @param  SHORT_TEXT                   The title for primary members of this usergroup that don't have their own title.
  * @param  URLPATH                      The rank image for this.
- * @param  ?GROUP                       The that members of this usergroup get promoted to at point threshold (NULL: no promotion prospects).
- * @param  ?integer                     The point threshold for promotion (NULL: no promotion prospects).
- * @param  ?MEMBER                      The leader of this usergroup (NULL: none).
- * @param  ?integer                     The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
- * @param  ?integer                     The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
- * @param  ?integer                     The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer                     The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer                     The maximum avatar width that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer                     The maximum avatar height that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer                     The maximum post length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer                     The maximum signature length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer                     The number of gift points that members of this usergroup start with (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer                     The number of gift points that members of this usergroup get per day (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?GROUP                       The that members of this usergroup get promoted to at point threshold (null: no promotion prospects).
+ * @param  ?integer                     The point threshold for promotion (null: no promotion prospects).
+ * @param  ?MEMBER                      The leader of this usergroup (null: none).
+ * @param  ?integer                     The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). 0 means N/A. (null: average for existing usergroups)
+ * @param  ?integer                     The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). 0 means N/A. (null: average for existing usergroups)
+ * @param  ?integer                     The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (null: average for existing usergroups)
+ * @param  ?integer                     The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (null: average for existing usergroups)
+ * @param  ?integer                     The maximum avatar width that members of this usergroup may have (group 'best of' applies). (null: average for existing usergroups)
+ * @param  ?integer                     The maximum avatar height that members of this usergroup may have (group 'best of' applies). (null: average for existing usergroups)
+ * @param  ?integer                     The maximum post length that members of this usergroup may make (group 'best of' applies). (null: average for existing usergroups)
+ * @param  ?integer                     The maximum signature length that members of this usergroup may make (group 'best of' applies). (null: average for existing usergroups)
+ * @param  ?integer                     The number of gift points that members of this usergroup start with (group 'best of' applies). (null: average for existing usergroups)
+ * @param  ?integer                     The number of gift points that members of this usergroup get per day (group 'best of' applies). (null: average for existing usergroups)
  * @param  BINARY                       Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies).
  * @param  BINARY                       Whether the usergroup is presented for joining at joining (implies anyone may be in the, but only choosable at joining)
  * @param  BINARY                       Whether the name and membership of the is hidden
- * @param  ?integer                     The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (NULL: next).
+ * @param  ?integer                     The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (null: next).
  * @param  BINARY                       Whether the rank image will not be shown for secondary membership
  * @param  BINARY                       Whether members may join this usergroup without requiring any special permission
  * @param  BINARY                       Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.

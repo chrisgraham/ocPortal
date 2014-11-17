@@ -171,9 +171,9 @@ function get_nested_csv_structure()
  * Query the CSV files.
  *
  * @param  ID_TEXT                      Filename
- * @param  ?ID_TEXT                     Name of field we know (NULL: we know nothing special - i.e. no filtering)
- * @param  ?ID_TEXT                     Value of field we know (NULL: we know nothing special - i.e. no filtering)
- * @param  ?ID_TEXT                     Name of field we want (NULL: all fields in an array)
+ * @param  ?ID_TEXT                     Name of field we know (null: we know nothing special - i.e. no filtering)
+ * @param  ?ID_TEXT                     Value of field we know (null: we know nothing special - i.e. no filtering)
+ * @param  ?ID_TEXT                     Name of field we want (null: all fields in an array)
  * @return array                        List of possibilities
  */
 function get_csv_data_values($csv_file, $known_field_key = null, $known_field_value = null, $desired_field = null)
@@ -190,7 +190,7 @@ function get_csv_data_values($csv_file, $known_field_key = null, $known_field_va
  *
  * @param  ID_TEXT                      Filename
  * @param  array                        Map of ANDd constraints
- * @param  ?ID_TEXT                     Name of field we want (NULL: all fields in an array)
+ * @param  ?ID_TEXT                     Name of field we want (null: all fields in an array)
  * @return array                        List of possibilities
  */
 function get_csv_data_values__and($csv_file, $map, $desired_field = null)

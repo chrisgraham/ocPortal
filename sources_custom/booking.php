@@ -55,7 +55,7 @@ function booking_price_ajax_script()
  *
  * @param  array                        Booking details structure to check, passed by reference as statuses get added.
  * @param  array                        Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
- * @return ?tempcode                    Error message (NULL: no issue).
+ * @return ?tempcode                    Error message (null: no issue).
  */
 function check_booking_dates_available(&$request, $ignore_bookings)
 {
@@ -181,8 +181,8 @@ function get_booking_request_from_form()
  *
  * @param  array                        Booking details structure.
  * @param  array                        Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
- * @param  ?MEMBER                      The member ID we are saving as (NULL: current user).
- * @return ?array                       Booking details structure (NULL: error -- reshow form).
+ * @param  ?MEMBER                      The member ID we are saving as (null: current user).
+ * @return ?array                       Booking details structure (null: error -- reshow form).
  */
 function save_booking_form_to_db($request, $ignore_bookings, $member_id = null)
 {
@@ -278,7 +278,7 @@ function add_booking($request, $member_id)
  * @param  integer                      Month.
  * @param  integer                      Year.
  * @param  ID_TEXT                      Preferred code (often passed in as the last code provided, in order to provide continuity to guests).
- * @return ?ID_TEXT                     The code (NULL: could not find a code).
+ * @return ?ID_TEXT                     The code (null: could not find a code).
  */
 function find_free_bookable_code($bookable_id, $day, $month, $year, $preferred_code)
 {
@@ -399,7 +399,7 @@ function days_in_range($start_day, $start_month, $start_year, $end_day, $end_mon
  * @param  integer                      Year.
  * @param  integer                      Quantity needed.
  * @param  array                        Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
- * @return ?tempcode                    Error message (NULL: no issue).
+ * @return ?tempcode                    Error message (null: no issue).
  */
 function booking_date_available($bookable_id, $day, $month, $year, $quantity, $ignore_bookings)
 {

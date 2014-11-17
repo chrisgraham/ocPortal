@@ -148,7 +148,7 @@ function date_from_week_of_year($year, $week)
 /**
  * Find a list of pairs specifying the times the event occurs, for 20 years into the future, in user-time.
  *
- * @param  ID_TEXT                      The timezone for the event (NULL: current user's timezone)
+ * @param  ID_TEXT                      The timezone for the event (null: current user's timezone)
  * @param  BINARY                       Whether the time should be converted to the viewer's own timezone
  * @param  integer                      The year the event starts at. This and the below are in server time
  * @param  integer                      The month the event starts at
@@ -157,17 +157,17 @@ function date_from_week_of_year($year, $week)
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  integer                      The hour the event starts at
  * @param  integer                      The minute the event starts at
- * @param  ?integer                     The year the event ends at (NULL: not a multi day event)
- * @param  ?integer                     The month the event ends at (NULL: not a multi day event)
- * @param  ?integer                     The day the event ends at (NULL: not a multi day event)
+ * @param  ?integer                     The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     The day the event ends at (null: not a multi day event)
  * @param  ID_TEXT                      In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (NULL: not a multi day event / all day event)
- * @param  ?integer                     The minute the event ends at (NULL: not a multi day event / all day event)
+ * @param  ?integer                     The hour the event ends at (null: not a multi day event / all day event)
+ * @param  ?integer                     The minute the event ends at (null: not a multi day event / all day event)
  * @param  string                       The event recurrence
- * @param  ?integer                     The number of recurrences (NULL: none/infinite)
- * @param  ?TIME                        The timestamp that found times must exceed. In user-time (NULL: now)
- * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (NULL: 20 years time)
+ * @param  ?integer                     The number of recurrences (null: none/infinite)
+ * @param  ?TIME                        The timestamp that found times must exceed. In user-time (null: now)
+ * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (null: 20 years time)
  * @return array                        A list of pairs for period times (timestamps, in user-time). Actually a series of pairs, 'window-bound timestamps' is first pair, then 'true coverage timestamps', then 'true coverage timestamps without timezone conversions'
  */
 function find_periods_recurrence($timezone, $do_timezone_conv, $start_year, $start_month, $start_day, $start_monthly_spec_type, $start_hour, $start_minute, $end_year, $end_month, $end_day, $end_monthly_spec_type, $end_hour, $end_minute, $recurrence, $recurrences, $period_start = null, $period_end = null)
@@ -464,8 +464,8 @@ function get_days_between($initial_start_month, $initial_start_day, $initial_sta
 /**
  * Get a list of event types, taking security into account against the current member.
  *
- * @param  ?AUTO_LINK                   The event type to select by default (NULL: none)
- * @param  ?TIME                        Time from which content must be updated (NULL: no limit).
+ * @param  ?AUTO_LINK                   The event type to select by default (null: none)
+ * @param  ?TIME                        Time from which content must be updated (null: no limit).
  * @return tempcode                     The list
  */
 function create_selection_list_event_types($it = null, $updated_since = null)
@@ -613,11 +613,11 @@ function date_range($from, $to, $do_time = true, $force_absolute = false)
  * @param  MEMBER                       The member we are running authentication against
  * @param  MEMBER                       The member to detect matches for
  * @param  boolean                      Whether to restrict only to viewable events for the current member (rarely pass this as false!)
- * @param  ?TIME                        The timestamp that found times must exceed. In user-time (NULL: use find_periods_recurrence default)
- * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (NULL: use find_periods_recurrence default)
- * @param  ?array                       The type filter (NULL: none)
+ * @param  ?TIME                        The timestamp that found times must exceed. In user-time (null: use find_periods_recurrence default)
+ * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (null: use find_periods_recurrence default)
+ * @param  ?array                       The type filter (null: none)
  * @param  boolean                      Whether to include RSS/iCal events in the results
- * @param  ?BINARY                      Whether to show private events (1) or public events (0) (NULL: both public and private)
+ * @param  ?BINARY                      Whether to show private events (1) or public events (0) (null: both public and private)
  * @return array                        A list of events happening, with time details
  */
 function calendar_matches($auth_member_id, $member_id, $restrict, $period_start, $period_end, $filter = null, $do_rss = true, $private = null)
@@ -837,8 +837,8 @@ function calendar_matches($auth_member_id, $member_id, $restrict, $period_start,
 /**
  * Get a list of events to edit.
  *
- * @param  ?MEMBER                      Only show events owned by this member (NULL: no such limitation)
- * @param  ?AUTO_LINK                   Event to select by default (NULL: no specific default)
+ * @param  ?MEMBER                      Only show events owned by this member (null: no such limitation)
+ * @param  ?AUTO_LINK                   Event to select by default (null: no specific default)
  * @param  boolean                      Whether owned public events should be shown
  * @return tempcode                     The list
  */
@@ -869,27 +869,27 @@ function create_selection_list_events($only_owned, $it, $edit_viewable_events = 
  * NB: Only detects future conflicts, not conflicts on past scheduling.
  *
  * @param  MEMBER                       The member to detect conflicts for
- * @param  ?AUTO_LINK                   The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (NULL: not added yet)
- * @param  ?integer                     The year the event starts at. This and the below are in server time (NULL: default)
- * @param  ?integer                     The month the event starts at (NULL: default)
- * @param  ?integer                     The day the event starts at (NULL: default)
+ * @param  ?AUTO_LINK                   The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (null: not added yet)
+ * @param  ?integer                     The year the event starts at. This and the below are in server time (null: default)
+ * @param  ?integer                     The month the event starts at (null: default)
+ * @param  ?integer                     The day the event starts at (null: default)
  * @param  ID_TEXT                      In-month specification type for start date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event starts at (NULL: default)
- * @param  ?integer                     The minute the event starts at (NULL: default)
- * @param  ?integer                     The year the event ends at (NULL: not a multi day event)
- * @param  ?integer                     The month the event ends at (NULL: not a multi day event)
- * @param  ?integer                     The day the event ends at (NULL: not a multi day event)
+ * @param  ?integer                     The hour the event starts at (null: default)
+ * @param  ?integer                     The minute the event starts at (null: default)
+ * @param  ?integer                     The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     The day the event ends at (null: not a multi day event)
  * @param  ID_TEXT                      In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (NULL: not a multi day event)
- * @param  ?integer                     The minute the event ends at (NULL: not a multi day event)
+ * @param  ?integer                     The hour the event ends at (null: not a multi day event)
+ * @param  ?integer                     The minute the event ends at (null: not a multi day event)
  * @param  string                       The event recurrence
- * @param  ?integer                     The number of recurrences (NULL: none/infinite)
+ * @param  ?integer                     The number of recurrences (null: none/infinite)
  * @param  AUTO_LINK                    The event type
- * @param  ?MEMBER                      The member calendar (NULL: none)
+ * @param  ?MEMBER                      The member calendar (null: none)
  * @param  integer                      The scope type, DETECT_CONFLICT_SCOPE_*
- * @return ?tempcode                    Information about conflicts (NULL: none)
+ * @return ?tempcode                    Information about conflicts (null: none)
  */
 function detect_conflicts($member_id, $skip_id, $start_year, $start_month, $start_day, $start_monthly_spec_type, $start_hour, $start_minute, $end_year, $end_month, $end_day, $end_monthly_spec_type, $end_hour, $end_minute, $recurrence, $recurrences, $type, $member_calendar, $scope_type)
 {
@@ -1063,8 +1063,8 @@ function find_timezone_end_minute_in_utc($timezone, $year, $month, $day, $monthl
  * @param  integer                      Day
  * @param  ID_TEXT                      In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     Hour (NULL: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
- * @param  ?integer                     Minute (NULL: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer                     Hour (null: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer                     Minute (null: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  boolean                      Whether the time should be converted to the $timezone instead instead of UTC.
  * @return TIME                         Timestamp
  */
@@ -1128,8 +1128,8 @@ function cal_get_start_utctime_for_event($timezone, $year, $month, $day, $monthl
  * @param  integer                      Day
  * @param  ID_TEXT                      In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     Hour (NULL: end hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
- * @param  ?integer                     Minute (NULL: end minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer                     Hour (null: end hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer                     Minute (null: end minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  boolean                      Whether the time should be converted to the viewer's own timezone instead.
  * @return TIME                         Timestamp
  */
@@ -1204,11 +1204,11 @@ function cal_utctime_to_usertime($utc_timestamp, $default_timezone, $show_in_use
  * Detect conflicts with an event in certain time periods.
  *
  * @param  MEMBER                       The member to detect conflicts for
- * @param  ?AUTO_LINK                   The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (NULL: not added yet)
+ * @param  ?AUTO_LINK                   The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (null: not added yet)
  * @param  array                        List of pairs specifying our happening time (in time order)
  * @param  boolean                      Whether to restrict only to viewable events for the current member
- * @param  ?TIME                        The timestamp that found times must exceed. In user-time (NULL: use find_periods_recurrence default)
- * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (NULL: use find_periods_recurrence default)
+ * @param  ?TIME                        The timestamp that found times must exceed. In user-time (null: use find_periods_recurrence default)
+ * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (null: use find_periods_recurrence default)
  * @return array                        A list of events happening, with time details
  */
 function detect_happening_at($member_id, $skip_id, $our_times, $restrict = true, $period_start = null, $period_end = null)
@@ -1643,7 +1643,7 @@ function end_find_concrete_day_of_month_wrap($event)
 /**
  * Find details of when an event happens. Preferably the next recurrence, but if it is in the past, the first.
  *
- * @param  ID_TEXT                      The timezone for the event (NULL: current user's timezone)
+ * @param  ID_TEXT                      The timezone for the event (null: current user's timezone)
  * @param  BINARY                       Whether the time should be converted to the viewer's own timezone
  * @param  integer                      The year the event starts at. This and the below are in server time
  * @param  integer                      The month the event starts at
@@ -1652,15 +1652,15 @@ function end_find_concrete_day_of_month_wrap($event)
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  integer                      The hour the event starts at
  * @param  integer                      The minute the event starts at
- * @param  ?integer                     The year the event ends at (NULL: not a multi day event)
- * @param  ?integer                     The month the event ends at (NULL: not a multi day event)
- * @param  ?integer                     The day the event ends at (NULL: not a multi day event)
+ * @param  ?integer                     The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     The day the event ends at (null: not a multi day event)
  * @param  ID_TEXT                      In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (NULL: not a multi day event / all day event)
- * @param  ?integer                     The minute the event ends at (NULL: not a multi day event / all day event)
+ * @param  ?integer                     The hour the event ends at (null: not a multi day event / all day event)
+ * @param  ?integer                     The minute the event ends at (null: not a multi day event / all day event)
  * @param  string                       The event recurrence
- * @param  ?integer                     The number of recurrences (NULL: none/infinite)
+ * @param  ?integer                     The number of recurrences (null: none/infinite)
  * @param  boolean                      Whether to forcibly get the first recurrence, not a future one
  * @return array                        A tuple: Written date [range], from timestamp, to timestamp
  */

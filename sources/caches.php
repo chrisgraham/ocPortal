@@ -64,8 +64,8 @@ function init__caches()
  * Get data from the persistent cache.
  *
  * @param  mixed                        Key
- * @param  ?TIME                        Minimum timestamp that entries from the cache may hold (NULL: don't care)
- * @return ?mixed                       The data (NULL: not found / NULL entry)
+ * @param  ?TIME                        Minimum timestamp that entries from the cache may hold (null: don't care)
+ * @return ?mixed                       The data (null: not found / NULL entry)
  */
 function persistent_cache_get($key, $min_cache_date = null)
 {
@@ -88,7 +88,7 @@ function persistent_cache_get($key, $min_cache_date = null)
  * @param  mixed                        Key
  * @param  mixed                        The data
  * @param  boolean                      Whether it is server-wide data
- * @param  ?integer                     The expiration time in seconds. (NULL: Default expiry in 60 minutes, or never if it is server-wide).
+ * @param  ?integer                     The expiration time in seconds. (null: Default expiry in 60 minutes, or never if it is server-wide).
  */
 function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = null)
 {
@@ -163,7 +163,7 @@ function erase_persistent_cache()
  * Remove an item from the general cache (most commonly used for blocks).
  *
  * @param  mixed                        The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
- * @param  ?array                       A map of identifiying characteristics (NULL: no identifying characteristics, decache all)
+ * @param  ?array                       A map of identifiying characteristics (null: no identifying characteristics, decache all)
  */
 function decache($cached_for, $identifier = null)
 {
@@ -179,7 +179,7 @@ function decache($cached_for, $identifier = null)
  * Find the cache-on parameters for 'codename's cacheing style (prevents us needing to load up extra code to find it).
  *
  * @param  ID_TEXT                      The codename of what will be checked for cacheing
- * @return ?array                       The cached result (NULL: no cached result)
+ * @return ?array                       The cached result (null: no cached result)
  */
 function find_cache_on($codename)
 {
@@ -206,8 +206,8 @@ function find_cache_on($codename)
  * @param  integer                      The TTL for the cache entry
  * @param  boolean                      Whether we are cacheing Tempcode (needs special care)
  * @param  boolean                      Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
- * @param  ?array                       Parameters to call up block with if we have to defer caching (NULL: none)
- * @return ?mixed                       The cached result (NULL: no cached result)
+ * @param  ?array                       Parameters to call up block with if we have to defer caching (null: none)
+ * @return ?mixed                       The cached result (null: no cached result)
  */
 function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode = false, $caching_via_cron = false, $map = null) // Default to a very big ttl
 {

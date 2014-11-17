@@ -377,7 +377,7 @@ function attach_message($message, $type = 'inform', $put_in_helper_panel = false
 /**
  * Get the relative URL to the logo for the current zone.
  *
- * @param  ?ID_TEXT                     The zone being operated within (NULL: auto-detect)
+ * @param  ?ID_TEXT                     The zone being operated within (null: auto-detect)
  * @return URLPATH                      The relative URL to the logo for the current zone
  */
 function get_logo_url($zone_name = null)
@@ -515,7 +515,7 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint = true)
  * @sets_output_state
  *
  * @param  tempcode                     The segment
- * @param  ?mixed                       The title of the follower of the segment OR an array as for breadcrumb_set_parents (NULL: implicit in $segment)
+ * @param  ?mixed                       The title of the follower of the segment OR an array as for breadcrumb_set_parents (null: implicit in $segment)
  */
 function breadcrumb_add_segment($segment, $final_title = null)
 {
@@ -974,12 +974,12 @@ function do_site()
  *
  * @param  ID_TEXT                      The codename of the page to load
  * @param  boolean                      Whether it is required for this page to exist (shows an error if it doesn't) -- otherwise, it will just return NULL
- * @param  ?ID_TEXT                     The zone the page is being loaded in (NULL: as shown by access URL)
- * @param  ?ID_TEXT                     The type of page - for if you know it (NULL: don't know it)
+ * @param  ?ID_TEXT                     The zone the page is being loaded in (null: as shown by access URL)
+ * @param  ?ID_TEXT                     The type of page - for if you know it (null: don't know it)
  * @param  boolean                      Whether the page is being included from another
  * @param  boolean                      Whether to not check for redirects (normally you would)
- * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
- * @return ?tempcode                    The page (NULL: no page)
+ * @param  ?object                      Semi-filled output template (null: definitely not doing output streaming)
+ * @return ?tempcode                    The page (null: no page)
  */
 function request_page($codename, $required, $zone = null, $page_type = null, $being_included = false, $no_redirect_check = false, &$out = null)
 {
@@ -1136,8 +1136,8 @@ function request_page($codename, $required, $zone = null, $page_type = null, $be
  *
  * @param  ID_TEXT                      The codename of the page to load
  * @param  ID_TEXT                      The zone the page is being loaded in
- * @param  ?ID_TEXT                     The type of page - for if you know it (NULL: don't know it)
- * @param  ?LANGUAGE_NAME               Language name (NULL: users language)
+ * @param  ?ID_TEXT                     The type of page - for if you know it (null: don't know it)
+ * @param  ?LANGUAGE_NAME               Language name (null: users language)
  * @param  boolean                      Whether to not check for redirects (normally you would)
  * @return ~array                       A list of details (false: page not found)
  */
@@ -1156,8 +1156,8 @@ function _request_page($codename, $zone, $page_type = null, $lang = null, $no_re
  *
  * @param  ID_TEXT                      The codename of the page to load
  * @param  ID_TEXT                      The zone the page is being loaded in
- * @param  ?ID_TEXT                     The type of page - for if you know it (NULL: don't know it)
- * @param  ?LANGUAGE_NAME               Language name (NULL: users language)
+ * @param  ?ID_TEXT                     The type of page - for if you know it (null: don't know it)
+ * @param  ?LANGUAGE_NAME               Language name (null: users language)
  * @param  boolean                      Whether to not check for redirects (normally you would)
  * @return ~array                       A list of details (false: page not found)
  */
@@ -1412,9 +1412,9 @@ function _request_page__redirects($codename, $zone, $wildcard_mode = false)
  * @param  PATH                         The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
  * @param  ID_TEXT                      The zone the page is being loaded from
  * @param  ID_TEXT                      The codename of the page
- * @param  ?PATH                        The file base to load from (NULL: standard)
+ * @param  ?PATH                        The file base to load from (null: standard)
  * @param  boolean                      Whether the page is being included from another
- * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @param  ?object                      Semi-filled output template (null: definitely not doing output streaming)
  * @return tempcode                     The page
  */
 function load_comcode_page($string, $zone, $codename, $file_base = null, $being_included = false, &$out = null)

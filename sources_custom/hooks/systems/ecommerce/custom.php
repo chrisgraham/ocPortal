@@ -139,7 +139,7 @@ class Hook_ecommerce_custom
     /**
      * Get fields that need to be filled in in the purchase wizard.
      *
-     * @return ?array                   The fields and message text (NULL: none).
+     * @return ?array                   The fields and message text (null: none).
      */
     public function get_needed_fields()
     {

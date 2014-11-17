@@ -66,7 +66,7 @@ function external_db()
  * Find who is logged into the remote system.
  * THIS FUNCTION NEEDS CUSTOMISING. It is currently written for one particular ASP.net system.
  *
- * @param  ?array                       User record for session (NULL: none).
+ * @param  ?array                       User record for session (null: none).
  */
 function external_db_user_from_session()
 {

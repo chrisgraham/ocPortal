@@ -106,7 +106,7 @@ function authors_script()
  * Get a member ID from an author name. First by trying authors table, second by trying forum usernames.
  *
  * @param  ID_TEXT                      The name of an author
- * @return ?MEMBER                      The member ID (NULL: none found)
+ * @return ?MEMBER                      The member ID (null: none found)
  */
 function get_author_id_from_name($author)
 {
@@ -119,11 +119,11 @@ function get_author_id_from_name($author)
  *
  * @param  ID_TEXT                      The name of an author
  * @param  URLPATH                      The URL to the authors home page
- * @param  ?MEMBER                      The member ID of the author (NULL: no forum profile)
+ * @param  ?MEMBER                      The member ID of the author (null: no forum profile)
  * @param  LONG_TEXT                    A description of the author
  * @param  LONG_TEXT                    A terse string showing author skills
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit) (blank: implicit)
  */
 function add_author($author, $url, $member_id, $description, $skills, $meta_keywords = '', $meta_description = '')
 {

@@ -73,7 +73,7 @@ class Hook_media_rendering_youtube extends Media_renderer_with_fallback
      * If we can handle this URL, get the thumbnail URL.
      *
      * @param  URLPATH                  Video URL
-     * @return ?string                  The thumbnail URL (NULL: no match).
+     * @return ?string                  The thumbnail URL (null: no match).
      */
     public function get_video_thumbnail($src_url)
     {
@@ -91,7 +91,7 @@ class Hook_media_rendering_youtube extends Media_renderer_with_fallback
      * @param  mixed                    URL to render (no sessions etc)
      * @param  array                    Attributes (e.g. width, height, length)
      * @param  boolean                  Whether there are admin privileges, to render dangerous media types
-     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @param  ?MEMBER                  Member to run as (null: current member)
      * @return tempcode                 Rendered version
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)

@@ -34,8 +34,8 @@ function init__antispam()
 /**
  * Should be called when an action happens that results in content submission. Does a spammer check.
  *
- * @param ?string    Check this particular username that has just been supplied (NULL: none)
- * @param ?string    Check this particular email address that has just been supplied (NULL: none)
+ * @param ?string    Check this particular username that has just been supplied (null: none)
+ * @param ?string    Check this particular email address that has just been supplied (null: none)
  */
 function inject_action_spamcheck($username = null, $email = null)
 {
@@ -51,7 +51,7 @@ function inject_action_spamcheck($username = null, $email = null)
  * Check RBLs to see if we need to block this user.
  *
  * @param boolean    Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
- * @param ?IP        IP address (NULL: current user's)
+ * @param ?IP        IP address (null: current user's)
  */
 function check_rbls($page_level = false, $user_ip = null)
 {
@@ -279,7 +279,7 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
  * @param  IP                           The IP address to lookup
  * @param  ID_TEXT                      The RBL domain
  * @param  boolean                      Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
- * @return ?array                       Return result (NULL: error)
+ * @return ?array                       Return result (null: error)
  */
 function rbl_resolve($ip, $rbl_domain, $page_level)
 {
@@ -376,8 +376,8 @@ function handle_perceived_spammer_by_confidence($user_ip, $confidence_level, $bl
 /**
  * Check the stopforumspam service to see if we need to block this user.
  *
- * @param ?string    Check this particular username that has just been supplied (NULL: none)
- * @param ?string    Check this particular email address that has just been supplied (NULL: none)
+ * @param ?string    Check this particular username that has just been supplied (null: none)
+ * @param ?string    Check this particular email address that has just been supplied (null: none)
  */
 function check_stopforumspam($username = null, $email = null)
 {
@@ -410,8 +410,8 @@ function check_stopforumspam($username = null, $email = null)
  * Check the stopforumspam service to see if we need to block this user (lower level, doesn't handle result).
  *
  * @param  string                       Check this IP address
- * @param  ?string                      Check this particular username that has just been supplied (NULL: none)
- * @param  ?string                      Check this particular email address that has just been supplied (NULL: none)
+ * @param  ?string                      Check this particular username that has just been supplied (null: none)
+ * @param  ?string                      Check this particular email address that has just been supplied (null: none)
  * @return array                        Pair: Listed for potential blocking as a ANTISPAM_RESPONSE_* constant, confidence level if attainable (0.0 to 1.0) (else NULL)
  */
 function _check_stopforumspam($user_ip, $username = null, $email = null)

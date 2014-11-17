@@ -100,14 +100,14 @@ function render_banner_type_box($row, $zone = '_SEARCH', $give_context = true, $
  * Show a banner according to GET parameter specification.
  *
  * @param  boolean                      Whether to return a result rather than outputting
- * @param  ?string                      Whether we are displaying or click-processing (NULL: get from URL param)
+ * @param  ?string                      Whether we are displaying or click-processing (null: get from URL param)
  * @set    "click" ""
- * @param  ?string                      Specific banner to display (NULL: get from URL param) (blank: randomise)
- * @param  ?string                      Banner type to display (NULL: get from URL param)
- * @param  ?string                      The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (NULL: get from URL param) (blank: our own site)
- * @param  ?integer                     The width (NULL: standard for banner type)
- * @param  ?integer                     The height (NULL: standard for banner type)
- * @return ?tempcode                    Result (NULL: we weren't asked to return the result)
+ * @param  ?string                      Specific banner to display (null: get from URL param) (blank: randomise)
+ * @param  ?string                      Banner type to display (null: get from URL param)
+ * @param  ?string                      The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (null: get from URL param) (blank: our own site)
+ * @param  ?integer                     The width (null: standard for banner type)
+ * @param  ?integer                     The height (null: standard for banner type)
+ * @return ?tempcode                    Result (null: we weren't asked to return the result)
  */
 function banners_script($ret = false, $type = null, $dest = null, $b_type = null, $source = null, $width = null, $height = null)
 {
@@ -333,7 +333,7 @@ function banners_script($ret = false, $type = null, $dest = null, $b_type = null
 /**
  * Get a nice, formatted XHTML list to select a banner type
  *
- * @param  ?ID_TEXT                     The currently selected licence (NULL: none selected)
+ * @param  ?ID_TEXT                     The currently selected licence (null: none selected)
  * @return tempcode                     The list of categories
  */
 function create_selection_list_banner_types($it = null)
@@ -366,8 +366,8 @@ function create_selection_list_banner_types($it = null)
  * @param  URLPATH                      The URL to the banner's target
  * @param  ID_TEXT                      The banner type
  * @param  MEMBER                       The submitting user
- * @param  ?integer                     The width (NULL: standard for banner type)
- * @param  ?integer                     The height (NULL: standard for banner type)
+ * @param  ?integer                     The width (null: standard for banner type)
+ * @param  ?integer                     The height (null: standard for banner type)
  * @return tempcode                     The rendered banner
  */
 function show_banner($name, $title_text, $caption, $direct_code, $img_url, $source, $url, $b_type, $submitter, $width = null, $height = null)
@@ -479,8 +479,8 @@ function show_banner($name, $title_text, $caption, $direct_code, $img_url, $sour
 /**
  * Get a list of banners.
  *
- * @param  ?AUTO_LINK                   The ID of the banner selected by default (NULL: no specific default)
- * @param  ?MEMBER                      Only show banners owned by the member (NULL: no such restriction)
+ * @param  ?AUTO_LINK                   The ID of the banner selected by default (null: no specific default)
+ * @param  ?MEMBER                      Only show banners owned by the member (null: no such restriction)
  * @return tempcode                     The list
  */
 function create_selection_list_banners($it = null, $only_owned = null)

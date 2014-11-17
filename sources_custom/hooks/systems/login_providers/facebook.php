@@ -21,8 +21,8 @@ class Hook_login_provider_facebook
     /**
      * Standard login provider hook.
      *
-     * @param  ?MEMBER                  Member ID already detected as logged in (NULL: none). May be a guest ID.
-     * @return ?MEMBER                  Member ID now detected as logged in (NULL: none). May be a guest ID.
+     * @param  ?MEMBER                  Member ID already detected as logged in (null: none). May be a guest ID.
+     * @return ?MEMBER                  Member ID now detected as logged in (null: none). May be a guest ID.
      */
     public function try_login($member) // NB: if $member is set (but not Guest), then it will bind to that account
     {

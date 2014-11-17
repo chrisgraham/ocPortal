@@ -24,8 +24,8 @@
  * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
  *
  * @param  object                       Link to the real forum driver
- * @param  ?SHORT_TEXT                  The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
- * @param  ?MEMBER                      The member ID (NULL: use member name)
+ * @param  ?SHORT_TEXT                  The member username (null: don't use this in the authentication - but look it up using the ID if needed)
+ * @param  ?MEMBER                      The member ID (null: use member name)
  * @param  MD5                          The md5-hashed password
  * @param  string                       The raw password
  * @param  boolean                      Whether this is a cookie login, determines how the hashed password is treated for the value passed in

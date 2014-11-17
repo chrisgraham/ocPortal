@@ -39,7 +39,7 @@ class Hook_notification_content_reviews extends Hook_notification__Staff
      * Standard function to create the standardised category tree
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
+     * @param  ?ID_TEXT                 The ID of where we're looking under (null: N/A)
      * @return array                    Tree structure
      */
     public function create_category_tree($notification_code, $id)

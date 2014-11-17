@@ -30,10 +30,10 @@ function init__ocf_notifications()
 /**
  * Get the personal post rows for the current member.
  *
- * @param  ?integer                     The maximum number of rows to get (gets newest first) (NULL: no limit).
+ * @param  ?integer                     The maximum number of rows to get (gets newest first) (null: no limit).
  * @param  boolean                      Whether to only get unread ones.
  * @param  boolean                      Whether to include inline personal posts.
- * @param  ?TIME                        Only since this date (NULL: no limit).
+ * @param  ?TIME                        Only since this date (null: no limit).
  * @return array                        The personal post rows (with corresponding topic details).
  */
 function ocf_get_pp_rows($limit = 5, $unread = true, $include_inline = true, $time_barrier = null)

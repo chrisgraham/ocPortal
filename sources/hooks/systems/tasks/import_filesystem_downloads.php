@@ -29,7 +29,7 @@ class Hook_task_import_filesystem_downloads
      * @param  AUTO_LINK                The category to import to
      * @param  PATH                     The import path
      * @param  boolean                  Whether to import subfolders
-     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($destination, $server_path, $subfolders)
     {

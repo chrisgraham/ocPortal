@@ -41,8 +41,8 @@ class Hook_pointstore_permission
      * @param  SHORT_TEXT               Title
      * @param  LONG_TEXT                Description
      * @param  BINARY                   Whether it is enabled
-     * @param  ?integer                 The cost in points (NULL: not set)
-     * @param  ?integer                 Number of hours for it to last for (NULL: unlimited)
+     * @param  ?integer                 The cost in points (null: not set)
+     * @param  ?integer                 Number of hours for it to last for (null: unlimited)
      * @param  ID_TEXT                  Permission scope 'type'
      * @param  ID_TEXT                  Permission scope 'privilege'
      * @param  ID_TEXT                  Permission scope 'zone'
@@ -137,7 +137,7 @@ class Hook_pointstore_permission
     /**
      * Standard pointstore item configuration function.
      *
-     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
+     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (null: disabled)
      */
     public function config()
     {

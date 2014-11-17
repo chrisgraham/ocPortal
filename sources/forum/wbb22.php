@@ -54,9 +54,9 @@ class Forum_driver_wbb22 extends forum_driver_wbb_shared
      * Get an array of members who are in at least one of the given array of usergroups.
      *
      * @param  array                    The array of usergroups
-     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
      * @param  integer                  Return primary members after this offset and secondary members after this offset
-     * @return ?array                   The array of members (NULL: no members)
+     * @return ?array                   The array of members (null: no members)
      */
     public function member_group_query($groups, $max = null, $start = 0)
     {

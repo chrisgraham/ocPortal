@@ -282,9 +282,9 @@ function add_privilege($section, $name, $default = false, $not_even_mods = false
  * @param  GROUP                        The usergroup having the permission set
  * @param  ID_TEXT                      The codename of the permission
  * @param  boolean                      Whether the usergroup has the permission
- * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
- * @param  ?ID_TEXT                     The category-type for the permission (NULL: none required)
- * @param  ?ID_TEXT                     The category-name/value for the permission (NULL: none required)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (null: current page)
+ * @param  ?ID_TEXT                     The category-type for the permission (null: none required)
+ * @param  ?ID_TEXT                     The category-name/value for the permission (null: none required)
  */
 function set_privilege($group_id, $permission, $value, $page = null, $category_type = null, $category_name = null)
 {
@@ -330,7 +330,7 @@ function delete_privilege($name)
  * Delete attachments solely used by the specified hook.
  *
  * @param  ID_TEXT                      The hook
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  */
 function delete_attachments($type, $connection = null)
 {
@@ -360,7 +360,7 @@ function delete_attachments($type, $connection = null)
  *
  * @param  ID_TEXT                      The table
  * @param  array                        The attributes
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  */
 function mass_delete_lang($table, $attrs, $connection)
 {

@@ -24,41 +24,41 @@
  * @param  SHORT_TEXT                   The username.
  * @param  SHORT_TEXT                   The password.
  * @param  SHORT_TEXT                   The e-mail address.
- * @param  ?array                       A list of secondary usergroups (NULL: default/current usergroups).
- * @param  ?integer                     Day of date of birth (NULL: unknown).
- * @param  ?integer                     Month of date of birth (NULL: unknown).
- * @param  ?integer                     Year of date of birth (NULL: unknown).
+ * @param  ?array                       A list of secondary usergroups (null: default/current usergroups).
+ * @param  ?integer                     Day of date of birth (null: unknown).
+ * @param  ?integer                     Month of date of birth (null: unknown).
+ * @param  ?integer                     Year of date of birth (null: unknown).
  * @param  array                        A map of custom field values (fieldID=>value).
- * @param  ?ID_TEXT                     The member timezone (NULL: auto-detect).
- * @param  ?GROUP                       The member's primary (NULL: default).
+ * @param  ?ID_TEXT                     The member timezone (null: auto-detect).
+ * @param  ?GROUP                       The member's primary (null: default).
  * @param  BINARY                       Whether the profile has been validated.
- * @param  ?TIME                        When the member joined (NULL: now).
- * @param  ?TIME                        When the member last visited (NULL: now).
+ * @param  ?TIME                        When the member joined (null: now).
+ * @param  ?TIME                        When the member last visited (null: now).
  * @param  ID_TEXT                      The member's default theme.
- * @param  ?URLPATH                     The URL to the member's avatar (blank: none) (NULL: choose one automatically).
+ * @param  ?URLPATH                     The URL to the member's avatar (blank: none) (null: choose one automatically).
  * @param  LONG_TEXT                    The member's signature (blank: none).
  * @param  BINARY                       Whether the member is permanently banned.
- * @param  ?BINARY                      Whether posts are previewed before they are made (NULL: calculate automatically).
+ * @param  ?BINARY                      Whether posts are previewed before they are made (null: calculate automatically).
  * @param  BINARY                       Whether the member's age may be shown.
  * @param  SHORT_TEXT                   The member's title (blank: get from primary).
  * @param  URLPATH                      The URL to the member's photo (blank: none).
  * @param  URLPATH                      The URL to the member's photo thumbnail (blank: none).
  * @param  BINARY                       Whether the member sees signatures in posts.
- * @param  ?BINARY                      Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
- * @param  ?LANGUAGE_NAME               The member's language (NULL: auto detect).
+ * @param  ?BINARY                      Whether the member automatically is enabled for notifications for content they contribute to (null: get default from config).
+ * @param  ?LANGUAGE_NAME               The member's language (null: auto detect).
  * @param  BINARY                       Whether the member allows e-mails via the site.
  * @param  BINARY                       Whether the member allows e-mails from staff via the site.
- * @param  ?IP                          The member's IP address (NULL: IP address of current user).
+ * @param  ?IP                          The member's IP address (null: IP address of current user).
  * @param  SHORT_TEXT                   The code required before the account becomes active (blank: already entered).
  * @param  boolean                      Whether to check details for correctness.
- * @param  ?ID_TEXT                     The compatibility scheme that the password operates in (blank: none) (NULL: none [meaning normal ocPortal salted style] or plain, depending on whether passwords are encrypted).
+ * @param  ?ID_TEXT                     The compatibility scheme that the password operates in (blank: none) (null: none [meaning normal ocPortal salted style] or plain, depending on whether passwords are encrypted).
  * @param  SHORT_TEXT                   The password salt (blank: password compatibility scheme does not use a salt / auto-generate).
- * @param  ?TIME                        The time the member last made a submission (NULL: set to now).
- * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?TIME                        The time the member last made a submission (null: set to now).
+ * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
  * @param  BINARY                       Whether the member username will be highlighted.
  * @param  SHORT_TEXT                   Usergroups that may PT the member.
  * @param  LONG_TEXT                    Rules that other members must agree to before they may start a PT with the member.
- * @param  ?TIME                        When the member is on probation until (NULL: not on probation)
+ * @param  ?TIME                        When the member is on probation until (null: not on probation)
  * @return AUTO_LINK                    The ID of the new member.
  */
 function ocf_make_member($username, $password, $email_address, $secondary_groups, $dob_day, $dob_month, $dob_year, $custom_fields, $timezone = null, $primary_group = null, $validated = 1, $join_time = null, $last_visit_time = null, $theme = '', $avatar_url = null, $signature = '', $is_perm_banned = 0, $preview_posts = null, $reveal_age = 0, $title = '', $photo_url = '', $photo_thumb_url = '', $views_signatures = 1, $auto_monitor_contrib_content = null, $language = null, $allow_emails = 1, $allow_emails_from_staff = 1, $ip_address = null, $validated_email_confirm_code = '', $check_correctness = true, $password_compatibility_scheme = null, $salt = '', $last_submit_time = null, $id = null, $highlighted_name = 0, $pt_allow = '*', $pt_rules_text = '', $on_probation_until = null)
@@ -483,7 +483,7 @@ function get_cpf_storage_for($type)
  * @param  BINARY                       Whether it is required that every member have this field filled in.
  * @param  BINARY                       Whether this field is shown in posts and places where member details are highlighted (such as an image in a member gallery).
  * @param  BINARY                       Whether this field is shown in preview places, such as in the forum member tooltip.
- * @param  ?integer                     The order of this field relative to other fields (NULL: next).
+ * @param  ?integer                     The order of this field relative to other fields (null: next).
  * @param  LONG_TEXT                    The usergroups that this field is confined to (comma-separated list).
  * @param  boolean                      Whether to check that no field has this name already.
  * @param  BINARY                       Whether the field is to be shown on the join form

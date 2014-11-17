@@ -247,7 +247,7 @@ function _inspect($args, $force_plain = false)
 /**
  * Record the memory usage at this point.
  *
- * @param  ?string                      The name of the memory point (NULL: use a simple counter)
+ * @param  ?string                      The name of the memory point (null: use a simple counter)
  */
 function memory_trace_point($name = null)
 {
@@ -283,7 +283,7 @@ function show_memory_points()
  * Finds if a function is being run underneath another function, and exit if there is a death message to output. This function should only be used when coding.
  *
  * @param  string                       The function to check running underneath
- * @param  ?string                      The message to exit with (NULL: return, do not exit)
+ * @param  ?string                      The message to exit with (null: return, do not exit)
  * @return boolean                      Whether we are
  */
 /*function debug_running_underneath($function,$death_message=NULL)

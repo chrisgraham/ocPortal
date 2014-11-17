@@ -90,7 +90,7 @@ function _multi_lang()
  * Get the default value of a config option.
  *
  * @param  ID_TEXT                      The name of the option
- * @return ?SHORT_TEXT                  The value (NULL: disabled)
+ * @return ?SHORT_TEXT                  The value (null: disabled)
  */
 function get_default_option($name)
 {
@@ -204,7 +204,7 @@ function config_update_value_ref($old_setting, $setting, $type)
  * Update a reference stored in a config option.
  *
  * @param  ID_TEXT                      The config option name
- * @return ?URLPATH                     URL to set the config option (NULL: no such option exists)
+ * @return ?URLPATH                     URL to set the config option (null: no such option exists)
  */
 function config_option_url($name)
 {

@@ -710,9 +710,9 @@ function check($structure)
             log_warning('Class names should start with an upper case letter, \'' . $class['name'] . '\'');
         }
 
-        if (substr($class['name'], 1) != strtolower(substr($class['name'], 1))) {
+        /*if (substr($class['name'], 1) != strtolower(substr($class['name'], 1))) {     Too ocPortal-specific
             log_warning('Class names should be lower case apart from the first letter, \'' . $class['name'] . '\'');
-        }
+        }*/
 
         $CURRENT_CLASS = $class['name'];
         foreach ($class['functions'] as $function) {

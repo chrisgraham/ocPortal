@@ -28,7 +28,7 @@ function init__ocworld()
  * Helper function. From a given GET/POST parameter name, tries to identify a member ID. Parameter may be given as a direct member ID or via a username.
  *
  * @param  string                       The given parameter name.
- * @return ?MEMBER                      Member ID (NULL: blank requested)
+ * @return ?MEMBER                      Member ID (null: blank requested)
  */
 function grab_new_owner($param_name)
 {
@@ -79,7 +79,7 @@ function get_ocworld_prices_default()
  *
  * @param  MEMBER                       The member
  * @param  boolean                      Whether it's excusable if the member does not exist (i.e. doesn't exit with error)
- * @return ?array                       Tuple: Realm, X ordinate, Y ordinate (NULL: no such member)
+ * @return ?array                       Tuple: Realm, X ordinate, Y ordinate (null: no such member)
  */
 function get_loc_details($member_id, $null_ok = false)
 {
@@ -255,7 +255,7 @@ function room_exists($x, $y, $realm)
  * @param  integer                      X distance
  * @param  integer                      Y distance
  * @param  string                       The access password they have given
- * @return ?tempcode                    Error message (NULL: no error)
+ * @return ?tempcode                    Error message (null: no error)
  */
 function try_to_enter_room($member_id, $dx, $dy, $given_password)
 {

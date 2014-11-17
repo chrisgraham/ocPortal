@@ -84,8 +84,8 @@ function ocf_make_emoticon($code, $theme_img_code, $relevance_level = 1, $use_to
  * @param  SHORT_TEXT                   The subject of the Welcome E-mail
  * @param  LONG_TEXT                    The message body of the Welcome E-mail
  * @param  integer                      The number of hours before sending the e-mail
- * @param  ?AUTO_LINK                   What newsletter to send out to instead of members (NULL: none)
- * @param  ?AUTO_LINK                   The usergroup to tie to (NULL: none)
+ * @param  ?AUTO_LINK                   What newsletter to send out to instead of members (null: none)
+ * @param  ?AUTO_LINK                   The usergroup to tie to (null: none)
  * @param  ID_TEXT                      How to send regarding usergroups (blank: indiscriminately)
  * @set primary secondary ""
  * @return AUTO_LINK                    The ID

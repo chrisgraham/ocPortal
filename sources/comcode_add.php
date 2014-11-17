@@ -173,7 +173,7 @@ function _get_details_comcode_tags()
 /**
  * Get the Comcode tags in groups
  *
- * @param  ?string                      Group Name (NULL: return a specific group)
+ * @param  ?string                      Group Name (null: return a specific group)
  * @return array                        Returns each Group name as key, values as its tags
  */
 function _get_group_tags($group = null)

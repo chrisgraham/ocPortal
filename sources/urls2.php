@@ -100,7 +100,7 @@ function page_link_as_url($url)
  *
  * @param  ID_TEXT                      The page for the form to go to (blank: don't attach)
  * @param  boolean                      Whether to keep all elements of the current URL represented in this form (rather than just the keep_ fields, and page)
- * @param  ?array                       A list of parameters to exclude (NULL: don't exclude any)
+ * @param  ?array                       A list of parameters to exclude (null: don't exclude any)
  * @return tempcode                     The builtup hidden form fields
  */
 function _build_keep_form_fields($page = '', $keep_all = false, $exclude = null)
@@ -172,7 +172,7 @@ function _fixed_post_parser($key, $value)
 /**
  * Relay all POST variables for this URL, to the URL embedded in the form.
  *
- * @param  ?array                       A list of parameters to exclude (NULL: exclude none)
+ * @param  ?array                       A list of parameters to exclude (null: exclude none)
  * @return tempcode                     The builtup hidden form fields
  */
 function _build_keep_post_fields($exclude = null)
@@ -272,7 +272,7 @@ function _qualify_url($url, $url_base)
  * Convert a URL to a local file path.
  *
  * @param  URLPATH                      The value to convert
- * @return ?PATH                        File path (NULL: is not local)
+ * @return ?PATH                        File path (null: is not local)
  */
 function _convert_url_to_path($url)
 {
@@ -528,7 +528,7 @@ function _page_path_to_page_link($page)
  * @param  array                        The hooks info profile.
  * @param  array                        The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
  * @param  ID_TEXT                      The URL zone name (only used for Comcode Page URL monikers).
- * @return ?string                      The moniker ID (NULL: error generating it somehow, can not do it)
+ * @return ?string                      The moniker ID (null: error generating it somehow, can not do it)
  */
 function autogenerate_new_url_moniker($ob_info, $url_parts, $zone)
 {
@@ -663,8 +663,8 @@ function suggest_new_idmoniker_for($page, $type, $id, $zone, $moniker_src, $is_n
  * @param  ID_TEXT                      Screen type code.
  * @param  ID_TEXT                      Resource ID.
  * @param  string                       String from which a moniker will be chosen (may not be blank).
- * @param  ?string                      Whether to skip the exists check for a certain moniker (will be used to pass "existing self" for edits) (NULL: nothing existing to check against).
- * @param  ?string                      Where the moniker will be placed in the moniker URL tree (NULL: unknown, so make so no duplicates anywhere).
+ * @param  ?string                      Whether to skip the exists check for a certain moniker (will be used to pass "existing self" for edits) (null: nothing existing to check against).
+ * @param  ?string                      Where the moniker will be placed in the moniker URL tree (null: unknown, so make so no duplicates anywhere).
  * @return string                       Chosen moniker.
  */
 function _choose_moniker($page, $type, $id, $moniker_src, $no_exists_check_for = null, $scope_context = null)
@@ -826,7 +826,7 @@ function _give_moniker_scope($page, $type, $id, $zone, $main)
  *
  * @param  ID_TEXT                      The content type.
  * @param  SHORT_TEXT                   The URL moniker.
- * @return ?ID_TEXT                     The ID (NULL: not found).
+ * @return ?ID_TEXT                     The ID (null: not found).
  */
 function find_id_via_url_moniker($content_type, $url_moniker)
 {

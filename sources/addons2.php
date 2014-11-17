@@ -68,7 +68,7 @@ function upgrade_addon_soft($addon)
  * Reinstall the specified addon.
  *
  * @param  ID_TEXT                      The addon name
- * @param  ?array                       .ini-format info (needs processing) (NULL: unknown / N/A)
+ * @param  ?array                       .ini-format info (needs processing) (null: unknown / N/A)
  */
 function reinstall_addon_soft($addon, $ini_info = null)
 {
@@ -277,7 +277,7 @@ function find_installed_addons($just_non_bundled = false)
  * Find effective modification date of an addon.
  *
  * @param  string                       The name of the addon
- * @return ?TIME                        Modification time (NULL: could not find any files)
+ * @return ?TIME                        Modification time (null: could not find any files)
  */
 function find_addon_effective_mtime($addon_name)
 {
@@ -533,7 +533,7 @@ function create_addon($file, $files, $addon, $incompatibilities, $dependencies, 
  * Uninstall an addon.
  *
  * @param  string                       Name of the addon TAR file
- * @param  ?array                       The files to install (NULL: all)
+ * @param  ?array                       The files to install (null: all)
  */
 function install_addon($file, $files = null)
 {
@@ -747,8 +747,8 @@ function uninstall_addon($addon)
  * Get information for the user relating to an addon that they are intending to install.
  *
  * @param  string                       Filename of the addon TAR file
- * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
- * @param  ?array                       List of addons that we're currently installing (so dependencies to these are irrelevant). (NULL: none)
+ * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (null: none)
+ * @param  ?array                       List of addons that we're currently installing (so dependencies to these are irrelevant). (null: none)
  * @param  boolean                      Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
  * @return array                        Triple: warnings, files, addon info array
  */
@@ -1023,8 +1023,8 @@ function has_feature($dependency)
  * Get information for the user relating to an addon that they are intending to uninstall.
  *
  * @param  string                       Name of the addon
- * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
- * @param  ?array                       Addon details. (NULL: load in function)
+ * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (null: none)
+ * @param  ?array                       Addon details. (null: load in function)
  * @param  boolean                      Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
  * @return array                        Pair: warnings, files
  */

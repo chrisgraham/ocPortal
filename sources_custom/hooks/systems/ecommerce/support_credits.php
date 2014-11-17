@@ -104,7 +104,7 @@ class Hook_ecommerce_support_credits
      * Find the corresponding member to a given purchase ID.
      *
      * @param  ID_TEXT                  The purchase ID.
-     * @return ?MEMBER                  The member (NULL: unknown / can't perform operation).
+     * @return ?MEMBER                  The member (null: unknown / can't perform operation).
      */
     public function member_for($purchase_id)
     {
@@ -114,7 +114,7 @@ class Hook_ecommerce_support_credits
     /**
      * Get fields that need to be filled in in the purchase wizard.
      *
-     * @return ?array                   The fields and message text (NULL: none).
+     * @return ?array                   The fields and message text (null: none).
      */
     public function get_needed_fields()
     {

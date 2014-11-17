@@ -110,7 +110,7 @@ function zip_error($errno, $mzip = false)
  * Handle invalid parameter values.
  *
  * @param  string                       The parameter deemed to have an invalid value somehow
- * @param  ?string                      The value of the parameter deemed invalid (NULL: we known we can't recover)
+ * @param  ?string                      The value of the parameter deemed invalid (null: we known we can't recover)
  * @param  boolean                      Whether the parameter is a POST parameter
  * @return string                       Fixed parameter (usually the function won't return [instead will give an error], but in special cases, it can filter an invalid return)
  */
@@ -153,7 +153,7 @@ function _param_invalid($name, $ret, $posted)
  * Complain about a field being missing.
  *
  * @param  string                       The name of the parameter
- * @param  ?boolean                     Whether the parameter is a POST parameter (NULL: undetermined)
+ * @param  ?boolean                     Whether the parameter is a POST parameter (null: undetermined)
  * @param  array                        The array we're extracting parameters from
  */
 function improperly_filled_in($name, $posted, $array)
@@ -308,7 +308,7 @@ function _sanitise_error_msg($text)
  *
  * @param  mixed                        The error message (string or tempcode)
  * @param  ID_TEXT                      Name of the terminal page template
- * @param  boolean ?Whether match key messages / redirects should be supported (NULL: detect)
+ * @param  boolean ?Whether match key messages / redirects should be supported (null: detect)
  */
 function _generic_exit($text, $template, $support_match_key_messages = false)
 {
@@ -707,7 +707,7 @@ function _log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_
  *
  * @param  IP                           The IP address to ban
  * @param  LONG_TEXT                    Explanation for ban
- * @param  ?TIME                        When to ban until (NULL: no limit)
+ * @param  ?TIME                        When to ban until (null: no limit)
  * @param  boolean                      Whether this is a positive ban (as opposed to a cached negative)
  * @return boolean                      Whether a change actually happened
  */
@@ -796,7 +796,7 @@ function remove_ip_ban($ip)
  * Lookup error on ocportal.com, to see if there is more information.
  *
  * @param  mixed                        The error message (string or tempcode)
- * @return ?string                      The result from the web service (NULL: no result)
+ * @return ?string                      The result from the web service (null: no result)
  */
 function get_webservice_result($error_message)
 {
@@ -1242,7 +1242,7 @@ function get_html_trace()
  * @param  string                       Message screen text that is about to be displayed
  * @param  boolean                      Only if it is a zone-level match-key
  * @param  boolean                      Whether to only consider text matches, not match-key matches
- * @return ?tempcode                    The message (NULL: no change)
+ * @return ?tempcode                    The message (null: no change)
  */
 function _look_for_match_key_message($natural_text, $only_if_zone = false, $only_text_match = false)
 {

@@ -143,8 +143,8 @@ function make_xhtml_strict($global)
 /**
  * Find the country an IP address long is located in
  *
- * @param  ?IP                          The IP to geolocate (NULL: current user's IP)
- * @return ?string                      The country initials (NULL: unknown)
+ * @param  ?IP                          The IP to geolocate (null: current user's IP)
+ * @return ?string                      The country initials (null: unknown)
  */
 function geolocate_ip($ip = null)
 {
@@ -405,8 +405,8 @@ function ocp_mb_chunk_split($str, $len = 76, $glue = "\r\n")
  * Prevent double submission, by reference to recent matching admin log entries by the current member.
  *
  * @param  ID_TEXT                      The type of activity just carried out (a lang string)
- * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (NULL: none / cannot match against)
- * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (NULL: none / cannot match against)
+ * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (null: none / cannot match against)
+ * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none / cannot match against)
  */
 function prevent_double_submit($type, $a = null, $b = null)
 {
@@ -453,8 +453,8 @@ function prevent_double_submit($type, $a = null, $b = null)
  * Log an action.
  *
  * @param  ID_TEXT                      The type of activity just carried out (a lang string)
- * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (NULL: none)
- * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (NULL: none)
+ * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (null: none)
+ * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none)
  */
 function _log_it($type, $a = null, $b = null)
 {

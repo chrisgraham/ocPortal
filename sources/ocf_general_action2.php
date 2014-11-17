@@ -161,8 +161,8 @@ function ocf_delete_emoticon($code)
  * @param  SHORT_TEXT                   The subject of the Welcome E-mail
  * @param  LONG_TEXT                    The message body of the Welcome E-mail
  * @param  integer                      The number of hours before sending the e-mail
- * @param  ?AUTO_LINK                   What newsletter to send out to instead of members (NULL: none)
- * @param  ?AUTO_LINK                   The usergroup to tie to (NULL: none)
+ * @param  ?AUTO_LINK                   What newsletter to send out to instead of members (null: none)
+ * @param  ?AUTO_LINK                   The usergroup to tie to (null: none)
  * @param  ID_TEXT                      How to send regarding usergroups (blank: indiscriminately)
  * @set primary secondary
  */
@@ -226,8 +226,8 @@ function ocf_get_forum_multi_code_field($forum_multi_code)
  * @param  SHORT_TEXT                   First detailing parameter.
  * @param  SHORT_TEXT                   Second detailing parameter.
  * @param  LONG_TEXT                    The reason for the moderation (may be blank).
- * @param  ?MEMBER                      The member performing the moderation (NULL: current member).
- * @param  ?TIME                        The time of the moderation (NULL: just now).
+ * @param  ?MEMBER                      The member performing the moderation (null: current member).
+ * @param  ?TIME                        The time of the moderation (null: just now).
  */
 function ocf_mod_log_it($the_type, $param_a = '', $param_b = '', $reason = '', $by = null, $date_and_time = null)
 {

@@ -49,7 +49,7 @@ class Hook_phpbb3
     /**
      * Standard importer hook info function.
      *
-     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
+     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (null: importer is disabled).
      */
     public function info()
     {
@@ -716,7 +716,7 @@ class Hook_phpbb3
      * Helper function to translate phpBB permissions to ocPortal permissions.
      *
      * @param  string                   Old perm
-     * @return ?string                  New perm (NULL: could not convert)
+     * @return ?string                  New perm (null: could not convert)
      */
     protected function _translate_permission($perm)
     {
@@ -911,7 +911,7 @@ class Hook_phpbb3
      * @param  string                   Bbcode uid
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
-     * @param  ?AUTO_LINK               The ID of the post/message being imported (NULL: attachments not supported)
+     * @param  ?AUTO_LINK               The ID of the post/message being imported (null: attachments not supported)
      * @param  boolean                  Whether it is a personal message
      * @return string                   The new text field text
      */

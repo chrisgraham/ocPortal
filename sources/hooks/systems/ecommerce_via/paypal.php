@@ -130,7 +130,7 @@ class Hook_paypal
      * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
      *
      * @param  string                   Transaction ID to cancel.
-     * @return ?boolean                 True: yes. False: no. (NULL: cancels via a user-URL-directioning)
+     * @return ?boolean                 True: yes. False: no. (null: cancels via a user-URL-directioning)
      */
     public function auto_cancel($trans_id)
     {
@@ -392,7 +392,7 @@ class Hook_paypal
      * Store shipping address for orders.
      *
      * @param  AUTO_LINK                Order ID.
-     * @return ?mixed                   Address ID (NULL: No address record found).
+     * @return ?mixed                   Address ID (null: No address record found).
      */
     public function store_shipping_address($order_id)
     {
@@ -423,7 +423,7 @@ class Hook_paypal
     /**
      * Get the status message after a URL callback.
      *
-     * @return ?string                  Message (NULL: none).
+     * @return ?string                  Message (null: none).
      */
     public function get_callback_url_message()
     {

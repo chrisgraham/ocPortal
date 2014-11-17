@@ -37,7 +37,7 @@ class Hook_task_send_newsletter
      * @range  1 5
      * @param  string                   CSV data of extra subscribers (blank: none). This is in the same ocPortal newsletter CSV format that we export elsewhere.
      * @param  ID_TEXT                  The template used to show the email
-     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($message, $subject, $lang, $send_details, $html_only, $from_email, $from_name, $priority, $csv_data, $mail_template)
     {

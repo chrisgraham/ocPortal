@@ -142,7 +142,7 @@ class Hook_ecommerce_usergroup
      * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
      *
      * @param  ID_TEXT                  Product codename.
-     * @return ?tempcode                Input field in standard Tempcode format for fields (NULL: no identifier).
+     * @return ?tempcode                Input field in standard Tempcode format for fields (null: no identifier).
      */
     public function get_identifier_manual_field_inputter($type_code)
     {
@@ -177,7 +177,7 @@ class Hook_ecommerce_usergroup
      * Find the corresponding member to a given purchase ID.
      *
      * @param  ID_TEXT                  The purchase ID.
-     * @return ?MEMBER                  The member (NULL: unknown / can't perform operation).
+     * @return ?MEMBER                  The member (null: unknown / can't perform operation).
      */
     public function member_for($purchase_id)
     {
@@ -250,7 +250,7 @@ class Hook_ecommerce_usergroup
     /**
      * Get fields that need to be filled in in the purchase wizard.
      *
-     * @return ?array                   The fields and message text (NULL: none).
+     * @return ?array                   The fields and message text (null: none).
      */
     public function get_needed_fields()
     {

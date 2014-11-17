@@ -72,7 +72,7 @@ class Hook_ecommerce_cart_orders
      *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
      *
      * @param  boolean                  Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
-     * @param  ?ID_TEXT                 Product being searched for (NULL: none).
+     * @param  ?ID_TEXT                 Product being searched for (null: none).
      * @param  boolean                  Whether $search refers to the item name rather than the product codename.
      * @return array                    A map of product name to list of product details.
      */
@@ -125,7 +125,7 @@ class Hook_ecommerce_cart_orders
      * Find the corresponding member to a given purchase ID.
      *
      * @param  ID_TEXT                  The purchase ID.
-     * @return ?MEMBER                  The member (NULL: unknown / can't perform operation).
+     * @return ?MEMBER                  The member (null: unknown / can't perform operation).
      */
     public function member_for($purchase_id)
     {

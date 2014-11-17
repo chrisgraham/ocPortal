@@ -211,26 +211,26 @@ function fix_permissions($path, $perms = 0666) // We call this function assuming
  * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
  *
  * @param  URLPATH                      The URL to download
- * @param  ?integer                     The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
+ * @param  ?integer                     The number of bytes to download. This is not a guarantee, it is a minimum (null: all bytes)
  * @range  1 max
  * @param  boolean                      Whether to throw an ocPortal error, on error
  * @param  boolean                      Whether to block redirects (returns NULL when found)
  * @param  string                       The user-agent to identify as
- * @param  ?array                       An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
- * @param  ?array                       An optional array of cookies to send (NULL: none)
- * @param  ?string                      'accept' header value (NULL: don't pass one)
- * @param  ?string                      'accept-charset' header value (NULL: don't pass one)
- * @param  ?string                      'accept-language' header value (NULL: don't pass one)
- * @param  ?resource                    File handle to write to (NULL: do not do that)
- * @param  ?string                      The HTTP referer (NULL: none)
- * @param  ?array                       A pair: authentication username and password (NULL: none)
+ * @param  ?array                       An optional array of POST parameters to send; if this is NULL, a GET request is used (null: none)
+ * @param  ?array                       An optional array of cookies to send (null: none)
+ * @param  ?string                      'accept' header value (null: don't pass one)
+ * @param  ?string                      'accept-charset' header value (null: don't pass one)
+ * @param  ?string                      'accept-language' header value (null: don't pass one)
+ * @param  ?resource                    File handle to write to (null: do not do that)
+ * @param  ?string                      The HTTP referer (null: none)
+ * @param  ?array                       A pair: authentication username and password (null: none)
  * @param  float                        The timeout
  * @param  boolean                      Whether to treat the POST parameters as a raw POST (rather than using MIME)
- * @param  ?array                       Files to send. Map between field to file path (NULL: none)
- * @param  ?array                       Extra headers to send (NULL: none)
- * @param  ?string                      HTTP verb (NULL: auto-decide based on other parameters)
+ * @param  ?array                       Files to send. Map between field to file path (null: none)
+ * @param  ?array                       Extra headers to send (null: none)
+ * @param  ?string                      HTTP verb (null: auto-decide based on other parameters)
  * @param  string                       The content type to use if a raw HTTP post
- * @return ?string                      The data downloaded (NULL: error)
+ * @return ?string                      The data downloaded (null: error)
  */
 function http_download_file($url, $byte_limit = null, $trigger_error = true, $no_redirect = false, $ua = 'ocPortal', $post_params = null, $cookies = null, $accept = null, $accept_charset = null, $accept_language = null, $write_to_file = null, $referer = null, $auth = null, $timeout = 6.0, $raw_post = false, $files = null, $extra_headers = null, $http_verb = null, $raw_content_type = 'application/xml')
 {
@@ -365,7 +365,7 @@ function push_output_state($just_tempcode = false, $true_blank = false)
  *
  * @param  boolean                      Whether to only restore the Tempcode execution part of the state.
  * @param  boolean                      Whether to merge the current output state in.
- * @param  ?array                       Settings to keep / merge if possible (NULL: none).
+ * @param  ?array                       Settings to keep / merge if possible (null: none).
  */
 function restore_output_state($just_tempcode = false, $merge_current = false, $keep = null)
 {
@@ -410,8 +410,8 @@ function restore_output_state($just_tempcode = false, $merge_current = false, $k
 /**
  * Turn the tempcode lump into a standalone page.
  *
- * @param  ?tempcode                    The tempcode to put into a nice frame (NULL: support output streaming mode)
- * @param  ?mixed                       'Additional' message (NULL: none)
+ * @param  ?tempcode                    The tempcode to put into a nice frame (null: support output streaming mode)
+ * @param  ?mixed                       'Additional' message (null: none)
  * @param  string                       The type of special message
  * @set    inform warn ""
  * @param  boolean                      Whether to include the header/footer/panels
@@ -543,13 +543,13 @@ function set_http_status_code($code)
  * Search for a template.
  *
  * @param  ID_TEXT                      The codename of the template being loaded
- * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (NULL: users own language)
+ * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (null: users own language)
  * @param  ID_TEXT                      The theme to use
  * @param  string                       File type suffix of template file (e.g. .tpl)
  * @param  string                       Subdirectory type to look in
  * @set    templates css
  * @param  boolean                      Whether to only search in the default templates
- * @return ?array                       List of parameters needed for the _do_template function to be able to load the template (NULL: could not find the template)
+ * @return ?array                       List of parameters needed for the _do_template function to be able to load the template (null: could not find the template)
  */
 function find_template_place($codename, $lang, $theme, $suffix, $type, $non_custom_only = false)
 {
@@ -708,7 +708,7 @@ function ocp_mb_strlen($in)
  *
  * @param  string                       The subject.
  * @param  integer                      The start position.
- * @param  ?integer                     The length to extract (NULL: all remaining).
+ * @param  ?integer                     The length to extract (null: all remaining).
  * @param  boolean                      Whether to force unicode as on.
  * @return ~string                      String part (false: $start was over the end of the string).
  */
@@ -1336,9 +1336,9 @@ function fix_id($param)
  *
  * @param  string                       Match keys
  * @param  boolean                      Check against POSTed data too
- * @param  ?array                       Parameters to check against (NULL: get from environment GET/POST) - if set, $support_post is ignored)
- * @param  ?ID_TEXT                     Current zone name (NULL: get from environment)
- * @param  ?ID_TEXT                     Current page name (NULL: get from environment)
+ * @param  ?array                       Parameters to check against (null: get from environment GET/POST) - if set, $support_post is ignored)
+ * @param  ?ID_TEXT                     Current zone name (null: get from environment)
+ * @param  ?ID_TEXT                     Current page name (null: get from environment)
  * @return boolean                      Whether there is a match
  */
 function match_key_match($match_key, $support_post = false, $current_params = null, $current_zone_name = null, $current_page_name = null)
@@ -1587,7 +1587,7 @@ function is_valid_ip($ip)
  *
  * @param  integer                      The number of groups to include in the IP address (rest will be replaced with *'s). For IP6, this is doubled.
  * @set    1 2 3 4
- * @param  ?IP                          IP address to use, normally left NULL (NULL: current user's)
+ * @param  ?IP                          IP address to use, normally left NULL (null: current user's)
  * @return IP                           The users IP address (blank: could not find a valid one)
  */
 function get_ip_address($amount = 4, $ip = null)
@@ -1786,7 +1786,7 @@ function compare_ip_address_ip6($wild, $full_parts)
  * @param  string                       The IP address to check for banning (potentially encoded with *'s)
  * @param  boolean                      Force check via database
  * @param  boolean                      Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
- * @return ?boolean                     Whether the IP address is banned (NULL: unknown)
+ * @return ?boolean                     Whether the IP address is banned (null: unknown)
  */
 function ip_banned($ip, $force_db = false, $handle_uncertainties = false) // This is the very first query called, so we will be a bit smarter, checking for errors
 {
@@ -1902,8 +1902,8 @@ function ip_banned($ip, $force_db = false, $handle_uncertainties = false) // Thi
  * Log an action
  *
  * @param  ID_TEXT                      The type of activity just carried out (a lang string)
- * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (NULL: none)
- * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (NULL: none)
+ * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (null: none)
+ * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none)
  */
 function log_it($type, $a = null, $b = null)
 {
@@ -2204,7 +2204,7 @@ function browser_matches($code)
 /**
  * Look at the user's browser, and decide if they are viewing on a mobile device or not.
  *
- * @param  ?string                      The user agent (NULL: get from environment, current user's browser)
+ * @param  ?string                      The user agent (null: get from environment, current user's browser)
  * @param  boolean                      Whether to always tell the truth (even if the current page does not have mobile support)
  * @return boolean                      Whether the user is using a mobile device
  */
@@ -2307,7 +2307,7 @@ function is_mobile($user_agent = null, $truth = false)
 /**
  * Get the name of a webcrawler bot, or NULL if no bot detected
  *
- * @return ?string                      Webcrawling bot name (NULL: not a bot)
+ * @return ?string                      Webcrawling bot name (null: not a bot)
  */
 function get_bot_type()
 {
@@ -2476,7 +2476,7 @@ function wordfilter_text($text)
 /**
  * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
  *
- * @return ?mixed                       Of mixed type (NULL: default)
+ * @return ?mixed                       Of mixed type (null: default)
  */
 function mixed()
 {
@@ -2515,7 +2515,7 @@ function seo_meta_get_for($type, $id)
  *
  * @param  ID_TEXT                      The type of resource (e.g. download)
  * @param  ID_TEXT                      The ID of the resource
- * @param  ?string                      The page-specific title to use, in Comcode or plain-text format with possible HTML entities included [Comcode will later be stripped] (NULL: none)
+ * @param  ?string                      The page-specific title to use, in Comcode or plain-text format with possible HTML entities included [Comcode will later be stripped] (null: none)
  */
 function seo_meta_load_for($type, $id, $title = null)
 {
@@ -2537,8 +2537,8 @@ function seo_meta_load_for($type, $id, $title = null)
 /**
  * Get Tempcode for tags, based on loaded up from SEO keywords (seo_meta_load_for).
  *
- * @param  ?ID_TEXT                     The search code for this tag content (e.g. downloads) (NULL: there is none)
- * @param  ?array                       Explicitly pass a list of tags instead (NULL: use loaded ones)
+ * @param  ?ID_TEXT                     The search code for this tag content (e.g. downloads) (null: there is none)
+ * @param  ?array                       Explicitly pass a list of tags instead (null: use loaded ones)
  * @return tempcode                     Loaded tag output (or blank if there are none)
  */
 function get_loaded_tags($limit_to = null, $the_tags = null)
@@ -2918,7 +2918,7 @@ function appengine_live_guard()
  * Check serialized data for objects, as a security measure.
  *
  * @param string     Serialized data
- * @param ?mixed     What to substitute if objects are contained (NULL: substitute null)
+ * @param ?mixed     What to substitute if objects are contained (null: substitute null)
  */
 function secure_serialized_data(&$data, $safe_replacement = null)
 {
@@ -2995,7 +2995,7 @@ function ocp_profile_start_for($identifier)
  * End a profiling block, for a specified identifier (of your own choosing - but you must have started it with ocp_profile_start_for).
  *
  * @param  ID_TEXT                      Identifier
- * @param  ?string                      Longer details of what happened (e.g. a specific SQL query that ran) (NULL: none provided)
+ * @param  ?string                      Longer details of what happened (e.g. a specific SQL query that ran) (null: none provided)
  */
 function ocp_profile_end_for($identifier, $specifics = null)
 {

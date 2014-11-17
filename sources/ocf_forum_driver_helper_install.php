@@ -33,7 +33,7 @@
  * @param  string                       Description
  * @param  string                       The field type
  * @param  BINARY                       Whether the field is encrypted
- * @param  ?string                      Default field value (NULL: standard for field type)
+ * @param  ?string                      Default field value (null: standard for field type)
  * @return boolean                      Whether the custom field was created successfully
  */
 function _helper_install_create_custom_field($this_ref, $name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0, $description = '', $type = 'long_text', $encrypted = 0, $default = null)

@@ -328,7 +328,7 @@ function ce_fix_permissions($path, $perms = 0666) // We call this function assum
 /**
  * Open up an FTP connection from POSTed details.
  *
- * @return ?mixed                       Either an error screen or a connection. (NULL: not using FTP)
+ * @return ?mixed                       Either an error screen or a connection. (null: not using FTP)
  */
 function open_up_ftp_connection()
 {

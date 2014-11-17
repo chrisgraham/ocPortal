@@ -316,7 +316,7 @@ function ocportal_error_handler($errno, $errstr, $errfile, $errline)
 /**
  * Find whether the current member is a guest.
  *
- * @param  ?MEMBER                      Member ID to check (NULL: current user)
+ * @param  ?MEMBER                      Member ID to check (null: current user)
  * @return boolean                      Whether the current member is a guest
  */
 function is_guest($member_id = null)
@@ -525,7 +525,7 @@ function get_site_name()
 /**
  * Get the base url (the minimum fully qualified URL to our installation).
  *
- * @param  ?boolean                     Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
+ * @param  ?boolean                     Whether to get the HTTPS base URL (null: do so only if the current page uses the HTTPS base URL)
  * @param  string                       What zone this is running in
  * @return URLPATH                      The base-url
  */
@@ -546,7 +546,7 @@ function get_base_url($https = null, $zone_for = '')
 /**
  * Get the base url (the minimum fully qualified URL to our personal data installation). For a shared install only, this is different to the base-url.
  *
- * @param  ?boolean                     Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
+ * @param  ?boolean                     Whether to get the HTTPS base URL (null: do so only if the current page uses the HTTPS base URL)
  * @return URLPATH                      The base-url
  */
 function get_custom_base_url($https = null)
@@ -571,7 +571,7 @@ function log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_b
  * If any are found, and the member cannot bypass the word filter, an error message is displayed.
  *
  * @param  string                       The sentence to check
- * @param  ?ID_TEXT                     The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (NULL: don't know param, do not check to avoid)
+ * @param  ?ID_TEXT                     The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (null: don't know param, do not check to avoid)
  * @param  boolean                      Whether to avoid dying on fully blocked words (useful if importing, for instance)
  * @param  boolean                      Whether to try pattern matching (this takes more resources)
  * @param  boolean                      Whether to allow permission-based skipping, and length-based skipping
@@ -586,8 +586,8 @@ function check_word_filter($a, $name = null, $no_die = false, $try_patterns = fa
  * Get a value (either POST [u]or[/u] GET), or the default if neither can be found.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?string                      The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
+ * @param  ?string                      The default value to give the parameter if the parameter value is not defined (null: give error on missing parameter)
+ * @return ?string                      The value of the parameter (null: not there, and default was NULL)
  */
 function either_param($name, $default = null)
 {
@@ -599,8 +599,8 @@ function either_param($name, $default = null)
  * Get the value of the specified POST key, if it is found, or the default otherwise.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?string                      The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
+ * @param  ?string                      The default value to give the parameter if the parameter value is not defined (null: give error on missing parameter)
+ * @return ?string                      The value of the parameter (null: not there, and default was NULL)
  */
 function post_param($name, $default = null)
 {
@@ -612,8 +612,8 @@ function post_param($name, $default = null)
  * Get the value of the specified GET key, if it is found, or the default otherwise.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?string                      The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
+ * @param  ?string                      The default value to give the parameter if the parameter value is not defined (null: give error on missing parameter)
+ * @return ?string                      The value of the parameter (null: not there, and default was NULL)
  */
 function get_param($name, $default = null)
 {
@@ -626,10 +626,10 @@ function get_param($name, $default = null)
  *
  * @param  array                        The array we're extracting parameters from
  * @param  ID_TEXT                      The name of the parameter
- * @param  ?mixed                       The default value to use for the parameter (NULL: no default)
+ * @param  ?mixed                       The default value to use for the parameter (null: no default)
  * @param  boolean                      Whether the parameter has to be an integer
  * @param  boolean                      Whether the parameter is a POST parameter
- * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
+ * @return ?string                      The value of the parameter (null: not there, and default was NULL)
  */
 function __param($array, $name, $default, $must_integer = false, $is_post = false)
 {
@@ -649,7 +649,7 @@ function __param($array, $name, $default, $must_integer = false, $is_post = fals
  * You should always use integer specified versions when inputting integers, for the added security that type validation allows. If the value is of the wrong type, it indicates a hack attempt and will be logged.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (null: give error on missing parameter)
  * @return integer                      The parameter value
  */
 function either_param_integer($name, $default = null)
@@ -665,7 +665,7 @@ function either_param_integer($name, $default = null)
  * This function is the integeric partner of post_param, as it returns the value as an integer.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (null: give error on missing parameter)
  * @return integer                      The parameter value
  */
 function post_param_integer($name, $default = null)
@@ -681,7 +681,7 @@ function post_param_integer($name, $default = null)
  * This function is the integeric partner of get_param, as it returns the value as an integer.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (null: give error on missing parameter)
  * @return integer                      The parameter value
  */
 function get_param_integer($name, $default = null)
@@ -800,8 +800,8 @@ function simulated_wildcard_match($context, $word, $full_cover = false)
  * Get data from the persistent cache.
  *
  * @param  mixed                        Key
- * @param  ?TIME                        Minimum timestamp that entries from the cache may hold (NULL: don't care)
- * @return ?mixed                       The data (NULL: not found / NULL entry)
+ * @param  ?TIME                        Minimum timestamp that entries from the cache may hold (null: don't care)
+ * @return ?mixed                       The data (null: not found / NULL entry)
  */
 function persistent_cache_get($key, $min_cache_date = null)
 {
@@ -814,7 +814,7 @@ function persistent_cache_get($key, $min_cache_date = null)
  * @param  mixed                        Key
  * @param  mixed                        The data
  * @param  boolean                      Whether it is server-wide data
- * @param  ?integer                     The expiration time in seconds. (NULL: Default expiry in 60 minutes, or never if it is server-wide).
+ * @param  ?integer                     The expiration time in seconds. (null: Default expiry in 60 minutes, or never if it is server-wide).
  */
 function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = null)
 {

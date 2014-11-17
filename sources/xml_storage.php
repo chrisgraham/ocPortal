@@ -39,7 +39,7 @@ function find_all_xml_tables()
 /**
  * Export ocPortal database tables to an equivalent XML format, automatically.
  *
- * @param  ?array                       List of tables to export (NULL: all tables except those skippable)
+ * @param  ?array                       List of tables to export (null: all tables except those skippable)
  * @return string                       Exported data in XML format
  */
 function export_to_xml($tables = null)
@@ -164,9 +164,9 @@ function _export_recurse_for_children($table, $row, $db_fields, $seo_type_code, 
  * @param  ID_TEXT                      Table to export
  * @param  array                        DB row
  * @param  array                        List of field definitions for the row
- * @param  ?ID_TEXT                     SEO type code (NULL: N/A)
- * @param  ?ID_TEXT                     Permission type code (NULL: N/A)
- * @param  ?ID_TEXT                     ID field name (NULL: N/A)
+ * @param  ?ID_TEXT                     SEO type code (null: N/A)
+ * @param  ?ID_TEXT                     Permission type code (null: N/A)
+ * @param  ?ID_TEXT                     ID field name (null: N/A)
  * @param  boolean                      Whether to include the end tag for the row
  * @return string                       Exported data in XML format
  */
@@ -397,7 +397,7 @@ function import_from_xml($xml_data, $delete_missing_rows = false)
  * @param  array                        Meta data about table IDs
  * @param  array                        The record details being imported
  * @param  array                        The insert IDs thus far
- * @param  ?AUTO_LINK                   The ID of the auto-inserted parent to this row (NULL: N/A)
+ * @param  ?AUTO_LINK                   The ID of the auto-inserted parent to this row (null: N/A)
  * @return array                        List of operations performed
  */
 function _import_xml_row($parsed, &$all_existing_data, $all_fields, $all_id_fields, $table, &$insert_ids, $last_parent_id = null)

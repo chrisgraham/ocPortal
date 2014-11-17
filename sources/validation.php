@@ -301,7 +301,7 @@ function init__validation()
  * @param  boolean                      Validate for compatibility
  * @param  boolean                      Validate external files
  * @param  boolean                      Bring up messages about manual checks
- * @return ?map                         Error information (NULL: no error)
+ * @return ?map                         Error information (null: no error)
  */
 function check_xhtml($out, $well_formed_only = false, $is_fragment = false, $validation_javascript = true, $validation_css = true, $validation_wcag = true, $validation_compat = true, $validation_ext_files = true, $validation_manual = false)
 {
@@ -699,7 +699,7 @@ function is_hex($string)
  * Test the next entity in the output stream.
  *
  * @param  integer                      Checking offset
- * @return ?mixed                       An array of error details (NULL: no errors)
+ * @return ?mixed                       An array of error details (null: no errors)
  */
 function test_entity($offset = 0)
 {
@@ -787,7 +787,7 @@ function fix_entities($in)
 /**
  * Get the next tag in the current XHTML document.
  *
- * @return ?mixed                       Either an array of error details, a string of the tag, or NULL for finished (NULL: no next tag)
+ * @return ?mixed                       Either an array of error details, a string of the tag, or NULL for finished (null: no next tag)
  */
 function _get_next_tag()
 {

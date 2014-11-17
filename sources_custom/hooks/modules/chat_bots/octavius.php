@@ -47,7 +47,7 @@ class Hook_chat_bot_octavius
      *
      * @param  AUTO_LINK        The ID of the chat room
      * @param  string            The message used.
-     * @return ?string        Bot reply (NULL: bot does not handle the command)
+     * @return ?string        Bot reply (null: bot does not handle the command)
      */
     function reply_to_any_communication($room_id, $string)
     {
@@ -70,7 +70,7 @@ class Hook_chat_bot_octavius
      *
      * @param  AUTO_LINK        The ID of the chat room
      * @param  string            The command used. This is just the chat message, so you can encode and recognise your own parameter scheme if you like.
-     * @return ?string        Bot reply (NULL: bot does not handle the command)
+     * @return ?string        Bot reply (null: bot does not handle the command)
      */
     function handle_commands($room_id, $string)
     {

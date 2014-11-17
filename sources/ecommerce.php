@@ -91,13 +91,13 @@ function ecommerce_get_currency_symbol()
 /**
  * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
  *
- * @param  ?ID_TEXT                     The transaction ID (NULL: auto-generate)
+ * @param  ?ID_TEXT                     The transaction ID (null: auto-generate)
  * @param  ID_TEXT                      The purchase ID
  * @param  SHORT_TEXT                   The item name
  * @param  SHORT_TEXT                   The amount
- * @param  ?integer                     The length (NULL: not a subscription)
+ * @param  ?integer                     The length (null: not a subscription)
  * @param  ID_TEXT                      The length units
- * @param  ?ID_TEXT                     The service the payment will go via via (NULL: autodetect).
+ * @param  ?ID_TEXT                     The service the payment will go via via (null: autodetect).
  * @return array                        A pair: The form fields, Hidden fields
  */
 function get_transaction_form_fields($trans_id, $purchase_id, $item_name, $amount, $length, $length_units, $via = null)
@@ -191,7 +191,7 @@ function get_transaction_fee($amount, $via)
  * @param  ID_TEXT                      The purchase ID.
  * @param  float                        A transaction amount.
  * @param  ID_TEXT                      The currency to use.
- * @param  ?ID_TEXT                     The service the payment will go via via (NULL: autodetect).
+ * @param  ?ID_TEXT                     The service the payment will go via via (null: autodetect).
  * @return tempcode                     The button
  */
 function make_transaction_button($type_code, $item_name, $purchase_id, $amount, $currency, $via = null)
@@ -215,7 +215,7 @@ function make_transaction_button($type_code, $item_name, $purchase_id, $amount, 
  * @param  ID_TEXT                      The length units.
  * @set    d w m y
  * @param  ID_TEXT                      The currency to use.
- * @param  ?ID_TEXT                     The service the payment will go via via (NULL: autodetect).
+ * @param  ?ID_TEXT                     The service the payment will go via via (null: autodetect).
  * @return tempcode                     The button
  */
 function make_subscription_button($type_code, $item_name, $purchase_id, $amount, $length, $length_units, $currency, $via = null)
@@ -233,7 +233,7 @@ function make_subscription_button($type_code, $item_name, $purchase_id, $amount,
  *
  * @param  AUTO_LINK                    The purchase ID.
  * @param  ID_TEXT                      The service the payment will go via via.
- * @return ?tempcode                    The button (NULL: no special cancellation -- just delete the subscription row to stop ocPortal regularly re-charging)
+ * @return ?tempcode                    The button (null: no special cancellation -- just delete the subscription row to stop ocPortal regularly re-charging)
  */
 function make_cancel_button($purchase_id, $via)
 {
@@ -300,7 +300,7 @@ function find_all_products($site_lang = false)
  * @param  ID_TEXT                      The item name/product_id
  * @param  boolean                      Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
  * @param  boolean                      Whether $search refers to the item name rather than the product codename
- * @return ?object                      The product-class object (NULL: not found).
+ * @return ?object                      The product-class object (null: not found).
  */
 function find_product($search, $site_lang = false, $search_item_names = false)
 {

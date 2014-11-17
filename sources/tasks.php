@@ -135,9 +135,9 @@ function execute_task_background($task_row)
  * Send out the newsletter.
  *
  * @param  string                       Title to use for completion notification subject lines
- * @param  ?tempcode                    Title to use if there is no queueing or a queue message (NULL: don't return a full screen)
+ * @param  ?tempcode                    Title to use if there is no queueing or a queue message (null: don't return a full screen)
  * @param  ID_TEXT                      The task hook
- * @param  ?array                       Arguments for the task (NULL: no arguments)
+ * @param  ?array                       Arguments for the task (null: no arguments)
  * @param  boolean                      Whether to run the task at the end of the script (if it's not going to be put into the task queue)
  * @param  boolean                      Whether to forcibly bypass the task queue (because we've determined somehow it will be a quick task)
  * @param  boolean                      Whether to send a notification of the task having come out of the queue

@@ -181,9 +181,9 @@ function render_quiz($questions)
  * Score a particular quiz entry.
  *
  * @param   AUTO_LINK   Entry ID
- * @param   ?AUTO_LINK  Quiz ID (NULL: look up from entry ID)
- * @param   ?array      Quiz row (NULL: look up from entry ID)
- * @param   ?array      Question rows (NULL: look up from entry ID)
+ * @param   ?AUTO_LINK  Quiz ID (null: look up from entry ID)
+ * @param   ?array      Quiz row (null: look up from entry ID)
+ * @param   ?array      Question rows (null: look up from entry ID)
  * @param   boolean     Whether to show answers, regardless of whether the quiz is set to do so
  * @return  array       A tuple of quiz result details
  */

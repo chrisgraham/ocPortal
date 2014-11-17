@@ -25,12 +25,12 @@
  * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
  * @param  BINARY                       Whether the IOTD may be trackbacked
  * @param  LONG_TEXT                    Notes for the IOTD
- * @param  ?TIME                        The time of submission (NULL: now)
- * @param  ?MEMBER                      The IOTD submitter (NULL: current member)
+ * @param  ?TIME                        The time of submission (null: now)
+ * @param  ?MEMBER                      The IOTD submitter (null: current member)
  * @param  BINARY                       Whether the IOTD has been used before
- * @param  ?TIME                        The time the IOTD was used (NULL: never)
+ * @param  ?TIME                        The time the IOTD was used (null: never)
  * @param  integer                      The number of views had
- * @param  ?TIME                        The edit date (NULL: never)
+ * @param  ?TIME                        The edit date (null: never)
  * @return AUTO_LINK                    The ID of the IOTD just added
  */
 function add_iotd($url, $title, $caption, $thumb_url, $current, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $time = null, $submitter = null, $used = 0, $use_time = null, $views = 0, $edit_date = null)
@@ -86,10 +86,10 @@ function add_iotd($url, $title, $caption, $thumb_url, $current, $allow_rating, $
  * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
  * @param  BINARY                       Whether the IOTD may be trackbacked
  * @param  LONG_TEXT                    Notes for the IOTD
- * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME                        Add time (NULL: do not change)
- * @param  ?integer                     Number of views (NULL: do not change)
- * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (null: do not change)
+ * @param  ?integer                     Number of views (null: do not change)
+ * @param  ?MEMBER                      Submitter (null: do not change)
  * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_iotd($id, $title, $caption, $thumb_url, $url, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $edit_time = null, $add_time = null, $views = null, $submitter = null, $null_is_literal = false)

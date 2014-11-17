@@ -25,7 +25,7 @@
  * @param  ID_TEXT                      Zone to link through to
  * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @param  ?AUTO_LINK                   Virtual root to use (null: none)
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The topic box
  */
@@ -90,7 +90,7 @@ function ocf_get_topic_where($topic_id)
 /**
  * Find whether a member may make a Private Topic.
  *
- * @param  ?MEMBER                      The member (NULL: current member).
+ * @param  ?MEMBER                      The member (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_make_private_topic($member_id = null)
@@ -110,7 +110,7 @@ function ocf_may_make_private_topic($member_id = null)
  * Find whether a member may post a topic in a certain forum.
  *
  * @param  AUTO_LINK                    The forum the topic would be in.
- * @param  ?MEMBER                      The member (NULL: current member).
+ * @param  ?MEMBER                      The member (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_post_topic($forum_id, $member_id = null)
@@ -137,7 +137,7 @@ function ocf_may_post_topic($forum_id, $member_id = null)
 /**
  * Find whether a member may report a post.
  *
- * @param  ?MEMBER                      The member (NULL: current member).
+ * @param  ?MEMBER                      The member (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_report_post($member_id = null)
@@ -153,7 +153,7 @@ function ocf_may_report_post($member_id = null)
  * Find whether a member has replied to a certain topic.
  *
  * @param  AUTO_LINK                    The topic.
- * @param  ?MEMBER                      The member (NULL: current member).
+ * @param  ?MEMBER                      The member (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_has_replied_topic($topic_id, $member_id = null)
@@ -208,7 +208,7 @@ function ocf_may_delete_topics_by($forum_id, $member_id, $resource_owner)
  * Mark a topic as read by the current member.
  *
  * @param  AUTO_LINK                    The ID of the topic to mark as read.
- * @param  ?MEMBER                      The member to do this for (NULL: current member).
+ * @param  ?MEMBER                      The member to do this for (null: current member).
  */
 function ocf_ping_topic_read($topic_id, $member_id = null)
 {
@@ -223,9 +223,9 @@ function ocf_ping_topic_read($topic_id, $member_id = null)
  * Find whether a member has read a certain topic, such that they have possibly read all posts within it already.
  *
  * @param  AUTO_LINK                    The ID of the topic.
- * @param  ?TIME                        The time of the last post in the topic (NULL: get it from the DB).
- * @param  ?MEMBER                      The member (NULL: current member).
- * @param  ?TIME                        The time the member last viewed the topic (NULL: get it from the DB).
+ * @param  ?TIME                        The time of the last post in the topic (null: get it from the DB).
+ * @param  ?MEMBER                      The member (null: current member).
+ * @param  ?TIME                        The time the member last viewed the topic (null: get it from the DB).
  * @return boolean                      They have read it as such, yes.
  */
 function ocf_has_read_topic($topic_id, $topic_last_time = null, $member_id = null, $member_last_time = null)
@@ -271,7 +271,7 @@ function ocf_has_read_topic($topic_id, $topic_last_time = null, $member_id = nul
  * Find whether a member has special access to a certain PT.
  *
  * @param  AUTO_LINK                    The ID of the topic.
- * @param  ?MEMBER                      The member (NULL: current member).
+ * @param  ?MEMBER                      The member (null: current member).
  * @return boolean                      Whether they have special access.
  */
 function ocf_has_special_pt_access($topic_id, $member_id = null)

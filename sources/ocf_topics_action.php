@@ -21,19 +21,19 @@
 /**
  * Add a topic.
  *
- * @param  ?AUTO_LINK                   The ID of the forum the topic will be in (NULL: Private Topic).
+ * @param  ?AUTO_LINK                   The ID of the forum the topic will be in (null: Private Topic).
  * @param  SHORT_TEXT                   Description of the topic.
  * @param  SHORT_TEXT                   The theme image code of the emoticon for the topic.
- * @param  ?BINARY                      Whether the topic is validated (NULL: detect whether it should be).
+ * @param  ?BINARY                      Whether the topic is validated (null: detect whether it should be).
  * @param  BINARY                       Whether the topic is open.
  * @param  BINARY                       Whether the topic is pinned.
  * @param  BINARY                       Whether the topic is sunk.
  * @param  BINARY                       Whether the topic is cascading.
- * @param  ?MEMBER                      If it is a Private Topic, who is it 'from' (NULL: not a Private Topic).
- * @param  ?MEMBER                      If it is a Private Topic, who is it 'to' (NULL: not a Private Topic).
+ * @param  ?MEMBER                      If it is a Private Topic, who is it 'from' (null: not a Private Topic).
+ * @param  ?MEMBER                      If it is a Private Topic, who is it 'to' (null: not a Private Topic).
  * @param  boolean                      Whether to check the poster has permissions for the given topic settings.
  * @param  integer                      The number of times the topic has been viewed.
- * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
  * @param  SHORT_TEXT                   Link related to the topic (e.g. link to view a ticket).
  * @return AUTO_LINK                    The ID of the newly created topic.
  */

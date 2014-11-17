@@ -30,7 +30,7 @@ class Hook_task_make_backup
      * @param  string                   The type of backup to do
      * @set    full incremental
      * @param  integer                  The maximum size of a file to include in the backup
-     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($file, $b_type, $max_size)
     {

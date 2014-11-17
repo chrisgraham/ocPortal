@@ -172,7 +172,7 @@ function find_member_subscriptions($member_id, $usergroup_subscriptions_only = f
                 'start_time' => $start_time,
                 'term_start_time' => $term_start_time, // For non-recurring, this is the same as start_time
                 'term_end_time' => $term_end_time, // For non-recurring, this is the same as expiry_time
-                'expiry_time' => $expiry_time, // May be NULL: For recurring, expiry only happens on explicit cancellation or failed payment
+                'expiry_time' => $expiry_time, // May be null: For recurring, expiry only happens on explicit cancellation or failed payment
             );
             if (($is_active) || (!isset($subscriptions[$sub['s_type_code']]))) { // We don't want to know multiple subscriptions to the same thing; prioritise active ones
                 $subscriptions[$sub['s_type_code']] = $subscription;

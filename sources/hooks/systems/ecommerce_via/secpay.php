@@ -199,7 +199,7 @@ class Hook_secpay
      * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
      *
      * @param  string                   Transaction ID to cancel.
-     * @return ?boolean                 True: yes. False: no. (NULL: cancels via a user-URL-directioning)
+     * @return ?boolean                 True: yes. False: no. (null: cancels via a user-URL-directioning)
      */
     /*function auto_cancel($trans_id)     Not currently implemented
     {
@@ -226,7 +226,7 @@ class Hook_secpay
     /**
      * Get a list of card types.
      *
-     * @param  ?string                  The card type to select by default (NULL: don't care).
+     * @param  ?string                  The card type to select by default (null: don't care).
      * @return tempcode                 The list.
      */
     public function create_selection_list_card_types($it = null)
@@ -242,7 +242,7 @@ class Hook_secpay
     /**
      * Perform a transaction.
      *
-     * @param  ?ID_TEXT                 The transaction ID (NULL: generate one).
+     * @param  ?ID_TEXT                 The transaction ID (null: generate one).
      * @param  SHORT_TEXT               Cardholder name.
      * @param  SHORT_TEXT               Card number.
      * @param  SHORT_TEXT               Transaction amount.
@@ -252,8 +252,8 @@ class Hook_secpay
      * @param  SHORT_TEXT               Card Type.
      * @set    "Visa" "Master Card" "Switch" "UK Maestro" "Maestro" "Solo" "Delta" "American Express" "Diners Card" "JCB"
      * @param  SHORT_TEXT               Card CV2 number (security number).
-     * @param  ?integer                 The subscription length in the units. (NULL: not a subscription)
-     * @param  ?ID_TEXT                 The length units. (NULL: not a subscription)
+     * @param  ?integer                 The subscription length in the units. (null: not a subscription)
+     * @param  ?ID_TEXT                 The length units. (null: not a subscription)
      * @set    d w m y
      * @return array                    A tuple: success (boolean), trans-ID (string), message (string), raw message (string).
      */
@@ -446,7 +446,7 @@ class Hook_secpay
      * Store shipping address for orders.
      *
      * @param  AUTO_LINK                Order ID.
-     * @return ?mixed                   Address ID (NULL: No address record found).
+     * @return ?mixed                   Address ID (null: No address record found).
      */
     public function store_shipping_address($order_id)
     {

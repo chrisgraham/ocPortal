@@ -24,7 +24,7 @@
  * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
  *
  * @param  object                       Link to the real forum driver
- * @param  ?MEMBER                      Only emoticons the given member can see (NULL: don't care)
+ * @param  ?MEMBER                      Only emoticons the given member can see (null: don't care)
  * @return array                        The map
  */
 function _helper_apply_emoticons($this_ref, $member_id = null)
@@ -75,19 +75,19 @@ function _helper_apply_emoticons($this_ref, $member_id = null)
  * @param  LONG_TEXT                    The post content in Comcode format
  * @param  string                       The topic title; must be same as content title if this is for a comment topic
  * @param  string                       This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
- * @param  ?URLPATH                     URL to the content (NULL: do not make spacer post)
- * @param  ?TIME                        The topic time (NULL: use current time)
- * @param  ?IP                          The post IP address (NULL: use current members IP address)
- * @param  ?BINARY                      Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
- * @param  ?BINARY                      Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+ * @param  ?URLPATH                     URL to the content (null: do not make spacer post)
+ * @param  ?TIME                        The topic time (null: use current time)
+ * @param  ?IP                          The post IP address (null: use current members IP address)
+ * @param  ?BINARY                      Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+ * @param  ?BINARY                      Whether the topic is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
  * @param  boolean                      Whether to skip post checks
  * @param  SHORT_TEXT                   The name of the poster
- * @param  ?AUTO_LINK                   ID of post being replied to (NULL: N/A)
+ * @param  ?AUTO_LINK                   ID of post being replied to (null: N/A)
  * @param  boolean                      Whether the reply is only visible to staff
- * @param  ?ID_TEXT                     DO NOT send notifications to: The notification code (NULL: no restriction)
- * @param  ?SHORT_TEXT                  DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
- * @param  ?TIME                        The post time (NULL: use current time)
- * @param  ?MEMBER                      Owner of comment topic (NULL: Guest)
+ * @param  ?ID_TEXT                     DO NOT send notifications to: The notification code (null: no restriction)
+ * @param  ?SHORT_TEXT                  DO NOT send notifications to: The category within the notification code (null: none / no restriction)
+ * @param  ?TIME                        The post time (null: use current time)
+ * @param  ?MEMBER                      Owner of comment topic (null: Guest)
  * @return array                        Topic ID (may be NULL), and whether a hidden post has been made
  */
 function _helper_make_post_forum_topic($this_ref, $forum_name, $topic_identifier, $member_id, $post_title, $post, $content_title, $topic_identifier_encapsulation_prefix, $content_url, $time, $ip, $validated, $topic_validated, $skip_post_checks, $poster_name_if_guest, $parent_id, $staff_only, $no_notify_for__notification_code, $no_notify_for__code_category, $time_post, $spacer_post_member_id)
@@ -228,7 +228,7 @@ function _helper_make_post_forum_topic($this_ref, $forum_name, $topic_identifier
  * @param  string                       The date key to sort by
  * @set    lasttime firsttime
  * @param  boolean                      Whether to limit to hot topics
- * @return ?array                       The array of topics (NULL: error/none)
+ * @return ?array                       The array of topics (null: error/none)
  */
 function _helper_show_forum_topics($this_ref, $name, $limit, $start, &$max_rows, $filter_topic_title, $filter_topic_description, $show_first_posts, $date_key, $hot)
 {
@@ -404,14 +404,14 @@ function not_like_spacer_posts($field)
  * Get an array of maps for the topic in the given forum.
  *
  * @param  object                       Link to the real forum driver
- * @param  ?integer                     The topic ID (NULL: does not exist)
- * @param  ?integer                     The comment count will be returned here by reference (NULL: no return)
- * @param  ?integer                     Maximum comments to returned (NULL: no limit)
+ * @param  ?integer                     The topic ID (null: does not exist)
+ * @param  ?integer                     The comment count will be returned here by reference (null: no return)
+ * @param  ?integer                     Maximum comments to returned (null: no limit)
  * @param  integer                      Comment to start at
  * @param  boolean                      Whether to mark the topic read
  * @param  boolean                      Whether to show in reverse
  * @param  boolean                      Whether to only load minimal details if it is a threaded topic
- * @param  ?array                       List of post IDs to load (NULL: no filter)
+ * @param  ?array                       List of post IDs to load (null: no filter)
  * @param  boolean                      Whether to load spacer posts
  * @param  ID_TEXT                      Preferred sort order (appropriate will use rating if threaded, other
  * @set date compound_rating average_rating

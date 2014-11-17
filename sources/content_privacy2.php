@@ -21,8 +21,8 @@
 /**
  * Get form fields for setting content privacy.
  *
- * @param  ?ID_TEXT                     The content type (NULL: could be multiple)
- * @param  ?ID_TEXT                     The content ID (NULL: adding)
+ * @param  ?ID_TEXT                     The content type (null: could be multiple)
+ * @param  ?ID_TEXT                     The content ID (null: adding)
  * @param  boolean                      Whether to show a header to separate the settings out
  * @param  string                       Prefix for field naming
  * @return tempcode                     The form fields
@@ -122,7 +122,7 @@ function read_privacy_fields($prefix = '')
  * Actualise form data for setting content privacy.
  *
  * @param  ID_TEXT                      The content type
- * @param  ?ID_TEXT                     The content ID (NULL: adding)
+ * @param  ?ID_TEXT                     The content ID (null: adding)
  * @param  ID_TEXT                      The privacy level
  * @set members friends staff guests
  * @param  array                        A list of usernames

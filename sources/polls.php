@@ -128,10 +128,10 @@ function render_poll_box($results, $myrow, $zone = '_SEARCH', $include_manage_li
  * Vote in a poll.
  *
  * @param  AUTO_LINK                    The poll ID
- * @param  ?integer                     Vote to cast (NULL: forfeit vote)
- * @param  ?array                       Poll row (NULL: lookup from DB)
- * @param  ?MEMBER                      Who to vote (NULL: current user)
- * @param  ?IP                          The IP to vote (NULL: no IP check)
+ * @param  ?integer                     Vote to cast (null: forfeit vote)
+ * @param  ?array                       Poll row (null: lookup from DB)
+ * @param  ?MEMBER                      Who to vote (null: current user)
+ * @param  ?IP                          The IP to vote (null: no IP check)
  * @return array                        Amended poll row
  */
 function vote_in_poll($poll_id, $cast, $myrow = null, $member_id = null, $ip = null)
@@ -193,7 +193,7 @@ function vote_in_poll($poll_id, $cast, $myrow = null, $member_id = null, $ip = n
  *
  * @param  AUTO_LINK                    The poll ID
  * @param  MEMBER                       Who to check for
- * @param  ?IP                          The IP to check for (NULL: no IP check)
+ * @param  ?IP                          The IP to check for (null: no IP check)
  * @return boolean                      Whether the current member may vote
  */
 function may_vote_in_poll($poll_id, $member_id, $ip)
@@ -223,8 +223,8 @@ function may_vote_in_poll($poll_id, $member_id, $ip)
 /**
  * Get a list of polls.
  *
- * @param  ?AUTO_LINK                   The ID of the poll to select by default (NULL: first)
- * @param  ?MEMBER                      Only show polls owned by this member (NULL: no such restriction)
+ * @param  ?AUTO_LINK                   The ID of the poll to select by default (null: first)
+ * @param  ?MEMBER                      Only show polls owned by this member (null: no such restriction)
  * @return tempcode                     The list
  */
 function create_selection_list_polls($it = null, $only_owned = null)

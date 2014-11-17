@@ -518,7 +518,7 @@ function find_dir_size($dir)
  * Find the load of a server.
  *
  * @param  ID_TEXT                      The server to check load for.
- * @return ?float                       The load (NULL: out of action).
+ * @return ?float                       The load (null: out of action).
  */
 function find_server_load($server)
 {

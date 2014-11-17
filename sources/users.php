@@ -124,7 +124,7 @@ function handle_logins()
 /**
  * Find whether the current member is a guest.
  *
- * @param  ?MEMBER                      Member ID to check (NULL: current user)
+ * @param  ?MEMBER                      Member ID to check (null: current user)
  * @param  boolean                      Whether to just do a quick check, don't establish new sessions
  * @return boolean                      Whether the current member is a guest
  */
@@ -456,8 +456,8 @@ function enforce_sessioned_url($url)
 /**
  * Find what sessions are expired and delete them, and recover an existing one for $member if there is one.
  *
- * @param  ?MEMBER                      User to get a current session for (NULL: do not try, which guarantees a return result of NULL also)
- * @return ?AUTO_LINK                   The session ID we rebound to (NULL: did not rebind)
+ * @param  ?MEMBER                      User to get a current session for (null: do not try, which guarantees a return result of NULL also)
+ * @return ?AUTO_LINK                   The session ID we rebound to (null: did not rebind)
  */
 function delete_expired_sessions_or_recover($member = null)
 {
@@ -550,8 +550,8 @@ function get_pass_cookie()
  * Get a cookie value.
  *
  * @param  string                       The name of the cookie
- * @param  ?string                      The default value (NULL: just use the value NULL)
- * @return ?string                      The value stored in the cookie (NULL: the default default)
+ * @param  ?string                      The default value (null: just use the value NULL)
+ * @return ?string                      The value stored in the cookie (null: the default default)
  */
 function ocp_admirecookie($name, $default = null)
 {
@@ -569,7 +569,7 @@ function ocp_admirecookie($name, $default = null)
  * Get the value of a special 'ocp_' custom profile field. For OCF it can also do it for a pure field title, e.g. "Example Field".
  *
  * @param  ID_TEXT                      The CPF name stem
- * @param  ?MEMBER                      Member to lookup for (NULL: current member)
+ * @param  ?MEMBER                      Member to lookup for (null: current member)
  * @return string                       The value (blank: has a blank value, or does not exist)
  */
 function get_ocp_cpf($cpf, $member = null)

@@ -43,7 +43,7 @@ function init__ocf_forums()
  * @param  ID_TEXT                      Zone to link through to
  * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @param  ?AUTO_LINK                   Virtual root to use (null: none)
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The forum box
  */
@@ -164,8 +164,8 @@ function ocf_organise_into_tree(&$all_forums, $forum_id)
  * Gets a list of subordinate forums of a certain forum.
  *
  * @param  AUTO_LINK                    The ID of the forum we are finding subordinate forums of.
- * @param  ?string                      The field name to use in the OR list (NULL: do not make an OR list, return an array).
- * @param  ?array                       The forum tree structure (NULL: unknown, it will be found using ocf_organise_into_tree).
+ * @param  ?string                      The field name to use in the OR list (null: do not make an OR list, return an array).
+ * @param  ?array                       The forum tree structure (null: unknown, it will be found using ocf_organise_into_tree).
  * @param  boolean                      Whether to ignore permissions in this.
  * @return mixed                        The list (is either a true list, or an OR list).
  */
@@ -246,7 +246,7 @@ function ocf_get_all_subordinate_forums($forum_id, $create_or_list = null, $tree
  * Find whether a member may moderate a certain forum.
  *
  * @param  AUTO_LINK                    The ID of the forum.
- * @param  ?MEMBER                      The member ID (NULL: current member).
+ * @param  ?MEMBER                      The member ID (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_moderate_forum($forum_id, $member_id = null)
@@ -266,7 +266,7 @@ function ocf_may_moderate_forum($forum_id, $member_id = null)
  * Get an OR list of a forums parents, suited for selection from the f_topics table.
  *
  * @param  AUTO_LINK                    The ID of the forum.
- * @param  ?AUTO_LINK                   The ID of the parent forum (-1: get it from the DB) (NULL: there is no parent, as it is the root forum).
+ * @param  ?AUTO_LINK                   The ID of the parent forum (-1: get it from the DB) (null: there is no parent, as it is the root forum).
  * @return string                       The OR list.
  */
 function ocf_get_forum_parent_or_list($forum_id, $parent_id = -1)
@@ -291,11 +291,11 @@ function ocf_get_forum_parent_or_list($forum_id, $parent_id = -1)
 /**
  * Get breadcrumbs for a forum.
  *
- * @param  mixed                        The ID of the forum we are at in our path (NULL: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
- * @param  ?mixed                       The name of the given forum as string or Tempcode (NULL: find it from the DB).
- * @param  ?AUTO_LINK                   The parent forum of the given forum (NULL: find it from the DB).
+ * @param  mixed                        The ID of the forum we are at in our path (null: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
+ * @param  ?mixed                       The name of the given forum as string or Tempcode (null: find it from the DB).
+ * @param  ?AUTO_LINK                   The parent forum of the given forum (null: find it from the DB).
  * @param  boolean                      Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
- * @param  ?AUTO_LINK                   Virtual root (NULL: none).
+ * @param  ?AUTO_LINK                   Virtual root (null: none).
  * @return tempcode                     The breadcrumbs.
  */
 function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_forum = null, $start = true, $root = null)

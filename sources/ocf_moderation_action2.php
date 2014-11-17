@@ -24,10 +24,10 @@
  * @param  AUTO_LINK                    The ID of the multi moderation we are editing.
  * @param  SHORT_TEXT                   The name of the multi moderation.
  * @param  LONG_TEXT                    The default post text to add when applying (may be blank).
- * @param  ?AUTO_LINK                   The forum to move the topic when applying (NULL: do not move).
- * @param  ?BINARY                      The pin state after applying (NULL: unchanged).
- * @param  ?BINARY                      The sink state after applying (NULL: unchanged).
- * @param  ?BINARY                      The open state after applying (NULL: unchanged).
+ * @param  ?AUTO_LINK                   The forum to move the topic when applying (null: do not move).
+ * @param  ?BINARY                      The pin state after applying (null: unchanged).
+ * @param  ?BINARY                      The sink state after applying (null: unchanged).
+ * @param  ?BINARY                      The open state after applying (null: unchanged).
  * @param  SHORT_TEXT                   The forum multi code for where this multi moderation may be applied.
  * @param  SHORT_TEXT                   The title suffix.
  */
@@ -214,16 +214,16 @@ function warnings_script()
  *
  * @param  MEMBER                       The member being warned.
  * @param  LONG_TEXT                    An explanation for why the member is being warned.
- * @param  ?MEMBER                      The member doing the warning (NULL: current member).
- * @param  ?TIME                        The time of the warning (NULL: now).
+ * @param  ?MEMBER                      The member doing the warning (null: current member).
+ * @param  ?TIME                        The time of the warning (null: now).
  * @param  BINARY                       Whether this counts as a warning
- * @param  ?AUTO_LINK                   The topic being silenced from (NULL: none)
- * @param  ?AUTO_LINK                   The forum being silenced from (NULL: none)
+ * @param  ?AUTO_LINK                   The topic being silenced from (null: none)
+ * @param  ?AUTO_LINK                   The forum being silenced from (null: none)
  * @param  integer                      Number of extra days for probation
  * @param  IP                           The IP address being banned (blank: none)
  * @param  integer                      The points being charged
  * @param  BINARY                       Whether the member is being banned
- * @param  ?GROUP                       The usergroup being changed from (NULL: no change)
+ * @param  ?GROUP                       The usergroup being changed from (null: no change)
  * @return AUTO_LINK                    The ID of the newly created warning.
  */
 function ocf_make_warning($member_id, $explanation, $by = null, $time = null, $is_warning = 1, $silence_from_topic = null, $silence_from_forum = null, $probation = 0, $banned_ip = '', $charged_points = 0, $banned_member = 0, $changed_usergroup_from = null)

@@ -61,7 +61,7 @@ function _delete_attachment($id, $connection)
  *
  * @param  ID_TEXT                      The arbitrary type that the attached is for (e.g. download)
  * @param  ID_TEXT                      The ID in the set of the arbitrary types that the attached is for
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  */
 function delete_comcode_attachments($type, $id, $connection = null)
 {
@@ -88,7 +88,7 @@ function delete_comcode_attachments($type, $id, $connection = null)
  * @param  mixed                        The language ID
  * @param  ID_TEXT                      The arbitrary type that the attached is for (e.g. download)
  * @param  ID_TEXT                      The ID in the set of the arbitrary types that the attached is for
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  */
 function delete_lang_comcode_attachments($lang_id, $type, $id, $connection = null)
 {
@@ -111,9 +111,9 @@ function delete_lang_comcode_attachments($lang_id, $type, $id, $connection = nul
  * @param  LONG_TEXT                    The new text
  * @param  ID_TEXT                      The arbitrary type that the attached is for (e.g. download)
  * @param  ID_TEXT                      The ID in the set of the arbitrary types that the attached is for
- * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?object                      The database connection to use (null: standard site connection)
  * @param  boolean                      Whether to backup the language string before changing it
- * @param  ?MEMBER                      The member that owns the content this is for (NULL: current member)
+ * @param  ?MEMBER                      The member that owns the content this is for (null: current member)
  * @return array                        The language ID save fields
  */
 function update_lang_comcode_attachments($field_name, $lang_id, $text, $type, $id, $connection = null, $backup_string = false, $for_member = null)

@@ -197,7 +197,7 @@ class OCP_RSS
      *
      * @param  object                   The parser object (same as 'this')
      * @param  string                   N/A
-     * @param  ?URLPATH                 The URI of the name space we are entering (NULL: not given)
+     * @param  ?URLPATH                 The URI of the name space we are entering (null: not given)
      */
     public function startNameSpace($parser, $prefix, $uri = null)
     {

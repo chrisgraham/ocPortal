@@ -315,7 +315,7 @@ function add_room($name, $realm, $x, $y, $text, $password_question, $password_an
 /**
  * Wrapper and actualiser to add a realm. Does not return.
  *
- * @param  ?MEMBER                      The member performing the action (NULL: no member)
+ * @param  ?MEMBER                      The member performing the action (null: no member)
  * @param  string                       Name for the realm
  * @param  string                       Name of the realm's troll
  * @param  string                       Name of the jail room
@@ -832,7 +832,7 @@ function edit_room($name, $realm, $x, $y, $text, $password_question, $password_a
  * @param  string                       Name of the realm's troll
  * @param  array                        List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
  * @param  BINARY                       Whether the realm is private
- * @param  ?MEMBER                      The owner of the realm (NULL: same as $member_id)
+ * @param  ?MEMBER                      The owner of the realm (null: same as $member_id)
  */
 function edit_realm_wrap($member_id, $name, $troll_name, $qa, $private, $new_owner)
 {

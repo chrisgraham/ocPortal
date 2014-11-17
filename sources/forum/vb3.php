@@ -261,7 +261,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
      * Create a member login cookie.
      *
      * @param  MEMBER                   The member ID
-     * @param  ?SHORT_TEXT              The username (NULL: lookup)
+     * @param  ?SHORT_TEXT              The username (null: lookup)
      * @param  string                   The password
      */
     public function forum_create_cookie($id, $name, $password)
@@ -283,7 +283,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
      * All authorisation, cookies, and form-logins, are passed through this function.
      * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
      *
-     * @param  ?SHORT_TEXT              The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  ?SHORT_TEXT              The member username (null: don't use this in the authentication - but look it up using the ID if needed)
      * @param  MEMBER                   The member ID
      * @param  MD5                      The md5-hashed password
      * @param  string                   The raw password

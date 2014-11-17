@@ -174,7 +174,7 @@ Allows people to specify who referred them when they join your site or other con
     /**
      * Install the addon.
      *
-     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What version we're upgrading from (null: new install)
      */
     public function install($upgrade_from = null)
     {

@@ -27,7 +27,7 @@ class Hook_search_catalogue_entries
      * Find details for this search hook.
      *
      * @param  boolean                  Whether to check permissions.
-     * @return ?array                   Map of search hook details (NULL: hook is disabled).
+     * @return ?array                   Map of search hook details (null: hook is disabled).
      */
     public function info($check_permissions = true)
     {
@@ -160,7 +160,7 @@ class Hook_search_catalogue_entries
      * @param  boolean                  Whether only to search titles (as opposed to both titles and content)
      * @param  string                   Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
      * @param  SHORT_TEXT               Username/Author to match for
-     * @param  ?MEMBER                  Member-ID to match for (NULL: unknown)
+     * @param  ?MEMBER                  Member-ID to match for (null: unknown)
      * @param  TIME                     Cutoff date
      * @param  string                   The sort type (gets remapped to a field in this function)
      * @set    title add_date
@@ -422,7 +422,7 @@ class Hook_search_catalogue_entries
      * Run function for rendering a search result.
      *
      * @param  array                    The data row stored when we retrieved the result
-     * @return ?tempcode                The output (NULL: compound output)
+     * @return ?tempcode                The output (null: compound output)
      */
     public function render($row)
     {

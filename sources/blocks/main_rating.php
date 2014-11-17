@@ -26,7 +26,7 @@ class Block_main_rating
     /**
      * Find details of the block.
      *
-     * @return ?array                   Map of block info (NULL: block is disabled).
+     * @return ?array                   Map of block info (null: block is disabled).
      */
     public function info()
     {
@@ -44,7 +44,7 @@ class Block_main_rating
     /**
      * Find cacheing details for the block.
      *
-     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
      */
     /*
     function cacheing_environment() // We can't cache this block, because it needs to execute in order to allow commenting

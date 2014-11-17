@@ -20,7 +20,7 @@
  * @param  URLPATH                      The URL to the banner image
  * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
  * @param  SHORT_TEXT                   The caption of the banner
- * @param  ?integer                     The number of hits the banner may have (NULL: not applicable for this banner type)
+ * @param  ?integer                     The number of hits the banner may have (null: not applicable for this banner type)
  * @range  0 max
  * @param  URLPATH                      The URL to the site the banner leads to
  * @param  integer                      The banners "importance modulus"
@@ -28,16 +28,16 @@
  * @param  LONG_TEXT                    Any notes associated with the banner
  * @param  SHORT_INTEGER                The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
- * @param  ?TIME                        The banner expiry date (NULL: never)
- * @param  ?MEMBER                      The banners submitter (NULL: current member)
+ * @param  ?TIME                        The banner expiry date (null: never)
+ * @param  ?MEMBER                      The banners submitter (null: current member)
  * @param  BINARY                       Whether the banner has been validated
  * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
- * @param  ?TIME                        The time the banner was added (NULL: now)
+ * @param  ?TIME                        The time the banner was added (null: now)
  * @param  integer                      The number of return hits from this banners site
  * @param  integer                      The number of banner hits to this banners site
  * @param  integer                      The number of return views from this banners site
  * @param  integer                      The number of banner views to this banners site
- * @param  ?TIME                        The banner edit date  (NULL: never)
+ * @param  ?TIME                        The banner edit date  (null: never)
  */
 function add_banner_quiet($name, $imgurl, $title_text, $caption, $campaign_remaining, $site_url, $importance_modulus, $notes, $the_type, $expiry_date, $submitter, $validated = 0, $b_type = '', $time = null, $hits_from = 0, $hits_to = 0, $views_from = 0, $views_to = 0, $edit_date = null)
 {

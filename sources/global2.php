@@ -877,7 +877,7 @@ function running_script($is_this_running)
  * This is a intended to output an informational exit at the same time as terminating execution
  *
  * @param  mixed                        The error message (string or tempcode)
- * @param  ?boolean                     Whether match key messages / redirects should be supported (NULL: detect)
+ * @param  ?boolean                     Whether match key messages / redirects should be supported (null: detect)
  */
 function inform_exit($text, $support_match_key_messages = null)
 {
@@ -1040,7 +1040,7 @@ function get_forum_base_url($forum_base = false)
 /**
  * Get the ocPortal cookie path.
  *
- * @return ?string                      The ocPortal cookie path (NULL: no special path, global)
+ * @return ?string                      The ocPortal cookie path (null: no special path, global)
  */
 function get_cookie_path()
 {
@@ -1052,7 +1052,7 @@ function get_cookie_path()
 /**
  * Get the ocPortal cookie domain.
  *
- * @return ?string                      The ocPortal cookie domain (NULL: current domain)
+ * @return ?string                      The ocPortal cookie domain (null: current domain)
  */
 function get_cookie_domain()
 {
@@ -1166,8 +1166,8 @@ function find_script($name, $append_keep = false, $base_url_code = 0)
 /**
  * Get the base url (the minimum fully qualified URL to our installation).
  *
- * @param  ?boolean                     Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
- * @param  ?ID_TEXT                     The zone the link is for (NULL: root zone)
+ * @param  ?boolean                     Whether to get the HTTPS base URL (null: do so only if the current page uses the HTTPS base URL)
+ * @param  ?ID_TEXT                     The zone the link is for (null: root zone)
  * @return URLPATH                      The base-url
  */
 function get_base_url($https = null, $zone_for = null)
@@ -1251,7 +1251,7 @@ function get_base_url($https = null, $zone_for = null)
 /**
  * Get the base url (the minimum fully qualified URL to our personal data installation). For a shared install, or a GAE-install, this is different to the base-url.
  *
- * @param  ?boolean                     Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
+ * @param  ?boolean                     Whether to get the HTTPS base URL (null: do so only if the current page uses the HTTPS base URL)
  * @return URLPATH                      The base-url
  */
 function get_custom_base_url($https = null)
@@ -1288,8 +1288,8 @@ function get_complex_base_url($at)
  * Implements additional security over the direct PHP access mechanism which should not be used.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
- * @return ?string                      The parameter value (NULL: missing)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (null: allow missing parameter) (false: give error on missing parameter)
+ * @return ?string                      The parameter value (null: missing)
  */
 function either_param($name, $default = false)
 {
@@ -1310,10 +1310,10 @@ function either_param($name, $default = false)
  * Implements additional security over the direct PHP access mechanism which should not be used.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (null: allow missing parameter) (false: give error on missing parameter)
  * @param  boolean                      Whether we are cleaning for HTML rather than Comcode/plain-text
  * @param  boolean                      Whether to convert WYSIWYG contents to Comcode automatically
- * @return ?string                      The parameter value (NULL: missing)
+ * @return ?string                      The parameter value (null: missing)
  */
 function post_param($name, $default = false, $html = false, $conv_from_wysiwyg = true)
 {
@@ -1365,9 +1365,9 @@ function post_param($name, $default = false, $html = false, $conv_from_wysiwyg =
  * Implements additional security over the direct PHP access mechanism which should not be used.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (null: allow missing parameter) (false: give error on missing parameter)
  * @param  boolean                      Whether to skip the security check
- * @return ?string                      The parameter value (NULL: missing)
+ * @return ?string                      The parameter value (null: missing)
  */
 function get_param($name, $default = false, $no_security = false)
 {
@@ -1429,9 +1429,9 @@ function get_param($name, $default = false, $no_security = false)
  *
  * @param  array                        The array we're extracting parameters from
  * @param  string                       The name of the parameter
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (null: allow missing parameter) (false: give error on missing parameter)
  * @param  boolean                      Whether the parameter has to be an integer
- * @param  ?boolean                     Whether the parameter is a POST parameter (NULL: undetermined)
+ * @param  ?boolean                     Whether the parameter is a POST parameter (null: undetermined)
  * @return string                       The value of the parameter
  */
 function __param($array, $name, $default, $integer = false, $posted = false)
@@ -1489,8 +1489,8 @@ function simulated_wildcard_match($context, $word, $full_cover = false)
  * You should always use integer specified versions when inputting integers, for the added security that type validation allows. If the value is of the wrong type, it indicates a hack attempt and will be logged.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined or the empty string (NULL: allow missing parameter) (false: give error on missing parameter)
- * @return ?integer                     The parameter value (NULL: not set, and NULL given as default)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined or the empty string (null: allow missing parameter) (false: give error on missing parameter)
+ * @return ?integer                     The parameter value (null: not set, and NULL given as default)
  */
 function either_param_integer($name, $default = false)
 {
@@ -1514,8 +1514,8 @@ function either_param_integer($name, $default = false)
  * This function is the integeric partner of post_param, as it returns the value as an integer.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined or the empty string (NULL: allow missing parameter) (false: give error on missing parameter)
- * @return ?integer                     The parameter value (NULL: not set, and NULL given as default)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined or the empty string (null: allow missing parameter) (false: give error on missing parameter)
+ * @return ?integer                     The parameter value (null: not set, and NULL given as default)
  */
 function post_param_integer($name, $default = false)
 {
@@ -1548,9 +1548,9 @@ function post_param_integer($name, $default = false)
  * This function is the integeric partner of get_param, as it returns the value as an integer.
  *
  * @param  ID_TEXT                      The name of the parameter to get
- * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined or the empty string (NULL: allow missing parameter) (false: give error on missing parameter)
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined or the empty string (null: allow missing parameter) (false: give error on missing parameter)
  * @param  boolean                      If a string is given, use the default parameter rather than giving an error (only use this if you are suffering from a parameter conflict situation between different parts of ocPortal)
- * @return ?integer                     The parameter value (NULL: not set, and NULL given as default)
+ * @return ?integer                     The parameter value (null: not set, and NULL given as default)
  */
 function get_param_integer($name, $default = false, $not_string_ok = false)
 {
@@ -1595,7 +1595,7 @@ function get_param_integer($name, $default = false, $not_string_ok = false)
  * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
  *
  * @param  string                       The data to clean
- * @param  ?ID_TEXT                     The character set it should be in. We don't do any real conversions using this, only make sure that common problems with fed ISO-8859-1 data are resolved (NULL: output character set)
+ * @param  ?ID_TEXT                     The character set it should be in. We don't do any real conversions using this, only make sure that common problems with fed ISO-8859-1 data are resolved (null: output character set)
  * @param  boolean                      Whether we are cleaning for HTML rather than Comcode/plain-text
  * @param  boolean                      Whether the file is loaded from disk (less conversion needed)
  * @return string                       The cleaned data
@@ -1626,8 +1626,8 @@ function unixify_line_format($in, $desired_charset = null, $html = false, $from_
  * Force a JavaScript file to be cached (ordinarily we can rely on this to be automated by require_javascript/javascript_tempcode).
  *
  * @param  string                       The javascript file required
- * @param  ?ID_TEXT                     The name of the theme (NULL: current theme)
- * @param  ?boolean                     Whether to minify (NULL: read from environment)
+ * @param  ?ID_TEXT                     The name of the theme (null: current theme)
+ * @param  ?boolean                     Whether to minify (null: read from environment)
  * @return string                       The path to the javascript file in the cache (blank: no file)
  */
 function javascript_enforce($j, $theme = null, $minify = null)
@@ -1702,7 +1702,7 @@ function javascript_enforce($j, $theme = null, $minify = null)
 /**
  * Get tempcode to tie in (to the HTML, in <head>) all the JavaScript files that have been required.
  *
- * @param  ?string                      Position to get JavaScript for (NULL: all positions)
+ * @param  ?string                      Position to get JavaScript for (null: all positions)
  * @set NULL header footer
  * @return tempcode                     The tempcode to tie in the JavaScript files
  */
@@ -1750,10 +1750,10 @@ function javascript_tempcode($position = null)
  *
  * @param  ID_TEXT                      The javascript file required
  * @param  tempcode                     Tempcode object (will be written into if appropriate)
- * @param  ?boolean                     Whether minifying (NULL: from what is cached)
- * @param  ?boolean                     Whether doing HTTPS (NULL: from what is cached)
- * @param  ?boolean                     Whether operating in mobile mode (NULL: from what is cached)
- * @param  ?boolean                     Whether to generate the cached file if not already cached (NULL: from what is cached)
+ * @param  ?boolean                     Whether minifying (null: from what is cached)
+ * @param  ?boolean                     Whether doing HTTPS (null: from what is cached)
+ * @param  ?boolean                     Whether operating in mobile mode (null: from what is cached)
+ * @param  ?boolean                     Whether to generate the cached file if not already cached (null: from what is cached)
  */
 function _javascript_tempcode($j, &$js, $_minify = null, $_https = null, $_mobile = null, $do_enforce = true)
 {
@@ -1815,8 +1815,8 @@ function require_javascript($javascript)
  * Force a CSS file to be cached.
  *
  * @param  string                       The CSS file required
- * @param  ?ID_TEXT                     The name of the theme (NULL: current theme)
- * @param  ?boolean                     Whether to minify (NULL: read from environment)
+ * @param  ?ID_TEXT                     The name of the theme (null: current theme)
+ * @param  ?boolean                     Whether to minify (null: read from environment)
  * @return string                       The path to the CSS file in the cache (blank: no file)
  */
 function css_enforce($c, $theme = null, $minify = null)
@@ -1902,8 +1902,8 @@ function css_enforce($c, $theme = null, $minify = null)
  *
  * @param  boolean                      Force inline CSS
  * @param  boolean                      Only do global CSS
- * @param  ?string                      HTML context for which we filter (minimise) any CSS we spit out as inline (NULL: none)
- * @param  ?ID_TEXT                     The name of the theme (NULL: current theme)
+ * @param  ?string                      HTML context for which we filter (minimise) any CSS we spit out as inline (null: none)
+ * @param  ?ID_TEXT                     The name of the theme (null: current theme)
  * @return tempcode                     The tempcode to tie in the CSS files
  */
 function css_tempcode($inline = false, $only_global = false, $context = null, $theme = null)
@@ -1955,13 +1955,13 @@ function css_tempcode($inline = false, $only_global = false, $context = null, $t
  * @param  tempcode                     Main tempcode object (will be written into if appropriate)
  * @param  tempcode                     Inline tempcode object (will be written into if appropriate)
  * @param  boolean                      Only do global CSS
- * @param  ?string                      HTML context for which we filter (minimise) any CSS we spit out as inline (NULL: none)
- * @param  ?ID_TEXT                     The name of the theme (NULL: current theme) (NULL: from what is cached)
- * @param  ?ID_TEXT                     The seed colour (NULL: previous cached) (blank: none) (NULL: from what is cached)
- * @param  ?boolean                     Whether operating in text-only mode (NULL: from what is cached)
- * @param  ?boolean                     Whether minifying (NULL: from what is cached)
- * @param  ?boolean                     Whether doing HTTPS (NULL: from what is cached)
- * @param  ?boolean                     Whether operating in mobile mode (NULL: from what is cached)
+ * @param  ?string                      HTML context for which we filter (minimise) any CSS we spit out as inline (null: none)
+ * @param  ?ID_TEXT                     The name of the theme (null: current theme) (null: from what is cached)
+ * @param  ?ID_TEXT                     The seed colour (null: previous cached) (blank: none) (null: from what is cached)
+ * @param  ?boolean                     Whether operating in text-only mode (null: from what is cached)
+ * @param  ?boolean                     Whether minifying (null: from what is cached)
+ * @param  ?boolean                     Whether doing HTTPS (null: from what is cached)
+ * @param  ?boolean                     Whether operating in mobile mode (null: from what is cached)
  * @param  boolean                      Whether to generate the cached file if not already cached
  */
 function _css_tempcode($c, &$css, &$css_need_inline, $inline = false, $context = null, $theme = null, $_seed = null, $_text_only = null, $_minify = null, $_https = null, $_mobile = null, $do_enforce = true)
@@ -2066,7 +2066,7 @@ function require_css($css)
  * @param  boolean                      If we are minifying
  * @param  boolean                      If we are using HTTPs
  * @param  boolean                      If we are using mobile
- * @return ?ID_TEXT                     Resource name for merged file, which we assume is compiled (as this function makes it) (NULL: we don't know what is required / race condition)
+ * @return ?ID_TEXT                     Resource name for merged file, which we assume is compiled (as this function makes it) (null: we don't know what is required / race condition)
  */
 function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
 {

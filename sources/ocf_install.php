@@ -154,7 +154,7 @@ function uninstall_ocf()
 /**
  * Install/upgrade OCF.
  *
- * @param  ?float                       The version to upgrade from (NULL: fresh install).
+ * @param  ?float                       The version to upgrade from (null: fresh install).
  */
 function install_ocf($upgrade_from = null)
 {

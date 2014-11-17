@@ -36,8 +36,8 @@ function init__tempcode_compiler__runtime()
  * @param  integer                      The position we are looking at in the text
  * @param  boolean                      Whether this text is infact a directive, about to be put in the context of a wider template
  * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ?ID_TEXT                     The theme it is for (NULL: current theme)
- * @param  ?ID_TEXT                     The language it is for (NULL: current language)
+ * @param  ?ID_TEXT                     The theme it is for (null: current theme)
+ * @param  ?ID_TEXT                     The language it is for (null: current language)
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
 function template_to_tempcode_static($text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null)
@@ -129,7 +129,7 @@ function template_to_tempcode_static($text, $symbol_pos = 0, $inside_directive =
  * @param  string                       The full text that is being parsed (we only look into this - the whole thing will be passed into PHP by reference, hence avoiding us a memory block copy)
  * @param  integer                      The position we are looking at in the text
  * @param  integer                      The length of our variable
- * @param  ?ID_TEXT                     The theme it is for (NULL: current theme)
+ * @param  ?ID_TEXT                     The theme it is for (null: current theme)
  * @return array                        The tempcode variable array that our variable gets represented of
  */
 function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $theme = null)
@@ -389,7 +389,7 @@ class Tempcode_static
      * Attach the specified tempcode to the right of the current tempcode object.
      *
      * @param  mixed                    The tempcode/string to attach
-     * @param  ?array                   Extra escaping (NULL: none)
+     * @param  ?array                   Extra escaping (null: none)
      * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
      */
     public function attach($attach, $escape = null, $avoid_children_merge = false)
@@ -445,7 +445,7 @@ class Tempcode_static
     /**
      * Parses the current tempcode object, then return the parsed string
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current user's language)
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current user's language)
      * @param  mixed                    Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
      * @return string                   The evaluated thing. Voila, it's all over!
      */
@@ -490,7 +490,7 @@ class Tempcode_static
  * @param  ID_TEXT                      The actual codename to use for the template (e.g. thin_foo)
  * @param  LANGUAGE_NAME                The language the template is in the context of
  * @param  string                       File type suffix of template file
- * @param  ?ID_TEXT                     The theme to cache in (NULL: main theme)
+ * @param  ?ID_TEXT                     The theme to cache in (null: main theme)
  * @return tempcode                     The compiled tempcode
  */
 function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $theme_orig = null)
@@ -579,8 +579,8 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
  * @param  integer                      The position we are looking at in the text
  * @param  boolean                      Whether this text is infact a directive, about to be put in the context of a wider template
  * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ?ID_TEXT                     The theme it is for (NULL: current theme)
- * @param  ?ID_TEXT                     The language it is for (NULL: current language)
+ * @param  ?ID_TEXT                     The theme it is for (null: current theme)
+ * @param  ?ID_TEXT                     The language it is for (null: current language)
  * @param  boolean                      Whether to tolerate errors
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */

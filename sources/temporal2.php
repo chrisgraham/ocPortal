@@ -274,9 +274,9 @@ function _get_timezone_list()
  * Check a POST inputted date for validity, and get the dat/time components.
  *
  * @param  ID_TEXT                      The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
- * @param  ?integer                     Default year (NULL: none)
- * @param  ?integer                     Default month (NULL: none)
- * @param  ?integer                     Default day (NULL: none)
+ * @param  ?integer                     Default year (null: none)
+ * @param  ?integer                     Default month (null: none)
+ * @param  ?integer                     Default day (null: none)
  * @param  boolean                      Whether to allow over get parameters also
  * @return array                        The date/time components
  */
@@ -384,7 +384,7 @@ function get_input_date_components($stub, $year = null, $month = null, $day = nu
  * @param  ID_TEXT                      The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
  * @param  boolean                      Whether to allow over get parameters also
  * @param  boolean                      Whether to do timezone conversion
- * @return ?TIME                        The timestamp of the date (NULL: no input date was chosen)
+ * @return ?TIME                        The timestamp of the date (null: no input date was chosen)
  */
 function _get_input_date($stub, $get_also = false, $do_timezone_conversion = true)
 {

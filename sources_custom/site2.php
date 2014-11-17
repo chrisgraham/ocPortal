@@ -15,7 +15,7 @@ if (!function_exists('_load_comcode_page_not_cached')) {
      * @param  ID_TEXT                  The zone the page is being loaded from
      * @param  ID_TEXT                  The codename of the page
      * @param  PATH                     The file base to load from
-     * @param  ?array                   Row from database (holds submitter etc) (NULL: no row, originated first from disk)
+     * @param  ?array                   Row from database (holds submitter etc) (null: no row, originated first from disk)
      * @param  array                    New row for database, used if necessary (holds submitter etc)
      * @param  boolean                  Whether the page is being included from another
      * @return array                    A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode

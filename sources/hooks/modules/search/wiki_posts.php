@@ -27,7 +27,7 @@ class Hook_search_wiki_posts
      * Find details for this search hook.
      *
      * @param  boolean                  Whether to check permissions.
-     * @return ?array                   Map of search hook details (NULL: hook is disabled).
+     * @return ?array                   Map of search hook details (null: hook is disabled).
      */
     public function info($check_permissions = true)
     {
@@ -89,7 +89,7 @@ class Hook_search_wiki_posts
      * @param  boolean                  Whether only to search titles (as opposed to both titles and content)
      * @param  string                   Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
      * @param  SHORT_TEXT               Username/Author to match for
-     * @param  ?MEMBER                  Member-ID to match for (NULL: unknown)
+     * @param  ?MEMBER                  Member-ID to match for (null: unknown)
      * @param  TIME                     Cutoff date
      * @param  string                   The sort type (gets remapped to a field in this function)
      * @set    title add_date

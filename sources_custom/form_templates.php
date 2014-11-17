@@ -19,7 +19,7 @@
  * @param  mixed                        A description for this input field
  * @param  ID_TEXT                      The name which this input field is for
  * @param  boolean                      Whether this is ticked by default
- * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ?integer                     The tab index of the field (null: not specified)
  * @param  ID_TEXT                      The value the checkbox passes when ticked
  * @param  ?boolean                     Whether this box should be disabled (default: false)
  * @return tempcode                     The input field
@@ -39,11 +39,11 @@ function form_input_tick($pretty_name, $description, $name, $ticked, $tabindex =
  *
  * @param  array                        A list of tuples: (prettyname, name, value, description)
  * @param  mixed                        A description for this input field
- * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ?integer                     The tab index of the field (null: not specified)
  * @param  mixed                        A human intelligible name for this input field (blank: use default)
  * @param  boolean                      Whether to place each tick on a new line
- * @param  ?ID_TEXT                     Name for custom value to be entered to (NULL: no custom value allowed)
- * @param  ?string                      Value for custom value (NULL: no custom value known)
+ * @param  ?ID_TEXT                     Name for custom value to be entered to (null: no custom value allowed)
+ * @param  ?string                      Value for custom value (null: no custom value known)
  * @return tempcode                     The input field
  */
 function form_input_various_ticks($options, $description, $_tabindex = null, $_pretty_name = '', $simple_style = false, $custom_name = null, $custom_value = null)

@@ -388,7 +388,7 @@ function _helper_rename_table($this_ref, $old, $new)
  * @param  ID_TEXT                      The table name
  * @param  ID_TEXT                      The field name
  * @param  ID_TEXT                      The field type
- * @param  ?mixed                       The default value (NULL: no default)
+ * @param  ?mixed                       The default value (null: no default)
  */
 function _helper_add_table_field($this_ref, $table_name, $name, $_type, $default = null)
 {
@@ -530,7 +530,7 @@ function _helper_add_table_field($this_ref, $table_name, $name, $_type, $default
  * @param  ID_TEXT                      The table name
  * @param  ID_TEXT                      The field name
  * @param  ID_TEXT                      The new field type
- * @param  ?ID_TEXT                     The new field name (NULL: leave name)
+ * @param  ?ID_TEXT                     The new field name (null: leave name)
  */
 function _helper_alter_table_field($this_ref, $table_name, $name, $_type, $new_name = null)
 {

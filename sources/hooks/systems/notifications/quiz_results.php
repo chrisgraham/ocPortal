@@ -27,7 +27,7 @@ class Hook_notification_quiz_results extends Hook_notification__Staff
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
      * @return integer                  Initial setting
      */
     public function get_initial_setting($notification_code, $category = null)
@@ -51,7 +51,7 @@ class Hook_notification_quiz_results extends Hook_notification__Staff
      * Standard function to create the standardised category tree
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
+     * @param  ?ID_TEXT                 The ID of where we're looking under (null: N/A)
      * @return array                    Tree structure
      */
     public function create_category_tree($notification_code, $id)

@@ -83,8 +83,8 @@ function _ocfilter_eq($field_name, $var, $numeric)
  * Helper function to fetch a subtree from the database.
  *
  * @param  string                       The category-ID we are searching under
- * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's parent-category-ID (null: don't support subtree [*-style] searches beyond the tree base)
  * @param  string                       The database's field name for the category-set's category-ID
  * @param  boolean                      Whether the category-set IDs are numeric
  * @param  object                       Database connection to use
@@ -145,7 +145,7 @@ function _ocfilter_subtree_fetch($look_under, $table_name, $parent_name, $field_
  *
  * @param  string                       The ID field name in the record-set
  * @param  string                       The table name of the record-set
- * @param  ?string                      The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's parent-category-ID (null: don't support subtree [*-style] searches)
  * @param  object                       Database connection to use
  * @return array                        A map between record-set IDs and record-set parent-category-IDs
  */
@@ -167,11 +167,11 @@ function _ocfilter_find_ids_and_parents($field_name, $table_name, $parent_field_
 /**
  * Function to do an actual data lookup sourced via the database, used as a kind of a callback function (it's name gets passed into the generic API).
  *
- * @param  ?string                      The database's table for the record-set we're matching (NULL: use a different lookup method)
- * @param  ?string                      The database's ID field for the record-set we're matching (NULL: use a different lookup method)
- * @param  ?string                      The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's table for the record-set we're matching (null: use a different lookup method)
+ * @param  ?string                      The database's ID field for the record-set we're matching (null: use a different lookup method)
+ * @param  ?string                      The database's field name for the record-set's container-category specifier (null: don't support subtree [*-style] searches)
  * @param  boolean                      Whether there are parents in the filter
- * @param  ?object                      Database connection to use (NULL: website)
+ * @param  ?object                      Database connection to use (null: website)
  * @return array                        A list of ID numbers
  */
 function _ocfilter_to_generic_callback($table_name, $field_name, $parent_field_name, $has_no_parents, $db)
@@ -188,17 +188,17 @@ function _ocfilter_to_generic_callback($table_name, $field_name, $parent_field_n
  * Turn an ocFilter (a filter specifying which records to match) into a list of ID numbers, relying on the database to extract the record-set.
  *
  * @param  string                       The filter
- * @param  ?string                      The database's ID field for the record-set we're matching (NULL: use a different lookup method)
- * @param  ?string                      The database's table for the record-set we're matching (NULL: use a different lookup method)
- * @param  ?array                       A map between record-set IDs and record-set parent-category-IDs (NULL: use a different lookup method)
- * @param  ?mixed                       A call_user_func_array specifier to a function that will give a map between record-set IDs and record-set parent-category-IDs. We pass a call_user_func_array specifier because we don't want to have to generate it unless we need to (if we need to do 'avoiding' matches or 'subtree' matches) (NULL: use a different lookup method)
- * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
- * @param  ?string                      The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's ID field for the record-set we're matching (null: use a different lookup method)
+ * @param  ?string                      The database's table for the record-set we're matching (null: use a different lookup method)
+ * @param  ?array                       A map between record-set IDs and record-set parent-category-IDs (null: use a different lookup method)
+ * @param  ?mixed                       A call_user_func_array specifier to a function that will give a map between record-set IDs and record-set parent-category-IDs. We pass a call_user_func_array specifier because we don't want to have to generate it unless we need to (if we need to do 'avoiding' matches or 'subtree' matches) (null: use a different lookup method)
+ * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's parent-category-ID (null: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's field name for the record-set's container-category specifier (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's category-ID (null: don't support subtree [*-style] searches beyond the tree base)
  * @param  boolean                      Whether the record-set IDs are numeric
  * @param  boolean                      Whether the category-set IDs are numeric
- * @param  ?object                      Database connection to use (NULL: website)
+ * @param  ?object                      Database connection to use (null: website)
  * @return array                        A list of ID numbers
  */
 function _ocfilter_to_generic($filter, $field_name, $table_name, $ids_and_parents, $ids_and_parents_callback, $parent_spec__table_name, $parent_spec__parent_name, $parent_field_name, $parent_spec__field_name, $numeric_record_set_ids, $numeric_category_set_ids, $db)
@@ -362,13 +362,13 @@ function _ocfilter_to_generic($filter, $field_name, $table_name, $ids_and_parent
  * @param  string                       The filter
  * @param  string                       The database's ID field for the record-set we're matching
  * @param  string                       The database's table for the record-set we're matching
- * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
- * @param  ?string                      The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's parent-category-ID (null: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's field name for the record-set's container-category specifier (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's category-ID (null: don't support subtree [*-style] searches beyond the tree base)
  * @param  boolean                      Whether the record-set IDs are numeric
  * @param  boolean                      Whether the category-set IDs are numeric
- * @param  ?object                      Database connection to use (NULL: website)
+ * @param  ?object                      Database connection to use (null: website)
  * @return array                        A list of ID numbers
  */
 function ocfilter_to_idlist_using_db($filter, $field_name, $table_name, $parent_spec__table_name = null, $parent_spec__parent_name = null, $parent_field_name = null, $parent_spec__field_name = null, $numeric_record_set_ids = true, $numeric_category_set_ids = true, $db = null)
@@ -381,13 +381,13 @@ function ocfilter_to_idlist_using_db($filter, $field_name, $table_name, $parent_
  *
  * @param  string                       The filter
  * @param  array                        A map between record-set IDs and record-set parent-category-IDs
- * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
- * @param  ?string                      The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's parent-category-ID (null: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's field name for the record-set's container-category specifier (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's category-ID (null: don't support subtree [*-style] searches beyond the tree base)
  * @param  boolean                      Whether the record-set IDs are numeric
  * @param  boolean                      Whether the category-set IDs are numeric
- * @param  ?object                      Database connection to use (NULL: website)
+ * @param  ?object                      Database connection to use (null: website)
  * @return array                        A list of ID numbers
  */
 function ocfilter_to_idlist_using_memory($filter, $ids_and_parents, $parent_spec__table_name = null, $parent_spec__parent_name = null, $parent_field_name = null, $parent_spec__field_name = null, $numeric_record_set_ids = true, $numeric_category_set_ids = true, $db = null)
@@ -400,13 +400,13 @@ function ocfilter_to_idlist_using_memory($filter, $ids_and_parents, $parent_spec
  *
  * @param  string                       The filter
  * @param  string                       A call_user_func_array specifier to a function that will give a map between record-set IDs and record-set parent-category-IDs. We pass a call_user_func_array specifier because we don't want to have to generate it unless we need to (if we need to do 'avoiding' matches or 'subtree' matches)
- * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
- * @param  ?string                      The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches)
- * @param  ?string                      The database's field name for the category-set's category-ID (NULL: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's parent-category-ID (null: don't support subtree [*-style] searches beyond the tree base)
+ * @param  ?string                      The database's field name for the record-set's container-category specifier (null: don't support subtree [*-style] searches)
+ * @param  ?string                      The database's field name for the category-set's category-ID (null: don't support subtree [*-style] searches beyond the tree base)
  * @param  boolean                      Whether the record-set IDs are numeric
  * @param  boolean                      Whether the category-set IDs are numeric
- * @param  ?object                      Database connection to use (NULL: website)
+ * @param  ?object                      Database connection to use (null: website)
  * @return array                        A list of ID numbers
  */
 function ocfilter_to_idlist_using_callback($filter, $ids_and_parents_callback, $parent_spec__table_name = null, $parent_spec__parent_name = null, $parent_field_name = null, $parent_spec__field_name = null, $numeric_record_set_ids = true, $numeric_category_set_ids = true, $db = null)
@@ -419,13 +419,13 @@ function ocfilter_to_idlist_using_callback($filter, $ids_and_parents_callback, $
  *
  * @param  string                       The filter
  * @param  string                       The database's ID field for the record-set we're matching. E.g. 'id'.
- * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (NULL: don't support subtree [*-style] searches). E.g. 'categories'.
- * @param  ?string                      The database's field name for the category-set's parent-category-ID (NULL: don't support subtree [*-style] searches beyond the tree base). E.g. 'parent_id'.
- * @param  ?string                      The database's field name for the record-set's container-category specifier (NULL: don't support subtree [*-style] searches). E.g. 'cat'.
- * @param  ?string                      The database's field name for the category-set's category-ID (NULL: don't support subtree [*-style] searches beyond the tree base). E.g. 'id'.
+ * @param  ?string                      The database's table that contains parent/child relationships in the record-set's category-set (the category-set is equal to the record-set if we're matching categories, but not if we're matching entries) (null: don't support subtree [*-style] searches). E.g. 'categories'.
+ * @param  ?string                      The database's field name for the category-set's parent-category-ID (null: don't support subtree [*-style] searches beyond the tree base). E.g. 'parent_id'.
+ * @param  ?string                      The database's field name for the record-set's container-category specifier (null: don't support subtree [*-style] searches). E.g. 'cat'.
+ * @param  ?string                      The database's field name for the category-set's category-ID (null: don't support subtree [*-style] searches beyond the tree base). E.g. 'id'.
  * @param  boolean                      Whether the record-set IDs are numeric
  * @param  boolean                      Whether the category-set IDs are numeric
- * @param  ?object                      Database connection to use (NULL: website)
+ * @param  ?object                      Database connection to use (null: website)
  * @return string                       SQL query fragment. Note that brackets will be put around this automatically if required, so there's no need to do this yourself.
  */
 function ocfilter_to_sqlfragment($filter, $field_name, $parent_spec__table_name = null, $parent_spec__parent_name = null, $parent_field_name = null, $parent_spec__field_name = null, $numeric_record_set_ids = true, $numeric_category_set_ids = true, $db = null)

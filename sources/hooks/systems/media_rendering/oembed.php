@@ -53,7 +53,7 @@ class Hook_media_rendering_oembed
      * See if we can recognise this mime type.
      *
      * @param  ID_TEXT                  The mime type
-     * @param  ?array                   The media signature, so we can go on this on top of the mime-type (NULL: not known)
+     * @param  ?array                   The media signature, so we can go on this on top of the mime-type (null: not known)
      * @return integer                  Recognition precedence
      */
     public function recognises_mime_type($mime_type, $meta_details = null)
@@ -86,7 +86,7 @@ class Hook_media_rendering_oembed
      * If we can handle this URL, get the thumbnail URL.
      *
      * @param  URLPATH                  Video URL
-     * @return ?string                  The thumbnail URL (NULL: no match).
+     * @return ?string                  The thumbnail URL (null: no match).
      */
     public function get_video_thumbnail($src_url)
     {
@@ -102,7 +102,7 @@ class Hook_media_rendering_oembed
      *
      * @param  URLPATH                  URL to render
      * @param  array                    Attributes (e.g. width, height)
-     * @return ?array                   Fully parsed/validated oEmbed result (NULL: fail)
+     * @return ?array                   Fully parsed/validated oEmbed result (null: fail)
      */
     public function get_oembed_data_result($url, $attributes)
     {
@@ -269,7 +269,7 @@ class Hook_media_rendering_oembed
      * @param  mixed                    URL to render (no sessions etc)
      * @param  array                    Attributes (e.g. width, height, length)
      * @param  boolean                  Whether there are admin privileges, to render dangerous media types
-     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @param  ?MEMBER                  Member to run as (null: current member)
      * @return tempcode                 Rendered version
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
@@ -355,7 +355,7 @@ class Hook_media_rendering_oembed
      *
      * @param  mixed                    URL to render
      * @param  array                    Attributes (e.g. width, height, length)
-     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @param  ?MEMBER                  Member to run as (null: current member)
      * @param  string                   Text to show the link with
      * @return tempcode                 Rendered version
      */
@@ -384,7 +384,7 @@ class Hook_media_rendering_oembed
      * Find an oEmbed endpoint for a URL.
      *
      * @param  URLPATH                  URL to find the oEmbed endpoint for
-     * @return ?URLPATH                 Endpoint UR (NULL: none found)
+     * @return ?URLPATH                 Endpoint UR (null: none found)
      */
     public function _find_oembed_endpoint($url)
     {

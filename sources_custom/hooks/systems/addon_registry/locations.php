@@ -156,7 +156,7 @@ class Hook_addon_registry_locations
     /**
      * Install the addon.
      *
-     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What version we're upgrading from (null: new install)
      */
     public function install($upgrade_from = null)
     {

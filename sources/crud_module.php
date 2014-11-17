@@ -111,7 +111,7 @@ abstract class Standard_crud_module
     /**
      * Find details of the module.
      *
-     * @return ?array                   Map of module info (NULL: module is disabled).
+     * @return ?array                   Map of module info (null: module is disabled).
      */
     public function info()
     {
@@ -129,10 +129,10 @@ abstract class Standard_crud_module
      * Find entry-points available within this module.
      *
      * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
@@ -165,8 +165,8 @@ abstract class Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
-     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
     {
@@ -561,9 +561,9 @@ abstract class Standard_crud_module
     /**
      * Statistically work out defaults for feedback fields, if not currently set.
      *
-     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
      * @return array                    Array of all input parameters, converted
      */
     public function choose_feedback_fields_statistically($allow_rating, $allow_comments, $allow_trackbacks)
@@ -589,10 +589,10 @@ abstract class Standard_crud_module
     /**
      * Standard CRUD-module permission chooser.
      *
-     * @param  ?ID_TEXT                 The category ID the permissions are being chosen for (NULL: new category)
-     * @param  ?tempcode                Extra help to show in interface (NULL: none)
+     * @param  ?ID_TEXT                 The category ID the permissions are being chosen for (null: new category)
+     * @param  ?tempcode                Extra help to show in interface (null: none)
      * @param  boolean                  Whether this is a new category (don't load permissions, default to on)
-     * @param  ?tempcode                Label for view permissions (NULL: default)
+     * @param  ?tempcode                Label for view permissions (null: default)
      * @return tempcode                 The permission fields
      */
     public function get_permission_fields($category_id, $help = null, $new_category = false, $pinterface_view = null)
@@ -615,7 +615,7 @@ abstract class Standard_crud_module
      *
      * @param  tempcode                 The title (output of get_screen_title)
      * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?ID_TEXT                 The ID of whatever we are working with (NULL: deleted)
+     * @param  ?ID_TEXT                 The ID of whatever we are working with (null: deleted)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -664,7 +664,7 @@ abstract class Standard_crud_module
      * If a confirmation is needed, and not been given, ask for one.
      *
      * @param  tempcode                 The page title for what's being done
-     * @return ?tempcode                The confirmation UI (NULL: all is clear - no confirmation needed)
+     * @return ?tempcode                The confirmation UI (null: all is clear - no confirmation needed)
      */
     public function handle_confirmations($title)
     {
@@ -687,7 +687,7 @@ abstract class Standard_crud_module
      * Get some XHTML for a form to choose a catalogue out of all the available ones.
      *
      * @param  tempcode                 The get_screen_title converted title for this page
-     * @return ?tempcode                The tempcode for the catalogue chooser (NULL: already chosen)
+     * @return ?tempcode                The tempcode for the catalogue chooser (null: already chosen)
      */
     public function choose_catalogue($title)
     {
@@ -1032,8 +1032,8 @@ abstract class Standard_crud_module
      * Standard CRUD-module entry function to get rows for selection from.
      *
      * @param  boolean                  Whether to force a recache
-     * @param  ?ID_TEXT                 Order to use (NULL: automatic)
-     * @param  ?array                   Extra where clauses (NULL: none)
+     * @param  ?ID_TEXT                 Order to use (null: automatic)
+     * @param  ?array                   Extra where clauses (null: none)
      * @param  boolean                  Whether to always access using the site database
      * @param  string                   Extra join clause for our query (blank: none)
      * @return array                    A pair: Rows for selection from, Total results
@@ -1650,7 +1650,7 @@ abstract class Standard_crud_module
      * Mass delete some entries/categories.
      *
      * @param  boolean                  Whether this is a top level mass delete op (i.e. not a recursion)
-     * @return ?tempcode                The UI (NULL: not top level)
+     * @return ?tempcode                The UI (null: not top level)
      */
     public function mass_delete($top_level = true)
     {

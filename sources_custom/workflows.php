@@ -17,7 +17,7 @@
  * Returns whether the given user (default: current member) can choose the
  * workflow to apply to some content they're submitting/editing.
  *
- * @param  ?MEMBER                      Member (NULL: current member)
+ * @param  ?MEMBER                      Member (null: current member)
  * @return boolean                      Whether the user has permission or not
  */
 function can_choose_workflow($member = null)
@@ -102,7 +102,7 @@ function get_all_workflows()
  * will return it, otherwise (multiple with no default specified, or no
  * workflows at all) it will give NULL.
  *
- * @return ?AUTO_LINK                   The ID of the default workflow. (NULL: if none set)
+ * @return ?AUTO_LINK                   The ID of the default workflow. (null: if none set)
  */
 function get_default_workflow()
 {
@@ -138,7 +138,7 @@ function get_default_workflow()
  * Find out who submitted a piece of content from a workflow.
  *
  * @param  AUTO_LINK                    The workflow content ID
- * @return ?MEMBER                      The submitter (NULL: if unknown)
+ * @return ?MEMBER                      The submitter (null: if unknown)
  */
 function get_submitter_of_workflow_content($content_id)
 {
@@ -697,9 +697,9 @@ function workflow_update_handler()
  *
  * @param  ID_TEXT                      The content-meta-aware name that applies to this content.
  * @param  ID_TEXT                      The ID of this content. Must be a string. Integers will be extracted from the string if needed.
- * @param  ?AUTO_LINK                   The ID of the desired workflow. (NULL: system default)
+ * @param  ?AUTO_LINK                   The ID of the desired workflow. (null: system default)
  * @param  boolean                      Whether to remove any existing workflows from this content beforehand (current permissions must allow this)
- * @return ?AUTO_LINK                   The content's ID in the workflow_content table. (NULL: if not added (eg. told to use default when there isn't one))
+ * @return ?AUTO_LINK                   The content's ID in the workflow_content table. (null: if not added (eg. told to use default when there isn't one))
  */
 function add_content_to_workflow($content_type = '', $content_id = '', $workflow_id = null, $remove_existing = false)
 {
@@ -806,7 +806,7 @@ function get_usergroups_for_approval_point($approval_id)
  * Gets the position of the given approval point in the given workflow.
  *
  * @param  AUTO_LINK                    The ID of the approval point
- * @return ?integer                     The position of the approval point in this case (NULL: if not found)
+ * @return ?integer                     The position of the approval point in this case (null: if not found)
  */
 function get_approval_point_position($approval_point_id)
 {
@@ -841,7 +841,7 @@ function get_workflow_content_id($content_type, $content_id)
  *
  * @param  string                       The type of content (as specified when it was entered into the workflow system)
  * @param  string                       The ID of the content (as specified when it was entered into the workflow system)
- * @return ?AUTO_LINK                   The ID of the workflow that this content is in (NULL: not found)
+ * @return ?AUTO_LINK                   The ID of the workflow that this content is in (null: not found)
  */
 function get_workflow_of_content($type, $id)
 {

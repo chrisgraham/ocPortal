@@ -39,7 +39,7 @@ class Hook_notification_ocf_topic extends Hook_Notification
      * Standard function to create the standardised category tree
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
+     * @param  ?ID_TEXT                 The ID of where we're looking under (null: N/A)
      * @return array                    Tree structure
      */
     public function create_category_tree($notification_code, $id)
@@ -136,7 +136,7 @@ class Hook_notification_ocf_topic extends Hook_Notification
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
      * @return integer                  Initial setting
      */
     public function get_initial_setting($notification_code, $category = null)
@@ -148,7 +148,7 @@ class Hook_notification_ocf_topic extends Hook_Notification
      * Find the setting that members have for a notification code if they have done some action triggering automatic setting (e.g. posted within a topic).
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
      * @return integer                  Automatic setting
      */
     public function get_default_auto_setting($notification_code, $category = null)
@@ -172,8 +172,8 @@ class Hook_notification_ocf_topic extends Hook_Notification
     /**
      * Find whether someone has permisson to view any notifications (yes) and possibly if they actually are.
      *
-     * @param  ?ID_TEXT                 Notification code (NULL: don't check if they are)
-     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @param  ?ID_TEXT                 Notification code (null: don't check if they are)
+     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
@@ -202,8 +202,8 @@ class Hook_notification_ocf_topic extends Hook_Notification
      * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      *
      * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
-     * @param  ?array                   List of member IDs we are restricting to (NULL: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
      * @param  integer                  Start position (for pagination)
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more

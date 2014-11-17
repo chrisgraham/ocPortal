@@ -90,7 +90,7 @@ class Hook_pointstore_pop3
     /**
      * Standard pointstore item configuration function.
      *
-     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
+     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (null: disabled)
      */
     public function config()
     {

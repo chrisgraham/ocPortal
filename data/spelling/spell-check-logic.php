@@ -84,7 +84,7 @@ function sl_filter_naughty_harsh($in)
 /**
  * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
  *
- * @return ?mixed                       Of mixed type (NULL: default)
+ * @return ?mixed                       Of mixed type (null: default)
  */
 function sl_mixed()
 {
@@ -94,9 +94,9 @@ function sl_mixed()
 /**
  * Start the spellcheck process
  *
- * @param  ?string                      The type of operation (NULL: look from params)
- * @param  ?string                      The text to check (NULL: look from params)
- * @param  ?array                       A list of words to skip checking of (NULL: none)
+ * @param  ?string                      The type of operation (null: look from params)
+ * @param  ?string                      The text to check (null: look from params)
+ * @param  ?array                       A list of words to skip checking of (null: none)
  * @param  boolean                      Whether to return data, instead of output
  * @return array                        A map, possibly mispelled words, to suggestions
  */
@@ -345,8 +345,8 @@ function _utf8_ord($matches)
  * @param  mixed                        aSpell call command
  * @param  PATH                         Temporary file name
  * @param  string                       Language being used
- * @param  ?string                      The text to check (NULL: look from params)
- * @param  ?array                       Words to skip (NULL: none)
+ * @param  ?string                      The text to check (null: look from params)
+ * @param  ?array                       Words to skip (null: none)
  * @param  boolean                      Whether to return data, instead of output
  * @return array                        A map, possibly mispelled words, to suggestions
  */

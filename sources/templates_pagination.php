@@ -38,7 +38,7 @@ function init__templates_pagination()
  * @param  integer                      The maximum number of rows in the entire dataset
  * @param  boolean                      Whether to keep post data when browsing through
  * @param  integer                      The maximum number of quick-jump page-links to show
- * @param  ?array                       List of per-page selectors to show (NULL: show hard-coded ones)
+ * @param  ?array                       List of per-page selectors to show (null: show hard-coded ones)
  * @param  ID_TEXT                      Hash component to URL
  * @return tempcode                     The results browser
  */
