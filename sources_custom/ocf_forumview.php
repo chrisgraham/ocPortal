@@ -40,7 +40,7 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
             $ticket_type_name = get_translated_text($_ticket_type_name);
             $d->attach(div(escape_html($ticket_type_name)));
 
-            $d->attach(get_ocportal_support_timings(!in_array('closed', $topic['modifiers']), $topic['last_member_id'], $ticket_type_name, $topic['last_time']));
+            $d->attach(get_ocportal_support_timings_wrap(!in_array('closed', $topic['modifiers']), $topic['id'], $ticket_type_name));
 
             $ret->singular_bind('DESCRIPTION', protect_from_escaping($d));
         }

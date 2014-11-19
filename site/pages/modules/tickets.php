@@ -379,8 +379,8 @@ class Module_tickets
 
         $assigned = find_ticket_assigned_to($ticket_id);
 
-        if (function_exists('get_ocportal_support_timings')) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
-            $extra_details = get_ocportal_support_timings($topic['closed'] == 0, $last_poster_id, $ticket_type_name, $topic['lasttime']);
+        if (function_exists('get_ocportal_support_timings_wrap')) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
+            $extra_details = get_ocportal_support_timings_wrap($topic['closed'] == 0, $topic['id'], $ticket_type_name);
         } else {
             $extra_details = new Tempcode();
         }
@@ -688,9 +688,9 @@ class Module_tickets
 
             $assigned = find_ticket_assigned_to($id);
 
-            if (function_exists('get_ocportal_support_timings') && !$new) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
+            if (function_exists('get_ocportal_support_timings_wrap') && !$new) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
                 $last_poster_id = isset($our_topic['lastmemberid']) ? $our_topic['lastmemberid'] : $GLOBALS['FORUM_DRIVER']->get_member_from_username($our_topic['lastusername']);
-                $extra_details = get_ocportal_support_timings($our_topic['closed'] == 0, $last_poster_id, $ticket_type_name, $our_topic['lasttime'], true);
+                $extra_details = get_ocportal_support_timings_wrap($our_topic['closed'] == 0, $our_topic['id'], $ticket_type_name, true);
             } else {
                 $extra_details = new Tempcode();
             }
