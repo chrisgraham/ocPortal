@@ -35,9 +35,10 @@ class Hook_clear_caches
 		{
 			require_code('view_modes');
 
-			$_caches=array();
+			$_caches=mixed();
 			if (array_key_exists(0,$parameters))
 			{
+				$_caches=array();
 				$caches=explode(',',$parameters[0]);
 				foreach ($caches as $cache) $_caches[]=trim($cache);
 			}

@@ -90,9 +90,7 @@
 {$,NB: We also support standard metadata, schema.org, semantic HTML5, ARIA, OpenSearch, and OCPCORE}
 
 {$,Favicon and iOS icon for site, managed as theme images}
-{+START,IF,{$NOT,{$BROWSER_MATCHES,chrome}}}
-	<link rel="icon" href="{$IMG*,appleicon}" sizes="64x64 128x128" /> {$,Used on Opera speed dial}
-{+END}
+<link rel="icon" href="{$IMG*,appleicon}" sizes="64x64 128x128" /> {$,Used on Opera speed dial}
 <link rel="apple-touch-icon" href="{$IMG*,appleicon}" />
 <link rel="shortcut icon" href="{$IMG*,favicon}" type="image/x-icon" sizes="16x16 32x32" />
 

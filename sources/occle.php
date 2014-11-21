@@ -1475,6 +1475,7 @@ class virtual_fs
 	function _pwd_to_array($pwd)
 	{
 		//Convert a string-form pwd to an array-form pwd, and sanitise it
+		if ($pwd=='') $pwd='/';
 		$absolute=($pwd[0]=='/');
 		$_pwd=explode('/',$pwd);
 		if ($absolute) $target_directory=array();
