@@ -65,7 +65,7 @@ class PasswordHash
     public $portable_hashes;
     public $random_state;
 
-    public function PasswordHash($iteration_count_log2, $portable_hashes)
+    public function __construct($iteration_count_log2, $portable_hashes)
     {
         $this->itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 

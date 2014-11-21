@@ -84,20 +84,22 @@ function get_php_file_api($filename, $include_code = true)
 
         // Sense class boundaries (hackerish: assumes whitespace laid out correctly)
         $ltrim = ltrim($line);
-        if (substr($ltrim, 0, 6) == 'class ') {
+        if (substr($ltrim, 0, 6) == 'class ' || substr($ltrim, 0, 15) == 'abstract class ') {
             if (count($functions) != 0) {
                 $classes[$current_class] = array('functions' => $functions, 'name' => $current_class);
             }
 
-            $space_pos = strpos($ltrim, ' ');
-            $space_pos_2 = strpos($ltrim, ' ', $space_pos + 1);
+            $ltrim2 = preg_replace('#^abstract #', '', $ltrim);
+
+            $space_pos = strpos($ltrim2, ' ');
+            $space_pos_2 = strpos($ltrim2, ' ', $space_pos + 1);
             if ($space_pos_2 === false) {
-                $space_pos_2 = strpos($ltrim, "\r", $space_pos + 1);
+                $space_pos_2 = strpos($ltrim2, "\r", $space_pos + 1);
             }
             if ($space_pos_2 === false) {
-                $space_pos_2 = strpos($ltrim, "\n", $space_pos + 1);
+                $space_pos_2 = strpos($ltrim2, "\n", $space_pos + 1);
             }
-            $current_class = substr($ltrim, $space_pos + 1, $space_pos_2 - $space_pos - 1);
+            $current_class = substr($ltrim2, $space_pos + 1, $space_pos_2 - $space_pos - 1);
             $current_class_level = strlen($line) - strlen($ltrim);
 
             $functions = array();
@@ -119,13 +121,19 @@ function get_php_file_api($filename, $include_code = true)
                 $line2 = $lines[$j];
                 $_depth = str_repeat(' ', $depth);
 
+                // Class
                 if (substr($line2, 0, $depth + 6) == $_depth . 'class ') {
-                    // Is a class
                     $class_with_comments = preg_replace('#\s.*$#s', '', substr($line2, $depth + 6));
                     $class_has_comments[$class_with_comments] = true;
                     continue 2;
                 }
+                if (substr($line2, 0, $depth + 15) == $_depth . 'abstract class ') {
+                    $class_with_comments = preg_replace('#\s.*$#s', '', substr($line2, $depth + 15));
+                    $class_has_comments[$class_with_comments] = true;
+                    continue 2;
+                }
 
+                // Function
                 if (substr($line2, 0, $depth + 9) == $_depth . 'function ') {
                     // Parse function line
                     $_line = substr($line2, $depth + 9);
@@ -133,6 +141,20 @@ function get_php_file_api($filename, $include_code = true)
                     break;
                 }
 
+                // Method
+                if (substr($line2, 0, $depth + 16) == $_depth . 'public function ') {
+                    // Parse function line
+                    $_line = substr($line2, $depth + 16);
+                    list($function_name, $parameters) = _read_php_function_line($_line);
+
+                    if ($current_class == '__global') {
+                        attach_message($function_name . ' seems to be a method outside of a class', 'warn');
+                    }
+
+                    break;
+                }
+
+                // Irrelevant line, don't let it confuse us
                 if ((substr(trim($line2), 0, 3) == '/**') || ((strpos($line2, '*/') !== false) && (array_key_exists($j + 1, $lines)) && (strpos($lines[$j + 1], 'function ') === false) && (strpos($lines[$j + 1], 'class ') === false))) { // Probably just skipped past a top header
                     $i = $j - 1;
                     continue 2;
@@ -324,8 +346,7 @@ function get_php_file_api($filename, $include_code = true)
     }
 
     // See if there are classes with no comments
-    foreach (array_keys($classes) as $class)
-    {
+    foreach (array_keys($classes) as $class) {
         if ($class == '__global') {
             continue;
         }

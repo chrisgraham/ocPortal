@@ -70,9 +70,6 @@ if (isset($_SERVER['argv'])) {
     if (array_key_exists('spelling', $_SERVER['argv'])) {
         $GLOBALS['SPELLING'] = 1;
     }
-    if (array_key_exists('non_terse', $_SERVER['argv'])) {
-        $GLOBALS['NON_TERSE'] = 1;
-    }
 }
 if (array_key_exists('api', $_GET)) {
     $GLOBALS['API'] = 1;
@@ -93,9 +90,6 @@ if (array_key_exists('checks', $_GET)) {
 }
 if (array_key_exists('spelling', $_GET)) {
     $GLOBALS['SPELLING'] = 1;
-}
-if (array_key_exists('non_terse', $_GET)) {
-    $GLOBALS['NON_TERSE'] = 1;
 }
 
 require_once('tests.php');
@@ -599,25 +593,33 @@ $ERROR_FUNCS = array(
     'passthru' => 1,
 );
 
-// Load up function info
-global $FUNCTION_SIGNATURES;
 global $OCPORTAL_PATH;
-if ((isset($GLOBALS['API'])) || (isset($_GET['test']))) {
-    $functions_file = file_get_contents(file_exists($OCPORTAL_PATH . '/data_custom/functions.dat') ? ($OCPORTAL_PATH . '/data_custom/functions.dat') : 'functions.dat');
-    $FUNCTION_SIGNATURES = unserialize($functions_file);
-} else {
-    $FUNCTION_SIGNATURES = array();
+global $FUNCTION_SIGNATURES;
+$FUNCTION_SIGNATURES = array();
+
+if (isset($GLOBALS['API'])) {
+    load_function_signatures();
 }
 
 // To get it started
 if (isset($_GET['test'])) {
 
+    // Checking an internal test
+
     $GLOBALS['API'] = 1;
+    load_function_signatures();
+
     $GLOBALS['CHECKS'] = 1;
+
     $tests = get_tests();
     $parsed = parse(lex('<' . '?php' . "\n" . $tests[$_GET['test']] . "\n"));
     check($parsed);
 } elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) {
+
+    // Search for stuff to check
+
+    $GLOBALS['API'] = 1;
+    load_function_signatures();
 
     $avoid = array();
     if (isset($_GET['avoid'])) {
@@ -631,7 +633,7 @@ if (isset($_GET['test'])) {
         }
 
         if (strpos(file_get_contents($to_use), '/*CQC: No check*/') !== false) {
-            echo 'SKIP: ' . $to_use;
+            //echo 'SKIP: ' . $to_use;
             continue;
         }
 
@@ -642,6 +644,8 @@ if (isset($_GET['test'])) {
         }
     }
 } else {
+
+    // Given list of things to check
 
     $_to_use = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : $_GET['to_use'];
     if (isset($_SERVER['argv']) && array_key_exists('single', $_SERVER['argv'])) {
@@ -675,6 +679,16 @@ if (isset($_GET['test'])) {
     }
 }
 echo 'FINAL Done!';
+
+function load_function_signatures()
+{
+    // Load up function info
+    global $FUNCTION_SIGNATURES;
+    global $OCPORTAL_PATH;
+    $functions_file_path = file_exists($OCPORTAL_PATH . '/data_custom/functions.dat') ? ($OCPORTAL_PATH . '/data_custom/functions.dat') : 'functions.dat';
+    $functions_file = file_get_contents($functions_file_path);
+    $FUNCTION_SIGNATURES = unserialize($functions_file);
+}
 
 // Do the actual code quality check
 function check($structure)
@@ -1379,11 +1393,11 @@ function check_call($c, $c_pos, $class = null, $function_guard = '')
         if (isset($GLOBALS['API'])) {
             if (((is_null($GLOBALS['OK_EXTRA_FUNCTIONS'])) || (preg_match('#^' . $GLOBALS['OK_EXTRA_FUNCTIONS'] . '#', $function) == 0)) && (!in_array($function, array('critical_error', 'file_array_exists', 'file_array_get', 'file_array_count', 'file_array_get_at', 'master__sync_file', 'master__sync_file_move'))) && (strpos($function_guard, ',' . $function . ',') === false)) {
                 if ((is_null($class)) || ($class == '__global')) {
-                    if ($function != '') {
+                    if ($function != '' && $function != '__construct') {
                         log_warning('Could not find function \'' . $function . '\'', $c_pos);
                     }
                 } else {
-                    if ($class != 'mixed') {
+                    if ($class != 'mixed' && $function != '__construct') {
                         log_warning('Could not find method \'' . $class . '->' . $function . '\'', $c_pos);
                     }
                 }
@@ -1633,7 +1647,7 @@ function check_expression($e, $assignment = false, $equate_false = false, $funct
         }
     }
     if ($e[0] == 'UNARY_IF') {
-        if (($e[1][0] == 'CALL_DIRECT') && (strpos($e[1][1], '_exists') !== false) && ($e[1][2][0][0] == 'LITERAL') && ($e[1][2][0][1][0] == 'STRING')) {
+        if (($e[1][0] == 'CALL_DIRECT') && (strpos($e[1][1], '_exists') !== false/*function_exists or method_exists or class_exists*/) && ($e[1][2][0][0] == 'LITERAL') && ($e[1][2][0][1][0] == 'STRING')) {
             $function_guard .= ',' . $e[1][2][0][1][1] . ',';
         }
         $passes = ensure_type(array('boolean'), check_expression($e[1], false, false, $function_guard), $c_pos, 'Conditionals must be boolean (unary)');

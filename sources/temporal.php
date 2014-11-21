@@ -413,12 +413,11 @@ function tz_time($time, $zone)
         $zone = get_server_timezone();
     }
     static $zone_offsets = array();
-    //if (!isset($zone_offsets[$zone]))   Actually, cannot do this, as $time is not constant
-    {
+    //if (!isset($zone_offsets[$zone])) {  Actually, cannot do this, as $time is not constant
         @date_default_timezone_set($zone);
         $zone_offsets[$zone] = intval(60.0 * 60.0 * floatval(date('O', $time)) / 100.0);
         date_default_timezone_set('UTC');
-    }
+    //}
     $ret = $time + $zone_offsets[$zone];
     return $ret;
 }

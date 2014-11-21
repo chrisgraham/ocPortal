@@ -83,8 +83,7 @@ class Hook_cron_notification_digests
                 }
 
                 $start += 100;
-            }
-            while (count($members) == 100);
+            } while (count($members) == 100);
         }
     }
 }

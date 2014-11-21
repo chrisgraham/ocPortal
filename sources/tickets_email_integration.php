@@ -131,7 +131,7 @@ function ticket_incoming_scan()
     require_code('mail2');
 
     $server = get_option('ticket_mail_server');
-    $port = get_option('ticket_mail_server_port');
+    $port = intval(get_option('ticket_mail_server_port'));
     $type = get_option('ticket_mail_server_type');
 
     $username = get_option('ticket_mail_username');

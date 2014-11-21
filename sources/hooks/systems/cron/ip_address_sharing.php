@@ -40,7 +40,7 @@ class Hook_cron_ip_address_sharing
 
         $days = 7;
         $last_time = intval(get_long_value('mail_log_last_run_time'));
-        if ($current_time > $time + ($days * 24 * 60 * 60)) {
+        if ($last_time > $time + ($days * 24 * 60 * 60)) {
             set_long_value('mail_log_last_run_time', strval($time));
 
             $results = array();

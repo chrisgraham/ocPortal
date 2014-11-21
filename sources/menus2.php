@@ -74,9 +74,14 @@ function import_menu_csv($file_path = null)
     }
     $myfile = fopen($file_path, 'rt');
     while (($record = fgetcsv($myfile, 8192)) !== false) {
-        if (!isset($record[12])) continue;
-        if ($record[0] == 'id') continue;
+        if (!isset($record[12])) {
+            continue;
+        }
+        if ($record[0] == 'id') {
+            continue;
+        }
 
+        $id = ($record[0] == '' || $record[0] == 'NULL') ? null : intval($record[0]);
         $menu = $record[1];
         $order = intval($record[2]);
         $parent = ($record[3] == '' || $record[3] == 'NULL') ? null : intval($record[3]);

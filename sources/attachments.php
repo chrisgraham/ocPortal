@@ -313,8 +313,7 @@ function attachments_script()
     /*if ($size==$new_length)    Uses a lot of memory :S
     {
         fpassthru($myfile);
-    } else*/
-    {
+    } else {*/
         $i = 0;
         flush(); // Works around weird PHP bug that sends data before headers, on some PHP versions
         while ($i < $new_length) {
@@ -327,7 +326,7 @@ function attachments_script()
             $i += $len;
         }
         fclose($myfile);
-    }
+    //}
 }
 
 /**

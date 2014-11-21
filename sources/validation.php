@@ -710,8 +710,7 @@ function test_entity($offset = 0)
     $errors = array();
 
     $pos = strpos($lump, ';');
-    //if ($pos!==0) // "&; sequence" is possible. It's in IPB's posts and to do with emoticon meta tagging
-    {
+    //if ($pos!==0) { // "&; sequence" is possible. It's in IPB's posts and to do with emoticon meta tagging
         if ($pos === false) {
             $errors[] = array('XHTML_BAD_ENTITY');
         } else {
@@ -723,7 +722,7 @@ function test_entity($offset = 0)
                 }
             }
         }
-    }
+    //}
 
     if (!isset($errors[0])) {
         return null;

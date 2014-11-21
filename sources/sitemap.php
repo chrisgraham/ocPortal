@@ -303,6 +303,9 @@ function find_sitemap_object($page_link)
     return array($ob, $is_virtual);
 }
 
+/**
+ * Sitemap node type base class.
+ */
 abstract class Hook_sitemap_base
 {
     /**
@@ -703,6 +706,9 @@ abstract class Hook_sitemap_base
     }
 }
 
+/**
+ * Sitemap node type for content types.
+ */
 abstract class Hook_sitemap_content extends Hook_sitemap_base
 {
     protected $content_type = null;

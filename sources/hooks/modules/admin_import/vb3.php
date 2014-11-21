@@ -1033,10 +1033,10 @@ class Hook_vb3
                     $recurrence = 'monthly ' . str_repeat('0', intval($bits[0]) - 1) . '1';
                     break;
                 case 6:
-                    $recurrence = 'yearly ' . str_repeat('0', intval($bits[0]) - 1) . '1';;
+                    $recurrence = 'yearly ' . str_repeat('0', intval($bits[0]) - 1) . '1';
                     break;
                 case 7:
-                    $recurrence = 'yearly ' . str_repeat('0', intval($bits[0]) - 1) . '1';;
+                    $recurrence = 'yearly ' . str_repeat('0', intval($bits[0]) - 1) . '1';
                     break;
             }
             list($start_year, $start_month, $start_day, $start_hour, $start_minute) = explode('-', date('Y-m-d-h-i', strtotime($row['dateline'])));

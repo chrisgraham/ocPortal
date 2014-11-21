@@ -113,11 +113,7 @@ class Hook_choose_forum
         require_code('ocf_forums');
         require_code('ocf_forums2');
 
-        $tree = create_selection_list_forum_tree(null, null, is_null($it) ? null : array(intval($it)), '', null, null, $compound_list, null, false);
-
-        if ($compound_list) {
-            list($tree,) = $tree;
-        }
+        $tree = create_selection_list_forum_tree(null, null, is_null($it) ? null : array(intval($it)), $compound_list);
 
         return $tree;
     }

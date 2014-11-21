@@ -21,11 +21,10 @@ public class Main {
     public static boolean relay__checks = false;
     public static boolean relay__security = false;
     public static boolean relay__pedantic = false;
-    public static boolean relay__non_terse = false;
     public static boolean relay__spelling = false;
-    public static String projectPath = ".\\";
-    public static String textEditorPath = "C:\\Program Files\\ConTEXT\\ConTEXT.exe";
-    public static String phpPath = ".\\php.exe";
+    public static String projectPath = ".." + File.separator + ".." + File.separator;
+    public static String textEditorPath = "/usr/local/bin/mate";
+    public static String phpPath = "php";
 
     // Memory
     static ArrayList<String> skipped_errors = new ArrayList<String>();
@@ -57,13 +56,12 @@ public class Main {
             relay__checks = (p.getProperty("relay__checks").equals("1"));
             relay__security = (p.getProperty("relay__security").equals("1"));
             relay__pedantic = (p.getProperty("relay__pedantic").equals("1"));
-            relay__non_terse = (p.getProperty("relay__non_terse").equals("1"));
             relay__spelling = (p.getProperty("relay__spelling").equals("1"));
             projectPath = p.getProperty("projectPath");
             textEditorPath = p.getProperty("textEditorPath");
             phpPath = p.getProperty("phpPath");
             if (!new File(projectPath).exists()) {
-                projectPath = ".\\";
+                projectPath = ".." + File.separator + ".." + File.separator;
             }
             if (!new File(textEditorPath).exists()) {
                 if (new File(

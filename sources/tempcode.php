@@ -607,6 +607,7 @@ function do_lang_tempcode($lang_string, $token1 = null, $token2 = null, $token3 
  */
 function kid_gloves_html_escaping(&$parameters)
 {
+    $param = mixed();
     foreach ($parameters as &$param) {
         if (is_string($param)) {
             if ((strpos($param, "'") !== false) || (strpos($param, '"') !== false) || (strpos($param, '<') !== false) || (strpos($param, '>') !== false)) {
@@ -941,7 +942,7 @@ function handle_symbol_preprocessing($seq_part, &$children)
                 $REQUEST_BLOCK_NEST_LEVEL++;
                 if ($REQUEST_BLOCK_NEST_LEVEL > 40) { // 100 caused xdebug error, but ocPortal will have some overhead in both error handler and other code to get to here. We want xdebug error to not show, but of course to provide the same benefits as that error.
                     $REQUEST_BLOCK_NEST_LEVEL = 0;
-                    $LOADED_BLOCKS[serialize($param)] = do_lang_tempcode('INTERNAL_ERROR');
+                    $BLOCKS_CACHE[serialize($param)] = do_lang_tempcode('INTERNAL_ERROR');
                     attach_message(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE', is_string($param[0]) ? $param[0] : 'block'), 'warn');
                     return;
                 }
@@ -1697,22 +1698,17 @@ class Tempcode
         foreach ($this->seq_parts as $seq_parts_group) {
             foreach ($seq_parts_group as $seq_part) {
                 $seq_part_0 = $seq_part[0];
-                /*if ($DEV_MODE)
-                    {
-                            if (!isset($tpl_funcs[$seq_part_0]))
-                            {
-                                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
-                            }
-                            if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
-                            {
-                                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
-                            } else
-                            {
-                                        $parameters=$seq_part[1];
-                                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
-                            }
-                    } else*/
-                {
+                /*if ($DEV_MODE) {
+                    if (!isset($tpl_funcs[$seq_part_0])) {
+                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
+                    }
+                    if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0]))) {
+                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+                    } else {
+                        $parameters=$seq_part[1];
+                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+                    }
+                } else {*/
                     if (!isset($tpl_funcs[$seq_part_0])) {
                         eval($this->code_to_preexecute[$seq_part_0]);
                     }
@@ -1722,7 +1718,7 @@ class Tempcode
                         $parameters = $seq_part[1];
                         eval($tpl_funcs[$seq_part_0]);
                     }
-                }
+                //}
 
                 if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length() > 0)) { // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
                     @ob_end_clean();
@@ -1807,22 +1803,17 @@ class Tempcode
         foreach ($this->seq_parts as $seq_parts_group) {
             foreach ($seq_parts_group as $seq_part) {
                 $seq_part_0 = $seq_part[0];
-                /*if ($DEV_MODE)
-                    {
-                            if (!isset($tpl_funcs[$seq_part_0]))
-                            {
-                                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
-                            }
-                            if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
-                            {
-                                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
-                            } else
-                            {
-                                        $parameters=$seq_part[1];
-                                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
-                            }
-                    } else*/
-                {
+                /*if ($DEV_MODE) {
+                    if (!isset($tpl_funcs[$seq_part_0])) {
+                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
+                    }
+                    if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0]))) {
+                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+                    } else {
+                        $parameters=$seq_part[1];
+                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+                    }
+                    } else {*/
                     if (!isset($tpl_funcs[$seq_part_0])) {
                         eval($this->code_to_preexecute[$seq_part_0]);
                     }
@@ -1832,7 +1823,7 @@ class Tempcode
                         $parameters = $seq_part[1];
                         eval($tpl_funcs[$seq_part_0]);
                     }
-                }
+                //}
             }
         }
 
@@ -1906,22 +1897,17 @@ class Tempcode
                 $seq_part = $seq_parts_group[$j];
 
                 $seq_part_0 = $seq_part[0];
-                /*if ($DEV_MODE)
-                    {
-                            if (!isset($tpl_funcs[$seq_part_0]))
-                            {
-                                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
-                            }
-                            if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
-                            {
-                                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
-                            } else
-                            {
-                                        $parameters=$seq_part[1];
-                                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
-                            }
-                    } else*/
-                {
+                /*if ($DEV_MODE) {
+                    if (!isset($tpl_funcs[$seq_part_0])) {
+                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
+                    }
+                    if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0]))) {
+                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+                    } else {
+                        $parameters=$seq_part[1];
+                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+                    }
+                } else {*/
                     if (!isset($tpl_funcs[$seq_part_0])) {
                         eval($this->code_to_preexecute[$seq_part_0]);
                     }
@@ -1931,7 +1917,7 @@ class Tempcode
                         $parameters = $seq_part[1];
                         eval($tpl_funcs[$seq_part_0]);
                     }
-                }
+                //}
 
                 if ($stop_if_stuck) {
                     if ($STUCK_ABORT_SIGNAL) {

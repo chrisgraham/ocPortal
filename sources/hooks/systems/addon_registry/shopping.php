@@ -248,12 +248,7 @@ class Hook_addon_registry_shopping
     public function show_custom_tables($tplset)
     {
         $fields_title = new Tempcode();
-        foreach (array(
-                     lorem_word(),
-                     lorem_word_2(),
-                     lorem_word(),
-                     lorem_word_2()
-                 ) as $k => $v) {
+        foreach (array(lorem_word(), lorem_word_2(), lorem_word(), lorem_word_2()) as $k => $v) {
             $fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
                 'VALUE' => $v,
             )));

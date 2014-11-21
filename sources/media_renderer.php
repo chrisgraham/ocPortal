@@ -323,6 +323,9 @@ function _create_media_template_parameters($url, $attributes, $as_admin = false,
     );
 }
 
+/**
+ * A media renderer coded to fall-back to a simple image if we have low-fi mode turned on.
+ */
 abstract class Media_renderer_with_fallback
 {
     /**
@@ -333,7 +336,7 @@ abstract class Media_renderer_with_fallback
      * @param  array                    Attributes (e.g. width, height, length)
      * @param  boolean                  Whether there are admin privileges, to render dangerous media types
      * @param  ?MEMBER                  Member to run as (null: current member)
-     * @param  mixed                    URL to route clicks through to
+     * @param  ?mixed                   URL to route clicks through to (null: no special URL)
      * @return ?tempcode                Rendered version (null: do not render)
      */
     public function fallback_render($url, $url_safe, $attributes, $as_admin, $source_member, $click_url = null)

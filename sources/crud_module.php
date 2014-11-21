@@ -1016,14 +1016,13 @@ abstract class Standard_crud_module
 
         clear_ocp_autosave();
 
-        //if ($this->redirect_type=='!')
-        {
+        //if ($this->redirect_type=='!') {
             $url = get_param('redirect', null);
             if (!is_null($url)) {
                 $url = str_replace('__ID__', $id, $url);
                 return redirect_screen($this->title, $url, $description);
             }
-        }
+        //}
 
         return $this->do_next_manager($this->title, $description, $id);
     }

@@ -142,11 +142,7 @@ class Hook_addon_registry_core_zone_editor
         ));
 
         $editor = array();
-        foreach (array(
-                     'panel_left',
-                     'panel_middle',
-                     'panel_right'
-                 ) as $i => $for) {
+        foreach (array( 'panel_left', 'panel_middle', 'panel_right') as $i => $for) {
             $editor[$for] = do_lorem_template('ZONE_EDITOR_PANEL', array(
                 'CLASS' => '',
                 'ZONES' => '',

@@ -688,11 +688,12 @@ class Module_tickets
 
             $assigned = find_ticket_assigned_to($id);
 
-            if (function_exists('get_ocportal_support_timings_wrap') && !$new) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
-                $last_poster_id = isset($our_topic['lastmemberid']) ? $our_topic['lastmemberid'] : $GLOBALS['FORUM_DRIVER']->get_member_from_username($our_topic['lastusername']);
-                $extra_details = get_ocportal_support_timings_wrap($our_topic['closed'] == 0, $our_topic['id'], $ticket_type_name, true);
-            } else {
-                $extra_details = new Tempcode();
+            $extra_details = new Tempcode();
+            if (function_exists('get_ocportal_support_timings_wrap')) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
+                if (!$new) {
+                    $last_poster_id = isset($our_topic['lastmemberid']) ? $our_topic['lastmemberid'] : $GLOBALS['FORUM_DRIVER']->get_member_from_username($our_topic['lastusername']);
+                    $extra_details = get_ocportal_support_timings_wrap($our_topic['closed'] == 0, $our_topic['id'], $ticket_type_name, true);
+                }
             }
 
             // Render ticket screen
@@ -1089,7 +1090,7 @@ class Module_tickets
         $merge_post = do_lang('TICKETS_MERGED_POST', $to_title);
         ticket_add_post(get_member(), $from, $_ticket_type_id, $merge_title, $merge_post, $home_url, false);
         $email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($_comments_all[0]['member']);
-        send_ticket_email($from, $merge_title, $merge_post, $home_url, $email, null, get_member());
+        send_ticket_email($from, $merge_title, $merge_post, $home_url, $email, -1, get_member());
 
         // Closed old ticket
         if (get_forum_type() == 'ocf') {

@@ -295,6 +295,8 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
         }
     }
 
+    $id = isset($vars['id']) ? $vars['id'] : null;
+
     global $SITE_INFO;
     if (
         (isset($SITE_INFO['no_keep_params'])) &&
@@ -312,8 +314,6 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
         }
         return make_string_tempcode(_build_url($vars, $zone_name, $skip, $keep_all, $avoid_remap, true, $hash));
     }
-
-    $id = isset($vars['id']) ? $vars['id'] : null;
 
     $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/
         ($vars['page']);
@@ -756,7 +756,9 @@ function _url_rewrite_params($zone_name, $vars, $force_index_php = false)
  */
 function url_is_local($url)
 {
-    if ($url == '') return true;
+    if ($url == '') {
+        return true;
+    }
     if (preg_match('#^[^:\{%]*$#', $url) != 0) {
         return true;
     }

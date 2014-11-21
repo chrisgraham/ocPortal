@@ -75,10 +75,10 @@ class Hook_symbol_CPF_LIST
                         case 'combo_multi':
                             $bits = explode('|', $test[0]['cf_default']);
                             sort($bits);
-                            if (trim($k, '-') == '' && $value == '') {
-                                continue;
-                            }
                             foreach ($bits as $k) {
+                                if (trim($k, '-') == '' && $value == '') {
+                                    continue;
+                                }
                                 if ($value != '') {
                                     $value .= ',';
                                 }

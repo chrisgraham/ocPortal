@@ -149,7 +149,7 @@ class Virtual_shell
      * @param  ?array                   An array of prior output to be prepended (null: none)
      * @param  ?array                   An array of prior parameters (null: none)
      */
-    public function Virtual_shell($inputted_command, $prior_output = null, $parameters = null)
+    public function __construct($inputted_command, $prior_output = null, $parameters = null)
     {
         if (!defined('MODE_NORMAL')) {
             define('MODE_NORMAL', 0); // Not in quotes

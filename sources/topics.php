@@ -65,7 +65,7 @@ class OCP_Topic
     /**
      * Constructor.
      */
-    public function OCP_Topic()
+    public function __construct()
     {
     }
 

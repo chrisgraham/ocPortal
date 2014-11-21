@@ -25,7 +25,7 @@ class Hook_snippet_member_tooltip
      *
      * @return tempcode                     The snippet
      */
-    function run()
+    public function run()
     {
         require_lang('ocf');
         require_code('ocf_members2');
@@ -35,7 +35,9 @@ class Hook_snippet_member_tooltip
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/modules/topicview/' . filter_naughty_harsh($hook));
             $object = object_factory('Hook_topicview_' . filter_naughty_harsh($hook), true);
-            if (is_null($object)) continue;
+            if (is_null($object)) {
+                continue;
+            }
             $sga_hook_objects[$hook] = $object;
         }
 

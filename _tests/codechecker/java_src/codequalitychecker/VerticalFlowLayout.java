@@ -12,7 +12,7 @@ import java.awt.Container;
 import java.awt.Insets;
 
 /**
- * A vertical flow layout is similar to a flow layuot but it layouts the
+ * A vertical flow layout is similar to a flow layout but it layouts the
  * components vertically instead of horizontally.
  *
  * @author vassilidzuba

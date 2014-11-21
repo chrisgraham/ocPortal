@@ -36,14 +36,14 @@ function captcha_script()
     }
 
     $code_needed = $GLOBALS['SITE_DB']->query_select_value_if_there('captchas', 'si_code', array('si_session_id' => get_session_id()));
-    if (is_null($_code_needed)) {
+    if (is_null($code_needed)) {
         generate_captcha();
         $code_needed = $GLOBALS['SITE_DB']->query_select_value_if_there('captchas', 'si_code', array('si_session_id' => get_session_id()));
         /*set_http_status_code('500');    This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
 
         warn_exit(do_lang_tempcode('CAPTCHA_NO_SESSION'));*/
     }
-    mt_srand($_code_needed); // Important: to stop averaging out of different attempts. This makes the distortion consistent for that particular code.
+    mt_srand($code_needed); // Important: to stop averaging out of different attempts. This makes the distortion consistent for that particular code.
 
     @ini_set('ocproducts.xss_detect', '0');
 
@@ -235,7 +235,7 @@ function generate_captcha()
     }
 
     // Store code
-    $GLOBALS['SITE_DB']->query_insert('captchas', $insert_map + array('si_code' => $si_code), false, true);
+    $GLOBALS['SITE_DB']->query_insert('captchas', array('si_session_id' => $session, 'si_time' => time(), 'si_code' => $si_code), false, true);
 
     require_javascript('javascript_ajax');
 }
@@ -271,7 +271,7 @@ function check_captcha($code_entered, $regenerate_on_error = true)
         if (get_option('captcha_single_guess') == '1') {
             $GLOBALS['SITE_DB']->query_delete('captchas', array('si_session_id' => get_session_id())); // Only allowed to check once
         }
-        if (is_null($_code_needed)) {
+        if (is_null($code_needed)) {
             if (get_option('captcha_single_guess') == '1') {
                 generate_captcha();
             }

@@ -363,7 +363,7 @@ function get_downloads_tree($submitter = null, $category_id = null, $breadcrumbs
  */
 function create_selection_list_download_category_tree($it = null, $use_compound_list = false, $addable_filter = false, $updated_since = null)
 {
-    $tree = get_download_category_tree(null, null, null, $updated_since !== null, $use_compound_list, null, $addable_filter, $updated_since);
+    $tree = get_download_category_tree(null, null, null, $updated_since !== null, $use_compound_list, null, $addable_filter);
     if ($use_compound_list) {
         $tree = $tree[0];
     }

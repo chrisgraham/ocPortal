@@ -75,7 +75,7 @@ class Hook_occle_command_continue_import
 
             if (get_forum_type() != 'ocf') {
                 require_code('forum/ocf');
-                $GLOBALS['OCF_DRIVER'] = new forum_driver_ocf();
+                $GLOBALS['OCF_DRIVER'] = new Forum_driver_ocf();
                 $GLOBALS['OCF_DRIVER']->connection = $GLOBALS['SITE_DB'];
                 $GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED = array();
             }

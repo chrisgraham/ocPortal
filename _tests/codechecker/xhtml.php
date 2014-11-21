@@ -59,23 +59,21 @@ if (!isset($_SERVER['argv'])) {
 }
 
 if (!function_exists('init__validation')) {
-    require_once('../../sources/validation.php');
+    require_code('validation');
+    require_code('validation2');
     init__validation();
-    if (file_exists('../../sources/validation2.php')) {
-        require_once('../../sources/validation2.php');
-        init__validation2();
-    }
+    init__validation2();
 }
 if (!function_exists('init__js_lex')) {
-    require_once('../../sources/js_lex.php');
+    require_code('js_lex');
     init__js_lex();
 }
 if (!function_exists('init__js_parse')) {
-    require_once('../../sources/js_parse.php');
+    require_code('js_parse');
     init__js_parse();
 }
 if (!function_exists('init__js_validator')) {
-    require_once('../../sources/js_validator.php');
+    require_code('js_validator');
     init__js_validator();
 }
 

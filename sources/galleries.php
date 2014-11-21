@@ -540,7 +540,7 @@ function only_member_galleries_of_id($cat, $member_id, $child_count)
  */
 function create_selection_list_gallery_tree($it = null, $filter = null, $must_accept_images = false, $must_accept_videos = false, $purity = false, $use_compound_list = false, $member_id = null, $addable_filter = false, $editable_filter = false, $updated_since = null)
 {
-    $tree = get_gallery_tree('root', '', null, $updated_since !== null, $filter, $must_accept_images, $must_accept_videos, $purity, $use_compound_list, null, $member_id, $addable_filter, $editable_filter, $updated_since);
+    $tree = get_gallery_tree('root', '', null, $updated_since !== null, $filter, $must_accept_images, $must_accept_videos, $purity, $use_compound_list, null, $member_id, $addable_filter, $editable_filter);
     if ($use_compound_list) {
         $tree = $tree[0];
     }

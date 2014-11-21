@@ -351,11 +351,9 @@ function ocf_make_post($topic_id, $title, $post, $skip_sig = 0, $is_starter = fa
             }
             if ($validated == 1) {
                 if (!is_null($forum_id)) {
-                    /*if ($sunk==1)    Don't hide posts to sunk topics actually, it's too weird
-                            {
-                                        $GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET f_cache_num_topics=(f_cache_num_topics+'.(($is_starter)?'1':'0').'),f_cache_num_posts=(f_cache_num_posts+1) WHERE id='.strval($topic_id));
-                            } else*/
-                    {
+                    /*if ($sunk==1) {    Don't hide posts to sunk topics actually, it's too weird
+                        $GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET f_cache_num_topics=(f_cache_num_topics+'.(($is_starter)?'1':'0').'),f_cache_num_posts=(f_cache_num_posts+1) WHERE id='.strval($topic_id));
+                    } else {*/
                         require_code('ocf_posts_action2');
 
                         // Find if the topic is validated. This can be approximate, if we don't get 1 then ocf_force_update_forum_cacheing will do a search, making the code very slightly slower
@@ -372,7 +370,7 @@ function ocf_make_post($topic_id, $title, $post, $skip_sig = 0, $is_starter = fa
                         ocp_profile_start_for('ocf_make_post:ocf_force_update_forum_cacheing');
                         ocf_force_update_forum_cacheing($forum_id, ($is_starter) ? 1 : 0, 1, ($topic_validated == 0) ? null : $topic_id, ($topic_validated == 0) ? null : $topic_title, ($topic_validated == 0) ? null : $time, ($topic_validated == 0) ? null : $poster_name_if_guest, ($topic_validated == 0) ? null : $poster, ($topic_validated == 0) ? null : $forum_id);
                         ocp_profile_end_for('ocf_make_post:ocf_force_update_forum_cacheing');
-                    }
+                    //}
                 }
             }
         }

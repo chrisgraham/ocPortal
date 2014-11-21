@@ -364,7 +364,9 @@ class Module_search
                 $days = ($id == 'ocf_members') ? -1 : 60;
             } else {
                 $days = intval($_days);
-                if ($days == 0) $days = -1;
+                if ($days == 0) {
+                    $days = -1;
+                }
             }
         }
         $sort = get_param('sort', 'relevance');

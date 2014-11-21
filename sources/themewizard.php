@@ -173,10 +173,9 @@ function find_theme_seed($theme, $no_easy_anchor = false)
             /*if ($no_easy_anchor)
             {
                     Ideally we would put some auto-detection code here
-            } else*/
-            {
+            } else {*/
                 $THEME_SEED_CACHE[$theme] = '426aa9'; // Not ideal, but default theme is this
-            }
+            //}
         }
     } else {
         $THEME_SEED_CACHE[$theme] = $map['seed'];

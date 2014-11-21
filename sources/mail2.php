@@ -106,14 +106,10 @@ function can_email_member($member_id, $server = null, $port = null, $folder = nu
 {
     $email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
     if ($email == '') {
-        return false;
+        return null;
     }
 
-    if (is_mail_bounced($email, $server, $port, $folder, $username, $password)) {
-        return false;
-    }
-
-    return true;
+    return is_mail_bounced($email, $server, $port, $folder, $username, $password);
 }
 
 /**

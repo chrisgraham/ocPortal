@@ -33,7 +33,6 @@ public class OptionsDialog extends JDialog {
     JCheckBox checks = new JCheckBox();
     JCheckBox security = new JCheckBox();
     JCheckBox pedantic = new JCheckBox();
-    JCheckBox non_terse = new JCheckBox();
 
     public OptionsDialog(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
@@ -109,14 +108,11 @@ public class OptionsDialog extends JDialog {
         pedantic.setToolTipText("");
         pedantic.setActionCommand("pedantic");
         pedantic.setText("Show pedantic warnings (comment density, etc)");
-        non_terse.setActionCommand("non_terse");
-        non_terse.setText("Use spaced-operator layout rules");
         api = new JCheckBox(api.getText(), Main.relay__api);
         mixed = new JCheckBox(mixed.getText(), Main.relay__mixed);
         checks = new JCheckBox(checks.getText(), Main.relay__checks);
         security = new JCheckBox(security.getText(), Main.relay__security);
         pedantic = new JCheckBox(pedantic.getText(), Main.relay__pedantic);
-        non_terse = new JCheckBox(non_terse.getText(), Main.relay__non_terse);
         this.setModal(true);
         this.setResizable(false);
         this.setTitle("Options");
@@ -140,7 +136,6 @@ public class OptionsDialog extends JDialog {
         flags.add(mixed);
         flags.add(api);
         flags.add(spelling);
-        flags.add(non_terse);
         jTabbedPane1.add(environment, "Environment");
         panel1.setPreferredSize(new Dimension(475, 297));
     }
@@ -151,7 +146,6 @@ public class OptionsDialog extends JDialog {
         Main.relay__checks = checks.isSelected();
         Main.relay__security = security.isSelected();
         Main.relay__pedantic = pedantic.isSelected();
-        Main.relay__non_terse = non_terse.isSelected();
         Main.relay__spelling = spelling.isSelected();
         Main.projectPath = projectPath.getText();
         Main.textEditorPath = textEditorPath.getText();
@@ -164,7 +158,6 @@ public class OptionsDialog extends JDialog {
             p.put("relay__checks", Main.relay__checks ? "1" : "0");
             p.put("relay__security", Main.relay__security ? "1" : "0");
             p.put("relay__pedantic", Main.relay__pedantic ? "1" : "0");
-            p.put("relay__non_terse", Main.relay__non_terse ? "1" : "0");
             p.put("relay__spelling", Main.relay__spelling ? "1" : "0");
             p.put("projectPath", Main.projectPath);
             p.put("textEditorPath", Main.textEditorPath);

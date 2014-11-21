@@ -312,7 +312,7 @@ function _ftp_info($light_fail = false)
             }
         }
 
-        $AFM_FTP_CONN = $conn;;
+        $AFM_FTP_CONN = $conn;
         return $AFM_FTP_CONN;
     }
 

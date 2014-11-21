@@ -104,7 +104,7 @@ function ocf_edit_forum($forum_id, $name, $description, $forum_grouping_id, $new
         $forum_grouping_id = null;
     }
     if ($new_parent == -1) {
-        $new_parent = null;
+        $new_parent = mixed();
     }
 
     require_code('urls2');
@@ -126,7 +126,7 @@ function ocf_edit_forum($forum_id, $name, $description, $forum_grouping_id, $new
 
     $under_forum = $new_parent;
     while ((!is_null($under_forum)) && ($under_forum != INTEGER_MAGIC_NULL)) {
-        if ($forum_id == $under_forum) {
+        if ($forum_id === $under_forum) {
             warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
         }
         $under_forum = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums', 'f_parent_forum', array('id' => $under_forum));
@@ -161,7 +161,7 @@ function ocf_edit_forum($forum_id, $name, $description, $forum_grouping_id, $new
         }
     }
 
-    if (($old_parent != $new_parent) && ($new_parent != INTEGER_MAGIC_NULL)) {
+    if (($old_parent !== $new_parent) && ($new_parent !== INTEGER_MAGIC_NULL)) {
         // Recalc stats
         require_code('ocf_posts_action2');
         $num_topics_forum = $forum_info[0]['f_cache_num_topics']; // This is valid, because we move all this forums subforums too

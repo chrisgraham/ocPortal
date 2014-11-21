@@ -199,10 +199,9 @@ function set_session_id($id, $guest_session = false)  // NB: Guests sessions can
     /*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))      Useful for testing non-cookie support, but annoying if left on
     {
         $test=false;
-    } else*/
-    {
+    } else {*/
         $test = @setcookie(get_session_cookie(), $id, $timeout, get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
-    }
+    //}
     $_COOKIE[get_session_cookie()] = $id; // So we remember for this page view
 
     // If we really have to, store in URL
@@ -247,7 +246,9 @@ function try_su_login($member)
     }
     if (has_privilege($member, 'assume_any_member')) {
         $su = $GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
-        if ((is_null($su)) && (is_numeric($ks))) $su = intval($ks);
+        if ((is_null($su)) && (is_numeric($ks))) {
+            $su = intval($ks);
+        }
 
         if (!is_null($su)) {
             $member = $su;

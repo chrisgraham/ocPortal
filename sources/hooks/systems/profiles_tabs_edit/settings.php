@@ -174,8 +174,7 @@ class Hook_profiles_tabs_edit_settings
 
             if (!fractional_edit()) {
                 // Secondary groups
-                //if (array_key_exists('secondary_groups',$_POST)) Can't use this line, because deselecting all will result in it not being passed
-                {
+                //if (array_key_exists('secondary_groups',$_POST)) { Can't use this line, because deselecting all will result in it not being passed
                     if (!array_key_exists('secondary_groups', $_POST)) {
                         $_POST['secondary_groups'] = array();
                     }
@@ -201,7 +200,7 @@ class Hook_profiles_tabs_edit_settings
                             ocf_member_leave_group($group_id, $member_id_of);
                         }
                     }
-                }
+                //}
 
                 $GLOBALS['FORUM_DB']->query('DELETE FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_member_known_login_ips WHERE i_member_id=' . strval($member_id_of) . ' AND ' . db_string_not_equal_to('i_val_code', '')); // So any re-confirms can happen
 

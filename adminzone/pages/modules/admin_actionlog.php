@@ -234,7 +234,8 @@ class Module_admin_actionlog
 
         $max_rows = 0;
 
-        // Pull up our rows: forum
+        // Pull up our rows: forum...
+
         if (get_forum_type() == 'ocf') {
             // Possible filter (called up by URL)
             $where = '1=1';
@@ -270,40 +271,41 @@ class Module_admin_actionlog
             $rows1 = array();
         }
 
-        // Pull up our rows: site
-        {
-            // Possible filter (called up by URL)
-            $where = '1=1';
-            if ($filter_to_type != '') {
-                $where .= ' AND (1=2';
-                foreach (explode(',', $filter_to_type) as $_filter_to_type) {
-                    $where .= ' OR ' . db_string_equal_to('the_type', $_filter_to_type);
-                }
-                $where .= ')';
-            }
-            if ($filter_param_a != '') {
-                if (is_numeric($filter_param_a)) {
-                    $where .= ' AND ' . db_string_equal_to('param_a', $filter_param_a);
-                } else {
-                    $where .= ' AND param_a LIKE \'' . db_encode_like('%' . $filter_param_a . '%') . '\'';
-                }
-            }
-            if ($filter_param_b != '') {
-                if (is_numeric($filter_param_b)) {
-                    $where .= ' AND ' . db_string_equal_to('param_b', $filter_param_b);
-                } else {
-                    $where .= ' AND param_b LIKE \'' . db_encode_like('%' . $filter_param_b . '%') . '\'';
-                }
-            }
-            if ($id != -1) {
-                $where .= ' AND member_id=' . strval($id);
-            }
+        // Pull up our rows: site...
 
-            // Fetch
-            $rows2 = $GLOBALS['SITE_DB']->query('SELECT id,member_id,date_and_time,the_type,param_a,param_b,ip FROM ' . get_table_prefix() . 'adminlogs WHERE ' . $where . ' ORDER BY ' . $sortable . ' ' . $sort_order, $max + $start, null, false, true);
-            $max_rows += $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . $where, false, true);
-            $rows = array_merge($rows1, $rows2);
+        // Possible filter (called up by URL)
+        $where = '1=1';
+        if ($filter_to_type != '') {
+            $where .= ' AND (1=2';
+            foreach (explode(',', $filter_to_type) as $_filter_to_type) {
+                $where .= ' OR ' . db_string_equal_to('the_type', $_filter_to_type);
+            }
+            $where .= ')';
         }
+        if ($filter_param_a != '') {
+            if (is_numeric($filter_param_a)) {
+                $where .= ' AND ' . db_string_equal_to('param_a', $filter_param_a);
+            } else {
+                $where .= ' AND param_a LIKE \'' . db_encode_like('%' . $filter_param_a . '%') . '\'';
+            }
+        }
+        if ($filter_param_b != '') {
+            if (is_numeric($filter_param_b)) {
+                $where .= ' AND ' . db_string_equal_to('param_b', $filter_param_b);
+            } else {
+                $where .= ' AND param_b LIKE \'' . db_encode_like('%' . $filter_param_b . '%') . '\'';
+            }
+        }
+        if ($id != -1) {
+            $where .= ' AND member_id=' . strval($id);
+        }
+
+        // Fetch
+        $rows2 = $GLOBALS['SITE_DB']->query('SELECT id,member_id,date_and_time,the_type,param_a,param_b,ip FROM ' . get_table_prefix() . 'adminlogs WHERE ' . $where . ' ORDER BY ' . $sortable . ' ' . $sort_order, $max + $start, null, false, true);
+        $max_rows += $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . $where, false, true);
+        $rows = array_merge($rows1, $rows2);
+
+        // Render...
 
         require_code('actionlog');
 

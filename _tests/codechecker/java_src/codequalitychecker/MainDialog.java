@@ -251,7 +251,7 @@ public class MainDialog extends JFrame {
             last_m = tmpFile.lastModified() / 1000 + 60 * 60 * 24;
 
             if (tmpFile.isDirectory()) {
-		if ((skip_custom) && ((thefiles[i].equals("tracker")) || (thefiles[i].equals("exports")) || (thefiles[i].equals("simpletest")) || (thefiles[i].indexOf("_custom") != -1))) {
+		if ((skip_custom) && ((thefiles[i].equals("transcoder")) || (thefiles[i].equals("uploads")) || (thefiles[i].equals("_tests")) || (thefiles[i].equals("ocworld")) || (thefiles[i].equals("tracker")) || (thefiles[i].equals("exports")) || (thefiles[i].equals("simpletest")) || (thefiles[i].indexOf("_custom") != -1))) {
                     continue;
                 }
 
@@ -260,6 +260,10 @@ public class MainDialog extends JFrame {
                         + tmpFile.getName(), skip_custom);
                 finalFiles.addAll(next);
             } else if (tmpFile.isFile()) {
+                if (thefiles[i].equals("_config.php")) {
+                    continue;
+                }
+                
                 if ((type.equals("PHP")) && (!thefiles[i].toLowerCase().endsWith(".php"))) {
                     continue;
                 }
@@ -512,9 +516,6 @@ public class MainDialog extends JFrame {
         }
         if (Main.relay__mixed) {
             line = line + " mixed=1";
-        }
-        if (Main.relay__non_terse) {
-            line = line + " non_terse=1";
         }
         if (Main.relay__pedantic) {
             line = line + " pedantic=1";

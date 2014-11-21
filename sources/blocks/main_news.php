@@ -78,7 +78,7 @@ class Block_main_news
         $member_based = (isset($map['member_based'])) && ($map['member_based'] == '1');
         $attach_to_url_filter = ((isset($map['attach_to_url_filter']) ? $map['attach_to_url_filter'] : '0') == '1');
         $ocselect = isset($map['ocselect']) ? $map['ocselect'] : '';
-        $optimise=(array_key_exists('optimise',$map)) && ($map['optimise']=='1');
+        $optimise = (array_key_exists('optimise', $map)) && ($map['optimise'] == '1');
 
         // Pagination
         $block_id = get_block_id($map);
@@ -204,8 +204,7 @@ class Block_main_news
                     }
                 }
                 $start += 200;
-            }
-            while (count($_rows) == 200);
+            } while (count($_rows) == 200);
             unset($_rows);
         }
         $rows = remove_duplicate_rows($rows, 'p_id');

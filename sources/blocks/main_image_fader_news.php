@@ -82,7 +82,7 @@ class Block_main_image_fader_news
         }
 
         require_code('ocfiltering');
-		$ocfilter = ocfilter_to_sqlfragment($cat, 'r.news_category', 'news_categories', NULL, 'r.news_category', 'id');
+        $ocfilter = ocfilter_to_sqlfragment($cat, 'r.news_category', 'news_categories', null, 'r.news_category', 'id');
 
         $q_filter = '';
         if ($blogs === 0) {

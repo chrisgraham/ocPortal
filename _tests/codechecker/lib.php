@@ -69,11 +69,11 @@ function parse_file($to_use, $verbose = false, $very_verbose = false, $i = null,
     if ($verbose) {
         echo '</pre>';
     }
-    echo 'DONE ' . $FILENAME;
+    /*echo 'DONE ' . $FILENAME;
     if (!is_null($i)) {
         echo ' - ' . $i . ' of ' . $count;
     }
-    echo cnl();
+    echo cnl();*/
 
     return $structure;
 }
@@ -161,7 +161,7 @@ function do_dir($dir, $no_custom = false, $orig_priority = false, $avoid = null)
                 continue;
             }
 
-            $bitmask = IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE;
+            $bitmask = IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE | IGNORE_BUNDLED_VOLATILE;
             if ($no_custom) {
                 $bitmask = $bitmask | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_NONBUNDLED_SCATTERED;
             }

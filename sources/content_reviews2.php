@@ -209,7 +209,7 @@ function content_review_set($content_type, $content_id, $old_content_id = null)
 function schedule_content_review($content_type, $content_id, $review_freq, $next_review_time = null, $auto_action = 'leave', $display_review_status = 0)
 {
     if ($review_freq === 0) {
-        $review_freq = null;
+        $review_freq = mixed();
     }
 
     // Tidy up, if conflicting entry in database
@@ -222,8 +222,8 @@ function schedule_content_review($content_type, $content_id, $review_freq, $next
     if ((is_null($next_review_time)) && (is_null($review_freq))) {
         return; // Nothing to schedule
     }
-    $calc_review_time = (time() + $review_freq);
-    if ((is_null($next_review_time))/* || ($calc_review_time<$next_review_time)*/) {
+    if (is_null($next_review_time)) {
+        $calc_review_time = (time() + $review_freq);
         $next_review_time = $calc_review_time;
     }
 

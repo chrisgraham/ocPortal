@@ -119,7 +119,7 @@ function tar_get_directory(&$resource, $tolerate_errors = false)
             $mtime = octdec(trim(substr($header, 136, 12)));
             $chksum = octdec(trim(substr($header, 148, 8)));
             $block_size = file_size_to_tar_block_size($size);
-//       $is_ok=substr($header,156,1)=='0';  Actually, this isn't consistently useful
+            //$is_ok=substr($header,156,1)=='0';  Actually, this isn't consistently useful
 
             $header2 = substr($header, 0, 148);
             $header2 .= '        ';
@@ -131,8 +131,7 @@ function tar_get_directory(&$resource, $tolerate_errors = false)
                 warn_exit(do_lang_tempcode('CORRUPT_TAR'));
             }
 
-//       if ($is_ok)
-            {
+            //if ($is_ok) {
                 if ($path != '././@LongLink') {
                     if (substr(basename($path), 0, 2) != '._') {
                         $directory[$offset] = array('path' => $path, 'mode' => $mode, 'size' => $size, 'mtime' => $mtime);
@@ -144,7 +143,7 @@ function tar_get_directory(&$resource, $tolerate_errors = false)
                     $next_name = fread($myfile, $size);
                     fseek($myfile, $block_size - 512 - $size, SEEK_CUR);
                 }
-            }
+            //}
 
             $resource['already_at_end'] = false;
         }
@@ -514,13 +513,12 @@ function tar_add_file(&$resource, $target_path, $data, $_mode = 0644, $_mtime = 
 
     $myfile = $resource['myfile'];
 
-// if (!$resource['already_at_end'])   Don't trust this as reliable at the moment and seeking is not a problem
-    {
+    //if (!$resource['already_at_end']) {   Don't trust this as reliable at the moment and seeking is not a problem
         if (!is_null($myfile)) {
             fseek($myfile, $resource['end'], SEEK_SET);
         }
         $resource['already_at_end'] = true;
-    }
+    //}
     $resource['directory'][$resource['end']] = array('path' => $target_path, 'mode' => $_mode, 'size' => $data_is_path ? filesize($data) : strlen($data));
 
     if (strlen($target_path) > 100) {

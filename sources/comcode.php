@@ -53,10 +53,9 @@ function init__comcode()
         'attachment' => 1, 'attachment_safe' => 1, 'align' => 1, 'left' => 1, 'center' => 1, 'right' => 1,
         'snapback' => 1, 'post' => 1, 'topic' => 1, 'include' => 1, 'random' => 1, 'ticker' => 1, 'jumping' => 1, 'surround' => 1, 'pulse' => 1, 'shocker' => 1,
     );
-    //if (addon_installed('ecommerce'))
-    {
+    //if (addon_installed('ecommerce')) {
         $VALID_COMCODE_TAGS['currency'] = 1;
-    }
+    //}
 }
 
 /**

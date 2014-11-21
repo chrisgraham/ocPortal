@@ -287,9 +287,7 @@ function lex($text = null)
                     }
                 }
                 while (trim($char) == '');
-                if (/*($new_line) && */
-                (trim($previous_char) == '')
-                ) {
+                if ((trim($previous_char) == '')) {
                     if ($char == '{') {
                         $line = substr($TEXT, 0, $i);
                         if ($new_line) {
@@ -301,12 +299,16 @@ function lex($text = null)
                         }
                         $should_be_on_same_line = (preg_match('#^\s*(function|class|public|private|protected|static|abstract|interface) #', $line) != 0);
                         if ($should_be_on_same_line != $new_line) {
-                            log_warning('Bracing error (type 2/1) ', $i, true);
+                            log_warning('Bracing error (opening brace on wrong line) ', $i, true);
                         }
-                        array_push($brace_stack, $indentation);
+                        if ($indentation % 4 == 0 || strpos($line, '=>') === false) {
+                            array_push($brace_stack, $indentation);
+                        } else {
+                            array_push($brace_stack, end($brace_stack) + 4); // Has array structure indenting, messing with brace offsets, so calculate via other method
+                        }
                     } elseif ($char == '}') {
                         if (!$new_line) {
-                            log_warning('Bracing error (type 2/2) ', $i, true);
+                            log_warning('Bracing error (closing brace not on new line) ', $i, true);
                         }
                         $past_indentation = array_pop($brace_stack);
                         if ($past_indentation != $indentation) {
@@ -314,7 +316,7 @@ function lex($text = null)
                         }
                     }
                 }
-                if (($new_line) && ($indentation % (isset($GLOBALS['NON_TERSE']) ? 4 : 3) != 0)) {
+                if (($new_line) && (($indentation % 4) != 0) && (strpos(substr($TEXT, $i, strpos($TEXT, "\n", $i) - $i), '=>') === false)) {
                     log_warning('Bad indentation according to coding standards', $i, true);
                 }
                 $new_line = false;
@@ -423,22 +425,15 @@ function lex($text = null)
                         }
                     }
 
-                    $terse_style = !isset($GLOBALS['NON_TERSE']);
-                    if ($terse_style) {
-                        if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && (in_array($token_found, array('COMMA', 'IS_EQUAL', 'IS_GREATER', 'IS_SMALLER', 'IS_GREATER_OR_EQUAL', 'IS_SMALLER_OR_EQUAL', 'IS_IDENTICAL', 'IS_NOT_EQUAL', 'IS_NOT_IDENTICAL', 'CONCAT_EQUAL', 'DIV_EQUAL', 'MINUS_EQUAL', 'MUL_EQUAL', 'PLUS_EQUAL', 'BOR_EQUAL', 'EQUAL', 'COMMA', 'BW_XOR', 'BW_OR', 'SL', 'SR', 'CONC', 'ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'REMAINDER', 'OBJECT_OPERATOR')))) {
-                            log_warning('Superfluous spacing (for ' . $token_found . ') against coding standards', $i, true);
-                        }
-                    } else {
-                        if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && (in_array($token_found, array('OBJECT_OPERATOR')))) {
-                            log_warning('Superfluous spacing (for ' . $token_found . ') against coding standards', $i, true);
-                        }
-                        if (($i_current > 0) && (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != ')') && ($TEXT[$i] != "/") && ($TEXT[$i] != "\r")) && (in_array($token_found, array('COMMA', 'COMMAND_TERMINATE')))) {
+                    if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && (in_array($token_found, array('OBJECT_OPERATOR')))) {
+                        log_warning('Superfluous spacing (for ' . $token_found . ') against coding standards', $i, true);
+                    }
+                    if (($i_current > 0) && (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != ')') && ($TEXT[$i] != "/") && ($TEXT[$i] != "\r")) && (in_array($token_found, array('COMMA', 'COMMAND_TERMINATE')))) {
+                        log_warning('Missing surrounding spacing (for ' . $token_found . ') against coding standards', $i, true);
+                    }
+                    if (($i_current > 0) && (($TEXT[$i_current - 1] != ' ') || (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r"))) && (in_array($token_found, array('IS_EQUAL', 'IS_GREATER', 'IS_SMALLER', 'IS_GREATER_OR_EQUAL', 'IS_SMALLER_OR_EQUAL', 'IS_IDENTICAL', 'IS_NOT_EQUAL', 'IS_NOT_IDENTICAL', 'CONCAT_EQUAL', 'DIV_EQUAL', 'MINUS_EQUAL', 'MUL_EQUAL', 'PLUS_EQUAL', 'BOR_EQUAL', 'EQUAL', 'BW_XOR', 'BW_OR', 'SL', 'SR', 'CONC', 'ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'REMAINDER')))) {
+                        if ($token_found != 'SUBTRACT' || is_alphanumeric($TEXT[$i_current - 1]) /* As could be minus sign */) {
                             log_warning('Missing surrounding spacing (for ' . $token_found . ') against coding standards', $i, true);
-                        }
-                        if (($i_current > 0) && (($TEXT[$i_current - 1] != ' ') || (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r"))) && (in_array($token_found, array('IS_EQUAL', 'IS_GREATER', 'IS_SMALLER', 'IS_GREATER_OR_EQUAL', 'IS_SMALLER_OR_EQUAL', 'IS_IDENTICAL', 'IS_NOT_EQUAL', 'IS_NOT_IDENTICAL', 'CONCAT_EQUAL', 'DIV_EQUAL', 'MINUS_EQUAL', 'MUL_EQUAL', 'PLUS_EQUAL', 'BOR_EQUAL', 'EQUAL', 'BW_XOR', 'BW_OR', 'SL', 'SR', 'CONC', 'ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'REMAINDER')))) {
-                            if ($token_found != 'SUBTRACT' || is_alphanumeric($TEXT[$i_current - 1]) /* As could be minus sign */) {
-                                log_warning('Missing surrounding spacing (for ' . $token_found . ') against coding standards', $i, true);
-                            }
                         }
                     }
                     if (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r") && (in_array($token_found, array('IF', 'ELSEIF', 'FOREACH', 'FOR', 'WHILE', 'DO')))) {

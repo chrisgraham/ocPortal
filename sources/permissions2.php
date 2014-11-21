@@ -153,10 +153,10 @@ function get_category_permissions_for_environment($module, $category, $page = nu
         $page = get_page_name();
     }
     if ($category == '-1') {
-        $category = null;
+        $category = mixed();
     }
     if ($category == '') {
-        $category = null;
+        $category = mixed();
     }
 
     $server_id = get_module_zone($page) . ':' . $page; // $category is not of interest to us because we use this to find our inheritance settings

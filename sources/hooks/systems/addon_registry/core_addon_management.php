@@ -345,10 +345,7 @@ class Hook_addon_registry_core_addon_management
         $tpl_languages = new Tempcode();
         $tpl_themes = new Tempcode();
 
-        foreach (array(
-                     'en',
-                     'mal'
-                 ) as $value) {
+        foreach (array('en', 'mal') as $value) {
             $frm_langs = new Tempcode();
             $i = 0;
             foreach (placeholder_array() as $file) {
@@ -362,10 +359,7 @@ class Hook_addon_registry_core_addon_management
             )));
         }
 
-        foreach (array(
-                     'default',
-                     'ocp'
-                 ) as $value) {
+        foreach (array( 'default', 'ocp') as $value) {
             $frm_themes = new Tempcode();
             foreach (placeholder_array() as $file) {
                 $frm_themes->attach(form_input_hidden('file_' . strval($i), $file));
