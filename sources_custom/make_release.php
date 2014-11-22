@@ -96,17 +96,18 @@ function make_installers($skip_file_grab = false)
     // Build quick installer
     if ($make_quick) {
         // Write out our installer data file
-        $data_file = fopen($builds_path . '/builds/' . $version_dotted . '/data.ocp', 'wb');
-        require_code('zip');
+        require_code('tar');
+        $data_file = tar_open($builds_path . '/builds/' . $version_dotted . '/data.cms', 'wb');
         $zip_file_array = array();
+        $offsets = array();
+        $sizes = array();
         foreach ($MAKE_INSTALLERS__FILE_ARRAY as $filename => $data) {
-            $zip_file_array[] = array('time' => filemtime(get_file_base() . '/' . $filename), 'data' => $data, 'name' => $filename);
+            $offsets[] = tar_add_file($data_file, $filename, $data, 0644, filemtime(get_file_base() . '/' . $filename));
+            $sizes[] = strlen($data);
         }
-        list($data, $offsets, $sizes) = create_zip_file($zip_file_array, false, true);
-        fwrite($data_file, $data);
-        fclose($data_file);
-        fix_permissions($builds_path . '/builds/' . $version_dotted . '/data.ocp');
-        $archive_size = filesize($builds_path . '/builds/' . $version_dotted . '/data.ocp');
+        tar_close($data_file);
+        fix_permissions($builds_path . '/builds/' . $version_dotted . '/data.cms');
+        $archive_size = filesize($builds_path . '/builds/' . $version_dotted . '/data.cms');
         // The installer does an md5 check to check validity - prepare for it
         $md5_test_path = 'data/images/advertise_here.png';
         $md5 = md5(file_get_contents($builds_path . '/builds/build/' . $version_branch . '/' . $md5_test_path));
@@ -123,7 +124,7 @@ function make_installers($skip_file_grab = false)
             $file_list .= '\'' . $path . '\',';
         }
 
-        // Build install.php, which has to have all our data.ocp file offsets put into it (data.ocp is an uncompressed zip, but the quick installer cheats - it can't truly read arbitrary zips)
+        // Build install.php, which has to have all our data.cms file offsets put into it (data.cms is an uncompressed zip, but the quick installer cheats - it can't truly read arbitrary zips)
         $code = file_get_contents(get_file_base() . '/install.php');
         $auto_installer = fopen($builds_path . '/builds/' . $version_dotted . '/install.php', 'wb');
         $installer_start = "<?php
@@ -133,10 +134,10 @@ function make_installers($skip_file_grab = false)
             \$OFFSET_ARRAY = array({$offset_list});
             \$SIZE_ARRAY = array({$size_list});
             \$FILE_ARRAY = array({$file_list});
-            \$DATADOTOCP_FILE = fopen('data.ocp','rb');
-            if (\$DATADOTOCP_FILE === false) warn_exit('data.ocp missing / inaccessible');
-            if (filesize('data.ocp') != {$archive_size}) warn_exit('data.ocp not fully uploaded, or wrong version for this installer');
-            if (md5(file_array_get('{$md5_test_path}')) != '{$md5}') warn_exit('data.ocp corrupt. Must not be uploaded in text mode');
+            \$DATADOTOCP_FILE = fopen('data.cms','rb');
+            if (\$DATADOTOCP_FILE === false) warn_exit('data.cms missing / inaccessible');
+            if (filesize('data.cms') != {$archive_size}) warn_exit('data.cms not fully uploaded, or wrong version for this installer');
+            if (md5(file_array_get('{$md5_test_path}')) != '{$md5}') warn_exit('data.cms corrupt. Must not be uploaded in text mode');
 
             function file_array_get(\$path)
             {
@@ -188,7 +189,7 @@ function make_installers($skip_file_grab = false)
         @unlink($quick_zip);
 
         chdir($builds_path . '/builds/' . $version_dotted);
-        $cmd = 'zip -r -9 ' . escapeshellarg($quick_zip) . ' ' . escapeshellarg('data.ocp') . ' ' . escapeshellarg('install.php');
+        $cmd = 'zip -r -9 ' . escapeshellarg($quick_zip) . ' ' . escapeshellarg('data.cms') . ' ' . escapeshellarg('install.php');
         $output2 = $cmd . ':' . "\n" . shell_exec($cmd);
 
         chdir(get_file_base() . '/data_custom/builds');

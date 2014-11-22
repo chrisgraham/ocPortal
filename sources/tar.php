@@ -475,6 +475,7 @@ function tar_get_file(&$resource, $path, $tolerate_errors = false, $write_data_t
  * @param  ?TIME                        The modification time we wish for our file (null: now)
  * @param  boolean                      Whether the $data variable is actually a full file path
  * @param  boolean                      Whether to return on errors
+ * @return integer                      Offset of the file in the TAR
  */
 function tar_add_file(&$resource, $target_path, $data, $_mode = 0644, $_mtime = null, $data_is_path = false, $return_on_errors = false)
 {
@@ -519,6 +520,7 @@ function tar_add_file(&$resource, $target_path, $data, $_mode = 0644, $_mtime = 
         }
         $resource['already_at_end'] = true;
     //}
+    $offset = $resource['end'];
     $resource['directory'][$resource['end']] = array('path' => $target_path, 'mode' => $_mode, 'size' => $data_is_path ? filesize($data) : strlen($data));
 
     if (strlen($target_path) > 100) {
@@ -609,6 +611,8 @@ function tar_add_file(&$resource, $target_path, $data, $_mode = 0644, $_mtime = 
         }
     }
     $resource['end'] += $block_size + 512;
+
+    return $offset;
 }
 
 /**

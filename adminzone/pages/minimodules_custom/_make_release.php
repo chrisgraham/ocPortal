@@ -187,7 +187,7 @@ if ((!$is_bleeding_edge) && (!$is_old_tree) && (isset($all_downloads_to_add[0]['
 
 // Extract latest download
 if ((!$is_bleeding_edge) && (!$is_old_tree)) {
-    @unlink('data.ocp');
+    @unlink('data.cms');
     @unlink('install.php');
     $cmd = 'cd ' . get_custom_file_base() . '/uploads/downloads; unzip -o ' . $all_downloads_to_add[0]['filename'];
     shell_exec($cmd);

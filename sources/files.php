@@ -251,7 +251,7 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
         // Installer files
         'install.php' => '',
         '_config.php.template' => '',
-        'data.ocp' => '',
+        'data.cms' => '',
         'install.sql' => '',
         'install1.sql' => '',
         'install2.sql' => '',

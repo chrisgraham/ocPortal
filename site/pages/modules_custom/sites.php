@@ -444,7 +444,7 @@ class Module_sites
             $t = get_custom_file_base() . '/' . rawurldecode($t);
         }
 
-        $array = array('install.php' => get_file_base() . '/uploads/downloads/install.php', 'data.ocp' => get_file_base() . '/uploads/downloads/data.ocp');
+        $array = array('install.php' => get_file_base() . '/uploads/downloads/install.php', 'data.cms' => get_file_base() . '/uploads/downloads/data.cms');
         foreach ($array as $filename => $tmp_file) {
             if (!@ftp_put($conn_id, $filename, $tmp_file, FTP_BINARY)) {
                 ftp_close($conn_id);

@@ -1268,7 +1268,7 @@ function step_5_ftp()
         if ($files === false) { // :(. Weird bug on some systems
             $files = array();
             if (@ftp_rename($conn, 'install.php', 'install.php')) {
-                $files = array('install.php', 'data.ocp');
+                $files = array('install.php', 'data.cms');
             }
         }
         if (!in_array('install.php', $files)) {
@@ -2403,7 +2403,7 @@ function handle_self_referencing_embedment()
             if ($files === false) { // :(. Weird bug on some systems
                 $files = array();
                 if (@ftp_rename($conn, 'install.php', 'install.php')) {
-                    $files = array('install.php', 'data.ocp');
+                    $files = array('install.php', 'data.cms');
                 }
             }
             if (!in_array('install.php', $files)) {

@@ -732,7 +732,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                     $tcp_time = false;
                 }
             }
-            if ((!$support_smart_decaching) || (($tcp_time !== false) && (is_file($file_path)))/*if in install can be found yet no file at path due to running from data.ocp*/ && ($found !== null)) {
+            if ((!$support_smart_decaching) || (($tcp_time !== false) && (is_file($file_path)))/*if in install can be found yet no file at path due to running from data.cms*/ && ($found !== null)) {
                 if ((!$support_smart_decaching) || (filemtime($file_path) < $tcp_time)) {
                     $_data = new Tempcode();
                     $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $type, $fallback));

@@ -48,7 +48,7 @@ If you'd like to use the one bundled with windows, open a new Internet Explorer 
 
 At this point you need to decide whether you want your website to reside in your root folder or not. If you choose to place it in your root folder (which is the recommended option), people will be able to access your site by going to [tt]http://www.mywebsite.com[/tt] (unless you don't own your own domain name). If you choose to place it in a subfolder (for example, "subfolder"), people will access your ocPortal installation by going to [tt]http://www.mywebsite.com/subfolder[/tt].
 
-When you successfully connect, find your webroot, and navigate into a subfolder if you chose to, you need to upload the files that were inside the zip package you downloaded. If you chose the quick installer, these files are called 'install.php', the other is called 'data.ocp'. If you chose the manual installer, there will be many more.
+When you successfully connect, find your webroot, and navigate into a subfolder if you chose to, you need to upload the files that were inside the zip package you downloaded. If you chose the quick installer, these files are called 'install.php', the other is called 'data.cms'. If you chose the manual installer, there will be many more.
 
 Regardless whether or not you chose to make a new subfolder, you need to put these files in the same folder. This can usually be done by dragging and dropping the files from your computer to your web host in your FTP client ([url="image" rel="lightbox"]data_custom/images/docs/install_upload_ftp.gif[/url]). If your FTP client presents a choice of whether to upload in 'Binary' or 'ASCII'/'Text' mode, choose 'Binary' mode.
 
