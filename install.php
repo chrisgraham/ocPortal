@@ -1725,7 +1725,7 @@ if (!function_exists(\'git_repos\')) {
     if (GOOGLE_APPENGINE) {
         // Copy in default php.ini file
         @unlink(get_file_base() . '/php.ini');
-        copy(get_file_base() . '/data/modules/google_appengine/php.ini', get_file_base() . '/php.ini');
+        copy(get_file_base() . '/data/modules/google_appengine/php.gae.ini', get_file_base() . '/php.ini');
 
         // Customise php.ini file
         $php_ini = file_get_contents(get_file_base() . '/php.ini');
