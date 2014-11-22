@@ -309,7 +309,7 @@ function do_lang_tempcode($x, $a = null, $b = null, $c = null, $d = null)
 {
     global $PARSED;
     if (!isset($PARSED)) {
-        $temp = file_get_contents('lang/php.ini');
+        $temp = file_get_contents('lang/phpdoc.ini');
         $temp_2 = explode("\n", $temp);
         $PARSED = array();
         foreach ($temp_2 as $p) {

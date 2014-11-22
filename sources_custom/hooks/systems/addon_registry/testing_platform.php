@@ -149,7 +149,7 @@ class Hook_addon_registry_testing_platform
             '_tests/codechecker/index.html',
             '_tests/codechecker/lang/.htaccess',
             '_tests/codechecker/lang/index.html',
-            '_tests/codechecker/lang/php.ini',
+            '_tests/codechecker/lang/phpdoc.ini',
             '_tests/codechecker/lex.php',
             '_tests/codechecker/lib.php',
             '_tests/codechecker/netbeans/.htaccess',
