@@ -359,7 +359,13 @@ function step_1()
 	if ((!function_exists('zip_open')) && (!@file_exists('/usr/bin/unzip')))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_ZIP_ON_SERVER'))));
 	if (!function_exists('imagecreatefromstring'))
+	{
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_GD_ON_SERVER'))));
+	} else
+	{
+		if (!function_exists('imagepng'))
+			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_GD_ON_SERVER_PNG'))));
+	}
 	if (!function_exists('xml_parser_create'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_XML_ON_SERVER'))));
 	if ((function_exists('memory_get_usage')) && (@ini_get('memory_limit')!='') && (@ini_get('memory_limit')!='-1') && (@ini_get('memory_limit')!='0') && (intval(trim(str_replace('M','',@ini_get('memory_limit'))))<16))

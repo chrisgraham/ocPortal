@@ -974,7 +974,7 @@ function has_feature($dependency)
 	if (($dependency=='javascript') && (has_js())) return true;
 	if (($dependency=='cron') && (cron_installed())) return true;
 	if (($dependency=='ocf') && (get_forum_type()=='ocf')) return true;
-	if ((strtolower($dependency)=='gd') && (get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring'))) return true;
+	if ((strtolower($dependency)=='gd') && (get_option('is_on_gd')=='1') && (function_exists('imagepng'))) return true;
 	if ($dependency=='adobeflash') return true;
 	if (substr($dependency,0,3)=='php')
 	{

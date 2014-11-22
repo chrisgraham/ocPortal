@@ -689,7 +689,7 @@ function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=
 	// Special code to re-orientate JPEG images if required (browsers cannot do this)
 	if (($enforce_type==OCP_UPLOAD_IMAGE) || (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (substr($place,-4)!='.swf')))
 	{
-		if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring'))) // TODO: No is_on_gd in v10
+		if ((get_option('is_on_gd')=='1') && (function_exists('imagepng'))) // TODO: No is_on_gd in v10
 		{
 			require_code('images');
 			convert_image($place,$place,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);

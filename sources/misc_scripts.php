@@ -24,6 +24,7 @@
 function gd_text_script()
 {
 	if (!function_exists('imagefontwidth')) return;
+	if (!function_exists('imagepng')) return;
 
 	$text=get_param('text');
 	if (get_magic_quotes_gpc()) $text=stripslashes($text);

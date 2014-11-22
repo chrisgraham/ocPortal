@@ -59,7 +59,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	$comcode_text=(substr($original_comcode,0,8)!='<comcode');
 
 	// Handle data URLs for attachment embedding
-	if (function_exists('imagecreatefromstring'))
+	if (function_exists('imagepng'))
 	{
 		$matches=array();
 		$matches2=array();

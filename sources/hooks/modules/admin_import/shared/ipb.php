@@ -431,7 +431,7 @@ class Hook_ipb_base
 						$filename=(($rrpos===false)?$photo_url:substr($photo_url,$rrpos));
 					}
 
-					if (($photo_url!='') && (function_exists('imagecreatefromstring')))
+					if (($photo_url!='') && (function_exists('imagepng')))
 					{
 						$photo_thumb_url='uploads/ocf_photos_thumbs/'.find_derivative_filename('ocf_photos_thumbs',$filename,true);
 						require_code('images');

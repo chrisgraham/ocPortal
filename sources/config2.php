@@ -108,6 +108,8 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 {
 	global $OPTIONS;
 
+	if (!isset($OPTIONS[$name])) return;
+
 	if (is_null($type))
 	{
 		global $GET_OPTION_LOOP;

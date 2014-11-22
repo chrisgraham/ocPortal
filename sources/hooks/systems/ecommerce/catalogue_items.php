@@ -246,13 +246,19 @@ class Hook_catalogue_items
 
 		$qty=post_param_integer('quantity',1);
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$pid));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','c_name',array('id'=>$pid));
+		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$product_det=get_catalogue_entry_field_values($catalogue_name,$pid,NULL,NULL,true);
 
 		foreach ($product_det as $key=>$value)
 		{
 			$product_det[$key]=array_key_exists('effective_value_pure',$value)?$value['effective_value_pure']:$value['effective_value'];
+		}
+
+		for ($i=0;$i<=9;$i++)
+		{
+			if (!isset($product_det[$i])) $product_det[$i]='';
 		}
 
 		$product=array(
@@ -305,10 +311,10 @@ class Hook_catalogue_items
 					'product_code'=>$product_det['product_code'],
 					'quantity'=>$product_det['quantity'],
 					'price'=>round(floatval($product_det['price']),2),
-					'price_pre_tax'=>$product_det['tax'],
+					'price_pre_tax'=>round(floatval($product_det['tax']),2),
 					'product_description'=>$product_det['description'],
 					'product_type'=>$product_det['product_type'],
-					'product_weight'=>$product_det['product_weight'],
+					'product_weight'=>floatval($product_det['product_weight']),
 					'is_deleted' => 0,
 				)
 			);
@@ -328,7 +334,7 @@ class Hook_catalogue_items
 				array(
 					'quantity'=>($qty+$product_det['quantity']),
 					'price'=>round(floatval($product_det['price']),2),
-					'price_pre_tax'=>$product_det['tax'],
+					'price_pre_tax'=>round(floatval($product_det['tax']),2),
 				),
 				$where
 			);

@@ -91,7 +91,7 @@ function _symbol_thumbnail($param)
 	// only_make_smaller: Whether to avoid growing small images to fit (smaller images are better for the Web). One of 0 (false) or 1 (true)
 	if (($param[0]!=''))
 	{
-		if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return $param[0];
+		if ((get_option('is_on_gd')=='0') || (!function_exists('imagepng'))) return $param[0];
 
 		$only_make_smaller=isset($param[8])?($param[8]=='1'):false;
 		$orig_url=$param[0]; // Source for thumbnail generation

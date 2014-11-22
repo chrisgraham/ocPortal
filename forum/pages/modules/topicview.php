@@ -277,7 +277,7 @@ class Module_topicview
 				}
 
 				if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']=='') && (($_postdetails['id']===$jump_post_id) || (($array_id==0) && ($jump_post_id===NULL))))
-					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post']),'200','0','1','0.2'),'left'),ENT_QUOTES,get_charset());
+					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post'],'200','0','1','0.2'),'left')),ENT_QUOTES,get_charset());
 
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 							'_GUID'=>'sacd09wekfofpw2f',
@@ -343,6 +343,8 @@ class Module_topicview
 			if (!is_null($threaded_topic_ob->topic_title)) // Updated topic title
 				$topic_info['title']=$threaded_topic_ob->topic_title;
 			$topic_info['max_rows']=$threaded_topic_ob->total_posts;
+
+			$second_poster=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // No definitive post orders
 		}
 
 		// Buttons for topic as whole

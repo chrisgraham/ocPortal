@@ -550,7 +550,7 @@ class Module_admin_setupwizard
 	{
 		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(7),integer_format(10)));
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>(addon_installed('themewizard') && (function_exists('imagecreatefromstring')))?'step8':'step9'),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>(addon_installed('themewizard') && (function_exists('imagepng')))?'step8':'step9'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_7_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
@@ -689,7 +689,7 @@ class Module_admin_setupwizard
 			}
 		} else $installprofileblocks=array();
 
-		if ((post_param_integer('skip_8',0)==0) && (function_exists('imagecreatefromstring')) && (addon_installed('themewizard')))
+		if ((post_param_integer('skip_8',0)==0) && (function_exists('imagepng')) && (addon_installed('themewizard')))
 		{
 			require_code('themewizard');
 

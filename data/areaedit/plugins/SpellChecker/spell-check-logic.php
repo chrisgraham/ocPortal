@@ -263,7 +263,7 @@ function aspell_init()
 			if ($aspellconfig===false) $aspellconfig=pspell_config_create('en',$spelling,'',$charset);
 			pspell_config_personal($aspellconfig,$p_dict_path.'/'.$lang_stub.'.pws');
 			pspell_config_repl($aspellconfig,$p_dict_path.'/'.$lang_stub.'.prepl');
-			$aspellcommand=pspell_new_config($aspellconfig);
+			$aspellcommand=@pspell_new_config($aspellconfig);
 			if (($aspellcommand===false) && ($lang!='en')) // Might be that we had a late fail on initialising that language
 			{
 				$aspellconfig=pspell_config_create('en',$spelling,'',$charset);

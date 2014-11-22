@@ -1789,14 +1789,26 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'PREG_MATCH':
 				if (isset($param[1]))
 				{
+					$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 					$value=(preg_match('#'.str_replace('#','\#',$param[0]).'#'.(isset($param[2])?str_replace('e','',$param[2]):''),$param[1])!=0)?'1':'0';
+					$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
+					if (isset($php_errormsg))
+					{
+						attach_message($php_errormsg,'warn');
+					}
 				}
 				break;
 
 			case 'PREG_REPLACE':
 				if (isset($param[2]))
 				{
+					$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 					$value=preg_replace('#'.str_replace('#','\#',$param[0]).'#'.(isset($param[3])?str_replace('e','',$param[3]):''),$param[1],$param[2]);
+					$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
+					if (isset($php_errormsg))
+					{
+						attach_message($php_errormsg,'warn');
+					}
 				}
 				break;
 
@@ -2218,17 +2230,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'SELF_PAGE_LINK':
-			    $value='';
-                if (running_script('index') || running_script('iframe'))
-                {
-    				$value=get_zone_name().':'.get_page_name();
-    				foreach ($_GET as $key=>$val)
-    				{
-    					if ($key=='page') continue;
-    					if (is_array($val)) continue;
-    					if (substr($key,0,5)=='keep_') continue;
-    					$value.=':'.$key.'='.$val;
-    				}
+				$value='';
+				if (running_script('index') || running_script('iframe'))
+				{
+					$value=get_zone_name().':'.get_page_name();
+					foreach ($_GET as $key=>$val)
+					{
+						if ($key=='page') continue;
+						if (is_array($val)) continue;
+						if (substr($key,0,5)=='keep_') continue;
+						$value.=':'.$key.'='.$val;
+					}
 				}
 				break;
 
