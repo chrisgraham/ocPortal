@@ -1892,9 +1892,8 @@ class Module_admin_themes
             }
 
             $directory = dirname($_file);
-
             $file = str_replace($directory . '/', $directory . '_custom/', $_file);
-            $fullpath = get_custom_file_base() . '/themes/' . $file;
+            $fullpath = get_custom_file_base() . '/themes/' . $theme . '/' . $file;
             if (!file_exists(dirname($fullpath))) {
                 require_code('files2');
                 make_missing_directory(dirname($fullpath));
@@ -1941,7 +1940,7 @@ class Module_admin_themes
                 fix_permissions($fullpath);
                 sync_file($fullpath);
 
-                if (file_exists(get_file_base() . '/themes/' . post_param('f' . $i . 'file'))) {
+                if (file_exists(get_file_base() . '/themes/default/' . post_param('f' . $i . 'file'))) {
                     // Make base-hash-thingy
                     $myfile = @fopen($fullpath . '.editfrom', GOOGLE_APPENGINE ? 'wb' : 'at');
                     if ($myfile === false) {
@@ -1951,7 +1950,7 @@ class Module_admin_themes
                     if (!GOOGLE_APPENGINE) {
                         ftruncate($myfile, 0);
                     }
-                    $hash = file_get_contents(get_file_base() . '/themes/' . post_param('f' . $i . 'file'));
+                    $hash = file_get_contents(get_file_base() . '/themes/default/' . post_param('f' . $i . 'file'));
                     if (fwrite($myfile, $hash) < strlen($hash)) {
                         warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                     }
