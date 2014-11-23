@@ -122,8 +122,8 @@ class Hook_addon_registry_msn
     public function tpl_previews()
     {
         return array(
-            'BLOCK_SIDE_NETWORK.tpl' => 'block_side_network',
-            'NETLINK.tpl' => 'netlink'
+            'templates/BLOCK_SIDE_NETWORK.tpl' => 'block_side_network',
+            'templates/NETLINK.tpl' => 'netlink'
         );
     }
 

@@ -118,7 +118,7 @@ class Hook_addon_registry_ocf_member_photos
     public function tpl_previews()
     {
         return array(
-            'OCF_EDIT_PHOTO_TAB.tpl' => 'ocf_edit_photo_tab'
+            'templates/OCF_EDIT_PHOTO_TAB.tpl' => 'ocf_edit_photo_tab'
         );
     }
 

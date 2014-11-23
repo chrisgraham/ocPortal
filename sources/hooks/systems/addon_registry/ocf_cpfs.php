@@ -121,9 +121,9 @@ class Hook_addon_registry_ocf_cpfs
     public function tpl_previews()
     {
         return array(
-            'OCF_CPF_PERMISSIONS_TAB.tpl' => 'ocf_cpf_permissions_tab',
-            'OCF_CPF_STATS_LINE.tpl' => 'administrative__ocf_cpf_stats_screen',
-            'OCF_CPF_STATS_SCREEN.tpl' => 'administrative__ocf_cpf_stats_screen'
+            'templates/OCF_CPF_PERMISSIONS_TAB.tpl' => 'ocf_cpf_permissions_tab',
+            'templates/OCF_CPF_STATS_LINE.tpl' => 'administrative__ocf_cpf_stats_screen',
+            'templates/OCF_CPF_STATS_SCREEN.tpl' => 'administrative__ocf_cpf_stats_screen'
         );
     }
 

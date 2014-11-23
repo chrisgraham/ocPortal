@@ -551,12 +551,12 @@ function set_http_status_code($code)
  * @param  boolean                      Whether to only search in the default templates
  * @return ?array                       List of parameters needed for the _do_template function to be able to load the template (null: could not find the template)
  */
-function find_template_place($codename, $lang, $theme, $suffix, $type, $non_custom_only = false)
+function find_template_place($codename, $lang, $theme, $suffix, $directory, $non_custom_only = false)
 {
     global $FILE_ARRAY, $CURRENT_SHARE_USER;
 
     static $tp_cache = array();
-    $sz = serialize(array($codename, $lang, $theme, $suffix, $type));
+    $sz = serialize(array($codename, $lang, $theme, $suffix, $directory));
     if (isset($tp_cache[$sz])) {
         return $tp_cache[$sz];
     }
@@ -565,22 +565,22 @@ function find_template_place($codename, $lang, $theme, $suffix, $type, $non_cust
     $prefix = ($theme == 'default') ? $prefix_default : (get_custom_file_base() . '/themes/');
 
     if (!isset($FILE_ARRAY)) {
-        if ((is_file($prefix . $theme . '/' . $type . '_custom/' . $codename . $suffix)) && (!in_safe_mode()) && (!$non_custom_only)) {
-            $place = array($theme, '/' . $type . '_custom/');
-        } elseif (is_file($prefix . $theme . '/' . $type . '/' . $codename . $suffix)) {
-            $place = array($theme, '/' . $type . '/');
-        } elseif (($CURRENT_SHARE_USER !== null) && ($theme != 'default') && (is_file(get_file_base() . '/themes/' . $theme . '/' . $type . '_custom/' . $codename . $suffix)) && (!$non_custom_only)) {
-            $place = array($theme, '/' . $type . '_custom/');
-        } elseif (($CURRENT_SHARE_USER !== null) && ($theme != 'default') && (is_file(get_file_base() . '/themes/' . $theme . '/' . $type . '/' . $codename . $suffix))) {
-            $place = array($theme, '/' . $type . '/');
-        } elseif (($CURRENT_SHARE_USER !== null) && (is_file(get_custom_file_base() . '/themes/default/' . $type . '_custom/' . $codename . $suffix)) && (!$non_custom_only)) {
-            $place = array('default', '/' . $type . '_custom/');
-        } elseif (($CURRENT_SHARE_USER !== null) && (is_file(get_custom_file_base() . '/themes/default/' . $type . '/' . $codename . $suffix))) {
-            $place = array('default', '/' . $type . '/');
-        } elseif ((is_file($prefix_default . 'default' . '/' . $type . '_custom/' . $codename . $suffix)) && (!in_safe_mode()) && (!$non_custom_only)) {
-            $place = array('default', '/' . $type . '_custom/');
-        } elseif (is_file($prefix_default . 'default' . '/' . $type . '/' . $codename . $suffix)) {
-            $place = array('default', '/' . $type . '/');
+        if ((is_file($prefix . $theme . '/' . $directory . '_custom/' . $codename . $suffix)) && (!in_safe_mode()) && (!$non_custom_only)) {
+            $place = array($theme, '/' . $directory . '_custom/');
+        } elseif (is_file($prefix . $theme . '/' . $directory . '/' . $codename . $suffix)) {
+            $place = array($theme, '/' . $directory . '/');
+        } elseif (($CURRENT_SHARE_USER !== null) && ($theme != 'default') && (is_file(get_file_base() . '/themes/' . $theme . '/' . $directory . '_custom/' . $codename . $suffix)) && (!$non_custom_only)) {
+            $place = array($theme, '/' . $directory . '_custom/');
+        } elseif (($CURRENT_SHARE_USER !== null) && ($theme != 'default') && (is_file(get_file_base() . '/themes/' . $theme . '/' . $directory . '/' . $codename . $suffix))) {
+            $place = array($theme, '/' . $directory . '/');
+        } elseif (($CURRENT_SHARE_USER !== null) && (is_file(get_custom_file_base() . '/themes/default/' . $directory . '_custom/' . $codename . $suffix)) && (!$non_custom_only)) {
+            $place = array('default', '/' . $directory . '_custom/');
+        } elseif (($CURRENT_SHARE_USER !== null) && (is_file(get_custom_file_base() . '/themes/default/' . $directory . '/' . $codename . $suffix))) {
+            $place = array('default', '/' . $directory . '/');
+        } elseif ((is_file($prefix_default . 'default' . '/' . $directory . '_custom/' . $codename . $suffix)) && (!in_safe_mode()) && (!$non_custom_only)) {
+            $place = array('default', '/' . $directory . '_custom/');
+        } elseif (is_file($prefix_default . 'default' . '/' . $directory . '/' . $codename . $suffix)) {
+            $place = array('default', '/' . $directory . '/');
         } else {
             $place = null;
         }
@@ -589,9 +589,9 @@ function find_template_place($codename, $lang, $theme, $suffix, $type, $non_cust
             $dh = opendir(get_file_base() . '/themes');
             while (($possible_theme = readdir($dh))) {
                 if ((substr($possible_theme, 0, 1) != '.') && ($possible_theme != 'default') && ($possible_theme != $theme) && ($possible_theme != 'map.ini') && ($possible_theme != 'index.html')) {
-                    $fullpath = get_custom_file_base() . '/themes/' . $possible_theme . '/' . $type . '_custom/' . $codename . $suffix;
+                    $fullpath = get_custom_file_base() . '/themes/' . $possible_theme . '/' . $directory . '_custom/' . $codename . $suffix;
                     if (is_file($fullpath)) {
-                        $place = array($possible_theme, '/' . $type . '_custom/');
+                        $place = array($possible_theme, '/' . $directory . '_custom/');
                         break;
                     }
                 }
@@ -599,7 +599,7 @@ function find_template_place($codename, $lang, $theme, $suffix, $type, $non_cust
             closedir($dh);
         }
     } else {
-        $place = array('default', '/' . $type . '/');
+        $place = array('default', '/' . $directory . '/');
     }
 
     $tp_cache[$sz] = $place;

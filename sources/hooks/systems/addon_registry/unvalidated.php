@@ -126,9 +126,9 @@ class Hook_addon_registry_unvalidated
     public function tpl_previews()
     {
         return array(
-            'UNVALIDATED_SECTION.tpl' => 'administrative__unvalidated_screen',
-            'UNVALIDATED_SCREEN.tpl' => 'administrative__unvalidated_screen',
-            'VALIDATION_REQUEST_MAIL.txt' => 'administrative__validation_request_mail'
+            'templates/UNVALIDATED_SECTION.tpl' => 'administrative__unvalidated_screen',
+            'templates/UNVALIDATED_SCREEN.tpl' => 'administrative__unvalidated_screen',
+            'text/VALIDATION_REQUEST_MAIL.txt' => 'administrative__validation_request_mail'
         );
     }
 

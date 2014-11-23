@@ -131,13 +131,13 @@ class Hook_addon_registry_securitylogging
     public function tpl_previews()
     {
         return array(
-            'SECURITY_SCREEN.tpl' => 'administrative__security_screen',
-            'SECURITY_ALERT_SCREEN.tpl' => 'administrative__security_alert_screen',
-            'HACK_ATTEMPT_MAIL.txt' => 'administrative__hack_attempt_mail',
-            'IP_BAN_SCREEN.tpl' => 'ip_ban_screen',
-            'LOOKUP_IP_LIST_ENTRY.tpl' => 'administrative__lookup_screen',
-            'LOOKUP_IP_LIST_GROUP.tpl' => 'administrative__lookup_screen',
-            'LOOKUP_SCREEN.tpl' => 'administrative__lookup_screen',
+            'templates/SECURITY_SCREEN.tpl' => 'administrative__security_screen',
+            'templates/SECURITY_ALERT_SCREEN.tpl' => 'administrative__security_alert_screen',
+            'text/HACK_ATTEMPT_MAIL.txt' => 'administrative__hack_attempt_mail',
+            'templates/IP_BAN_SCREEN.tpl' => 'ip_ban_screen',
+            'templates/LOOKUP_IP_LIST_ENTRY.tpl' => 'administrative__lookup_screen',
+            'templates/LOOKUP_IP_LIST_GROUP.tpl' => 'administrative__lookup_screen',
+            'templates/LOOKUP_SCREEN.tpl' => 'administrative__lookup_screen',
         );
     }
 

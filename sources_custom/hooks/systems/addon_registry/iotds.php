@@ -179,10 +179,10 @@ class Hook_addon_registry_iotds
     public function tpl_previews()
     {
         return array(
-            'IOTD_ADMIN_CHOOSE_SCREEN.tpl' => 'administrative__iotd_admin_choose_screen',
-            'BLOCK_MAIN_IOTD.tpl' => 'block_main_iotd',
-            'IOTD_BOX.tpl' => 'iotd_view_screen_iotd',
-            'IOTD_ENTRY_SCREEN.tpl' => 'iotd_view_screen'
+            'templates/IOTD_ADMIN_CHOOSE_SCREEN.tpl' => 'administrative__iotd_admin_choose_screen',
+            'templates/BLOCK_MAIN_IOTD.tpl' => 'block_main_iotd',
+            'templates/IOTD_BOX.tpl' => 'iotd_view_screen_iotd',
+            'templates/IOTD_ENTRY_SCREEN.tpl' => 'iotd_view_screen'
         );
     }
 

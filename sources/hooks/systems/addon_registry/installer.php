@@ -130,25 +130,25 @@ class Hook_addon_registry_installer
     public function tpl_previews()
     {
         return array(
-            'INSTALLER_HTML_WRAP.tpl' => 'administrative__installer_wrap',
-            'INSTALLER_WARNING.tpl' => 'administrative__installer_step_1',
-            'INSTALLER_WARNING_LONG.tpl' => 'administrative__installer_step_1',
-            'INSTALLER_NOTICE.tpl' => 'administrative__installer_step_1',
-            'INSTALLER_STEP_1.tpl' => 'administrative__installer_step_1',
-            'INSTALLER_STEP_2.tpl' => 'administrative__installer_step_2',
-            'INSTALLER_FORUM_CHOICE_VERSION.tpl' => 'administrative__installer_step_3',
-            'INSTALLER_FORUM_CHOICE.tpl' => 'administrative__installer_step_3',
-            'INSTALLER_STEP_3.tpl' => 'administrative__installer_step_3',
-            'INSTALLER_STEP_4_SECTION.tpl' => 'administrative__installer_step_4',
-            'INSTALLER_STEP_4_SECTION_HIDE.tpl' => 'administrative__installer_step_4',
-            'INSTALLER_STEP_4.tpl' => 'administrative__installer_step_4',
-            'INSTALLER_STEP_LOG.tpl' => 'administrative__installer_step_log',
-            'INSTALLER_DONE_SOMETHING.tpl' => 'administrative__installer_step_log',
-            'INSTALLER_STEP_10.tpl' => 'administrative__installer_step_10',
-            'INSTALLER_INPUT_PASSWORD.tpl' => 'administrative__installer_step_4',
-            'INSTALLER_STEP_4_SECTION_OPTION.tpl' => 'administrative__installer_step_4',
-            'INSTALLER_INPUT_LINE.tpl' => 'administrative__installer_step_4',
-            'INSTALLER_INPUT_TICK.tpl' => 'administrative__installer_step_4'
+            'templates/INSTALLER_HTML_WRAP.tpl' => 'administrative__installer_wrap',
+            'templates/INSTALLER_WARNING.tpl' => 'administrative__installer_step_1',
+            'templates/INSTALLER_WARNING_LONG.tpl' => 'administrative__installer_step_1',
+            'templates/INSTALLER_NOTICE.tpl' => 'administrative__installer_step_1',
+            'templates/INSTALLER_STEP_1.tpl' => 'administrative__installer_step_1',
+            'templates/INSTALLER_STEP_2.tpl' => 'administrative__installer_step_2',
+            'templates/INSTALLER_FORUM_CHOICE_VERSION.tpl' => 'administrative__installer_step_3',
+            'templates/INSTALLER_FORUM_CHOICE.tpl' => 'administrative__installer_step_3',
+            'templates/INSTALLER_STEP_3.tpl' => 'administrative__installer_step_3',
+            'templates/INSTALLER_STEP_4_SECTION.tpl' => 'administrative__installer_step_4',
+            'templates/INSTALLER_STEP_4_SECTION_HIDE.tpl' => 'administrative__installer_step_4',
+            'templates/INSTALLER_STEP_4.tpl' => 'administrative__installer_step_4',
+            'templates/INSTALLER_STEP_LOG.tpl' => 'administrative__installer_step_log',
+            'templates/INSTALLER_DONE_SOMETHING.tpl' => 'administrative__installer_step_log',
+            'templates/INSTALLER_STEP_10.tpl' => 'administrative__installer_step_10',
+            'templates/INSTALLER_INPUT_PASSWORD.tpl' => 'administrative__installer_step_4',
+            'templates/INSTALLER_STEP_4_SECTION_OPTION.tpl' => 'administrative__installer_step_4',
+            'templates/INSTALLER_INPUT_LINE.tpl' => 'administrative__installer_step_4',
+            'templates/INSTALLER_INPUT_TICK.tpl' => 'administrative__installer_step_4'
         );
     }
 

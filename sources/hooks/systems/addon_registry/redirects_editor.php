@@ -121,8 +121,8 @@ class Hook_addon_registry_redirects_editor
     public function tpl_previews()
     {
         return array(
-            'REDIRECTE_TABLE_REDIRECT.tpl' => 'administrative__redirecte_table_screen',
-            'REDIRECTE_TABLE_SCREEN.tpl' => 'administrative__redirecte_table_screen'
+            'templates/REDIRECTE_TABLE_REDIRECT.tpl' => 'administrative__redirecte_table_screen',
+            'templates/REDIRECTE_TABLE_SCREEN.tpl' => 'administrative__redirecte_table_screen'
         );
     }
 

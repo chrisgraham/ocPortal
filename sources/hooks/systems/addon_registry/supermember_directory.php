@@ -120,8 +120,8 @@ class Hook_addon_registry_supermember_directory
     public function tpl_previews()
     {
         return array(
-            'SUPERMEMBERS_SCREEN_GROUP.tpl' => 'supermembers_screen',
-            'SUPERMEMBERS_SCREEN.tpl' => 'supermembers_screen'
+            'templates/SUPERMEMBERS_SCREEN_GROUP.tpl' => 'supermembers_screen',
+            'templates/SUPERMEMBERS_SCREEN.tpl' => 'supermembers_screen'
         );
     }
 

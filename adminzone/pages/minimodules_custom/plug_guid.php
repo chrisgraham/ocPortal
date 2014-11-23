@@ -34,7 +34,7 @@ foreach ($files as $i => $file) {
         continue;
     }
 
-    $FILENAME = substr($file, strlen(get_file_base()) + 1);
+    $FILENAME = $file;
 
     echo 'Doing ' . escape_html($file) . '<br />';
 
@@ -62,7 +62,7 @@ if ($limit_file == '') {
 function callback($match)
 {
     //echo $match[0].'<br />';
-//return $match[0];
+    //return $match[0];
     global $GUID_LANDSCAPE, $FILENAME, $IN;
     $new_guid = md5(uniqid('', true));
     if (!array_key_exists($match[1], $GUID_LANDSCAPE)) {

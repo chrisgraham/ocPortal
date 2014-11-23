@@ -117,8 +117,8 @@ class Hook_addon_registry_ssl
     public function tpl_previews()
     {
         return array(
-            'SSL_CONFIGURATION_ENTRY.tpl' => 'administrative__ssl_configuration_screen',
-            'SSL_CONFIGURATION_SCREEN.tpl' => 'administrative__ssl_configuration_screen'
+            'templates/SSL_CONFIGURATION_ENTRY.tpl' => 'administrative__ssl_configuration_screen',
+            'templates/SSL_CONFIGURATION_SCREEN.tpl' => 'administrative__ssl_configuration_screen'
         );
     }
 

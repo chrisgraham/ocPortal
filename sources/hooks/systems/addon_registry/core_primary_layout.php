@@ -125,18 +125,18 @@ class Hook_addon_registry_core_primary_layout
     public function tpl_previews()
     {
         return array(
-            'BREADCRUMB_SEPARATOR.tpl' => 'breadcrumb',
-            'CLOSED_SITE.tpl' => 'closed_site',
-            'CSS_NEED_FULL.tpl' => 'css_need_full',
-            'MESSAGE.tpl' => 'message',
-            'MAIL_SUBJECT.txt' => 'mail_subject',
-            'MAIL.tpl' => 'mail',
-            'GLOBAL_HTML_WRAP.tpl' => 'global_html_wrap',
-            'GLOBAL_HTML_WRAP_mobile.tpl' => 'global_html_wrap',
-            'GLOBAL_HELPER_PANEL.tpl' => 'global_html_wrap',
-            'SCREEN_TITLE.tpl' => 'screen_title',
-            'MINOR_TITLE.tpl' => 'minor_title',
-            'SECTION_TITLE.tpl' => 'section_title'
+            'templates/BREADCRUMB_SEPARATOR.tpl' => 'breadcrumb',
+            'templates/CLOSED_SITE.tpl' => 'closed_site',
+            'templates/CSS_NEED_FULL.tpl' => 'css_need_full',
+            'templates/MESSAGE.tpl' => 'message',
+            'text/MAIL_SUBJECT.txt' => 'mail_subject',
+            'templates/MAIL.tpl' => 'mail',
+            'templates/GLOBAL_HTML_WRAP.tpl' => 'global_html_wrap',
+            'templates/GLOBAL_HTML_WRAP_mobile.tpl' => 'global_html_wrap',
+            'templates/GLOBAL_HELPER_PANEL.tpl' => 'global_html_wrap',
+            'templates/SCREEN_TITLE.tpl' => 'screen_title',
+            'templates/MINOR_TITLE.tpl' => 'minor_title',
+            'templates/SECTION_TITLE.tpl' => 'section_title'
         );
     }
 

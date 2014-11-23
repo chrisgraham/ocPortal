@@ -125,9 +125,9 @@ class Hook_addon_registry_staff
     public function tpl_previews()
     {
         return array(
-            'STAFF_SCREEN.tpl' => 'staff_screen',
-            'STAFF_EDIT_WRAPPER.tpl' => 'administrative__staff_admin_screen',
-            'STAFF_ADMIN_SCREEN.tpl' => 'administrative__staff_admin_screen'
+            'templates/STAFF_SCREEN.tpl' => 'staff_screen',
+            'templates/STAFF_EDIT_WRAPPER.tpl' => 'administrative__staff_admin_screen',
+            'templates/STAFF_ADMIN_SCREEN.tpl' => 'administrative__staff_admin_screen'
         );
     }
 

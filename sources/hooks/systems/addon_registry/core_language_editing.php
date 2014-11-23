@@ -136,14 +136,14 @@ class Hook_addon_registry_core_language_editing
     public function tpl_previews()
     {
         return array(
-            'TRANSLATE_LANGUAGE_CRITICISM.tpl' => 'administrative__translate_language_criticise_screen',
-            'TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl' => 'administrative__translate_language_criticise_screen',
-            'TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl' => 'administrative__translate_language_criticise_screen',
-            'TRANSLATE_ACTION.tpl' => 'administrative__translate_screen_content_screen',
-            'TRANSLATE_LINE_CONTENT.tpl' => 'administrative__translate_screen_content_screen',
-            'TRANSLATE_SCREEN_CONTENT_SCREEN.tpl' => 'administrative__translate_screen_content_screen',
-            'TRANSLATE_LINE.tpl' => 'administrative__translate_screen',
-            'TRANSLATE_SCREEN.tpl' => 'administrative__translate_screen'
+            'templates/TRANSLATE_LANGUAGE_CRITICISM.tpl' => 'administrative__translate_language_criticise_screen',
+            'templates/TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl' => 'administrative__translate_language_criticise_screen',
+            'templates/TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl' => 'administrative__translate_language_criticise_screen',
+            'templates/TRANSLATE_ACTION.tpl' => 'administrative__translate_screen_content_screen',
+            'templates/TRANSLATE_LINE_CONTENT.tpl' => 'administrative__translate_screen_content_screen',
+            'templates/TRANSLATE_SCREEN_CONTENT_SCREEN.tpl' => 'administrative__translate_screen_content_screen',
+            'templates/TRANSLATE_LINE.tpl' => 'administrative__translate_screen',
+            'templates/TRANSLATE_SCREEN.tpl' => 'administrative__translate_screen'
         );
     }
 

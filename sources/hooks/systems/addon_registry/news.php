@@ -190,21 +190,21 @@ class Hook_addon_registry_news
     public function tpl_previews()
     {
         return array(
-            'BLOCK_SIDE_NEWS_ARCHIVE.tpl' => 'block_side_news_archive',
-            'BLOCK_MAIN_NEWS.tpl' => 'block_main_news',
-            'BLOCK_SIDE_NEWS.tpl' => 'block_side_news',
-            'BLOCK_SIDE_NEWS_CATEGORIES.tpl' => 'block_side_news_categories',
-            'BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY.tpl' => 'block_side_news_categories',
-            'BLOCK_SIDE_NEWS_SUMMARY.tpl' => 'block_side_news',
-            'BLOCK_BOTTOM_NEWS.tpl' => 'block_bottom_news',
-            'NEWS_ENTRY_SCREEN.tpl' => 'news_full_screen',
-            'NEWS_CHICKLETS.tpl' => 'news_chicklets',
-            'NEWS_ARCHIVE_SCREEN.tpl' => 'news_archive_screen',
-            'NEWS_WORDPRESS_IMPORT_SCREEN.tpl' => 'administrative__news_wordpress_import_screen',
-            'NEWS_BRIEF.tpl' => 'news_archive_screen',
-            'NEWS_BOX.tpl' => 'block_main_news',
-            'OCF_MEMBER_PROFILE_BLOG.tpl' => 'ocf_member_profile_blog',
-            'BLOCK_MAIN_IMAGE_FADER_NEWS.tpl' => 'block_main_image_fader_news',
+            'templates/BLOCK_SIDE_NEWS_ARCHIVE.tpl' => 'block_side_news_archive',
+            'templates/BLOCK_MAIN_NEWS.tpl' => 'block_main_news',
+            'templates/BLOCK_SIDE_NEWS.tpl' => 'block_side_news',
+            'templates/BLOCK_SIDE_NEWS_CATEGORIES.tpl' => 'block_side_news_categories',
+            'templates/BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY.tpl' => 'block_side_news_categories',
+            'templates/BLOCK_SIDE_NEWS_SUMMARY.tpl' => 'block_side_news',
+            'templates/BLOCK_BOTTOM_NEWS.tpl' => 'block_bottom_news',
+            'templates/NEWS_ENTRY_SCREEN.tpl' => 'news_full_screen',
+            'templates/NEWS_CHICKLETS.tpl' => 'news_chicklets',
+            'templates/NEWS_ARCHIVE_SCREEN.tpl' => 'news_archive_screen',
+            'templates/NEWS_WORDPRESS_IMPORT_SCREEN.tpl' => 'administrative__news_wordpress_import_screen',
+            'templates/NEWS_BRIEF.tpl' => 'news_archive_screen',
+            'templates/NEWS_BOX.tpl' => 'block_main_news',
+            'templates/OCF_MEMBER_PROFILE_BLOG.tpl' => 'ocf_member_profile_blog',
+            'templates/BLOCK_MAIN_IMAGE_FADER_NEWS.tpl' => 'block_main_image_fader_news',
         );
     }
 

@@ -151,18 +151,18 @@ class Hook_addon_registry_core_adminzone_dashboard
     public function tpl_previews()
     {
         return array(
-            'BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK.tpl' => 'administrative__block_main_staff_checklist',
-            'BLOCK_MAIN_NOTES.tpl' => 'block_main_notes',
-            'BLOCK_MAIN_STAFF_CHECKLIST.tpl' => 'administrative__block_main_staff_checklist',
-            'BLOCK_MAIN_STAFF_NEW_VERSION.tpl' => 'administrative__block_main_staff_new_version',
-            'BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1.tpl' => 'administrative__block_main_staff_checklist',
-            'BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0.tpl' => 'administrative__block_main_staff_checklist',
-            'BLOCK_MAIN_STAFF_CHECKLIST_ITEM.tpl' => 'administrative__block_main_staff_checklist',
-            'BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA.tpl' => 'administrative__block_main_staff_checklist',
-            'BLOCK_MAIN_STAFF_TIPS.tpl' => 'administrative__block_main_staff_tips',
-            'BLOCK_MAIN_STAFF_LINKS.tpl' => 'administrative__block_main_staff_links',
-            'BLOCK_MAIN_STAFF_WEBSITE_MONITORING.tpl' => 'administrative__block_main_staff_website_monitoring',
-            'BLOCK_MAIN_STAFF_ACTIONS.tpl' => 'administrative__block_main_staff_actions',
+            'templates/BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK.tpl' => 'administrative__block_main_staff_checklist',
+            'templates/BLOCK_MAIN_NOTES.tpl' => 'block_main_notes',
+            'templates/BLOCK_MAIN_STAFF_CHECKLIST.tpl' => 'administrative__block_main_staff_checklist',
+            'templates/BLOCK_MAIN_STAFF_NEW_VERSION.tpl' => 'administrative__block_main_staff_new_version',
+            'templates/BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1.tpl' => 'administrative__block_main_staff_checklist',
+            'templates/BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0.tpl' => 'administrative__block_main_staff_checklist',
+            'templates/BLOCK_MAIN_STAFF_CHECKLIST_ITEM.tpl' => 'administrative__block_main_staff_checklist',
+            'templates/BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA.tpl' => 'administrative__block_main_staff_checklist',
+            'templates/BLOCK_MAIN_STAFF_TIPS.tpl' => 'administrative__block_main_staff_tips',
+            'templates/BLOCK_MAIN_STAFF_LINKS.tpl' => 'administrative__block_main_staff_links',
+            'templates/BLOCK_MAIN_STAFF_WEBSITE_MONITORING.tpl' => 'administrative__block_main_staff_website_monitoring',
+            'templates/BLOCK_MAIN_STAFF_ACTIONS.tpl' => 'administrative__block_main_staff_actions',
         );
     }
 

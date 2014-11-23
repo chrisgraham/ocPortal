@@ -155,11 +155,11 @@ class Hook_addon_registry_tickets
     public function tpl_previews()
     {
         return array(
-            'SUPPORT_TICKET_LINK.tpl' => 'support_tickets_screen',
-            'SUPPORT_TICKETS_SCREEN.tpl' => 'support_tickets_screen',
-            'SUPPORT_TICKET_SCREEN.tpl' => 'support_ticket_screen',
-            'SUPPORT_TICKETS_SEARCH_SCREEN.tpl' => 'support_tickets_search_screen',
-            'SUPPORT_TICKET_TYPE_SCREEN.tpl' => 'support_ticket_type_screen'
+            'templates/SUPPORT_TICKET_LINK.tpl' => 'support_tickets_screen',
+            'templates/SUPPORT_TICKETS_SCREEN.tpl' => 'support_tickets_screen',
+            'templates/SUPPORT_TICKET_SCREEN.tpl' => 'support_ticket_screen',
+            'templates/SUPPORT_TICKETS_SEARCH_SCREEN.tpl' => 'support_tickets_search_screen',
+            'templates/SUPPORT_TICKET_TYPE_SCREEN.tpl' => 'support_ticket_type_screen'
         );
     }
 

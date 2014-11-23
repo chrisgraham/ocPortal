@@ -830,7 +830,7 @@ function find_all_previews__by_screen()
 /**
  * Shows the preview of a screen
  *
- * @param  ID_TEXT                      The template to be previewed
+ * @param  ID_TEXT                      The template to be previewed (e.g. templates/DOWNLOAD_BOX.tpl)
  * @param  ?ID_TEXT                     The hook the preview is in (null: search)
  * @param  ID_TEXT                      The name of the screen preview
  * @return tempcode                     The previewed screen
@@ -872,14 +872,13 @@ function render_screen_preview($template, $hook, $function)
             require_javascript(strtolower(basename($file, '.js')));
         }
     }
-    $temp_name = substr($template, 0, -4);
 
-    if (is_full_screen_template($temp_name)) {
+    if (is_full_screen_template($template)) {
         $complete_html = true;
     } else {
         $complete_html = false;
     }
-    if (is_plain_text_template($temp_name)) {
+    if (is_plain_text_template($template)) {
         //@header('Content-type: text/plain');     Let it show with WITH_WHITESPACE
         $text = true;
     } else {

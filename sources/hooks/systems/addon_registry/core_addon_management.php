@@ -147,21 +147,21 @@ class Hook_addon_registry_core_addon_management
     public function tpl_previews()
     {
         return array(
-            'ADDON_SCREEN.tpl' => 'administrative__addon_screen',
-            'ADDON_SCREEN_ADDON.tpl' => 'administrative__addon_screen',
-            'ADDON_NAME.tpl' => 'administrative__addon_screen',
-            'ADDON_MULTI_CONFIRM_SCREEN.tpl' => 'administrative__addon_multi_confirm_screen',
-            'ADDON_INSTALL_CONFIRM_SCREEN.tpl' => 'administrative__addon_install_confirm_screen',
-            'ADDON_UNINSTALL_CONFIRM_SCREEN.tpl' => 'administrative__addon_uninstall_confirm_screen',
-            'ADDON_EXPORT_LINE.tpl' => 'administrative__addon_export_screen',
-            'ADDON_EXPORT_FILE_CHOICE.tpl' => 'administrative__addon_export_screen',
-            'ADDON_EXPORT_LINE_CHOICE.tpl' => 'administrative__addon_export_screen',
-            'ADDON_EXPORT_SCREEN.tpl' => 'administrative__addon_export_screen',
-            'MODULE_SCREEN_MODULE.tpl' => 'administrative__module_screen',
-            'MODULE_SCREEN.tpl' => 'administrative__module_screen',
-            'ADDON_INSTALL_FILES_WARNING.tpl' => 'administrative__addon_install_confirm_screen',
-            'ADDON_INSTALL_FILES.tpl' => 'administrative__addon_install_confirm_screen',
-            'ADDON_INSTALL_WARNING.tpl' => 'administrative__addon_install_confirm_screen'
+            'templates/ADDON_SCREEN.tpl' => 'administrative__addon_screen',
+            'templates/ADDON_SCREEN_ADDON.tpl' => 'administrative__addon_screen',
+            'templates/ADDON_NAME.tpl' => 'administrative__addon_screen',
+            'templates/ADDON_MULTI_CONFIRM_SCREEN.tpl' => 'administrative__addon_multi_confirm_screen',
+            'templates/ADDON_INSTALL_CONFIRM_SCREEN.tpl' => 'administrative__addon_install_confirm_screen',
+            'templates/ADDON_UNINSTALL_CONFIRM_SCREEN.tpl' => 'administrative__addon_uninstall_confirm_screen',
+            'templates/ADDON_EXPORT_LINE.tpl' => 'administrative__addon_export_screen',
+            'templates/ADDON_EXPORT_FILE_CHOICE.tpl' => 'administrative__addon_export_screen',
+            'templates/ADDON_EXPORT_LINE_CHOICE.tpl' => 'administrative__addon_export_screen',
+            'templates/ADDON_EXPORT_SCREEN.tpl' => 'administrative__addon_export_screen',
+            'templates/MODULE_SCREEN_MODULE.tpl' => 'administrative__module_screen',
+            'templates/MODULE_SCREEN.tpl' => 'administrative__module_screen',
+            'templates/ADDON_INSTALL_FILES_WARNING.tpl' => 'administrative__addon_install_confirm_screen',
+            'templates/ADDON_INSTALL_FILES.tpl' => 'administrative__addon_install_confirm_screen',
+            'templates/ADDON_INSTALL_WARNING.tpl' => 'administrative__addon_install_confirm_screen'
         );
     }
 

@@ -126,22 +126,22 @@ class Hook_addon_registry_core_html_abstractions
     public function tpl_previews()
     {
         return array(
-            'POOR_XHTML_WRAPPER.tpl' => 'poor_xhtml_wrapper',
-            'JS_REFRESH.tpl' => 'js_refresh',
-            'ANCHOR.tpl' => 'anchor',
-            'STANDALONE_HTML_WRAP.tpl' => 'standalone_html_wrap',
-            'META_REFRESH_LINE.tpl' => 'meta_refresh_line',
-            'HYPERLINK_POPUP_WINDOW.tpl' => 'hyperlink_popup_window',
-            'BASIC_HTML_WRAP.tpl' => 'basic_html_wrap',
-            'HTML_HEAD.tpl' => 'basic_html_wrap',
-            'FLOATER.tpl' => 'floater',
-            'HYPERLINK.tpl' => 'hyperlink',
-            'HYPERLINK_BUTTON.tpl' => 'hyperlink_button',
-            'HYPERLINK_EMAIL.tpl' => 'hyperlink_email',
-            'HYPERLINK_TOOLTIP.tpl' => 'hyperlink_tooltip',
-            'PARAGRAPH.tpl' => 'paragraph',
-            'DIV.tpl' => 'div',
-            'WITH_WHITESPACE.tpl' => 'with_whitespace'
+            'templates/POOR_XHTML_WRAPPER.tpl' => 'poor_xhtml_wrapper',
+            'templates/JS_REFRESH.tpl' => 'js_refresh',
+            'templates/ANCHOR.tpl' => 'anchor',
+            'templates/STANDALONE_HTML_WRAP.tpl' => 'standalone_html_wrap',
+            'templates/META_REFRESH_LINE.tpl' => 'meta_refresh_line',
+            'templates/HYPERLINK_POPUP_WINDOW.tpl' => 'hyperlink_popup_window',
+            'templates/BASIC_HTML_WRAP.tpl' => 'basic_html_wrap',
+            'templates/HTML_HEAD.tpl' => 'basic_html_wrap',
+            'templates/FLOATER.tpl' => 'floater',
+            'templates/HYPERLINK.tpl' => 'hyperlink',
+            'templates/HYPERLINK_BUTTON.tpl' => 'hyperlink_button',
+            'templates/HYPERLINK_EMAIL.tpl' => 'hyperlink_email',
+            'templates/HYPERLINK_TOOLTIP.tpl' => 'hyperlink_tooltip',
+            'templates/PARAGRAPH.tpl' => 'paragraph',
+            'templates/DIV.tpl' => 'div',
+            'templates/WITH_WHITESPACE.tpl' => 'with_whitespace'
         );
     }
 

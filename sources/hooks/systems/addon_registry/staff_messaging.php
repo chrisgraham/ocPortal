@@ -128,9 +128,9 @@ class Hook_addon_registry_staff_messaging
     public function tpl_previews()
     {
         return array(
-            'MESSAGING_MESSAGE_SCREEN.tpl' => 'administrative__messaging_message_screen', //
-            'BLOCK_MAIN_CONTACT_US.tpl' => 'block_main_contact_us',
-            'BLOCK_MAIN_CONTACT_SIMPLE.tpl' => 'block_main_contact_simple'
+            'templates/MESSAGING_MESSAGE_SCREEN.tpl' => 'administrative__messaging_message_screen', //
+            'templates/BLOCK_MAIN_CONTACT_US.tpl' => 'block_main_contact_us',
+            'templates/BLOCK_MAIN_CONTACT_SIMPLE.tpl' => 'block_main_contact_simple'
         );
     }
 

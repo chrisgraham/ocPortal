@@ -166,22 +166,22 @@ class Hook_addon_registry_banners
     public function tpl_previews()
     {
         return array(
-            'BANNER_PREVIEW.tpl' => 'banner_preview',
-            'BANNER_SHOW_CODE.tpl' => 'banner_show_code',
-            'BANNER_ADDED_SCREEN.tpl' => 'administrative__banner_added_screen',
-            'BLOCK_MAIN_TOPSITES.tpl' => 'block_main_topsites',
-            'BLOCK_MAIN_BANNER_WAVE_BWRAP.tpl' => 'block_main_banner_wave',
-            'BLOCK_MAIN_BANNER_WAVE.tpl' => 'block_main_banner_wave',
-            'BANNERS_NONE.tpl' => 'banners_none',
-            'BANNER_FLASH.tpl' => 'banner_flash',
-            'BANNER_IMAGE.tpl' => 'banner_image',
-            'BANNER_IFRAME.tpl' => 'banner_iframe',
-            'BANNER_TEXT.tpl' => 'banner_text',
-            'POINTSTORE_BANNERS_2.tpl' => 'pointstore_banners_2',
-            'POINTSTORE_BANNERS_UPGRADE.tpl' => 'pointstore_banners_upgrade',
-            'POINTSTORE_BANNERS_ACTIVATE.tpl' => 'pointstore_banners_activate',
-            'POINTSTORE_BANNERS_SCREEN.tpl' => 'pointstore_banners_screen',
-            'BANNER_VIEW_SCREEN.tpl' => 'administrative__banner_view_screen'
+            'templates/BANNER_PREVIEW.tpl' => 'banner_preview',
+            'templates/BANNER_SHOW_CODE.tpl' => 'banner_show_code',
+            'templates/BANNER_ADDED_SCREEN.tpl' => 'administrative__banner_added_screen',
+            'templates/BLOCK_MAIN_TOPSITES.tpl' => 'block_main_topsites',
+            'templates/BLOCK_MAIN_BANNER_WAVE_BWRAP.tpl' => 'block_main_banner_wave',
+            'templates/BLOCK_MAIN_BANNER_WAVE.tpl' => 'block_main_banner_wave',
+            'templates/BANNERS_NONE.tpl' => 'banners_none',
+            'templates/BANNER_FLASH.tpl' => 'banner_flash',
+            'templates/BANNER_IMAGE.tpl' => 'banner_image',
+            'templates/BANNER_IFRAME.tpl' => 'banner_iframe',
+            'templates/BANNER_TEXT.tpl' => 'banner_text',
+            'templates/POINTSTORE_BANNERS_2.tpl' => 'pointstore_banners_2',
+            'templates/POINTSTORE_BANNERS_UPGRADE.tpl' => 'pointstore_banners_upgrade',
+            'templates/POINTSTORE_BANNERS_ACTIVATE.tpl' => 'pointstore_banners_activate',
+            'templates/POINTSTORE_BANNERS_SCREEN.tpl' => 'pointstore_banners_screen',
+            'templates/BANNER_VIEW_SCREEN.tpl' => 'administrative__banner_view_screen'
         );
     }
 

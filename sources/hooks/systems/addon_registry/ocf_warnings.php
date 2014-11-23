@@ -123,9 +123,9 @@ class Hook_addon_registry_ocf_warnings
     public function tpl_previews()
     {
         return array(
-            'OCF_SAVED_WARNING.tpl' => 'ocf_saved_warning',
-            'OCF_WARNING_HISTORY_SCREEN.tpl' => 'administrative__ocf_warning_history_screen',
-            'OCF_MEMBER_PROFILE_WARNINGS.tpl' => 'ocf_member_profile_warnings'
+            'templates/OCF_SAVED_WARNING.tpl' => 'ocf_saved_warning',
+            'templates/OCF_WARNING_HISTORY_SCREEN.tpl' => 'administrative__ocf_warning_history_screen',
+            'templates/OCF_MEMBER_PROFILE_WARNINGS.tpl' => 'ocf_member_profile_warnings'
         );
     }
 

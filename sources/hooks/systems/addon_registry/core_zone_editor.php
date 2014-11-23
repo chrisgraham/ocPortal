@@ -119,8 +119,8 @@ class Hook_addon_registry_core_zone_editor
     public function tpl_previews()
     {
         return array(
-            'ZONE_EDITOR_PANEL.tpl' => 'administrative__zone_editor_screen',
-            'ZONE_EDITOR_SCREEN.tpl' => 'administrative__zone_editor_screen'
+            'templates/ZONE_EDITOR_PANEL.tpl' => 'administrative__zone_editor_screen',
+            'templates/ZONE_EDITOR_SCREEN.tpl' => 'administrative__zone_editor_screen'
         );
     }
 

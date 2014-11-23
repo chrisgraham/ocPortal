@@ -157,10 +157,10 @@ class Hook_addon_registry_stats
     public function tpl_previews()
     {
         return array(
-            'STATS_GRAPH.tpl' => 'administrative__stats_screen',
-            'STATS_SCREEN.tpl' => 'administrative__stats_screen',
-            'STATS_OVERVIEW_SCREEN.tpl' => 'administrative__stats_screen_overview',
-            'STATS_SCREEN_ISCREEN.tpl' => 'administrative__stats_screen_iscreen'
+            'templates/STATS_GRAPH.tpl' => 'administrative__stats_screen',
+            'templates/STATS_SCREEN.tpl' => 'administrative__stats_screen',
+            'templates/STATS_OVERVIEW_SCREEN.tpl' => 'administrative__stats_screen_overview',
+            'templates/STATS_SCREEN_ISCREEN.tpl' => 'administrative__stats_screen_iscreen'
         );
     }
 

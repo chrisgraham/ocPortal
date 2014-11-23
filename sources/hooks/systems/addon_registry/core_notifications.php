@@ -160,18 +160,18 @@ class Hook_addon_registry_core_notifications
     public function tpl_previews()
     {
         return array(
-            'NOTIFICATIONS_MANAGE.tpl' => 'notifications_regular',
-            'NOTIFICATIONS_MANAGE_SCREEN.tpl' => 'notifications_regular',
-            'NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl' => 'notifications_advanced',
-            'NOTIFICATIONS_TREE.tpl' => 'notifications_advanced',
-            'NOTIFICATION_TYPES.tpl' => 'notifications_regular',
-            'NOTIFICATION_WEB.tpl' => 'notification_web',
-            'NOTIFICATION_WEB_DESKTOP.tpl' => 'notification_web_desktop',
-            'NOTIFICATION_PT_DESKTOP.tpl' => 'notification_pt_desktop',
-            'BLOCK_TOP_NOTIFICATIONS.tpl' => 'block_top_notifications',
-            'NOTIFICATION_POLLER.tpl' => 'notification_poller',
-            'NOTIFICATION_BROWSE_SCREEN.tpl' => 'notification_browse_screen',
-            'NOTIFICATION_VIEW_SCREEN.tpl' => 'notification_view_screen',
+            'templates/NOTIFICATIONS_MANAGE.tpl' => 'notifications_regular',
+            'templates/NOTIFICATIONS_MANAGE_SCREEN.tpl' => 'notifications_regular',
+            'templates/NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl' => 'notifications_advanced',
+            'templates/NOTIFICATIONS_TREE.tpl' => 'notifications_advanced',
+            'templates/NOTIFICATION_TYPES.tpl' => 'notifications_regular',
+            'templates/NOTIFICATION_WEB.tpl' => 'notification_web',
+            'templates/NOTIFICATION_WEB_DESKTOP.tpl' => 'notification_web_desktop',
+            'templates/NOTIFICATION_PT_DESKTOP.tpl' => 'notification_pt_desktop',
+            'templates/BLOCK_TOP_NOTIFICATIONS.tpl' => 'block_top_notifications',
+            'templates/NOTIFICATION_POLLER.tpl' => 'notification_poller',
+            'templates/NOTIFICATION_BROWSE_SCREEN.tpl' => 'notification_browse_screen',
+            'templates/NOTIFICATION_VIEW_SCREEN.tpl' => 'notification_view_screen',
         );
     }
 

@@ -118,7 +118,7 @@ class Hook_addon_registry_ocf_signatures
     public function tpl_previews()
     {
         return array(
-            'OCF_EDIT_SIGNATURE_TAB.tpl' => 'ocf_edit_signature_tab'
+            'templates/OCF_EDIT_SIGNATURE_TAB.tpl' => 'ocf_edit_signature_tab'
         );
     }
 

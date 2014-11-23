@@ -150,14 +150,14 @@ class Hook_addon_registry_import
     public function tpl_previews()
     {
         return array(
-            'IMPORT_ACTION_LINE.tpl' => 'administrative__import_action_screen',
-            'IMPORT_ACTION_SCREEN.tpl' => 'administrative__import_action_screen',
-            'IMPORT_MESSAGE.tpl' => 'administrative__import_action_screen',
-            'XML_STORAGE_SCREEN.tpl' => 'administrative__xml_storage_screen',
-            'XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_import_results_screen',
-            'XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_export_results_screen',
-            'IMPORT_MKPORTAL_FCOMCODEPAGE.txt' => 'administrative__import_mkportal_fcomcodepage',
-            'IMPORT_PHPNUKE_FCOMCODEPAGE.txt' => 'administrative__import_phpnuke_fcomcodepage'
+            'templates/IMPORT_ACTION_LINE.tpl' => 'administrative__import_action_screen',
+            'templates/IMPORT_ACTION_SCREEN.tpl' => 'administrative__import_action_screen',
+            'templates/IMPORT_MESSAGE.tpl' => 'administrative__import_action_screen',
+            'templates/XML_STORAGE_SCREEN.tpl' => 'administrative__xml_storage_screen',
+            'templates/XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_import_results_screen',
+            'templates/XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_export_results_screen',
+            'text/IMPORT_MKPORTAL_FCOMCODEPAGE.txt' => 'administrative__import_mkportal_fcomcodepage',
+            'text/IMPORT_PHPNUKE_FCOMCODEPAGE.txt' => 'administrative__import_phpnuke_fcomcodepage'
         );
     }
 

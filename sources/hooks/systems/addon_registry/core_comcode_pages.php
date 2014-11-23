@@ -134,10 +134,10 @@ class Hook_addon_registry_core_comcode_pages
     public function tpl_previews()
     {
         return array(
-            'COMCODE_PAGE_SCREEN.tpl' => 'comcode_page_screen',
-            'COMCODE_PAGE_EDIT_ACTIONS.tpl' => 'comcode_page_edit_actions',
-            'COMCODE_PAGE_BOX.tpl' => 'comcode_page_preview',
-            'COMCODE_PAGE_MANAGE_SCREEN.tpl' => 'administrative__comcode_page_manage_screen'
+            'templates/COMCODE_PAGE_SCREEN.tpl' => 'comcode_page_screen',
+            'templates/COMCODE_PAGE_EDIT_ACTIONS.tpl' => 'comcode_page_edit_actions',
+            'templates/COMCODE_PAGE_BOX.tpl' => 'comcode_page_preview',
+            'templates/COMCODE_PAGE_MANAGE_SCREEN.tpl' => 'administrative__comcode_page_manage_screen'
         );
     }
 

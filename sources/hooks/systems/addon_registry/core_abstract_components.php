@@ -131,19 +131,19 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_previews()
     {
         return array(
-            'REVISION_HISTORY_LINE.tpl' => 'administrative__show_revision_history',
-            'REVISION_HISTORY_WRAP.tpl' => 'administrative__show_revision_history',
-            'REVISION_RESTORE.tpl' => 'administrative__revision_restore',
-            'BUTTON_SCREEN_ITEM.tpl' => 'button_screen_item',
-            'FRACTIONAL_EDIT.tpl' => 'administrative__fractional_edit',
-            'CROP_TEXT_MOUSE_OVER_INLINE.tpl' => 'crop_text_mouse_over_inline',
-            'IMG_THUMB.tpl' => 'img_thumb',
-            'CROP_TEXT_MOUSE_OVER.tpl' => 'crop_text_mouse_over',
-            'BUTTON_SCREEN.tpl' => 'button_screen',
-            'STANDARDBOX_default.tpl' => 'standardbox_default',
-            'STANDARDBOX_accordion.tpl' => 'standardbox_accordion',
-            'HANDLE_CONFLICT_RESOLUTION.tpl' => 'administrative__handle_conflict_resolution',
-            'STAFF_ACTIONS.tpl' => 'staff_actions'
+            'templates/REVISION_HISTORY_LINE.tpl' => 'administrative__show_revision_history',
+            'templates/REVISION_HISTORY_WRAP.tpl' => 'administrative__show_revision_history',
+            'templates/REVISION_RESTORE.tpl' => 'administrative__revision_restore',
+            'templates/BUTTON_SCREEN_ITEM.tpl' => 'button_screen_item',
+            'templates/FRACTIONAL_EDIT.tpl' => 'administrative__fractional_edit',
+            'templates/CROP_TEXT_MOUSE_OVER_INLINE.tpl' => 'crop_text_mouse_over_inline',
+            'templates/IMG_THUMB.tpl' => 'img_thumb',
+            'templates/CROP_TEXT_MOUSE_OVER.tpl' => 'crop_text_mouse_over',
+            'templates/BUTTON_SCREEN.tpl' => 'button_screen',
+            'templates/STANDARDBOX_default.tpl' => 'standardbox_default',
+            'templates/STANDARDBOX_accordion.tpl' => 'standardbox_accordion',
+            'templates/HANDLE_CONFLICT_RESOLUTION.tpl' => 'administrative__handle_conflict_resolution',
+            'templates/STAFF_ACTIONS.tpl' => 'staff_actions'
         );
     }
 

@@ -120,7 +120,7 @@ class Hook_addon_registry_ocf_member_avatars
     public function tpl_previews()
     {
         return array(
-            'OCF_EDIT_AVATAR_TAB.tpl' => 'ocf_edit_avatar_tab'
+            'templates/OCF_EDIT_AVATAR_TAB.tpl' => 'ocf_edit_avatar_tab'
         );
     }
 

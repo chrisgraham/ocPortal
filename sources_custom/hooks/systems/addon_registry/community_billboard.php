@@ -166,10 +166,10 @@ class Hook_addon_registry_community_billboard
     public function tpl_previews()
     {
         return array(
-            'COMMUNITY_BILLBOARD_DETAILS.tpl' => 'administrative__community_billboard_manage_screen',
-            'COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl' => 'administrative__community_billboard_manage_screen',
-            'POINTSTORE_COMMUNITY_BILLBOARD_2.tpl' => 'pointstore_community_billboard_2',
-            'POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl' => 'pointstore_community_billboard_screen',
+            'templates/COMMUNITY_BILLBOARD_DETAILS.tpl' => 'administrative__community_billboard_manage_screen',
+            'templates/COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl' => 'administrative__community_billboard_manage_screen',
+            'templates/POINTSTORE_COMMUNITY_BILLBOARD_2.tpl' => 'pointstore_community_billboard_2',
+            'templates/POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl' => 'pointstore_community_billboard_screen',
         );
     }
 

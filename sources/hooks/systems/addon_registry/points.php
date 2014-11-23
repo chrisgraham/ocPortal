@@ -171,16 +171,16 @@ class Hook_addon_registry_points
     public function tpl_previews()
     {
         return array(
-            'POINTS_LEADER_BOARD_ROW.tpl' => 'points_leader_board',
-            'POINTS_LEADER_BOARD.tpl' => 'points_leader_board',
-            'POINTS_LEADER_BOARD_WEEK.tpl' => 'points_leader_board_screen',
-            'POINTS_LEADER_BOARD_SCREEN.tpl' => 'points_leader_board_screen',
-            'POINTS_SEARCH_RESULT.tpl' => 'points_search_screen',
-            'POINTS_SEARCH_SCREEN.tpl' => 'points_search_screen',
-            'POINTS_GIVE.tpl' => 'points_screen',
-            'POINTS_PROFILE.tpl' => 'points_screen',
-            'POINTS_SCREEN.tpl' => 'points_screen',
-            'POINTS_TRANSACTIONS_WRAP.tpl' => 'points_screen'
+            'templates/POINTS_LEADER_BOARD_ROW.tpl' => 'points_leader_board',
+            'templates/POINTS_LEADER_BOARD.tpl' => 'points_leader_board',
+            'templates/POINTS_LEADER_BOARD_WEEK.tpl' => 'points_leader_board_screen',
+            'templates/POINTS_LEADER_BOARD_SCREEN.tpl' => 'points_leader_board_screen',
+            'templates/POINTS_SEARCH_RESULT.tpl' => 'points_search_screen',
+            'templates/POINTS_SEARCH_SCREEN.tpl' => 'points_search_screen',
+            'templates/POINTS_GIVE.tpl' => 'points_screen',
+            'templates/POINTS_PROFILE.tpl' => 'points_screen',
+            'templates/POINTS_SCREEN.tpl' => 'points_screen',
+            'templates/POINTS_TRANSACTIONS_WRAP.tpl' => 'points_screen'
         );
     }
 

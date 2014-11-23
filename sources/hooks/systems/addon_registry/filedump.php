@@ -131,8 +131,8 @@ class Hook_addon_registry_filedump
     public function tpl_previews()
     {
         return array(
-            'FILEDUMP_SCREEN.tpl' => 'filedump_screen',
-            'FILEDUMP_EMBED_SCREEN.tpl' => 'filedump_embed_screen',
+            'templates/FILEDUMP_SCREEN.tpl' => 'filedump_screen',
+            'templates/FILEDUMP_EMBED_SCREEN.tpl' => 'filedump_embed_screen',
         );
     }
 

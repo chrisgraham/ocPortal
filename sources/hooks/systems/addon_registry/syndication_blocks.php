@@ -135,18 +135,18 @@ class Hook_addon_registry_syndication_blocks
     public function tpl_previews()
     {
         return array(
-            'BLOCK_SIDE_RSS_SUMMARY.tpl' => 'block_side_rss',
-            'BLOCK_SIDE_RSS.tpl' => 'block_side_rss',
-            'BLOCK_MAIN_RSS_TITLE.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_FULL.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_LIST_FIRST.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_LIST_MIDDLE.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_LIST_LAST.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_CATEGORY.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_CATEGORY_NO_IMG.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_FROM_TITLE.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS_SUMMARY.tpl' => 'block_main_rss',
-            'BLOCK_MAIN_RSS.tpl' => 'block_main_rss'
+            'templates/BLOCK_SIDE_RSS_SUMMARY.tpl' => 'block_side_rss',
+            'templates/BLOCK_SIDE_RSS.tpl' => 'block_side_rss',
+            'templates/BLOCK_MAIN_RSS_TITLE.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_FULL.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_LIST_FIRST.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_LIST_MIDDLE.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_LIST_LAST.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_CATEGORY.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_CATEGORY_NO_IMG.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_FROM_TITLE.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS_SUMMARY.tpl' => 'block_main_rss',
+            'templates/BLOCK_MAIN_RSS.tpl' => 'block_main_rss'
         );
     }
 

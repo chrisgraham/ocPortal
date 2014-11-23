@@ -156,16 +156,16 @@ class Hook_addon_registry_newsletter
     public function tpl_previews()
     {
         return array(
-            'NEWSLETTER_WHATSNEW_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
-            'NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
-            'NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
-            'NEWSLETTER_SUBSCRIBER.tpl' => 'administrative__newsletter_subscribers_screen',
-            'NEWSLETTER_SUBSCRIBERS_SCREEN.tpl' => 'administrative__newsletter_subscribers_screen',
-            'NEWSLETTER_DEFAULT_FCOMCODE.txt' => 'newsletter_default',
-            'NEWSLETTER_CONFIRM_WRAP.tpl' => 'administrative__newsletter_confirm_wrap',
-            'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl' => 'block_main_newsletter_signup_done',
-            'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl' => 'block_main_newsletter_signup',
-            'PERIODIC_NEWSLETTER_REMOVE.tpl' => 'periodic_newsletter_remove',
+            'text/NEWSLETTER_WHATSNEW_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
+            'text/NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
+            'text/NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
+            'templates/NEWSLETTER_SUBSCRIBER.tpl' => 'administrative__newsletter_subscribers_screen',
+            'templates/NEWSLETTER_SUBSCRIBERS_SCREEN.tpl' => 'administrative__newsletter_subscribers_screen',
+            'text/NEWSLETTER_DEFAULT_FCOMCODE.txt' => 'newsletter_default',
+            'templates/NEWSLETTER_CONFIRM_WRAP.tpl' => 'administrative__newsletter_confirm_wrap',
+            'templates/BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl' => 'block_main_newsletter_signup_done',
+            'templates/BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl' => 'block_main_newsletter_signup',
+            'templates/PERIODIC_NEWSLETTER_REMOVE.tpl' => 'periodic_newsletter_remove',
         );
     }
 

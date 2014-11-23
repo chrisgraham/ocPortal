@@ -114,7 +114,7 @@ class Hook_addon_registry_ocf_reported_posts
     public function tpl_previews()
     {
         return array(
-            'OCF_REPORTED_POST_FCOMCODE.txt' => 'ocf_reported_post_fcomcode'
+            'text/OCF_REPORTED_POST_FCOMCODE.txt' => 'ocf_reported_post_fcomcode'
         );
     }
 

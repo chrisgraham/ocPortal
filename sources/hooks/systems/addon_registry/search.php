@@ -147,21 +147,21 @@ class Hook_addon_registry_search
     public function tpl_previews()
     {
         return array(
-            'BLOCK_MAIN_SEARCH.tpl' => 'block_main_search',
-            'BLOCK_TOP_SEARCH.tpl' => 'block_top_search',
-            'BLOCK_SIDE_TAG_CLOUD.tpl' => 'block_side_tag_cloud',
-            'TAGS.tpl' => 'tags',
+            'templates/BLOCK_MAIN_SEARCH.tpl' => 'block_main_search',
+            'templates/BLOCK_TOP_SEARCH.tpl' => 'block_top_search',
+            'templates/BLOCK_SIDE_TAG_CLOUD.tpl' => 'block_side_tag_cloud',
+            'templates/TAGS.tpl' => 'tags',
             'OPENSEARCH.xml' => 'opensearch',
-            'SEARCH_RESULT.tpl' => 'search_form_screen',
-            'SEARCH_RESULT_TABLE.tpl' => 'search_form_screen',
-            'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl' => 'search_form_screen',
-            'SEARCH_ADVANCED.tpl' => 'search_form_screen',
-            'SEARCH_FOR_SEARCH_DOMAIN.tpl' => 'search_form_screen',
-            'SEARCH_DOMAINS.tpl' => 'search_form_screen',
-            'SEARCH_FORM_SCREEN.tpl' => 'search_form_screen',
-            'SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl' => 'search_form_screen',
-            'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl' => 'search_form_screen',
-            'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl' => 'search_form_screen'
+            'templates/SEARCH_RESULT.tpl' => 'search_form_screen',
+            'templates/SEARCH_RESULT_TABLE.tpl' => 'search_form_screen',
+            'templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl' => 'search_form_screen',
+            'templates/SEARCH_ADVANCED.tpl' => 'search_form_screen',
+            'templates/SEARCH_FOR_SEARCH_DOMAIN.tpl' => 'search_form_screen',
+            'templates/SEARCH_DOMAINS.tpl' => 'search_form_screen',
+            'templates/SEARCH_FORM_SCREEN.tpl' => 'search_form_screen',
+            'templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl' => 'search_form_screen',
+            'templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl' => 'search_form_screen',
+            'templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl' => 'search_form_screen'
         );
     }
 

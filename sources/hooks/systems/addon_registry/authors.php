@@ -132,12 +132,12 @@ class Hook_addon_registry_authors
     public function tpl_previews()
     {
         return array(
-            'AUTHOR_MANAGE_SCREEN.tpl' => 'administrative__author_manage_screen',
-            'AUTHOR_SCREEN.tpl' => 'author_screen',
-            'AUTHOR_POPUP.tpl' => 'author_popup_window',
-            'AUTHOR_POPUP_WINDOW_DEFINED.tpl' => 'author_popup_window',
-            'AUTHOR_POPUP_WINDOW_UNDEFINED.tpl' => 'author_popup_window',
-            'AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY.tpl' => 'author_screen'
+            'templates/AUTHOR_MANAGE_SCREEN.tpl' => 'administrative__author_manage_screen',
+            'templates/AUTHOR_SCREEN.tpl' => 'author_screen',
+            'templates/AUTHOR_POPUP.tpl' => 'author_popup_window',
+            'templates/AUTHOR_POPUP_WINDOW_DEFINED.tpl' => 'author_popup_window',
+            'templates/AUTHOR_POPUP_WINDOW_UNDEFINED.tpl' => 'author_popup_window',
+            'templates/AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY.tpl' => 'author_screen'
         );
     }
 

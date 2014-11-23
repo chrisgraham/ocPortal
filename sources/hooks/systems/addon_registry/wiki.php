@@ -168,16 +168,16 @@ class Hook_addon_registry_wiki
     public function tpl_previews()
     {
         return array(
-            'WIKI_MANAGE_TREE_SCREEN.tpl' => 'administrative__wiki_manage_tree_screen',
-            'WIKI_LIST_TREE_LINE.tpl' => 'wiki_list_tree',
-            'WIKI_SUBCATEGORY_CHILDREN.tpl' => 'wiki_page_screen',
-            'WIKI_SUBCATEGORY_LINK.tpl' => 'wiki_page_screen',
-            'WIKI_POST.tpl' => 'wiki_page_screen',
-            'WIKI_PAGE_SCREEN.tpl' => 'wiki_page_screen',
-            'WIKI_CHANGES_SCREEN.tpl' => 'wiki_changes_screen',
-            'WIKI_RATING.tpl' => 'wiki_page_screen',
-            'WIKI_POSTING_SCREEN.tpl' => 'wiki_posting_screen',
-            'WIKI_RATING_FORM.tpl' => 'wiki_page_screen'
+            'templates/WIKI_MANAGE_TREE_SCREEN.tpl' => 'administrative__wiki_manage_tree_screen',
+            'templates/WIKI_LIST_TREE_LINE.tpl' => 'wiki_list_tree',
+            'templates/WIKI_SUBCATEGORY_CHILDREN.tpl' => 'wiki_page_screen',
+            'templates/WIKI_SUBCATEGORY_LINK.tpl' => 'wiki_page_screen',
+            'templates/WIKI_POST.tpl' => 'wiki_page_screen',
+            'templates/WIKI_PAGE_SCREEN.tpl' => 'wiki_page_screen',
+            'templates/WIKI_CHANGES_SCREEN.tpl' => 'wiki_changes_screen',
+            'templates/WIKI_RATING.tpl' => 'wiki_page_screen',
+            'templates/WIKI_POSTING_SCREEN.tpl' => 'wiki_posting_screen',
+            'templates/WIKI_RATING_FORM.tpl' => 'wiki_page_screen'
         );
     }
 

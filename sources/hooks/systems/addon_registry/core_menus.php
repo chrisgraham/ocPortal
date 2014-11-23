@@ -182,42 +182,42 @@ class Hook_addon_registry_core_menus
     public function tpl_previews()
     {
         return array(
-            'MENU_EDITOR_BRANCH.tpl' => 'administrative__menu_editor_screen',
-            'MENU_EDITOR_BRANCH_WRAP.tpl' => 'administrative__menu_editor_screen',
-            'MENU_EDITOR_SCREEN.tpl' => 'administrative__menu_editor_screen',
-            'PAGE_LINK_CHOOSER.tpl' => 'page_link_chooser',
-            'BLOCK_MENU.tpl' => 'block_menu__tree',
-            'MENU_STAFF_LINK.tpl' => 'block_menu__tree',
+            'templates/MENU_EDITOR_BRANCH.tpl' => 'administrative__menu_editor_screen',
+            'templates/MENU_EDITOR_BRANCH_WRAP.tpl' => 'administrative__menu_editor_screen',
+            'templates/MENU_EDITOR_SCREEN.tpl' => 'administrative__menu_editor_screen',
+            'templates/PAGE_LINK_CHOOSER.tpl' => 'page_link_chooser',
+            'templates/BLOCK_MENU.tpl' => 'block_menu__tree',
+            'templates/MENU_STAFF_LINK.tpl' => 'block_menu__tree',
 
-            'MENU_SPACER_tree.tpl' => 'block_menu__tree',
-            'MENU_BRANCH_tree.tpl' => 'block_menu__tree',
-            'MENU_tree.tpl' => 'block_menu__tree',
+            'templates/MENU_SPACER_tree.tpl' => 'block_menu__tree',
+            'templates/MENU_BRANCH_tree.tpl' => 'block_menu__tree',
+            'templates/MENU_tree.tpl' => 'block_menu__tree',
 
-            'MENU_SPACER_mobile.tpl' => 'block_menu__mobile',
-            'MENU_BRANCH_mobile.tpl' => 'block_menu__mobile',
-            'MENU_mobile.tpl' => 'block_menu__mobile',
+            'templates/MENU_SPACER_mobile.tpl' => 'block_menu__mobile',
+            'templates/MENU_BRANCH_mobile.tpl' => 'block_menu__mobile',
+            'templates/MENU_mobile.tpl' => 'block_menu__mobile',
 
-            'MENU_SPACER_dropdown.tpl' => 'block_menu__dropdown',
-            'MENU_BRANCH_dropdown.tpl' => 'block_menu__dropdown',
-            'MENU_dropdown.tpl' => 'block_menu__dropdown',
+            'templates/MENU_SPACER_dropdown.tpl' => 'block_menu__dropdown',
+            'templates/MENU_BRANCH_dropdown.tpl' => 'block_menu__dropdown',
+            'templates/MENU_dropdown.tpl' => 'block_menu__dropdown',
 
-            'MENU_SPACER_embossed.tpl' => 'block_menu__embossed',
-            'MENU_BRANCH_embossed.tpl' => 'block_menu__embossed',
-            'MENU_embossed.tpl' => 'block_menu__embossed',
+            'templates/MENU_SPACER_embossed.tpl' => 'block_menu__embossed',
+            'templates/MENU_BRANCH_embossed.tpl' => 'block_menu__embossed',
+            'templates/MENU_embossed.tpl' => 'block_menu__embossed',
 
-            'MENU_SPACER_popup.tpl' => 'block_menu__popup',
-            'MENU_BRANCH_popup.tpl' => 'block_menu__popup',
-            'MENU_popup.tpl' => 'block_menu__popup',
+            'templates/MENU_SPACER_popup.tpl' => 'block_menu__popup',
+            'templates/MENU_BRANCH_popup.tpl' => 'block_menu__popup',
+            'templates/MENU_popup.tpl' => 'block_menu__popup',
 
-            'MENU_SPACER_select.tpl' => 'block_menu__select',
-            'MENU_BRANCH_select.tpl' => 'block_menu__select',
-            'MENU_select.tpl' => 'block_menu__select',
+            'templates/MENU_SPACER_select.tpl' => 'block_menu__select',
+            'templates/MENU_BRANCH_select.tpl' => 'block_menu__select',
+            'templates/MENU_select.tpl' => 'block_menu__select',
 
-            'MENU_SPACER_sitemap.tpl' => 'block_menu__sitemap',
-            'MENU_BRANCH_sitemap.tpl' => 'block_menu__sitemap',
-            'MENU_sitemap.tpl' => 'block_menu__sitemap',
+            'templates/MENU_SPACER_sitemap.tpl' => 'block_menu__sitemap',
+            'templates/MENU_BRANCH_sitemap.tpl' => 'block_menu__sitemap',
+            'templates/MENU_sitemap.tpl' => 'block_menu__sitemap',
 
-            'MENU_LINK_PROPERTIES.tpl' => 'block_menu__sitemap',
+            'templates/MENU_LINK_PROPERTIES.tpl' => 'block_menu__sitemap',
         );
     }
 

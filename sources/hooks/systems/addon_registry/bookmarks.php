@@ -122,7 +122,7 @@ class Hook_addon_registry_bookmarks
     public function tpl_previews()
     {
         return array(
-            'BOOKMARKS_SCREEN.tpl' => 'bookmarks_screen'
+            'templates/BOOKMARKS_SCREEN.tpl' => 'bookmarks_screen'
         );
     }
 

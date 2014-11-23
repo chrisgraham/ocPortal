@@ -131,8 +131,8 @@ class Hook_addon_registry_awards
     public function tpl_previews()
     {
         return array(
-            'BLOCK_MAIN_AWARDS.tpl' => 'block_main_awards',
-            'AWARDED_CONTENT.tpl' => 'awarded_content'
+            'templates/BLOCK_MAIN_AWARDS.tpl' => 'block_main_awards',
+            'templates/AWARDED_CONTENT.tpl' => 'awarded_content'
         );
     }
 

@@ -279,9 +279,9 @@ class Hook_addon_registry_core_configuration
     public function tpl_previews()
     {
         return array(
-            'CONFIG_GROUP.tpl' => 'administrative__config_category_screen',
-            'CONFIG_CATEGORY_SCREEN.tpl' => 'administrative__config_category_screen',
-            'XML_CONFIG_SCREEN.tpl' => 'administrative__xml_config_screen'
+            'templates/CONFIG_GROUP.tpl' => 'administrative__config_category_screen',
+            'templates/CONFIG_CATEGORY_SCREEN.tpl' => 'administrative__config_category_screen',
+            'templates/XML_CONFIG_SCREEN.tpl' => 'administrative__xml_config_screen'
         );
     }
 

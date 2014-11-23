@@ -228,27 +228,27 @@ class Hook_addon_registry_occle
     public function tpl_previews()
     {
         return array(
-            'OCCLE_MAIN.tpl' => 'administrative__occle_main',
-            'OCCLE_MAIN_SCREEN.tpl' => 'administrative__occle_main_screen',
-            'OCCLE_COMMAND.tpl' => 'administrative__occle_command',
-            'OCCLE_ARRAY_ELEMENT.tpl' => 'administrative__occle_array',
-            'OCCLE_ARRAY.tpl' => 'administrative__occle_array',
-            'OCCLE_NOTIFICATION.tpl' => 'administrative__occle_command',
-            'OCCLE_HELP.tpl' => 'administrative__occle_help',
-            'OCCLE_BOX.tpl' => 'administrative__occle_box',
-            'OCCLE_COMMANDS.tpl' => 'administrative__occle_commands',
-            'OCCLE_RSS_ITEM.tpl' => 'administrative__occle_rss',
-            'OCCLE_RSS.tpl' => 'administrative__occle_rss',
-            'OCCLE_EDIT.tpl' => 'administrative__occle_edit',
-            'OCCLE_USERS_ONLINE.tpl' => 'administrative__occle_users_online',
-            'OCCLE_FIND_CODES.tpl' => 'administrative__occle_find_codes',
-            'OCCLE_WHOIS.tpl' => 'administrative__occle_whois',
-            'OCCLE_ENTRY_POINTS.tpl' => 'administrative__occle_entry_points',
-            'OCCLE_LS.tpl' => 'administrative__occle_ls',
-            'OCCLE_CHAT_NOTIFICATION.tpl' => 'administrative__occle_chat_notification',
-            'OCCLE_OCCLECHAT_NOTIFICATION.tpl' => 'administrative__occle_occlechat_notification',
-            'OCCLE_OCF_NOTIFICATION.tpl' => 'administrative__occle_ocf_notification',
-            'OCCLE_PT_NOTIFICATION.tpl' => 'administrative__occle_pt_notification'
+            'templates/OCCLE_MAIN.tpl' => 'administrative__occle_main',
+            'templates/OCCLE_MAIN_SCREEN.tpl' => 'administrative__occle_main_screen',
+            'templates/OCCLE_COMMAND.tpl' => 'administrative__occle_command',
+            'templates/OCCLE_ARRAY_ELEMENT.tpl' => 'administrative__occle_array',
+            'templates/OCCLE_ARRAY.tpl' => 'administrative__occle_array',
+            'templates/OCCLE_NOTIFICATION.tpl' => 'administrative__occle_command',
+            'templates/OCCLE_HELP.tpl' => 'administrative__occle_help',
+            'templates/OCCLE_BOX.tpl' => 'administrative__occle_box',
+            'templates/OCCLE_COMMANDS.tpl' => 'administrative__occle_commands',
+            'templates/OCCLE_RSS_ITEM.tpl' => 'administrative__occle_rss',
+            'templates/OCCLE_RSS.tpl' => 'administrative__occle_rss',
+            'templates/OCCLE_EDIT.tpl' => 'administrative__occle_edit',
+            'templates/OCCLE_USERS_ONLINE.tpl' => 'administrative__occle_users_online',
+            'templates/OCCLE_FIND_CODES.tpl' => 'administrative__occle_find_codes',
+            'templates/OCCLE_WHOIS.tpl' => 'administrative__occle_whois',
+            'templates/OCCLE_ENTRY_POINTS.tpl' => 'administrative__occle_entry_points',
+            'templates/OCCLE_LS.tpl' => 'administrative__occle_ls',
+            'templates/OCCLE_CHAT_NOTIFICATION.tpl' => 'administrative__occle_chat_notification',
+            'templates/OCCLE_OCCLECHAT_NOTIFICATION.tpl' => 'administrative__occle_occlechat_notification',
+            'templates/OCCLE_OCF_NOTIFICATION.tpl' => 'administrative__occle_ocf_notification',
+            'templates/OCCLE_PT_NOTIFICATION.tpl' => 'administrative__occle_pt_notification'
         );
     }
 

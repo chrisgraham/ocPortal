@@ -118,7 +118,7 @@ class Hook_addon_registry_ocf_post_templates
     public function tpl_previews()
     {
         return array(
-            'OCF_POST_TEMPLATE_SELECT.tpl' => 'ocf_post_template_select'
+            'templates/OCF_POST_TEMPLATE_SELECT.tpl' => 'ocf_post_template_select'
         );
     }
 

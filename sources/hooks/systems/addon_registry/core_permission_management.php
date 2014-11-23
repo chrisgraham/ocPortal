@@ -138,17 +138,17 @@ class Hook_addon_registry_core_permission_management
     public function tpl_previews()
     {
         return array(
-            'PERMISSIONS_TREE_EDITOR_SCREEN.tpl' => 'administrative__permissions_tree_editor_screen',
-            'PERMISSION_HEADER_CELL.tpl' => 'administrative__permission_keys_permissions_screen',
-            'PERMISSION_CELL.tpl' => 'administrative__permission_keys_permissions_screen',
-            'PERMISSION_KEYS_PERMISSION_ROW.tpl' => 'administrative__permission_keys_permissions_screen',
-            'PERMISSION_KEYS_MESSAGE_ROW.tpl' => 'administrative__permission_keys_permissions_screen',
-            'PERMISSION_KEYS_PERMISSIONS_SCREEN.tpl' => 'administrative__permission_keys_permissions_screen',
-            'PERMISSION_COLUMN_SIZER.tpl' => 'administrative__permission_screen_permissions_screen',
-            'PERMISSION_ROW.tpl' => 'administrative__permission_screen_permissions_screen',
-            'PERMISSION_SCREEN_PERMISSIONS_SCREEN.tpl' => 'administrative__permission_screen_permissions_screen',
-            'PERMISSION_PRIVILEGES_SECTION.tpl' => 'administrative__permission_s_permissions_screen',
-            'PERMISSION_PRIVILEGES_SCREEN.tpl' => 'administrative__permission_s_permissions_screen'
+            'templates/PERMISSIONS_TREE_EDITOR_SCREEN.tpl' => 'administrative__permissions_tree_editor_screen',
+            'templates/PERMISSION_HEADER_CELL.tpl' => 'administrative__permission_keys_permissions_screen',
+            'templates/PERMISSION_CELL.tpl' => 'administrative__permission_keys_permissions_screen',
+            'templates/PERMISSION_KEYS_PERMISSION_ROW.tpl' => 'administrative__permission_keys_permissions_screen',
+            'templates/PERMISSION_KEYS_MESSAGE_ROW.tpl' => 'administrative__permission_keys_permissions_screen',
+            'templates/PERMISSION_KEYS_PERMISSIONS_SCREEN.tpl' => 'administrative__permission_keys_permissions_screen',
+            'templates/PERMISSION_COLUMN_SIZER.tpl' => 'administrative__permission_screen_permissions_screen',
+            'templates/PERMISSION_ROW.tpl' => 'administrative__permission_screen_permissions_screen',
+            'templates/PERMISSION_SCREEN_PERMISSIONS_SCREEN.tpl' => 'administrative__permission_screen_permissions_screen',
+            'templates/PERMISSION_PRIVILEGES_SECTION.tpl' => 'administrative__permission_s_permissions_screen',
+            'templates/PERMISSION_PRIVILEGES_SCREEN.tpl' => 'administrative__permission_s_permissions_screen'
         );
     }
 

@@ -73,22 +73,20 @@ class template_previews_test_set extends ocp_test_case
 
         $lists = find_all_previews__by_template();
         foreach ($lists as $template => $list) {
-            $temp_name = basename($template, '.tpl');
-
             if (count($only_do_these) != 0) {
-                if (!in_array($temp_name, $only_do_these)) {
+                if (!in_array($template, $only_do_these)) {
                     continue;
                 }
             }
 
-            if ($temp_name == 'tempcode_test') {
+            if ($template == 'templates/tempcode_test.tpl') {
                 continue;
             }
-            if ($temp_name == 'ADMIN_ZONE_SEARCH') {
+            if ($template == 'templates/ADMIN_ZONE_SEARCH.tpl') {
                 continue; // Only in admin theme, causes problem
             }
 
-            if (is_plain_text_template($temp_name)) {
+            if (is_plain_text_template($template)) {
                 continue;
             }
 
@@ -107,28 +105,27 @@ class template_previews_test_set extends ocp_test_case
             $out = render_screen_preview($template, $hook, $function);
             $flag = false;
             foreach ($lists as $template_2 => $list_2) {
-                $temp_name_2 = basename($template_2, '.tpl');
                 if (count($only_do_these) != 0) {
-                    if (!in_array($temp_name_2, $only_do_these)) {
+                    if (!in_array($template_2, $only_do_these)) {
                         continue;
                     }
                 }
 
-                if ($temp_name_2 == 'tempcode_test') {
+                if ($template_2 == 'templates/tempcode_test.tpl') {
                     continue;
                 }
 
-                if (is_plain_text_template($temp_name_2)) {
+                if (is_plain_text_template($template_2)) {
                     continue;
                 }
                 if ($list_2[1] == $function) {
                     // Ignore templates designed for indirect inclusion
-                    if ($temp_name_2 == 'GLOBAL_HELPER_PANEL' || $temp_name_2 == 'GLOBAL_HTML_WRAP_mobile' || $temp_name_2 == 'HTML_HEAD' || $temp_name_2 == 'MEMBER_TOOLTIP' || $temp_name_2 == 'FORM_STANDARD_END' || $temp_name_2 == 'MEMBER_BAR_SEARCH' || $temp_name_2 == 'MENU_LINK_PROPERTIES') {
+                    if ($template_2 == 'templates/GLOBAL_HELPER_PANEL.tpl' || $template_2 == 'templates/GLOBAL_HTML_WRAP_mobile.tpl' || $template_2 == 'templates/HTML_HEAD.tpl' || $template_2 == 'templates/MEMBER_TOOLTIP.tpl' || $template_2 == 'templates/FORM_STANDARD_END.tpl' || $template_2 == 'templates/MEMBER_BAR_SEARCH.tpl' || $template_2 == 'templates/MENU_LINK_PROPERTIES.tpl') {
                         continue;
                     }
 
-                    $this->assertTrue(in_array($temp_name_2, $RECORDED_TEMPLATES_USED), $template_2 . ' not used in preview as claimed in ' . $hook . '/' . $function);
-                    if (!in_array($temp_name_2, $RECORDED_TEMPLATES_USED)) {
+                    $this->assertTrue(in_array($template_2, $RECORDED_TEMPLATES_USED), $template_2 . ' not used in preview as claimed in ' . $hook . '/' . $function);
+                    if (!in_array($template_2, $RECORDED_TEMPLATES_USED)) {
                         $flag = true;
                     }
                 }
@@ -143,7 +140,7 @@ class template_previews_test_set extends ocp_test_case
             if ((!is_null($result)) && (count($result['errors']) == 0)) {
                 $result = null;
             }
-            $this->assertTrue(is_null($result), $hook . '/' . $temp_name);
+            $this->assertTrue(is_null($result), $hook . ':' . $template);
             if (!is_null($result)) {
                 require_code('view_modes');
                 display_validation_results($_out, $result, false, false);

@@ -143,13 +143,13 @@ class Hook_addon_registry_polls
     public function tpl_previews()
     {
         return array(
-            'BLOCK_MAIN_POLL.tpl' => 'block_main_poll',
-            'POLL_RSS_SUMMARY.tpl' => 'poll_rss_summary',
-            'POLL_ANSWER.tpl' => 'poll_answer',
-            'POLL_ANSWER_RESULT.tpl' => 'poll_answer_result',
-            'POLL_BOX.tpl' => 'poll_answer',
-            'POLL_LIST_ENTRY.tpl' => 'poll_list_entry',
-            'POLL_SCREEN.tpl' => 'poll_screen'
+            'templates/BLOCK_MAIN_POLL.tpl' => 'block_main_poll',
+            'templates/POLL_RSS_SUMMARY.tpl' => 'poll_rss_summary',
+            'templates/POLL_ANSWER.tpl' => 'poll_answer',
+            'templates/POLL_ANSWER_RESULT.tpl' => 'poll_answer_result',
+            'templates/POLL_BOX.tpl' => 'poll_answer',
+            'templates/POLL_LIST_ENTRY.tpl' => 'poll_list_entry',
+            'templates/POLL_SCREEN.tpl' => 'poll_screen'
         );
     }
 

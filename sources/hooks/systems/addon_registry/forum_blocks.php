@@ -122,11 +122,11 @@ class Hook_addon_registry_forum_blocks
     public function tpl_previews()
     {
         return array(
-            'BLOCK_MAIN_FORUM_TOPICS_TOPIC.tpl' => 'block_main_forum_topics',
-            'BLOCK_MAIN_FORUM_TOPICS.tpl' => 'block_main_forum_topics',
-            'BLOCK_SIDE_FORUM_NEWS_SUMMARY.tpl' => 'block_side_forum_news',
-            'BLOCK_SIDE_FORUM_NEWS.tpl' => 'block_side_forum_news',
-            'BLOCK_MAIN_FORUM_NEWS.tpl' => 'block_main_forum_news'
+            'templates/BLOCK_MAIN_FORUM_TOPICS_TOPIC.tpl' => 'block_main_forum_topics',
+            'templates/BLOCK_MAIN_FORUM_TOPICS.tpl' => 'block_main_forum_topics',
+            'templates/BLOCK_SIDE_FORUM_NEWS_SUMMARY.tpl' => 'block_side_forum_news',
+            'templates/BLOCK_SIDE_FORUM_NEWS.tpl' => 'block_side_forum_news',
+            'templates/BLOCK_MAIN_FORUM_NEWS.tpl' => 'block_main_forum_news'
         );
     }
 

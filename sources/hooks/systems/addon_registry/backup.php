@@ -136,8 +136,8 @@ class Hook_addon_registry_backup
     public function tpl_previews()
     {
         return array(
-            'RESTORE_HTML_WRAP.tpl' => 'administrative__restore_wrap',
-            'BACKUP_LAUNCH_SCREEN.tpl' => 'administrative__backup_launch_screen'
+            'templates/RESTORE_HTML_WRAP.tpl' => 'administrative__restore_wrap',
+            'templates/BACKUP_LAUNCH_SCREEN.tpl' => 'administrative__backup_launch_screen'
         );
     }
 

@@ -160,8 +160,8 @@ class Hook_addon_registry_core_fields
     public function tpl_previews()
     {
         return array(
-            'CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl' => 'catalogue_multilist',
-            'CATALOGUE_DEFAULT_FIELD_PICTURE.tpl' => 'catalogue_picture'
+            'templates/CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl' => 'catalogue_multilist',
+            'templates/CATALOGUE_DEFAULT_FIELD_PICTURE.tpl' => 'catalogue_picture'
         );
     }
 

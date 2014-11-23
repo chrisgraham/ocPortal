@@ -150,16 +150,16 @@ class Hook_addon_registry_quizzes
     public function tpl_previews()
     {
         return array(
-            'QUIZ_RESULTS_SCREEN.tpl' => 'administrative__quiz_results_screen',
-            'QUIZ_RESULT_SCREEN.tpl' => 'administrative__quiz_result_screen',
-            'QUIZ_RESULTS.tpl' => 'quiz_results',
-            'QUIZ_BOX.tpl' => 'quiz_archive_screen',
-            'QUIZ_ARCHIVE_SCREEN.tpl' => 'quiz_archive_screen',
-            'QUIZ_SCREEN.tpl' => 'quiz_screen',
-            'QUIZ_SURVEY_ANSWERS_MAIL.txt' => 'quiz_survey_answers_mail',
-            'QUIZ_TEST_ANSWERS_MAIL.txt' => 'quiz_test_answers_mail',
-            'QUIZ_DONE_SCREEN.tpl' => 'quiz_done_screen',
-            'MEMBER_QUIZ_ENTRIES.tpl' => 'member_quiz_entries',
+            'templates/QUIZ_RESULTS_SCREEN.tpl' => 'administrative__quiz_results_screen',
+            'templates/QUIZ_RESULT_SCREEN.tpl' => 'administrative__quiz_result_screen',
+            'templates/QUIZ_RESULTS.tpl' => 'quiz_results',
+            'templates/QUIZ_BOX.tpl' => 'quiz_archive_screen',
+            'templates/QUIZ_ARCHIVE_SCREEN.tpl' => 'quiz_archive_screen',
+            'templates/QUIZ_SCREEN.tpl' => 'quiz_screen',
+            'text/QUIZ_SURVEY_ANSWERS_MAIL.txt' => 'quiz_survey_answers_mail',
+            'text/QUIZ_TEST_ANSWERS_MAIL.txt' => 'quiz_test_answers_mail',
+            'templates/QUIZ_DONE_SCREEN.tpl' => 'quiz_done_screen',
+            'templates/MEMBER_QUIZ_ENTRIES.tpl' => 'member_quiz_entries',
         );
     }
 

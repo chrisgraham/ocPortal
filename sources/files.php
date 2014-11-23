@@ -237,7 +237,7 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
         'php.ini' => '.*',
         '.htpasswd' => '.*',
         'iirf.ini' => '',
-        'robots.txt' => '',
+        'text/robots.txt' => '',
         'favicon.ico' => '', // Not used for ocPortal, but default path for other scripts on server
         '400.shtml' => '',
         '500.shtml' => '',
@@ -276,7 +276,7 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
         'install_locked' => '',
 
         // MyOCP
-        'if_hosted_service.txt' => '',
+        'text/if_hosted_service.txt' => '',
         'sites' => '',
 
         // API docs

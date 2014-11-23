@@ -144,22 +144,22 @@ class Hook_addon_registry_core_validation
     public function tpl_previews()
     {
         return array(
-            'VALIDATE_SCREEN.tpl' => 'administrative__validate',
-            'VALIDATE_TAG_START.tpl' => 'administrative__validate',
-            'VALIDATE_TAG_NAME_START.tpl' => 'administrative__validate',
-            'VALIDATE_LINE_END.tpl' => 'administrative__validate',
-            'VALIDATE_LINE.tpl' => 'administrative__validate',
-            'VALIDATE_TAG_END.tpl' => 'administrative__validate',
-            'VALIDATE_TAG_NAME_END.tpl' => 'administrative__validate',
-            'VALIDATE_SCREEN_END.tpl' => 'administrative__validate',
-            'VALIDATE_ERROR.tpl' => 'administrative__validate_error_screen',
-            'VALIDATE_ERROR_SCREEN.tpl' => 'administrative__validate_error_screen',
-            'VALIDATE_ATTRIBUTE_START.tpl' => 'administrative__validate_error_screen',
-            'VALIDATE_ATTRIBUTE_END.tpl' => 'administrative__validate_error_screen',
-            'VALIDATE_MARKER.tpl' => 'administrative__validate_error_screen',
-            'VALIDATE_LINE_ERROR.tpl' => 'administrative__validate_error_screen',
-            'VALIDATE_MARKER_START.tpl' => 'administrative__validate',
-            'VALIDATE_MARKER_END.tpl' => 'administrative__validate'
+            'templates/VALIDATE_SCREEN.tpl' => 'administrative__validate',
+            'templates/VALIDATE_TAG_START.tpl' => 'administrative__validate',
+            'templates/VALIDATE_TAG_NAME_START.tpl' => 'administrative__validate',
+            'templates/VALIDATE_LINE_END.tpl' => 'administrative__validate',
+            'templates/VALIDATE_LINE.tpl' => 'administrative__validate',
+            'templates/VALIDATE_TAG_END.tpl' => 'administrative__validate',
+            'templates/VALIDATE_TAG_NAME_END.tpl' => 'administrative__validate',
+            'templates/VALIDATE_SCREEN_END.tpl' => 'administrative__validate',
+            'templates/VALIDATE_ERROR.tpl' => 'administrative__validate_error_screen',
+            'templates/VALIDATE_ERROR_SCREEN.tpl' => 'administrative__validate_error_screen',
+            'templates/VALIDATE_ATTRIBUTE_START.tpl' => 'administrative__validate_error_screen',
+            'templates/VALIDATE_ATTRIBUTE_END.tpl' => 'administrative__validate_error_screen',
+            'templates/VALIDATE_MARKER.tpl' => 'administrative__validate_error_screen',
+            'templates/VALIDATE_LINE_ERROR.tpl' => 'administrative__validate_error_screen',
+            'templates/VALIDATE_MARKER_START.tpl' => 'administrative__validate',
+            'templates/VALIDATE_MARKER_END.tpl' => 'administrative__validate'
         );
     }
 

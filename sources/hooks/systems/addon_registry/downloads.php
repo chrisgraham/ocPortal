@@ -188,16 +188,16 @@ class Hook_addon_registry_downloads
     public function tpl_previews()
     {
         return array(
-            'DOWNLOAD_LIST_LINE.tpl' => 'download_list_line',
-            'DOWNLOAD_LIST_LINE_2.tpl' => 'download_list_line_2',
-            'DOWNLOAD_BOX.tpl' => 'download_category_screen',
-            'DOWNLOAD_AND_IMAGES_SIMPLE_BOX.tpl' => 'download_and_images_simple_box',
-            'DOWNLOAD_CATEGORY_SCREEN.tpl' => 'download_category_screen',
-            'DOWNLOAD_ALL_SCREEN.tpl' => 'download_all_screen',
-            'DOWNLOAD_SCREEN_IMAGE.tpl' => 'download_screen',
-            'DOWNLOAD_GALLERY_IMAGE_CELL.tpl' => 'download_screen',
-            'DOWNLOAD_GALLERY_ROW.tpl' => 'download_screen',
-            'DOWNLOAD_SCREEN.tpl' => 'download_screen'
+            'templates/DOWNLOAD_LIST_LINE.tpl' => 'download_list_line',
+            'templates/DOWNLOAD_LIST_LINE_2.tpl' => 'download_list_line_2',
+            'templates/DOWNLOAD_BOX.tpl' => 'download_category_screen',
+            'templates/DOWNLOAD_AND_IMAGES_SIMPLE_BOX.tpl' => 'download_and_images_simple_box',
+            'templates/DOWNLOAD_CATEGORY_SCREEN.tpl' => 'download_category_screen',
+            'templates/DOWNLOAD_ALL_SCREEN.tpl' => 'download_all_screen',
+            'templates/DOWNLOAD_SCREEN_IMAGE.tpl' => 'download_screen',
+            'templates/DOWNLOAD_GALLERY_IMAGE_CELL.tpl' => 'download_screen',
+            'templates/DOWNLOAD_GALLERY_ROW.tpl' => 'download_screen',
+            'templates/DOWNLOAD_SCREEN.tpl' => 'download_screen'
         );
     }
 

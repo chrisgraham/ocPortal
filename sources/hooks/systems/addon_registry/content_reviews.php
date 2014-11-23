@@ -119,7 +119,7 @@ class Hook_addon_registry_content_reviews
     public function tpl_previews()
     {
         return array(
-            'REVIEW_STATUS.tpl' => 'review_status',
+            'templates/REVIEW_STATUS.tpl' => 'review_status',
         );
     }
 

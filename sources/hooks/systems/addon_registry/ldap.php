@@ -133,8 +133,8 @@ class Hook_addon_registry_ldap
     public function tpl_previews()
     {
         return array(
-            'OCF_LDAP_LIST_ENTRY.tpl' => 'administrative__ocf_ldap_sync_screen',
-            'OCF_LDAP_SYNC_SCREEN.tpl' => 'administrative__ocf_ldap_sync_screen'
+            'templates/OCF_LDAP_LIST_ENTRY.tpl' => 'administrative__ocf_ldap_sync_screen',
+            'templates/OCF_LDAP_SYNC_SCREEN.tpl' => 'administrative__ocf_ldap_sync_screen'
         );
     }
 

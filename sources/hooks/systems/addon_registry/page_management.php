@@ -125,9 +125,9 @@ class Hook_addon_registry_page_management
     public function tpl_previews()
     {
         return array(
-            'SITEMAP_EDITOR_SCREEN.tpl' => 'administrative__sitemap_editor_screen',
-            'VALIDATE_CHECK_SCREEN.tpl' => 'administrative__validate_check_screen',
-            'VALIDATE_CHECK_ERROR.tpl' => 'administrative__validate_check_screen'
+            'templates/SITEMAP_EDITOR_SCREEN.tpl' => 'administrative__sitemap_editor_screen',
+            'templates/VALIDATE_CHECK_SCREEN.tpl' => 'administrative__validate_check_screen',
+            'templates/VALIDATE_CHECK_ERROR.tpl' => 'administrative__validate_check_screen'
         );
     }
 

@@ -209,36 +209,36 @@ class Hook_addon_registry_catalogues
     public function tpl_previews()
     {
         return array(
-            'CATALOGUE_ADDING_SCREEN.tpl' => 'administrative__catalogue_adding_screen',
-            'CATALOGUE_EDITING_SCREEN.tpl' => 'administrative__catalogue_editing_screen',
-            'CATALOGUE_ENTRIES_LIST_LINE.tpl' => 'catalogue_entries_list_line',
-            'CATALOGUE_CATEGORIES_LIST_LINE.tpl' => 'catalogue_categories_list_line',
-            'SEARCH_RESULT_CATALOGUE_ENTRIES.tpl' => 'search_result_catalogue_entries',
-            'CATALOGUE_DEFAULT_CATEGORY_EMBED.tpl' => 'fieldmap_category_screen',
+            'templates/CATALOGUE_ADDING_SCREEN.tpl' => 'administrative__catalogue_adding_screen',
+            'templates/CATALOGUE_EDITING_SCREEN.tpl' => 'administrative__catalogue_editing_screen',
+            'templates/CATALOGUE_ENTRIES_LIST_LINE.tpl' => 'catalogue_entries_list_line',
+            'templates/CATALOGUE_CATEGORIES_LIST_LINE.tpl' => 'catalogue_categories_list_line',
+            'templates/SEARCH_RESULT_CATALOGUE_ENTRIES.tpl' => 'search_result_catalogue_entries',
+            'templates/CATALOGUE_DEFAULT_CATEGORY_EMBED.tpl' => 'fieldmap_category_screen',
 
-            'CATALOGUE_CATEGORY_HEADING.tpl' => 'fieldmap_category_screen',
-            'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl' => 'fieldmap_category_screen',
+            'templates/CATALOGUE_CATEGORY_HEADING.tpl' => 'fieldmap_category_screen',
+            'templates/CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl' => 'fieldmap_category_screen',
 
-            'CATALOGUE_DEFAULT_TABULAR_WRAP.tpl' => 'tabular_category_screen',
-            'CATALOGUE_DEFAULT_TABULAR_HEADCELL.tpl' => 'tabular_category_screen',
-            'CATALOGUE_DEFAULT_TABULAR_ENTRY_WRAP.tpl' => 'tabular_category_screen',
-            'CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD.tpl' => 'tabular_category_screen',
+            'templates/CATALOGUE_DEFAULT_TABULAR_WRAP.tpl' => 'tabular_category_screen',
+            'templates/CATALOGUE_DEFAULT_TABULAR_HEADCELL.tpl' => 'tabular_category_screen',
+            'templates/CATALOGUE_DEFAULT_TABULAR_ENTRY_WRAP.tpl' => 'tabular_category_screen',
+            'templates/CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD.tpl' => 'tabular_category_screen',
 
-            'CATALOGUE_DEFAULT_GRID_ENTRY_WRAP.tpl' => 'grid_category_screen',
-            'CATALOGUE_DEFAULT_GRID_ENTRY_FIELD.tpl' => 'grid_category_screen',
+            'templates/CATALOGUE_DEFAULT_GRID_ENTRY_WRAP.tpl' => 'grid_category_screen',
+            'templates/CATALOGUE_DEFAULT_GRID_ENTRY_FIELD.tpl' => 'grid_category_screen',
 
-            'CATALOGUE_links_TABULAR_WRAP.tpl' => 'tabular_category_screen__links',
-            'CATALOGUE_links_TABULAR_HEADCELL.tpl' => 'tabular_category_screen__links',
-            'CATALOGUE_links_TABULAR_ENTRY_WRAP.tpl' => 'tabular_category_screen__links',
-            'CATALOGUE_links_TABULAR_ENTRY_FIELD.tpl' => 'tabular_category_screen__links',
+            'templates/CATALOGUE_links_TABULAR_WRAP.tpl' => 'tabular_category_screen__links',
+            'templates/CATALOGUE_links_TABULAR_HEADCELL.tpl' => 'tabular_category_screen__links',
+            'templates/CATALOGUE_links_TABULAR_ENTRY_WRAP.tpl' => 'tabular_category_screen__links',
+            'templates/CATALOGUE_links_TABULAR_ENTRY_FIELD.tpl' => 'tabular_category_screen__links',
 
-            'CATALOGUE_DEFAULT_TITLELIST_ENTRY.tpl' => 'list_category_screen',
-            'CATALOGUE_DEFAULT_TITLELIST_WRAP.tpl' => 'list_category_screen',
+            'templates/CATALOGUE_DEFAULT_TITLELIST_ENTRY.tpl' => 'list_category_screen',
+            'templates/CATALOGUE_DEFAULT_TITLELIST_WRAP.tpl' => 'list_category_screen',
 
-            'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl' => 'entry_screen',
-            'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD.tpl' => 'entry_screen',
+            'templates/CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl' => 'entry_screen',
+            'templates/CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD.tpl' => 'entry_screen',
 
-            'CATALOGUE_DEFAULT_ENTRY_SCREEN.tpl' => 'entry_screen'
+            'templates/CATALOGUE_DEFAULT_ENTRY_SCREEN.tpl' => 'entry_screen'
         );
     }
 
