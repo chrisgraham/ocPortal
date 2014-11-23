@@ -43,9 +43,9 @@ function script_load_stuff()
 	handle_textarea_scrolling();
 
 	// Tell the server we have JavaScript, so do not degrade things for reasons of compatibility - plus also set other things the server would like to know
-	{+START,IF,{$CONFIG_OPTION,detect_javascript}}
+	/*{+START,IF,{$CONFIG_OPTION,detect_javascript}}*/
 		set_cookie('js_on',1,120);
-	{+END}
+	/*{+END}*/
 	if ((!window.parent) || (window.parent==window))
 	{
 		//set_cookie('screen_width',get_window_width(),120);	Violation of EU Cookie Guidelines :(
@@ -203,14 +203,14 @@ function new_html__initialise(element)
 	{
 		case 'img':
 			// Convert a/img title attributes into ocPortal tooltips
-			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+			/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 				convert_tooltip(element);
-			{+END}
+			/*{+END}*/
 			break;
 
 		case 'a':
 			// Lightboxes
-			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+			/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 				var rel=element.getAttribute('rel');
 				if (rel && rel.match(/(^|\s)lightbox($|\s)/))
 				{
@@ -227,12 +227,12 @@ function new_html__initialise(element)
 					element.title=element.title.replace('{!LINK_NEW_WINDOW;}','');
 					if (element.title==' ') element.title='';
 				}
-			{+END}
+			/*{+END}*/
 
 			// Convert a/img title attributes into ocPortal tooltips
-			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+			/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 				if (typeof element['original-title']=='undefined'/*check tipsy not used*/ && element.className.indexOf('no_tooltip')==-1) convert_tooltip(element);
-			{+END}
+			/*{+END}*/
 			break;
 
 		case 'form':
@@ -257,7 +257,7 @@ function new_html__initialise(element)
 				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ });
 
 			// Convert a/img title attributes into ocPortal tooltips
-			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+			/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 				//convert_tooltip(element);	Not useful
 
 				// Convert a/img title attributes into ocPortal tooltips
@@ -278,7 +278,7 @@ function new_html__initialise(element)
 						convert_tooltip(elements[j]);
 					}
 				}
-			{+END}
+			/*{+END}*/
 
 			break;
 	}
@@ -530,7 +530,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 	}
 	button_set=new_button_set;
 
-	if ((typeof window.showModalDialog!='undefined'){+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END})
+	if ((typeof window.showModalDialog!='undefined')/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/ || true/*{+END}*/)
 	{
 		if (button_set.length>4) height+=5*(button_set.length-4);
 
@@ -687,7 +687,7 @@ function doc_onmouseover(i)
 function script_page_rendered()
 {
 	// Move the help panel if needed
-	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}*/
 		if (get_window_width()<990)
 		{
 			var panel_right=document.getElementById('panel_right');
@@ -714,7 +714,7 @@ function script_page_rendered()
 				}
 			}
 		}
-	{+END}
+	/*{+END}*/
 }
 
 // The help panel
@@ -845,9 +845,9 @@ function set_cookie(cookie_name,cookie_value,num_days)
 	var read=read_cookie(cookie_name);
 	if ((read!=cookie_value) && (read))
 	{
-		{+START,IF,{$DEV_MODE}}
+		/*{+START,IF,{$DEV_MODE}}*/
 			if (!window.done_cookie_alert) window.fauxmodal_alert('{!COOKIE_CONFLICT_DELETE_COOKIES;^}'+'... '+document.cookie+' ('+to_set+')',null,'{!ERROR_OCCURRED;^}');
-		{+END}
+		/*{+END}*/
 		window.done_cookie_alert=true;
 	}
 }
@@ -1231,9 +1231,9 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 	if (element.nodeName.toLowerCase()=='table') type='table';
 	if (element.nodeName.toLowerCase()=='tr') type='table-row';
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,enable_animations}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,enable_animations}}}*/
 		no_animate=true;
-	{+END}
+	/*{+END}*/
 
 	var _pic=get_elements_by_class_name(element.parentNode,'toggleable_tray_button');
 	var pic;
@@ -1411,7 +1411,7 @@ function animate_frame_load(pf,frame,leave_gap_top)
 }
 function illustrate_frame_load(pf,frame)
 {
-	{+START,IF,{$CONFIG_OPTION,enable_animations}}
+	/*{+START,IF,{$CONFIG_OPTION,enable_animations}}*/
 		var head='<style>',cssText='';
 		if (!browser_matches('ie8'))
 		{
@@ -1491,20 +1491,20 @@ function illustrate_frame_load(pf,frame)
 		);
 		var style=de.getElementsByTagName('style')[0];
 		if ((style) && (style.styleSheet)) style.styleSheet.cssText=cssText; // For IE
-	{+END}
+	/*{+END}*/
 }
 
 /* Smoothly scroll to another position on the page */
 function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 {
-	{+START,IF,{$NOT,{$CONFIG_OPTION,enable_animations}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,enable_animations}}}*/
 		try
 		{
 			window.scrollTo(0,dest_y);
 		}
 		catch (e) {};
 		return;
-	{+END}
+	/*{+END}*/
 
 	var scroll_y=get_window_scroll_y();
 	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y),true);
@@ -2895,7 +2895,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 /* Google Analytics tracking for links; particularly useful if you have no server-side stat collection */
 function ga_track(ob,category,action)
 {
-	{+START,IF_NON_EMPTY,{$CONFIG_OPTION,google_analytics}}{+START,IF,{$NOR,{$IS_STAFF},{$IS_ADMIN}}}
+	/*{+START,IF_NON_EMPTY,{$CONFIG_OPTION,google_analytics}}{+START,IF,{$NOR,{$IS_STAFF},{$IS_ADMIN}}}*/
 		if (typeof category=='undefined') var category='{!URL;}';
 		if (typeof action=='undefined') var action=ob?ob.href:'{!UNKNOWN;}';
 
@@ -2913,7 +2913,7 @@ function ga_track(ob,category,action)
 
 			return false;
 		}
-	{+END}{+END}
+	/*{+END}{+END}*/
 
 	return null;
 }

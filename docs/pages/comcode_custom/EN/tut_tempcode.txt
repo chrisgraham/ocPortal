@@ -1647,6 +1647,31 @@ Head of state:
 {+END}
 [/code]
 
+[title="2"]Encapsulation[/title]
+
+You can encapsulate Tempcode within comments of other languages, in order to not break editor syntax highlighting, and so WYSIWYG editors don't corrupt the code.
+
+Examples...
+
+HTML comments...
+[code]
+<!-- {+START,IF,{$MOBILE}} -->
+Example
+<!-- {+END} -->
+[/code]
+
+CSS comments...
+[code]
+/* {+START,IF,{$MOBILE}} */
+Example
+/* {+END} */
+[/code]
+
+HTML attributes...
+[code]
+<span x-tempcode-1="{+START,IF,{$MOBILE}}" class="mobile" x-tempcode-2="{+END}">Example</span>
+[/code]
+
 [title="2"]GUIDs[/title]
 
 There is a design issue that comes to us when we design template structure... do we re-use templates so that editing is easier, load is decreased, and consistency is raised; or do we allow maximum customisation of different aspects of the system by not re-using templates?

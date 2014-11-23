@@ -42,6 +42,8 @@ function init__tempcode_compiler__runtime()
  */
 function template_to_tempcode_static($text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null)
 {
+    $text = substr($text, 0, $symbol_pos) . substitute_comment_encapsulated_tempcode(substr($text, $symbol_pos));
+
     if (is_null($theme)) {
         $theme = is_null($GLOBALS['FORUM_DRIVER']) ? 'default' : $GLOBALS['FORUM_DRIVER']->get_theme();
     }

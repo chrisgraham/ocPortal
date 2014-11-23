@@ -74,7 +74,7 @@ function set_attachment(field_name,number,filename,multi)
 		var show_overlay,defaults={};
 		if (filepath.indexOf('fakepath')==-1) // iPhone gives c:\fakepath\image.jpg, so don't use that
 			defaults.description=filepath; // Default caption to local file path
-		{+START,INCLUDE,ATTACHMENT_UI_DEFAULTS,.js,javascript}{+END}
+		/*{+START,INCLUDE,ATTACHMENT_UI_DEFAULTS,.js,javascript}{+END}*/
 
 		if (!show_overlay)
 		{
@@ -508,7 +508,7 @@ function do_input_page(field_name)
 
 	var result;
 
-	if (typeof window.showModalDialog!='undefined'{+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END})
+	if (typeof window.showModalDialog!='undefined'/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/ || true/*{+END}*/)
 	{
 		window.faux_showModalDialog(
 			maintain_theme_in_link('{$FIND_SCRIPT;,page_link_chooser}'+keep_stub(true)),

@@ -108,6 +108,27 @@ function _length_so_far($bits, $i)
 }
 
 /**
+ * Take some Tempcode and pre-process it for Tempcode portions encapsulated within comments (or similar).
+ * This is done so syntax-highlighters don't break, and WYSIWYG-editors don't corrupt the Tempcode.
+ *
+ * @param  string                       Input Tempcode
+ * @return string                       Output Tempcode
+ */
+function substitute_comment_encapsulated_tempcode($data)
+{
+    // HTML comment
+    $data = preg_replace('#<!--\s*\{(((?!-->).)*)\}\s*-->#', '{${1}}', $data);
+
+    // HTML attribute
+    $data = preg_replace('#\sx-tempcode(-\w+)?="\{([^"]*)\}"#', '{${2}}', $data);
+
+    // CSS comment
+    $data = preg_replace('#/\*\s*\{(((?!\*/).)*)\}\s*\*/#', '{${1}}', $data);
+
+    return $data;
+}
+
+/**
  * Compile a template into a list of appendable outputs, for the closure-style Tempcode implementation.
  *
  * @param  string                       The template file contents
@@ -119,6 +140,8 @@ function _length_so_far($bits, $i)
  */
 function compile_template($data, $template_name, $theme, $lang, $tolerate_errors = false)
 {
+    $data = substitute_comment_encapsulated_tempcode($data);
+
     if (strpos($data, '{$,Parser hint: pure}') !== false) {
         return array(array('"' . php_addslashes(preg_replace('#\{\$,.*\}#U', '', str_replace('{$,Parser hint: pure}', '/*no minify*/', $data))) . '"'), array());
     }

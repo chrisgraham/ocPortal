@@ -327,7 +327,7 @@ iframe {
 	direction: {!dir};
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	select {
 		max-width: 100px;
 	}
@@ -348,7 +348,7 @@ iframe {
 		white-space: normal !important;
 		{$BETA_CSS_PROPERTY,word-wrap: break-word !important;}
 	}
-{+END}
+/*{+END}*/
 
 /* Cool effect to change how text selection looks; not valid CSS, but is safe */
 ::selection {
@@ -377,7 +377,7 @@ body.website_body.frame {
 	background: transparent; /* Don't assume too much for a frame, it may be nested inside a box for example */
 }
 
-{+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$CONFIG_OPTION,fixed_width}}/*{+START,IF,{$NOT,{$MOBILE}}}*/*/
 	html>body#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
 		/* Want to change the tiled background?
 			Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
@@ -401,7 +401,7 @@ body.website_body.frame {
 			{$BETA_CSS_PROPERTY,box-shadow: none;}
 		}
 	}
-{+END}{+END}
+/*{+END}*//*{+END}*/
 
 body.website_body, #wysiwyg_editor {
 	font-size: 13px; /* Note that the font sizer may override this (FONT_SIZER.tpl) */
@@ -416,9 +416,9 @@ body#main_website {
 	margin: 0;
 
 	/* To stop it scaling down if we are applying "width=device-width" and forcing a page to displaying non-mobile */
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*/*{+START,IF,{$NOT,{$MOBILE}}}*/*/
 		min-width: 1000px;
-	{+END}
+	/*{+END}*/
 }
 
 body#main_website #main_website_inner {
@@ -438,10 +438,10 @@ header {
 
 header h1 {
 	margin: 0;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		width: 100%;
 		text-align: center;
-	{+END}
+	/*{+END}*/
 	border: 0;
 }
 
@@ -481,12 +481,12 @@ header h1 {
 	display: block;
 }
 .logo_outer .logo {
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		width: 100%;
-	{+END}
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+END}*/
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		max-width: 100%;
-	{+END}
+	/*{+END}*/
 }
 
 .global_navigation {
@@ -494,23 +494,23 @@ header h1 {
 	border-bottom: 1px solid {$GET,standard_border};
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
 	color: {$GET,WB};
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		position: relative;
-	{+END}
+	/*{+END}*/
 	min-height: 3.4em;
 }
 
 .global_navigation_inner {
 	overflow: hidden;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		margin-left: 8em !important; /* Space for the menu button, which is position:absolute */
-	{+END}
+	/*{+END}*/
 }
 
 .global_navigation .top_buttons, .global_navigation .top_form {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-left: 1.5em;
-	{+END}
+	/*{+END}*/
 	padding: 0.5em 0;
 	margin-right: 1em;
 	float: right;
@@ -586,24 +586,24 @@ header h1 {
 
 .global_breadcrumbs {
 	padding: 7px 0 7px 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		{+START,IF,{$CONFIG_OPTION,fixed_width}}
 			text-align: {!en_right};
-		{+END}
-		{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
+		/*{+END}*/
+		/*{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}*/
 			float: {!en_right};
-		{+END}
+		/*{+END}*/
 		margin-left: 0.5em;
-	{+END}
+	/*{+END}*/
 }
 .global_breadcrumbs abbr, .global_breadcrumbs a, .global_breadcrumbs span {
 	white-space: nowrap !important;
 }
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.global_breadcrumbs {
 		margin-bottom: 1em;
 	}
-{+END}
+/*{+END}*/
 
 .non_accessibility_redundancy .breadcrumbs {
 	width: 100%;
@@ -656,8 +656,8 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 .global_middle_outer {
 	margin-top: 0.8em;
 }
-{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-	{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}*/
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		.zone_running_ .global_middle_outer {
 			margin-top: 0; /* Splash page style design, tighter spacing */
 		}
@@ -665,22 +665,22 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 		.zone_running_ .global_side_panel {
 			margin-top: 0.8em;
 		}
-	{+END}
-{+END}
+	/*{+END}*/
+/*{+END}*/
 
 .global_middle {
 	/*overflow: hidden; Breaks Safari so we'll let the surrounding element contain floats*/
 
 	margin-bottom: 1em;
 
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		/* Add some spacing. This will be overwritten to 1.5em in rules below if we have panels */
 		padding-{!en_left}: 1em;
 		padding-{!en_right}: 1em;
-	{+END}
+	/*{+END}*/
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.global_middle, .panel_solo {
 		padding-{!en_left}: 2px;
 		padding-{!en_right}: 2px;
@@ -697,7 +697,7 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	.overlay h1 {
 		display: none;
 	}
-{+END}
+/*{+END}*/
 
 body.popup_spacer {
 	padding: 1em !important;
@@ -707,62 +707,62 @@ body.popup_spacer h2 {
 }
 
 #panel_bottom {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin: 0 1em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 0 2px;
-	{+END}
+	/*{+END}*/
 }
 
 #panel_top .ocf_member_bar_etc { /* Should not be flush with site borders (but the menu above it will be, so don't do the whole panel */
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin: 0 1em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 0 2px;
-	{+END}
+	/*{+END}*/
 }
 
 #panel_left {
 	float: {!en_left};
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-{!en_left}: 1em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		padding-{!en_left}: 2px;
 		padding-{!en_right}: 1px;
 		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-	{+END}
+	/*{+END}*/
 }
 
 #panel_right {
 	float: {$?,{$MOBILE},{!en_left},{!en_right}};
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-{!en_right}: 1em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		padding-{!en_right}: 2px;
 		padding-{!en_left}: 1px;
 		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-	{+END}
+	/*{+END}*/
 }
 
 .global_side_panel {
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 13em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		width: 50%;
-	{+END}
+	/*{+END}*/
 	color: {$GET,slightly_seeded_gray_text};
 }
 .global_middle_faux>.global_side_panel {
 	width: auto;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	/* Spacing around middle column if it adjoins panels */
 	#panel_left ~ .global_middle {
 		margin-{!en_left}: 13em;
@@ -772,12 +772,12 @@ body.popup_spacer h2 {
 		margin-{!en_right}: 13em;
 		padding-{!en_right}: 3.5em;
 	}
-	{+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
+	/*{+START,IF,{$CONFIG_OPTION,collapse_user_zones}}*/
 		.zone_running_ #panel_right:first-child ~ .global_middle { /* If no left panel on welcome zone, lets give some extra space */
 			margin-{!en_right}: 16em;
 		}
-	{+END}
-{+END}
+	/*{+END}*/
+/*{+END}*/
 
 .global_side_panel h2 {
 	border-bottom: 1px solid;
@@ -829,12 +829,12 @@ footer {
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,footer_background}\, {$GET,footer_2_background});}
 
 	color: {$GET,footer_text};
-	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}*/
 		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,footer_tinting};}
-	{+END}
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+END}*/
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		padding: 1.5em;
-	{+END}
+	/*{+END}*/
 }
 
 footer .button_hyperlink, footer a, footer a:visited, footer .horizontal_links {
@@ -845,17 +845,17 @@ footer a:hover, footer .button_hyperlink:hover {
 	color: {$GET,footer_tinting};
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	footer .global_footer_left, footer .global_footer_right {
 		padding-left: 0.5em;
 		padding-right: 0.5em;
 	}
-{+END}
+/*{+END}*/
 
 footer .global_footer_left {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		float: {!en_left};
-	{+END}
+	/*{+END}*/
 }
 
 footer .footer_button_loading {
@@ -867,16 +867,16 @@ footer .global_footer_left .horizontal_buttons {
 	white-space: nowrap;
 	margin-top: 0;
 	font-size: 0; /* Fixes wrapping problem */
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		float: left;
-	{+END}
+	/*{+END}*/
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	footer .global_footer_left .su_form {
 		float: right;
 	}
-{+END}
+/*{+END}*/
 
 footer .global_footer_left .horizontal_buttons>li:first-child {
 	padding-left: 0 !important;
@@ -902,10 +902,10 @@ footer .special_page_type_form select option {
 }
 
 footer .global_footer_left .horizontal_buttons, footer .su_form, footer .special_page_type_form {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		float: left;
 		padding-right: 20px;
-	{+END}
+	/*{+END}*/
 }
 footer .global_footer_left .horizontal_buttons {
 	margin-top: 5px;
@@ -931,35 +931,35 @@ footer .invisible_ref_point {
 }
 
 footer .global_copyright {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		text-align: center;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 0.5em 0;
-	{+END}
+	/*{+END}*/
 }
 
 footer .global_minilinks {
 	padding-top: 0.3em;
 	font-size: 0.9em;
 	white-space: nowrap; /* Stops logout link wrapping around in Firefox 3.6 */
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		text-align: center;
-	{+END}
+	/*{+END}*/
 	margin-right: 3em; /* Make tidy gap away from the font sizer */
 }
 
 footer .global_minilinks .footer_links {
 	width: auto;
 	font-size: 1.1em;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 0;
 		padding: 0;
 		list-style-type: none;
-	{+END}
+	/*{+END}*/
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	footer .global_minilinks .footer_links li {
 		min-width: 6em;
 		margin-right: 1em;
@@ -968,7 +968,7 @@ footer .global_minilinks .footer_links {
 		padding: 0.25em 0 0.25em 18px;
 		background: url('{$IMG_INLINE;,icons/14x14/action_link}') 0 5px no-repeat;
 	}
-{+END}
+/*{+END}*/
 
 footer .global_minilinks a, footer .global_minilinks .button_hyperlink {
 	white-space: nowrap !important; /* So works on mobiles */
@@ -1005,9 +1005,9 @@ body .accessibility_hidden { /* Contents should be made visible (or interpreted)
 }
 
 .non_accessibility_redundancy { /* Contents should be skipped by screen readers */
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		display: none;
-	{+END}
+	/*{+END}*/
 }
 
 /*
@@ -1151,9 +1151,9 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 .trinav_wrap {
 	overflow: hidden;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-bottom: 2em;
-	{+END}
+	/*{+END}*/
 	{$BETA_CSS_PROPERTY,border-radius: 20px;}
 	color: {$GET,heading_text};
 }
@@ -1167,25 +1167,25 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 }
 .trinav_left {
 	float: left;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-left: 2em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		width: 110px;
 		margin-left: 0.5em;
-	{+END}
+	/*{+END}*/
 	text-align: left;
 }
 .trinav_mid { /* Used for putting a button in the middle of the left/right pagination, for example */
 	text-align: center;
 }
 .trinav_mid.text {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		padding-top: 6px;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		padding-top: 1px;
-	{+END}
+	/*{+END}*/
 }
 .trinav_mid.text>span:before {
 	content: "(";
@@ -1195,14 +1195,14 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 }
 .trinav_right {
 	float: right;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-left: 1em;
 		margin-right: 2em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		width: 110px;
 		margin-right: 0.5em;
-	{+END}
+	/*{+END}*/
 	text-align: right;
 }
 
@@ -1602,13 +1602,13 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 
 .fp_col_block {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 50%;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 1em 0;
 		max-width: 100%;
-	{+END}
+	/*{+END}*/
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
@@ -1642,9 +1642,9 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	font-size: 0.9em;
 	color: {$GET,area_text};
 	border-bottom: 1px dotted {$GET,pale_border};
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 25em;
-	{+END}
+	/*{+END}*/
 	max-width: 100%;
 	padding-{!en_left}: 0.5em;
 	padding-bottom: 0.5em;
@@ -1851,9 +1851,9 @@ table.scrollable_inside {
 
 .wide_table {
 	width: 100%;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		table-layout: fixed;
-	{+END}
+	/*{+END}*/
 }
 
 .spaced_table th, .spaced_table td {
@@ -2228,11 +2228,11 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	margin-top: 1.5em;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.index_screen_fancier_screen_entries {
 		margin-{!en_left}: 1em;
 	}
-{+END}
+/*{+END}*/
 .index_screen_fancier_entry {
 	margin: 0.5em;
 	padding: 0.5em;
@@ -2355,7 +2355,7 @@ div.wysiwyg_toolbar_color_finder {
 =========================
 */
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.lined_up_boxes .right {
 		margin-left: 1em;
 	}
@@ -2363,9 +2363,9 @@ div.wysiwyg_toolbar_color_finder {
 	.lined_up_boxes .left {
 		margin-right: 1em;
 	}
-{+END}
+/*{+END}*/
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.lined_up_boxes .right {
 		width: 100%;
 	}
@@ -2373,7 +2373,7 @@ div.wysiwyg_toolbar_color_finder {
 	.lined_up_boxes .left {
 		width: 100%;
 	}
-{+END}
+/*{+END}*/
 
 .ratings {
 	width: {$?,{$MOBILE},100%,10em};
@@ -2455,12 +2455,12 @@ div.wysiwyg_toolbar_color_finder {
 
 .post .post_thread_children {
 	margin-top: 1em;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		margin-left: 7px;
-	{+END}
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+END}*/
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-left: 20px;
-	{+END}
+	/*{+END}*/
 }
 
 .post_buttons {
@@ -2529,9 +2529,9 @@ div .post_buttons>*, div .buttons_group_faded>* {
 .comments_posting_form_inner {
 	text-align: {!en_left};
 	padding: 1em 0 0 0;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		overflow: hidden;
-	{+END}
+	/*{+END}*/
 }
 
 .comments_posting_form_inner th, .comments_posting_form_inner td.one_line {
@@ -2542,9 +2542,9 @@ div .post_buttons>*, div .buttons_group_faded>* {
 	font-weight: bold !important;
 	border-right: 1px solid {$GET,pale_border};
 	text-align: right;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		min-width: 4.5em;
-	{+END}
+	/*{+END}*/
 }
 .comments_posting_form_inner th>* {
 	text-align: right !important;
@@ -2589,14 +2589,14 @@ div .post_buttons>*, div .buttons_group_faded>* {
 
 .comments_posting_form_end {
 	overflow: hidden;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 0;
 		padding: 0;
 		text-align: center;
-	{+END}
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+END}*/
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin: 0 0 1em 0;
-	{+END}
+	/*{+END}*/
 }
 
 .comments_posting_form_end .proceed_button {
@@ -2616,11 +2616,11 @@ div .post_buttons>*, div .buttons_group_faded>* {
 	vertical-align: middle;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.comments_posting_form_end .proceed_button button {
 		float: none;
 	}
-{+END}
+/*{+END}*/
 
 /*
 =========================
@@ -3140,10 +3140,10 @@ div>.button_micro:first-child, div>.button_screen:first-child, div>.button_scree
 	background-position: right 7px top 3px;
 	background-size: 18px 18px;
 	font-size: 13px;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		min-width: 6.5em;
 		margin: 0.25em 0.1em !important;
-	{+END}
+	/*{+END}*/
 }
 .button_micro {
 	padding: 1px 3px 2px 3px;
@@ -3659,10 +3659,10 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 	border-left: 0;
 	border-right: 0;
 	border-top: 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		border-bottom: 1px solid;
 		border-color: {$GET,tab_border};
-	{+END}
+	/*{+END}*/
 	height: 25px;
 }
 
@@ -3678,9 +3678,9 @@ a.tab, a.tab:visited, a.tab:hover {
 	text-align: center;
 	cursor: pointer;
 	{$BETA_CSS_PROPERTY,opacity: 0.6;}
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		min-width: 85px; /* Allows 3 per row, neat alignment */
-	{+END}
+	/*{+END}*/
 }
 
 .tab * {
@@ -3715,15 +3715,15 @@ a.tab, a.tab:visited, a.tab:hover {
 }
 
 div[role="tabpanel"] {
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		padding-left: 2px;
 		padding-right: 2px;
-	{+END}
+	/*{+END}*/
 
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		padding-left: 1em;
 		padding-right: 1em;
-	{+END}
+	/*{+END}*/
 }
 div[role="tabpanel"]>:first-child {
 	margin-top: 1em;
@@ -4047,10 +4047,10 @@ td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
 
 .attachment {
 	margin: 1em 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		border: 1px solid {$GET,standard_border};
 		padding: 0.5em !important;
-	{+END}
+	/*{+END}*/
 	font-size: 0.9em;
 	display: inline-block;
 }
@@ -4332,7 +4332,7 @@ a[rel="lightbox"] {
 			background-size: 7px 8px;
 		}
 	}
-{+END}
+/*{+END}*/
 
 {+START,IF,{$ADDON_INSTALLED,recommend}}
 	.print_icon {
@@ -4346,7 +4346,7 @@ a[rel="lightbox"] {
 			background-size: 24px 24px;
 		}
 	}
-{+END}
+/*{+END}*/
 
 a[title="{!VIRTUAL_ROOT}"]:hover {
 	color: {$GET,red_highlight_text};

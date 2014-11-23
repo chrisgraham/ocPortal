@@ -360,7 +360,7 @@ function wysiwyg_editor_init_for(element,id)
 		wysiwyg_color+=(window.parseInt(matches[5])+4)+matches[6];
 	}
 
-	{+START,INCLUDE,WYSIWYG_SETTINGS,.js,javascript}{+END}
+	/*{+START,INCLUDE,WYSIWYG_SETTINGS,.js,javascript}{+END}*/
 
 	if (typeof window.CKEDITOR.instances[element.id]!='undefined' && window.CKEDITOR.instances[element.id]) delete window.CKEDITOR.instances[element.id]; // Workaround "The instance "xxx" already exists" error in Google Chrome
 	var editor=window.CKEDITOR.replace(element.id,editor_settings);
@@ -957,12 +957,12 @@ function show_upload_syndication_options(name,syndication_json,no_quota)
 						{
 							//e.checked=false;	Better to assume success, not all oAuth support callback
 							var url='{$FIND_SCRIPT;,upload_syndication_auth}?hook='+window.encodeURIComponent(hook)+'&name='+window.encodeURIComponent(name)+keep_stub();
-							{+START,IF,{$MOBILE}}
+							/*{+START,IF,{$MOBILE}}*/
 								window.open(url);
-							{+END}
-							{+START,IF,{$NOT,{$MOBILE}}}
+							/*{+END}*/
+							/*{+START,IF,{$NOT,{$MOBILE}}}*/
 								faux_open(url,null,'width=960;height=500','_top');
-							{+END}
+							/*{+END}*/
 							if (!pre_disabled)
 							{
 								file_ob.disabled=false;
