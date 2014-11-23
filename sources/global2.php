@@ -141,6 +141,7 @@ function init__global2()
     if ($SERVER_TIMEZONE_CACHE != 'UTC') {
         date_default_timezone_set('UTC');
     }
+    ini_set('date.timezone','UTC'); // In case PHP does not have it configured, would produce a warning
 
     // Initialise some error handling
     error_reporting(E_ALL);
