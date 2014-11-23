@@ -1,4 +1,4 @@
-{$REQUIRE_JAVASCRIPT,javascript_validation}
+{$REQUIRE_JAVASCRIPT,validation}
 
 {+START,IF_NON_EMPTY,{FIELDS}}
 	<form title="{!PRIMARY_PAGE_FORM}" method="get" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}">

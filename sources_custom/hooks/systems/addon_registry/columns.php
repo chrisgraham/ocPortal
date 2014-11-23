@@ -92,7 +92,7 @@ class Hook_addon_registry_columns
 You need to add this code into your [tt]HTML_HEAD.tpl[/tt]:
 [code]<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js\"></script>
 {$REQUIRE_CSS,columns}
-{$REQUIRE_JAVASCRIPT,javascript_columns}[/code]';
+{$REQUIRE_JAVASCRIPT,columns}[/code]';
     }
 
     /**
@@ -139,7 +139,7 @@ You need to add this code into your [tt]HTML_HEAD.tpl[/tt]:
         return array(
             'sources_custom/hooks/systems/addon_registry/columns.php',
             'themes/default/css_custom/columns.css',
-            'themes/default/templates_custom/JAVASCRIPT_COLUMNS.tpl',
+            'themes/default/javascript_custom/columns.js',
         );
     }
 }

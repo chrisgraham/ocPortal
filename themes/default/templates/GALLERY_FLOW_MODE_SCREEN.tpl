@@ -22,7 +22,7 @@
 		<div class="box box___gallery_flow_mode_screen__other"><div class="box_inner">
 			<h2>{!OTHER_IMAGES_IN_GALLERY}</h2>
 
-			{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+			{$REQUIRE_JAVASCRIPT,dyn_comcode}
 			{$REQUIRE_CSS,carousels}
 
 			{$SET,carousel_id,{$RAND}}

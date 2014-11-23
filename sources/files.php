@@ -389,10 +389,12 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
             'html_custom' => '.*',
             'css_custom' => '.*',
             'templates_custom' => '.*',
+            'javascript_custom' => '.*',
+            'xml_custom' => '.*',
+            'text_custom' => '.*',
             'images_custom' => '.*',
             'lang_custom' => '.*',
             'file_backups' => 'exports',
-            'text_custom' => '',
             'theme.ini' => 'themes/[^/]*',
         );
     }

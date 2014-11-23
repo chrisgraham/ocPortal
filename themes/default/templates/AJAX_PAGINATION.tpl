@@ -1,4 +1,4 @@
-{$REQUIRE_JAVASCRIPT,javascript_ajax}
+{$REQUIRE_JAVASCRIPT,ajax}
 
 <script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function() {

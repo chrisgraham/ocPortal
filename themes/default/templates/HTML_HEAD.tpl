@@ -169,7 +169,7 @@
 <![endif]-->
 
 {$,jQuery fan? Just uncomment the below and start using all the jQuery plugins you love in the normal way}
-{$,{$REQUIRE_JAVASCRIPT,javascript_jquery}}
+{$,{$REQUIRE_JAVASCRIPT,jquery}}
 
 {$,If the page is doing a refresh include the markup for that}
 {$REFRESH}

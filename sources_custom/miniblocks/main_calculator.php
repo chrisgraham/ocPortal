@@ -9,7 +9,7 @@
 
 i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-require_javascript('javascript_validation');
+require_javascript('validation');
 
 $message = $map['message'];
 $equation = $map['equation'];

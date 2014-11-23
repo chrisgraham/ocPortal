@@ -255,7 +255,7 @@
 
 <script type="text/javascript">// <![CDATA[
 	{$REQUIRE_CSS,autocomplete}
-	{+START,INCLUDE,AUTOCOMPLETE_LOAD}NAME=post{+END}
+	{+START,INCLUDE,AUTOCOMPLETE_LOAD,.js,javascript}NAME=post{+END}
 //]]></script>
 
 {+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}{+START,IF,{$NOT,{$VALUE_OPTION,xhtml_strict}}}

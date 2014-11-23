@@ -257,11 +257,11 @@ class Module_admin_zones
             return $lang;
         }
 
-        require_javascript('javascript_zone_editor');
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_posting');
-        require_javascript('javascript_editing');
-        require_javascript('javascript_validation');
+        require_javascript('zone_editor');
+        require_javascript('ajax');
+        require_javascript('posting');
+        require_javascript('editing');
+        require_javascript('validation');
         require_code('form_templates');
         require_lang('comcode');
 
@@ -363,7 +363,7 @@ class Module_admin_zones
                 $edit_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $current_zone . ':' . $current_for), get_module_zone('cms_comcode_pages'));
 
                 // WYSIWYG?
-                require_javascript('javascript_editing');
+                require_javascript('editing');
                 $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($comcode, '{$,page hint: no_wysiwyg}') === false));
                 attach_wysiwyg();
                 if ($w) {
@@ -686,7 +686,7 @@ class Module_admin_zones
         $submit_name = do_lang_tempcode('ADD_ZONE');
         $text = paragraph(do_lang_tempcode('ZONE_ADD_TEXT'));
 
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
         $script = find_script('snippet');
         $javascript .= "
             var form=document.getElementById('main_form');

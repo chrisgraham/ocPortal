@@ -498,10 +498,10 @@ function tar_add_file(&$resource, $target_path, $data, $_mode = 0644, $_mtime = 
     $directory = $resource['directory'];
 
     if ($target_path != '././@LongLink') {
-        foreach ($directory as $entry) { // Make sure it does not exist
+        foreach ($directory as $offset => $entry) { // Make sure it does not exist
             if ($entry['path'] == $target_path) {
                 if ($return_on_errors) {
-                    return;
+                    return $offset + 512;
                 }
                 warn_exit(do_lang_tempcode('FILE_IN_ARCHIVE_TWICE', escape_html($target_path)));
             }
@@ -612,7 +612,7 @@ function tar_add_file(&$resource, $target_path, $data, $_mode = 0644, $_mtime = 
     }
     $resource['end'] += $block_size + 512;
 
-    return $offset;
+    return $offset + 512;
 }
 
 /**

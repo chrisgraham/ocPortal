@@ -196,7 +196,23 @@ function actual_add_theme($name)
     force_have_afm_details();
 
     // Create directories
-    $dir_list = array('', 'images', 'images/logo', 'images_custom', 'templates', 'templates_custom', 'templates_cached', 'css', 'css_custom');
+    $dir_list = array(
+        '',
+        'images',
+        'images/logo',
+        'images_custom',
+        'templates',
+        'templates_custom',
+        'javascript',
+        'javascript_custom',
+        'xml',
+        'xml_custom',
+        'text',
+        'text_custom',
+        'templates_cached',
+        'css',
+        'css_custom',
+    );
     $langs = find_all_langs(true);
     foreach (array_keys($langs) as $lang) {
         $dir_list[] = 'templates_cached/' . $lang;

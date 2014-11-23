@@ -115,12 +115,12 @@ class Hook_addon_registry_core_form_interfaces
             'themes/default/templates/POSTING_FORM.tpl',
             'themes/default/templates/POSTING_SCREEN.tpl',
             'themes/default/templates/WYSIWYG_LOAD.tpl',
-            'themes/default/templates/JAVASCRIPT_POSTING.tpl',
-            'themes/default/templates/JAVASCRIPT_EDITING.tpl',
+            'themes/default/javascript/posting.js',
+            'themes/default/javascript/editing.js',
             'themes/default/templates/WYSIWYG_SETTINGS.tpl',
             'themes/default/templates/ATTACHMENT_UI_DEFAULTS.tpl',
-            'themes/default/templates/JAVASCRIPT_MULTI.tpl',
-            'themes/default/templates/JAVASCRIPT_VALIDATION.tpl',
+            'themes/default/javascript/multi.js',
+            'themes/default/javascript/validation.js',
             'themes/default/templates/FORM_FIELD_SET_GROUPER.tpl',
             'themes/default/templates/FORM.tpl',
             'themes/default/templates/FORM_SINGLE_FIELD.tpl',
@@ -184,7 +184,7 @@ class Hook_addon_registry_core_form_interfaces
             'themes/default/templates/FORM_SCREEN_FIELD_DESCRIPTION.tpl',
             'themes/default/templates/FORM_SCREEN_ARE_REQUIRED.tpl',
             'data/block_helper.php',
-            'themes/default/templates/JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl',
+            'themes/default/javascript/ajax_people_lists.js',
             'themes/default/templates/PREVIEW_SCRIPT.tpl',
             'themes/default/templates/PREVIEW_SCRIPT_CODE.tpl',
             'themes/default/templates/PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl',
@@ -431,15 +431,15 @@ class Hook_addon_registry_core_form_interfaces
             'data_custom/spelling/personal_dicts/.htaccess',
             'data_custom/spelling/personal_dicts/index.html',
             'themes/default/css/widget_date.css',
-            'themes/default/templates/JAVASCRIPT_WIDGET_DATE.tpl',
+            'themes/default/javascript/widget_date.js',
             'themes/default/css/widget_color.css',
-            'themes/default/templates/JAVASCRIPT_WIDGET_COLOR.tpl',
+            'themes/default/javascript/widget_color.js',
             'themes/default/css/widget_select2.css',
             'themes/default/images/select2/index.html',
             'themes/default/images/select2/select2-spinner.gif',
             'themes/default/images/select2/select2.png',
             'themes/default/images/select2/select2x2.png',
-            'themes/default/templates/JAVASCRIPT_SELECT2.tpl',
+            'themes/default/javascript/select2.js',
             'themes/default/css/forms.css',
             'data/spelling/aspell/.htaccess',
             'data/spelling/aspell/index.html',
@@ -631,7 +631,7 @@ class Hook_addon_registry_core_form_interfaces
     {
         require_lang('comcode');
         require_lang('dates');
-        require_javascript('javascript_theme_colours');
+        require_javascript('theme_colours');
 
         $fields = new Tempcode();
 

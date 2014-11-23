@@ -2163,48 +2163,56 @@ function upgrade_theme($theme, $from_version, $to_version, $test_run = true)
     }
 
     // Templates
-    $templates_dir = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/templates_custom/';
-    $dh = @opendir($templates_dir);
-    if ($dh !== false) {
-        while (($templates_file = readdir($dh)) !== false) {
-            if (substr($templates_file, -4) != '.tpl') {
-                continue;
-            }
+    $directories = array(
+        'templates' => 'tpl',
+        'javascript' => 'js',
+        'xml' => 'xml',
+        'text' => 'txt',
+    );
+    foreach ($directories as $directory => $ext) {
+        $templates_dir = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/' . $directory . '_custom/';
+        $dh = @opendir($templates_dir);
+        if ($dh !== false) {
+            while (($templates_file = readdir($dh)) !== false) {
+                if (substr($templates_file, -4) != '.' . $ext) {
+                    continue;
+                }
 
-            $templates_file_contents = file_get_contents($templates_dir . $templates_file);
-            $orig_templates_file_contents = $templates_file_contents;
+                $templates_file_contents = file_get_contents($templates_dir . $templates_file);
+                $orig_templates_file_contents = $templates_file_contents;
 
-            foreach ($templates_replace as $target_file => $rule_set) {
-                if (($target_file == '*') || ($target_file == $templates_file)) {
-                    foreach ($rule_set as $from => $to) {
-                        $templates_file_contents = str_replace($from, $to, $templates_file_contents);
+                foreach ($templates_replace as $target_file => $rule_set) {
+                    if (($target_file == '*') || ($target_file == $templates_file)) {
+                        foreach ($rule_set as $from => $to) {
+                            $templates_file_contents = str_replace($from, $to, $templates_file_contents);
+                        }
                     }
                 }
-            }
-            if (array_key_exists($templates_file, $templates_rename)) {
-                if (!$test_run) {
-                    @rename($templates_dir . $templates_file, $templates_dir . $templates_rename[$templates_file]) or intelligent_write_error($templates_dir . $templates_rename[$templates_file]);
-                    $successes[] = do_lang_tempcode('TEMPLATE_RENAMED', escape_html($templates_file), escape_html($templates_rename[$templates_file]));
+                if (array_key_exists($templates_file, $templates_rename)) {
+                    if (!$test_run) {
+                        @rename($templates_dir . $templates_file, $templates_dir . $templates_rename[$templates_file]) or intelligent_write_error($templates_dir . $templates_rename[$templates_file]);
+                        $successes[] = do_lang_tempcode('TEMPLATE_RENAMED', escape_html($templates_file), escape_html($templates_rename[$templates_file]));
+                    }
+                    $templates_file = $templates_rename[$templates_file];
                 }
-                $templates_file = $templates_rename[$templates_file];
-            }
-            if ($templates_file_contents != $orig_templates_file_contents) {
-                if (!$test_run) {
-                    $successes[] = do_lang_tempcode('TEMPLATE_ALTERED', escape_html($templates_file));
+                if ($templates_file_contents != $orig_templates_file_contents) {
+                    if (!$test_run) {
+                        $successes[] = do_lang_tempcode('TEMPLATE_ALTERED', escape_html($templates_file));
 
-                    // Save
-                    $outfile = @fopen($templates_dir . $templates_file, 'wb') or intelligent_write_error($templates_dir . $templates_file);
-                    fwrite($outfile, $templates_file_contents);
-                    fclose($outfile);
+                        // Save
+                        $outfile = @fopen($templates_dir . $templates_file, 'wb') or intelligent_write_error($templates_dir . $templates_file);
+                        fwrite($outfile, $templates_file_contents);
+                        fclose($outfile);
+                    }
+                }
+
+                if (in_array($templates_file, $templates_borked)) {
+                    $errors[] = do_lang_tempcode('TEMPLATE_WILL_NEED_RESTORING', escape_html($templates_file));
                 }
             }
 
-            if (in_array($templates_file, $templates_borked)) {
-                $errors[] = do_lang_tempcode('TEMPLATE_WILL_NEED_RESTORING', escape_html($templates_file));
-            }
+            closedir($dh);
         }
-
-        closedir($dh);
     }
 
     return array($errors, $successes);

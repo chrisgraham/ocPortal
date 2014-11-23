@@ -147,7 +147,7 @@ If the [tt]delay[/tt] is set to blank or 0, it will disable automatic (timed) tr
             'sources_custom/blocks/main_unslider.php',
             'themes/default/css_custom/unslider.css',
             'themes/default/templates_custom/BLOCK_MAIN_UNSLIDER.tpl',
-            'themes/default/templates_custom/JAVASCRIPT_UNSLIDER.tpl',
+            'themes/default/javascript_custom/unslider.js',
             'pages/comcode_custom/EN/_unslider_slide1.txt',
             'pages/comcode_custom/EN/_unslider_slide2.txt',
             'pages/comcode_custom/EN/_unslider_slide3.txt',

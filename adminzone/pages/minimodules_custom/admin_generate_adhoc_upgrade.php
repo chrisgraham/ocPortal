@@ -108,8 +108,20 @@ if ($type == 'auto_probe') {
                                 }
 
                                 $override_file = str_replace(
-                                        array('themes/default/templates/', 'themes/default/css/'),
-                                        array('themes/' . $theme . '/templates_custom/', 'themes/' . $theme . '/css_custom/'),
+                                        array(
+                                            'themes/default/templates/',
+                                            'themes/default/javascript/',
+                                            'themes/default/xml/',
+                                            'themes/default/text/',
+                                            'themes/default/css/',
+                                        ),
+                                        array(
+                                            'themes/' . $theme . '/templates_custom/',
+                                            'themes/' . $theme . '/javascript_custom/',
+                                            'themes/' . $theme . '/xml_custom/',
+                                            'themes/' . $theme . '/text_custom/',
+                                            'themes/' . $theme . '/css_custom/',
+                                        ),
                                         $file
                                     ) . '.editfrom';
 

@@ -36,6 +36,10 @@ If you do not have such access, you will need to set permissions as specified fo
 [indent]
 [tt]*/pages/comcode_custom/*/*.txt[/tt] (So new/edited Comcode pages may be edited again)
 [tt]themes/*/templates_custom/*.tpl[/tt] (So new/overridden templates may be edited again)
+[tt]themes/*/javascript_custom/*.js[/tt] (")
+[tt]themes/*/xml_custom/*.xml[/tt] (")
+[tt]themes/*/text_custom/*.txt[/tt] (")
+[tt]themes/*/templates_custom/*.tpl[/tt] (")
 [tt]themes/*/css_custom/*.css[/tt] (So new/overridden css may be edited again)
 [tt]uploads/*/*[/tt] (So uploads may be deleted when content is)
 [tt]lang_custom/*/*.ini[/tt] (So language changes may be edited again)

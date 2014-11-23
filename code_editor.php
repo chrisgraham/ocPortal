@@ -238,7 +238,7 @@ END;
  * @param  SHORT_TEXT                   The directory path to search.
  * @return array                        A list of the HTML elements for the list box selection.
  */
-function do_dir($dir)
+function ce_do_dir($dir)
 {
     $out = array();
     $_dir = ($dir == '') ? '.' : $dir;
@@ -255,7 +255,7 @@ function do_dir($dir)
                         }
                     }
                 } elseif (is_dir($_dir . '/' . $file)) {
-                    $out = array_merge($out, do_dir($dir . (($dir != '') ? '/' : '') . $file));
+                    $out = array_merge($out, ce_do_dir($dir . (($dir != '') ? '/' : '') . $file));
                 }
             }
         }
@@ -279,7 +279,7 @@ function do_get_path($given_password)
     }
 
     code_editor_do_header('gui');
-    $files = do_dir('');
+    $files = ce_do_dir('');
     sort($files);
     $paths = implode('', $files);
     foreach ($_POST as $key => $val) {

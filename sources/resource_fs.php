@@ -1637,7 +1637,7 @@ class Resource_fs_base
         $privileges_scheme = array();
         foreach ($overridables as $override => $cat_support) {
             $usual_suspects = array('bypass_validation_.*range_content', 'edit_.*range_content', 'edit_own_.*range_content', 'delete_.*range_content', 'delete_own_.*range_content', 'submit_.*range_content');
-            $access = array(2, 3, 2, 3, 2, 1); // The minimum access level that turns on each of the above permissions   NB: Also defined in JAVASCRIPT_PERMISSIONS.tpl, so keep that in-sync
+            $access = array(2, 3, 2, 3, 2, 1); // The minimum access level that turns on each of the above permissions   NB: Also defined in permissions.js, so keep that in-sync
             foreach ($usual_suspects as $i => $privilege) {
                 if (preg_match('#' . $privilege . '#', $override) != 0) {
                     $min_level = $access[$i];

@@ -1091,7 +1091,7 @@ class Module_admin_newsletter extends Standard_crud_module
                                 'TITLE' => $temp[1],
                                 'CONTENT' => $temp[0],
                                 'THUMBNAIL' => array_key_exists(2, $temp) ? $temp[2] : ''
-                            ));
+                            ), null, false, null, '.txt', 'text');
                             $automatic[$last_find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
                             $i++;
                         }
@@ -1124,7 +1124,7 @@ class Module_admin_newsletter extends Standard_crud_module
                     continue;
                 }
                 if (!$temp[0]->is_empty()) {
-                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '64c8870e7c75354c07b2e94f299cd38c', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
+                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '64c8870e7c75354c07b2e94f299cd38c', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]), null, false, null, '.txt', 'text');
                     $automatic[$find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
                     $i++;
                 }
@@ -1134,7 +1134,7 @@ class Module_admin_newsletter extends Standard_crud_module
                     continue;
                 }
                 if (!$temp[0]->is_empty()) {
-                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '8d1e7f448d11853b675a0949b8a0c2c9', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]));
+                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '8d1e7f448d11853b675a0949b8a0c2c9', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]), null, false, null, '.txt', 'text');
                     $automatic[$last_find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
                     $i++;
                 }
@@ -1145,7 +1145,7 @@ class Module_admin_newsletter extends Standard_crud_module
         foreach ($automatic as $tp) {
             $_automatic .= $tp;
         }
-        $completed = do_template('NEWSLETTER_WHATSNEW_FCOMCODE', array('_GUID' => '20f6adc244b04d9e5206682ec4e0cc0f', 'CONTENT' => $_automatic));
+        $completed = do_template('NEWSLETTER_WHATSNEW_FCOMCODE', array('_GUID' => '20f6adc244b04d9e5206682ec4e0cc0f', 'CONTENT' => $_automatic), null, false, null, '.txt', 'text');
         return $completed->evaluate($lang);
     }
 
@@ -1248,12 +1248,12 @@ class Module_admin_newsletter extends Standard_crud_module
                     $_existing = get_translated_text($myrow['news'], null, $lang);
                 }
             }
-            $existing = do_template('NEWSLETTER_DEFAULT_FCOMCODE', array('_GUID' => '53c02947915806e519fe14c318813f42', 'CONTENT' => $_existing, 'LANG' => $lang, 'SUBJECT' => $default_subject));
+            $existing = do_template('NEWSLETTER_DEFAULT_FCOMCODE', array('_GUID' => '53c02947915806e519fe14c318813f42', 'CONTENT' => $_existing, 'LANG' => $lang, 'SUBJECT' => $default_subject), null, false, null, '.txt', 'text');
         } else {
-            $default = do_template('NEWSLETTER_DEFAULT_FCOMCODE', array('_GUID' => '53c02947915806e519fe14c318813f44', 'CONTENT' => $_existing, 'LANG' => $lang, 'SUBJECT' => $default_subject));
+            $default = do_template('NEWSLETTER_DEFAULT_FCOMCODE', array('_GUID' => '53c02947915806e519fe14c318813f44', 'CONTENT' => $_existing, 'LANG' => $lang, 'SUBJECT' => $default_subject), null, false, null, '.txt', 'text');
             if (strpos($default->evaluate(), '<html') !== false && strpos($_existing, '<html') === false) { // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
                 if ($comcode_given) {
-                    $default = do_template('NEWSLETTER_DEFAULT_FCOMCODE', array('_GUID' => '53c02947915806e519fe14c318813f46', 'CONTENT' => comcode_to_tempcode($_existing), 'LANG' => $lang, 'SUBJECT' => $default_subject));
+                    $default = do_template('NEWSLETTER_DEFAULT_FCOMCODE', array('_GUID' => '53c02947915806e519fe14c318813f46', 'CONTENT' => comcode_to_tempcode($_existing), 'LANG' => $lang, 'SUBJECT' => $default_subject), null, false, null, '.txt', 'text');
                 }
                 $existing = $default;
             } else {

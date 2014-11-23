@@ -120,8 +120,8 @@ class Module_admin_occle
     public function run()
     {
         require_code('occle');
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_occle');
+        require_javascript('ajax');
+        require_javascript('occle');
         require_css('occle');
 
         return $this->main_gui();

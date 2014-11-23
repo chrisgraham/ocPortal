@@ -8,16 +8,18 @@
 */
 
 /**
- * @license        http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright    ocProducts Ltd
- * @package        ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 $d = opendir('.');
 $one = false;
 while (($file = readdir($d)) !== false) {
     if (substr($file, -4) == '.png') {
-        if ($one) echo ',';
+        if ($one) {
+            echo ',';
+        }
         $one = true;
         echo $file;
     }

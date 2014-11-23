@@ -137,9 +137,9 @@ After installing this addon your shout box will essentially be treated as an emb
         return array(
             'sources_custom/hooks/systems/addon_registry/oc_super_shout.php',
             'data_custom/messages.php',
-            'themes/default/templates_custom/JAVASCRIPT_SHAKE.tpl',
-            'themes/default/templates_custom/JAVASCRIPT_SHOUTBOX.tpl',
-            'themes/default/templates_custom/JAVASCRIPT_TEXT_GHOSTS.tpl',
+            'themes/default/javascript_custom/shake.js',
+            'themes/default/javascript_custom/shoutbox.js',
+            'themes/default/javascript_custom/text_ghosts.js',
             'sources_custom/blocks/side_shoutbox.php',
             'themes/default/templates_custom/BLOCK_SIDE_SHOUTBOX.tpl',
             'themes/default/css_custom/shoutbox.css',

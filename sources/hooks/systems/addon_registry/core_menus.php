@@ -137,13 +137,13 @@ class Hook_addon_registry_core_menus
             'themes/default/templates/MENU_SPACER_sitemap.tpl',
             'themes/default/templates/MENU_SPACER_tree.tpl',
             'themes/default/templates/MENU_SPACER_mobile.tpl',
-            'themes/default/templates/JAVASCRIPT_MENU_POPUP.tpl',
-            'themes/default/templates/JAVASCRIPT_MENU_SITEMAP.tpl',
+            'themes/default/javascript/menu_popup.js',
+            'themes/default/javascript/menu_sitemap.js',
             'themes/default/templates/MENU_STAFF_LINK.tpl',
             'themes/default/templates/MENU_EDITOR_BRANCH.tpl',
             'themes/default/templates/MENU_EDITOR_SCREEN.tpl',
             'themes/default/templates/MENU_EDITOR_BRANCH_WRAP.tpl',
-            'themes/default/templates/JAVASCRIPT_MENU_EDITOR.tpl',
+            'themes/default/javascript/menu_editor.js',
             'themes/default/templates/BLOCK_MENU.tpl',
             'themes/default/templates/MENU_LINK_PROPERTIES.tpl',
             'adminzone/pages/modules/admin_menus.php',
@@ -280,7 +280,7 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__page_link_chooser()
     {
-        require_javascript('javascript_tree_list');
+        require_javascript('tree_list');
         return array(
             lorem_globalise(
                 do_lorem_template('PAGE_LINK_CHOOSER', array(

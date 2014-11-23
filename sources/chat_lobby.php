@@ -30,9 +30,9 @@ function enter_chat_lobby()
     require_css('chat');
     require_lang('chat');
     require_code('chat');
-    require_javascript('javascript_ajax');
-    require_javascript('javascript_chat');
-    require_javascript('javascript_sound');
+    require_javascript('ajax');
+    require_javascript('chat');
+    require_javascript('sound');
 
     if ((!array_key_exists(get_member(), get_chatters_in_room(null))) && (!is_invisible())) {
         $GLOBALS['SITE_DB']->query_insert('chat_active', array('member_id' => get_member(), 'date_and_time' => time(), 'room_id' => null));

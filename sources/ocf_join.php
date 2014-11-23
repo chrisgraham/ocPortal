@@ -104,7 +104,7 @@ function ocf_join_form($url, $captcha_if_enabled = true, $intro_message_if_enabl
 
     $submit_name = do_lang_tempcode('PROCEED');
 
-    require_javascript('javascript_ajax');
+    require_javascript('ajax');
 
     $script = find_script('username_check');
     $javascript = "

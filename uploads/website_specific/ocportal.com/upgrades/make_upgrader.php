@@ -9,9 +9,9 @@
 */
 
 /**
- * @license        http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright    ocProducts Ltd
- * @package        ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 /* Returns triple: PATH or NULL if critical error, NULL or error string if error */
@@ -24,15 +24,21 @@ function make_upgrade_get_path($from_version, $to_version)
         return array(null, $err);
     }
 
-    if ($from_version == '..') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT', 'from version'));
-    if ($to_version == '..') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT', 'from version'));
+    if ($from_version == '..') {
+        warn_exit(do_lang_tempcode('NO_PARAMETER_SENT', 'from version'));
+    }
+    if ($to_version == '..') {
+        warn_exit(do_lang_tempcode('NO_PARAMETER_SENT', 'from version'));
+    }
 
     if ($from_version == $to_version) {
         $err = 'Put in the version number you are upgrading <strong>from</strong>, not to. Then a specialised upgrade file will be generated for you.';
         return array(null, $err);
     }
 
-    if (function_exists('set_time_limit')) @set_time_limit(0);
+    if (function_exists('set_time_limit')) {
+        @set_time_limit(0);
+    }
     require_code('tar');
     require_code('m_zip');
 
@@ -52,16 +58,19 @@ function make_upgrade_get_path($from_version, $to_version)
         return array(null, $err);
     }
     $new_download_row = find_download($to_version);
-    if (is_null($new_download_row)) return array(null, escape_html('Could not find version ' . $to_version . ' in the download database'));
+    if (is_null($new_download_row)) {
+        return array(null, escape_html('Could not find version ' . $to_version . ' in the download database'));
+    }
     $mtime = $new_download_row['add_date'];
-    if (!is_null($new_download_row['edit_date'])) $mtime = $new_download_row['edit_date'];
+    if (!is_null($new_download_row['edit_date'])) {
+        $mtime = $new_download_row['edit_date'];
+    }
 
     // Exists already
     if (file_exists($tar_path)) {
         if (filemtime($tar_path) > $mtime) {
             return array($tar_path, $err);
-        } else // Outdated
-        {
+        } else { // Outdated
             unlink($tar_path);
         }
     }
@@ -74,13 +83,17 @@ function make_upgrade_get_path($from_version, $to_version)
     // Unzip old
     if (!is_null($old_download_row)) {
         @mkdir($old_base_path, 0777);
-        if (!url_is_local($old_download_row['url'])) return array(null, escape_html('Non-local URL found (' . $old_download_row['url'] . '). Unexpected.'));
+        if (!url_is_local($old_download_row['url'])) {
+            return array(null, escape_html('Non-local URL found (' . $old_download_row['url'] . '). Unexpected.'));
+        }
         recursive_unzip(get_file_base() . '/' . rawurldecode($old_download_row['url']), $old_base_path);
     }
 
     // Unzip new
     @mkdir($new_base_path, 0777);
-    if (!url_is_local($new_download_row['url'])) return array(null, escape_html('Non-local URL found (' . $new_download_row['url'] . '). Unexpected.'));
+    if (!url_is_local($new_download_row['url'])) {
+        return array(null, escape_html('Non-local URL found (' . $new_download_row['url'] . '). Unexpected.'));
+    }
     recursive_unzip(get_file_base() . '/' . rawurldecode($new_download_row['url']), $new_base_path);
 
     // Make actual upgrader
@@ -132,8 +145,7 @@ function load_download_rows()
 {
     global $DOWNLOAD_ROWS;
     if (!isset($DOWNLOAD_ROWS)) {
-        if (get_param_integer('test_mode', 0) == 1) // Test data
-        {
+        if (get_param_integer('test_mode', 0) == 1) { // Test data
             $DOWNLOAD_ROWS = array(
                 array('id' => 20, 'nice_title' => 'ocPortal Version 3.0', 'add_date' => time() - 60 * 60 * 8, 'edit_date' => null, 'url' => 'uploads/downloads/test.zip', 'nice_description' => '[Test message] This is 3. Yo peeps. 3.1 is the biz.'),
                 array('id' => 30, 'nice_title' => 'ocPortal Version 3.1', 'add_date' => time() - 60 * 60 * 5, 'edit_date' => null, 'url' => 'uploads/downloads/test.zip', 'nice_description' => '[Test message] This is 3.1.1. 3.1.1 is out dudes.'),
@@ -164,7 +176,9 @@ function recursive_unzip($zip_path, $unzip_path)
                 $out_file = fopen($unzip_path . '/' . $entry_name, 'wb');
                 while (true) {
                     $it = zip_entry_read($entry, 1024);
-                    if (($it === false) || ($it == '')) break;
+                    if (($it === false) || ($it == '')) {
+                        break;
+                    }
                     fwrite($out_file, $it);
                 }
                 zip_entry_close($entry);
@@ -183,7 +197,9 @@ function make_upgrader_do_dir($build_path, $new_base_path, $old_base_path, $dir 
     while (($file = readdir($dh)) !== false) {
         $is_dir = is_dir($new_base_path . '/' . $dir . $file);
 
-        if (should_ignore_file($pretend_dir . $file, IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_VOLATILE | IGNORE_BUNDLED_UNSHIPPED_VOLATILE, 0)) continue;
+        if (should_ignore_file($pretend_dir . $file, IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_VOLATILE | IGNORE_BUNDLED_UNSHIPPED_VOLATILE, 0)) {
+            continue;
+        }
 
         if ($is_dir) {
             @mkdir($build_path . '/' . $pretend_dir . $file, 0777);

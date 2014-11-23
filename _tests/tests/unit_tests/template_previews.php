@@ -53,7 +53,7 @@ class template_previews_test_set extends ocp_test_case
 
         $all_previews = find_all_previews__by_template();
         foreach ($templates as $t) {
-            $this->assertFalse(((!array_key_exists($t, $all_previews)) && (substr($t, 0, 11) != 'JAVASCRIPT_') && ($t != 'JAVASCRIPT.tpl')), 'Missing preview for: ' . $t);
+            $this->assertFalse((!array_key_exists($t, $all_previews)), 'Missing preview for: ' . $t);
         }
 
         @ini_set('ocproducts.type_strictness', '0');

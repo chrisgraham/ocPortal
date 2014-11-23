@@ -1,6 +1,6 @@
-{$REQUIRE_JAVASCRIPT,javascript_jquery}
-{$REQUIRE_JAVASCRIPT,javascript_widget_color}
-{$REQUIRE_JAVASCRIPT,javascript_theme_colours}
+{$REQUIRE_JAVASCRIPT,jquery}
+{$REQUIRE_JAVASCRIPT,widget_color}
+{$REQUIRE_JAVASCRIPT,theme_colours}
 {$REQUIRE_CSS,widget_color}
 
 {+START,IF,{RAW_FIELD}}

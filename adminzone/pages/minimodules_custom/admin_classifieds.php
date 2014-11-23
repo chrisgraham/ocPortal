@@ -16,7 +16,7 @@
 require_lang('classifieds');
 require_lang('catalogues');
 
-require_javascript('javascript_validation');
+require_javascript('validation');
 
 // Handle result, if set
 if (count($_POST) != 0) {

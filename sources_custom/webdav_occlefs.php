@@ -13,6 +13,8 @@
  * @package    webdav
  */
 
+/*CQC: No check*/
+
 namespace webdav_occlefs {
     /**
      * Base node-class

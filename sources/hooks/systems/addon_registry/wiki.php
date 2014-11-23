@@ -346,7 +346,7 @@ class Hook_addon_registry_wiki
      */
     public function tpl_preview__wiki_posting_screen()
     {
-        require_javascript('javascript_validation');
+        require_javascript('validation');
         require_lang('comcode');
 
         require_css('forms');

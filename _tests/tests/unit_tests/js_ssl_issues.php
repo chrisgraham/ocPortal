@@ -26,10 +26,10 @@ class js_ssl_issues_test_set extends ocp_test_case
     public function testSSLIssues()
     {
         $templates = array();
-        $path = get_file_base() . '/themes/default/templates';
+        $path = get_file_base() . '/themes/default/javascript';
         $dh = opendir($path);
         while (($f = readdir($dh)) !== false) {
-            if ((strtolower(substr($f, -4)) == '.tpl') && (substr($f, 0, 10) == 'JAVASCRIPT')) {
+            if (strtolower(substr($f, -3)) == '.js') {
                 $file = file_get_contents($path . '/' . $f);
 
                 $matches = array();

@@ -1,7 +1,7 @@
 {$SET,RAND_ID_SHOCKER,rand{$RAND}}
 
-{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
-{$REQUIRE_JAVASCRIPT,javascript_pulse}
+{$REQUIRE_JAVASCRIPT,dyn_comcode}
+{$REQUIRE_JAVASCRIPT,pulse}
 
 <div class="shocker">
 	<div class="shocker_left" id="comcodeshocker{$GET,RAND_ID_SHOCKER}_left"></div>

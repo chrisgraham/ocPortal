@@ -524,12 +524,12 @@ function placeholder_breadcrumbs()
  * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
  * @param  string                       File type suffix of template file (e.g. .tpl)
  * @param  string                       Subdirectory type to look in
- * @set    templates css
+ * @set    templates css javascript xml text
  * @return tempcode                     The tempcode for this template
  */
-function do_lorem_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $type = 'templates')
+function do_lorem_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $directory = 'templates')
 {
-    return do_template($codename, $parameters, $lang, $light_error, $fallback, $suffix, $type);
+    return do_template($codename, $parameters, $lang, $light_error, $fallback, $suffix, $directory);
 }
 
 /**
@@ -565,7 +565,7 @@ function lorem_globalise($middle, $message = null, $type = '', $include_header_a
 /**
  * Get an array of emoticons.
  *
- * @return array                        emoticons
+ * @return array                        Emoticons
  */
 function placeholder_emoticons()
 {
@@ -592,7 +592,7 @@ function placeholder_emoticons()
 /**
  * Get an avatar image.
  *
- * @return URLPATH                      image
+ * @return URLPATH                      Image
  */
 function placeholder_avatar()
 {
@@ -602,7 +602,7 @@ function placeholder_avatar()
 /**
  * Get a table of emoticons.
  *
- * @return tempcode                     emotocons
+ * @return tempcode                     Emoticons
  */
 function placeholder_emoticon_chooser()
 {
@@ -868,8 +868,8 @@ function render_screen_preview($template, $hook, $function)
             require_css(basename($file, '.css'));
         }
 
-        if ((substr($file, -4) == '.tpl') && (substr($file, 0, 7) == 'themes/') && (substr($file, 0, 11) == 'JAVASCRIPT_') && ($file != 'JAVASCRIPT_NEED.tpl') && ($file != 'JAVASCRIPT_NEED_INLINE.tpl')) {
-            require_javascript(strtolower(basename($file, '.tpl')));
+        if ((substr($file, -3) == '.js') && (substr($file, 0, 7) == 'themes/')) {
+            require_javascript(strtolower(basename($file, '.js')));
         }
     }
     $temp_name = substr($template, 0, -4);
@@ -902,44 +902,45 @@ function render_screen_preview($template, $hook, $function)
 }
 
 /**
- * Get an additional list of templates that should be treated as text.
+ * Get an additional list of templates that should be previewed as text.
  *
  * @return array                        The list of templates
  */
 function get_text_templates()
 {
     $text_templates = array(
-        'JS_BLOCK',
-        'CSS_NEED',
-        'CSS_NEED_FULL',
-        'CSS_NEED_INLINE',
-        'WYSIWYG_LOAD',
-        'JAVASCRIPT_NEED',
-        'JAVASCRIPT_NEED_INLINE',
-        'AJAX_PAGINATION',
-        'JAVA_DETECT',
-        'JS_REFRESH',
-        'META_REFRESH_LINE',
-        'OCF_AUTO_TIME_ZONE_ENTRY',
-        'PREVIEW_SCRIPT_CODE',
-        'QUICK_JS_LOADER',
-        'TRACKBACK_XML_WRAPPER',
-        'HANDLE_CONFLICT_RESOLUTION',
-        'TRACKBACK_XML',
-        'POLL_RSS_SUMMARY',
-        'WYSIWYG_SETTINGS',
-        'ATTACHMENT_UI_DEFAULTS',
-        'FONT_SIZER',
-        'FORM_SCREEN_FIELD_DESCRIPTION',
-        'FORM_SCREEN_ARE_REQUIRED',
-        'GALLERY_POPULAR',
-        'AUTOCOMPLETE_LOAD',
+        'templates/JS_BLOCK.tpl',
+        'templates/CSS_NEED.tpl',
+        'templates/CSS_NEED_FULL.tpl',
+        'templates/CSS_NEED_INLINE.tpl',
+        'templates/WYSIWYG_LOAD.tpl',
+        'templates/JAVASCRIPT_NEED.tpl',
+        'templates/JAVASCRIPT_NEED_INLINE.tpl',
+        'templates/AJAX_PAGINATION.tpl',
+        'templates/JS_REFRESH.tpl',
+        'templates/META_REFRESH_LINE.tpl',
+        'templates/OCF_AUTO_TIME_ZONE_ENTRY.tpl',
+        'templates/PREVIEW_SCRIPT_CODE.tpl',
+        'templates/TRACKBACK_XML_WRAPPER.tpl',
+        'templates/HANDLE_CONFLICT_RESOLUTION.tpl',
+        'templates/TRACKBACK_XML.tpl',
+        'templates/POLL_RSS_SUMMARY.tpl',
+        'templates/FONT_SIZER.tpl',
+        'templates/FORM_SCREEN_FIELD_DESCRIPTION.tpl',
+        'templates/FORM_SCREEN_ARE_REQUIRED.tpl',
+        'templates/GALLERY_POPULAR.tpl',
+
+        // In header, and uses IDs, so can't be used except in isolation
+        'templates/BLOCK_TOP_NOTIFICATIONS.tpl',
+        'templates/MENU_BRANCH_zone.tpl',
+        'templates/MENU_SPACER_zone.tpl',
+        'templates/MENU_zone.tpl',
     );
     return $text_templates;
 }
 
 /**
- * Checks if the template is a text template
+ * Checks if the template is to be previewed as a text template
  *
  * @param  string                       Name of the template
  * @return boolean                      Whether it is
@@ -947,19 +948,6 @@ function get_text_templates()
 function is_plain_text_template($temp_name)
 {
     return (
-        $temp_name == 'BLOCK_TOP_NOTIFICATIONS' || $temp_name == 'MENU_BRANCH_zone' || $temp_name == 'MENU_SPACER_zone' || $temp_name == 'MENU_zone' || // In header, and uses IDs, so can't be used except in isolation
-        substr($temp_name, 0, 5) == 'MAIL_' ||
-        substr($temp_name, 0, 11) == 'JAVASCRIPT_' && $temp_name != 'JAVASCRIPT_NEED' && $temp_name != 'JAVASCRIPT_NEED_INLINE' ||
-        $temp_name == 'JAVASCRIPT.tpl' ||
-        substr($temp_name, -9) === '_FCOMCODE' ||
-        substr($temp_name, -5) === '_MAIL' ||
-        substr($temp_name, -13) === '_FCOMCODEPAGE' ||
-        substr($temp_name, 0, 14) == 'TRACKBACK_XML_' ||
-        $temp_name == 'OPENSEARCH' ||
-        $temp_name == 'WYSIWYG_SETTINGS' ||
-        $temp_name == 'ATTACHMENT_UI_DEFAULTS' ||
-        substr($temp_name, 0, 5) == 'OPML_' ||
-        substr($temp_name, 0, 5) == 'ATOM_' || substr($temp_name, 0, 4) == 'RSS_' ||
         in_array($temp_name, get_text_templates())
     );
 }
@@ -979,10 +967,10 @@ function is_full_screen_template($temp_name = null, $tempcode = null)
     }
 
     return (
-        $temp_name == 'GLOBAL_HTML_WRAP' ||
-        $temp_name == 'RESTORE_HTML_WRAP' ||
-        $temp_name == 'BASIC_HTML_WRAP' ||
-        $temp_name == 'STANDALONE_HTML_WRAP' ||
-        $temp_name == 'MAIL'
+        $temp_name == 'templates/GLOBAL_HTML_WRAP.tpl' ||
+        $temp_name == 'templates/RESTORE_HTML_WRAP.tpl' ||
+        $temp_name == 'templates/BASIC_HTML_WRAP.tpl' ||
+        $temp_name == 'templates/STANDALONE_HTML_WRAP.tpl' ||
+        $temp_name == 'templates/MAIL.tpl'
     );
 }

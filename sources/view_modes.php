@@ -146,10 +146,10 @@ function special_page_types($special_page_type, &$out, $out_evaluated)
             }
         }
         foreach (array_unique($RECORDED_TEMPLATES_USED) as $name) {
-            $search = find_template_place($name, get_site_default_lang(), $GLOBALS['FORUM_DRIVER']->get_theme(), '.tpl', 'templates');
+            $search = find_template_place(basename($name, '.' . get_file_extension($name)), get_site_default_lang(), $GLOBALS['FORUM_DRIVER']->get_theme(), '.' . get_file_extension($name), dirname($name));
             if (!is_null($search)) {
                 list($theme, $type) = $search;
-                $txtmte_url = 'txmt://open?url=file://' . get_file_base() . '/themes/' . $theme . '/' . $type . '/' . $name . '.tpl';
+                $txtmte_url = 'txmt://open?url=file://' . get_file_base() . '/themes/' . $theme . '/' . $type . '/' . basename($name);
                 $file_links->attach(do_template('INDEX_SCREEN_ENTRY', array('_GUID' => 'c2a5f66b9d6564b30c506afafd59b676', 'DISPLAY_STRING' => '(Templates)', 'URL' => $txtmte_url, 'NAME' => $name . '.tpl')));
             }
         }
@@ -208,7 +208,7 @@ function special_page_types($special_page_type, &$out, $out_evaluated)
                 if ((get_option('google_translate_api_key') == '') || (user_lang() == get_site_default_lang())) {
                     $actions = new Tempcode();
                 } else {
-                    require_javascript('javascript_translate');
+                    require_javascript('translate');
                     $actions = do_template('TRANSLATE_ACTION', array('_GUID' => '441cd96588b2a4f74e94003643262833', 'LANG_FROM' => get_site_default_lang(), 'LANG_TO' => user_lang(), 'NAME' => 'trans_' . strval($key), 'OLD' => $value_found));
                 }
                 $description->attach($actions);
@@ -251,7 +251,7 @@ function special_page_types($special_page_type, &$out, $out_evaluated)
                 if ((get_option('google_translate_api_key') == '') || (user_lang() == get_site_default_lang())) {
                     $actions = new Tempcode();
                 } else {
-                    require_javascript('javascript_translate');
+                    require_javascript('translate');
                     $actions = do_template('TRANSLATE_ACTION', array('_GUID' => '031eb918cb3bcaf4339130b46f8b1b8a', 'LANG_FROM' => get_site_default_lang(), 'LANG_TO' => user_lang(), 'NAME' => 'l_' . $key, 'OLD' => str_replace('\n', "\n", $value_found)));
                 }
                 $description->attach($actions);
@@ -279,8 +279,7 @@ function special_page_types($special_page_type, &$out, $out_evaluated)
             $_RECORDED_TEMPLATES_USED = array_count_values($RECORDED_TEMPLATES_USED);
             ksort($_RECORDED_TEMPLATES_USED);
             foreach ($_RECORDED_TEMPLATES_USED as $name => $count) {
-                $file = $name . '.tpl';
-                $edit_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $GLOBALS['FORUM_DRIVER']->get_theme(), 'f0file' => $file), 'adminzone', null, false, true);
+                $edit_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $GLOBALS['FORUM_DRIVER']->get_theme(), 'f0file' => $name), 'adminzone', null, false, true);
                 $templates->attach(do_template('TEMPLATE_LIST_ENTRY', array('_GUID' => '67fb5ac96a4ab2103ae82f9be7c43e24', 'COUNT' => integer_format($count), 'NAME' => $name, 'EDIT_URL' => $edit_url)));
             }
         } else {
@@ -337,34 +336,6 @@ function special_page_types($special_page_type, &$out, $out_evaluated)
     $echo->evaluate_echo();
 
     exit();
-}
-
-/**
- * Finds the path of the given template codename.
- *
- * @param  ID_TEXT                      The template codename
- * @return ?PATH                        A path (null: no such template)
- */
-function find_template_path($name)
-{
-    $theme = $GLOBALS['FORUM_DRIVER']->get_theme();
-    $restore_from = null;
-    $_codename = $name;
-    $tries = array(get_custom_file_base() . '/themes/' . $theme . '/templates_custom/' . $_codename,
-        get_custom_file_base() . '/themes/' . $theme . '/templates/' . $_codename,
-        get_file_base() . '/themes/' . 'default' . '/templates_custom/' . $_codename,
-        get_file_base() . '/themes/' . 'default' . '/templates/' . $_codename,
-        get_custom_file_base() . '/themes/' . $theme . '/templates_custom/' . $name,
-        get_custom_file_base() . '/themes/' . $theme . '/templates/' . $name,
-        get_file_base() . '/themes/' . 'default' . '/templates_custom/' . $name,
-        get_file_base() . '/themes/' . 'default' . '/templates/' . $name);
-    foreach ($tries as $try) {
-        $restore_from = $try . '.tpl';
-        if (is_file($try . '.tpl')) {
-            break;
-        }
-    }
-    return $restore_from;
 }
 
 /**

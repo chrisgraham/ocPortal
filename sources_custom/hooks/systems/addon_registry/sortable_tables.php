@@ -139,7 +139,7 @@ We will automatically detect what columns can be filtered, how to sort each colu
         return array(
             'sources_custom/hooks/systems/addon_registry/sortable_tables.php',
             'lang_custom/EN/sortable_tables.ini',
-            'themes/default/templates_custom/JAVASCRIPT_SORTABLE_TABLES.tpl',
+            'themes/default/javascript_custom/sortable_tables.js',
             'themes/default/templates_custom/SORTABLE_TABLE.tpl',
             'themes/default/templates_custom/SORTABLE_TABLE_ROW.tpl',
             'themes/default/css_custom/sortable_tables.css',

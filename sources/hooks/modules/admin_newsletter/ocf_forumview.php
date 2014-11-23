@@ -71,7 +71,7 @@ class Hook_whatsnew_ocf_forumview
                 $url = $_url->evaluate();
                 $name = $row['t_cache_first_title'];
                 $member_id = (is_guest($row['t_cache_first_member_id'])) ? null : strval($row['t_cache_first_member_id']);
-                $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '14a328f973ac44eb54aa9b31e5a4ae34', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'CONTENT_TYPE' => 'topic', 'CONTENT_ID' => strval($id))));
+                $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '14a328f973ac44eb54aa9b31e5a4ae34', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'CONTENT_TYPE' => 'topic', 'CONTENT_ID' => strval($id)), null, false, null, '.txt', 'text'));
             }
         }
 

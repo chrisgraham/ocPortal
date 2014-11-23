@@ -26,9 +26,9 @@
 				</div>
 			</form>
 
-			{$REQUIRE_JAVASCRIPT,javascript_ajax}
-			{$REQUIRE_JAVASCRIPT,javascript_validation}
-			{$REQUIRE_JAVASCRIPT,javascript_staff}
+			{$REQUIRE_JAVASCRIPT,ajax}
+			{$REQUIRE_JAVASCRIPT,validation}
+			{$REQUIRE_JAVASCRIPT,staff}
 		</div>
 	</section>
 </div>

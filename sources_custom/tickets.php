@@ -2,24 +2,23 @@
 
 function get_ocportal_support_timings_wrap($open, $topic_id, $ticket_type_name, $say_more = false)
 {
-	$posts = $GLOBALS['FORUM_DB']->query_select('f_posts', array('p_poster', 'p_time'), array('p_topic_id' => $topic_id), 'ORDER BY p_time DESC,id DESC');
-	$most_recent_post = null;
-	foreach ($posts as $post)
-	{
-		if (!has_privilege($post['p_poster'], 'support_operator')) {
-			$most_recent_post = $post;
-			// Don't break, their first unanswered query may be further back
-		} else {
-			if (is_null($most_recent_post)) {
-				$most_recent_post = $post; // Ok, most recent was staff
-			}
-			break; // Okay, the furthest back unanswered/answer post was the one in $most_recent_post
-		}
-	}
+    $posts = $GLOBALS['FORUM_DB']->query_select('f_posts', array('p_poster', 'p_time'), array('p_topic_id' => $topic_id), 'ORDER BY p_time DESC,id DESC');
+    $most_recent_post = null;
+    foreach ($posts as $post) {
+        if (!has_privilege($post['p_poster'], 'support_operator')) {
+            $most_recent_post = $post;
+            // Don't break, their first unanswered query may be further back
+        } else {
+            if (is_null($most_recent_post)) {
+                $most_recent_post = $post; // Ok, most recent was staff
+            }
+            break; // Okay, the furthest back unanswered/answer post was the one in $most_recent_post
+        }
+    }
 
-	$member_id = $most_recent_post['p_poster'];
-	$last_time = $most_recent_post['p_time'];
-	return get_ocportal_support_timings($open, $member_id, $ticket_type_name, $last_time, $say_more);
+    $member_id = $most_recent_post['p_poster'];
+    $last_time = $most_recent_post['p_time'];
+    return get_ocportal_support_timings($open, $member_id, $ticket_type_name, $last_time, $say_more);
 }
 
 function get_ocportal_support_timings($open, $member_id, $ticket_type_name, $last_time, $say_more = false)

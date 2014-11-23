@@ -161,7 +161,7 @@ class Hook_addon_registry_ocf_forum
             'themes/default/templates/OCF_FORUM_INTRO_QUESTION_POPUP.tpl',
             'themes/default/templates/OCF_MEMBER_PT_RULES_SCREEN.tpl',
             'themes/default/templates/OCF_PT_BETWEEN.tpl',
-            'themes/default/templates/JAVASCRIPT_OCF_FORUM.tpl',
+            'themes/default/javascript/ocf_forum.js',
             'themes/default/templates/BLOCK_MAIN_OCF_INVOLVED_TOPICS.tpl',
             'themes/default/templates/OCF_VFORUM_FILTERING.tpl',
             'forum/rules.php',
@@ -200,7 +200,7 @@ class Hook_addon_registry_ocf_forum
             'themes/default/templates/OCF_POSTER_GUEST.tpl',
             'themes/default/templates/OCF_POSTER_MEMBER.tpl',
             'themes/default/templates/OCF_POSTING_SCREEN_POSTS.tpl',
-            'themes/default/templates/OCF_QUOTE_FCOMCODE.tpl',
+            'themes/default/text/OCF_QUOTE_FCOMCODE.txt',
             'themes/default/templates/BLOCK_MAIN_BOTTOM_BAR.tpl',
             'themes/default/templates/OCF_FORUM_TOPIC_EMOTICON.tpl',
             'themes/default/templates/OCF_FORUM_TOPIC_EMOTICON_NONE.tpl',
@@ -407,7 +407,7 @@ class Hook_addon_registry_ocf_forum
             'OCF_FORUM_SCREEN.tpl' => 'ocf_forum',
             'OCF_VFORUM_SCREEN.tpl' => 'ocf_vforum',
             'OCF_WHISPER_CHOICE_SCREEN.tpl' => 'ocf_whisper_choice_screen',
-            'OCF_QUOTE_FCOMCODE.tpl' => 'ocf_quote_fcomcode',
+            'OCF_QUOTE_FCOMCODE.txt' => 'ocf_quote_fcomcode',
             'OCF_MEMBER_PT_RULES_SCREEN.tpl' => 'ocf_member_pt_rules_screen',
             'OCF_POSTING_SCREEN_POSTS.tpl' => 'ocf_posting_screen_posts',
             'OCF_TOPIC_FIRST_UNREAD.tpl' => 'ocf_topic_screen',
@@ -1302,7 +1302,7 @@ class Hook_addon_registry_ocf_forum
                 'POST' => lorem_phrase(),
                 'BY' => lorem_phrase(),
                 'BY_ID' => placeholder_id(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 

@@ -106,7 +106,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
         $this->edit_text = do_lang_tempcode('GROUP_TEXT');
 
         if ($type == 'ad') {
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript .= "
                     var form=document.getElementById('main_form');

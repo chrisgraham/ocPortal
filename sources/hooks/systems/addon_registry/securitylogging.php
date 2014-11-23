@@ -112,7 +112,7 @@ class Hook_addon_registry_securitylogging
             'themes/default/templates/SECURITY_SCREEN.tpl',
             'themes/default/templates/SECURITY_ALERT_SCREEN.tpl',
             'adminzone/pages/modules/admin_security.php',
-            'themes/default/templates/HACK_ATTEMPT_MAIL.tpl',
+            'themes/default/text/HACK_ATTEMPT_MAIL.txt',
             'adminzone/pages/modules/admin_ip_ban.php',
             'lang/EN/lookup.ini',
             'lang/EN/security.ini',
@@ -133,7 +133,7 @@ class Hook_addon_registry_securitylogging
         return array(
             'SECURITY_SCREEN.tpl' => 'administrative__security_screen',
             'SECURITY_ALERT_SCREEN.tpl' => 'administrative__security_alert_screen',
-            'HACK_ATTEMPT_MAIL.tpl' => 'administrative__hack_attempt_mail',
+            'HACK_ATTEMPT_MAIL.txt' => 'administrative__hack_attempt_mail',
             'IP_BAN_SCREEN.tpl' => 'ip_ban_screen',
             'LOOKUP_IP_LIST_ENTRY.tpl' => 'administrative__lookup_screen',
             'LOOKUP_IP_LIST_GROUP.tpl' => 'administrative__lookup_screen',
@@ -187,7 +187,7 @@ class Hook_addon_registry_securitylogging
                 'TIME' => placeholder_date(),
                 'URL' => placeholder_url(),
                 'POST' => lorem_phrase(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 

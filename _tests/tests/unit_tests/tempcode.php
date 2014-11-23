@@ -31,7 +31,7 @@ class tempcode_test_set extends ocp_test_case
             'PASSED' => 'This is a passed parameter',
             'SIMPLE_ARRAY' => array('1', '2', '3'),
             'ARRAY' => array(array('a' => 'A1', 'b' => 'B1', 'c' => 'C1'), array('a' => 'A2', 'b' => 'B2', 'c' => 'C2'), array('a' => 'A3', 'b' => 'B3', 'c' => 'C3'), array('a' => 'A4', 'b' => 'B4', 'c' => 'C4')),
-        ));
+        ), null, false, null, '.txt', 'text');
         $got = $tpl->evaluate();
         $expected = '<h1>Tempcode tests</h1>
 

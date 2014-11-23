@@ -84,7 +84,7 @@ function init__global2()
     }
 
     // Initialise some globals
-    $JAVASCRIPTS_DEFAULT = array('javascript' => 1, 'javascript_transitions' => 1, 'javascript_modalwindow' => 1, 'javascript_custom_globals' => 1);
+    $JAVASCRIPTS_DEFAULT = array('global' => 1, 'transitions' => 1, 'modalwindow' => 1, 'custom_globals' => 1);
     $JAVASCRIPT_BOTTOM = array();
     $RUNNING_SCRIPT_CACHE = array();
     $BROWSER_DECACHEING_CACHE = null;
@@ -357,14 +357,14 @@ function init__global2()
 
         // Load requirements for admins
         if (has_zone_access(get_member(), 'adminzone')) {
-            $JAVASCRIPTS_DEFAULT['javascript_staff'] = 1;
-            $JAVASCRIPTS_DEFAULT['javascript_ajax'] = 1;
+            $JAVASCRIPTS_DEFAULT['staff'] = 1;
+            $JAVASCRIPTS_DEFAULT['ajax'] = 1;
             if (get_option('bottom_show_occle_button', true) === '1') {
-                $JAVASCRIPTS_DEFAULT['javascript_button_occle'] = 1;
+                $JAVASCRIPTS_DEFAULT['button_occle'] = 1;
             }
         }
         if (get_option('bottom_show_realtime_rain_button', true) === '1') {
-            $JAVASCRIPTS_DEFAULT['javascript_button_realtime_rain'] = 1;
+            $JAVASCRIPTS_DEFAULT['button_realtime_rain'] = 1;
         }
         $JAVASCRIPTS += $JAVASCRIPTS_DEFAULT;
     }
@@ -1679,16 +1679,16 @@ function javascript_enforce($j, $theme = null, $minify = null)
 
     if (($support_smart_decaching) || (!$is_cached)) {
         $_j = strtoupper($j);
-        $found = find_template_place($_j, '', $theme, '.tpl', 'templates');
+        $found = find_template_place($_j, '', $theme, '.js', 'javascript');
         if ($found === null) {
             return '';
         }
         $theme = $found[0];
-        $fullpath = get_custom_file_base() . '/themes/' . $theme . $found[1] . $_j . '.tpl';
+        $fullpath = get_custom_file_base() . '/themes/' . $theme . $found[1] . $_j . '.js';
         if (!is_file($fullpath)) {
-            $fullpath = get_file_base() . '/themes/' . $theme . $found[1] . $_j . '.tpl';
+            $fullpath = get_file_base() . '/themes/' . $theme . $found[1] . $_j . '.js';
         }
-        $globals_custom = str_replace('default/templates/JAVASCRIPT.tpl', filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme()) . '/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl', $fullpath);
+        $globals_custom = str_replace('default/javascript/javascript.js', filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme()) . '/javascript_custom/custom_globals.js', $fullpath);
     }
 
     if ((($support_smart_decaching) && ((@(filemtime($js_cache_path) < filemtime($fullpath)) && (@filemtime($fullpath) < time())) || (@filemtime(get_file_base() . '/_config.php') > @filemtime($js_cache_path)) || ((is_file($globals_custom)) && (@filemtime($globals_custom) > @filemtime($js_cache_path))))) || (!$is_cached)) {
@@ -1720,14 +1720,14 @@ function javascript_tempcode($position = null)
     $grouping_codename = _handle_web_resource_merging('.js', $JAVASCRIPTS, $minify, $https, $mobile);
 
     // Fix order, so our main JavaScript runs first
-    if (isset($JAVASCRIPTS['javascript'])) {
+    if (isset($JAVASCRIPTS['global'])) {
         $arr_backup = $JAVASCRIPTS;
         $JAVASCRIPTS = array();
-        $JAVASCRIPTS[($grouping_codename == '') ? 'javascript' : $grouping_codename] = ($grouping_codename == '') ? 1 : 0;
+        $JAVASCRIPTS[($grouping_codename == '') ? 'global' : $grouping_codename] = ($grouping_codename == '') ? 1 : 0;
         $JAVASCRIPTS += $arr_backup;
     }
 
-    $bottom_ones = array('javascript_staff' => 1, 'javascript_button_occle' => 1, 'javascript_button_realtime_rain' => 1, 'javascript_fractional_edit' => 1, 'javascript_transitions' => 1) + $JAVASCRIPT_BOTTOM; // These are all framework ones that add niceities
+    $bottom_ones = array('staff' => 1, 'button_occle' => 1, 'button_realtime_rain' => 1, 'fractional_edit' => 1, 'transitions' => 1) + $JAVASCRIPT_BOTTOM; // These are all framework ones that add niceities
     foreach ($JAVASCRIPTS as $j => $do_enforce) {
         if ($position !== null) {
             $bottom = (isset($bottom_ones[$j]));
@@ -2114,14 +2114,8 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
             if (($is_guest) || ($is_admin)) {
                 $resources = array_keys($arr);
                 $value = implode(',', $resources) . '::???';
-                if ($type == '.js') {
-                    $value = preg_replace('#(^|,)javascript_#', '${1}', $value); // Shorten
-                }
             }
         }
-    }
-    if (($type == '.js') && ($value !== null)) {
-        $value = preg_replace('#(^|,)(?!javascript)#', '${1}javascript_', $value); // Unshorten
     }
 
     // If set, ensure merged resources file exists, and apply it
@@ -2131,7 +2125,7 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
         }
 
         $_value = explode('::', $value);
-        $resources = ($_value[0] == '' || $_value[0] == 'javascript_') ? array() : explode(',', $_value[0]);
+        $resources = ($_value[0] == '') ? array() : explode(',', $_value[0]);
         $hash = $_value[1];
 
         // Regenerate hash if we support smart decaching, it might have changed and hence we need to do recompiling with a new hash OR this may be the first time ("???" is placeholder)
@@ -2157,9 +2151,6 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
             }
             if ($hash != $old_hash) {
                 $value = implode(',', $resources) . '::' . $hash;
-                if ($type == '.js') {
-                    $value = preg_replace('#(^|,)javascript_#', '${1}', $value); // Shorten
-                }
                 set_value($grouping_codename . $type, $value);
             }
         }

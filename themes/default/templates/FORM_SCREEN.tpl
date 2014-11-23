@@ -13,7 +13,7 @@
 	{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 {+END}
 
-{$REQUIRE_JAVASCRIPT,javascript_validation}
+{$REQUIRE_JAVASCRIPT,validation}
 {+START,IF_NON_PASSED,IFRAME_URL}
 <form {+START,IF_PASSED_AND_TRUE,SUPPORT_AUTOSAVE}autocomplete="off" {+END}title="{!PRIMARY_PAGE_FORM}" id="main_form"{+START,IF_NON_PASSED_OR_FALSE,GET} method="post" action="{URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED_AND_TRUE,GET} method="get" action="{$URL_FOR_GET_FORM*,{URL}}"{+END}{+START,IF_PASSED,TARGET} target="{TARGET*}"{+END}{+START,IF_NON_PASSED,TARGET} target="_top"{+END}{+START,IF_PASSED_AND_TRUE,AUTOCOMPLETE} class="autocomplete"{+END}>
 	{+START,IF_NON_PASSED_OR_FALSE,GET}{$INSERT_SPAMMER_BLACKHOLE}{+END}
@@ -62,7 +62,7 @@
 
 {+START,IF_PASSED_AND_TRUE,SUPPORT_AUTOSAVE}
 	{+START,IF,{$IS_A_COOKIE_LOGIN}}
-		{$REQUIRE_JAVASCRIPT,javascript_posting}
+		{$REQUIRE_JAVASCRIPT,posting}
 		<script type="text/javascript">// <![CDATA[
 			add_event_listener_abstract(window,'load',function() {
 				if (typeof init_form_saving!='undefined') init_form_saving('main_form');

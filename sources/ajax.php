@@ -458,8 +458,8 @@ function comcode_convert_script()
             }
             if (get_param_integer('javascript', 0) == 1) {
                 global $JAVASCRIPTS;
-                unset($JAVASCRIPTS['javascript']);
-                unset($JAVASCRIPTS['javascript_staff']);
+                unset($JAVASCRIPTS['global']);
+                unset($JAVASCRIPTS['staff']);
                 $out .= static_evaluate_tempcode(javascript_tempcode());
             }
         }
@@ -585,16 +585,17 @@ function load_template_script()
 
     $theme = filter_naughty(get_param('theme'));
     $id = filter_naughty(get_param('id'));
+    $directory = filter_naughty(get_param('directory', 'templates'));
 
-    $x = get_custom_file_base() . '/themes/' . $theme . '/templates_custom/' . $id;
+    $x = get_custom_file_base() . '/themes/' . $theme . '/' . $directory . '_custom/' . $id;
     if (!file_exists($x)) {
-        $x = get_file_base() . '/themes/' . $theme . '/templates/' . $id;
+        $x = get_file_base() . '/themes/' . $theme . '/' . $directory . '/' . $id;
     }
     if (!file_exists($x)) {
-        $x = get_custom_file_base() . '/themes/default/templates_custom/' . $id;
+        $x = get_custom_file_base() . '/themes/default/' . $directory . '_custom/' . $id;
     }
     if (!file_exists($x)) {
-        $x = get_file_base() . '/themes/default/templates/' . $id;
+        $x = get_file_base() . '/themes/default/' . $directory . '/' . $id;
     }
     if (file_exists($x)) {
         echo file_get_contents($x);

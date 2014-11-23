@@ -101,8 +101,8 @@ class Block_main_contact_simple
 
         $em = $GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
 
-        require_javascript('javascript_editing');
-        require_javascript('javascript_validation');
+        require_javascript('editing');
+        require_javascript('validation');
 
         $comment_url = get_self_url();
         $email_optional = array_key_exists('email_optional', $map) ? (intval($map['email_optional']) == 1) : true;

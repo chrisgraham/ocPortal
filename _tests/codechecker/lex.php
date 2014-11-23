@@ -297,9 +297,11 @@ function lex($text = null)
                         } else {
                             $line = substr($line, strrpos($line, "\n"));
                         }
-                        $should_be_on_same_line = (preg_match('#^\s*(function|class|public|private|protected|static|abstract|interface) #', $line) != 0);
-                        if ($should_be_on_same_line != $new_line) {
-                            log_warning('Bracing error (opening brace on wrong line) ', $i, true);
+                        if (preg_replace('#\s#', '', $line) == '){') {
+                            $should_not_be_on_same_line = (preg_match('#^\s*(function|class|public|private|protected|static|abstract|interface) #', $line) != 0);
+                            if ($should_not_be_on_same_line != $new_line) {
+                                log_warning('Bracing error (opening brace on wrong line) ', $i, true);
+                            }
                         }
                         if ($indentation % 4 == 0 || strpos($line, '=>') === false) {
                             array_push($brace_stack, $indentation);
@@ -425,7 +427,7 @@ function lex($text = null)
                         }
                     }
 
-                    if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && (in_array($token_found, array('OBJECT_OPERATOR')))) {
+                    if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && ($TEXT[$i_current - 2] != ' ') && (in_array($token_found, array('OBJECT_OPERATOR')))) {
                         log_warning('Superfluous spacing (for ' . $token_found . ') against coding standards', $i, true);
                     }
                     if (($i_current > 0) && (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != ')') && ($TEXT[$i] != "/") && ($TEXT[$i] != "\r")) && (in_array($token_found, array('COMMA', 'COMMAND_TERMINATE')))) {

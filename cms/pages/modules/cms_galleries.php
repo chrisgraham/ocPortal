@@ -192,7 +192,7 @@ class Module_cms_galleries extends Standard_crud_module
         }
 
         if ($type == 'ac') {
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             $script = find_script('snippet');
             $this->cat_crud_module->javascript .= "
                     var form=document.getElementById('main_form');

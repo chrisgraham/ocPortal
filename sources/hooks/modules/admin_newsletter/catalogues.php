@@ -150,7 +150,7 @@ class Hook_whatsnew_catalogues
 
             $member_id = (is_guest($row['ce_submitter'])) ? null : strval($row['ce_submitter']);
 
-            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '4ae604e5d0e9cf4d28e7d811dc4558e5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'CATALOGUE' => $catalogue, 'NAME' => $name, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'catalogue_entry', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '4ae604e5d0e9cf4d28e7d811dc4558e5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'CATALOGUE' => $catalogue, 'NAME' => $name, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'catalogue_entry', 'CONTENT_ID' => strval($id)), null, false, null, '.txt', 'text'));
         }
 
         return array($new, do_lang('CATALOGUE_ENTRIES', '', '', '', $lang));

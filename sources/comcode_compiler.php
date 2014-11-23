@@ -77,7 +77,7 @@ function init__comcode_compiler()
 
     // ALSO:
     // See $non_text_tags list in comcode_renderer.php
-    // See non_text_tags in JAVASCRIPT_EDITING.tpl
+    // See non_text_tags in editing.js
     // See _get_details_comcode_tags function in comcode_add.php
 
     // We're not allowed to specify any of these as entities

@@ -128,8 +128,7 @@ class Module_report_content
             'r_session_id' => get_session_id(),
             'r_content_type' => $content_type,
             'r_content_id' => $content_id,
-        )))
-        ) {
+        )))) {
             warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
         }
 
@@ -207,8 +206,7 @@ class Module_report_content
             'r_session_id' => get_session_id(),
             'r_content_type' => $content_type,
             'r_content_id' => $content_id,
-        )))
-        ) {
+        )))) {
             warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
         }
         list($content_title, , $cma_info, $content_url) = content_get_details($content_type, $content_id);

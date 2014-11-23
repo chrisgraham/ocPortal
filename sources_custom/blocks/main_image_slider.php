@@ -52,8 +52,8 @@ class Block_main_image_slider
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
         require_css('skitter');
-        require_javascript('javascript_jquery');
-        require_javascript('javascript_skitter');
+        require_javascript('jquery');
+        require_javascript('skitter');
 
         require_code('galleries');
 

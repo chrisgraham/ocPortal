@@ -116,9 +116,9 @@ class Block_main_activities
 
         require_lang('activities');
         require_css('activities');
-        require_javascript('javascript_activities');
-        require_javascript('javascript_jquery');
-        require_javascript('javascript_base64');
+        require_javascript('activities');
+        require_javascript('jquery');
+        require_javascript('base64');
 
         $refresh_time = array_key_exists('refresh_time', $map) ? intval($map['refresh_time']) : 30;
         $grow = array_key_exists('grow', $map) ? ($map['grow'] == '1') : true;

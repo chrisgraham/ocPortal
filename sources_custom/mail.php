@@ -71,8 +71,7 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
 
         $through_queue =
             (!$bypass_queue) &&
-            ((get_option('mail_queue_debug') === '1') || ((get_option('mail_queue') === '1') &&
-                    (cron_installed())));
+            ((get_option('mail_queue_debug') === '1') || ((get_option('mail_queue') === '1') && (cron_installed())));
         if (!is_null($attachments)) {
             foreach (array_keys($attachments) as $path) {
                 if ((substr($path, 0, strlen(get_custom_file_base() . '/')) != get_custom_file_base() . '/') && (substr($path, 0, strlen(get_file_base() . '/')) != get_file_base() . '/')) {
@@ -164,7 +163,7 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
     }
 
     // Our subject
-    $_subject = do_template('MAIL_SUBJECT', array('_GUID' => '4c7eefb7296e7b7d4f3a4ef0eeeca658', 'SUBJECT_LINE' => $subject_line), $lang, false, null, '.tpl', 'templates', $theme);
+    $_subject = do_template('MAIL_SUBJECT', array('_GUID' => '4c7eefb7296e7b7d4f3a4ef0eeeca658', 'SUBJECT_LINE' => $subject_line), $lang, false, null, '.txt', 'text', $theme);
     $subject = $_subject->evaluate($lang); // Note that this is slightly against spec, because characters aren't forced to be printable us-ascii. But it's better we allow this (which works in practice) than risk incompatibility via charset-base64 encoding.
 
     // Evaluate message. Needs doing early so we know if we have any headers
@@ -191,7 +190,7 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
         $_html_content = $html_content->evaluate($lang);
         $_html_content = preg_replace('#(keep|for)_session=\w*#', 'filtered=1', $_html_content);
         $message_html = (strpos($_html_content, '<html') !== false) ? make_string_tempcode($_html_content) : do_template($mail_template, array('_GUID' => 'b23069c20202aa59b7450ebf8d49cde1', 'CSS' => '{CSS}', 'LOGOURL' => get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/
-            'LANG' => $lang, 'TITLE' => $subject, 'CONTENT' => $_html_content), $lang, false, null, '.tpl', 'templates', $theme);
+                                                                                                                                               'LANG' => $lang, 'TITLE' => $subject, 'CONTENT' => $_html_content), $lang, false, null, '.tpl', 'templates', $theme);
         $css = css_tempcode(true, true, $message_html->evaluate($lang), $theme);
         $_css = $css->evaluate($lang);
         if (get_option('allow_ext_images') != '1') {

@@ -84,7 +84,7 @@ class Hook_whatsnew_calendar
             $name = get_translated_text($row['e_title'], null, $lang);
             $description = get_translated_text($row['e_content'], null, $lang);
             $member_id = (is_guest($row['e_submitter'])) ? null : strval($row['e_submitter']);
-            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '654cafa75ec9f9b8e0e0fb666f28fb37', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'event', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '654cafa75ec9f9b8e0e0fb666f28fb37', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'event', 'CONTENT_ID' => strval($id)), null, false, null, '.txt', 'text'));
         }
 
         return array($new, do_lang('CALENDAR', '', '', '', $lang));

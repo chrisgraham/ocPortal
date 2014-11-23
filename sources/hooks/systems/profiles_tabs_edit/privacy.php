@@ -111,7 +111,7 @@ class Hook_profiles_tabs_edit_privacy
 
         $member_cpfs = ocf_get_custom_fields_member($member_id_of);
 
-        require_javascript('javascript_multi');
+        require_javascript('multi');
 
         $fields = new Tempcode();
         require_code('form_templates');

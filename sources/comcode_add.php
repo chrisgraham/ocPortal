@@ -835,8 +835,8 @@ page=URL';
  */
 function comcode_helper_script_step3()
 {
-    require_javascript('javascript_posting');
-    require_javascript('javascript_editing');
+    require_javascript('posting');
+    require_javascript('editing');
 
     $field_name = get_param('field_name');
     $tag = post_param('tag');

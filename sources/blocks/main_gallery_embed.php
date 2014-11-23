@@ -67,7 +67,7 @@ class Block_main_gallery_embed
         require_code('galleries');
         require_code('images');
         require_code('feedback');
-        require_javascript('javascript_galleries');
+        require_javascript('galleries');
 
         $block_id = get_block_id($map);
 

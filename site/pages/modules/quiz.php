@@ -665,7 +665,7 @@ class Module_quiz
                     'CORRECTIONS' => $corrections_to_staff,
                     'RESULT' => $result_to_staff,
                     'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username(get_member()),
-                ));
+                ), null, false, null, '.txt', 'text');
                 dispatch_notification('quiz_results', strval($quiz_id), $notification_title, $mail->evaluate(get_site_default_lang()));
 
                 break;
@@ -694,7 +694,7 @@ class Module_quiz
                     'GIVEN_ANSWERS' => $given_answers_to_staff,
                     'MEMBER_PROFILE_URL' => is_guest() ? '' : $GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(), false, true),
                     'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username(get_member()),
-                ));
+                ), null, false, null, '.txt', 'text');
 
                 // Send notification of answers to the staff
                 dispatch_notification('quiz_results', strval($quiz_id), $notification_title, $given_answers_to_staff->evaluate(get_site_default_lang()));

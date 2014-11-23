@@ -118,7 +118,7 @@ class Block_main_staff_checklist
      */
     public function run($map)
     {
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
 
         // Handle custom tasks
         $new_task = post_param('new_task', null);

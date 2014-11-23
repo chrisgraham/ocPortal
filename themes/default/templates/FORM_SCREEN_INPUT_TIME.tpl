@@ -1,7 +1,7 @@
-{$REQUIRE_JAVASCRIPT,javascript_modernizr}
-{$REQUIRE_JAVASCRIPT,javascript_jquery}
-{$REQUIRE_JAVASCRIPT,javascript_jquery_ui_core}
-{$REQUIRE_JAVASCRIPT,javascript_widget_date}
+{$REQUIRE_JAVASCRIPT,modernizr}
+{$REQUIRE_JAVASCRIPT,jquery}
+{$REQUIRE_JAVASCRIPT,jquery_ui_core}
+{$REQUIRE_JAVASCRIPT,widget_date}
 {$REQUIRE_CSS,jquery_ui}
 {$REQUIRE_CSS,widget_date}
 

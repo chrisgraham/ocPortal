@@ -36,9 +36,9 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
             $_ticket_type_name = $GLOBALS['SITE_DB']->query_select_value_if_there('ticket_types', 'ticket_type_name', array('id' => $ticket_type_id));
 
             $d = new Tempcode();
-            $d->attach(div(escape_html($topic['description'])));
+            $d->attach(div(make_string_tempcode(escape_html($topic['description']))));
             $ticket_type_name = get_translated_text($_ticket_type_name);
-            $d->attach(div(escape_html($ticket_type_name)));
+            $d->attach(div(make_string_tempcode(escape_html($ticket_type_name))));
 
             $d->attach(get_ocportal_support_timings_wrap(!in_array('closed', $topic['modifiers']), $topic['id'], $ticket_type_name));
 

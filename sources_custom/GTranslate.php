@@ -7,6 +7,8 @@
  * Modified for Google Translate 2 API by ocProducts, and generally tidied up.
  */
 
+/*CQC: No check*/
+
 class GTranslate
 {
 	protected $lang_from='en';

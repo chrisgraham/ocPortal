@@ -210,8 +210,8 @@ function ecv($lang, $escaped, $type, $name, $param)
                 break;
 
             case 'FRACTIONAL_EDITABLE':
-                require_javascript('javascript_ajax');
-                require_javascript('javascript_fractional_edit');
+                require_javascript('ajax');
+                require_javascript('fractional_edit');
 
                 foreach (array_keys($param) as $key) {
                     if (!is_numeric($key)) {
@@ -1113,7 +1113,7 @@ function ecv_FACILITATE_AJAX_BLOCK_CALL($lang, $escaped, $param)
     }
 
     if (isset($param[0])) {
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
 
         require_code('blocks');
         $_block_constraints = block_params_to_block_signature(block_params_str_to_arr($param[0]));

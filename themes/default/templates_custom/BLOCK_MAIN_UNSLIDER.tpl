@@ -1,5 +1,5 @@
-{$REQUIRE_JAVASCRIPT,javascript_jquery}
-{$REQUIRE_JAVASCRIPT,javascript_unslider}
+{$REQUIRE_JAVASCRIPT,jquery}
+{$REQUIRE_JAVASCRIPT,unslider}
 
 <script src="//use.typekit.net/vgf3zbf.js"></script>
 <script>try { Typekit.load(); } catch(e){}</script>

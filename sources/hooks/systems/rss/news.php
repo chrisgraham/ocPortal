@@ -102,12 +102,12 @@ class Hook_rss_news
                 $view_url = build_url(array('page' => 'news', 'type' => 'view', 'id' => $row['id']), get_module_zone('news'), null, false, false, true);
 
                 if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
-                    $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'b4f25f5cf68304f8d402bb06851489d6', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
+                    $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'b4f25f5cf68304f8d402bb06851489d6', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])), null, false, null, '.xml', 'xml');
                 } else {
                     $if_comments = new Tempcode();
                 }
 
-                $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
+                $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date), null, false, null, '.xml', 'xml'));
             }
         }
 

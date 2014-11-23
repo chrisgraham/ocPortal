@@ -399,8 +399,8 @@ class Module_admin_permissions
             return redirect_screen($this->title, $url, do_lang_tempcode('NO_JS_ADVANCED_SCREEN_PERMISSIONS'));
         }
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_tree_list');
+        require_javascript('ajax');
+        require_javascript('tree_list');
         require_code('form_templates');
 
         require_css('sitemap_editor');

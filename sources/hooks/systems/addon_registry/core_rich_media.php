@@ -110,7 +110,7 @@ class Hook_addon_registry_core_rich_media
             'themes/default/images/icons/16x16/editor/index.html',
             'themes/default/images/icons/32x32/editor/index.html',
             'sources/hooks/systems/addon_registry/core_rich_media.php',
-            'themes/default/templates/JAVASCRIPT_DYN_COMCODE.tpl',
+            'themes/default/javascript/dyn_comcode.js',
             'themes/default/templates/EMOTICON_CLICK_CODE.tpl',
             'themes/default/templates/EMOTICON_IMG_CODE_DIR.tpl',
             'themes/default/templates/EMOTICON_IMG_CODE_THEMED.tpl',
@@ -203,7 +203,7 @@ class Hook_addon_registry_core_rich_media
             'themes/default/templates/COMCODE_REAL_TABLE_START.tpl',
             'themes/default/templates/COMCODE_REAL_TABLE_START_SUMMARY.tpl',
             'themes/default/templates/COMCODE_PULSE.tpl',
-            'themes/default/templates/JAVASCRIPT_PULSE.tpl',
+            'themes/default/javascript/pulse.js',
             'themes/default/templates/COMCODE_BIG_TABS_CONTROLLER.tpl',
             'themes/default/templates/COMCODE_BIG_TABS_TAB.tpl',
             'themes/default/templates/MEDIA_AUDIO_WEBSAFE.tpl',
@@ -241,7 +241,7 @@ class Hook_addon_registry_core_rich_media
             'themes/default/images/big_tabs_controller_button_top.png',
             'themes/default/images/big_tabs_controller_button.png',
             'data/jwplayer.flash.swf',
-            'themes/default/templates/JAVASCRIPT_JWPLAYER.tpl',
+            'themes/default/javascript/jwplayer.js',
             'sources/hooks/systems/notifications/member_mention.php',
             'sources/member_mentions.php',
             'data/attachment.php',
@@ -301,7 +301,7 @@ class Hook_addon_registry_core_rich_media
             'uploads/attachments/.htaccess',
             'uploads/attachments_thumbs/.htaccess',
             'themes/default/templates/COMCODE_MEMBER_LINK.tpl',
-            'themes/default/templates/JAVASCRIPT_JQUERY_AUTOCOMPLETE.tpl',
+            'themes/default/javascript/jquery_autocomplete.js',
             'themes/default/css/autocomplete.css',
             'themes/default/templates/AUTOCOMPLETE_LOAD.tpl',
             'themes/default/images/mediaset_next.png',
@@ -563,10 +563,10 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__attachments()
     {
-        require_javascript('javascript_validation');
-        require_javascript('javascript_plupload');
-        require_javascript('javascript_posting');
-        require_javascript('javascript_editing');
+        require_javascript('validation');
+        require_javascript('plupload');
+        require_javascript('posting');
+        require_javascript('editing');
 
         require_css('forms');
 

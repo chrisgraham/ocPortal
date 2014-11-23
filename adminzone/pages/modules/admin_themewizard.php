@@ -205,7 +205,7 @@ class Module_admin_themewizard
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'e809c785aff72bbfeec3829a0b2f464d', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('ADVANCED'))));
         $fields->attach(form_input_tick(do_lang_tempcode('INHERIT_CSS'), do_lang_tempcode('DESCRIPTION_INHERIT_CSS'), 'inherit_css', get_param_integer('inherit_css', 0) == 1));
 
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
         $script = find_script('snippet');
         $javascript = "
             var form=document.getElementById('main_form');

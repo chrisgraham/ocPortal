@@ -137,7 +137,7 @@ class Hook_addon_registry_shopping
             'themes/default/templates/CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl',
             'themes/default/templates/CATALOGUE_products_GRID_ENTRY_WRAP.tpl',
             'themes/default/templates/RESULTS_products_TABLE.tpl',
-            'themes/default/templates/JAVASCRIPT_SHOPPING.tpl',
+            'themes/default/javascript/shopping.js',
             'themes/default/templates/CATALOGUE_ENTRY_CART_BUTTONS.tpl',
             'adminzone/pages/modules/admin_orders.php',
             'lang/EN/shopping.ini',

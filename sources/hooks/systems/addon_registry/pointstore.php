@@ -142,19 +142,19 @@ class Hook_addon_registry_pointstore
             'themes/default/templates/POINTSTORE_TOPIC_PIN.tpl',
             'themes/default/templates/POINTSTORE_SCREEN.tpl',
             'themes/default/templates/POINTSTORE_CONFIRM_SCREEN.tpl',
-            'themes/default/templates/POINTSTORE_FORWARDER_MAIL.tpl',
+            'themes/default/text/POINTSTORE_FORWARDER_MAIL.txt',
             'themes/default/templates/POINTSTORE_ITEM.tpl',
             'themes/default/templates/POINTSTORE_LOG_SCREEN.tpl',
-            'themes/default/templates/POINTSTORE_MAIL.tpl',
+            'themes/default/text/POINTSTORE_MAIL.txt',
             'themes/default/templates/POINTSTORE_MFORWARDING_LINK.tpl',
             'themes/default/templates/POINTSTORE_MPOP3_LINK.tpl',
             'themes/default/templates/POINTSTORE_POP3_SCREEN.tpl',
             'themes/default/templates/POINTSTORE_POP3_ACTIVATE.tpl',
-            'themes/default/templates/POINTSTORE_POP3_MAIL.tpl',
+            'themes/default/text/POINTSTORE_POP3_MAIL.txt',
             'themes/default/templates/POINTSTORE_POP3_QUOTA.tpl',
             'themes/default/templates/POINTSTORE_PRICE_SCREEN.tpl',
             'themes/default/templates/POINTSTORE_QUOTA.tpl',
-            'themes/default/templates/POINTSTORE_QUOTA_MAIL.tpl',
+            'themes/default/text/POINTSTORE_QUOTA_MAIL.txt',
             'adminzone/pages/modules/admin_pointstore.php',
             'lang/EN/pointstore.ini',
             'site/pages/modules/pointstore.php',
@@ -186,19 +186,19 @@ class Hook_addon_registry_pointstore
             'POINTSTORE_PRICES_FORM_WRAP.tpl' => 'administrative__pointstore_price_screen',
             'POINTSTORE_PRICE_SCREEN.tpl' => 'administrative__pointstore_price_screen',
             'POINTSTORE_CONFIRM_SCREEN.tpl' => 'pointstore_confirm_screen',
-            'POINTSTORE_FORWARDER_MAIL.tpl' => 'pointstore_forwarder_mail',
+            'POINTSTORE_FORWARDER_MAIL.txt' => 'pointstore_forwarder_mail',
             'POINTSTORE_POP3_ACTIVATE.tpl' => 'pointstore_pop3_screen',
             'POINTSTORE_POP3_QUOTA.tpl' => 'pointstore_pop3_screen',
             'POINTSTORE_POP3_SCREEN.tpl' => 'pointstore_pop3_screen',
-            'POINTSTORE_POP3_MAIL.tpl' => 'pointstore_pop3_mail',
+            'POINTSTORE_POP3_MAIL.txt' => 'pointstore_pop3_mail',
             'POINTSTORE_QUOTA.tpl' => 'pointstore_quota',
-            'POINTSTORE_QUOTA_MAIL.tpl' => 'pointstore_quota_mail',
+            'POINTSTORE_QUOTA_MAIL.txt' => 'pointstore_quota_mail',
             'POINTSTORE_CUSTOM_ITEM_SCREEN.tpl' => 'pointstore_custom_item_screen',
             'POINTSTORE_HIGHLIGHT_NAME_SCREEN.tpl' => 'pointstore_highlight_name_screen',
             'POINTSTORE_ITEM.tpl' => 'pointstore_screen',
             'POINTSTORE_MFORWARDING_LINK.tpl' => 'pointstore_screen',
             'POINTSTORE_MPOP3_LINK.tpl' => 'pointstore_screen',
-            'POINTSTORE_MAIL.tpl' => 'pointstore_screen',
+            'POINTSTORE_MAIL.txt' => 'pointstore_screen',
             'POINTSTORE_SCREEN.tpl' => 'pointstore_screen',
             'POINTSTORE_CUSTOM.tpl' => 'pointstore_custom',
             'POINTSTORE_GAMBLING.tpl' => 'pointstore_gambling',
@@ -256,7 +256,7 @@ class Hook_addon_registry_pointstore
     public function tpl_preview__administrative__pointstore_price_screen()
     {
         //This is for getting the do_ajax_request() javascript function.
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
 
         $warning_details = do_lorem_template('WARNING_BOX', array('WARNING' => lorem_phrase()));
 
@@ -313,7 +313,7 @@ class Hook_addon_registry_pointstore
      */
     public function tpl_preview__pointstore_forwarder_mail()
     {
-        $temp = do_lorem_template('POINTSTORE_FORWARDER_MAIL', array('ENCODED_REASON' => lorem_phrase(), 'EMAIL' => lorem_word(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'FORW_URL' => placeholder_url(), 'SUFFIX_PRICE' => lorem_phrase()));
+        $temp = do_lorem_template('POINTSTORE_FORWARDER_MAIL', array('ENCODED_REASON' => lorem_phrase(), 'EMAIL' => lorem_word(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'FORW_URL' => placeholder_url(), 'SUFFIX_PRICE' => lorem_phrase()), null, false, null, '.txt', 'text');
 
         return array(
             lorem_globalise($temp, null, '', true)
@@ -354,9 +354,7 @@ class Hook_addon_registry_pointstore
      */
     public function tpl_preview__pointstore_pop3_mail()
     {
-        $temp = do_lorem_template('POINTSTORE_POP3_MAIL', array('EMAIL' => lorem_word(), 'ENCODED_REASON' => lorem_phrase(), 'LOGIN' => lorem_phrase(), 'QUOTA' => placeholder_number(), 'MAIL_SERVER' => lorem_phrase(), 'PASSWORD' => lorem_phrase(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'POP3_URL' => placeholder_url(), 'SUFFIX_PRICE' => placeholder_number()));
-
-//       $out=comcode_to_temcode($temp);
+        $temp = do_lorem_template('POINTSTORE_POP3_MAIL', array('EMAIL' => lorem_word(), 'ENCODED_REASON' => lorem_phrase(), 'LOGIN' => lorem_phrase(), 'QUOTA' => placeholder_number(), 'MAIL_SERVER' => lorem_phrase(), 'PASSWORD' => lorem_phrase(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'POP3_URL' => placeholder_url(), 'SUFFIX_PRICE' => placeholder_number()), null, false, null, '.txt', 'text');
 
         return array(
             lorem_globalise(
@@ -414,7 +412,7 @@ class Hook_addon_registry_pointstore
                         'EMAIL' => lorem_word(),
                         'QUOTA_URL' => placeholder_url(),
                         'PRICE' => placeholder_number(),
-                    )
+                    ), null, false, null, '.txt', 'text'
                 ), null, '', true),
         );
     }
@@ -481,7 +479,7 @@ class Hook_addon_registry_pointstore
 
         $pointstore_mail_forwarding_link = do_lorem_template('POINTSTORE_MFORWARDING_LINK', array('FORWARDING_URL' => placeholder_url()));
 
-        $mail_tpl = do_lorem_template('POINTSTORE_MAIL', array('POINTSTORE_MAIL_POP3_LINK' => $pointstore_mail_pop3_link, 'POINTSTORE_MAIL_FORWARDING_LINK' => $pointstore_mail_forwarding_link));
+        $mail_tpl = do_lorem_template('POINTSTORE_MAIL', array('POINTSTORE_MAIL_POP3_LINK' => $pointstore_mail_pop3_link, 'POINTSTORE_MAIL_FORWARDING_LINK' => $pointstore_mail_forwarding_link), null, false, null, '.txt', 'text');
 
         $items->attach(do_lorem_template('POINTSTORE_ITEM', array('ITEM' => $mail_tpl)));
 

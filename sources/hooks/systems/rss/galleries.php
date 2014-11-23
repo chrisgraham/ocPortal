@@ -109,7 +109,7 @@ class Hook_rss_galleries
             $view_url = build_url(array('page' => 'galleries', 'type' => $row['type'], 'id' => $row['id']), get_module_zone('galleries'), null, false, false, true);
 
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
-                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '65dc0cec8c75f565c58c95fa1667aa1e', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
+                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '65dc0cec8c75f565c58c95fa1667aa1e', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])), null, false, null, '.xml', 'xml');
             } else {
                 $if_comments = new Tempcode();
             }
@@ -142,7 +142,7 @@ class Hook_rss_galleries
                 'DATE' => $news_date,
                 'DURATION' => array_key_exists('video_length', $row) ? (strval(intval(floor(floatval($row['video_length'])) / 60.0)) . ':' . strval($row['video_length'] % 60)) : null,
                 'KEYWORDS' => $keywords,
-            )));
+            ), null, false, null, '.xml', 'xml'));
         }
 
         require_lang('galleries');

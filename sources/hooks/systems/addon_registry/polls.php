@@ -189,7 +189,7 @@ class Hook_addon_registry_polls
         $if_comments = do_lorem_template('RSS_ENTRY_COMMENTS', array(
             'COMMENT_URL' => placeholder_url(),
             'ID' => placeholder_id(),
-        ));
+        ), null, false, null, '.xml', 'xml');
 
         return array(
             lorem_globalise(do_lorem_template('RSS_ENTRY', array(
@@ -204,7 +204,7 @@ class Hook_addon_registry_polls
                 'ID' => placeholder_id(),
                 'NEWS' => lorem_paragraph(),
                 'DATE' => placeholder_time(),
-            )), null, '', true)
+            ), null, false, null, '.xml', 'xml'), null, '', true)
         );
     }
 

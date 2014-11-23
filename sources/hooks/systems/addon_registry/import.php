@@ -111,8 +111,8 @@ class Hook_addon_registry_import
             'themes/default/templates/IMPORT_ACTION_LINE.tpl',
             'themes/default/templates/IMPORT_ACTION_SCREEN.tpl',
             'themes/default/templates/IMPORT_MESSAGE.tpl',
-            'themes/default/templates/IMPORT_PHPNUKE_FCOMCODEPAGE.tpl',
-            'themes/default/templates/IMPORT_MKPORTAL_FCOMCODEPAGE.tpl',
+            'themes/default/text/IMPORT_PHPNUKE_FCOMCODEPAGE.txt',
+            'themes/default/text/IMPORT_MKPORTAL_FCOMCODEPAGE.txt',
             'adminzone/pages/modules/admin_import.php',
             'lang/EN/import.ini',
             'sources/hooks/modules/admin_import/.htaccess',
@@ -156,8 +156,8 @@ class Hook_addon_registry_import
             'XML_STORAGE_SCREEN.tpl' => 'administrative__xml_storage_screen',
             'XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_import_results_screen',
             'XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_export_results_screen',
-            'IMPORT_MKPORTAL_FCOMCODEPAGE.tpl' => 'administrative__import_mkportal_fcomcodepage',
-            'IMPORT_PHPNUKE_FCOMCODEPAGE.tpl' => 'administrative__import_phpnuke_fcomcodepage'
+            'IMPORT_MKPORTAL_FCOMCODEPAGE.txt' => 'administrative__import_mkportal_fcomcodepage',
+            'IMPORT_PHPNUKE_FCOMCODEPAGE.txt' => 'administrative__import_phpnuke_fcomcodepage'
         );
     }
 
@@ -272,7 +272,7 @@ class Hook_addon_registry_import
                 'TEXT' => lorem_sentence_html(),
                 'PAGE_FOOTER' => lorem_phrase(),
                 'SIGNATURE' => lorem_phrase(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 
@@ -293,7 +293,7 @@ class Hook_addon_registry_import
                 'TEXT' => lorem_sentence_html(),
                 'PAGE_FOOTER' => lorem_phrase(),
                 'SIGNATURE' => lorem_phrase(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 }

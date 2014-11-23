@@ -1,6 +1,6 @@
 {$INC,big_tab_sets}
 
-{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+{$REQUIRE_JAVASCRIPT,dyn_comcode}
 {$REQUIRE_CSS,big_tabs}
 
 <div class="comcode_big_tab_controller" role="tablist">

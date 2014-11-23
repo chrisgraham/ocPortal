@@ -165,7 +165,7 @@ class Module_admin_custom_comcode extends Standard_crud_module
         $this->edit_one_label = do_lang_tempcode('EDIT_CUSTOM_COMCODE_TAG');
 
         if ($type == 'ad') {
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript .= "
                     var form=document.getElementById('main_form');

@@ -111,8 +111,8 @@ class Hook_addon_registry_quizzes
             'sources/hooks/systems/meta/quiz.php',
             'sources/hooks/blocks/side_stats/stats_quiz.php',
             'themes/default/templates/QUIZ_ARCHIVE_SCREEN.tpl',
-            'themes/default/templates/QUIZ_SURVEY_ANSWERS_MAIL.tpl',
-            'themes/default/templates/QUIZ_TEST_ANSWERS_MAIL.tpl',
+            'themes/default/text/QUIZ_SURVEY_ANSWERS_MAIL.txt',
+            'themes/default/text/QUIZ_TEST_ANSWERS_MAIL.txt',
             'sources/hooks/systems/content_meta_aware/quiz.php',
             'sources/hooks/systems/occle_fs/quizzes.php',
             'sources/hooks/systems/addon_registry/quizzes.php',
@@ -156,8 +156,8 @@ class Hook_addon_registry_quizzes
             'QUIZ_BOX.tpl' => 'quiz_archive_screen',
             'QUIZ_ARCHIVE_SCREEN.tpl' => 'quiz_archive_screen',
             'QUIZ_SCREEN.tpl' => 'quiz_screen',
-            'QUIZ_SURVEY_ANSWERS_MAIL.tpl' => 'quiz_survey_answers_mail',
-            'QUIZ_TEST_ANSWERS_MAIL.tpl' => 'quiz_test_answers_mail',
+            'QUIZ_SURVEY_ANSWERS_MAIL.txt' => 'quiz_survey_answers_mail',
+            'QUIZ_TEST_ANSWERS_MAIL.txt' => 'quiz_test_answers_mail',
             'QUIZ_DONE_SCREEN.tpl' => 'quiz_done_screen',
             'MEMBER_QUIZ_ENTRIES.tpl' => 'member_quiz_entries',
         );
@@ -314,7 +314,7 @@ class Hook_addon_registry_quizzes
     public function tpl_preview__quiz_screen()
     {
         //This is for getting the do_ajax_request() javascript function.
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
 
         $warning_details = do_lorem_template('WARNING_BOX', array(
             'WARNING' => lorem_phrase(),
@@ -370,7 +370,7 @@ class Hook_addon_registry_quizzes
                 'MEMBER_PROFILE_URL' => placeholder_url(),
                 'USERNAME' => lorem_phrase(),
                 'FORUM_DRIVER' => null,
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 
@@ -419,7 +419,7 @@ class Hook_addon_registry_quizzes
                 'CORRECTIONS' => $corrections,
                 'RESULT' => lorem_phrase(),
                 'USERNAME' => lorem_phrase(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 

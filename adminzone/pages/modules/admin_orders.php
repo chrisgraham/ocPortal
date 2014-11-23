@@ -160,7 +160,7 @@ class Module_admin_orders
     public function run()
     {
         require_code('ecommerce');
-        require_javascript('javascript_shopping');
+        require_javascript('shopping');
         require_css('shopping');
         require_code('users_active_actions');
 

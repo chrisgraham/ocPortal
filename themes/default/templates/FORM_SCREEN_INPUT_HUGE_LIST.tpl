@@ -1,6 +1,6 @@
 {$REQUIRE_CSS,widget_select2}
-{$REQUIRE_JAVASCRIPT,javascript_jquery}
-{$REQUIRE_JAVASCRIPT,javascript_select2}
+{$REQUIRE_JAVASCRIPT,jquery}
+{$REQUIRE_JAVASCRIPT,select2}
 
 <tr>
 	{$SET,randomised_id,{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}}

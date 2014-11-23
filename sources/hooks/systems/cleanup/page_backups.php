@@ -65,10 +65,19 @@ class Hook_cleanup_page_backups
         }
         while (count($zones) != 0);
 
-        // Themes: Templates and CSS files
+        // Themes: Templates (various kinds, including CSS files)
         $themes = find_all_themes();
         foreach ($themes as $theme) {
             $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/templates_custom';
+            $this->process($path);
+
+            $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/javascript_custom';
+            $this->process($path);
+
+            $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/xml_custom';
+            $this->process($path);
+
+            $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/text_custom';
             $this->process($path);
 
             $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/css_custom';

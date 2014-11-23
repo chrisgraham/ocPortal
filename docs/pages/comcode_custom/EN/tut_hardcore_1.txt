@@ -2,7 +2,7 @@
 
 At ocProducts we really want to encourage users of ocPortal to start making addons and releasing them in an Open Source code ecosystem. In order to get the ball rolling we've done a number of things:
  - Made a powerful framework for customising ocPortal and releasing addons
- - Written a huge devguide, which explains all ocPortal's conventions, systems, and APIs
+ - Written a huge Code Book, which explains all ocPortal's conventions, systems, and APIs
  - Written a number of tutorials, such as these
  - Released our own semi-official addons, as examples
  - Assisted, answering technical questions

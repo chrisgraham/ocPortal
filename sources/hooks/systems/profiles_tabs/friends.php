@@ -47,7 +47,7 @@ class Hook_profiles_tabs_friends
     {
         require_lang('chat');
         require_lang('ocf');
-        require_javascript('javascript_validation');
+        require_javascript('validation');
 
         $title = do_lang_tempcode('FRIENDS');
 

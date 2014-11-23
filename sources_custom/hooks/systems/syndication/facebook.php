@@ -108,7 +108,7 @@ class Hook_syndication_facebook
 
         if (is_null($member_id)) {
             $FACEBOOK_CONNECT->setExtendedAccessToken();
-            $facebook->api('/oauth/access_token', 'POST',
+            $FACEBOOK_CONNECT->api('/oauth/access_token', 'POST',
                 array(
                     'grant_type' => 'fb_exchange_token',
                     'client_id' => get_option('facebook_appid'),

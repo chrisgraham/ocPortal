@@ -314,15 +314,14 @@ function block_helper_script()
                         $list->attach(form_input_list_entry($option, $has_default && $option == $default));
                     }
                     $fields->attach(form_input_list(titleify($parameter), escape_html($description), $parameter, $list, null, false, false));
-                } /*elseif ($block.':'.$parameter=='menu:param') // special case for menus     Disabled so Sitemap nodes may be entered
-                    {
-                            $list=new Tempcode();
-                            $rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
-                            foreach ($rows as $row)
-                            {
-                                        $list->attach(form_input_list_entry($row['i_menu'],$has_default && $row['i_menu']==$default));
-                            }
-                            $fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
+                } /*elseif ($block.':'.$parameter=='menu:param') { // special case for menus     Disabled so Sitemap nodes may be entered
+                        $list=new Tempcode();
+                        $rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
+                        foreach ($rows as $row)
+                        {
+                            $list->attach(form_input_list_entry($row['i_menu'],$has_default && $row['i_menu']==$default));
+                        }
+                        $fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
                     }*/
                 elseif ($parameter == 'zone') { // zone list
                     $list = new Tempcode();
@@ -440,8 +439,8 @@ function block_helper_script()
     }
 
     if ($type == 'step3') { // Close off, and copy in Comcode to browser
-        require_javascript('javascript_posting');
-        require_javascript('javascript_editing');
+        require_javascript('posting');
+        require_javascript('editing');
 
         $field_name = get_param('field_name');
 

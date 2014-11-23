@@ -319,7 +319,7 @@ class Module_admin_config
      */
     public function config_category()
     {
-        require_javascript('javascript_validation');
+        require_javascript('validation');
 
         // Load up some basic details
         $category = $this->category;

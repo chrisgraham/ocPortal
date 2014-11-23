@@ -113,7 +113,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
         require_code('ocf_general_action2');
 
         if ($type == 'ad') {
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript = "
                     var form=document.getElementById('main_form');

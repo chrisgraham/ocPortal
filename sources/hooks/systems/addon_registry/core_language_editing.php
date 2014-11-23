@@ -109,7 +109,7 @@ class Hook_addon_registry_core_language_editing
             'themes/default/css/translations_editor.css',
             'sources/hooks/systems/addon_registry/core_language_editing.php',
             'sources/hooks/blocks/main_staff_checklist/translations.php',
-            'themes/default/templates/JAVASCRIPT_TRANSLATE.tpl',
+            'themes/default/javascript/translate.js',
             'themes/default/templates/TRANSLATE_ACTION.tpl',
             'themes/default/templates/TRANSLATE_LINE.tpl',
             'themes/default/templates/TRANSLATE_LINE_CONTENT.tpl',

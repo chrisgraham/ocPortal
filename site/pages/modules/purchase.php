@@ -226,7 +226,7 @@ class Module_purchase
         if (is_null($url)) {
             $url = '';
         }
-        require_javascript('javascript_validation');
+        require_javascript('validation');
         return do_template('PURCHASE_WIZARD_SCREEN', array('_GUID' => 'a32c99acc28e8ad05fd9b5e2f2cda029', 'GET' => $get ? true : null, 'TITLE' => $title, 'CONTENT' => $content, 'URL' => $url));
     }
 

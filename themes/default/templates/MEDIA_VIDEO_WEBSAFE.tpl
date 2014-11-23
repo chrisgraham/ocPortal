@@ -1,7 +1,7 @@
 {+START,SET,media}
 	{$SET,player_id,player_{$RAND}}
 
-	{$REQUIRE_JAVASCRIPT,javascript_jwplayer}
+	{$REQUIRE_JAVASCRIPT,jwplayer}
 
 	{+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_EDITABLE}
 		{+START,IF_EMPTY,{$META_DATA,video}}

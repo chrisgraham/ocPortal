@@ -58,6 +58,15 @@ if ($mode == 'unbundle') {
         if (preg_match('#^themes/default/templates/(.*)$#', $file, $matches) != 0) {
             $new_file = 'themes/default/templates_custom/' . $matches[1];
         }
+        if (preg_match('#^themes/default/javascript/(.*)$#', $file, $matches) != 0) {
+            $new_file = 'themes/default/javascript_custom/' . $matches[1];
+        }
+        if (preg_match('#^themes/default/xml/(.*)$#', $file, $matches) != 0) {
+            $new_file = 'themes/default/xml_custom/' . $matches[1];
+        }
+        if (preg_match('#^themes/default/text/(.*)$#', $file, $matches) != 0) {
+            $new_file = 'themes/default/text_custom/' . $matches[1];
+        }
         if (preg_match('#^sources/(.*)$#', $file, $matches) != 0) {
             $new_file = 'sources_custom/' . $matches[1];
         }

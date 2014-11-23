@@ -1,5 +1,5 @@
 {$REQUIRE_CSS,menu__sitemap}
-{$REQUIRE_JAVASCRIPT,javascript_menu_sitemap}
+{$REQUIRE_JAVASCRIPT,menu_sitemap}
 
 {$SET,js_menu,{$AND,{$NOT,{$BROWSER_MATCHES,bot}},{$JS_ON}}}
 

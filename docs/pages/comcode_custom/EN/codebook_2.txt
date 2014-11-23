@@ -105,21 +105,21 @@ JavaScript is separate from Java, and built into web browsers directly. It is us
 
 [title="3"]JavaScript libraries[/title]
 
-ocPortal has an inbuilt set of JavaScript libraries, which are split across a number of JavaScript template files that each begin with the name 'JAVASCRIPT'. The core library that is loaded onto every screen is named just [tt]JAVASCRIPT.tpl[/tt]. This core library is very general and doesn't know about ocPortal's individual modules- it is a general-purpose library to provide functionality usable anywhere. Most of the other JavaScript libraries are specific to individual modules (e.g. the chat module uses [tt]JAVASCRIPT_CHAT.tpl[/tt]) or to specific aspects of ocPortal (e.g. the Comcode editing interface uses [tt]JAVASCRIPT_EDITING.tpl[/tt]). There are a few additional general purpose JavaScript libraries:
-1) [tt]JAVASCRIPT_AJAX[/tt] -- AJAX call functionality, which should be used for all AJAX code.
-2) [tt]JAVASCRIPT_DRAGDROP[/tt] -- A drag and drop library (do not use this unless drag & drop really is the best way to build an interface, which is very rare)
-3) [tt]JAVASCRIPT_JQUERY[/tt] -- Bundled jQuery library, used on some screens (but not usually included as a cross-site dependency).
-4) [tt]JAVASCRIPT_TRANSITIONS[/tt] -- Provide various transition/animation effects.
+ocPortal has an inbuilt set of JavaScript libraries, which are split across a number of JavaScript template files that each begin with the name 'JAVASCRIPT'. The core library that is loaded onto every screen is named just [tt]global.js[/tt]. This core library is very general and doesn't know about ocPortal's individual modules- it is a general-purpose library to provide functionality usable anywhere. Most of the other JavaScript libraries are specific to individual modules (e.g. the chat module uses [tt]chat.js[/tt]) or to specific aspects of ocPortal (e.g. the Comcode editing interface uses [tt]editing.js[/tt]). There are a few additional general purpose JavaScript libraries:
+1) [tt]ajax[/tt] -- AJAX call functionality, which should be used for all AJAX code.
+2) [tt]dragdrop[/tt] -- A drag and drop library (do not use this unless drag & drop really is the best way to build an interface, which is very rare)
+3) [tt]jquery[/tt] -- Bundled jQuery library, used on some screens (but not usually included as a cross-site dependency).
+4) [tt]transitions[/tt] -- Provide various transition/animation effects.
 
-To flag a javascript file to be loaded up, use the 'require_javascript' API command in the PHP code. For example, if you wanted to load up the JavaScript defined in an 'JAVASCRIPT_EXAMPLE' template, use:
-require_javascript('javascript_example');
+To flag a javascript file to be loaded up, use the 'require_javascript' API command in the PHP code. For example, if you wanted to load up the JavaScript defined in an 'example.js' template, use:
+require_javascript('example');
 This command is usually best placed:
 1) in screen functions if it is not used by all screens in your module
 2) or, in the [tt]run[/tt] function if it is used by all/most screens in your module
 
 Alternatively, you can load JavaScript from a template with a command like:
 [code="HTML"]
-{$REQUIRE_JAVASCRIPT,javascript_example}
+{$REQUIRE_JAVASCRIPT,example}
 [/code]
 
 You may add new JavaScript templates as needed. Just make sure to follow the naming convention.
@@ -140,8 +140,8 @@ In ocPortal, JavaScript libraries are automatically minified to save on bandwidt
  - Tooltips: activate_tooltip
  - Misc: set_opacity, add_event_listener_abstract, cancel_bubbling, keep_stub
  - HTML manipulation: get_inner_html, set_inner_html
- - AJAX: JAVASCRIPT_AJAX: do_ajax_request
- - Animation: toggleable_tray, smooth_scroll, JAVASCRIPT_TRANSITIONS: fade_transition
+ - AJAX: ajax.js: do_ajax_request
+ - Animation: toggleable_tray, smooth_scroll, transitions.js: fade_transition
 
 [title="3"]Integrating third-party JavaScript libraries[/title]
 
@@ -183,7 +183,7 @@ It is important that:
 [*]You use the "//" bits. Usually ocPortal will be running as HTML even though it is marked-up as XHTML (this is a little known fact but is the case for almost websites out there, whatever they are running). HTML interprets everything in the script tag as CDATA automatically so everything inside there is parsed as JavaScript; the "//" bits are simply JavaScript comments to stop the CDATA bits being interpreted as JavaScript code.
 [*]You should actually use CDATA so the document does validate as XHTML.
 [*]You should not put it all on one line, because then the JavaScript line-comment will end up commenting all the code out and nothing will happen.
-[*]Don't use any ocPortal JavaScript except for JavaScript in the main '[tt]JAVASCRIPT.tpl[/tt]' library, unless you have put it inside an '[tt]onload[/tt]' event handler, like:
+[*]Don't use any ocPortal JavaScript except for JavaScript in the main '[tt]global.js[/tt]' library, unless you have put it inside an '[tt]onload[/tt]' event handler, like:
 [code="HTML"]
 add_event_listener_abstract(window,'load',function() { ... });
 [/code]
@@ -237,14 +237,14 @@ function output_my_parameter(message)
 
 [title="3"]Writing AJAX functionality[/title]
 
-For adding an ajax functionality, we can use the functions defined in the [tt]JAVASCRIPT_AJAX.tpl[/tt] template (in particular, [tt]do_ajax_request[/tt]). For using those functions, we should include the javascript_ajax in code like:
+For adding an ajax functionality, we can use the functions defined in the [tt]ajax.js[/tt] template (in particular, [tt]do_ajax_request[/tt]). For using those functions, we should include the [tt]ajax[/tt] in code like:
 [code="HTML"]
-require_javascript('javascript_ajax');
+require_javascript('ajax');
 [/code]
 
-Also we need our own JavaScript template file to implement our AJAX-tied behaviour, because the code is probably going to be too long to include in-line with the HTML. For example, create a new file named [tt]JAVASCRIPT_EXAMPLE.tpl[/tt], which would be loaded up from PHP code by:
+Also we need our own JavaScript template file to implement our AJAX-tied behaviour, because the code is probably going to be too long to include in-line with the HTML. For example, create a new file named [tt]example.js[/tt], which would be loaded up from PHP code by:
 [code="HTML"]
-require_javascript('javascript_example');
+require_javascript('example');
 [/code]
 
 AJAX requests can be either synchronous or asynchronous. A synchronous request runs linearly: JavaScript makes the call and then the browser will wait for the response before resuming execution. An asynchronous request involves a later (at an unknown point) 'call back' to a response handler (the "method") that we would write specially. Technically a synchronous-AJAX request is a contradiction (the 'A' in AJAX means 'asynchronous'), but the way people use the term AJAX means it's best we not worry about this. It's rare for us to use synchronous requests as it can make the browser freeze whilst it waits.
@@ -296,7 +296,7 @@ Once the server has returned a result to the client, it will be processed for ha
 There is an implied format contract between the PHP code we wrote and the JavaScript we wrote. In other words, we are not likely to have incompatibilities between the data of the server (PHP) and client (JavaScript) as you will have designed them together. Therefore you don't need to write any special error handling code to make sure the structure returned is correct, unless you've written in your own extra error handling into the pay-load.
 
 Example:
- - Template -- [tt]JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl[/tt]
+ - Template -- [tt]themes/default/javascript/ajax_people_lists.js[/tt]
  - Data file -- [tt]data/namelike.php[/tt] (calls [tt]namelike_script()[/tt] defined in [tt]sources/ajax.php[/tt])
  - Ajax php script -- [tt]source/ajax.php[/tt]
 

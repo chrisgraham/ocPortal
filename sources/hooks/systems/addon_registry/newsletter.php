@@ -118,9 +118,9 @@ class Hook_addon_registry_newsletter
             'sources/hooks/systems/cron/newsletter_drip_send.php',
             'sources/hooks/systems/cron/newsletter_periodic.php',
             'sources/hooks/modules/admin_import_types/newsletter.php',
-            'themes/default/templates/NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.tpl',
-            'themes/default/templates/NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.tpl',
-            'themes/default/templates/NEWSLETTER_WHATSNEW_FCOMCODE.tpl',
+            'themes/default/text/NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.txt',
+            'themes/default/text/NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.txt',
+            'themes/default/text/NEWSLETTER_WHATSNEW_FCOMCODE.txt',
             'themes/default/templates/NEWSLETTER_CONFIRM_WRAP.tpl',
             'themes/default/templates/NEWSLETTER_SUBSCRIBER.tpl',
             'themes/default/templates/NEWSLETTER_SUBSCRIBERS_SCREEN.tpl',
@@ -156,12 +156,12 @@ class Hook_addon_registry_newsletter
     public function tpl_previews()
     {
         return array(
-            'NEWSLETTER_WHATSNEW_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
-            'NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
-            'NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.tpl' => 'newsletter_automated_fcomcode',
+            'NEWSLETTER_WHATSNEW_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
+            'NEWSLETTER_WHATSNEW_SECTION_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
+            'NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE.txt' => 'newsletter_automated_fcomcode',
             'NEWSLETTER_SUBSCRIBER.tpl' => 'administrative__newsletter_subscribers_screen',
             'NEWSLETTER_SUBSCRIBERS_SCREEN.tpl' => 'administrative__newsletter_subscribers_screen',
-            'NEWSLETTER_DEFAULT_FCOMCODE.tpl' => 'newsletter_default',
+            'NEWSLETTER_DEFAULT_FCOMCODE.txt' => 'newsletter_default',
             'NEWSLETTER_CONFIRM_WRAP.tpl' => 'administrative__newsletter_confirm_wrap',
             'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl' => 'block_main_newsletter_signup_done',
             'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl' => 'block_main_newsletter_signup',
@@ -188,13 +188,13 @@ class Hook_addon_registry_newsletter
                 'THUMBNAIL' => placeholder_image_url(),
                 'CONTENT_TYPE' => lorem_word(),
                 'CONTENT_ID' => placeholder_id(),
-            ));
+            ), null, false, null, '.txt', 'text');
 
             $tmp = do_lorem_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array(
                 'I' => lorem_word(),
                 'TITLE' => lorem_phrase(),
                 'CONTENT' => $_content,
-            ));
+            ), null, false, null, '.txt', 'text');
             $automatic[] = $tmp->evaluate();
         }
 
@@ -206,7 +206,7 @@ class Hook_addon_registry_newsletter
         return array(
             lorem_globalise(do_lorem_template('NEWSLETTER_WHATSNEW_FCOMCODE', array(
                 'CONTENT' => $content,
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 
@@ -261,7 +261,7 @@ class Hook_addon_registry_newsletter
                 'CONTENT' => lorem_phrase(),
                 'LANG' => fallback_lang(),
                 'SUBJECT' => lorem_phrase(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 

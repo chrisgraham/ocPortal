@@ -147,7 +147,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 		<td>Adds browser vendor prefixes to a CSS rule that is not widely supported yet. This effectively marks the CSS rule out, and theoretically allows new ocPortal versions to alter how that rule is handled without direct changes to your theme CSS.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$REQUIRE_JAVASCRIPT,javascript_example}</td>
+		<td>{$REQUIRE_JAVASCRIPT,example}</td>
 		<td>Include a JavaScript file in the output stream. If you set the second parameter to '1', then loading will be deferred until the end of the page</td>
 	</tr>
 	<tr style="background: #DDFFDD">
@@ -1610,7 +1610,7 @@ I threw [tt]{$SITE_NAME}[/tt] into the example just to demonstrate symbols are n
 
 Tempcode is extremely powerful, and hopefully now you can see how symbols, directives, and parameters, can come together to allow great things to happen!
 
-[box]See [tt]tempcode_test.tpl[/tt] for more examples on how to use symbols and directives.[/box]
+[box]See [tt]tempcode_test.txt[/tt] for more examples on how to use symbols and directives.[/box]
 
 [title="3"]CASES[/title]
 

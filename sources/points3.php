@@ -31,7 +31,7 @@ function points_profile($member_id_of, $member_id_viewing)
     require_css('points');
     require_lang('points');
 
-    require_javascript('javascript_validation');
+    require_javascript('validation');
 
     // Get info about viewing/giving user
     if (!is_guest($member_id_viewing)) {

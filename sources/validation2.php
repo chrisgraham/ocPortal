@@ -1535,7 +1535,7 @@ function _check_link_accessibility($tag, $attributes, $self_close, $close)
         $title = $attributes['title'];
     }
     $content = strtolower(substr($OUT, $POS, strpos($OUT, '</a>', $POS) - $POS));
-    if ((isset($attributes['target'])) && ($attributes['target'] == '_blank') && (strpos($content, do_lang('LINK_NEW_WINDOW')) === false) && (strpos($title, do_lang('LINK_NEW_WINDOW')) === false)) {
+    if ((isset($attributes['target'])) && ($attributes['target'] == '_blank') && (function_exists('do_lang')) && (strpos($content, do_lang('LINK_NEW_WINDOW')) === false) && (strpos($title, do_lang('LINK_NEW_WINDOW')) === false)) {
         $errors[] = array('WCAG_BLANK');
     }
     if (substr($content, 0, 4) != '<img') {

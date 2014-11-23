@@ -1,5 +1,7 @@
 <?php
 
+/*CQC: No check*/
+
 /*
 This is based on the 8/14/10 version of the official Vimeo PHP API (vimeo-php-lib, https://github.com/vimeo/vimeo-php-lib)
  */

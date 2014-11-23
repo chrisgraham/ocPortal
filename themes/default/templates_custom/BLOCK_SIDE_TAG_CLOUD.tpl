@@ -9,7 +9,7 @@
 		</ul>
 	</nav>
 
-	{$REQUIRE_JAVASCRIPT,javascript_tag_cloud}
+	{$REQUIRE_JAVASCRIPT,tag_cloud}
 
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function() {

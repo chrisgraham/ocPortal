@@ -163,13 +163,13 @@ This form of integration is most appropriate for news and calendars, although ot
 
 [title="3"]If you're integrating it to your own new PHP code[/title]
 
-For a library called [tt]example.js[/tt], copy it to [tt]themes/default/templates_custom/JAVASCRIPT_EXAMPLE.tpl[/tt]. Use the [b]non-compressed[/b] version, as ocPortal will automatically compress it anyway, and this way is it less likely the Tempcode parser will accidentally try and interpret parts of the code as Tempcode variables.
+For a library called [tt]example.js[/tt], copy it to [tt]themes/default/javascript_custom/example.js[/tt]. Use the [b]non-compressed[/b] version, as ocPortal will automatically compress it anyway, and this way is it less likely the Tempcode parser will accidentally try and interpret parts of the code as Tempcode variables.
 
-To include that library in PHP code, you would run [tt]require_javascript('javascript_example');[/tt] from screens you need to use it on.
+To include that library in PHP code, you would run [tt]require_javascript('example');[/tt] from screens you need to use it on.
 
 [title="3"]If you're using it for your own theme, not new PHP code[/title]
 
-Edit the [tt]JAVASCRIPT_CUSTOM_GLOBALS[/tt] template and paste all the JavaScript in there.
+Edit the [tt]custom_globals.js[/tt] template and paste all the JavaScript in there.
 
 Alternatively, if keeping the filenames matters, edit the [tt]HTML_HEAD[/tt] or [tt]GLOBAL_HTML_WRAP[/tt] template to include it in the normal documented way for the JavaScript library, and upload the files. The canonical place to put extra files in ocPortal is [tt]uploads/website_specific[/tt] and reference them from there, but you can put them somewhere else if you prefer.
 

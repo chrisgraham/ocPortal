@@ -211,7 +211,18 @@ function actual_copy_theme($theme, $to)
         afm_make_directory(dirname('themes/' . $to . '/' . $c), true, true);
         afm_copy('themes/' . $theme . '/' . $c, 'themes/' . $to . '/' . $c, true);
     }
-    $needed = array('css', 'css_custom', 'images', 'images_custom', 'templates', 'templates_cached/' . get_site_default_lang(), 'templates_custom');
+    $needed = array(
+        'css',
+        'css_custom',
+        'images',
+        'images_custom',
+        'templates',
+        'templates_cached/' . get_site_default_lang(),
+        'templates_custom',
+        'javascript_custom',
+        'xml_custom',
+        'text_custom',
+    );
     foreach ($needed as $n) {
         afm_make_directory(dirname('themes/' . $to . '/' . $n), true, true);
     }

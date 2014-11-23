@@ -1,6 +1,6 @@
 {+START,IF_EMPTY,{ERROR}}
 	{+START,IF,{$JS_ON}}
-		{$REQUIRE_JAVASCRIPT,javascript_ajax}
+		{$REQUIRE_JAVASCRIPT,ajax}
 
 		{+START,LOOP,ALL_RATING_CRITERIA}
 			{$SET,identifier,{CONTENT_TYPE*}__{TYPE*}__{ID*}}

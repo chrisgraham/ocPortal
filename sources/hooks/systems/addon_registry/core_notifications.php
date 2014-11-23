@@ -117,7 +117,7 @@ class Hook_addon_registry_core_notifications
             'sources/hooks/systems/notifications/index.html',
             'sources/hooks/systems/profiles_tabs_edit/notifications.php',
             'themes/default/css/notifications.css',
-            'themes/default/templates/JAVASCRIPT_NOTIFICATIONS.tpl',
+            'themes/default/javascript/notifications.js',
             'themes/default/templates/NOTIFICATIONS_MANAGE.tpl',
             'themes/default/templates/NOTIFICATIONS_MANAGE_SCREEN.tpl',
             'themes/default/templates/NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl',
@@ -136,7 +136,7 @@ class Hook_addon_registry_core_notifications
             'sources/blocks/top_notifications.php',
             'sources/hooks/systems/startup/notification_poller_init.php',
             'sources/notification_poller.php',
-            'themes/default/templates/JAVASCRIPT_NOTIFICATION_POLLER.tpl',
+            'themes/default/javascript/notification_poller.js',
             'themes/default/templates/NOTIFICATION_POLLER.tpl',
             'themes/default/templates/NOTIFICATION_WEB.tpl',
             'themes/default/templates/NOTIFICATION_WEB_DESKTOP.tpl',
@@ -377,7 +377,7 @@ class Hook_addon_registry_core_notifications
     public function tpl_preview__notifications_regular()
     {
         require_css('notifications');
-        require_javascript('javascript_notifications');
+        require_javascript('notifications');
 
         $notification_types = array();
         $notification_types[] = array(
@@ -434,7 +434,7 @@ class Hook_addon_registry_core_notifications
     public function tpl_preview__notifications_advanced()
     {
         require_css('notifications');
-        require_javascript('javascript_notifications');
+        require_javascript('notifications');
 
         $notification_types = array();
         $notification_types[] = array(

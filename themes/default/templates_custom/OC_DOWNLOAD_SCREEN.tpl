@@ -84,4 +84,4 @@
 	}
 //]]></script>
 
-{$REQUIRE_JAVASCRIPT,javascript_thumbnails}
+{$REQUIRE_JAVASCRIPT,thumbnails}

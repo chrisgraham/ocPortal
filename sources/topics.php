@@ -457,8 +457,8 @@ class OCP_Topic
             $posts = $this->_decide_what_to_render($num_to_show_limit, $queue);
         }
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_transitions');
+        require_javascript('ajax');
+        require_javascript('transitions');
 
         // Precache member/group details in one fell swoop
         if (get_forum_type() == 'ocf') {
@@ -978,9 +978,9 @@ class OCP_Topic
     {
         require_lang('comcode');
 
-        require_javascript('javascript_editing');
-        require_javascript('javascript_validation');
-        require_javascript('javascript_plupload');
+        require_javascript('editing');
+        require_javascript('validation');
+        require_javascript('plupload');
         require_css('widget_plupload');
 
         $em = $GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();

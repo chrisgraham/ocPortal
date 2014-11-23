@@ -643,9 +643,10 @@ function step_3()
         warn_exit(do_lang_tempcode('NO_PHP_DB'));
     }
 
-    $js = do_template('JAVASCRIPT');
+    $js = new ocp_tempcode();
+    $js->attach(do_template('global', null, null, false, null, '.js'));
     $js->attach("\n");
-    $js->attach(do_template('JAVASCRIPT_AJAX'));
+    $js->attach(do_template('ajax', null, null, false, null, '.js'));
 
     $url = 'install.php?step=4';
     if (in_safe_mode()) {
@@ -680,9 +681,10 @@ function step_4()
         exit(do_lang('INST_POST_ERROR'));
     }
 
-    $js = do_template('JAVASCRIPT');
+    $js = new ocp_tempcode();
+    $js->attach(do_template('global', null, null, false, null, '.js'));
     $js->attach("\n");
-    $js->attach(do_template('JAVASCRIPT_AJAX'));
+    $js->attach(do_template('ajax', null, null, false, null, '.js'));
 
     require_code('database/' . post_param('db_type'));
     $GLOBALS['DB_STATIC_OBJECT'] = object_factory('Database_Static_' . post_param('db_type'));

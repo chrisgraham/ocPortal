@@ -201,7 +201,7 @@ class Module_admin_messaging
         $message_type = get_param('message_type');
 
         require_css('messaging');
-        require_javascript('javascript_validation');
+        require_javascript('validation');
 
         $take_responsibility_url = build_url(array('page' => '_SELF', 'type' => 'take', 'id' => $id, 'message_type' => $message_type), '_SELF');
         $responsible = null;

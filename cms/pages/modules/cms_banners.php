@@ -110,7 +110,7 @@ class Module_cms_banners extends Standard_crud_module
         ';
 
         if ($type == 'ad') {
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript .= "
                     var form=document.getElementById('main_form');
@@ -132,7 +132,7 @@ class Module_cms_banners extends Standard_crud_module
         }
 
         if ($type == 'ac') {
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             $script = find_script('snippet');
             $this->cat_crud_module->javascript = "
                     var form=document.getElementById('main_form');

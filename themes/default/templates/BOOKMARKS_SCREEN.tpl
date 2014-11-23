@@ -1,6 +1,6 @@
 {TITLE}
 
-{$REQUIRE_JAVASCRIPT,javascript_bookmarks}
+{$REQUIRE_JAVASCRIPT,bookmarks}
 
 {+START,IF_EMPTY,{BOOKMARKS}}
 	<p class="nothing_here">

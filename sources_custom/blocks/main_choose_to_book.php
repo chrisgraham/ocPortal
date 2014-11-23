@@ -8,9 +8,9 @@
 */
 
 /**
- * @license        http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright    ocProducts Ltd
- * @package        booking
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    booking
  */
 
 // TODO (can optionally take a filter of what bookables to show) - for choosing what to book from a list of possibilities, with date ranges or recurrence-choice shown for input, depending on nature of each bookable

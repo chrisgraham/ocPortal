@@ -227,7 +227,7 @@ class Module_tickets
             warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
         }
 
-        require_javascript('javascript_validation');
+        require_javascript('validation');
         require_css('tickets');
         require_code('tickets');
         require_code('tickets2');
@@ -560,10 +560,10 @@ class Module_tickets
             // Posting form
             if (($poster == '') || ($GLOBALS['FORUM_DRIVER']->get_guest_id() != intval($poster))) { // We can post a new ticket reply to an existing ticket that isn't from a guest
                 $em = $GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
-                require_javascript('javascript_editing');
-                require_javascript('javascript_validation');
-                require_javascript('javascript_posting');
-                require_javascript('javascript_plupload');
+                require_javascript('editing');
+                require_javascript('validation');
+                require_javascript('posting');
+                require_javascript('plupload');
                 require_css('widget_plupload');
                 require_code('form_templates');
                 list($attachments, $attach_size_field) = (get_forum_type() == 'ocf') ? get_attachments('post') : array(null, null);

@@ -136,7 +136,7 @@ class Hook_addon_registry_oc_tag_spinner
         return array(
             'sources_custom/hooks/systems/addon_registry/oc_tag_spinner.php',
             'themes/default/templates_custom/BLOCK_SIDE_TAG_CLOUD.tpl',
-            'themes/default/templates_custom/JAVASCRIPT_TAG_CLOUD.tpl',
+            'themes/default/javascript_custom/tag_cloud.js',
         );
     }
 }

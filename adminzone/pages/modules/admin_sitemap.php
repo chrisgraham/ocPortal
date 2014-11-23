@@ -227,10 +227,10 @@ class Module_admin_sitemap
             attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL', escape_html(integer_format(50))), 'warn');
         }
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_tree_list');
-        require_javascript('javascript_dragdrop');
-        require_javascript('javascript_sitemap_editor');
+        require_javascript('ajax');
+        require_javascript('tree_list');
+        require_javascript('dragdrop');
+        require_javascript('sitemap_editor');
 
         return do_template('SITEMAP_EDITOR_SCREEN', array('_GUID' => '2d42cb71e03d31c855a6b6467d2082d2', 'TITLE' => $this->title));
     }

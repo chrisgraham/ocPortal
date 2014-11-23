@@ -143,7 +143,7 @@ class Hook_addon_registry_image_slider
             'themes/default/images_custom/skitter/sprite-round.png',
             'themes/default/images_custom/skitter/sprite-square.png',
             'themes/default/templates_custom/BLOCK_MAIN_IMAGE_SLIDER.tpl',
-            'themes/default/templates_custom/JAVASCRIPT_SKITTER.tpl',
+            'themes/default/javascript_custom/skitter.js',
             'lang_custom/EN/image_slider.ini',
         );
     }

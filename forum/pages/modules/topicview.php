@@ -728,8 +728,8 @@ class Module_topicview
                 $expand_type = 'expand';
             }
             $em = $GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
-            require_javascript('javascript_editing');
-            require_javascript('javascript_validation');
+            require_javascript('editing');
+            require_javascript('validation');
             if (addon_installed('captcha')) {
                 require_code('captcha');
                 $use_captcha = use_captcha();

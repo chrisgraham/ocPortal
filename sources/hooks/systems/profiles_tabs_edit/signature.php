@@ -96,10 +96,10 @@ class Hook_profiles_tabs_edit_signature
         $has_preview = true;
 
         require_lang('javascript');
-        require_javascript('javascript_posting');
-        require_javascript('javascript_editing');
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_plupload');
+        require_javascript('posting');
+        require_javascript('editing');
+        require_javascript('ajax');
+        require_javascript('plupload');
         require_css('widget_plupload');
 
         require_lang('comcode');

@@ -26,7 +26,7 @@ if (!function_exists('_do_lang')) {
         if ($lang === null) {
             $lang = ($USER_LANG_CACHED === null) ? user_lang() : $USER_LANG_CACHED;
         }// else // This else assumes we initially load all language files in the users language. Reasonable. EDIT: Actually, no it is not - the user_lang() initially is not accurate until ocPortal gets past a certain startup position
-        {
+        //{
             if ($GLOBALS['SEMI_DEV_MODE']) { // Special syntax for easily inlining language strings
                 $pos = strpos($codename, '=');
                 if ($pos !== false) {
@@ -79,7 +79,7 @@ if (!function_exists('_do_lang')) {
 
                 require_all_open_lang_files($lang);
             }
-        }
+        //}
 
         if ($lang == 'xxx') {
             return 'xxx'; // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language

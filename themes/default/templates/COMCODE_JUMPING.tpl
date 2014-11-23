@@ -1,6 +1,6 @@
 {$SET,RAND_ID_JUMPING,rand{$RAND}}
 
-{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+{$REQUIRE_JAVASCRIPT,dyn_comcode}
 
 <div class="inline" id="comcodejumping{$GET,RAND_ID_JUMPING}"></div>
 

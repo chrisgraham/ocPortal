@@ -326,7 +326,7 @@ class Module_shopping
         require_code('templates_results_table');
         require_code('form_templates');
         require_css('shopping');
-        require_javascript('javascript_shopping');
+        require_javascript('shopping');
 
         log_cart_actions('View cart');
 
@@ -557,7 +557,7 @@ class Module_shopping
         if (is_null($url)) {
             $url = '';
         }
-        require_javascript('javascript_validation');
+        require_javascript('validation');
 
         return do_template('PURCHASE_WIZARD_SCREEN', array('_GUID' => '02fd80e2b4d4fc2348736a72e504a208', 'GET' => $get ? true : null, 'TITLE' => $title, 'CONTENT' => $content, 'URL' => $url));
     }

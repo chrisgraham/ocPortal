@@ -61,7 +61,7 @@ class Block_side_friends
         require_code('chat_lobby');
         require_lang('chat');
         require_css('chat');
-        require_javascript('javascript_chat');
+        require_javascript('chat');
 
         $max = array_key_exists('max', $map) ? intval($map['max']) : 15;
 

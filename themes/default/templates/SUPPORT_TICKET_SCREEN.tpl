@@ -107,7 +107,7 @@
 
 {+START,IF,{$HAS_PRIVILEGE,ticket_assigned_staff}}
 	<form action="{$PAGE_LINK*,_SEARCH:tickets:assign:ticket_id={ID}}" method="post">
-		{$REQUIRE_JAVASCRIPT,javascript_people_lists}
+		{$REQUIRE_JAVASCRIPT,people_lists}
 
 		<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" onfocus="if (this.value=='') update_ajax_member_list(this,null,true,event);" onkeyup="update_ajax_member_list(this,null,false,event);" class="input_username" type="text" id="username" name="username" value="{$USERNAME*}" />
 		<input class="button_micro buttons__proceed" type="submit" value="{!ASSIGN_TO}" />

@@ -97,8 +97,8 @@ function rss_backend_script()
         // Feed stylesheet for RSS
         header('Content-Type: text/xsl');
         require_css('rss');
-        $js = get_custom_base_url() . substr(javascript_enforce('JAVASCRIPT_XSL_MOPUP'), strlen(get_custom_file_base()));
-        $echo = do_template('RSS_XSLT', array('_GUID' => 'c443e0195c935117cf0d9a7bc2730d7a', 'JAVASCRIPT_XSL_MOPUP' => $js));
+        $js = get_custom_base_url() . substr(javascript_enforce('xsl_mopup'), strlen(get_custom_file_base()));
+        $echo = do_template('RSS_XSLT', array('_GUID' => 'c443e0195c935117cf0d9a7bc2730d7a', 'XSL_MOPUP' => $js), null, false, null, '.xml', 'xml');
         $echo->evaluate_echo();
         return;
     }
@@ -106,8 +106,8 @@ function rss_backend_script()
         // Feed stylesheet for Atom
         header('Content-Type: text/xsl');
         require_css('rss');
-        $js = get_custom_base_url() . substr(javascript_enforce('JAVASCRIPT_XSL_MOPUP'), strlen(get_custom_file_base()));
-        $echo = do_template('ATOM_XSLT', array('_GUID' => '27fec456a6b3144aa847130e74463d99', 'JAVASCRIPT_XSL_MOPUP' => $js));
+        $js = get_custom_base_url() . substr(javascript_enforce('xsl_mopup'), strlen(get_custom_file_base()));
+        $echo = do_template('ATOM_XSLT', array('_GUID' => '27fec456a6b3144aa847130e74463d99', 'XSL_MOPUP' => $js), null, false, null, '.xml', 'xml');
         $echo->evaluate_echo();
         return;
     }
@@ -115,8 +115,8 @@ function rss_backend_script()
         // Feed stylesheet for Atom
         header('Content-Type: text/xsl');
         require_css('rss');
-        $js = get_custom_base_url() . substr(javascript_enforce('JAVASCRIPT_XSL_MOPUP'), strlen(get_custom_file_base()));
-        $echo = do_template('OPML_XSLT', array('_GUID' => 'c0c6bd1d7a0e263768a2208061f799f5', 'JAVASCRIPT_XSL_MOPUP' => $js));
+        $js = get_custom_base_url() . substr(javascript_enforce('xsl_mopup'), strlen(get_custom_file_base()));
+        $echo = do_template('OPML_XSLT', array('_GUID' => 'c0c6bd1d7a0e263768a2208061f799f5', 'XSL_MOPUP' => $js), null, false, null, '.xml', 'xml');
         $echo->evaluate_echo();
         return;
     }
@@ -185,7 +185,7 @@ function rss_backend_script()
 
             $feeds[] = array('MODE' => $feed, 'TITLE' => $feed_title);
         }
-        $echo = do_template('OPML_WRAPPER', array('_GUID' => '712b78d1b4c23aefc8a92603477f84ed', 'FEEDS' => $feeds, 'ABOUT' => $site_about, 'DATE' => $date));
+        $echo = do_template('OPML_WRAPPER', array('_GUID' => '712b78d1b4c23aefc8a92603477f84ed', 'FEEDS' => $feeds, 'ABOUT' => $site_about, 'DATE' => $date), null, false, null, '.xml', 'xml');
         $echo->evaluate_echo();
         return;
     }
@@ -221,7 +221,7 @@ function rss_backend_script()
             $local_base_url = '';
         }
 
-        $rss_cloud = do_template('RSS_CLOUD', array('_GUID' => 'a47c40a4c137ea1e5abfc71346547313', 'TYPE' => ($type == 'news') ? '' : $type, 'PORT' => strval($port), 'LOCAL_BASE_URL' => $local_base_url));
+        $rss_cloud = do_template('RSS_CLOUD', array('_GUID' => 'a47c40a4c137ea1e5abfc71346547313', 'TYPE' => ($type == 'news') ? '' : $type, 'PORT' => strval($port), 'LOCAL_BASE_URL' => $local_base_url), null, false, null, '.xml', 'xml');
     } else {
         $rss_cloud = new Tempcode();
     }
@@ -233,7 +233,7 @@ function rss_backend_script()
         return;
     }
 
-    $echo = do_template($prefix . 'WRAPPER', array('FILTER' => $filter, 'CUTOFF' => strval($cutoff), 'MODE' => $mode, 'MODE_NICE' => $mode_nice, 'RSS_CLOUD' => $rss_cloud, 'VERSION' => ocp_version_pretty(), 'COPYRIGHT' => $copyright, 'DATE' => $date, 'LOGO_URL' => $logo_url, 'ABOUT' => $site_about, 'CONTENT' => $content, 'SELF_URL' => get_self_url_easy()));
+    $echo = do_template($prefix . 'WRAPPER', array('FILTER' => $filter, 'CUTOFF' => strval($cutoff), 'MODE' => $mode, 'MODE_NICE' => $mode_nice, 'RSS_CLOUD' => $rss_cloud, 'VERSION' => ocp_version_pretty(), 'COPYRIGHT' => $copyright, 'DATE' => $date, 'LOGO_URL' => $logo_url, 'ABOUT' => $site_about, 'CONTENT' => $content, 'SELF_URL' => get_self_url_easy()), null, false, null, '.xml', 'xml');
     $echo->evaluate_echo();
 }
 

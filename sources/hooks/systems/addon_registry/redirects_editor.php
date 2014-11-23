@@ -135,7 +135,7 @@ class Hook_addon_registry_redirects_editor
      */
     public function tpl_preview__administrative__redirecte_table_screen()
     {
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
 
         $fields = new Tempcode();
         foreach (placeholder_array() as $i => $row) {

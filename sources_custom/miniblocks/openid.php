@@ -3,8 +3,8 @@
 i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
 require_css('openid');
-require_javascript('javascript_jquery');
-require_javascript('javascript_openid');
+require_javascript('jquery');
+require_javascript('openid');
 
 $url = build_url(array('page' => ''), '');
 echo '

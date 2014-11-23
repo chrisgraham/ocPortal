@@ -423,7 +423,6 @@ class Module_admin_setupwizard
             'staff',
             'backup',
             'bookmarks',
-            'devguide',
             'supermember_directory',
             'ldap',
             'sms',

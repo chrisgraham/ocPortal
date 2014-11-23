@@ -56,7 +56,6 @@ class google_appengine_test_set extends ocp_test_case
 
             if (in_array($hook, array(
                 'installer',
-                'devguide',
                 'backup',
                 'uninstaller',
                 'ldap',

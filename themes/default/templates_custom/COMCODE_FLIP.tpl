@@ -1,6 +1,6 @@
-{$REQUIRE_JAVASCRIPT,javascript_jquery}
-{$REQUIRE_JAVASCRIPT,javascript_jquery_ui_core}
-{$REQUIRE_JAVASCRIPT,javascript_jquery_flip}
+{$REQUIRE_JAVASCRIPT,jquery}
+{$REQUIRE_JAVASCRIPT,jquery_ui_core}
+{$REQUIRE_JAVASCRIPT,jquery_flip}
 {$REQUIRE_CSS,flip}
 
 {$SET,RAND,{$RAND}}

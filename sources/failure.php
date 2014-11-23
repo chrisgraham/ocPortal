@@ -677,7 +677,11 @@ function _log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_
                 'URL' => $url,
                 'POST' => $post,
             ),
-            get_site_default_lang()
+            get_site_default_lang(),
+            false,
+            null,
+            '.txt',
+            'text'
         );
 
         require_code('notifications');

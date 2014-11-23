@@ -59,10 +59,10 @@ foreach (array_keys($themes) as $theme) {
         $images_copy = $images + $default_images;
         closedir($dh);
         $missing_images = array();
-        foreach (array(get_custom_file_base() . '/themes/' . $theme . '/css_custom', get_custom_file_base() . '/themes/' . $theme . '/templates_custom', get_custom_file_base() . '/pages/comcode_custom/EN') as $dir) {
+        foreach (array(get_custom_file_base() . '/themes/' . $theme . '/css_custom', get_custom_file_base() . '/themes/' . $theme . '/templates_custom', get_custom_file_base() . '/themes/' . $theme . '/xml_custom', get_custom_file_base() . '/themes/' . $theme . '/text_custom', get_custom_file_base() . '/pages/comcode_custom/EN') as $dir) {
             $dh = opendir($dir);
             while (($f = readdir($dh)) !== false) {
-                if ((substr($f, -4) == '.css') || (substr($f, -4) == '.tpl') || ((substr($f, -4) == '.txt') && (substr($f, 0, strlen($theme . '__')) == $theme . '__'))) {
+                if ((substr($f, -4) == '.css') || (substr($f, -4) == '.tpl') || (substr($f, -3) == '.js') || (substr($f, -4) == '.xml') || ((substr($f, -4) == '.txt') && (strpos($dir, '/themes/') !== false)) || ((substr($f, -4) == '.txt') && (substr($f, 0, strlen($theme . '__')) == $theme . '__'))) {
                     $contents = file_get_contents($dir . '/' . $f);
 
                     // Test comment/brace balancing

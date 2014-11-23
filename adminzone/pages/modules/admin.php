@@ -1080,13 +1080,13 @@ class Module_admin
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_themes', 'adminzone'))) {
             $content[$current_results_type] = new Tempcode();
             $tpl_found = array();
-            foreach (array('templates_custom', 'templates') as $template_dir) {
+            foreach (array('templates_custom', 'templates', 'xml_custom', 'xml', 'text_custom', 'text') as $template_dir) {
                 $dh = opendir(get_file_base() . '/themes/default/' . $template_dir . '/');
                 while (($file = readdir($dh)) !== false) {
-                    if ((substr(strtolower($file), -4) == '.tpl') && (!array_key_exists($file, $tpl_found))) {
+                    if (((substr(strtolower($file), -4) == '.tpl') || (substr(strtolower($file), -4) == '.xml') || (substr(strtolower($file), -4) == '.txt') || (substr(strtolower($file), -3) == '.js')) && (!array_key_exists($file, $tpl_found))) {
                         $n = $file;
-                        if (($this->_keyword_match(basename($n, '.tpl'))) || ($this->_keyword_match($n)) || (($template_dir == 'templates_custom') && ($this->_keyword_match(file_get_contents(get_file_base() . '/themes/default/' . $template_dir . '/' . $n))))) {
-                            $_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $default_theme, 'f0file' => $file), 'adminzone');
+                        if (($this->_keyword_match(basename($n, '.' . get_file_extension($n)))) || ($this->_keyword_match($n)) || (($template_dir == 'templates_custom') && ($this->_keyword_match(file_get_contents(get_file_base() . '/themes/default/' . $template_dir . '/' . $n))))) {
+                            $_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $default_theme, 'f0file' => $template_dir . '/' . $file), 'adminzone');
                             $breadcrumbs = new Tempcode();
                             $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                             $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));

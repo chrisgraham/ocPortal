@@ -883,7 +883,7 @@ abstract class Standard_crud_module
         $submit_icon = ($this->type_code == 'c') ? 'menu___generic_admin__add_one_category' : 'menu___generic_admin__add_one';
 
         if (get_param('type', 'ad') == 'add_catalogue') {
-            require_javascript('javascript_catalogues');
+            require_javascript('catalogues');
 
             // New field
             $fields_new = new Tempcode();
@@ -1404,7 +1404,7 @@ abstract class Standard_crud_module
         }
 
         if (get_param('type', '_ed') == '_edit_catalogue') {
-            require_javascript('javascript_catalogues');
+            require_javascript('catalogues');
 
             // Existing fields
             $field_count = 0;

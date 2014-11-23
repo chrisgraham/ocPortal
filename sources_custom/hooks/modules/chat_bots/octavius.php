@@ -7,6 +7,8 @@
 
 */
 
+/*CQC: No check*/
+
 #####################################################
 # eliza.php- Final Project: Eliza program written in PHP
 #

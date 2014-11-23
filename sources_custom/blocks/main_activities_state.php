@@ -49,8 +49,8 @@ class Block_main_activities_state
 
         require_lang('activities');
         require_css('activities');
-        require_javascript('javascript_activities_state');
-        require_javascript('javascript_jquery');
+        require_javascript('activities_state');
+        require_javascript('jquery');
 
         $title = array_key_exists('param', $map) ? $map['param'] : do_lang('STATUS_UPDATE');
 

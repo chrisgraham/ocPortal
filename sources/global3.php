@@ -849,14 +849,12 @@ function is_writable_wrap($path)
     }
 
     if (is_dir($path)) {
-        /*if (false) // ideal, but too dangerous as sometimes you can write files but not delete again
-        {
+        /*if (false) { // ideal, but too dangerous as sometimes you can write files but not delete again
             $test=@fopen($path.'/ocp.delete.me',GOOGLE_APPENGINE?'wb':'wt');
-            if ($test!==false)
-            {
-                    fclose($test);
-                    unlink($path.'/ocp.delete.me');
-                    return true;
+            if ($test!==false) {
+                fclose($test);
+                unlink($path.'/ocp.delete.me');
+                return true;
             }
             return false;
         }*/

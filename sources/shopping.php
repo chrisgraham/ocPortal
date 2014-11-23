@@ -430,7 +430,7 @@ function payment_form()
 
         $result = do_template('PURCHASE_WIZARD_STAGE_TRANSACT', array('_GUID' => 'a70d6995baabb7e41e1af68409361f3c', 'FIELDS' => $fields, 'HIDDEN' => $hidden));
 
-        require_javascript('javascript_validation');
+        require_javascript('validation');
 
         return do_template('PURCHASE_WIZARD_SCREEN', array('_GUID' => 'dfc7b8460e81dfd6d083e5f5d2b606a4', 'TITLE' => $title, 'CONTENT' => $result, 'URL' => $finish_url));
     }

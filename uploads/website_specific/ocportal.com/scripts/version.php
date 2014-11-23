@@ -9,9 +9,9 @@
 */
 
 /**
- * @license        http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright    ocProducts Ltd
- * @package        ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 // Find ocPortal base directory, and chdir into it
@@ -32,7 +32,9 @@ global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST = true;
 global $EXTERNAL_CALL;
 $EXTERNAL_CALL = false;
-if (!is_file($FILE_BASE . '/sources/global.php')) exit('<html><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+if (!is_file($FILE_BASE . '/sources/global.php')) {
+    exit('<html><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+}
 require($FILE_BASE . '/sources/global.php');
 
 require_lang('ocportalcom');
@@ -50,7 +52,9 @@ require_code('version2');
 $dotted = get_version_dotted__from_anything(get_param('version'));
 list($intended, $qualifier, $qualifier_number, $long_version) = get_version_components__from_dotted($dotted);
 $version_pretty = get_version_pretty__from_dotted($dotted);
-if (!is_null($qualifier)) $long_version_with_qualifier = $long_version . ' ' . $qualifier . $qualifier_number;
+if (!is_null($qualifier)) {
+    $long_version_with_qualifier = $long_version . ' ' . $qualifier . $qualifier_number;
+}
 
 /*
 VARIABLE KEY:
@@ -64,8 +68,7 @@ qualifier_number: NULL or integer
 
 // Find our version
 $our_version = null;
-if (preg_match('#^[\d\.]+$#', $intended) != 0) // If we understand the format
-{
+if (preg_match('#^[\d\.]+$#', $intended) != 0) { // If we understand the format
     $download_row = find_download($version_pretty);
     if (!is_null($download_row)) {
         $our_version = array(
@@ -74,12 +77,18 @@ if (preg_match('#^[\d\.]+$#', $intended) != 0) // If we understand the format
             'add_date' => $download_row['add_date'],
         );
     }
-} else return old_style(); // We can't do our clever stuff as we don't recognise the version number formatting. This should never happen, but better to allow it.
+} else {
+    return old_style();
+} // We can't do our clever stuff as we don't recognise the version number formatting. This should never happen, but better to allow it.
 
 // Possible next versions, in order of decreasing distance (i.e. we search from right to left until we find a match). Will never recommend a beta or RC unless you're already on the same track of them
 $bits = explode('.', $intended);
 for ($i = 0; $i < 3; $i++) {
-    if (!isset($bits[$i])) $bits[$i] = 0; else $bits[$i] = intval($bits[$i]);
+    if (!isset($bits[$i])) {
+        $bits[$i] = 0;
+    } else {
+        $bits[$i] = intval($bits[$i]);
+    }
 }
 $possible_next_versions = array();
 $stub = '';
@@ -110,19 +119,24 @@ for ($i = 0; $i < 3; $i++) {
         $possible_next_versions[] = $x;
     }
 
-    if ($stub != '') $stub .= '.';
+    if ($stub != '') {
+        $stub .= '.';
+    }
     $stub .= strval($bits[$i]);
 }
 
 // Strip down to canonical again
-foreach ($possible_next_versions as $x => $pos)
+foreach ($possible_next_versions as $x => $pos) {
     $possible_next_versions[$x] = preg_replace('#(\.0)+($| )#', '${2}', $pos);
+}
 
 // Find closest next version
 $possible_next_versions = array_reverse($possible_next_versions);
 $next_upgrade_version = null;
 foreach ($possible_next_versions as $pos_version) {
-    if ($pos_version == $version_pretty) continue;
+    if ($pos_version == $version_pretty) {
+        continue;
+    }
 
     $row = find_version($pos_version);
     if (!is_null($row)) {
@@ -141,13 +155,11 @@ foreach ($possible_next_versions as $pos_version) {
 $stub = '';
 $higher_versions = array(null, null, null);
 global $DOWNLOAD_ROWS;
-for ($i = 0; $i < 3; $i++) // Loop over each release level
-{
+for ($i = 0; $i < 3; $i++) { // Loop over each release level
     $found = null;
     $looking_for = 'ocPortal Version ' . $stub; // Starts with blank stub, which will match highest version. Subsequent iterations bind to the version numbers and find boundewd maximum highest version under that version prefix.
 
-    foreach (array_reverse($DOWNLOAD_ROWS) as $row) // Iterate, newest to oldest
-    {
+    foreach (array_reverse($DOWNLOAD_ROWS) as $row) { // Iterate, newest to oldest
         // If it's on the release level being inspected, and we're either on a qualifier (alpha/beta/RC) already, or this isn't having a qualifier (i.e. we don't want to suggest someone go to a bleeding-edge version)
         if ((substr($row['nice_title'], 0, strlen($looking_for)) == $looking_for) && ((!is_null($qualifier)) || ((strpos($row['nice_title'], 'RC') === false) && (strpos($row['nice_title'], 'beta') === false) && (strpos($row['nice_title'], 'alpha') === false)))) {
             // $this_version will hold the version we're currently looking at, comparing to the version the user has
@@ -157,17 +169,28 @@ for ($i = 0; $i < 3; $i++) // Loop over each release level
             $this_qualifier = (strpos($this_version, ' ') === false) ? mixed() : preg_replace('#^.* #', '', $this_version); // Extract qualifier from $this_version, which btw is a "pretty version" format version number
             $different = false; // Used to ensure the version really is different to the one we're on
             for ($j = 0; $j <= $i; $j++) {
-                if (!array_key_exists($j, $this_bits)) $this_bits[$j] = '0';
-                if (!is_numeric($this_bits[$j]))
+                if (!array_key_exists($j, $this_bits)) {
+                    $this_bits[$j] = '0';
+                }
+                if (!is_numeric($this_bits[$j])) {
                     break;
-                if (($bits[$j] != $this_bits[$j])) $different = true;
+                }
+                if (($bits[$j] != $this_bits[$j])) {
+                    $different = true;
+                }
             }
             for (; $j < 3; $j++) {
-                if (!array_key_exists($j, $this_bits)) $this_bits[$j] = '0';
+                if (!array_key_exists($j, $this_bits)) {
+                    $this_bits[$j] = '0';
+                }
             }
             if (!is_null($this_qualifier)) {
-                if ($this_qualifier !== ($qualifier . strval($qualifier_number))) $different = true;
-            } elseif (!is_null($qualifier)) $different = true;
+                if ($this_qualifier !== ($qualifier . strval($qualifier_number))) {
+                    $different = true;
+                }
+            } elseif (!is_null($qualifier)) {
+                $different = true;
+            }
 
             $news_row = find_version($this_version);
 
@@ -180,25 +203,27 @@ for ($i = 0; $i < 3; $i++) // Loop over each release level
                     @var_dump(implode('.', $bits) . (is_null($qualifier) ? '' : ('.' . $qualifier . $qualifier_number)));
                 }
 
-                if (is_null($found)) // Only set $found if not already. We were iterating downloads in reverse order, so the newest is found first via this
-                {
+                if (is_null($found)) { // Only set $found if not already. We were iterating downloads in reverse order, so the newest is found first via this
                     $found = array( // Outside
-                        'version' => $this_version,
-                        'news_id' => $news_row['id'],
-                        'download_description' => '', // We set this blank here as if this is the latest version then the download description is only going to say that, which is not interesting to us.
-                        'add_date' => $row['add_date'],
+                                    'version' => $this_version,
+                                    'news_id' => $news_row['id'],
+                                    'download_description' => '', // We set this blank here as if this is the latest version then the download description is only going to say that, which is not interesting to us.
+                                    'add_date' => $row['add_date'],
                     );
                 } else {
-                    if (strlen($found['download_description']) < 3000) // If was already found and we have release details in this download description, append it, it's still good advice for the upgrade level
-                    {
-                        if ($found['download_description'] != '') $found['download_description'] .= "\n---\n";
+                    if (strlen($found['download_description']) < 3000) { // If was already found and we have release details in this download description, append it, it's still good advice for the upgrade level
+                        if ($found['download_description'] != '') {
+                            $found['download_description'] .= "\n---\n";
+                        }
                         $found['download_description'] .= strip_download_description($row['nice_description']); // We chain all the download descriptions together; each says why the version involved is out of date, so together it is like a "why upgrade" history. The news posts on the other hand say what a new version itself offers.
                     }
                 }
             } elseif (!$different) {
                 if (!is_null($found)) {
                     if (strlen($found['download_description']) < 3000) {
-                        if ($found['download_description'] != '') $found['download_description'] .= "\n---\n";
+                        if ($found['download_description'] != '') {
+                            $found['download_description'] .= "\n---\n";
+                        }
                         $found['download_description'] .= strip_download_description($row['nice_description']); // We chain all the download descriptions together; each says why the version involved is out of date, so together it is like a "why upgrade" history. The news posts on the other hand say what a new version itself offers.
                     }
                 }
@@ -209,13 +234,17 @@ for ($i = 0; $i < 3; $i++) // Loop over each release level
     // If the best yet for any valid release level, remember it
     if (!is_null($found)) {
         for ($_i = 0; $_i < $i; $_i++) {
-            if (($higher_versions[$_i] !== null) && ($higher_versions[$_i]['version'] == $found['version'])) $found = null;
+            if (($higher_versions[$_i] !== null) && ($higher_versions[$_i]['version'] == $found['version'])) {
+                $found = null;
+            }
         }
 
         $higher_versions[$i] = $found;
     }
 
-    if ($stub != '') $stub .= '.';
+    if ($stub != '') {
+        $stub .= '.';
+    }
     $stub .= strval($bits[$i]);
 }
 
@@ -233,25 +262,20 @@ if (!is_null($our_version)) {
 } else {
     echo '<p>' . do_lang('OC_NON_EXISTANT_VERSION') . '</p>';
 }
-/*if (false) // Info isn't actually helpful, as the download_description above contains it also
-{
+/*if (false) { // Info isn't actually helpful, as the download_description above contains it also
 	echo '<h3>Next version</h3>';
 	// Next version
-	if (!is_null($next_upgrade_version))
-	{
+	if (!is_null($next_upgrade_version)) {
 		// NB: $has_jump should always be true in this branch, unless there are holes in the version DB
 		echo '<p>You are running an outdated version. The closest version is <a onclick="window.open(this.href,null,\'status=yes,toolbar=no,location=no,menubar=no,resizable=yes,scrollbars=yes,width=976,height=600\'); return false;" target="_blank" title="Version '.escape_html($next_upgrade_version['version']).' (this link will open in a new window)" href="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'news','type'=>'view','id'=>$next_upgrade_version['news_id'],'wide_high'=>1),'site'))).'">version '.escape_html($next_upgrade_version['version']).'</a>, but read on for the latest recommended upgrade paths.</p>';
-	} elseif ((!is_null($our_version)) && (!$has_jump))
-	{
+	} elseif ((!is_null($our_version)) && (!$has_jump)) {
 		echo '<p>You are running the latest version.</p>';
-	} else
-	{
+	} else {
 		echo '<p>Sorry, details of the next version is not in our database.</p>';
 	}
 } else
 {
-	if ((is_null($next_upgrade_version)) && (!is_null($our_version)) && (!$has_jump))
-	{
+	if ((is_null($next_upgrade_version)) && (!is_null($our_version)) && (!$has_jump)) {
 		echo '<p>You are running the latest version.</p>';
 	}
 }*/
@@ -265,7 +289,9 @@ if ($has_jump) {
             $discontinued = array('1', '2', '2.1', '2.5', '2.6', '3', '3.1', '3.2');
             $note = '';
             foreach ($discontinued as $d) {
-                if ((strlen($d) == 1) && ($higher_versions[$i]['version'] != $d)) $d .= '.0';
+                if ((strlen($d) == 1) && ($higher_versions[$i]['version'] != $d)) {
+                    $d .= '.0';
+                }
                 if ((substr($higher_versions[$i]['version'], 0, strlen($d) + 1) == $d . '.') || ($higher_versions[$i]['version'] == $d)) {
                     $note = ' &ndash; <em>Note that the ' . $d . ' version line is no longer supported</em>';
                 }
@@ -286,7 +312,9 @@ if ($has_jump) {
             // NB: For legacy reasons all lines get dumped into paragraphs. So we have to put on one line.
             $out = '';
             $upgrade_script = (($bits[0] >= 4) ? 'upgrader.php' : 'force_upgrade.php');
-            if (isset($found['news_id'])) $upgrade_script .= '?news_id=' . strval($higher_versions[$i]['news_id']);
+            if (isset($found['news_id'])) {
+                $upgrade_script .= '?news_id=' . strval($higher_versions[$i]['news_id']);
+            }
             $out = "
 			<span class=\"version_button\" id=\"link_pos_" . strval($i) . "\"></span>
 			<script type=\"text/javascript\">/* <![CDATA[ */
@@ -338,10 +366,18 @@ function find_version($version_pretty)
     load_news_rows();
 
     foreach ($NEWS_ROWS as $news_row) {
-        if ($news_row['nice_title'] == $version_pretty . ' released') return $news_row;
-        if ($news_row['nice_title'] == 'ocPortal ' . $version_pretty . ' released') return $news_row;
-        if ($news_row['nice_title'] == $version_pretty . ' released!') return $news_row;
-        if ($news_row['nice_title'] == 'ocPortal ' . $version_pretty . ' released!') return $news_row;
+        if ($news_row['nice_title'] == $version_pretty . ' released') {
+            return $news_row;
+        }
+        if ($news_row['nice_title'] == 'ocPortal ' . $version_pretty . ' released') {
+            return $news_row;
+        }
+        if ($news_row['nice_title'] == $version_pretty . ' released!') {
+            return $news_row;
+        }
+        if ($news_row['nice_title'] == 'ocPortal ' . $version_pretty . ' released!') {
+            return $news_row;
+        }
     }
 
     return null;
@@ -351,7 +387,6 @@ function find_download($version_pretty)
 {
     global $DOWNLOAD_ROWS;
     load_download_rows();
-
 
     $download_row = null;
     foreach ($DOWNLOAD_ROWS as $_download_row) {
@@ -368,8 +403,7 @@ function load_news_rows()
 {
     global $NEWS_ROWS;
     if (!isset($NEWS_ROWS)) {
-        if (get_param_integer('test_mode', 0) == 1) // Test data
-        {
+        if (get_param_integer('test_mode', 0) == 1) { // Test data
             $NEWS_ROWS = array(
                 array('id' => 2, 'nice_title' => 'ocPortal 3 released', 'add_date' => time() - 60 * 60 * 8),
                 array('id' => 3, 'nice_title' => '3.1 released', 'add_date' => time() - 60 * 60 * 5),
@@ -391,8 +425,7 @@ function load_download_rows()
 {
     global $DOWNLOAD_ROWS;
     if (!isset($DOWNLOAD_ROWS)) {
-        if (get_param_integer('test_mode', 0) == 1) // Test data
-        {
+        if (get_param_integer('test_mode', 0) == 1) { // Test data
             $DOWNLOAD_ROWS = array(
                 array('id' => 20, 'nice_title' => 'ocPortal Version 3', 'add_date' => time() - 60 * 60 * 8, 'nice_description' => '[Test message] This is 3. Yo peeps. 3.1 is the biz.'),
                 array('id' => 30, 'nice_title' => 'ocPortal Version 3.1', 'add_date' => time() - 60 * 60 * 5, 'nice_description' => '[Test message] This is 3.1.1. 3.1.1 is out dudes.'),

@@ -640,12 +640,13 @@ function kid_gloves_html_escaping_singular(&$param)
  * @param  boolean                      Whether to not produce a stack dump if the template is missing
  * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
  * @param  string                       File type suffix of template file (e.g. .tpl)
+ * @set    .tpl .js .xml .txt .css
  * @param  string                       Subdirectory type to look in
- * @set    templates css
+ * @set    templates javascript xml text css
  * @param  ?ID_TEXT                     Theme to use (null: current theme)
  * @return tempcode                     The Tempcode for this template
  */
-function do_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $type = 'templates', $theme = null)
+function do_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $directory = 'templates', $theme = null)
 {
     if (empty($lang)) {
         global $USER_LANG_CACHED;
@@ -653,7 +654,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
     }
 
     if ($GLOBALS['SEMI_DEV_MODE']) {
-        if (($codename == strtolower($codename)) && ($type != 'css') && ($codename != 'tempcode_test')) {
+        if (($codename == strtolower($codename)) && ($directory == 'templates')) {
             fatal_exit('Template names should be in upper case, and the files should be stored in upper case.');
         }
 
@@ -670,7 +671,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
     $special_treatment = ((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && ($XHTML_SPIT_OUT === null));
 
     if ($RECORD_TEMPLATES_USED) {
-        $RECORDED_TEMPLATES_USED[] = $codename;
+        $RECORDED_TEMPLATES_USED[] = $directory . '/' . $codename . $suffix;
     }
 
     // Variables we'll need
@@ -678,10 +679,10 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
         $theme = isset($USER_THEME_CACHE) ? $USER_THEME_CACHE : (((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER, 'get_theme'))) ? filter_naughty($FORUM_DRIVER->get_theme()) : 'default');
     }
     $prefix_default = get_file_base() . '/themes/';
-    $prefix = (get_custom_file_base() . '/themes/');
+    $prefix = get_custom_file_base() . '/themes/';
 
     // Is it structurally cached on disk yet?
-    if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type])) {
+    if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory])) {
         $loaded_this_once = false;
     } else {
         $loaded_this_once = true;
@@ -696,7 +697,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                 $_data = $LOADED_TPL_CACHE[$codename][$theme];
             } else {
                 $_data = new Tempcode();
-                $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $type, $fallback));
+                $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $directory, $fallback));
                 if (!$test) {
                     $_data = false; // failed
                 }
@@ -705,11 +706,11 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             global $SITE_INFO;
             $support_smart_decaching = (!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching'] != '1');
             if ($support_smart_decaching) {
-                if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type])) {
-                    $found = find_template_place($codename, $lang, $theme, $suffix, $type);
-                    $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type] = $found;
+                if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory])) {
+                    $found = find_template_place($codename, $lang, $theme, $suffix, $directory);
+                    $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory] = $found;
                 } else {
-                    $found = $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type];
+                    $found = $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory];
                 }
 
                 if ($found !== null) {
@@ -719,7 +720,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                             $file_path = get_file_base() . '/themes/' . $found[0] . $found[1] . $codename . $suffix;
                         }
                     } else {
-                        $file_path = ((($theme == 'default') && ($suffix != '.css')) ? get_file_base() : get_custom_file_base()) . '/themes/' . $found[0] . $found[1] . $codename . $suffix;
+                        $file_path = get_custom_file_base() . '/themes/' . $found[0] . $found[1] . $codename . $suffix;
                     }
                     if (GOOGLE_APPENGINE) {
                         gae_optimistic_cache(true);
@@ -735,7 +736,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             if ((!$support_smart_decaching) || (($tcp_time !== false) && (is_file($file_path)))/*if in install can be found yet no file at path due to running from data.cms*/ && ($found !== null)) {
                 if ((!$support_smart_decaching) || (filemtime($file_path) < $tcp_time)) {
                     $_data = new Tempcode();
-                    $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $type, $fallback));
+                    $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $directory, $fallback));
                     if (!$test) {
                         $_data = false; // failed
                     }
@@ -744,14 +745,14 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
         }
     }
     if ($_data === false) { // No, it's not
-        if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type])) {
-            $found = find_template_place($codename, $lang, $theme, $suffix, $type);
-            $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type] = $found;
+        if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory])) {
+            $found = find_template_place($codename, $lang, $theme, $suffix, $directory);
+            $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory] = $found;
         } else {
-            $found = $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type];
+            $found = $TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory];
         }
 
-        unset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]);
+        unset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$directory]);
         if ($found === null) {
             if ($fallback === null) {
                 if ($light_error) {
@@ -806,7 +807,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             $ret = $__data;
         }
         if (($SHOW_EDIT_LINKS) && ($codename != 'PARAM_INFO')) {
-            $edit_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $theme, 'f0file' => $codename), 'adminzone');
+            $edit_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $theme, 'f0file' => $directory . '/' . $codename), 'adminzone');
 
             $parameters2 = array();
             foreach ($parameters as $k => $v) {
@@ -886,13 +887,20 @@ function handle_symbol_preprocessing($seq_part, &$children)
             return;
 
         case 'INCLUDE':
-            if ($GLOBALS['RECORD_TEMPLATES_USED']) {
-                $param = $seq_part[3];
-                $GLOBALS['$RECORDED_TEMPLATES_USED'][] = (is_object($param[0]) ? $param[0]->evaluate() : $param[0]);
-            }
-            if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                $param = $seq_part[3];
-                $children[] = array((is_object($param[0]) ? $param[0]->evaluate() : $param[0]), isset($param[1]->children) ? $param[1]->children : array(), isset($param[1]->fresh) ? $param[1]->fresh : false);
+            if ($GLOBALS['RECORD_TEMPLATES_USED'] || $GLOBALS['RECORD_TEMPLATES_TREE']) {
+                if (!isset($param[1])) {
+                    $param[1] = make_string_tempcode('.tpl');
+                }
+                if (!isset($param[2])) {
+                    $param[2] = make_string_tempcode('templates');
+                }
+                if ($GLOBALS['RECORD_TEMPLATES_USED']) {
+                    $GLOBALS['RECORDED_TEMPLATES_USED'][] = $param[2]->evaluate() . '/' . (is_object($param[0]) ? $param[0]->evaluate() : $param[0]) . $param[1]->evaluate();
+                }
+                if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
+                    $param = $seq_part[3];
+                    $children[] = array($param[2]->evaluate() . '/' . (is_object($param[0]) ? $param[0]->evaluate() : $param[0]) . $param[1]->evaluate(), isset($param[1]->children) ? $param[1]->children : array(), isset($param[1]->fresh) ? $param[1]->fresh : false);
+                }
             }
             break;
 
@@ -929,7 +937,7 @@ function handle_symbol_preprocessing($seq_part, &$children)
 
             if (in_array('defer=1', $param)) {
                 // Nothing has to be done here, except preparing for AJAX
-                require_javascript('javascript_ajax');
+                require_javascript('ajax');
             } else {
                 global $REQUEST_BLOCK_NEST_LEVEL;
 
@@ -979,9 +987,9 @@ function handle_symbol_preprocessing($seq_part, &$children)
 
                     $BLOCKS_CACHE[serialize($param)] = $b_value;
                 }
-            }
 
-            $REQUEST_BLOCK_NEST_LEVEL--;
+                $REQUEST_BLOCK_NEST_LEVEL--;
+            }
 
             return;
 
@@ -997,7 +1005,7 @@ function handle_symbol_preprocessing($seq_part, &$children)
             return;
 
         case 'FACILITATE_AJAX_BLOCK_CALL':
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             return;
 
         case 'CSS_INHERIT':
@@ -1152,8 +1160,8 @@ function handle_symbol_preprocessing($seq_part, &$children)
             return;
 
         case 'FRACTIONAL_EDITABLE':
-            require_javascript('javascript_ajax');
-            require_javascript('javascript_fractional_edit');
+            require_javascript('ajax');
+            require_javascript('fractional_edit');
             return;
     }
 }
@@ -1523,7 +1531,7 @@ class Tempcode
             $trace = debug_backtrace();
             $parameters['_GUID'] = isset($trace[3]) ? ($trace[3]['function'] . '/' . $trace[2]['function']) : (isset($trace[2]) ? $trace[2]['function'] : $trace[1]['function']);
         }
-
+        
         $out = new Tempcode();
         $out->codename = $codename;
         $out->code_to_preexecute = $this->code_to_preexecute;

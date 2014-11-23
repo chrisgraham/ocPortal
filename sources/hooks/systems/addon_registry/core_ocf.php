@@ -227,7 +227,7 @@ class Hook_addon_registry_core_ocf
             'themes/default/templates/OCF_MEMBER_PROFILE_SCREEN.tpl',
             'themes/default/templates/OCF_MEMBER_PROFILE_ABOUT.tpl',
             'themes/default/templates/OCF_MEMBER_PROFILE_EDIT.tpl',
-            'themes/default/templates/JAVASCRIPT_PROFILE.tpl',
+            'themes/default/javascript/profile.js',
             'themes/default/templates/OCF_USER_MEMBER.tpl',
             'themes/default/templates/OCF_VIEW_GROUP_SCREEN.tpl',
             'themes/default/templates/OCF_VIEW_GROUP_MEMBER.tpl',

@@ -120,12 +120,12 @@ class Hook_rss_catalogues
                 $view_url = build_url(array('page' => 'catalogues', 'type' => 'entry', 'id' => $row['id']), get_module_zone('catalogues'), null, false, false, true);
 
                 if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
-                    $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'ee850d0e7f50b21f2dbe17cc49494baa', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
+                    $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'ee850d0e7f50b21f2dbe17cc49494baa', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])), null, false, null, '.xml', 'xml');
                 } else {
                     $if_comments = new Tempcode();
                 }
 
-                $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
+                $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date), null, false, null, '.xml', 'xml'));
             }
         }
 

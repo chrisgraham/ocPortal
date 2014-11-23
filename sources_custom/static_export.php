@@ -115,7 +115,7 @@ function _sitemap_xml_serialize_sitemap_node($node)
             $data = static_remove_dynamic_references($data, $relative_root);
 
             // Potential warnings
-            if (strpos($data, 'javascript_ajax') !== false) {
+            if (strpos($data, '/ajax') !== false) {
                 $STATIC_EXPORT_WARNINGS[] = 'AJAX being included on ' . $page_link . ', likely it doesn\'t work!';
             }
 

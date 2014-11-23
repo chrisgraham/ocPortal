@@ -163,7 +163,7 @@ class Module_admin_backup
      */
     public function backup_interface()
     {
-        require_javascript('javascript_ajax');
+        require_javascript('ajax');
 
         $last_backup = intval(get_value('last_backup'));
         if ($last_backup == 0) {

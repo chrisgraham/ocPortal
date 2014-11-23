@@ -8,7 +8,7 @@
 		<input type="hidden" id="previous_slide" name="previous_slide" value="{SLIDESHOW_PREVIOUS_URL*}" />
 	{+END}
 
-	{$REQUIRE_JAVASCRIPT,javascript_ajax}
+	{$REQUIRE_JAVASCRIPT,ajax}
 
 	<div class="trinav_wrap">
 		<div class="trinav_left" onclick="/*Access-note: code has other activation*/ cancel_bubbling(event);">

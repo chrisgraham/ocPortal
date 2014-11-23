@@ -21,8 +21,8 @@
 			</form>
 
 			<script>// <![CDATA[
-				require_javascript('javascript_ajax');
-				require_javascript('javascript_validation');
+				require_javascript('ajax');
+				require_javascript('validation');
 			//]]></script>
 		</div>
 	</section>

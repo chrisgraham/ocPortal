@@ -191,7 +191,7 @@ class Module_cms_catalogues extends Standard_crud_module
         require_code('catalogues');
 
         if ($type == 'add_catalogue') {
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             $script = find_script('snippet');
             $this->alt_crud_module->javascript .= "
                     var form=document.getElementById('new_field_0_name').form;

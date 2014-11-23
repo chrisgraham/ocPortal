@@ -307,7 +307,7 @@ class Hook_addon_registry_core
             'themes/default/images/icons/24x24/buttons/upload.png',
             'themes/default/images/icons/48x48/buttons/upload.png',
             'themes/default/images/EN/upload.png',
-            'themes/default/images/icons/64x64/menu/adminzone/usage.png',
+            'themes/default/images/icons/64x64/menu/adminzone/audit.png',
             'themes/default/images/icons/24x24/menu/social/users_online.png',
             'themes/default/images/icons/48x48/menu/social/users_online.png',
             'themes/default/images/icons/24x24/menu/_generic_admin/view_archive.png',
@@ -578,7 +578,7 @@ class Hook_addon_registry_core
             'sources/content2.php',
             'lang/EN/meta_data.ini',
             'adminzone/find_permissions.php',
-            'themes/default/templates/JAVASCRIPT_SOUND.tpl',
+            'themes/default/javascript/sound.js',
             'data/sounds/message_background.mp3',
             'data/sounds/message_received.mp3',
             'themes/default/templates/INLINE_WIP_MESSAGE.tpl',
@@ -657,15 +657,13 @@ class Hook_addon_registry_core
             'sources/hooks/systems/symbols/index.html',
             'sources/url_remappings.php',
             'sources/hooks/systems/addon_registry/.htaccess',
-            'data/quick_js_loader.js',
-            'data/quick_js_loader.php',
             'sources/activities.php',
             'sources/crypt.php',
             'themes/default/templates/JOIN_OR_LOGIN.tpl',
             'themes/default/templates/JS_BLOCK.tpl',
-            'themes/default/templates/JAVASCRIPT_MODERNIZR.tpl',
-            'themes/default/templates/JAVASCRIPT_JQUERY.tpl',
-            'themes/default/templates/JAVASCRIPT_JQUERY_UI_CORE.tpl',
+            'themes/default/javascript/modernizr.js',
+            'themes/default/javascript/jquery.js',
+            'themes/default/javascript/jquery_ui_core.js',
             'themes/default/images/jquery_ui/index.html',
             'themes/default/images/jquery_ui/ui-bg_diagonals-thick_18_b81900_40x40.png',
             'themes/default/images/jquery_ui/ui-bg_diagonals-thick_20_666666_40x40.png',
@@ -682,15 +680,15 @@ class Hook_addon_registry_core
             'themes/default/images/jquery_ui/ui-icons_ffd27a_256x240.png',
             'themes/default/images/jquery_ui/ui-icons_ffffff_256x240.png',
             'themes/default/css/jquery_ui.css',
-            'themes/default/templates/JAVASCRIPT.tpl',
-            'themes/default/templates/JAVASCRIPT_AJAX.tpl',
+            'themes/default/javascript/global.js',
+            'themes/default/javascript/ajax.js',
             'themes/default/templates/JAVASCRIPT_NEED.tpl',
             'themes/default/templates/JAVASCRIPT_NEED_INLINE.tpl',
-            'themes/default/templates/JAVASCRIPT_STAFF.tpl',
-            'themes/default/templates/JAVASCRIPT_TRANSITIONS.tpl',
-            'themes/default/templates/JAVASCRIPT_DRAGDROP.tpl',
-            'themes/default/templates/JAVASCRIPT_TREE_LIST.tpl',
-            'themes/default/templates/JAVASCRIPT_XSL_MOPUP.tpl',
+            'themes/default/javascript/staff.js',
+            'themes/default/javascript/transitions.js',
+            'themes/default/javascript/dragdrop.js',
+            'themes/default/javascript/tree_list.js',
+            'themes/default/javascript/xsl_mopup.js',
             'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS.tpl',
             'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LINE.tpl',
             'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl',
@@ -828,6 +826,12 @@ class Hook_addon_registry_core
             'themes/default/templates_cached/index.html',
             'themes/default/templates_custom/.htaccess',
             'themes/default/templates_custom/index.html',
+            'themes/default/javascript_custom/.htaccess',
+            'themes/default/javascript_custom/index.html',
+            'themes/default/xml_custom/.htaccess',
+            'themes/default/xml_custom/index.html',
+            'themes/default/text_custom/.htaccess',
+            'themes/default/text_custom/index.html',
             'themes/default/theme.ini',
             'themes/admin/theme.ini',
             'themes/index.html',
@@ -1175,11 +1179,11 @@ class Hook_addon_registry_core
             'sources/hooks/systems/snippets/block.php',
             'sources/blocks.php',
             'sources/hooks/systems/cron/block_caching.php',
-            'themes/default/templates/tempcode_test.tpl',
+            'themes/default/text/tempcode_test.txt',
             'themes/default/templates/QUERY_LOG.tpl',
             'themes/default/templates/QUERY_SCREEN.tpl',
-            'themes/default/templates/JAVASCRIPT_CUSTOM_GLOBALS.tpl',
-            'themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl',
+            'themes/default/javascript/custom_globals.js',
+            'themes/default/javascript/modalwindow.js',
             'themes/default/images/product_logo.png',
             'themes/default/images/button_lightbox_close.png',
             'sources/blocks/main_greeting.php',
@@ -1209,18 +1213,17 @@ class Hook_addon_registry_core
             'data/plupload/plupload.flash.swf',
             'data/plupload/plupload.silverlight.xap',
             'themes/default/css/widget_plupload.css',
-            'themes/default/templates/JAVASCRIPT_PLUPLOAD.tpl',
+            'themes/default/javascript/plupload.js',
             'themes/admin/templates/ADMIN_ZONE_SEARCH.tpl',
-            'themes/default/templates/NEWSLETTER_DEFAULT_FCOMCODE.tpl',
+            'themes/default/text/NEWSLETTER_DEFAULT_FCOMCODE.txt',
             'themes/default/images/.htaccess',
             'themes/default/images/favicon.ico',
             'themes/default/images/webclipicon.png',
-            'themes/default/templates/JAVASCRIPT_MENU_MOBILE.tpl',
+            'themes/default/javascript/menu_mobile.js',
             'adminzone/pages/modules/admin_email_log.php',
             'sources/hooks/systems/cron/mail_queue.php',
             'lang/EN/email_log.ini',
             'themes/default/templates/EMAIL_LOG_SCREEN.tpl',
-            'themes/default/templates/QUICK_JS_LOADER.tpl',
             'sources/hooks/systems/cron/implicit_usergroup_sync.php',
             'sources/hooks/systems/ocf_implicit_usergroups/index.html',
             'sources/hooks/systems/ocf_implicit_usergroups/.htaccess',
@@ -1254,6 +1257,12 @@ class Hook_addon_registry_core
             'themes/admin/templates/index.html',
             'themes/admin/templates_custom/.htaccess',
             'themes/admin/templates_custom/index.html',
+            'themes/admin/javascript_custom/.htaccess',
+            'themes/admin/javascript_custom/index.html',
+            'themes/admin/xml_custom/.htaccess',
+            'themes/admin/xml_custom/index.html',
+            'themes/admin/text_custom/.htaccess',
+            'themes/admin/text_custom/index.html',
             'themes/admin/templates_cached/.htaccess',
             'themes/admin/templates_cached/EN/index.html',
             'themes/admin/templates_cached/index.html',
@@ -1315,10 +1324,9 @@ class Hook_addon_registry_core
             'FORUM_ATTACHMENT_IMAGE.tpl' => 'forum_attachment_image',
             'FORUM_ATTACHMENT_IMAGE_THUMB.tpl' => 'forum_attachment_link',
             'FORUM_ATTACHMENT_LINK.tpl' => 'forum_attachment_link',
-            'tempcode_test.tpl' => 'administrative__tempcode_test',
+            'tempcode_test.txt' => 'administrative__tempcode_test',
             'ADMIN_ZONE_SEARCH.tpl' => 'admin_zone_search',
             'EMAIL_LOG_SCREEN.tpl' => 'email_log_screen',
-            'QUICK_JS_LOADER.tpl' => 'quick_js_loader',
             'BLOCK_MAIN_CONTENT_FILTERING.tpl' => 'block_main_content_filtering',
             'BLOCK_MAIN_CONTENT.tpl' => 'block_main_content',
             'BLOCK_MAIN_MULTI_CONTENT.tpl' => 'block_main_multi_content',
@@ -1416,20 +1424,6 @@ class Hook_addon_registry_core
                 'MASS_DELETE_URL' => placeholder_url(),
                 'MASS_SEND_URL' => placeholder_url(),
             )), null, '', true)
-        );
-    }
-
-    /**
-     * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-     * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-     * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
-     *
-     * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-     */
-    public function tpl_preview__quick_js_loader()
-    {
-        return array(
-            lorem_globalise(do_lorem_template('QUICK_JS_LOADER', array()), null, '', true)
         );
     }
 
@@ -2099,7 +2093,7 @@ class Hook_addon_registry_core
                         'C' => '',
                     )
                 )
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 

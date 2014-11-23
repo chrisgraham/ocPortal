@@ -50,7 +50,7 @@ function init__facebook_connect()
     $FACEBOOK_CONNECT = new ocpFacebook(array('appId' => $appid, 'secret' => $appsecret));
 
     if (running_script('index')) {
-        require_javascript('javascript_facebook');
+        require_javascript('facebook');
         attach_to_screen_footer(do_template('FACEBOOK_FOOTER', null, null, true, null, '.tpl', 'templates', 'default'));
     }
 }

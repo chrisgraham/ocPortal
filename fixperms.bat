@@ -24,6 +24,12 @@ cacls themes\default\images_custom /e /g %user%:F
 cacls themes\default\images_custom\* /e /g %user%:F
 cacls themes\default\templates_custom /e /g %user%:F
 cacls themes\default\templates_custom\* /e /g %user%:F
+cacls themes\default\javascript_custom /e /g %user%:F
+cacls themes\default\javascript_custom\* /e /g %user%:F
+cacls themes\default\xml_custom /e /g %user%:F
+cacls themes\default\xml_custom\* /e /g %user%:F
+cacls themes\default\text_custom /e /g %user%:F
+cacls themes\default\text_custom\* /e /g %user%:F
 cacls themes\default\theme.ini /e /g %user%:F
 cacls themes\default\templates_cached /e /g %user%:F
 cacls themes\default\templates_cached\* /e /g %user%:F
@@ -33,6 +39,12 @@ cacls themes\admin\images_custom /e /g %user%:F
 cacls themes\admin\images_custom\* /e /g %user%:F
 cacls themes\admin\templates_custom /e /g %user%:F
 cacls themes\admin\templates_custom\* /e /g %user%:F
+cacls themes\admin\javascript_custom /e /g %user%:F
+cacls themes\admin\javascript_custom\* /e /g %user%:F
+cacls themes\admin\xml_custom /e /g %user%:F
+cacls themes\admin\xml_custom\* /e /g %user%:F
+cacls themes\admin\text_custom /e /g %user%:F
+cacls themes\admin\text_custom\* /e /g %user%:F
 cacls themes\admin\theme.ini /e /g %user%:F
 cacls themes\admin\templates_cached /e /g %user%:F
 cacls themes\admin\templates_cached\* /e /g %user%:F
@@ -171,9 +183,30 @@ icacls themes\default\images_custom /grant %user%:(M)
 icacls themes\default\images_custom\* /grant %user%:(M)
 icacls themes\default\templates_custom /grant %user%:(M)
 icacls themes\default\templates_custom\* /grant %user%:(M)
+icacls themes\default\javascript_custom /grant %user%:(M)
+icacls themes\default\javascript_custom\* /grant %user%:(M)
+icacls themes\default\xml_custom /grant %user%:(M)
+icacls themes\default\xml_custom\* /grant %user%:(M)
+icacls themes\default\text_custom /grant %user%:(M)
+icacls themes\default\text_custom\* /grant %user%:(M)
 icacls themes\default\theme.ini /grant %user%:(M)
 icacls themes\default\templates_cached /grant %user%:(M)
 icacls themes\default\templates_cached\* /grant %user%:(M)
+icacls themes\admin\css_custom /grant %user%:(M)
+icacls themes\admin\css_custom\* /grant %user%:(M)
+icacls themes\admin\images_custom /grant %user%:(M)
+icacls themes\admin\images_custom\* /grant %user%:(M)
+icacls themes\admin\templates_custom /grant %user%:(M)
+icacls themes\admin\templates_custom\* /grant %user%:(M)
+icacls themes\admin\javascript_custom /grant %user%:(M)
+icacls themes\admin\javascript_custom\* /grant %user%:(M)
+icacls themes\admin\xml_custom /grant %user%:(M)
+icacls themes\admin\xml_custom\* /grant %user%:(M)
+icacls themes\admin\text_custom /grant %user%:(M)
+icacls themes\admin\text_custom\* /grant %user%:(M)
+icacls themes\admin\theme.ini /grant %user%:(M)
+icacls themes\admin\templates_cached /grant %user%:(M)
+icacls themes\admin\templates_cached\* /grant %user%:(M)
 icacls data_custom\fields.xml /grant %user%:(M)
 icacls data_custom\breadcrumbs.xml /grant %user%:(M)
 icacls data_custom\errorlog.php /grant %user%:(M)

@@ -1,5 +1,5 @@
-{$REQUIRE_JAVASCRIPT,javascript_profile}
-{$REQUIRE_JAVASCRIPT,javascript_editing}
+{$REQUIRE_JAVASCRIPT,profile}
+{$REQUIRE_JAVASCRIPT,editing}
 {$REQUIRE_CSS,ocf}
 
 <div class="box"><div class="box_inner">

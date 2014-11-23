@@ -173,7 +173,7 @@ class Hook_addon_registry_chat
             'themes/default/templates/CHAT_MESSAGE.tpl',
             'themes/default/templates/CHAT_PRIVATE.tpl',
             'themes/default/templates/CHAT_STAFF_ACTIONS.tpl',
-            'themes/default/templates/JAVASCRIPT_CHAT.tpl',
+            'themes/default/javascript/chat.js',
             'themes/default/templates/BLOCK_MAIN_FRIENDS_LIST.tpl',
             'sources/blocks/main_friends_list.php',
             'themes/default/templates/CHAT_LOBBY_SCREEN.tpl',
@@ -591,7 +591,7 @@ class Hook_addon_registry_chat
     public function tpl_preview__chat_room_screen()
     {
         require_lang('comcode');
-        require_javascript('javascript_chat');
+        require_javascript('chat');
 
         $chat_sound = do_lorem_template('CHAT_SOUND', array(
             'SOUND_EFFECTS' => placeholder_array(),
@@ -686,8 +686,8 @@ class Hook_addon_registry_chat
      */
     public function tpl_preview__chat_set_effects_screen()
     {
-        require_javascript('javascript_validation');
-        require_javascript('javascript_plupload');
+        require_javascript('validation');
+        require_javascript('plupload');
 
         require_css('forms');
 

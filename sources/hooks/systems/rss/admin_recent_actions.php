@@ -73,12 +73,12 @@ class Hook_rss_admin_recent_actions
             $view_url = build_url(array('page' => 'admin_actionlog', 'type' => 'view', 'mode' => 'ocp', 'id' => $row['id']), 'adminzone');
 
             if ($prefix == 'RSS_') {
-                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'c237ee93e6ff879b09eb93048a1f539b', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
+                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'c237ee93e6ff879b09eb93048a1f539b', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])), null, false, null, '.xml', 'xml');
             } else {
                 $if_comments = new Tempcode();
             }
 
-            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
+            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date), null, false, null, '.xml', 'xml'));
         }
 
         return array($content, do_lang('VIEW_ACTIONLOGS'));

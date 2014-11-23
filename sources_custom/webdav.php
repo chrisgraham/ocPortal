@@ -13,6 +13,8 @@
  * @package    webdav
  */
 
+/*CQC: No check*/
+
 use Sabre\DAV;
 
 /**

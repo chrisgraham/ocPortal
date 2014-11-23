@@ -1,5 +1,5 @@
 {$REQUIRE_CSS,menu__popup}
-{$REQUIRE_JAVASCRIPT,javascript_menu_popup}
+{$REQUIRE_JAVASCRIPT,menu_popup}
 
 {+START,IF_NON_EMPTY,{CONTENT}}
 	<nav class="menu_type__popup" role="navigation">

@@ -27,7 +27,7 @@
 function build_preview($multi_return = false)
 {
     require_css('forms');
-    require_javascript('javascript_validation');
+    require_javascript('validation');
 
     // Check CAPTCHA if it is passed
     if (addon_installed('captcha')) {

@@ -487,7 +487,7 @@ class Module_galleries
     {
         require_code('feedback');
         require_css('galleries');
-        require_javascript('javascript_galleries');
+        require_javascript('galleries');
 
         // What are we doing?
         $type = get_param('type', 'misc');

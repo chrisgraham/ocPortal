@@ -120,7 +120,7 @@ function js_compile($j, $js_cache_path, $minify = true)
     $KEEP_MARKERS = false;
     $SHOW_EDIT_LINKS = false;
     $tpl_params = array();
-    if ($j == 'javascript_staff') {
+    if ($j == 'staff') {
         $url_patterns = array();
         $cma_hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach (array_keys($cma_hooks) as $content_type) {
@@ -147,7 +147,7 @@ function js_compile($j, $js_cache_path, $minify = true)
         $tpl_params['URL_PATTERNS'] = array_values($url_patterns);
     }
     require_code('tempcode');
-    $js = do_template(strtoupper($j), $tpl_params);
+    $js = do_template($j, $tpl_params, null, false, null, '.js', 'javascript');
     $KEEP_MARKERS = $temp_keep_markers;
     $SHOW_EDIT_LINKS = $temp_show_edit_links;
     global $ATTACHED_MESSAGES_RAW;
@@ -162,7 +162,7 @@ function js_compile($j, $js_cache_path, $minify = true)
     if (($out == '') || ($minify)) {
         $contents = $out;
     } else {
-        $contents = '/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.' . "\n" . 'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */' . "\n\n" . $out;
+        $contents = '/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.' . "\n" . 'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A JAVASCRIPT_CUSTOM OVERRIDE. */' . "\n\n" . $out;
     }
     $js_file = @fopen($js_cache_path, GOOGLE_APPENGINE ? 'wb' : 'at');
     if ($js_file === false) {
@@ -315,7 +315,7 @@ function _css_compile($active_theme, $theme, $c, $fullpath, $minify = true)
     }
     if ($GLOBALS['RECORD_TEMPLATES_USED']) {
         global $RECORDED_TEMPLATES_USED;
-        $RECORDED_TEMPLATES_USED[] = $c . '.css';
+        $RECORDED_TEMPLATES_USED[] = 'css/' . $c . '.css';
     }
     require_code('tempcode_compiler');
     global $ATTACHED_MESSAGES_RAW;

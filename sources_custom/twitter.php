@@ -1,5 +1,7 @@
 <?php
 
+/*CQC: No check*/
+
 /**
  * Twitter class
  *

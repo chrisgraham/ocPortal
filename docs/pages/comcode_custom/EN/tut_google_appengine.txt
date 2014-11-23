@@ -140,7 +140,6 @@ The following addons are not supported/useful on GAE and should be uninstalled:
  - Installer (serves no purpose on any ocPortal site, once install has finished)
  - Code Editor (not supported)
  - Config Editor (not supported)
- - Devguide (generally not useful)
  - Backup (not supported/relevant, use the GAE database backup tools)
  - Uninstaller (not supported)
  - LDAP (not supported)

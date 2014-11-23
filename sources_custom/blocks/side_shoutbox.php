@@ -49,10 +49,10 @@ class Block_side_shoutbox
         require_css('chat');
         require_code('chat');
 
-        require_javascript('javascript_text_ghosts');
-        require_javascript('javascript_shake');
-        require_javascript('javascript_shoutbox');
-        require_javascript('javascript_ajax');
+        require_javascript('text_ghosts');
+        require_javascript('shake');
+        require_javascript('shoutbox');
+        require_javascript('ajax');
 
         $room_id = array_key_exists('param', $map) ? intval($map['param']) : null;
         $num_messages = array_key_exists('max', $map) ? intval($map['max']) : 5;

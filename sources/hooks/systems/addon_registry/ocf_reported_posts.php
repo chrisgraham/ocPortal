@@ -100,7 +100,7 @@ class Hook_addon_registry_ocf_reported_posts
     {
         return array(
             'sources/hooks/systems/addon_registry/ocf_reported_posts.php',
-            'themes/default/templates/OCF_REPORTED_POST_FCOMCODE.tpl',
+            'themes/default/text/OCF_REPORTED_POST_FCOMCODE.txt',
             'sources/hooks/blocks/main_staff_checklist/reported_posts.php',
             'sources/hooks/systems/config/reported_posts_forum.php',
         );
@@ -114,7 +114,7 @@ class Hook_addon_registry_ocf_reported_posts
     public function tpl_previews()
     {
         return array(
-            'OCF_REPORTED_POST_FCOMCODE.tpl' => 'ocf_reported_post_fcomcode'
+            'OCF_REPORTED_POST_FCOMCODE.txt' => 'ocf_reported_post_fcomcode'
         );
     }
 
@@ -136,7 +136,7 @@ class Hook_addon_registry_ocf_reported_posts
                 'POST' => lorem_phrase(),
                 'POSTER' => lorem_phrase(),
                 'TOPIC_TITLE' => lorem_phrase(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 }

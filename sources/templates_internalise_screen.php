@@ -35,8 +35,8 @@ function internalise_own_screen($screen_content, $refresh_time = null, $refresh_
         return $screen_content;
     }
 
-    require_javascript('javascript_ajax');
-    require_javascript('javascript_internalised_ajax_screen');
+    require_javascript('ajax');
+    require_javascript('internalised_ajax_screen');
 
     $params = '';
     foreach ($_GET as $key => $param) {
@@ -63,7 +63,7 @@ function internalise_own_screen($screen_content, $refresh_time = null, $refresh_
     $url = find_script('iframe') . $params;
 
     if (!is_null($refresh_if_changed)) {
-        require_javascript('javascript_sound');
+        require_javascript('sound');
         $change_detection_url = find_script('change_detection') . $params;
     } else {
         $refresh_if_changed = '';

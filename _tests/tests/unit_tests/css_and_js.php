@@ -48,10 +48,10 @@ class css_and_js_test_set extends ocp_test_case
     {
         require_code('js_validator');
 
-        $dh = opendir(get_file_base() . '/themes/default/templates');
+        $dh = opendir(get_file_base() . '/themes/default/javascript');
         while (($f = readdir($dh)) !== false) {
-            if ((substr($f, -4) == '.tpl') && (substr($f, 0, 7) == 'themes/') && (substr($f, 0, 11) == 'JAVASCRIPT_') && (strpos($f, 'JWPLAYER') === false) && (strpos($f, 'SOUND') === false) && (strpos($f, 'WIDGET') === false) && (strpos($f, 'JQUERY') === false) && ($f != 'JAVASCRIPT_NEED.tpl') && ($f != 'JAVASCRIPT_NEED_INLINE.tpl')) {
-                $path = javascript_enforce(basename($f, '.tpl'), 'default', false);
+            if ((substr($f, -4) == '.tpl') && (substr($f, 0, 7) == 'themes/') && (strtolower($f) == $f) && (strpos($f, 'jwplayer') === false) && (strpos($f, 'sound') === false) && (strpos($f, 'widget') === false) && (strpos($f, 'jquery') === false)) {
+                $path = javascript_enforce(basename($f, '.js'), 'default', false);
                 $contents = file_get_contents($path);
                 $errors = check_js($contents);
                 if (!is_null($errors)) {

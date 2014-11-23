@@ -46,7 +46,7 @@ class Hook_upon_query_user_sync
 
             $matches = array();
             if (
-            (preg_match('#^INSERT INTO ' . $prefix . 'f_members #', $query, $matches) != 0)
+                (preg_match('#^INSERT INTO ' . $prefix . 'f_members #', $query, $matches) != 0)
             ) {
                 require_code('user_sync');
                 user_sync__outbound($ret);
@@ -55,7 +55,7 @@ class Hook_upon_query_user_sync
 
             $matches = array();
             if (
-            (preg_match('#^INSERT INTO ' . $prefix . 'f_member_custom_fields .*\((\d+),#U', $query, $matches) != 0)
+                (preg_match('#^INSERT INTO ' . $prefix . 'f_member_custom_fields .*\((\d+),#U', $query, $matches) != 0)
             ) {
                 require_code('user_sync');
                 user_sync__outbound(intval($matches[1]));

@@ -15,7 +15,7 @@
 
 i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-require_javascript('javascript_thumbnails');
+require_javascript('thumbnails');
 
 $mill = 3000; // milliseconds between animations
 $dir = 'uploads/website_specific/fp_animation/';

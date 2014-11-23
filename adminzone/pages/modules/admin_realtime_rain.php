@@ -81,8 +81,8 @@ class Module_admin_realtime_rain
      */
     public function run()
     {
-        require_javascript('javascript_realtime_rain');
-        require_javascript('javascript_ajax');
+        require_javascript('realtime_rain');
+        require_javascript('ajax');
         require_css('realtime_rain');
 
         if (!has_js()) {

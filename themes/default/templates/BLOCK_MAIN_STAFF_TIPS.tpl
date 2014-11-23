@@ -31,8 +31,8 @@
 		//]]></script>
 	{+END}
 
-	{$REQUIRE_JAVASCRIPT,javascript_ajax}
-	{$REQUIRE_JAVASCRIPT,javascript_validation}
+	{$REQUIRE_JAVASCRIPT,ajax}
+	{$REQUIRE_JAVASCRIPT,validation}
 
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function() {

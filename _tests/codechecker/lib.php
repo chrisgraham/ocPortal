@@ -13,6 +13,10 @@
  * @package    code_quality
  */
 
+/*
+This file contains compatibility code to be able to load parts of ocPortal, as well as some custom functions needed by the CQC.
+*/
+
 @ini_set('memory_limit', '-1');
 error_reporting(E_ALL);
 if (function_exists('set_time_limit')) {
@@ -305,11 +309,16 @@ function filter_naughty($in)
     return $in;
 }
 
-function do_lang_tempcode($x, $a = null, $b = null, $c = null, $d = null)
+function do_lang($x, $a = null, $b = null, $c = null)
+{
+    return do_lang_tempcode($x, $a, $b, $c);
+}
+
+function do_lang_tempcode($x, $a = null, $b = null, $c = null)
 {
     global $PARSED;
     if (!isset($PARSED)) {
-        $temp = file_get_contents('lang/phpdoc.ini');
+        $temp = file_get_contents(dirname(__FILE__) . '/../../lang/EN/phpdoc.ini') . file_get_contents(dirname(__FILE__) . '/../../lang/EN/validation.ini');
         $temp_2 = explode("\n", $temp);
         $PARSED = array();
         foreach ($temp_2 as $p) {
@@ -340,6 +349,8 @@ function attach_message($message, $message_type)
 {
     global $TO_USE, $LINE, $OCPORTAL_PATH;
     echo('ISSUE "' . substr($TO_USE, strlen($OCPORTAL_PATH) + 1) . '" ' . strval($LINE) . ' 0 ' . $message . cnl());
+
+    return '';
 }
 
 if (!function_exists('is_alphanumeric')) {

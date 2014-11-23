@@ -529,8 +529,8 @@ class Module_groups
             $club_forum = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('f_description') => do_lang('FORUM_FOR_CLUB', $group_name)));
         }
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_ajax_people_lists');
+        require_javascript('ajax');
+        require_javascript('ajax_people_lists');
 
         $forum_id = null;
         if ($club) {

@@ -110,7 +110,7 @@ class Hook_addon_registry_core_primary_layout
             'themes/default/templates/SECTION_TITLE.tpl',
             'themes/default/templates/MINOR_TITLE.tpl',
             'themes/default/templates/MAIL.tpl',
-            'themes/default/templates/MAIL_SUBJECT.tpl',
+            'themes/default/text/MAIL_SUBJECT.txt',
             'themes/default/templates/BREADCRUMB_SEPARATOR.tpl',
             'themes/default/templates/CSS_NEED_FULL.tpl',
         );
@@ -129,7 +129,7 @@ class Hook_addon_registry_core_primary_layout
             'CLOSED_SITE.tpl' => 'closed_site',
             'CSS_NEED_FULL.tpl' => 'css_need_full',
             'MESSAGE.tpl' => 'message',
-            'MAIL_SUBJECT.tpl' => 'mail_subject',
+            'MAIL_SUBJECT.txt' => 'mail_subject',
             'MAIL.tpl' => 'mail',
             'GLOBAL_HTML_WRAP.tpl' => 'global_html_wrap',
             'GLOBAL_HTML_WRAP_mobile.tpl' => 'global_html_wrap',
@@ -221,7 +221,7 @@ class Hook_addon_registry_core_primary_layout
         return array(
             lorem_globalise(do_lorem_template('MAIL_SUBJECT', array(
                 'SUBJECT_LINE' => lorem_word(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 

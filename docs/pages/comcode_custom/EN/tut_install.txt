@@ -116,6 +116,9 @@ Set the following to [b]777[/b]: (full directory permissions)
  - themes/<for-each-theme>/css_custom
  - themes/<for-each-theme>/images_custom
  - themes/<for-each-theme>/templates_custom
+ - themes/<for-each-theme>/javascript_custom
+ - themes/<for-each-theme>/xml_custom
+ - themes/<for-each-theme>/text_custom
  - themes/<for-each-theme>/templates_cached
  - themes/<for-each-theme>/templates_cached/<for-each-language>
  - tmp ([i]this is a folder needed only by the quick installer -- and you will need to make it and set permissions immediately or wait until the quick installer makes it and then fails due to lack of permissions on it[/i])

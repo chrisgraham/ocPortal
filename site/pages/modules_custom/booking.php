@@ -219,7 +219,7 @@ class Module_booking
     {
         require_code('booking');
         require_code('ocf_join');
-        require_javascript('javascript_booking');
+        require_javascript('booking');
 
         $type = get_param('type', 'misc');
 
@@ -512,8 +512,8 @@ class Module_booking
             warn_exit(do_lang_tempcode('BOOK_QUANTITY_NOTHING_CHOSEN'));
         }
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_validation');
+        require_javascript('ajax');
+        require_javascript('validation');
 
         return do_template('BOOKING_FLESH_OUT_SCREEN', array(
             '_GUID' => '255280fa4f9bb37e3dae76f5bca46ace',

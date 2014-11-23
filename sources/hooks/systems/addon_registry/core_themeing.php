@@ -117,7 +117,7 @@ class Hook_addon_registry_core_themeing
             'adminzone/load_template.php',
             'adminzone/tempcode_tester.php',
             'sources/hooks/systems/addon_registry/core_themeing.php',
-            'themes/default/templates/JAVASCRIPT_THEME_COLOURS.tpl',
+            'themes/default/javascript/theme_colours.js',
             'themes/default/templates/THEME_IMAGE_MANAGE_SCREEN.tpl',
             'themes/default/templates/THEME_IMAGE_PREVIEW.tpl',
             'themes/default/templates/THEME_MANAGE_SCREEN.tpl',
@@ -138,7 +138,7 @@ class Hook_addon_registry_core_themeing
             'themes/default/templates/TEMPLATE_TREE_NODE.tpl',
             'themes/default/templates/TEMPLATE_LIST.tpl',
             'themes/default/templates/TEMPLATE_LIST_WRAP.tpl',
-            'themes/default/templates/JAVASCRIPT_THEMEING.tpl',
+            'themes/default/javascript/themeing.js',
             'themes/default/templates/TEMPCODE_TESTER_SCREEN.tpl',
             'sources/themes2.php',
             'sources/themes3.php',
@@ -239,8 +239,8 @@ class Hook_addon_registry_core_themeing
      */
     public function tpl_preview__administrative__theme_edit_css_screen()
     {
-        require_javascript('javascript_theme_colours');
-        require_javascript('javascript_ajax');
+        require_javascript('theme_colours');
+        require_javascript('ajax');
         require_css('forms');
 
         $colour_chooser = do_lorem_template('THEME_COLOUR_CHOOSER', array(
@@ -283,7 +283,7 @@ class Hook_addon_registry_core_themeing
                 'PING_URL' => placeholder_url(),
                 'WARNING_DETAILS' => '',
                 'TITLE' => lorem_title(),
-                'EDIT_FORM' => placeholder_form(),
+                'EDIT_FORMS' => array('_TITLE' => lorem_phrase(), 'FORM' => placeholder_form()),
             )), null, '', true)
         );
     }

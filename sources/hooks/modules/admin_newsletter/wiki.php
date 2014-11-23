@@ -56,7 +56,7 @@ class Hook_whatsnew_wiki
             $name = get_translated_text($row['title'], null, $lang);
             $description = get_translated_text($row['description'], null, $lang);
             $member_id = null;
-            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '29571e3829c6723b2ca946436a6cadb2', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'wiki_page', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('w', array('_GUID' => '29571e3829c6723b2ca946436a6cadb2', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'wiki_page', 'CONTENT_ID' => strval($id)), null, false, null, '.txt', 'text'));
         }
 
         return array($new, do_lang('WIKI', '', '', '', $lang));

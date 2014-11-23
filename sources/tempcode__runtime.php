@@ -307,7 +307,7 @@ function static_evaluate_tempcode($ob)
  * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
  * @param  string                       File type suffix of template file (e.g. .tpl)
  * @param  string                       Subdirectory type to look in
- * @set    templates css
+ * @set    templates css javascript xml text
  * @param  ID_TEXT                      Theme to use
  * @return tempcode                     The tempcode for this template
  */
@@ -319,7 +319,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
     }
 
     if ($GLOBALS['SEMI_DEV_MODE']) {
-        if (($codename != 'tempcode_test') && (strtoupper($codename) != strtoupper($codename))) {
+        if (($codename == strtolower($codename)) && ($directory == 'templates')) {
             fatal_exit('Template names should be in upper case, and the files should be stored in upper case.');
         }
 
@@ -338,7 +338,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
     // Is it already loaded?
     if ($RECORD_TEMPLATES_USED) {
         global $RECORDED_TEMPLATES_USED;
-        $RECORDED_TEMPLATES_USED[] = $codename;
+        $RECORDED_TEMPLATES_USED[] = $directory '.' . $codename . $suffix;
     }
 
     // Variables we'll need
@@ -608,11 +608,19 @@ function handle_symbol_preprocessing($bit, &$children)
             return;
 
         case 'INCLUDE':
-            if ($GLOBALS['RECORD_TEMPLATES_USED']) {
-                $GLOBALS['RECORDED_TEMPLATES_USED'][] = $param[0]->evaluate();
-            }
-            if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                $children[] = array($param[0], array(), false);
+            if ($GLOBALS['RECORD_TEMPLATES_USED'] || $GLOBALS['RECORD_TEMPLATES_TREE']) {
+                if (!isset($param[1])) {
+                    $param[1] = make_string_tempcode('.tpl');
+                }
+                if (!isset($param[2])) {
+                    $param[2] = make_string_tempcode('templates');
+                }
+                if ($GLOBALS['RECORD_TEMPLATES_USED']) {
+                    $GLOBALS['RECORDED_TEMPLATES_USED'][] = $param[2]->evaluate() . '/' . $param[0]->evaluate() . $param[1]->evaluate();
+                }
+                if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
+                    $children[] = array($param[2]->evaluate() . '/' . $param[0]->evaluate() . $param[1]->evaluate(), array(), false);
+                }
             }
             break;
 
@@ -630,7 +638,7 @@ function handle_symbol_preprocessing($bit, &$children)
             return;
 
         case 'FACILITATE_AJAX_BLOCK_CALL':
-            require_javascript('javascript_ajax');
+            require_javascript('ajax');
             return;
 
         case 'REQUIRE_CSS':
@@ -763,8 +771,8 @@ function handle_symbol_preprocessing($bit, &$children)
             return;
 
         case 'FRACTIONAL_EDITABLE':
-            require_javascript('javascript_ajax');
-            require_javascript('javascript_fractional_edit');
+            require_javascript('ajax');
+            require_javascript('fractional_edit');
             return;
     }
 }

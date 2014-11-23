@@ -112,7 +112,7 @@ class Hook_addon_registry_core_abstract_components
             'themes/default/templates/REVISION_RESTORE.tpl',
             'themes/default/templates/HANDLE_CONFLICT_RESOLUTION.tpl',
             'themes/default/templates/FRACTIONAL_EDIT.tpl',
-            'themes/default/templates/JAVASCRIPT_FRACTIONAL_EDIT.tpl',
+            'themes/default/javascript/fractional_edit.js',
             'data/fractional_edit.php',
             'data/edit_ping.php',
             'data/change_detection.php',

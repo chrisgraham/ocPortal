@@ -107,7 +107,7 @@ class Hook_addon_registry_unvalidated
             'sources/hooks/systems/addon_registry/unvalidated.php',
             'themes/default/templates/UNVALIDATED_SCREEN.tpl',
             'themes/default/templates/UNVALIDATED_SECTION.tpl',
-            'themes/default/templates/VALIDATION_REQUEST_MAIL.tpl',
+            'themes/default/text/VALIDATION_REQUEST_MAIL.txt',
             'adminzone/pages/modules/admin_unvalidated.php',
             'lang/EN/unvalidated.ini',
             'sources/hooks/blocks/main_staff_checklist/unvalidated.php',
@@ -128,7 +128,7 @@ class Hook_addon_registry_unvalidated
         return array(
             'UNVALIDATED_SECTION.tpl' => 'administrative__unvalidated_screen',
             'UNVALIDATED_SCREEN.tpl' => 'administrative__unvalidated_screen',
-            'VALIDATION_REQUEST_MAIL.tpl' => 'administrative__validation_request_mail'
+            'VALIDATION_REQUEST_MAIL.txt' => 'administrative__validation_request_mail'
         );
     }
 
@@ -148,7 +148,7 @@ class Hook_addon_registry_unvalidated
                 'TYPE' => lorem_phrase(),
                 'ID' => placeholder_id(),
                 'URL' => placeholder_url(),
-            )), null, '', true)
+            ), null, false, null, '.txt', 'text'), null, '', true)
         );
     }
 

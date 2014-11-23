@@ -36,7 +36,7 @@ function results_launcher($title, $page, $category_id, $max, $max_rows, $type, $
         $max = 1;
     }
 
-    require_javascript('javascript_pagination');
+    require_javascript('pagination');
 
     $out = new Tempcode();
 

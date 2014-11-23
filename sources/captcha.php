@@ -237,7 +237,7 @@ function generate_captcha()
     // Store code
     $GLOBALS['SITE_DB']->query_insert('captchas', array('si_session_id' => $session, 'si_time' => time(), 'si_code' => $si_code), false, true);
 
-    require_javascript('javascript_ajax');
+    require_javascript('ajax');
 }
 
 /**
@@ -313,7 +313,7 @@ function captcha_ajax_check()
         return '';
     }
 
-    require_javascript('javascript_ajax');
+    require_javascript('ajax');
     $script = find_script('snippet');
     return "
         var form=document.getElementById('main_form');

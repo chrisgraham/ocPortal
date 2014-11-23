@@ -48,17 +48,17 @@ class Mx_chat extends Module_chat
             @set_time_limit(200);
         }
 
-        require_javascript('javascript_xmpp_prototype');
-        //require_javascript('javascript_xmpp_extjs2');
-        require_javascript('javascript_xmpp_dom-all');
-        require_javascript('javascript_xmpp_crypto');
-        require_javascript('javascript_xmpp_xmpp4js');
+        require_javascript('xmpp_prototype');
+        //require_javascript('xmpp_extjs2');
+        require_javascript('xmpp_dom-all');
+        require_javascript('xmpp_crypto');
+        require_javascript('xmpp_xmpp4js');
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_chat');
-        require_javascript('javascript_sound');
-        require_javascript('javascript_editing');
-        require_javascript('javascript_validation');
+        require_javascript('ajax');
+        require_javascript('chat');
+        require_javascript('sound');
+        require_javascript('editing');
+        require_javascript('validation');
 
         require_lang('comcode');
         require_code('chat');
@@ -120,7 +120,7 @@ class Mx_chat extends Module_chat
      */
     public function chat_lobby()
     {
-        require_javascript('javascript_ajax_people_lists');
+        require_javascript('ajax_people_lists');
 
         // Starting an IM? The IM will popup by AJAX once the page loads, because it's in the system now
         $enter_im = get_param_integer('enter_im', null);
@@ -170,7 +170,7 @@ class Mx_chat extends Module_chat
      */
     public function chat_room()
     {
-        require_javascript('javascript_posting');
+        require_javascript('posting');
 
         $prefs = @$_COOKIE['software_chat_prefs'];
         $prefs = @explode(';', $prefs);

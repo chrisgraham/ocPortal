@@ -179,7 +179,7 @@ Please be aware that this addon overrides some common templates to add Facebook 
             'themes/default/templates_custom/LOGIN_SCREEN.tpl',
             'themes/default/templates_custom/OCF_GUEST_BAR.tpl',
             'themes/default/templates_custom/BLOCK_MAIN_SCREEN_ACTIONS.tpl',
-            'themes/default/templates_custom/JAVASCRIPT_FACEBOOK.tpl',
+            'themes/default/javascript_custom/facebook.js',
             'themes/default/templates_custom/BLOCK_TOP_LOGIN.tpl',
             'sources_custom/users_active_actions.php',
             'sources_custom/hooks/systems/syndication/facebook.php',

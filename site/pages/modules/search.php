@@ -204,8 +204,8 @@ class Module_search
             }
         }
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_ajax_people_lists');
+        require_javascript('ajax');
+        require_javascript('ajax_people_lists');
 
         $content = get_param('content', null, true);
 
@@ -246,7 +246,7 @@ class Module_search
 
             $under = null;
             if (method_exists($ob, 'ajax_tree')) {
-                require_javascript('javascript_tree_list');
+                require_javascript('tree_list');
                 $ajax = true;
                 $under = get_param('search_under', '', true);
                 $ajax_tree = $ob->ajax_tree();

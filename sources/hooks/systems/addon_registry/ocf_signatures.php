@@ -131,9 +131,9 @@ class Hook_addon_registry_ocf_signatures
      */
     public function tpl_preview__ocf_edit_signature_tab()
     {
-        require_javascript('javascript_plupload');
-        require_javascript('javascript_validation');
-        require_javascript('javascript_posting');
+        require_javascript('plupload');
+        require_javascript('validation');
+        require_javascript('posting');
         require_lang('comcode');
         require_lang('ocf');
         require_css('ocf');

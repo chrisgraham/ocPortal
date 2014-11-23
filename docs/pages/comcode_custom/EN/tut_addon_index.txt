@@ -479,17 +479,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=debrand&amp;status_id=10">Link</a></td>
 		</tr>
-	
-		<tr>
-			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/menu/_generic_admin/component.png" />Devguide<br />(<kbd>devguide</kbd>)</td>
-			<td>For programmers - blocks and infrastructure to help turn the phpdoc code comments ocPortal uses into HTML pages.</td>
-			<!--<td>No</td>-->
-			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/codebook.htm?keep_devtest=1">ocPortal Code Book</a></td>
-			<td></td>
-			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=devguide&amp;status_id=10">Link</a></td>
-		</tr>
-	
+
 		<tr>
 			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/menu/rich_content/downloads.png" />Downloads<br />(<kbd>downloads</kbd>)</td>
 			<td>Host a downloads directory.</td>

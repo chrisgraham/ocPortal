@@ -18,11 +18,6 @@
  * @package    core
  */
 
-// Quick JS loader
-if ((array_key_exists('js_cache', $_GET)) && ($_GET['js_cache'] == '1')) {
-    require_once(get_file_base() . '/data/quick_js_loader.php');
-}
-
 $script_name = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : (isset($_ENV['SCRIPT_NAME']) ? $_ENV['SCRIPT_NAME'] : '');
 if ((strpos($script_name, '/sources/') !== false) || (strpos($script_name, '/sources_custom/') !== false)) {
     header('Content-type: text/plain');

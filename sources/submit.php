@@ -125,7 +125,7 @@ function send_validation_request($type, $table, $non_integer_id, $id, $url, $mem
         $type = $_type;
     }
 
-    $comcode = do_template('VALIDATION_REQUEST_MAIL', array('_GUID' => '1885be371b2ff7810287715ef2f7b948', 'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username($member_id), 'TYPE' => $type, 'ID' => $id, 'URL' => $url), get_site_default_lang());
+    $comcode = do_template('VALIDATION_REQUEST_MAIL', array('_GUID' => '1885be371b2ff7810287715ef2f7b948', 'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username($member_id), 'TYPE' => $type, 'ID' => $id, 'URL' => $url), get_site_default_lang(), false, null, '.txt', 'text');
 
     require_code('notifications');
     $subject = do_lang('UNVALIDATED_TITLE', $title, '', '', get_site_default_lang());

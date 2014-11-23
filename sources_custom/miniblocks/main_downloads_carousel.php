@@ -10,7 +10,7 @@ $id = intval($map['id']);
 require_code('images');
 require_code('downloads');
 require_lang('downloads');
-require_javascript('javascript_dyn_comcode');
+require_javascript('dyn_comcode');
 require_css('carousels');
 
 $subdownloads = new Tempcode();

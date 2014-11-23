@@ -101,18 +101,18 @@ class Hook_addon_registry_syndication
     {
         return array(
             'sources/hooks/systems/addon_registry/syndication.php',
-            'themes/default/templates/ATOM_ENTRY.tpl',
-            'themes/default/templates/ATOM_WRAPPER.tpl',
-            'themes/default/templates/RSS_CLOUD.tpl',
-            'themes/default/templates/RSS_ENTRY.tpl',
-            'themes/default/templates/RSS_ENTRY_COMMENTS.tpl',
-            'themes/default/templates/RSS_HEADER.tpl',
-            'themes/default/templates/RSS_WRAPPER.tpl',
-            'themes/default/templates/ATOM_XSLT.tpl',
-            'themes/default/templates/RSS_ABBR.tpl',
-            'themes/default/templates/RSS_XSLT.tpl',
-            'themes/default/templates/OPML_WRAPPER.tpl',
-            'themes/default/templates/OPML_XSLT.tpl',
+            'themes/default/xml/ATOM_ENTRY.xml',
+            'themes/default/xml/ATOM_WRAPPER.xml',
+            'themes/default/xml/RSS_CLOUD.xml',
+            'themes/default/xml/RSS_ENTRY.xml',
+            'themes/default/xml/RSS_ENTRY_COMMENTS.xml',
+            'themes/default/xml/RSS_HEADER.xml',
+            'themes/default/xml/RSS_WRAPPER.xml',
+            'themes/default/xml/ATOM_XSLT.xml',
+            'themes/default/xml/RSS_ABBR.xml',
+            'themes/default/xml/RSS_XSLT.xml',
+            'themes/default/xml/OPML_WRAPPER.xml',
+            'themes/default/xml/OPML_XSLT.xml',
             'backend.php',
             'backend_cloud.php',
             'sources/rss2.php',
@@ -131,18 +131,18 @@ class Hook_addon_registry_syndication
     public function tpl_previews()
     {
         return array(
-            'RSS_ENTRY_COMMENTS.tpl' => 'rss_wrapper',
-            'RSS_XSLT.tpl' => 'rss_xslt',
-            'ATOM_XSLT.tpl' => 'atom_xslt',
-            'OPML_XSLT.tpl' => 'opml_xslt',
-            'OPML_WRAPPER.tpl' => 'opml_wrapper',
-            'RSS_CLOUD.tpl' => 'rss_wrapper',
-            'RSS_HEADER.tpl' => 'rss_header',
-            'ATOM_ENTRY.tpl' => 'atom_wrapper',
-            'ATOM_WRAPPER.tpl' => 'atom_wrapper',
-            'RSS_WRAPPER.tpl' => 'rss_wrapper',
-            'RSS_ENTRY.tpl' => 'rss_wrapper',
-            'RSS_ABBR.tpl' => 'rss_wrapper',
+            'RSS_ENTRY_COMMENTS.xml' => 'rss_wrapper',
+            'RSS_XSLT.xml' => 'rss_xslt',
+            'ATOM_XSLT.xml' => 'atom_xslt',
+            'OPML_XSLT.xml' => 'opml_xslt',
+            'OPML_WRAPPER.xml' => 'opml_wrapper',
+            'RSS_CLOUD.xml' => 'rss_wrapper',
+            'RSS_HEADER.xml' => 'rss_header',
+            'ATOM_ENTRY.xml' => 'atom_wrapper',
+            'ATOM_WRAPPER.xml' => 'atom_wrapper',
+            'RSS_WRAPPER.xml' => 'rss_wrapper',
+            'RSS_ENTRY.xml' => 'rss_wrapper',
+            'RSS_ABBR.xml' => 'rss_wrapper',
         );
     }
 
@@ -155,7 +155,7 @@ class Hook_addon_registry_syndication
      */
     public function tpl_preview__rss_wrapper()
     {
-        $comments = do_lorem_template('RSS_ENTRY_COMMENTS', array('COMMENT_URL' => placeholder_url(), 'ID' => placeholder_id()));
+        $comments = do_lorem_template('RSS_ENTRY_COMMENTS', array('COMMENT_URL' => placeholder_url(), 'ID' => placeholder_id()), null, false, null, '.xml', 'xml');
 
         $content = do_lorem_template('RSS_ABBR', array());
         $content->attach(do_lorem_template('RSS_ENTRY', array(
@@ -166,13 +166,13 @@ class Hook_addon_registry_syndication
             'CATEGORY' => lorem_word(),
             'IF_COMMENTS' => $comments,
             'DATE' => placeholder_date(),
-        )));
+        ), null, false, null, '.xml', 'xml'));
 
         $cloud = do_lorem_template('RSS_CLOUD', array(
             'TYPE' => 'news',
             'PORT' => '80',
             'LOCAL_BASE_URL' => placeholder_url(),
-        ));
+        ), null, false, null, '.xml', 'xml');
 
         return array(
             lorem_globalise(
@@ -185,7 +185,7 @@ class Hook_addon_registry_syndication
                         'LOGO_URL' => placeholder_image_url(),
                         'DATE' => placeholder_date(),
                         'CONTENT' => $content,
-                    )
+                    ), null, false, null, '.xml', 'xml'
                 ), null, '', true),
         );
     }
@@ -210,7 +210,7 @@ class Hook_addon_registry_syndication
             'AUTHOR' => lorem_word(),
             'SUMMARY' => lorem_word(),
             'NEWS' => lorem_word(),
-        ));
+        ), null, false, null, '.xml', 'xml');
 
 
         return array(
@@ -226,7 +226,7 @@ class Hook_addon_registry_syndication
                         'ABOUT' => lorem_paragraph(),
                         'VERSION' => lorem_word(),
                         'COPYRIGHT' => lorem_phrase(),
-                    )
+                    ), null, false, null, '.xml', 'xml'
                 ), null, '', true),
         );
     }
@@ -246,7 +246,7 @@ class Hook_addon_registry_syndication
             lorem_globalise(
                 do_lorem_template('RSS_XSLT', array(
                         'JAVASCRIPT_XSL_MOPUP' => '',
-                    )
+                    ), null, false, null, '.xml', 'xml'
                 ), null, '', true),
         );
     }
@@ -266,7 +266,7 @@ class Hook_addon_registry_syndication
             lorem_globalise(
                 do_lorem_template('ATOM_XSLT', array(
                         'JAVASCRIPT_XSL_MOPUP' => '',
-                    )
+                    ), null, false, null, '.xml', 'xml'
                 ), null, '', true),
         );
     }
@@ -285,7 +285,7 @@ class Hook_addon_registry_syndication
             lorem_globalise(
                 do_lorem_template('OPML_XSLT', array(
                         'JAVASCRIPT_XSL_MOPUP' => '',
-                    )
+                    ), null, false, null, '.xml', 'xml'
                 ), null, '', true),
         );
     }
@@ -308,7 +308,7 @@ class Hook_addon_registry_syndication
                         'DATE' => placeholder_time(),
                         'TITLE' => lorem_phrase(),
                         'MODE' => lorem_word(),
-                    )
+                    ), null, false, null, '.xml', 'xml'
                 ), null, '', true),
         );
     }

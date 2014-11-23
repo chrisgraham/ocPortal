@@ -130,7 +130,7 @@ class Hook_addon_registry_search
             'sources/blocks/top_search.php',
             'sources/hooks/modules/search/.htaccess',
             'sources/hooks/modules/search/index.html',
-            'themes/default/templates/OPENSEARCH.tpl',
+            'themes/default/xml/OPENSEARCH.xml',
             'data/opensearch.php',
             'sources/hooks/systems/config/search_results_per_page.php',
             'sources/hooks/systems/config/enable_boolean_search.php',
@@ -151,7 +151,7 @@ class Hook_addon_registry_search
             'BLOCK_TOP_SEARCH.tpl' => 'block_top_search',
             'BLOCK_SIDE_TAG_CLOUD.tpl' => 'block_side_tag_cloud',
             'TAGS.tpl' => 'tags',
-            'OPENSEARCH.tpl' => 'opensearch',
+            'OPENSEARCH.xml' => 'opensearch',
             'SEARCH_RESULT.tpl' => 'search_form_screen',
             'SEARCH_RESULT_TABLE.tpl' => 'search_form_screen',
             'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl' => 'search_form_screen',
@@ -292,7 +292,7 @@ class Hook_addon_registry_search
         return array(
             lorem_globalise(do_lorem_template('OPENSEARCH', array(
                 'DESCRIPTION' => lorem_paragraph(),
-            )), null, '', true)
+            ), null, false, null, '.xml', 'xml'), null, '', true)
         );
     }
 

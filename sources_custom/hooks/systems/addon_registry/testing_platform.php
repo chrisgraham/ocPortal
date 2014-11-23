@@ -95,7 +95,9 @@ class Hook_addon_registry_testing_platform
      */
     public function get_applicable_tutorials()
     {
-        return array();
+        return array(
+            'codebook',
+        );
     }
 
     /**
@@ -132,6 +134,9 @@ class Hook_addon_registry_testing_platform
     {
         return array(
             'sources_custom/hooks/systems/addon_registry/testing_platform.php',
+            'lang_custom/EN/phpdoc.ini',
+            'sources_custom/php.php',
+            'sources_custom/phpstub.php',
             '_tests/codechecker/.htaccess',
             '_tests/codechecker/build.sh',
             '_tests/codechecker/checker.ini',
@@ -147,9 +152,6 @@ class Hook_addon_registry_testing_platform
             '_tests/codechecker/codechecker.bat',
             '_tests/codechecker/codechecker.sh',
             '_tests/codechecker/index.html',
-            '_tests/codechecker/lang/.htaccess',
-            '_tests/codechecker/lang/index.html',
-            '_tests/codechecker/lang/phpdoc.ini',
             '_tests/codechecker/lex.php',
             '_tests/codechecker/lib.php',
             '_tests/codechecker/netbeans/.htaccess',

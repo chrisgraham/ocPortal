@@ -103,7 +103,7 @@ class Hook_rss_tickets
                 $if_comments = new Tempcode();
             }
 
-            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $ticket_id, 'NEWS' => '', 'DATE' => $date)));
+            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $ticket_id, 'NEWS' => '', 'DATE' => $date), null, false, null, '.xml', 'xml'));
         }
 
         require_lang('tickets');

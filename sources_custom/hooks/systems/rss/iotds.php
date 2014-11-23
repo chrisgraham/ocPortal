@@ -87,7 +87,7 @@ class Hook_rss_iotds
                 'ID' => $id,
                 'NEWS' => $news,
                 'DATE' => $news_date,
-            )));
+            ), null, false, null, '.xml', 'xml'));
         }
 
         require_lang('iotds');

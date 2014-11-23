@@ -61,9 +61,11 @@ class JabberAuth
     public $stdin;   /* stdin file pointer */
     public $stdout;  /* stdout file pointer */
 
-    public function JabberAuth()
+    public function __construct()
     {
-        @define_syslog_variables();
+        if (function_exists('define_syslog_variables')) {
+            @define_syslog_variables();
+        }
         @openlog("pipe-auth", LOG_NDELAY, LOG_SYSLOG);
 
         if ($this->debug) {
@@ -113,8 +115,8 @@ class JabberAuth
     {
         @fwrite($this->stdout, $message); // We reply ...
         $dump = @unpack("nn", $message);
-        $dump = $dump["n"];
-        $this->logg("OUT: " . $dump);
+        $_dump = $dump["n"];
+        $this->logg("OUT: " . $_dump);
     }
 
     public function myalive()
@@ -134,7 +136,7 @@ class JabberAuth
             $length = strlen($this->data); // compute data length
             if ($length > 0) { // for debug mainly ...
                 $this->logg("GO: " . $this->data);
-                $this->logg("data length is : " . $length);
+                $this->logg("data length is : " . strval($length));
             }
             $ret = $this->command(); // play with data !
             $this->logg("RE: " . $ret); // this is what WE send.

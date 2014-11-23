@@ -155,7 +155,7 @@ function _start_svg()
         $css_file = get_base_url() . '/themes/default/css/svg.css';
         $css_file_path = get_file_base() . '/themes/default/css/svg.css';
     }
-    $js_file = str_replace(get_custom_file_base(), get_custom_base_url(), javascript_enforce('javascript'));
+    $js_file = str_replace(get_custom_file_base(), get_custom_base_url(), javascript_enforce('global'));
     global $CSS_FILE_CONTENTS;
     $CSS_FILE_CONTENTS = file_get_contents($css_file_path);
     return '<' . '?xml version="1.0" encoding="' . get_charset() . '"?' . '>

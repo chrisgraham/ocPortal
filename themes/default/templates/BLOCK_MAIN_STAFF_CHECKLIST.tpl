@@ -51,7 +51,7 @@
 	</div>
 </section>
 
-{$REQUIRE_JAVASCRIPT,javascript_staff}
+{$REQUIRE_JAVASCRIPT,staff}
 
 <script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function() {

@@ -449,8 +449,63 @@
   </parameter> 
 
   <parameter
+    name="SetAclParameter86" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/javascript_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/javascript_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter84" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/xml_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/xml_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter85" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/text_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/text_custom" />
+  </parameter> 
+
+  <parameter
     name="SetAclParameter28" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/templates_cached/EN" tags="Hidden">
     <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/templates_cached/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter87" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter88" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin/css_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin/css_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter89" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin/images_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin/images_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter90" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin/templates_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin/templates_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter91" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin/javascript_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin/javascript_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter92" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin/xml_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin/xml_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter93" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin/text_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin/text_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter94" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/admin/templates_cached/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/admin/templates_cached/EN" />
   </parameter>
 
   <parameter

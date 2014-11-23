@@ -136,7 +136,7 @@ class Hook_addon_registry_catalogues
             'sources/hooks/systems/cron/catalogue_view_reports.php',
             'sources/hooks/systems/meta/catalogue_category.php',
             'sources/hooks/systems/meta/catalogue_entry.php',
-            'themes/default/templates/JAVASCRIPT_CATALOGUES.tpl',
+            'themes/default/javascript/catalogues.js',
             'sources/hooks/modules/admin_import_types/catalogues.php',
             'sources/hooks/systems/content_meta_aware/catalogue.php',
             'sources/hooks/systems/content_meta_aware/catalogue_category.php',
@@ -705,7 +705,7 @@ class Hook_addon_registry_catalogues
      */
     public function tpl_preview__administrative__catalogue_adding_screen()
     {
-        require_javascript('javascript_validation');
+        require_javascript('validation');
 
         return array(
             lorem_globalise(do_lorem_template('CATALOGUE_ADDING_SCREEN', array(
@@ -730,7 +730,7 @@ class Hook_addon_registry_catalogues
      */
     public function tpl_preview__administrative__catalogue_editing_screen()
     {
-        require_javascript('javascript_validation');
+        require_javascript('validation');
 
         return array(
             lorem_globalise(do_lorem_template('CATALOGUE_EDITING_SCREEN', array(

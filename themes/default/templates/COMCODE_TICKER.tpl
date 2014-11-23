@@ -1,6 +1,6 @@
 {$SET,RAND_ID_TICKER,rand{$RAND}}
 
-{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+{$REQUIRE_JAVASCRIPT,dyn_comcode}
 
 <div class="ticker_wrap" role="marquee" id="ticktickticker{$GET,RAND_ID_TICKER}"></div>
 

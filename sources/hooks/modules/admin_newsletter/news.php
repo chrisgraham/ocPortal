@@ -99,7 +99,7 @@ class Hook_whatsnew_news
             } else {
                 $thumbnail = mixed();
             }
-            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '4eaf5ec00db1f0b89cef5120c2486521', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'news', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '4eaf5ec00db1f0b89cef5120c2486521', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'news', 'CONTENT_ID' => strval($id))), null, false, null, '.txt', 'text');
         }
 
         return array($new, do_lang('NEWS', '', '', '', $lang));

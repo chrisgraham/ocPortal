@@ -3062,7 +3062,7 @@ ul.buttons_group, ul.associated_links_block_group {
 
 /*
 =========================
-=========Buttons=========
+======Common forms=======
 =========================
 */
 
@@ -3072,6 +3072,18 @@ ul.buttons_group, ul.associated_links_block_group {
 	margin-left: 0 !important;
 	margin-right: 0 !important;
 }
+.fields_set_contents .constrain_field, .fields_set_contents .wide_field {
+	max-width: 500px;
+}
+.fields_set_contents .constrain_field, .fields_set_contents input .wide_field {
+	display: inline;
+}
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
 
 /* This is used to overlay special out-of-flow edit buttons, for staff only */
 input.magic_image_edit_link {
@@ -3601,12 +3613,12 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 
 .dynamic_iframe {
 	width: 100%;
-	height: 900px; /* This is dynamically resized; 900px is referenced from JAVASCRIPT.tpl so don't change it */
+	height: 900px; /* This is dynamically resized; 900px is referenced from global.js so don't change it */
 }
 
 .expandable_iframe {
 	width: 100%;
-	height: 150px; /* Referenced also in JAVASCRIPT.tpl */
+	height: 150px; /* Referenced also in global.js */
 }
 
 .hidden_save_frame, .hidden_preview_frame {

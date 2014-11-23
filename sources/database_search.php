@@ -266,7 +266,7 @@ function opensearch_script()
         default:
             //header('Content-Type: application/opensearchdescription+xml');
             header('Content-Type: text/xml');
-            $tpl = do_template('OPENSEARCH', array('_GUID' => '1fe46743805ade5958dcba0d58c4b0f2', 'DESCRIPTION' => get_option('description')));
+            $tpl = do_template('OPENSEARCH', array('_GUID' => '1fe46743805ade5958dcba0d58c4b0f2', 'DESCRIPTION' => get_option('description')), null, false, null, '.xml', 'xml');
             $tpl->evaluate_echo();
             break;
     }

@@ -2,7 +2,7 @@
 	<img alt="{EMOTICON*}" src="{$IMG*,{SRC},1}" />
 {+END}
 {+START,IF,{$IS_IN_GROUP,{$CONFIG_OPTION,ocjester_emoticon_magnet_shown_for}}}
-	{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+	{$REQUIRE_JAVASCRIPT,dyn_comcode}
 	<div id="smilecrazy{UNIQID%}"></div>
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function() {

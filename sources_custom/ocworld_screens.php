@@ -148,7 +148,7 @@ function output_room_screen($member_id)
 
     require_lang('chat');
     require_lang('menus');
-    require_javascript('javascript_editing');
+    require_javascript('editing');
 
     list($realm, $x, $y) = get_loc_details($member_id);
 

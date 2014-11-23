@@ -1,5 +1,5 @@
-{$REQUIRE_JAVASCRIPT,javascript_ocf_forum}
-{$REQUIRE_JAVASCRIPT,javascript_ajax}
+{$REQUIRE_JAVASCRIPT,ocf_forum}
+{$REQUIRE_JAVASCRIPT,ajax}
 
 <div class="box ocf_notification"><div class="box_inner">
 	<p onclick="/*Access-note: code has other activation*/ return toggleable_tray(this.parentNode,false);" class="ocf_notification_intro_line">

@@ -1,6 +1,6 @@
 {TITLE}
 
-{$REQUIRE_JAVASCRIPT,javascript_widget_color}
+{$REQUIRE_JAVASCRIPT,widget_color}
 {$REQUIRE_CSS,widget_color}
 
 {+START,IF_NON_EMPTY,{INTRODUCTION}}<p>{INTRODUCTION}</p>{+END}

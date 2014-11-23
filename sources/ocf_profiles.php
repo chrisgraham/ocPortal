@@ -70,8 +70,8 @@ function render_profile_tabset($title, $member_id_of, $member_id_viewing = null,
         sort_maps_by($tabs, 2);
     }
 
-    require_javascript('javascript_profile');
-    require_javascript('javascript_ajax');
+    require_javascript('profile');
+    require_javascript('ajax');
 
     load_up_all_self_page_permissions($member_id_viewing);
 

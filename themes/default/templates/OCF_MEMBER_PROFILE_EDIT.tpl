@@ -8,7 +8,7 @@
 	{+END}
 {+END}
 
-{$REQUIRE_JAVASCRIPT,javascript_validation}
+{$REQUIRE_JAVASCRIPT,validation}
 
 <form class="form_table" title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}" enctype="multipart/form-data">
 	{HIDDEN}

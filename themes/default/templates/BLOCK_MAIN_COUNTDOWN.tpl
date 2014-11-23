@@ -1,4 +1,4 @@
-{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+{$REQUIRE_JAVASCRIPT,dyn_comcode}
 
 {$SET,countdown_id,countdown_{$RAND}}
 

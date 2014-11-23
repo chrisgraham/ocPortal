@@ -149,7 +149,7 @@ This product includes:
   - AreaEdit (remnants of spellchecker code, rest of code replaced by CKEditor) (BSD-like licence)
   - CKEditor WYSIWYG editor (MPL licence)
   - EditArea code editor (BSD-like licence)
-  - JAVASCRIPT_XSL_MOPUP.tpl (public domain)
+  - xsl_mopup.js (public domain)
   - dom-drag.js (www.youngpup.net, Creative Commons Attribution licence)
   - JavaScript base-64 code (http://www.webtoolkit.info/, liberal custom licence)
   - JW-Player (used under commercial license)

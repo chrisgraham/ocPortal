@@ -1,4 +1,4 @@
-{$REQUIRE_JAVASCRIPT,javascript_ocf_forum}
+{$REQUIRE_JAVASCRIPT,ocf_forum}
 
 <div class="ocf_topic_poll_form">
 	<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION},question,_SEARCH:topics:_edit_poll:{ID}}{QUESTION*}{+END}</h3>

@@ -3,5 +3,5 @@
 </div>
 
 <script type="text/javascript">// <![CDATA[
-	{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
+	{+START,INCLUDE,AUTOCOMPLETE_LOAD,.js,javascript}{+END}
 //]]></script>

@@ -115,7 +115,7 @@ class Hook_addon_registry_core_permission_management
             'themes/default/templates/PERMISSION_CELL.tpl',
             'themes/default/templates/PERMISSION_HEADER_CELL.tpl',
             'themes/default/templates/PERMISSION_ROW.tpl',
-            'themes/default/templates/JAVASCRIPT_PERMISSIONS.tpl',
+            'themes/default/javascript/permissions.js',
             'themes/default/templates/PERMISSIONS_TREE_EDITOR_SCREEN.tpl',
             'themes/default/templates/PERMISSION_KEYS_MESSAGE_ROW.tpl',
             'adminzone/pages/modules/admin_permissions.php',
@@ -163,8 +163,8 @@ class Hook_addon_registry_core_permission_management
     {
         require_css('sitemap_editor');
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_tree_list');
+        require_javascript('ajax');
+        require_javascript('tree_list');
         require_lang('permissions');
 
         require_css('forms');

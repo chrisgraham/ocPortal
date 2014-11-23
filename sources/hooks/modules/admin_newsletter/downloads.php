@@ -99,7 +99,7 @@ class Hook_whatsnew_downloads
                     }
                 }
             }
-            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => 'bbd85ed54500b9d6df998e3c835b45e9', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'download', 'CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => 'bbd85ed54500b9d6df998e3c835b45e9', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'download', 'CONTENT_ID' => strval($id))), null, false, null, '.txt', 'text');
         }
 
         return array($new, do_lang('SECTION_DOWNLOADS', '', '', '', $lang));

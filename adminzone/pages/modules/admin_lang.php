@@ -141,7 +141,7 @@ class Module_admin_lang
      */
     public function run()
     {
-        require_javascript('javascript_translate');
+        require_javascript('translate');
 
         require_code('lang2');
         require_code('lang_compile');

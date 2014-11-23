@@ -107,7 +107,7 @@
 
 		<script type="text/javascript">// <![CDATA[
 			manage_scroll_height(document.getElementById('{NAME;/}'));
-			{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
+			{+START,INCLUDE,AUTOCOMPLETE_LOAD,.js,javascript}{+END}
 		//]]></script>
 	</td>
 </tr>

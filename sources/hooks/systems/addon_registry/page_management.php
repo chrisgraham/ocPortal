@@ -110,7 +110,7 @@ class Hook_addon_registry_page_management
             'themes/default/templates/VALIDATE_CHECK_SCREEN.tpl',
             'themes/default/templates/VALIDATE_CHECK_ERROR.tpl',
             'adminzone/pages/modules/admin_sitemap.php',
-            'themes/default/templates/JAVASCRIPT_SITEMAP_EDITOR.tpl',
+            'themes/default/javascript/sitemap_editor.js',
             'themes/default/templates/SITEMAP_EDITOR_SCREEN.tpl',
             'themes/default/images/under_construction_animated.gif',
         );
@@ -140,10 +140,10 @@ class Hook_addon_registry_page_management
      */
     public function tpl_preview__administrative__sitemap_editor_screen()
     {
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_tree_list');
-        require_javascript('javascript_dragdrop');
-        require_javascript('javascript_sitemap_editor');
+        require_javascript('ajax');
+        require_javascript('tree_list');
+        require_javascript('dragdrop');
+        require_javascript('sitemap_editor');
         require_lang('zones');
         return array(
             lorem_globalise(do_lorem_template('SITEMAP_EDITOR_SCREEN', array(

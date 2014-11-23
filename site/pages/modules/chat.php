@@ -369,11 +369,11 @@ class Module_chat
             warn_exit(do_lang_tempcode('MSG_JS_NEEDED'));
         }
 
-        require_javascript('javascript_ajax');
-        require_javascript('javascript_chat');
-        require_javascript('javascript_sound');
-        require_javascript('javascript_editing');
-        require_javascript('javascript_validation');
+        require_javascript('ajax');
+        require_javascript('chat');
+        require_javascript('sound');
+        require_javascript('editing');
+        require_javascript('validation');
 
         require_lang('comcode');
         require_code('chat');
@@ -440,7 +440,7 @@ class Module_chat
     {
         require_code('chat_lobby');
 
-        require_javascript('javascript_ajax_people_lists');
+        require_javascript('ajax_people_lists');
 
         // Who are we viewing the lobby of?
         $member_id = get_param_integer('member_id', get_member());
@@ -587,7 +587,7 @@ class Module_chat
      */
     public function chat_room()
     {
-        require_javascript('javascript_posting');
+        require_javascript('posting');
 
         $prefs = @$_COOKIE['software_chat_prefs'];
         $prefs = @explode(';', $prefs);
@@ -1126,9 +1126,9 @@ class Module_chat
         }
 
         require_lang('javascript');
-        require_javascript('javascript_chat');
-        require_javascript('javascript_sound');
-        require_javascript('javascript_plupload');
+        require_javascript('chat');
+        require_javascript('sound');
+        require_javascript('plupload');
         require_css('widget_plupload');
 
         // Find all sounds available
