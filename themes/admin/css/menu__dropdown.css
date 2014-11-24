@@ -153,15 +153,15 @@ For example:
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.menu_type__dropdown .nlevel .current a {
-		background: transparent url('{$IMG;,2x/menus/menu_bullet_current}') no-repeat 5px 6px !important;
+		background-image: url('{$IMG;,2x/menus/menu_bullet_current}') !important;
 	}
 
 	.menu_type__dropdown .nlevel .non_current a {
-		background: transparent url('{$IMG;,2x/menus/menu_bullet}') no-repeat 5px 6px;
+		background-image: url('{$IMG;,2x/menus/menu_bullet}');
 	}
 
 	.menu_type__dropdown .nlevel .non_current a:hover {
-		background: transparent url('{$IMG;,2x/menus/menu_bullet_hover}') no-repeat 5px 6px;
+		background-image: url('{$IMG;,2x/menus/menu_bullet_hover}');
 	}
 }
 

@@ -1234,11 +1234,11 @@ div.red_alert, p.red_alert {
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	div.red_alert, p.red_alert {
-		background: url('{$IMG;,icons/48x48/status/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
+		background-size: url('{$IMG;,icons/48x48/status/notice}');
 		background-size: 24px 24px;
 	}
 	.inline_wip_message {
-		background: url('{$IMG;,icons/48x48/status/notice}') 0.6em 0.75em no-repeat {$GET,area_background};
+		background-size: url('{$IMG;,icons/48x48/status/notice}');
 		background-size: 24px 24px;
 	}
 }
@@ -1483,11 +1483,11 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6, .boxless_space .box>.toggleable_tray_title {
-		background: url('{$IMG_INLINE;,2x/boxless_title_leadin_rightcomp}') no-repeat !important;
+		background-image: url('{$IMG_INLINE;,2x/boxless_title_leadin_rightcomp}');
 		background-size: 18px 18px;
 	}
 	.global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
-		background: url('{$IMG_INLINE;,2x/boxless_title_leadin_leftcomp}') no-repeat !important;
+		background-image: url('{$IMG_INLINE;,2x/boxless_title_leadin_leftcomp}');
 		background-size: 18px 18px;
 	}
 }
@@ -1707,7 +1707,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.box.box_arrow>span {
-		background: url('{$IMG;,2x/box_arrow}') no-repeat;
+		background-image: url('{$IMG;,2x/box_arrow}');
 		background-size: 13px 7px;
 	}
 }
@@ -2244,7 +2244,9 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	background: url('{$IMG_INLINE;,icons/14x14/action_link}') 0 3px no-repeat;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	background: url('{$IMG_INLINE;,icons/28x28/action_link}') 0 3px no-repeat;
+	.index_screen_fancier_entry_link {
+		background-image: url('{$IMG_INLINE;,icons/28x28/action_link}');
+	}
 }
 .index_screen_fancier_entry_count {
 	font-size: 0.9em;
@@ -2693,7 +2695,7 @@ ul.actions_list>li, ul.actions_list_compact>li, ul.actions_list_super_compact>li
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	ul.actions_list>li, ul.actions_list_compact>li, ul.actions_list_super_compact>li {
-		background: url('{$IMG_INLINE;,icons/28x28/action_link}') left 8px no-repeat;
+		background-image: url('{$IMG_INLINE;,icons/28x28/action_link}');
 		background-size: 14px 14px;
 	}
 }
@@ -2793,8 +2795,10 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	background: url('{$IMG_INLINE;,icons/48x48/tabs/settings}') right 3px no-repeat;
-	background-size: 24px 24px;
+	.staff_actions {
+		background-image: url('{$IMG_INLINE;,icons/48x48/tabs/settings}');
+		background-size: 24px 24px;
+	}
 }
 .staff_actions:hover, body.touch_enabled .staff_actions {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;}
@@ -4259,76 +4263,76 @@ a[rel="lightbox"] {
 
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 		a[href^="mailto:"] {
-			background: url('{$IMG;,icons/32x32/filetypes/email_link}') no-repeat right top !important; /* Important because the URL may contain arbitrary stuff, including ".php", due to embedded mail body */
+			background-image: url('{$IMG;,icons/32x32/filetypes/email_link}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".pdf"].user_link, a[href$=".ps"].user_link, body div a.pdf_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_pdf}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_pdf}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".doc"].user_link, a[href$=".docx"].user_link, a[href$=".rtf"].user_link, body div a.doc_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_doc}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_doc}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".xls"].user_link, a[href$=".xlsx"].user_link, body div a.xls_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_xls}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_xls}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".ppt"].user_link, a[href$=".pptx"].user_link, body div a.ppt_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_ppt}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_ppt}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".log"].user_link, a[href$=".txt"].user_link, body div a.txt_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_txt}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_txt}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".odt"].user_link, body div a.odt_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_odt}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_odt}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".odp"].user_link, body div a.odp_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_odt}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_odt}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".ods"].user_link, body div a.ods_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_ods}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_ods}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".rss"].user_link, body div a.feed_link {
-			background: url('{$IMG;,icons/32x32/filetypes/feed}') no-repeat right top; 
+			background-image: url('{$IMG;,icons/32x32/filetypes/feed}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".torrent"].user_link, body div a.torrent_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_torrent}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_torrent}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".zip"].user_link, a[href$=".gz"].user_link, a[href$=".bz2"].user_link, a[href$=".tar"].user_link, a[href$=".rar"].user_link, body div a.archive_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_archive}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_archive}');
 			background-size: 16px 16px;
 		}
 
 		a[href$=".asf"].user_link, a[href$=".ra"].user_link, a[href$=".wma"].user_link, a[href$=".wav"].user_link, a[href$=".mp3"].user_link, a[href$=".ogg"].user_link, a[href$=".mid"].user_link, a[href$=".mov"].user_link, a[href$=".qt"].user_link, a[href$=".wmv"].user_link, a[href$=".ram"].user_link, a[href$=".rm"].user_link, a[href$=".avi"].user_link, a[href$=".mpg"].user_link, a[href$=".mpe"].user_link, a[href$=".mpeg"].user_link, a[href$=".mp4"].user_link, a[href$=".webm"].user_link, body div a.media_link {
-			background: url('{$IMG;,icons/32x32/filetypes/page_media}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/page_media}');
 			background-size: 16px 16px;
 		}
 
 		a[target="_blank"].user_link { /* Detected external links have styling */
-			background: url('{$IMG;,icons/32x32/filetypes/external_link}') no-repeat right top;
+			background-image: url('{$IMG;,icons/32x32/filetypes/external_link}');
 			background-size: 7px 8px;
 		}
 		body div a.external_link { /* Explicitly marked external links must show the styling with precedence */
-			background: url('{$IMG;,icons/32x32/filetypes/external_link}') no-repeat right top !important;
+			background-image: url('{$IMG;,icons/32x32/filetypes/external_link}');
 			background-size: 7px 8px;
 		}
 	}
@@ -4342,7 +4346,7 @@ a[rel="lightbox"] {
 
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 		.print_icon {
-			background: url('{$IMG;,icons/48x48/links/print}') no-repeat left top !important;
+			background-image: url('{$IMG;,icons/48x48/links/print}');
 			background-size: 24px 24px;
 		}
 	}

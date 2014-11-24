@@ -53,7 +53,7 @@ div.comcode_supported {
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.input_error_here {
-		background: url('{$IMG;,icons/48x48/status/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
+		background-image: url('{$IMG;,icons/48x48/status/notice}');
 		background-size: 24px 24px;
 	}
 }
@@ -320,6 +320,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	}
 	.form_table_field_input>input[name="validated"].input_tick:checked:before {
 		background-image: url('{$IMG;,2x/editor/on}') !important;
+		background-size: {$IMG_WIDTH%,{$IMG,1x/editor/on}}px {$IMG_HEIGHT%,{$IMG,1x/editor/on}}px;
 	}
 }
 .form_table_field_input>input[name="validated"].input_tick {

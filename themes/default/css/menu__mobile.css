@@ -55,8 +55,10 @@
 	color: {$GET,WB};
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	background-image: url('{$IMG;,icons/48x48/buttons/proceed}');
-	background-size: 24px 24px;
+	.menu_type__mobile li {
+		background-image: url('{$IMG;,icons/48x48/buttons/proceed}');
+		background-size: 24px 24px;
+	}
 }
 
 .menu_type__mobile li.current, .menu_type__mobile li:hover {
