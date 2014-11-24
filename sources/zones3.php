@@ -253,11 +253,11 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
     require_code('templates_donext');
     $special = array(
         array('menu/_generic_admin/add_one', array('cms_comcode_pages', array('type' => 'edit'), get_module_zone('cms_comcode_pages')), do_lang('COMCODE_PAGE_ADD')),
-        array('menu/cms/comcode_page_edit', array('cms_comcode_pages', array('type' => 'misc'), get_module_zone('cms_comcode_pages')), do_lang_tempcode('COMCODE_PAGE_EDIT')),
+        array('menu/cms/comcode_page_edit', array('cms_comcode_pages', array('type' => 'browse'), get_module_zone('cms_comcode_pages')), do_lang_tempcode('COMCODE_PAGE_EDIT')),
     );
     if (addon_installed('redirects_editor')) {
         require_lang('redirects');
-        $special[] = array('menu/adminzone/structure/redirects', array('admin_redirects', array('type' => 'misc'), get_module_zone('admin_redirects')), do_lang_tempcode('REDIRECTS'));
+        $special[] = array('menu/adminzone/structure/redirects', array('admin_redirects', array('type' => 'browse'), get_module_zone('admin_redirects')), do_lang_tempcode('REDIRECTS'));
     }
     if (!has_js()) {
         $special = array_merge($special, array(

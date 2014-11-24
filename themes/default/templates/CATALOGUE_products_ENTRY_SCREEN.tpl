@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="box box___catalogue_products_entry_screen"><div class="box_inner">
-		<div class="hproduct"{$?,{$MATCH_KEY_MATCH,_WILD:_WILD:misc}, itemscope="itemscope" itemtype="http://schema.org/Offer"}>
+		<div class="hproduct"{$?,{$MATCH_KEY_MATCH,_WILD:_WILD:browse}, itemscope="itemscope" itemtype="http://schema.org/Offer"}>
 			<div class="float_surrounder">
 				{+START,IF_NON_EMPTY,{FIELD_7_THUMB}}
 					<p class="catalogue_entry_box_thumbnail">

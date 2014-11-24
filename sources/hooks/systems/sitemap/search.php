@@ -32,7 +32,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
     public function handles_page_link($page_link)
     {
         $matches = array();
-        if (preg_match('#^([^:]*):search(:misc)?(:|$)#', $page_link, $matches) != 0) {
+        if (preg_match('#^([^:]*):search(:browse)?(:|$)#', $page_link, $matches) != 0) {
             $zone = $matches[1];
             $page = 'search';
 
@@ -104,7 +104,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
         sort_maps_by($hooks, 'lang');
 
         foreach ($hooks as $hook => $info) {
-            $child_page_link = $zone . ':' . $page . ':misc:' . $hook;
+            $child_page_link = $zone . ':' . $page . ':browse:' . $hook;
             $node = $this->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather);
             if (($callback === null || $return_anyway) && ($node !== null)) {
                 $nodes[] = $node;

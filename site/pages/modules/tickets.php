@@ -136,13 +136,13 @@ class Module_tickets
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('SUPPORT_TICKETS', 'menu/site_meta/tickets'),
+            'browse' => array('SUPPORT_TICKETS', 'menu/site_meta/tickets'),
         );
     }
 
@@ -156,13 +156,13 @@ class Module_tickets
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('tickets');
 
         set_feed_url('?mode=tickets&filter=');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             if (!is_guest()) {
                 // Our tickets
                 $ticket_type_id = get_param_integer('ticket_type_id', null);
@@ -176,7 +176,7 @@ class Module_tickets
         }
 
         if ($type == 'ticket') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SUPPORT_TICKETS'))));
 
             $GLOBALS['OUTPUT_STREAMING'] = false; // Too complex to do a pre_run for this properly
         }
@@ -186,7 +186,7 @@ class Module_tickets
         }
 
         if ($type == 'set_ticket_extra_access' || $type == '_set_ticket_extra_access') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
 
             $this->title = get_screen_title('SET_TICKET_EXTRA_ACCESS');
         }
@@ -196,19 +196,19 @@ class Module_tickets
         }
 
         if ($type == 'merge' || $type == '_merge') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('from'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('from'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
 
             $this->title = get_screen_title('MERGE_SUPPORT_TICKETS');
         }
 
         if ($type == 'assign') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('ticket_id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('ticket_id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
 
             $this->title = get_screen_title('TICKET_ASSIGN');
         }
 
         if ($type == 'unassign') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('ticket_id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('ticket_id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
 
             $this->title = get_screen_title('TICKET_UNASSIGN');
         }
@@ -232,9 +232,9 @@ class Module_tickets
         require_code('tickets');
         require_code('tickets2');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->do_choose_ticket();
         }
         if ($type == 'ticket') {

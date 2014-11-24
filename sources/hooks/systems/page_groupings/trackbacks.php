@@ -36,7 +36,7 @@ class Hook_page_groupings_trackbacks
             return array();
         }
         return array(
-            array('audit', 'menu/adminzone/audit/trackbacks', array('admin_trackbacks', array('type' => 'misc'), get_module_zone('admin_trackbacks')), do_lang_tempcode('trackbacks:MANAGE_TRACKBACKS'), 'trackbacks:DOC_TRACKBACKS'),
+            array('audit', 'menu/adminzone/audit/trackbacks', array('admin_trackbacks', array('type' => 'browse'), get_module_zone('admin_trackbacks')), do_lang_tempcode('trackbacks:MANAGE_TRACKBACKS'), 'trackbacks:DOC_TRACKBACKS'),
         );
     }
 }

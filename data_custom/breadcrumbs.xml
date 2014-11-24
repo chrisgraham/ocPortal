@@ -4,16 +4,16 @@
 	<substitution match_key="forum:forumview">
 		<link label="{!HOME}">:</link>
 	</substitution>
-	<substitution match_key="site:_WILD_NOT_START:misc">
+	<substitution match_key="site:_WILD_NOT_START:browse">
 		<link label="{!HOME}">:</link>
 	</substitution>
 	<substitution match_key="site:_WILD_NOT_START">
 		<link label="{!HOME}">:</link>
 	</substitution>
-	<substitution match_key="site:_WILD_NOT_START:misc">
+	<substitution match_key="site:_WILD_NOT_START:browse">
 		<link label="{!HOME}">:</link>
 	</substitution>
-	<substitution match_key="site:wiki:misc:1"> <!-- Wiki+ has a special URL structure -->
+	<substitution match_key="site:wiki:browse:1"> <!-- Wiki+ has a special URL structure -->
 		<link label="{!HOME}">:</link>
 	</substitution>
 	<substitution match_key="collaboration:_WILD_NOT_START">
@@ -45,7 +45,7 @@
 	<!-- Examples follow... -->
 
 	<!-- If you created and go to a gallery named "example_distorted_gallery" this will give you a special breadcrumb path -->
-	<!--<substitution label="Distorted gallery" match_key="site:galleries:misc:example_distorted_gallery">
+	<!--<substitution label="Distorted gallery" match_key="site:galleries:browse:example_distorted_gallery">
 		<link label="Our page">site:page_for_distorted_gallery</link>
 	</substitution>-->
 

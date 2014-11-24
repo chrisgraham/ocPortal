@@ -53,14 +53,14 @@ class Module_cms_catalogues extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @param  boolean                  Whether to simplify this down for only a specific catalogue (only applied to cms_catalogues module).
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false, $simplified = false)
     {
         $ret = array(
-            'misc' => array('MANAGE_CATALOGUES', 'menu/rich_content/catalogues/catalogues'),
+            'browse' => array('MANAGE_CATALOGUES', 'menu/rich_content/catalogues/catalogues'),
 
             'add_category' => array('ADD_CATALOGUE_CATEGORY', 'menu/_generic_admin/add_one_category'),
             'edit_category' => array('EDIT_CATALOGUE_CATEGORY', 'menu/_generic_admin/edit_one_category'),
@@ -123,7 +123,7 @@ class Module_cms_catalogues extends Standard_crud_module
         $this->alt_crud_module = class_exists('Mx_cms_catalogues_alt') ? new Mx_cms_catalogues_alt() : new Module_cms_catalogues_alt();
         $GLOBALS['MODULE_CMS_CATALOGUES'] = $this;
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('catalogues');
         require_css('catalogues');
@@ -213,8 +213,8 @@ class Module_cms_catalogues extends Standard_crud_module
         }
 
         // Decide what to do
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'import') {
             return $this->import_catalogue();
@@ -234,7 +234,7 @@ class Module_cms_catalogues extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         $catalogue_name = get_param('catalogue_name', '');

@@ -79,7 +79,7 @@ function render_news_box($row, $zone = '_SEARCH', $give_context = true, $brief =
         $truncate = false;
     }
 
-    $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), get_module_zone('authors')) : new Tempcode();
+    $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'browse', 'id' => $row['author']), get_module_zone('authors')) : new Tempcode();
     $author = $row['author'];
 
     $seo_bits = (get_value('no_tags') === '1') ? array('', '') : seo_meta_get_for('news', strval($row['id']));
@@ -128,11 +128,11 @@ function render_news_category_box($row, $zone = '_SEARCH', $give_context = true,
     require_lang('news');
 
     // URL
-    $map = array('page' => 'news', 'type' => 'misc', 'id' => $row['id']);
+    $map = array('page' => 'news', 'type' => 'browse', 'id' => $row['id']);
     if ($attach_to_url_filter) {
-        if (get_param('type', 'misc') == 'cat_select') {
+        if (get_param('type', 'browse') == 'cat_select') {
             $map['blog'] = '0';
-        } elseif (get_param('type', 'misc') == 'blog_select') {
+        } elseif (get_param('type', 'browse') == 'blog_select') {
             $map['blog'] = '1';
         }
 

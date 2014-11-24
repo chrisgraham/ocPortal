@@ -96,7 +96,7 @@ class Hook_phpbb3
         );
         $_cleanup_url = build_url(array('page' => 'admin_cleanup'), get_module_zone('admin_cleanup'));
         $cleanup_url = $_cleanup_url->evaluate();
-        $info['message'] = (get_param('type', 'misc') != 'import' && get_param('type', 'misc') != 'hook') ? new Tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
+        $info['message'] = (get_param('type', 'browse') != 'import' && get_param('type', 'browse') != 'hook') ? new Tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
 
         return $info;
     }
@@ -1283,7 +1283,7 @@ class Hook_phpbb3
                 continue;
             }
 
-            $GLOBALS['FORUM_DB']->query_insert('bookmarks', array('b_owner' => $owner, 'b_folder' => '', 'b_title' => 'Topic #' . strval($topic_id), 'b_page_link' => 'forum:topicview:misc:' . strval($topic_id)));
+            $GLOBALS['FORUM_DB']->query_insert('bookmarks', array('b_owner' => $owner, 'b_folder' => '', 'b_title' => 'Topic #' . strval($topic_id), 'b_page_link' => 'forum:topicview:browse:' . strval($topic_id)));
         }
     }
 

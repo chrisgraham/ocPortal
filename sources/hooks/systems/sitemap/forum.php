@@ -24,7 +24,7 @@
 class Hook_sitemap_forum extends Hook_sitemap_content
 {
     protected $content_type = 'forum';
-    protected $screen_type = 'misc';
+    protected $screen_type = 'browse';
 
     // If we have a different content type of entries, under this content type
     protected $entry_content_type = array('topic');

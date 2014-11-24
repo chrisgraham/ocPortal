@@ -701,7 +701,7 @@ function process_url_monikers($page, $redirect_if_non_canonical = true)
         // Yet more SEO redirection (monikers)
         // Does this URL arrangement support monikers?
         if ($url_id !== null && $redirect_if_non_canonical) { // NB: Comcode page monikers would have been handled in the code above
-            $type = get_param('type', 'misc');
+            $type = get_param('type', 'browse');
             $looking_for = '_SEARCH:' . $page . ':' . $type . ':_WILD';
             $hooks = find_all_hooks('systems', 'content_meta_aware');
             $ob_info = null;
@@ -716,7 +716,7 @@ function process_url_monikers($page, $redirect_if_non_canonical = true)
 
                 if (($ob_info['view_page_link_pattern'] == $looking_for) && ($ob_info['support_url_monikers'])) {
                     if (is_numeric($url_id)) { // Lookup and redirect to moniker
-                        $correct_moniker = find_id_moniker(array('page' => $page, 'type' => get_param('type', 'misc'), 'id' => $url_id), $zone);
+                        $correct_moniker = find_id_moniker(array('page' => $page, 'type' => get_param('type', 'browse'), 'id' => $url_id), $zone);
                         if (($correct_moniker !== null) && ($correct_moniker != $url_id) && (count($_POST) == 0)) { // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
                             header('HTTP/1.0 301 Moved Permanently');
                             $_new_url = build_url(array('page' => '_SELF', 'id' => $correct_moniker), '_SELF', null, true);
@@ -727,9 +727,9 @@ function process_url_monikers($page, $redirect_if_non_canonical = true)
                     } else {
                         // See if it is deprecated
                         if (strpos(get_db_type(), 'mysql') !== false) {
-                            $monikers = $GLOBALS['SITE_DB']->query_select('url_id_monikers USE INDEX (uim_moniker)', array('m_resource_id', 'm_deprecated'), array('m_resource_page' => $page, 'm_resource_type' => get_param('type', 'misc'), 'm_moniker' => $url_id));
+                            $monikers = $GLOBALS['SITE_DB']->query_select('url_id_monikers USE INDEX (uim_moniker)', array('m_resource_id', 'm_deprecated'), array('m_resource_page' => $page, 'm_resource_type' => get_param('type', 'browse'), 'm_moniker' => $url_id));
                         } else {
-                            $monikers = $GLOBALS['SITE_DB']->query_select('url_id_monikers', array('m_resource_id', 'm_deprecated'), array('m_resource_page' => $page, 'm_resource_type' => get_param('type', 'misc'), 'm_moniker' => $url_id));
+                            $monikers = $GLOBALS['SITE_DB']->query_select('url_id_monikers', array('m_resource_id', 'm_deprecated'), array('m_resource_page' => $page, 'm_resource_type' => get_param('type', 'browse'), 'm_moniker' => $url_id));
                         }
                         if (!array_key_exists(0, $monikers)) { // hmm, deleted?
                             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -740,7 +740,7 @@ function process_url_monikers($page, $redirect_if_non_canonical = true)
 
                         $deprecated = $monikers[0]['m_deprecated'] == 1;
                         if (($deprecated) && (count($_POST) == 0)) {
-                            $correct_moniker = find_id_moniker(array('page' => $page, 'type' => get_param('type', 'misc'), 'id' => $monikers[0]['m_resource_id']), $zone);
+                            $correct_moniker = find_id_moniker(array('page' => $page, 'type' => get_param('type', 'browse'), 'id' => $monikers[0]['m_resource_id']), $zone);
                             if ($correct_moniker != $url_id) { // Just in case database corruption means ALL are deprecated
                                 header('HTTP/1.0 301 Moved Permanently');
                                 $_new_url = build_url(array('page' => '_SELF', 'id' => $correct_moniker), '_SELF', null, true);

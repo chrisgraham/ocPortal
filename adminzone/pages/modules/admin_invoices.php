@@ -46,7 +46,7 @@ class Module_admin_invoices
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -56,7 +56,7 @@ class Module_admin_invoices
         }
 
         return array(
-            'misc' => array('INVOICES', 'menu/adminzone/audit/ecommerce/invoices'),
+            'browse' => array('INVOICES', 'menu/adminzone/audit/ecommerce/invoices'),
             'outstanding' => array('OUTSTANDING_INVOICES', 'menu/adminzone/audit/ecommerce/outstanding_invoices'),
             'undelivered' => array('UNDELIVERED_INVOICES', 'menu/adminzone/audit/ecommerce/undelivered_invoices'),
             'add' => array('CREATE_INVOICE', 'menu/adminzone/audit/ecommerce/create_invoice'),
@@ -78,38 +78,38 @@ class Module_admin_invoices
 
         set_helper_panel_tutorial('tut_ecommerce');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             breadcrumb_set_self(do_lang_tempcode('INVOICES'));
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE'))));
         }
 
         if ($type == 'add') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('INVOICES'))));
 
             $this->title = get_screen_title('CREATE_INVOICE');
         }
 
         if ($type == '_add') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:add', do_lang_tempcode('CREATE_INVOICE'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:add', do_lang_tempcode('CREATE_INVOICE'))));
 
             $this->title = get_screen_title('CREATE_INVOICE');
         }
 
         if ($type == 'outstanding') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('INVOICES'))));
 
             $this->title = get_screen_title('OUTSTANDING_INVOICES');
         }
 
         if ($type == 'undelivered') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('INVOICES'))));
 
             $this->title = get_screen_title('UNDELIVERED_INVOICES');
         }
 
         if ($type == 'delete') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:undelivered', do_lang_tempcode('UNDELIVERED_INVOICES'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:undelivered', do_lang_tempcode('UNDELIVERED_INVOICES'))));
             if (post_param_integer('confirmed', 0) != 1) {
                 breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
             } else {
@@ -121,7 +121,7 @@ class Module_admin_invoices
 
         if ($type == 'deliver') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:undelivered', do_lang_tempcode('UNDELIVERED_INVOICES'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:undelivered', do_lang_tempcode('UNDELIVERED_INVOICES'))));
 
             $this->title = get_screen_title('MARK_AS_DELIVERED');
         }
@@ -140,8 +140,8 @@ class Module_admin_invoices
 
         $type = get_param('type', 'add');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'add') {
             return $this->add();
@@ -169,7 +169,7 @@ class Module_admin_invoices
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('INVOICES'), comcode_lang_string('DOC_ECOMMERCE'),
@@ -322,14 +322,14 @@ class Module_admin_invoices
 
             $hidden = build_keep_post_fields();
             $hidden->attach(form_input_hidden('confirmed', '1'));
-            $hidden->attach(form_input_hidden('from', get_param('from', 'misc')));
+            $hidden->attach(form_input_hidden('from', get_param('from', 'browse')));
 
             return do_template('CONFIRM_SCREEN', array('_GUID' => '45707062c00588c33726b256e8f9ba40', 'TITLE' => $this->title, 'FIELDS' => $hidden, 'PREVIEW' => $text, 'URL' => $url));
         }
 
         $GLOBALS['SITE_DB']->query_delete('invoices', array('id' => get_param_integer('id')), '', 1);
 
-        $url = build_url(array('page' => '_SELF', 'type' => post_param('from', 'misc')), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => post_param('from', 'browse')), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 

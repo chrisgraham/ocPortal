@@ -4,7 +4,7 @@
 		var im_area_template='{IM_AREA_TEMPLATE;^/}';
 		var im_participant_template='{IM_PARTICIPANT_TEMPLATE;^/}';
 		var top_window=window;
-		var lobby_link='{$PAGE_LINK;,_SEARCH:chat:misc:enter_im=!!}';
+		var lobby_link='{$PAGE_LINK;,_SEARCH:chat:browse:enter_im=!!}';
 		var participants='';
 
 		function begin_im_chatting()

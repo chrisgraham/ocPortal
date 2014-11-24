@@ -113,14 +113,14 @@ class Module_sites
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
             'myocp' => array('MO_ADD_SITE', 'menu/_generic_admin/add_one'),
-            'misc' => array('OC_DOWNLOAD_NOW', 'menu/rich_content/downloads'),
+            'browse' => array('OC_DOWNLOAD_NOW', 'menu/rich_content/downloads'),
         );
     }
 
@@ -135,11 +135,11 @@ class Module_sites
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocportalcom');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('OC_DOWNLOAD_NOW');
         }
 
@@ -172,10 +172,10 @@ class Module_sites
         require_code('ecommerce');
         require_lang('ocf');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         // Main download screen
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->download_screen();
         }
 

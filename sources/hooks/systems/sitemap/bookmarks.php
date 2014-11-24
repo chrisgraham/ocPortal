@@ -100,7 +100,7 @@ class Hook_sitemap_bookmarks extends Hook_sitemap_base
 
         $children_folders = array();
         foreach ($subfolder_rows as $child_row) {
-            $child_page_link = $zone . ':' . $page . ':misc:' . urlencode($child_row['b_folder']);
+            $child_page_link = $zone . ':' . $page . ':browse:' . urlencode($child_row['b_folder']);
             $child_node = $this->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $child_row);
             if ($child_node !== null) {
                 $children_folders[] = $child_node;

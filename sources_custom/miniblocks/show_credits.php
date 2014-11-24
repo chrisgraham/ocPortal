@@ -79,7 +79,7 @@ if ($credits_available == 0) {
 } else {
     $credits_message = do_lang_tempcode('SHOW_CREDITS_Some_credits', $credits_available);
 }
-$tickets_url = build_url(array('page' => 'tickets', 'type' => 'misc'), get_module_zone('tickets'));
+$tickets_url = build_url(array('page' => 'tickets', 'type' => 'browse'), get_module_zone('tickets'));
 if (is_object($tickets_url)) {
     $tickets_url = $tickets_url->evaluate();
 }

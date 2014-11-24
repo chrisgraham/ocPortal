@@ -122,7 +122,7 @@ class Module_admin_stats
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -130,7 +130,7 @@ class Module_admin_stats
         require_lang('stats');
 
         $ret = array(
-            'misc' => array('SITE_STATISTICS', 'menu/adminzone/audit/statistics/statistics'),
+            'browse' => array('SITE_STATISTICS', 'menu/adminzone/audit/statistics/statistics'),
             'overview' => array('OVERVIEW_STATISTICS', 'menu/adminzone/audit/statistics/statistics'),
             'users_online' => array('USERS_ONLINE_STATISTICS', 'menu/adminzone/audit/statistics/users_online'),
             'submission_rates' => array('SUBMISSION_STATISTICS', 'menu/adminzone/audit/statistics/submits'),
@@ -165,16 +165,16 @@ class Module_admin_stats
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('stats');
 
-        if ($type != 'misc' && $type != '_clear') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SITE_STATISTICS'))));
+        if ($type != 'browse' && $type != '_clear') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SITE_STATISTICS'))));
         }
 
         if ($type == '_clear') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SITE_STATISTICS')), array('_SELF:_SELF:clear', do_lang_tempcode('CLEAR_STATISTICS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SITE_STATISTICS')), array('_SELF:_SELF:clear', do_lang_tempcode('CLEAR_STATISTICS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
@@ -254,15 +254,15 @@ class Module_admin_stats
             require_code('files2');
         }
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         if (!file_exists(get_custom_file_base() . '/data_custom/modules/admin_stats')) {
             require_code('files2');
             make_missing_directory(get_custom_file_base() . '/data_custom/modules/admin_stats');
         }
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         } elseif ($type == 'overview') {
             return $this->overview();
         } elseif ($type == 'users_online') {
@@ -303,7 +303,7 @@ class Module_admin_stats
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         $test = $GLOBALS['SITE_DB']->query_select_value('ip_country', 'COUNT(*)');
@@ -1519,7 +1519,7 @@ class Module_admin_stats
 
         $test = $GLOBALS['SITE_DB']->query_select_value('ip_country', 'COUNT(*)');
         if ($test >= $last) {
-            $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
         }
 
@@ -1565,7 +1565,7 @@ class Module_admin_stats
         }
 
         if ($i >= $last) {
-            $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
         }
 

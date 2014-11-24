@@ -91,7 +91,7 @@
 					<div class="inline">
 						<label for="tma_type" class="accessibility_hidden">{!TOPIC_ACTIONS}:</label>
 						<select class="dropdown_actions" id="tma_type" name="type">
-							<option value="misc">-</option>
+							<option value="browse">-</option>
 							{MODERATOR_ACTIONS}
 						</select><input class="buttons__proceed button_micro" type="submit" onclick="if (document.getElementById('tma_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; }  return false;" value="{!PROCEED}" />
 					</div>
@@ -108,7 +108,7 @@
 								<label for="mpa_type">{!_MARKED_POST_ACTIONS}:</label>
 								<select id="mpa_type" name="type">
 									{+START,IF,{$GT,{$SUBSTR_COUNT,{MARKED_POST_ACTIONS},<option},1}}
-										<option value="misc">-</option>
+										<option value="browse">-</option>
 									{+END}
 									{MARKED_POST_ACTIONS}
 								</select><input class="buttons__proceed button_micro" type="submit" onclick="if (!add_form_marked_posts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />

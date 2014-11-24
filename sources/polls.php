@@ -91,7 +91,7 @@ function render_poll_box($results, $myrow, $zone = '_SEARCH', $include_manage_li
             $submit_url = new Tempcode();
         }
 
-        $archive_url = build_url(array('page' => 'polls', 'type' => 'misc'), $zone);
+        $archive_url = build_url(array('page' => 'polls', 'type' => 'browse'), $zone);
     } else {
         $submit_url = new Tempcode();
         $archive_url = new Tempcode();

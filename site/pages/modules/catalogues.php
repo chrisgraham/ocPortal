@@ -432,7 +432,7 @@ class Module_catalogues
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -443,7 +443,7 @@ class Module_catalogues
 
         $ret = array();
         if (!$support_crosslinks) { // Too low level if doing a full Sitemap
-            $ret['misc'] = array('CATALOGUES', 'menu/rich_content/catalogues/catalogues');
+            $ret['browse'] = array('CATALOGUES', 'menu/rich_content/catalogues/catalogues');
         }
 
         return $ret;
@@ -468,12 +468,12 @@ class Module_catalogues
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('catalogues');
         require_code('catalogues');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('CATALOGUES');
 
             set_feed_url('?mode=catalogues&filter=');
@@ -509,7 +509,7 @@ class Module_catalogues
             }
 
             // Breadcrumbs
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc' . (($catalogue['c_ecommerce'] == 1) ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . (($catalogue['c_ecommerce'] == 1) ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
             breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($catalogue['c_title']))));
 
             // Meta data
@@ -610,7 +610,7 @@ class Module_catalogues
             }
             breadcrumb_add_segment($breadcrumbs);
             if (is_null($root)) {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc' . ($is_ecommerce ? ':ecommerce=1' : ''), do_lang('CATALOGUES'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . ($is_ecommerce ? ':ecommerce=1' : ''), do_lang('CATALOGUES'))));
             }
 
             // Meta data
@@ -668,7 +668,7 @@ class Module_catalogues
                 access_denied('CATALOGUE_ACCESS');
             }
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc' . (is_ecommerce_catalogue($category['c_name']) ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . (is_ecommerce_catalogue($category['c_name']) ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
 
             $_title = get_translated_text($category['cc_title']);
             $title_to_use = do_lang_tempcode('DEFAULT__CATALOGUE_CATEGORY_ATOZ', escape_html($_title));
@@ -684,7 +684,7 @@ class Module_catalogues
 
             $catalogue_name = get_param('id');
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc' . (is_ecommerce_catalogue($catalogue_name) ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . (is_ecommerce_catalogue($catalogue_name) ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
 
             $this->title = get_screen_title('CATEGORIES');
         }
@@ -703,9 +703,9 @@ class Module_catalogues
 
         $GLOBALS['NO_QUERY_LIMIT'] = true;
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->list_catalogues();
         }
         if ($type == 'index') {

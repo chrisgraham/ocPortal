@@ -47,13 +47,13 @@ class Module_cms_downloads extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('MANAGE_DOWNLOADS', 'menu/rich_content/downloads'),
+            'browse' => array('MANAGE_DOWNLOADS', 'menu/rich_content/downloads'),
         );
 
         $this->cat_crud_module = class_exists('Mx_cms_downloads_cat') ? new Mx_cms_downloads_cat() : new Module_cms_downloads_cat();
@@ -107,7 +107,7 @@ class Module_cms_downloads extends Standard_crud_module
         $this->alt_crud_module = class_exists('Mx_cms_downloads_alt') ? new Mx_cms_downloads_alt() : new Module_cms_downloads_alt();
         $GLOBALS['MODULE_CMS_DOWNLOADS'] = $this;
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('downloads');
 
@@ -126,20 +126,20 @@ class Module_cms_downloads extends Standard_crud_module
         }
 
         if ($type == 'import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_DOWNLOADS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_DOWNLOADS'))));
         }
 
         if ($type == '_import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_DOWNLOADS')), array('_SELF:_SELF:import', do_lang_tempcode('FTP_DOWNLOADS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_DOWNLOADS')), array('_SELF:_SELF:import', do_lang_tempcode('FTP_DOWNLOADS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
         if ($type == 'import2') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_DOWNLOADS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_DOWNLOADS'))));
         }
 
         if ($type == '_import2') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_DOWNLOADS')), array('_SELF:_SELF:import', do_lang_tempcode('FILESYSTEM_DOWNLOADS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_DOWNLOADS')), array('_SELF:_SELF:import', do_lang_tempcode('FILESYSTEM_DOWNLOADS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
@@ -159,8 +159,8 @@ class Module_cms_downloads extends Standard_crud_module
         require_css('downloads');
 
         // Decide what to do
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'import') {
             return $this->import_interface();
@@ -183,7 +183,7 @@ class Module_cms_downloads extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         require_code('fields');
@@ -1057,7 +1057,7 @@ class Module_cms_downloads_cat extends Standard_crud_module
                 null, // Edit this
                 has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
                 null, // View this
-                array('downloads', array('type' => 'misc'), get_module_zone('downloads')), // View archive
+                array('downloads', array('type' => 'browse'), get_module_zone('downloads')), // View archive
                 null, // Add to category
                 has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
                 has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
@@ -1091,12 +1091,12 @@ class Module_cms_downloads_cat extends Standard_crud_module
             (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads', array('downloads', $category_id)))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id), '_SELF'), // Edit this
             has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
             is_null($id) ? null : array('downloads', array('type' => 'entry', 'id' => $id), get_module_zone('downloads')), // View this
-            array('downloads', array('type' => 'misc'), get_module_zone('downloads')), // View archive
+            array('downloads', array('type' => 'browse'), get_module_zone('downloads')), // View archive
             (!is_null($id)) ? null : array('_SELF', array('type' => 'add', 'cat' => $category_id), '_SELF'), // Add to category
             has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
             has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
             has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => '_edit_category', 'id' => $category_id), '_SELF') : null, // Edit this category
-            array('downloads', array('type' => 'misc', 'id' => ($category_id == db_get_first_id()) ? null : $category_id), get_module_zone('downloads')), // View this category
+            array('downloads', array('type' => 'browse', 'id' => ($category_id == db_get_first_id()) ? null : $category_id), get_module_zone('downloads')), // View this category
             /* SPECIALLY TYPED 'LINKS' */
             $special_links,
             array(),

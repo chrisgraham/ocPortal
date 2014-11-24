@@ -65,9 +65,9 @@ class Hook_content_meta_aware_topic
             'thumb_field' => 't_emoticon',
             'thumb_field_is_theme_image' => true,
 
-            'view_page_link_pattern' => '_SEARCH:topicview:misc:_WILD',
+            'view_page_link_pattern' => '_SEARCH:topicview:browse:_WILD',
             'edit_page_link_pattern' => '_SEARCH:topics:edit_topic:_WILD',
-            'view_category_page_link_pattern' => '_SEARCH:forumview:misc:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:forumview:browse:_WILD',
             'add_url' => '',
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('forumview')) . ':forumview',
 

@@ -49,13 +49,13 @@ class Module_admin
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('ADMIN_ZONE', 'menu/adminzone/adminzone'),
+            'browse' => array('ADMIN_ZONE', 'menu/adminzone/adminzone'),
             'structure' => array('STRUCTURE', 'menu/adminzone/structure'),
             'audit' => array('AUDIT', 'menu/adminzone/audit'),
             'style' => array('STYLE', 'menu/adminzone/style'),
@@ -75,25 +75,25 @@ class Module_admin
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_code('menus');
         require_lang('zones');
 
         switch ($type) {
-            case 'misc':
+            case 'browse':
             case 'structure':
             case 'audit':
             case 'style':
             case 'setup':
             case 'tools':
             case 'security':
-                breadcrumb_set_self(do_lang_tempcode(($type == 'misc') ? 'ADMIN_ZONE' : strtoupper($type)));
+                breadcrumb_set_self(do_lang_tempcode(($type == 'browse') ? 'ADMIN_ZONE' : strtoupper($type)));
                 break;
         }
 
         switch ($type) {
-            case 'misc':
+            case 'browse':
                 $this->title = get_screen_title('ADMIN_ZONE');
                 break;
 
@@ -136,13 +136,13 @@ class Module_admin
 
         require_all_lang();
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         switch ($type) {
             case 'search':
                 return $this->search();
 
-            case 'misc':
+            case 'browse':
                 return do_next_manager_hooked('ADMIN_ZONE', 'menus:DOC_ADMIN_ZONE', '');
 
             case 'structure':
@@ -538,7 +538,7 @@ class Module_admin
                                                     continue;
                                                 }
 
-                                                if (($page == $i[2][0]) && (((!array_key_exists('type', $i[2][1])) && ($type == 'misc')) || ((array_key_exists('type', $i[2][1])) && ($type == $i[2][1]['type']))) && ($zone == $i[2][2])) {
+                                                if (($page == $i[2][0]) && (((!array_key_exists('type', $i[2][1])) && ($type == 'browse')) || ((array_key_exists('type', $i[2][1])) && ($type == $i[2][1]['type']))) && ($zone == $i[2][2])) {
                                                     if ($i[0] == 'cms') {
                                                         $_url = build_url(array('page' => 'cms', 'type' => $i[0]), 'cms');
                                                     } else {
@@ -549,9 +549,9 @@ class Module_admin
 
                                                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                                                     $breadcrumbs->attach(hyperlink($_url, do_lang_tempcode(strtoupper($i[0]))));
-                                                    if ($type != 'misc') {
+                                                    if ($type != 'browse') {
                                                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                                                        $breadcrumbs->attach(hyperlink(build_url(array('page' => $page, 'type' => 'misc'), $zone), $i[3]));
+                                                        $breadcrumbs->attach(hyperlink(build_url(array('page' => $page, 'type' => 'browse'), $zone), $i[3]));
                                                     }
                                                     break 2;
                                                 }
@@ -647,7 +647,7 @@ class Module_admin
                     $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('SETUP')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
+                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => $p['category']), 'adminzone'), do_lang('CONFIG_CATEGORY_' . $p['category'])));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
@@ -684,7 +684,7 @@ class Module_admin
                     $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('SETUP')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
+                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
                     $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
                     $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => 'eec6e7cc57e660bdcbf123db8419e24e', 'NAME' => $n, 'URL' => $_url, 'TITLE' => '', 'DESCRIPTION' => $description, 'SUP' => $sup)));
                 }
@@ -709,7 +709,7 @@ class Module_admin
                         $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('SETUP')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
+                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => $p), 'adminzone'), do_lang('CONFIG_CATEGORY_' . $p)));
                         $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
@@ -733,7 +733,7 @@ class Module_admin
                     $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('USERGROUPS')));
+                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('USERGROUPS')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'edit'), 'adminzone'), do_lang_tempcode('EDIT_GROUP')));
                     $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
@@ -754,7 +754,7 @@ class Module_admin
                     $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
+                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('THEMES')));
                     $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
                     $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => '00bb6ce930058afc298ce206b703322b', 'NAME' => $n, 'URL' => $url, 'TITLE' => '', 'DESCRIPTION' => '', 'SUP' => $sup)));
 
@@ -779,7 +779,7 @@ class Module_admin
                     $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('STRUCTURE')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_zones', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('ZONES')));
+                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_zones', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('ZONES')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_zones', 'type' => 'edit'), 'adminzone'), do_lang_tempcode('EDIT_ZONE')));
                     $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
@@ -909,7 +909,7 @@ class Module_admin
                         $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('USERGROUPS')));
+                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('USERGROUPS')));
                         $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
                         $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => 'd0baedf2ee9cf0bdd00e604bd4c7f3b4', 'NAME' => $n, 'URL' => $_url, 'TITLE' => '', 'DESCRIPTION' => $descrip, 'SUP' => $sup)));
                         continue 2;
@@ -965,7 +965,7 @@ class Module_admin
                         $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'structure'), 'adminzone'), do_lang_tempcode('STRUCTURE')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_zones', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('ZONES')));
+                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_zones', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('ZONES')));
                         $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
                         $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => '9c2cadfe9be9776c91c4d99050e0c187', 'NAME' => $n, 'URL' => $_url, 'TITLE' => '', 'DESCRIPTION' => $descrip, 'SUP' => $sup)));
                         continue 2;
@@ -1034,15 +1034,15 @@ class Module_admin
                     }
                 }
 
-                $_url = build_url(array('page' => 'admin_lang', 'type' => 'misc', 'lang' => user_lang(), 'lang_file' => $lang_file), 'adminzone');
+                $_url = build_url(array('page' => 'admin_lang', 'type' => 'browse', 'lang' => user_lang(), 'lang_file' => $lang_file), 'adminzone');
                 $url = $_url->evaluate();
                 $url .= '#jmp_' . $n;
                 $breadcrumbs = new Tempcode();
                 $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                 $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_lang', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('TRANSLATE_CONTENT')));
+                $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_lang', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('TRANSLATE_CONTENT')));
                 $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_lang', 'type' => 'misc', 'lang' => user_lang(), 'lang_file' => $lang_file), 'adminzone'), $lang_file));
+                $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_lang', 'type' => 'browse', 'lang' => user_lang(), 'lang_file' => $lang_file), 'adminzone'), $lang_file));
                 $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
                 $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => 'cafa14d50ce6ecc1db1486017b364ce5', 'NAME' => $n, 'URL' => $url, 'TITLE' => '', 'DESCRIPTION' => escape_html($n_value), 'SUP' => $sup)));
             }
@@ -1061,7 +1061,7 @@ class Module_admin
                     $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
+                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('THEMES')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'edit_css', 'theme' => $image['theme']), 'adminzone'), do_lang_tempcode('EDIT_THEME_IMAGE')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
@@ -1090,7 +1090,7 @@ class Module_admin
                             $breadcrumbs = new Tempcode();
                             $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                             $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                            $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
+                            $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('THEMES')));
                             $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                             $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'edit_templates', 'theme' => $default_theme), 'adminzone'), do_lang_tempcode('EDIT_TEMPLATES')));
                             $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
@@ -1119,7 +1119,7 @@ class Module_admin
                         $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
+                        $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'browse'), 'adminzone'), do_lang_tempcode('THEMES')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'choose_css', 'theme' => $default_theme), 'adminzone'), do_lang_tempcode('EDIT_CSS')));
                         $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);

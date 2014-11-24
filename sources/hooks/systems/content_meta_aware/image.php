@@ -59,7 +59,7 @@ class Hook_content_meta_aware_image
 
             'view_page_link_pattern' => '_SEARCH:galleries:image:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_galleries:_edit:_WILD',
-            'view_category_page_link_pattern' => '_SEARCH:galleries:misc:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:galleries:browse:_WILD',
             'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries')) ? (get_module_zone('cms_galleries') . ':cms_galleries:add') : null,
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('galleries')) . ':galleries',
 

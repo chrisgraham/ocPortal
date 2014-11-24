@@ -236,13 +236,13 @@ class Module_calendar
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('CALENDAR', 'menu/rich_content/calendar'),
+            'browse' => array('CALENDAR', 'menu/rich_content/calendar'),
         );
     }
 
@@ -264,7 +264,7 @@ class Module_calendar
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('calendar');
         require_code('calendar');
@@ -353,7 +353,7 @@ class Module_calendar
             $first_date = date('Y-m-d', $_first_date);
             $date = get_param('date', $first_date); // It's year 10,000 compliant when it comes to year display ;).
             $back_type = get_param('back', 'day');
-            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => $back_type, 'id' => $date));
+            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => $back_type, 'id' => $date));
             $back_url = build_url($map, '_SELF');
             breadcrumb_set_parents(array(array($back_url, do_lang_tempcode('CALENDAR'))));
 
@@ -370,8 +370,8 @@ class Module_calendar
             $this->back_url = $back_url;
         }
 
-        if ($type != 'misc' && $type != 'view') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CALENDAR'))));
+        if ($type != 'browse' && $type != 'view') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CALENDAR'))));
         }
 
         $GLOBALS['OUTPUT_STREAMING'] = false; // Too complex to do a pre_run for this properly
@@ -390,7 +390,7 @@ class Module_calendar
         require_css('calendar');
         require_code('feedback');
 
-        $type = get_param('type', post_param('type', 'misc'));
+        $type = get_param('type', post_param('type', 'browse'));
 
         // Decide what to do
         if ($type == 'declare_interest') {
@@ -411,7 +411,7 @@ class Module_calendar
         if ($type == '_subscribe_event') {
             return $this->_subscribe_event();
         }
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->view_calendar();
         }
         if ($type == 'view') {
@@ -629,7 +629,7 @@ class Module_calendar
         $map = array_merge($filter, array('page' => '_SELF', 'view' => $view, 'id' => $next));
         $next_url = build_url($map, '_SELF');
         if (is_null($back_url)) {
-            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => $back_view, 'id' => $back));
+            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => $back_view, 'id' => $back));
             $back_url = build_url($map, '_SELF');
         }
 
@@ -652,7 +652,7 @@ class Module_calendar
             }
             $event_types_1->attach(do_template('CALENDAR_EVENT_TYPE', array('_GUID' => '104b723d5211f400267345f616c4a677', 'S' => 'I', 'INTERESTED' => $interested, 'TYPE' => get_translated_text($type['t_title']), 'TYPE_ID' => strval($type['id']))));
         }
-        $filter_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'view' => $view, 'id' => $id), '_SELF', null, false, true);
+        $filter_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'view' => $view, 'id' => $id), '_SELF', null, false, true);
         $event_types_2 = new Tempcode();
         foreach ($types as $type) {
             if ($type['id'] == db_get_first_id()) {
@@ -679,16 +679,16 @@ class Module_calendar
             $timestamp = time();
         }
         $day = date('Y-m-d', $timestamp);
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $day));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $day));
         $day_url = ($view == 'day') ? new Tempcode() : build_url($map, '_SELF');
         $week = get_week_number_for($timestamp);
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'week', 'id' => $week));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'week', 'id' => $week));
         $week_url = ($view == 'week') ? new Tempcode() : build_url($map, '_SELF');
         $month = date('Y-m', $timestamp);
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $month));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'month', 'id' => $month));
         $month_url = ($view == 'month') ? new Tempcode() : build_url($map, '_SELF');
         $year = date('Y', $timestamp);
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'year', 'id' => $year));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'year', 'id' => $year));
         $year_url = ($view == 'year') ? new Tempcode() : build_url($map, '_SELF');
 
         // RSS
@@ -1007,44 +1007,44 @@ class Module_calendar
         $offset = 0;
         if (get_option('ssw') == '1') {
             $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
             $sunday_url = build_url($map, '_SELF');
             $sunday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
             $offset++;
         }
         $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
         $monday_url = build_url($map, '_SELF');
         $monday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
         $offset++;
         $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
         $tuesday_url = build_url($map, '_SELF');
         $tuesday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
         $offset++;
         $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
         $wednesday_url = build_url($map, '_SELF');
         $wednesday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
         $offset++;
         $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
         $thursday_url = build_url($map, '_SELF');
         $thursday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
         $offset++;
         $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
         $friday_url = build_url($map, '_SELF');
         $friday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
         $offset++;
         $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
         $saturday_url = build_url($map, '_SELF');
         $saturday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
         $offset++;
         if (get_option('ssw') == '0') {
             $datex = date('Y-m-d', mktime(0, 0, 0, $start_month, $start_day + $offset, intval($explode[0])));
-            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $datex));
+            $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $datex));
             $sunday_url = build_url($map, '_SELF');
             $sunday_date = locale_filter(date(do_lang('calendar_day_of_month_verbose'), $period_start + $offset * 60 * 60 * 24));
             $offset++;
@@ -1117,7 +1117,7 @@ class Module_calendar
             $timestamp = $period_start + ($i - 1) * 60 * 60 * 24 + 60 * 60;
             $day_of_week = date('D', $timestamp);
             if ($dotw == 6) {
-                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'week', 'id' => $explode[0] . '-' . strval($week_count)));
+                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'week', 'id' => $explode[0] . '-' . strval($week_count)));
                 $week_url = build_url($map, '_SELF');
                 $weeks->attach(do_template('CALENDAR_MONTH_WEEK', array('_GUID' => '1010b12d8677bc577f30a013e9a838ce', 'WEEK_URL' => $week_url, 'WEEK_DATE' => $week_date, 'DAYS' => $days)));
                 $days = new Tempcode();
@@ -1188,14 +1188,14 @@ class Module_calendar
                 $entries = do_template('CALENDAR_MONTH_ENTRY_FREE', array('_GUID' => 'a5e193c8c14deb17ac629e0de74458a2', 'CLASS' => $class, 'TEXT' => $text));
             }
 
-            $day_url = build_url(array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $explode[0] . '-' . $explode[1] . '-' . str_pad(strval($i), 2, '0', STR_PAD_LEFT))), '_SELF');
+            $day_url = build_url(array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $explode[0] . '-' . $explode[1] . '-' . str_pad(strval($i), 2, '0', STR_PAD_LEFT))), '_SELF');
             $days->attach(do_template('CALENDAR_MONTH_DAY', array('_GUID' => '44162c09e0647888cf079c0ac78c1912', 'CURRENT' => date('Y-m-d') == date('Y-m-d', $timestamp), 'DAY_URL' => $day_url, 'CLASS' => $class, 'DAY' => strval($i), 'ENTRIES' => $entries)));
         }
         $ex_array = array_flip(array_reverse(array_flip($ex_array)));
         for ($x = 0; $x < $ex_array[$day_of_week]; $x++) {
             $days->attach(do_template('CALENDAR_MONTH_DAY', array('_GUID' => '3a34ca72f31d9244b9eb642814836736', 'CURRENT' => false, 'DAY_URL' => '', 'CLASS' => '', 'DAY' => '', 'ENTRIES' => $empty_entry)));
         }
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'week', 'id' => $explode[0] . '-' . strval($week_count)));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'week', 'id' => $explode[0] . '-' . strval($week_count)));
         $week_url = build_url($map, '_SELF');
         $weeks->attach(do_template('CALENDAR_MONTH_WEEK', array('_GUID' => '0fc7a1691b3cb081d80519a2fe666849', 'WEEK_URL' => $week_url, 'WEEK_DATE' => $week_date, 'DAYS' => $days)));
 
@@ -1237,11 +1237,11 @@ class Module_calendar
                 if ($i == 10) {
                     list($month_a, $month_b, $month_c) = array(do_lang_tempcode('JULY'), do_lang_tempcode('AUGUST'), do_lang_tempcode('SEPTEMBER'));
                 }
-                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 3)));
+                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 3)));
                 $month_a_url = build_url($map, '_SELF');
-                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 2)));
+                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 2)));
                 $month_b_url = build_url($map, '_SELF');
-                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 1)));
+                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 1)));
                 $month_c_url = build_url($map, '_SELF');
                 $month_rows->attach(do_template('CALENDAR_YEAR_MONTH_ROW', array('_GUID' => 'cf4f7b66a32afee1c69b2e4338af8dd5', 'MONTHS' => $months, 'MONTH_A_URL' => $month_a_url, 'MONTH_B_URL' => $month_b_url, 'MONTH_C_URL' => $month_c_url, 'MONTH_A' => $month_a, 'MONTH_B' => $month_b, 'MONTH_C' => $month_c)));
                 $months = '';
@@ -1318,7 +1318,7 @@ class Module_calendar
             for ($j = 1; $j <= $_days + 1; $j++) {
                 $date = $explode[0] . '-' . str_pad(strval($i), 2, '0', STR_PAD_LEFT) . '-' . str_pad(strval($j), 2, '0', STR_PAD_LEFT);
                 $date_formatted = locale_filter(date(do_lang('calendar_date'), mktime(0, 0, 0, $i, $j, intval($explode[0]))));
-                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $date));
+                $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'day', 'id' => $date));
                 $day_url = build_url($map, '_SELF');
 
                 if (!array_key_exists($j, $entries)) {
@@ -1370,11 +1370,11 @@ class Module_calendar
             ;
         }
 
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 3)));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 3)));
         $month_a_url = build_url($map, '_SELF');
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 2)));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 2)));
         $month_b_url = build_url($map, '_SELF');
-        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 1)));
+        $map = array_merge($filter, array('page' => '_SELF', 'type' => 'browse', 'view' => 'month', 'id' => $explode[0] . '-' . strval($i - 1)));
         $month_c_url = build_url($map, '_SELF');
         list($month_a, $month_b, $month_c) = array(do_lang_tempcode('OCTOBER'), do_lang_tempcode('NOVEMBER'), do_lang_tempcode('DECEMBER'));
         $month_rows->attach(do_template('CALENDAR_YEAR_MONTH_ROW', array('_GUID' => 'd169c06319ca2c089faa6fbb92b39115', 'MONTHS' => $months, 'MONTH_A_URL' => $month_a_url, 'MONTH_B_URL' => $month_b_url, 'MONTH_C_URL' => $month_c_url, 'MONTH_A' => $month_a, 'MONTH_B' => $month_b, 'MONTH_C' => $month_c)));
@@ -1690,7 +1690,7 @@ class Module_calendar
             }
         }
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc', 'view' => get_param('view'), 'id' => get_param('id')), '_SELF'); // id being the event ID
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse', 'view' => get_param('view'), 'id' => get_param('id')), '_SELF'); // id being the event ID
         $this->title = get_screen_title('DECLARE_EVENT_INTEREST');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
@@ -1706,7 +1706,7 @@ class Module_calendar
 
         $GLOBALS['SITE_DB']->query_insert('calendar_interests', array('i_member_id' => get_member(), 't_type' => get_param_integer('t_type')));
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc', 'view' => get_param('view'), 'id' => get_param('id')), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse', 'view' => get_param('view'), 'id' => get_param('id')), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -1721,7 +1721,7 @@ class Module_calendar
 
         $GLOBALS['SITE_DB']->query_delete('calendar_interests', array('i_member_id' => get_member(), 't_type' => get_param('t_type')), '', 1);
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc', 'view' => get_param('view'), 'id' => get_param('id')), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse', 'view' => get_param('view'), 'id' => get_param('id')), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

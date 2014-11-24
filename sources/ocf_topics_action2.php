@@ -73,7 +73,7 @@ function ocf_edit_topic($topic_id, $description = null, $emoticon = null, $valid
 
     if (!is_null($title)) {
         require_code('urls2');
-        suggest_new_idmoniker_for('topicview', 'misc', strval($topic_id), '', $title);
+        suggest_new_idmoniker_for('topicview', 'browse', strval($topic_id), '', $title);
     }
 
     if (!is_null($description)) {

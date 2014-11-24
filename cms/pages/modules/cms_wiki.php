@@ -49,7 +49,7 @@ class Module_cms_wiki
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -88,7 +88,7 @@ class Module_cms_wiki
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('wiki');
         require_code('wiki');
@@ -157,13 +157,13 @@ class Module_cms_wiki
      */
     public function run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_css('wiki');
 
         // Decide what to do
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'choose_page_to_edit') {
             return $this->choose_page_to_edit();
@@ -195,7 +195,7 @@ class Module_cms_wiki
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         require_code('fields');
@@ -333,7 +333,7 @@ class Module_cms_wiki
         // Show it worked / Refresh
         $url = get_param('redirect', null);
         if (is_null($url)) {
-            $_url = build_url(array('page' => 'wiki', 'type' => 'misc', 'id' => ($id == db_get_first_id()) ? null : $id), get_module_zone('wiki'));
+            $_url = build_url(array('page' => 'wiki', 'type' => 'browse', 'id' => ($id == db_get_first_id()) ? null : $id), get_module_zone('wiki'));
             $url = $_url->evaluate();
         }
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
@@ -393,7 +393,7 @@ class Module_cms_wiki
 
         $redir_url = get_param('redirect', null);
         if (is_null($redir_url)) {
-            $_redir_url = build_url(array('page' => 'wiki', 'type' => 'misc', 'id' => get_param('id', false, true)), get_module_zone('wiki'));
+            $_redir_url = build_url(array('page' => 'wiki', 'type' => 'browse', 'id' => get_param('id', false, true)), get_module_zone('wiki'));
             $redir_url = $_redir_url->evaluate();
         }
         $edit_url = build_url(array('page' => '_SELF', 'redirect' => $redir_url, 'id' => get_param('id', false, true), 'type' => '_edit_page'), '_SELF');
@@ -486,7 +486,7 @@ class Module_cms_wiki
             require_code('autosave');
             clear_ocp_autosave();
 
-            $_url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $_url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             $url = $_url->evaluate();
         } else {
             check_edit_permission('cat_low', null, array('wiki_page', $id));
@@ -555,7 +555,7 @@ class Module_cms_wiki
 
         $redir_url = get_param('redirect', null);
         if (is_null($redir_url)) {
-            $_redir_url = build_url(array('page' => 'wiki', 'type' => 'misc', 'id' => get_param('id', false, true)), get_module_zone('wiki'));
+            $_redir_url = build_url(array('page' => 'wiki', 'type' => 'browse', 'id' => get_param('id', false, true)), get_module_zone('wiki'));
             $redir_url = $_redir_url->evaluate();
         }
         $post_url = build_url(array('page' => '_SELF', 'id' => get_param('id', false, true), 'redirect' => $redir_url, 'type' => '_edit_tree'), '_SELF');
@@ -638,7 +638,7 @@ class Module_cms_wiki
                     } else {
                         if (get_translated_text($title_id) != $title) {
                             require_code('urls2');
-                            suggest_new_idmoniker_for('wiki', 'misc', strval($child_id), '', $title);
+                            suggest_new_idmoniker_for('wiki', 'browse', strval($child_id), '', $title);
                             $GLOBALS['SITE_DB']->query_update('wiki_pages', lang_remap('title', $title_id, $title), array('id' => $child_id), '', 1);
                         }
                     }

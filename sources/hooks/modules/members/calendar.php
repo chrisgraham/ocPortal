@@ -41,6 +41,6 @@ class Hook_members_calendar
         }
 
         require_lang('calendar');
-        return array(array('content', do_lang_tempcode('CALENDAR'), build_url(array('page' => 'calendar', 'type' => 'misc', 'member_id' => $member_id, 'private' => 1), get_module_zone('calendar')), 'menu/rich_content/calendar'));
+        return array(array('content', do_lang_tempcode('CALENDAR'), build_url(array('page' => 'calendar', 'type' => 'browse', 'member_id' => $member_id, 'private' => 1), get_module_zone('calendar')), 'menu/rich_content/calendar'));
     }
 }

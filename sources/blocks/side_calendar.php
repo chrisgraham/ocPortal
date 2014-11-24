@@ -81,7 +81,7 @@ class Block_side_calendar
 
         $box_title = array_key_exists('title', $map) ? $map['title'] : do_lang_tempcode('COMING_SOON');
 
-        $calendar_url = build_url($filter + array('page' => 'calendar', 'type' => 'misc', 'view' => 'month', 'id' => strval($year) . '-' . strval($month)), $zone);
+        $calendar_url = build_url($filter + array('page' => 'calendar', 'type' => 'browse', 'view' => 'month', 'id' => strval($year) . '-' . strval($month)), $zone);
 
         $as_guest = array_key_exists('as_guest', $map) ? ($map['as_guest'] == '1') : false;
         $member = $as_guest ? $GLOBALS['FORUM_DRIVER']->get_guest_id() : get_member();
@@ -153,7 +153,7 @@ class Block_side_calendar
             for ($j = 1; $j <= $_days + 1; $j++) {
                 $date = strval($year) . '-' . str_pad(strval($month), 2, '0', STR_PAD_LEFT) . '-' . str_pad(strval($j), 2, '0', STR_PAD_LEFT);
                 $date_formatted = locale_filter(date(do_lang('calendar_date'), mktime(0, 0, 0, $month, $j, $year)));
-                $map2 = $filter + array('page' => 'calendar', 'type' => 'misc', 'view' => 'day', 'id' => $date);
+                $map2 = $filter + array('page' => 'calendar', 'type' => 'browse', 'view' => 'day', 'id' => $date);
                 $day_url = build_url($map2, $zone);
 
                 if (!array_key_exists($j, $entries)) {

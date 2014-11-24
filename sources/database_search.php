@@ -179,7 +179,7 @@ function opensearch_script()
         return; // No access
     }
 
-    $type = get_param('type', 'misc');
+    $type = get_param('type', 'browse');
     switch ($type) {
         // Make a search suggestion (like Google Suggest)
         case 'suggest':

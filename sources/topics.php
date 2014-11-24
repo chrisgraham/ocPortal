@@ -1006,7 +1006,7 @@ class OCP_Topic
         $join_bits = new Tempcode();
         if (is_guest()) {
             $redirect = get_self_url(true, true);
-            $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => $redirect), get_module_zone('login'));
+            $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => $redirect), get_module_zone('login'));
             $join_url = $GLOBALS['FORUM_DRIVER']->join_url();
             $join_bits = do_template('JOIN_OR_LOGIN', array('_GUID' => '2d26dba6fa5e6b665fbbe3f436289f7b', 'LOGIN_URL' => $login_url, 'JOIN_URL' => $join_url));
         }

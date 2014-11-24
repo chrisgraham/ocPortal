@@ -46,7 +46,7 @@ class Module_admin_trackbacks
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -56,7 +56,7 @@ class Module_admin_trackbacks
         }
 
         return array(
-            'misc' => array('MANAGE_TRACKBACKS', 'menu/adminzone/audit/trackbacks'),
+            'browse' => array('MANAGE_TRACKBACKS', 'menu/adminzone/audit/trackbacks'),
         );
     }
 
@@ -69,13 +69,13 @@ class Module_admin_trackbacks
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('trackbacks');
 
         set_helper_panel_text(comcode_lang_string('DOC_TRACKBACKS'));
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('MANAGE_TRACKBACKS');
         }
 
@@ -93,9 +93,9 @@ class Module_admin_trackbacks
      */
     public function run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->choose();
         }
         if ($type == 'delete') {
@@ -169,7 +169,7 @@ class Module_admin_trackbacks
         $text = do_lang_tempcode('SUCCESS');
         $url = get_param('redirect', null);
         if (is_null($url)) {
-            $_url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $_url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             $url = $_url->evaluate();
         }
         return redirect_screen($this->title, $url, $text);

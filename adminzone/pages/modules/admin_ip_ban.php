@@ -83,13 +83,13 @@ class Module_admin_ip_ban
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('IP_BANS', 'menu/adminzone/security/ip_ban'),
+            'browse' => array('IP_BANS', 'menu/adminzone/security/ip_ban'),
         );
     }
 
@@ -103,18 +103,18 @@ class Module_admin_ip_ban
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('submitban');
 
         set_helper_panel_tutorial('tut_censor');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $lookup_url = build_url(array('page' => 'admin_lookup'), get_module_zone('admin_lookup'));
             set_helper_panel_text(comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS', $lookup_url->evaluate())));
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('IP_BANS');
         }
 
@@ -184,9 +184,9 @@ class Module_admin_ip_ban
         require_code('submit');
 
         // What are we doing?
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->gui();
         }
         if ($type == 'actual') {
@@ -277,7 +277,7 @@ class Module_admin_ip_ban
         }
 
         // Show it worked / Refresh
-        $refresh_url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $refresh_url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $refresh_url, do_lang_tempcode('SUCCESS'));
     }
 

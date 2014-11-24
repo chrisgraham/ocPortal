@@ -36,7 +36,7 @@ function upgrade_script()
         $given_password = post_param('given_password');
         require_code('crypt');
         if (check_master_password($given_password)) {
-            $type = get_param('type', 'misc');
+            $type = get_param('type', 'browse');
 
             require_code('abstract_file_manager');
 
@@ -65,7 +65,7 @@ function upgrade_script()
             $show_more_link = true;
 
             switch ($type) {
-                case 'misc':
+                case 'browse':
                     clear_caches_1();
 
                     $l_choices = do_lang('FU_CHOICES');
@@ -485,7 +485,7 @@ function upgrade_script()
             }
 
             if ($show_more_link) {
-                echo '<hr class="spaced_rule" /><div>' . fu_link('upgrader.php?type=misc', do_lang('MORE_OPTIONS')) . '</div>';
+                echo '<hr class="spaced_rule" /><div>' . fu_link('upgrader.php?type=browse', do_lang('MORE_OPTIONS')) . '</div>';
             }
         } else {
             up_do_header();
@@ -541,7 +541,7 @@ function fu_link($url, $text, $disabled = false, $js = '')
  */
 function up_do_login($message = null)
 {
-    $type = get_param('type', 'misc');
+    $type = get_param('type', 'browse');
     global $SITE_INFO;
     $ftp_username = get_value('ftp_username');
     $ftp_folder = get_value('ftp_directory');

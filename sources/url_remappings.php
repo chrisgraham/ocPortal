@@ -41,7 +41,7 @@ function get_remappings($url_scheme)
     switch ($url_scheme) {
         case 'PG':
             if (addon_installed('wiki')) {
-                $rules[] = array(array('page' => 'wiki', 'type' => 'misc', 'id' => null), 'pg/s/ID', false);
+                $rules[] = array(array('page' => 'wiki', 'type' => 'browse', 'id' => null), 'pg/s/ID', false);
             }
             $rules[] = array(array('page' => null, 'type' => null, 'id' => null), 'pg/PAGE/TYPE/ID', false);
             $rules[] = array(array('page' => null, 'type' => null), 'pg/PAGE/TYPE', false);
@@ -52,7 +52,7 @@ function get_remappings($url_scheme)
 
         case 'HTM':
             if (addon_installed('wiki')) {
-                $rules[] = array(array('page' => 'wiki', 'type' => 'misc', 'id' => null), 's/ID.htm', false);
+                $rules[] = array(array('page' => 'wiki', 'type' => 'browse', 'id' => null), 's/ID.htm', false);
             }
             $rules[] = array(array('page' => null, 'type' => null, 'id' => null), 'PAGE/TYPE/ID.htm', false);
             $rules[] = array(array('page' => null, 'type' => null), 'PAGE/TYPE.htm', false);
@@ -63,10 +63,10 @@ function get_remappings($url_scheme)
 
         case 'SIMPLE':
             if (addon_installed('wiki')) {
-                $rules[] = array(array('page' => 'wiki', 'type' => 'misc', 'id' => null), 's/ID', false);
+                $rules[] = array(array('page' => 'wiki', 'type' => 'browse', 'id' => null), 's/ID', false);
             }
             $rules[] = array(array('page' => null, 'type' => null, 'id' => null), 'PAGE/TYPE/ID', false);
-            $rules[] = array(array('page' => null, 'type' => 'misc'), 'PAGE', false);
+            $rules[] = array(array('page' => null, 'type' => 'browse'), 'PAGE', false);
             $rules[] = array(array('page' => null, 'type' => null), 'PAGE/TYPE', false);
             $rules[] = array(array('page' => null), 'PAGE', false);
             $rules[] = array(array('page' => ''), '', false);

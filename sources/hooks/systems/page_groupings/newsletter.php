@@ -37,7 +37,7 @@ class Hook_page_groupings_newsletter
         }
 
         return array(
-            array('tools', 'menu/site_meta/newsletters', array('admin_newsletter', array('type' => 'misc'), get_module_zone('admin_newsletter')), do_lang_tempcode('newsletter:NEWSLETTER'), 'newsletter:DOC_NEWSLETTER'),
+            array('tools', 'menu/site_meta/newsletters', array('admin_newsletter', array('type' => 'browse'), get_module_zone('admin_newsletter')), do_lang_tempcode('newsletter:NEWSLETTER'), 'newsletter:DOC_NEWSLETTER'),
             array('site_meta', 'menu/site_meta/newsletters', array('newsletter', array(), get_module_zone('newsletter')), do_lang_tempcode('newsletter:NEWSLETTER')),
         );
     }

@@ -24,7 +24,7 @@
 class Hook_sitemap_download_category extends Hook_sitemap_content
 {
     protected $content_type = 'download_category';
-    protected $screen_type = 'misc';
+    protected $screen_type = 'browse';
 
     // If we have a different content type of entries, under this content type
     protected $entry_content_type = array('download');

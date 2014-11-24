@@ -165,7 +165,7 @@ class Block_main_image_fader
         if (preg_match('#^[\w\_]+$#', $nice_cat) == 0) {
             $nice_cat = 'root';
         }
-        $gallery_url = build_url(array('page' => 'galleries', 'type' => 'misc', 'id' => $nice_cat), $zone);
+        $gallery_url = build_url(array('page' => 'galleries', 'type' => 'browse', 'id' => $nice_cat), $zone);
 
         return do_template('BLOCK_MAIN_IMAGE_FADER', array(
             '_GUID' => '92337749fa084393a97f97eedbcf81f6',

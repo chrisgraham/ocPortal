@@ -92,7 +92,7 @@ class Block_main_member_bar
                 'LAST_VISIT_DATE_RAW' => strval($member_info['last_visit_time']),
                 'LAST_VISIT_DATE' => $member_info['last_visit_time_string'],
                 'PRIVATE_TOPIC_URL' => $private_topic_url,
-                'NEW_POSTS_URL' => build_url(array('page' => 'vforums', 'type' => 'misc'), get_module_zone('vforums')),
+                'NEW_POSTS_URL' => build_url(array('page' => 'vforums', 'type' => 'browse'), get_module_zone('vforums')),
                 'UNREAD_TOPICS_URL' => build_url(array('page' => 'vforums', 'type' => 'unread'), get_module_zone('vforums')),
                 'RECENTLY_READ_URL' => build_url(array('page' => 'vforums', 'type' => 'recently_read'), get_module_zone('vforums')),
                 'INLINE_PERSONAL_POSTS_URL' => build_url(array('page' => 'topicview'), get_module_zone('topicview')),
@@ -114,14 +114,14 @@ class Block_main_member_bar
             }
             $this_url = $_this_url->evaluate();
             $login_url = build_url(array('page' => 'login', 'type' => 'login', 'redirect' => $this_url), get_module_zone('login'));
-            $full_link = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => $this_url), get_module_zone('login'));
+            $full_link = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => $this_url), get_module_zone('login'));
             $join_url = build_url(array('page' => 'join', 'redirect' => $this_url), get_module_zone('join'));
             $bar = do_template('OCF_GUEST_BAR', array(
                 '_GUID' => '3b613deec9d4786f5b53dbd52af00d3c',
                 'LOGIN_URL' => $login_url,
                 'JOIN_URL' => $join_url,
                 'FULL_LOGIN_URL' => $full_link,
-                'NEW_POSTS_URL' => build_url(array('page' => 'vforums', 'type' => 'misc'), get_module_zone('vforums')),
+                'NEW_POSTS_URL' => build_url(array('page' => 'vforums', 'type' => 'browse'), get_module_zone('vforums')),
                 'UNANSWERED_TOPICS_URL' => build_url(array('page' => 'vforums', 'type' => 'unanswered_topics'), get_module_zone('vforums')),
             ));
         }

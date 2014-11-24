@@ -37,7 +37,7 @@ class Hook_page_groupings_ldap
         }
 
         return array(
-            (get_forum_type() != 'ocf') ? null : array('security', 'menu/adminzone/security/ldap', array('admin_ocf_ldap', array('type' => 'misc'), get_module_zone('admin_ocf_ldap')), do_lang_tempcode('ldap:LDAP'), 'ldap:DOC_LDAP'),
+            (get_forum_type() != 'ocf') ? null : array('security', 'menu/adminzone/security/ldap', array('admin_ocf_ldap', array('type' => 'browse'), get_module_zone('admin_ocf_ldap')), do_lang_tempcode('ldap:LDAP'), 'ldap:DOC_LDAP'),
         );
     }
 }

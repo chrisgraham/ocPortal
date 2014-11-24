@@ -97,13 +97,13 @@ class Module_iotds
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('IOTDS', 'menu/rich_content/iotds'),
+            'browse' => array('IOTDS', 'menu/rich_content/iotds'),
         );
     }
 
@@ -121,11 +121,11 @@ class Module_iotds
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('iotds');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('IOTD_ARCHIVE');
         }
 
@@ -135,7 +135,7 @@ class Module_iotds
             $id = get_param_integer('id');
 
             // Breadcrumbs
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('IOTD_ARCHIVE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('IOTD_ARCHIVE'))));
 
             // Fetch details
             $rows = $GLOBALS['SITE_DB']->query_select('iotd', array('*'), array('id' => $id), '', 1);
@@ -183,9 +183,9 @@ class Module_iotds
         require_css('iotds');
 
         // What action are we going to do?
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->iotd_browse();
         }
         if ($type == 'view') {

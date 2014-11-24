@@ -465,7 +465,7 @@ function get_field_restrict_property($property, $field, $page = null, $type = nu
         $page = get_page_name();
     }
     if (is_null($type)) {
-        $type = get_param('type', post_param('type', 'misc'));
+        $type = get_param('type', post_param('type', 'browse'));
     }
 
     $restrictions = load_field_restrictions($page, $type);
@@ -2096,7 +2096,7 @@ function handle_conflict_resolution($id = null, $only_staff = false)
     }
 
     require_javascript('ajax');
-    $last_edit_screen_time = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'edit_pings WHERE ' . db_string_equal_to('the_page', get_page_name()) . ' AND ' . db_string_equal_to('the_type', get_param('type', 'misc')) . ' AND ' . db_string_equal_to('the_id', $id) . ' AND the_member<>' . strval(get_member()) . ' ORDER BY the_time DESC', 1);
+    $last_edit_screen_time = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'edit_pings WHERE ' . db_string_equal_to('the_page', get_page_name()) . ' AND ' . db_string_equal_to('the_type', get_param('type', 'browse')) . ' AND ' . db_string_equal_to('the_id', $id) . ' AND the_member<>' . strval(get_member()) . ' ORDER BY the_time DESC', 1);
     if ((array_key_exists(0, $last_edit_screen_time)) && ($last_edit_screen_time[0]['the_time'] > time() - 20)) {
         $username = $GLOBALS['FORUM_DRIVER']->get_username($last_edit_screen_time[0]['the_member']);
         if (is_null($username)) {
@@ -2107,7 +2107,7 @@ function handle_conflict_resolution($id = null, $only_staff = false)
         $warning_details = null;
     }
     $keep = symbol_tempcode('KEEP');
-    $ping_url = find_script('edit_ping') . '?page=' . urlencode(get_page_name()) . '&type=' . urlencode(get_param('type', 'misc')) . '&id=' . urlencode($id) . $keep->evaluate();
+    $ping_url = find_script('edit_ping') . '?page=' . urlencode(get_page_name()) . '&type=' . urlencode(get_param('type', 'browse')) . '&id=' . urlencode($id) . $keep->evaluate();
 
     return array($warning_details, $ping_url);
 }

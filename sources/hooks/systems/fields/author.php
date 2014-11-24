@@ -103,7 +103,7 @@ class Hook_fields_author
             return new Tempcode();
         }
 
-        return hyperlink(build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $ev), get_module_zone('authors')), $ev, false, true);
+        return hyperlink(build_url(array('page' => 'authors', 'type' => 'browse', 'id' => $ev), get_module_zone('authors')), $ev, false, true);
     }
 
     // ======================

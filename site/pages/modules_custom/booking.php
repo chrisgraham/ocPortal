@@ -166,13 +166,13 @@ class Module_booking
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('CREATE_BOOKING', 'menu/book'),
+            'browse' => array('CREATE_BOOKING', 'menu/book'),
         );
     }
 
@@ -187,11 +187,11 @@ class Module_booking
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('booking');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('CREATE_BOOKING');
         }
 
@@ -221,7 +221,7 @@ class Module_booking
         require_code('ocf_join');
         require_javascript('booking');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         if ((is_guest()) && (get_forum_type() != 'ocf')) {
             access_denied('NOT_AS_GUEST');
@@ -230,7 +230,7 @@ class Module_booking
         }
 
         // Decide what to do
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->choose_bookables_and_dates(); // NB: This may be skipped, if blocks were used to access
         }
         if ($type == 'flesh_out') {
@@ -521,7 +521,7 @@ class Module_booking
             'BOOKABLES' => $bookables,
             'PRICE' => float_format(find_booking_price($request)),
             'POST_URL' => build_url(array('page' => '_SELF', 'type' => 'account', 'usergroup' => get_param_integer('usergroup', null)), '_SELF'),
-            'BACK_URL' => build_url(array('page' => '_SELF', 'type' => 'misc', 'usergroup' => get_param_integer('usergroup', null)), '_SELF'),
+            'BACK_URL' => build_url(array('page' => '_SELF', 'type' => 'browse', 'usergroup' => get_param_integer('usergroup', null)), '_SELF'),
             'HIDDEN' => build_keep_post_fields(),
         ));
     }

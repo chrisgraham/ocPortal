@@ -37,6 +37,6 @@ class Hook_members_filedump
 
         $path = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
-        return array(array('content', do_lang_tempcode('FILEDUMP'), build_url(array('page' => 'filedump', 'type' => 'misc', 'place' => '/' . $path . '/'), $zone), 'menu/cms/filedump'));
+        return array(array('content', do_lang_tempcode('FILEDUMP'), build_url(array('page' => 'filedump', 'type' => 'browse', 'place' => '/' . $path . '/'), $zone), 'menu/cms/filedump'));
     }
 }

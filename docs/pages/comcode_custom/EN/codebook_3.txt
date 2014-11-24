@@ -497,7 +497,7 @@ admin_ocf_forums
   forum_grouping_id
 
 admin_ocf_merge_members
- misc
+ browse
   from
   to
 

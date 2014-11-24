@@ -227,7 +227,7 @@ function handle_active_logout()
  */
 function _enforce_temporary_passwords($member)
 {
-    if ((get_forum_type() == 'ocf') && (running_script('index')) && ($member != db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member, 'm_password_compat_scheme') == 'temporary') && (get_page_name() != 'lost_password') && ((get_page_name() != 'members') || (get_param('type', 'misc') != 'view'))) {
+    if ((get_forum_type() == 'ocf') && (running_script('index')) && ($member != db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member, 'm_password_compat_scheme') == 'temporary') && (get_page_name() != 'lost_password') && ((get_page_name() != 'members') || (get_param('type', 'browse') != 'view'))) {
         $force_change_message = mixed();
         $redirect_url = mixed();
 

@@ -607,7 +607,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
                     $_groups2->attach(form_input_list_entry(strval($group['id']), $selected, get_translated_text($group['g_name'], $GLOBALS['FORUM_DB'])));
                 }
             }
-            $sec_url = build_url(array('page' => 'groups', 'type' => 'misc'), get_module_zone('groups'));
+            $sec_url = build_url(array('page' => 'groups', 'type' => 'browse'), get_module_zone('groups'));
             if (!$_groups2->is_empty()) {
                 $fields->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'), do_lang_tempcode('DESCRIPTION_SECONDARY_GROUP', escape_html($sec_url->evaluate())), 'secondary_groups', $_groups2));
             }

@@ -52,7 +52,7 @@ class Hook_pointstore_bank
         $_bank_dividend = get_option('bank_dividend');
         // IDEA: Make 30 days a config option too, or even have multiple products?
         // IDEA: Send email saying bank returned money?
-        // IDEA: Have the bank do marketing to people? http://ocportal.com/forum/topicview/misc/addons/ocbank_4.htm?redirected=1#post_87711
+        // IDEA: Have the bank do marketing to people? http://ocportal.com/forum/topicview/browse/addons/ocbank_4.htm?redirected=1#post_87711
         $bank_dividend = intval($_bank_dividend);
 
         $title = get_screen_title('BANKING');
@@ -109,7 +109,7 @@ class Hook_pointstore_bank
         $result = do_lang_tempcode('BANKING_CONGRATULATIONS', integer_format($amount), integer_format($bank_dividend));
 
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($title, $url, $result);
     }
 }

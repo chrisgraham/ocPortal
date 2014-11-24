@@ -11,7 +11,7 @@ if ($default_cutoff_days <= 1) {
 }
 $cutoff_days = post_param_integer('cutoff_days', $default_cutoff_days);
 
-$type = get_param('type', 'misc');
+$type = get_param('type', 'browse');
 
 if ($type != 'go') {
     $title->evaluate_echo();

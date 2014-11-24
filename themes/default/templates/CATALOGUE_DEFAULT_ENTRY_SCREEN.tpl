@@ -54,7 +54,7 @@
 		</div>
 	{+END}
 
-	{$,Uncomment and modify to create a reply link <a href="\{$PAGE_LINK*,site:contact_member:misc:\{SUBMITTER\}:subject=Response to listing, \{FIELD_1\}:message=\}">Respond</a>}
+	{$,Uncomment and modify to create a reply link <a href="\{$PAGE_LINK*,site:contact_member:browse:\{SUBMITTER\}:subject=Response to listing, \{FIELD_1\}:message=\}">Respond</a>}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}
 </div>

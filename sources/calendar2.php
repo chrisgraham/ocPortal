@@ -498,7 +498,7 @@ function edit_event_type($id, $title, $logo, $external_feed)
     $myrow = $myrows[0];
 
     require_code('urls2');
-    suggest_new_idmoniker_for('calendar', 'misc', strval($id), '', $title);
+    suggest_new_idmoniker_for('calendar', 'browse', strval($id), '', $title);
 
     $map = array(
         't_logo' => $logo,

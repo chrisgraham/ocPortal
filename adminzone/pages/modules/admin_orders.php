@@ -46,7 +46,7 @@ class Module_admin_orders
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -56,7 +56,7 @@ class Module_admin_orders
         }
 
         $ret = array(
-            'misc' => array('ORDERS', 'menu/adminzone/audit/ecommerce/orders'),
+            'browse' => array('ORDERS', 'menu/adminzone/audit/ecommerce/orders'),
             'show_orders' => array('SHOW_ORDERS', 'menu/adminzone/audit/ecommerce/orders'),
         );
         if ($support_crosslinks) {
@@ -74,18 +74,18 @@ class Module_admin_orders
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ecommerce');
         require_lang('shopping');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             breadcrumb_set_self(do_lang_tempcode('ORDERS'));
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE'))));
         }
 
         if ($type == 'show_orders') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('ORDERS'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('ORDERS'))));
 
             $filter = get_param('filter', null);
             if ($filter == 'undispatched') {
@@ -98,7 +98,7 @@ class Module_admin_orders
         $action = either_param('action', '');
 
         if ($type == 'order_det' || $action == 'order_act' || $action == '_add_note' || $action == 'order_export' || $action == '_order_export') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('ORDERS')), array('_SELF:_SELF:show_orders', do_lang_tempcode('ORDERS'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:browse', do_lang_tempcode('ORDERS')), array('_SELF:_SELF:show_orders', do_lang_tempcode('ORDERS'))));
         }
 
         if ($action == 'order_act') {
@@ -164,10 +164,10 @@ class Module_admin_orders
         require_css('shopping');
         require_code('users_active_actions');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'show_orders') {
             return $this->show_orders();
@@ -212,7 +212,7 @@ class Module_admin_orders
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('ORDERS'), comcode_lang_string('DOC_ECOMMERCE'),

@@ -37,7 +37,7 @@ class Hook_page_groupings_ssl
         }
 
         return array(
-            array('security', 'menu/adminzone/security/ssl', array('admin_ssl', array('type' => 'misc'), get_module_zone('admin_ssl')), do_lang_tempcode('ssl:SSL_CONFIGURATION'), 'ssl:DOC_SSL'),
+            array('security', 'menu/adminzone/security/ssl', array('admin_ssl', array('type' => 'browse'), get_module_zone('admin_ssl')), do_lang_tempcode('ssl:SSL_CONFIGURATION'), 'ssl:DOC_SSL'),
         );
     }
 }

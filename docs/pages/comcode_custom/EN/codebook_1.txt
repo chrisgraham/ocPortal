@@ -89,7 +89,7 @@ The module class must include a function named [tt]run[/tt]. This function is ca
 
 The [tt]run[/tt] function typically is written to do 4 things:
 1) Loads-up/records dependencies that all screens in the module use, using the [tt]require_code[/tt]/[tt]require_lang[/tt]/[tt]require_css[/tt]/[tt]require_javascript[/tt] API calls.
-2) Gets the URL parameter named 'type' into the variable [tt]$type[/tt], usually giving a default 'type' of 'misc' for when no 'type' parameter was specified. Remember that 'type' indicates which 'screen' the module will be outputting.
+2) Gets the URL parameter named 'type' into the variable [tt]$type[/tt], usually giving a default 'type' of 'browse' for when no 'type' parameter was specified. Remember that 'type' indicates which 'screen' the module will be outputting.
 3) Delegates to another function depending on [tt]$type[/tt].
 4) Outputs the result of the function that was delegates to, or [tt]new Tempcode()[/tt] if no delegate was found for the given 'type'.
 
@@ -104,12 +104,12 @@ function run()
     require_css('downloads');
 
     // Get the URL parameter named 'type' into the variable $type
-    $type = get_param('type','misc');
+    $type = get_param('type','browse');
 
     // Decide what to do (delegate)
     if ($type == 'tree_view') return $this->tree_view_screen();
     if ($type == 'entry') return $this->dloadinfo_screen();
-    if ($type == 'misc') return $this->category_screen();
+    if ($type == 'browse') return $this->category_screen();
 
     // If we get to this point no delegate was found
     return new Tempcode();
@@ -125,10 +125,10 @@ For example,
 [code="PHP"]
 function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 {
-	return array('misc'=>'ROOT','tree_view'=>'TREE');
+	return array('browse'=>'ROOT','tree_view'=>'TREE');
 }
 [/code]
-returns a mapping for two entry-points: the 'misc' screen (which almost any module will have), and the 'tree_view' screen. 'ROOT' and 'TREE' are language strings.
+returns a mapping for two entry-points: the 'browse' screen (which almost any module will have), and the 'tree_view' screen. 'ROOT' and 'TREE' are language strings.
 
 [title="5"]The '[tt]install[/tt]' and '[tt]uninstall[/tt]' functions[/title]
 
@@ -249,7 +249,7 @@ As an example, if a module was designed to add a resource, it would need at leas
 
 The function names of screens do not need to mirror the names of the 'type' parameter, but usually it is clearer this way.
 
-All modules must also define the default screen, which is almost always identified by 'type'='misc' or by there being no 'type' parameter given. The role of the default screen depends on the module, but usually it either acts to display a category browser or a menu. Usually all other screens in a module will be reachable by navigating starting from the default screen of that module.
+All modules must also define the default screen, which is almost always identified by 'type'='browse' or by there being no 'type' parameter given. The role of the default screen depends on the module, but usually it either acts to display a category browser or a menu. Usually all other screens in a module will be reachable by navigating starting from the default screen of that module.
 
 [title="3"]Templates and Tempcode[/title]
 
@@ -308,7 +308,7 @@ function category_screen()
 [code="HTML"]
 <li>
 <!-- Don't worry about this PAGE_LINK syntax yet, that will be explained later -->
-<a href="{$PAGE_LINK*,_SEARCH:categories:misc:{ID}}">{NAME*}</a>
+<a href="{$PAGE_LINK*,_SEARCH:categories:browse:{ID}}">{NAME*}</a>
 </li>
 [/code]
 
@@ -584,7 +584,7 @@ class Hook_members_calendar
             array('views',
                 do_lang_tempcode('CALENDAR'),
                 build_url(
-                    array('page' => 'calendar','type' => 'misc','member_id' => $member_id),
+                    array('page' => 'calendar','type' => 'browse','member_id' => $member_id),
                     get_module_zone('calendar')
                 )
             )

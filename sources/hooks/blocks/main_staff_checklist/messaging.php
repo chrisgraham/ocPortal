@@ -84,7 +84,7 @@ class Hook_checklist_messaging
             $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1', array('_GUID' => 'u578142633c6f3d37776e82a869deb91'));
         }
 
-        $url = build_url(array('page' => 'admin_messaging', 'type' => 'misc'), get_module_zone('admin_messaging'));
+        $url = build_url(array('page' => 'admin_messaging', 'type' => 'browse'), get_module_zone('admin_messaging'));
 
         $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => '10cf866e2ea104ac41685a8756e182f8', 'URL' => $url, 'STATUS' => $status, 'TASK' => do_lang_tempcode('CONTACT_US_MESSAGING'), 'INFO' => do_lang_tempcode('NUM_QUEUE', escape_html(integer_format($outstanding)))));
         return array(array($tpl, null, $outstanding, null));

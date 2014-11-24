@@ -243,13 +243,13 @@ class Module_chat
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array();
-        $ret['misc'] = array('CHAT_LOBBY', 'menu/social/chat/chat');
+        $ret['browse'] = array('CHAT_LOBBY', 'menu/social/chat/chat');
         if (!$check_perms || !is_guest($member_id)) {
             $ret['set_effects'] = array('CHAT_SET_EFFECTS', 'menu/social/chat/sound');
             $ret['private'] = array('CREATE_PRIVATE_CHATROOM', 'menu/social/chat/chatroom_add');
@@ -270,11 +270,11 @@ class Module_chat
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('chat');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             set_feed_url('?mode=chat&filter=');
 
             $this->title = get_screen_title($GLOBALS['IS_ACTUALLY_ADMIN'] ? 'SU_CHATTING_AS' : 'CHAT_LOBBY', true, array(escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
@@ -292,7 +292,7 @@ class Module_chat
             $this->room_row = $room_check[0];
             $this->room_name = $this->room_row['room_name'];
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
 
             $this->title = get_screen_title('_CHATROOM', true, array(escape_html($this->room_row['room_name'])));
         }
@@ -303,8 +303,8 @@ class Module_chat
             $this->title = get_screen_title('CHAT_DOWNLOAD_LOGS');
         }
 
-        if ($type == 'misc' || $type == 'room') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHAT_LOBBY'))));
+        if ($type == 'browse' || $type == 'room') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHAT_LOBBY'))));
         }
 
         if ($type == 'private') {
@@ -380,9 +380,9 @@ class Module_chat
         require_css('chat');
 
         // What action are we going to do?
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->chat_lobby();
         }
         if ($type == 'room') {
@@ -854,7 +854,7 @@ class Module_chat
             }
         }
 
-        $_url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $_url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         $url = $_url->evaluate();
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }

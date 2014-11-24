@@ -46,13 +46,13 @@ class Module_cms_authors
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('AUTHOR_MANAGE', 'menu/rich_content/authors'),
+            'browse' => array('AUTHOR_MANAGE', 'menu/rich_content/authors'),
             '_add' => array('EDIT_MY_AUTHOR_PROFILE', 'menu/cms/author_set_own_profile'),
             'edit' => array('EDIT_MERGE_AUTHORS', 'menu/_generic_admin/edit_one'),
         );
@@ -85,14 +85,14 @@ class Module_cms_authors
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('authors');
 
         if ($type == '_add') {
             inform_non_canonical_parameter('author');
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('AUTHOR_MANAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('AUTHOR_MANAGE'))));
 
             $author = get_param('author', $GLOBALS['FORUM_DRIVER']->get_username(get_member()));
             if (get_param('author', null) === null) {
@@ -105,21 +105,21 @@ class Module_cms_authors
         }
 
         if ($type == '__ad') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('AUTHOR_MANAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('AUTHOR_MANAGE'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('DEFINE_AUTHOR');
         }
 
         if ($type == '_merge') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('AUTHOR_MANAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('AUTHOR_MANAGE'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('MERGE_AUTHORS');
         }
 
         if ($type == 'edit') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('AUTHOR_MANAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('AUTHOR_MANAGE'))));
 
             $this->title = get_screen_title('EDIT_MERGE_AUTHORS');
         }
@@ -139,10 +139,10 @@ class Module_cms_authors
         require_code('authors');
 
         // Decide what we're doing
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == '_add') {
             return $this->_add();
@@ -165,7 +165,7 @@ class Module_cms_authors
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('fields');
         require_code('templates_donext');
@@ -370,7 +370,7 @@ class Module_cms_authors
             has_privilege(get_member(), 'edit_midrange_content', 'cms_authors') ? array('_SELF', array('type' => '_add', 'author' => ''), '_SELF') : null, // Add one
             is_null($author) ? null : array('_SELF', array('type' => '_add', 'author' => $author), '_SELF'), // Edit this
             has_privilege(get_member(), 'edit_midrange_content', 'cms_authors') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
-            is_null($author) ? null : array('authors', array('type' => 'misc', 'id' => $author), get_module_zone('authors')), // View this
+            is_null($author) ? null : array('authors', array('type' => 'browse', 'id' => $author), get_module_zone('authors')), // View this
             null, // View archive
             null, // Add to category
             null, // Add one category

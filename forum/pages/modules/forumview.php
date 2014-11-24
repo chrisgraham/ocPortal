@@ -46,7 +46,7 @@ class Module_forumview
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -61,7 +61,7 @@ class Module_forumview
         if ($support_crosslinks) {
             $ret += array(
                 '_SEARCH:topicview' => array('INLINE_PERSONAL_POSTS', 'menu/social/forum/inline_personal_posts'),
-                '_SEARCH:vforums:misc' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
+                '_SEARCH:vforums:browse' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
                 '_SEARCH:vforums:unanswered' => array('UNANSWERED_TOPICS', 'menu/social/forum/vforums/unanswered_topics')
             );
             if (!$check_perms || !is_guest($member_id)) {
@@ -88,13 +88,13 @@ class Module_forumview
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
 
         inform_non_canonical_parameter('#^kfs_.*$#');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $id = get_param_integer('id', db_get_first_id());
 
             $_forum_info = $GLOBALS['FORUM_DB']->query_select('f_forums', array('*'), array('id' => $id), '', 1, null, false);
@@ -112,7 +112,7 @@ class Module_forumview
                 'modified' => '',
                 'type' => 'Forum',
                 'title' => $forum_info['f_name'],
-                'identifier' => '_SEARCH:forumview:misc:' . strval($id),
+                'identifier' => '_SEARCH:forumview:browse:' . strval($id),
                 'description' => $description_text,
                 'image' => find_theme_image('icons/48x48/menu/social/forum/forums'),
                 //'category'=>???,
@@ -183,7 +183,7 @@ class Module_forumview
         }
         require_code('ocf_forumview');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         $current_filter_cat = get_param('category', '');
 

@@ -219,7 +219,7 @@ class Block_side_news
             }
         }
 
-        $tmp = array('page' => 'news', 'type' => 'misc');
+        $tmp = array('page' => 'news', 'type' => 'browse');
         if ($filter != '*') {
             $tmp[is_numeric($filter) ? 'id' : 'filter'] = $filter;
         }

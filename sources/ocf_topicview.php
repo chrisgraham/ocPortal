@@ -339,7 +339,7 @@ function ocf_read_in_topic($topic_id, $start, $max, $view_poll_results = false, 
                 'modified' => date('Y-m-d', $topic_info['t_cache_last_time']),
                 'type' => 'Forum topic',
                 'title' => $topic_info['t_cache_first_title'],
-                'identifier' => '_SEARCH:topicview:misc:' . strval($topic_id),
+                'identifier' => '_SEARCH:topicview:browse:' . strval($topic_id),
                 'numcomments' => strval($topic_info['t_cache_num_posts']),
                 'image' => find_theme_image('icons/48x48/menu/social/forum/forums'),
                 //'category'=>???,
@@ -828,7 +828,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
     }
 
     if ((has_privilege(get_member(), 'view_content_history')) && ($_postdetails['has_history'])) {
-        $action_url = build_url(array('page' => 'admin_ocf_history', 'type' => 'misc', 'post_id' => $_postdetails['id']), 'adminzone');
+        $action_url = build_url(array('page' => 'admin_ocf_history', 'type' => 'browse', 'post_id' => $_postdetails['id']), 'adminzone');
         $_title = do_lang_tempcode('POST_HISTORY');
         $_title_full = new Tempcode();
         $_title_full->attach($_title);

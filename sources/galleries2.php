@@ -1370,7 +1370,7 @@ function add_gallery($name, $fullname, $description, $notes, $parent_id, $accept
 function edit_gallery($old_name, $name, $fullname, $description, $notes, $parent_id = null, $accept_images = 1, $accept_videos = 1, $is_member_synched = 0, $flow_mode_interface = 0, $rep_image = '', $watermark_top_left = '', $watermark_top_right = '', $watermark_bottom_left = '', $watermark_bottom_right = '', $meta_keywords = null, $meta_description = null, $allow_rating = 1, $allow_comments = 1, $g_owner = null, $add_time = null, $null_is_literal = false, $uniqify = false)
 {
     require_code('urls2');
-    suggest_new_idmoniker_for('galleries', 'misc', $name, '', $name);
+    suggest_new_idmoniker_for('galleries', 'browse', $name, '', $name);
 
     $under_category_id = $parent_id;
     while (($under_category_id != '') && ($under_category_id != STRING_MAGIC_NULL)) {
@@ -1490,7 +1490,7 @@ function edit_gallery($old_name, $name, $fullname, $description, $notes, $parent
         $allow_comments != 0,
         'galleries',
         $name,
-        build_url(array('page' => 'galleries', 'type' => 'misc', 'id' => $name), get_module_zone('galleries'), null, false, false, true),
+        build_url(array('page' => 'galleries', 'type' => 'browse', 'id' => $name), get_module_zone('galleries'), null, false, false, true),
         $fullname,
         process_overridden_comment_forum('galleries', $name, $name, $old_name)
     );

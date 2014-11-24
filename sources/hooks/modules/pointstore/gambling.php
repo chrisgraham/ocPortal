@@ -143,7 +143,7 @@ class Hook_pointstore_gambling
         } else {
             $result = do_lang_tempcode('GAMBLE_COMMISERATIONS', integer_format($amount - $winnings), integer_format($amount));
         }
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($title, $url, $result);
     }
 }

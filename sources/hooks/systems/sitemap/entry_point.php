@@ -69,8 +69,8 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
                         $entry_points = is_array($functions[0]) ? call_user_func_array($functions[0][0], $functions[0][1]) : eval($functions[0]);
 
                         if ($entry_points !== null) {
-                            if (isset($entry_points['misc'])) {
-                                unset($entry_points['misc']);
+                            if (isset($entry_points['browse'])) {
+                                unset($entry_points['browse']);
                             } else {
                                 array_shift($entry_points);
                             }
@@ -121,7 +121,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
         }
         $type = $matches[4];
         if ($type == '') {
-            $type = 'misc';
+            $type = 'browse';
         }
         $id = mixed();
         if ($matches[5] != '') {
@@ -163,7 +163,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 
             if ((($matches[5] == '') || ($page == 'cms_catalogues' && $matches[5] != ''/*masquerades as direct content types but fulfilled as normal entry points*/)) && (isset($entry_points[$type]))) {
                 $entry_point = $entry_points[$type];
-            } elseif (($matches[5] == '') && ((isset($entry_points['!'])) && ($type == 'misc'))) {
+            } elseif (($matches[5] == '') && ((isset($entry_points['!'])) && ($type == 'browse'))) {
                 $entry_point = $entry_points['!'];
             } else {
                 if (isset($entry_points[$orig_page_link])) {
@@ -261,7 +261,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
         }
 
         // Look for virtual nodes to put under this
-        if ($type != 'misc') {
+        if ($type != 'browse') {
             $hooks = find_all_hooks('systems', 'sitemap');
             foreach (array_keys($hooks) as $_hook) {
                 require_code('hooks/systems/sitemap/' . $_hook);

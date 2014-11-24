@@ -1189,7 +1189,7 @@ class Hook_addon_registry_ocf_forum
 
         $pagination = placeholder_pagination();
         $topic_wrapper = do_lorem_template('OCF_FORUM_TOPIC_WRAPPER', array(
-            'TYPE' => 'misc',
+            'TYPE' => 'browse',
             'MAX' => lorem_phrase(),
             'ORDER' => lorem_phrase(),
             'MAY_CHANGE_MAX' => lorem_phrase(),

@@ -68,7 +68,7 @@
 			</p>
 			<ul>
 				{+START,LOOP,CATEGORIES}
-					<li><a href="{$PAGE_LINK*,_SELF:news:misc:{_loop_key}{$?,{BLOG},:blog=1,}}">{_loop_var*}</a></li>
+					<li><a href="{$PAGE_LINK*,_SELF:news:browse:{_loop_key}{$?,{BLOG},:blog=1,}}">{_loop_var*}</a></li>
 				{+END}
 			</ul>
 

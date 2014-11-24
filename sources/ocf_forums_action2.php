@@ -108,7 +108,7 @@ function ocf_edit_forum($forum_id, $name, $description, $forum_grouping_id, $new
     }
 
     require_code('urls2');
-    suggest_new_idmoniker_for('forumview', 'misc', strval($forum_id), '', $name);
+    suggest_new_idmoniker_for('forumview', 'browse', strval($forum_id), '', $name);
 
     if ((!is_null($forum_grouping_id)) && ($forum_grouping_id != INTEGER_MAGIC_NULL)) {
         ocf_ensure_forum_grouping_exists($forum_grouping_id);

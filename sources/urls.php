@@ -303,6 +303,10 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
         ($SITE_INFO['no_keep_params'] == '1') &&
         ((get_option('url_monikers_enabled') == '0') || (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && ((is_null($id)) || (strpos($id, '/') !== false)))
     ) {
+        if (($id === null) && (isset($vars['type'])) && ($vars['type'] == 'browse')) {
+            unset($vars['type']); // Redundant, let it default, this is our convention
+        }
+
         if ($vars['page'] == '_SELF') {
             $vars['page'] = get_page_name();
         }
@@ -424,6 +428,10 @@ function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $av
     $stub = get_base_url(is_page_https($zone_name, isset($vars['page']) ? $vars['page'] : ''), $zone_name);
     $stub .= '/';
 
+    if ((!isset($vars['id'])) && (isset($vars['type'])) && ($vars['type'] == 'browse')) {
+        unset($vars['type']); // Redundant, let it default, this is our convention
+    }
+
     // For bots we explicitly unset skippable injected 'keep_' params because it bloats the crawl-space
     if (($BOT_TYPE_CACHE !== null) && (get_bot_type() !== null)) {
         foreach ($vars as $key => $val) {
@@ -524,7 +532,7 @@ function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $av
         $use_rewrite_params = $USE_REWRITE_PARAMS_CACHE;
     }
     $test_rewrite = null;
-    $self_page = ((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name() == $zone_name) && (($vars['page'] == '_SELF') || ($vars['page'] == get_param('page', ''))))) && ((!isset($vars['type'])) || ($vars['type'] == get_param('type', 'misc'))) && ($hash != '#_top') && (!$KNOWN_AJAX);
+    $self_page = ((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name() == $zone_name) && (($vars['page'] == '_SELF') || ($vars['page'] == get_param('page', ''))))) && ((!isset($vars['type'])) || ($vars['type'] == get_param('type', 'browse'))) && ($hash != '#_top') && (!$KNOWN_AJAX);
     if ($use_rewrite_params) {
         if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE === 'index')) {
             $test_rewrite = _url_rewrite_params($zone_name, $vars, count($keep_actual) > 0);
@@ -708,7 +716,7 @@ function _url_rewrite_params($zone_name, $vars, $force_index_php = false)
             if (!$require_full_coverage) {
                 $extra_vars += $vars;
             }
-            $makeup = str_replace('TYPE', 'misc', $makeup);
+            $makeup = str_replace('TYPE', 'browse', $makeup);
             if ($makeup == '') {
                 switch ($url_scheme) {
                     case 'HTM':
@@ -1092,10 +1100,10 @@ function find_id_moniker($url_parts, $zone)
         $looking_for = '_WILD:_WILD';
     } else {
         if (!isset($url_parts['type'])) {
-            $url_parts['type'] = 'misc';
+            $url_parts['type'] = 'browse';
         }
         if ($url_parts['type'] === null) {
-            $url_parts['type'] = 'misc'; // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+            $url_parts['type'] = 'browse'; // NULL means "do not take from environment"; so we default it to 'browse' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
         }
 
         if (array_key_exists('id', $url_parts)) {

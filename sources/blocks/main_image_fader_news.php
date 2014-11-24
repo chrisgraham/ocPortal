@@ -150,7 +150,7 @@ class Block_main_image_fader_news
             $date = get_timezoned_date($row['date_and_time']);
             $date_raw = strval($row['date_and_time']);
 
-            $author_url = (addon_installed('authors')) ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), get_module_zone('authors')) : new Tempcode();
+            $author_url = (addon_installed('authors')) ? build_url(array('page' => 'authors', 'type' => 'browse', 'id' => $row['author']), get_module_zone('authors')) : new Tempcode();
 
             $news[] = array(
                 'TITLE' => $title,
@@ -177,7 +177,7 @@ class Block_main_image_fader_news
             return do_template('BLOCK_NO_ENTRIES', array('_GUID' => 'ba84d65b8dd134ba6cd7b1b7bde99de2', 'HIGH' => false, 'TITLE' => $main_title, 'MESSAGE' => do_lang_tempcode('NO_ENTRIES'), 'ADD_NAME' => do_lang_tempcode('ADD_NEWS'), 'SUBMIT_URL' => $submit_url));
         }
 
-        $tmp = array('page' => 'news', 'type' => 'misc', 'filter' => ($cat == '') ? null : $cat);
+        $tmp = array('page' => 'news', 'type' => 'browse', 'filter' => ($cat == '') ? null : $cat);
         if ($blogs != -1) {
             $tmp['blog'] = $blogs;
         }

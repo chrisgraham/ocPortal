@@ -92,7 +92,7 @@ class Block_side_news_categories
         }
         sort_maps_by($categories2, '_nc_title');
         foreach ($categories2 as $category) {
-            $url = build_url(array('page' => 'news', 'type' => 'misc', 'id' => $category['id']), get_module_zone('news'));
+            $url = build_url(array('page' => 'news', 'type' => 'browse', 'id' => $category['id']), get_module_zone('news'));
             $name = $category['_nc_title'];
             $content->attach(do_template('BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY', array('_GUID' => 'fee49cac370ec00fc59d2e9c66b6255a', 'URL' => $url, 'NAME' => $name, 'COUNT' => integer_format($count))));
         }

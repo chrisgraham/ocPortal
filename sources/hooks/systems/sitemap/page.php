@@ -32,7 +32,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
     public function handles_page_link($page_link)
     {
         $matches = array();
-        if (preg_match('#^([^:]*):([^:]+)(:misc)?$#', $page_link, $matches) != 0) {
+        if (preg_match('#^([^:]*):([^:]+)(:browse)?$#', $page_link, $matches) != 0) {
             $zone = $matches[1];
             $page = $matches[2];
 
@@ -215,14 +215,14 @@ class Hook_sitemap_page extends Hook_sitemap_base
                                 }
                             }
                             unset($entry_points['!']);
-                        } elseif ((isset($entry_points['misc'])) || (count($entry_points) == 1)) {
+                        } elseif ((isset($entry_points['browse'])) || (count($entry_points) == 1)) {
                             // Misc/only moves some details down and is then skipped (alternatively we could haved blanked out our container node to make it a non-link)
-                            $move_down_entry_point = (count($entry_points) == 1) ? key($entry_points) : 'misc';
+                            $move_down_entry_point = (count($entry_points) == 1) ? key($entry_points) : 'browse';
                             if (!isset($row[1])) {
                                 if (substr($struct['page_link'], -strlen(':' . $move_down_entry_point)) != ':' . $move_down_entry_point) {
                                     $struct['page_link'] .= ':' . $move_down_entry_point;
                                 }
-                                if (!isset($entry_points['misc'])) {
+                                if (!isset($entry_points['browse'])) {
                                     $_title = $entry_points[$move_down_entry_point][0];
                                     if (is_object($_title)) {
                                         $struct['title'] = $_title;
@@ -297,7 +297,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
                             $virtual_child_nodes = array();
                         }
                         foreach ($virtual_child_nodes as $child_node) {
-                            if ((count($virtual_child_nodes) == 1) && (preg_match('#^' . preg_quote($page_link, '#') . ':misc(:[^:=]*$|$)#', $child_node['page_link']) != 0) && (!$require_permission_support)) {
+                            if ((count($virtual_child_nodes) == 1) && (preg_match('#^' . preg_quote($page_link, '#') . ':browse(:[^:=]*$|$)#', $child_node['page_link']) != 0) && (!$require_permission_support)) {
                                 // Put as container instead
                                 if ($child_node['extra_meta']['image'] == '') {
                                     $child_node['extra_meta']['image'] = $struct['extra_meta']['image'];

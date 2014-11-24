@@ -360,7 +360,7 @@ class Hook_pointstore_permission
         }
 
         // Show message
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($title, $url, do_lang_tempcode('ORDER_GENERAL_DONE'));
     }
 

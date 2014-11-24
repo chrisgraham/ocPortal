@@ -515,7 +515,7 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
                     }
                 }
                 $pv = get_param($k, ($k == 'page') ? $dp : null, true);
-                if (($pv !== $v) && (($k != 'page') || ($REDIRECTED_TO_CACHE === null) || (($REDIRECTED_TO_CACHE !== null) && (($v !== $REDIRECTED_TO_CACHE['r_to_page']) || ($zone_name != $REDIRECTED_TO_CACHE['r_to_zone'])))) && (($k != 'type') || ($v != 'misc') || ($pv !== null)) && (($v != $dp) || ($k != 'page') || (get_param('page', '') != '')) && (substr($k, 0, 5) != 'keep_')) {
+                if (($pv !== $v) && (($k != 'page') || ($REDIRECTED_TO_CACHE === null) || (($REDIRECTED_TO_CACHE !== null) && (($v !== $REDIRECTED_TO_CACHE['r_to_page']) || ($zone_name != $REDIRECTED_TO_CACHE['r_to_zone'])))) && (($k != 'type') || ($v != 'browse') || ($pv !== null)) && (($v != $dp) || ($k != 'page') || (get_param('page', '') != '')) && (substr($k, 0, 5) != 'keep_')) {
                     $current_page = false;
                     break;
                 }
@@ -609,7 +609,7 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
         $accesskey = '6';
     } elseif ($page_link === '_SEARCH:rules') {
         $accesskey = '7';
-    } elseif ($page_link === '_SEARCH:staff:type=misc') {
+    } elseif ($page_link === '_SEARCH:staff:type=browse') {
         $accesskey = '5';
     } else {
         $accesskey = '';

@@ -153,7 +153,7 @@ class Block_side_news_archive
                         break;
                 }
 
-                $url = build_url(array('page' => 'news', 'type' => 'misc', 'filter' => $filter, 'start' => count($rows) - $offset - 1, 'year' => $current_year, 'month' => $current_month), $zone);
+                $url = build_url(array('page' => 'news', 'type' => 'browse', 'filter' => $filter, 'start' => count($rows) - $offset - 1, 'year' => $current_year, 'month' => $current_month), $zone);
 
                 array_unshift($years[$current_year]['TIMES'], array('URL' => $url, 'MONTH' => strval($current_month), 'MONTH_STRING' => $month_string));
             }

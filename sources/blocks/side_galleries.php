@@ -117,7 +117,7 @@ class Block_side_galleries
 
         foreach ($galleries as $gallery) {
             if (($show_empty) || (gallery_has_content($gallery['name']))) {
-                $url = build_url(array('page' => 'galleries', 'type' => 'misc', 'id' => $gallery['name']), $zone);
+                $url = build_url(array('page' => 'galleries', 'type' => 'browse', 'id' => $gallery['name']), $zone);
                 $content->attach(do_template($tpl, array('TITLE' => get_translated_text($gallery['fullname']), 'URL' => $url)));
             }
         }

@@ -189,13 +189,13 @@ class Module_downloads
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('DOWNLOADS_HOME', 'menu/rich_content/downloads'),
+            'browse' => array('DOWNLOADS_HOME', 'menu/rich_content/downloads'),
         );
     }
 
@@ -216,7 +216,7 @@ class Module_downloads
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_code('downloads');
         require_lang('downloads');
@@ -227,7 +227,7 @@ class Module_downloads
             set_feed_url('?mode=downloads&filter=');
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $category_id = get_param_integer('id', db_get_first_id());
 
             $root = get_param_integer('keep_download_root', db_get_first_id());
@@ -278,7 +278,7 @@ class Module_downloads
                 'modified' => '',
                 'type' => 'Download category',
                 'title' => $title_to_use,
-                'identifier' => '_SEARCH:downloads:misc:' . strval($category_id),
+                'identifier' => '_SEARCH:downloads:browse:' . strval($category_id),
                 'description' => get_translated_text($category['description']),
                 //'category'=>???,
             ));
@@ -429,10 +429,10 @@ class Module_downloads
         require_css('downloads');
         require_code('files');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         // Decide what to do
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->view_category_screen();
         }
         if ($type == 'index') {
@@ -724,7 +724,7 @@ class Module_downloads
 
         // Download link
         $author = $myrow['author'];
-        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $author), get_module_zone('authors')) : new Tempcode();
+        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'browse', 'id' => $author), get_module_zone('authors')) : new Tempcode();
 
         // Licence
         $licence_title = null;

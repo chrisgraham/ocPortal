@@ -1377,7 +1377,7 @@ function match_key_match($match_key, $support_post = false, $current_params = nu
 
                 $subparts = explode('=', $parts[$i]);
                 if ($subparts[0] == 'type') {
-                    $default = 'misc';
+                    $default = 'browse';
                 } else {
                     $default = '';
                 }

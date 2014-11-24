@@ -71,18 +71,18 @@ class Module_login
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if ($check_perms && is_guest($member_id)) {
             return array(
-                'misc' => array('_LOGIN', 'menu/site_meta/user_actions/login'),
+                'browse' => array('_LOGIN', 'menu/site_meta/user_actions/login'),
             );
         }
         $ret = array(
-            'misc' => array('_LOGIN', 'menu/site_meta/user_actions/login'),
+            'browse' => array('_LOGIN', 'menu/site_meta/user_actions/login'),
             //'logout'=>array('LOGOUT','menu/site_meta/user_actions/logout'), Don't show an immediate action, don't want accidental preloading
             //'concede'=>array('CONCEDED_MODE','menu/site_meta/user_actions/concede'), Don't show an immediate action, don't want accidental preloading
         );
@@ -105,9 +105,9 @@ class Module_login
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('_LOGIN');
 
             attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
@@ -116,7 +116,7 @@ class Module_login
         }
 
         if ($type == 'login') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('_LOGIN'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('_LOGIN'))));
 
             $username = trim(post_param('login_username'));
 
@@ -161,9 +161,9 @@ class Module_login
      */
     public function run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->login_before();
         }
         if ($type == 'login') {
@@ -197,7 +197,7 @@ class Module_login
         $unhelpful_redirect = false;
         $unhelpful_url_stubs = array(
             static_evaluate_tempcode(build_url(array('page' => 'login'), '', null, false, false, true)),
-            static_evaluate_tempcode(build_url(array('page' => 'login', 'type' => 'misc'), '', null, false, false, true)),
+            static_evaluate_tempcode(build_url(array('page' => 'login', 'type' => 'browse'), '', null, false, false, true)),
             static_evaluate_tempcode(build_url(array('page' => 'login', 'type' => 'logout'), '', null, false, false, true)),
         );
         foreach ($unhelpful_url_stubs as $unhelpful_url_stub) {

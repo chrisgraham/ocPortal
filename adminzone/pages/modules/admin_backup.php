@@ -46,13 +46,13 @@ class Module_admin_backup
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('BACKUP', 'menu/adminzone/tools/bulk_content_actions/backups'),
+            'browse' => array('BACKUP', 'menu/adminzone/tools/bulk_content_actions/backups'),
         );
     }
 
@@ -91,7 +91,7 @@ class Module_admin_backup
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('backups');
 
@@ -99,16 +99,16 @@ class Module_admin_backup
         set_helper_panel_text(comcode_lang_string('DOC_BACKUPS_2'));
 
         if ($type == 'make_backup') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('BACKUP'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('BACKUP'))));
             breadcrumb_set_self(do_lang_tempcode('START'));
         }
 
         if ($type == 'confirm_delete') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('BACKUP'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('BACKUP'))));
             breadcrumb_set_self(do_lang_tempcode('DELETE'));
         }
 
-        if ($type == 'misc' || $type == 'make_backup') {
+        if ($type == 'browse' || $type == 'make_backup') {
             $this->title = get_screen_title('BACKUP');
         }
 
@@ -138,9 +138,9 @@ class Module_admin_backup
 
         require_code('backup');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->backup_interface();
         }
         if ($type == 'make_backup') {
@@ -355,7 +355,7 @@ class Module_admin_backup
         sync_file('exports/backups/' . $file);
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

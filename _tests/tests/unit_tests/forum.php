@@ -39,7 +39,7 @@ class forum_test_set extends ocp_test_case
     public function testViewForum()
     {
         // Test the <title> contains "Test" which wil be in our forum name
-        $this->get('forum:forumview:misc:' . strval($this->forum_id));
+        $this->get('forum:forumview:browse:' . strval($this->forum_id));
         $this->assertTitle(new PatternExpectation('/Test/'));
     }
 

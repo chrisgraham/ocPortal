@@ -247,7 +247,7 @@ var SortableTable = (function(){
   };
 
   /**
-   * A place to store misc table information, rather than in the table objects themselves
+   * A place to store browse table information, rather than in the table objects themselves
    */
   table.tabledata = {};
 

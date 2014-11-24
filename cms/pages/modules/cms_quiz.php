@@ -35,7 +35,7 @@ class Module_cms_quiz extends Standard_crud_module
     public $seo_type = 'quiz';
     public $content_type = 'quiz';
     public $view_entry_point = '_SEARCH:quiz:do:_ID';
-    public $archive_entry_point = '_SEARCH:quiz:misc';
+    public $archive_entry_point = '_SEARCH:quiz:browse';
     public $javascript = 'var hide_func=function() { var ob=document.getElementById(\'type\'); if (ob.value==\'TEST\') { document.getElementById(\'percentage\').disabled=false; document.getElementById(\'num_winners\').disabled=true; }  if (ob.value==\'COMPETITION\') { document.getElementById(\'num_winners\').disabled=false; document.getElementById(\'percentage\').disabled=true; }  if (ob.value==\'SURVEY\') { document.getElementById(\'text\').value=document.getElementById(\'text\').value.replace(/ \[\*\]/g,\'\'); document.getElementById(\'num_winners\').disabled=true; document.getElementById(\'percentage\').disabled=true; } }; document.getElementById(\'type\').onchange=hide_func; hide_func();';
     public $menu_label = 'QUIZZES';
     public $table = 'quizzes';
@@ -61,13 +61,13 @@ class Module_cms_quiz extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-                'misc' => array('MANAGE_QUIZZES', 'menu/rich_content/quiz'),
+                'browse' => array('MANAGE_QUIZZES', 'menu/rich_content/quiz'),
             ) + parent::get_entry_points();
 
         if ($support_crosslinks) {
@@ -88,7 +88,7 @@ class Module_cms_quiz extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('quiz');
 
@@ -96,7 +96,7 @@ class Module_cms_quiz extends Standard_crud_module
 
         set_helper_panel_tutorial('tut_quizzes');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             if (has_actual_page_access(get_member(), 'admin_quiz')) {
                 $also_url = build_url(array('page' => 'admin_quiz'), get_module_zone('admin_quiz'));
                 attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN', escape_html($also_url->evaluate())), 'inform', true);
@@ -123,8 +123,8 @@ class Module_cms_quiz extends Standard_crud_module
         $this->archive_label = 'VIEW_ALL_QUIZZES';
         $this->view_label = do_lang_tempcode('TRY_QUIZ');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
 
         return new Tempcode();
@@ -135,7 +135,7 @@ class Module_cms_quiz extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         require_code('fields');

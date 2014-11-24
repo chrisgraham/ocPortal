@@ -227,7 +227,7 @@ class Hook_pointstore_banners
         }
 
         $title = get_screen_title('ADD_BANNER');
-        $stats_url = build_url(array('page' => 'banners', 'type' => 'misc'), get_module_zone('banners'));
+        $stats_url = build_url(array('page' => 'banners', 'type' => 'browse'), get_module_zone('banners'));
         $text = do_lang_tempcode('PURCHASED_BANNER');
 
         $_banner_type_row = $GLOBALS['SITE_DB']->query_select('banner_types', array('t_image_width', 't_image_height'), array('id' => ''), '', 1);
@@ -378,7 +378,7 @@ class Hook_pointstore_banners
         require_code('points2');
         charge_member($member_id, $total_price, do_lang('BANNER_UPGRADE_LINE', integer_format($futhit), integer_format($futimp)));
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($title, $url, do_lang_tempcode('BANNER_UPGRADED'));
     }
 }

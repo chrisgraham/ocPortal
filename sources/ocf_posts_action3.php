@@ -195,7 +195,7 @@ function ocf_edit_post($post_id, $validated, $title, $post, $skip_sig, $is_empha
     $info = $GLOBALS['FORUM_DB']->query_select('f_topics', array('t_cache_first_post_id', 't_cache_first_title'), array('id' => $topic_id), '', 1);
     if ((array_key_exists(0, $info)) && ($info[0]['t_cache_first_post_id'] == $post_id) && ($info[0]['t_cache_first_title'] != $title)) {
         require_code('urls2');
-        suggest_new_idmoniker_for('topicview', 'misc', strval($topic_id), '', $title);
+        suggest_new_idmoniker_for('topicview', 'browse', strval($topic_id), '', $title);
 
         $GLOBALS['FORUM_DB']->query_update('f_topics', array('t_cache_first_title' => $title), array('id' => $topic_id), '', 1);
     }
@@ -494,7 +494,7 @@ function ocf_move_posts($from_topic_id, $to_topic_id, $posts, $reason, $to_forum
         if ($is_support_ticket) {
             $to_link = '[page="' . get_module_zone('tickets') . ':tickets:ticket:' . $ticket_id . '"]' . str_replace('"', '\"', str_replace('[', '\\[', $topic_title)) . '[/page]';
         } else {
-            $to_link = '[page="' . get_module_zone('topicview') . ':topicview:misc:' . strval($to_topic_id) . '"]' . str_replace('"', '\"', str_replace('[', '\\[', $topic_title)) . '[/page]';
+            $to_link = '[page="' . get_module_zone('topicview') . ':topicview:browse:' . strval($to_topic_id) . '"]' . str_replace('"', '\"', str_replace('[', '\\[', $topic_title)) . '[/page]';
         }
         $me_link = '[page="' . get_module_zone('members') . ':members:view:' . strval(get_member()) . '"]' . $GLOBALS['OCF_DRIVER']->get_username(get_member(), true) . '[/page]';
         $lang = do_lang('INLINE_POSTS_MOVED_MESSAGE', $me_link, integer_format(count($posts)), array($to_link, get_timezoned_date(time())));

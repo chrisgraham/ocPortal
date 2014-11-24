@@ -42,7 +42,7 @@ class ecommerce_test_set extends ocp_test_case
 
         /*require_code('adminzone/pages/modules/admin_shipping.php');
         $this->admin_shipping=new Module_admin_shipping();
-        $this->admin_shipping->run_start('misc');*/
+        $this->admin_shipping->run_start('browse');*/
 
         /*require_code('adminzone/pages/modules_custom/admin_credits.php');
         $this->admin_credits=new Module_admin_credits();*/

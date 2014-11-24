@@ -31,7 +31,7 @@ class Hook_change_detection_tickets
      */
     public function run($data)
     {
-        if (get_param('type', 'misc') == 'misc') {
+        if (get_param('type', 'browse') == 'browse') {
             require_code('tickets');
             require_code('tickets2');
             $ticket_type_id = get_param_integer('ticket_type_id', null);

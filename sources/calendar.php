@@ -72,7 +72,7 @@ function render_calendar_type_box($row, $zone = '_SEARCH', $give_context = true,
 {
     require_lang('calendar');
 
-    $map = array('page' => 'calendar', 'type' => 'misc');
+    $map = array('page' => 'calendar', 'type' => 'browse');
     $map['int_' . strval($row['id'])] = 1;
     $url = build_url($map, $zone);
 

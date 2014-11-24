@@ -30,6 +30,6 @@
 [title="2"]Recommend ocPortal[/title]
 
 Know someone who needs a website?
-[page=":recommend:misc:ocp=1"]Recommend ocPortal[/page] and they'll be sent a link to your own site too.
+[page=":recommend:browse:ocp=1"]Recommend ocPortal[/page] and they'll be sent a link to your own site too.
 | [block]main_staff_links[/block]
 |}

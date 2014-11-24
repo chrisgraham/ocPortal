@@ -104,7 +104,7 @@ class Block_main_iotd
         $thumb_url = ensure_thumbnail($myrow['url'], $myrow['thumb_url'], 'iotds', 'iotd', $myrow['id']);
         $image = do_image_thumb($thumb_url, do_lang('IOTD'));
 
-        $archive_url = build_url(array('page' => 'iotds', 'type' => 'misc'), $zone);
+        $archive_url = build_url(array('page' => 'iotds', 'type' => 'browse'), $zone);
 
         $map2 = array('_GUID' => 'd710da3675a1775867168ae37db02ad4', 'CURRENT' => ($mode == 'current'), 'VIEW_URL' => $view_url, 'IMAGE_URL' => $image_url, 'THUMB_URL' => $thumb_url, 'SUBMITTER' => strval($myrow['submitter']), 'ID' => strval($myrow['id']), 'I_TITLE' => $i_title, 'CAPTION' => $caption, 'IMAGE' => $image, 'ARCHIVE_URL' => $archive_url, 'SUBMIT_URL' => $submit_url);
         if ((get_option('is_on_comments') == '1') && (get_forum_type() != 'none') && ($myrow['allow_comments'] >= 1)) {

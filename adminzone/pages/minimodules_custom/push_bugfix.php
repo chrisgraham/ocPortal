@@ -155,7 +155,7 @@ if (strtoupper(ocp_srv('REQUEST_METHOD')) == 'POST') {
     if ($recog_error_substring != '') {
         $recog_post = 'Your error seems to match a known and fixed bug in ocPortal (' . $title . ').' . "\n\n" . '[title="2"]How did this happen?[/title]' . "\n\n" . 'The bug description is as follows...' . "\n\n" . $notes . "\n\n" . '[title="2"]How do I fix it?[/title]' . "\n\n" . 'A hotfix is available under issue [url="#' . strval($tracker_id) . '"]' . $tracker_url . '[/url].';
         $recog_topic_id = create_forum_topic(SOLUTION_FORUM, $recog_error_substring, $recog_post);
-        $recog_topic_url = $REMOTE_BASE_URL . '/forum/topicview/misc/' . strval($recog_topic_id) . '.htm';
+        $recog_topic_url = $REMOTE_BASE_URL . '/forum/topicview/browse/' . strval($recog_topic_id) . '.htm';
         $done['Posted recognition signature'] = $recog_topic_url;
     }
 

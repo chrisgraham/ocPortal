@@ -131,7 +131,7 @@ abstract class Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -171,7 +171,7 @@ abstract class Standard_crud_module
     public function pre_run($top_level = true, $type = null)
     {
         if (is_null($this->default_type)) {
-            $this->default_type = method_exists($this, 'misc') ? 'misc' : 'add';
+            $this->default_type = method_exists($this, 'browse') ? 'browse' : 'add';
         }
         if (is_null($type)) {
             $type = get_param('type', $this->default_type);
@@ -365,15 +365,15 @@ abstract class Standard_crud_module
                 $this->title = get_screen_title('MASS_DELETE');
             }
 
-            if ((method_exists($this, 'misc')) && ($type != 'misc')) {
+            if ((method_exists($this, 'browse')) && ($type != 'browse')) {
                 if (($this->special_edit_frontend) && (($type == '_edit') || ($type == '_edit_category'))) {
-                    breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode(is_null($this->menu_label) ? 'MENU' : $this->menu_label)), array('_SELF:_SELF:' . substr($type, 1), do_lang_tempcode('CHOOSE'))));
+                    breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode(is_null($this->menu_label) ? 'MENU' : $this->menu_label)), array('_SELF:_SELF:' . substr($type, 1), do_lang_tempcode('CHOOSE'))));
                 } else {
                     if (($this->catalogue) && (either_param('catalogue_name', '') != '')) {
                         $catalogue_title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues', 'c_title', array('c_name' => either_param('catalogue_name'))));
-                        breadcrumb_set_parents(array(array('_SELF:_SELF:misc:catalogue_name=' . either_param('catalogue_name', ''), $catalogue_title)));
+                        breadcrumb_set_parents(array(array('_SELF:_SELF:browse:catalogue_name=' . either_param('catalogue_name', ''), $catalogue_title)));
                     } else {
-                        breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode(is_null($this->menu_label) ? 'MENU' : $this->menu_label))));
+                        breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode(is_null($this->menu_label) ? 'MENU' : $this->menu_label))));
                     }
                 }
             } else {
@@ -412,7 +412,7 @@ abstract class Standard_crud_module
         }
 
         if (is_null($this->default_type)) {
-            $this->default_type = method_exists($this, 'misc') ? 'misc' : 'add';
+            $this->default_type = method_exists($this, 'browse') ? 'browse' : 'add';
         }
         $type = get_param('type', $this->default_type);
 
@@ -852,7 +852,7 @@ abstract class Standard_crud_module
         if ($this->user_facing) {
             //I think people know how web systems work by now if (($this->care_please) && (do_lang('CARE_PLEASE')!='')) $this->add_text->attach(paragraph(do_lang_tempcode('CARE_PLEASE')));
             if (addon_installed('points')) {
-                $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
+                $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
                 $_login_url = escape_html($login_url->evaluate());
                 if ((is_guest()) && ((get_forum_type() != 'ocf') || (has_actual_page_access(get_member(), 'join')))) {
                     $this->add_text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT', $_login_url)));

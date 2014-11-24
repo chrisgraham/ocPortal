@@ -90,7 +90,7 @@ Whilst the '[tt]main_content[/tt]' block (see above) can show content within blo
 
 For example:
 [code]
-[block="_SEARCH:topicview:misc:1" strip_title="1" only_if_permissions="0"]main_include_module[/block]
+[block="_SEARCH:topicview:browse:1" strip_title="1" only_if_permissions="0"]main_include_module[/block]
 [/code]
 would show OCF topic #1 in a block, without running permission checks, and with the title removed.
 

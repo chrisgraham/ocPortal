@@ -39,7 +39,7 @@ function render_wiki_post_box($row, $zone = '_SEARCH', $give_context = true, $in
 
     $just_wiki_post_row = db_map_restrict($row, array('id', 'the_message'));
 
-    $map = array('page' => 'wiki', 'type' => 'misc', 'id' => $row['page_id']);
+    $map = array('page' => 'wiki', 'type' => 'browse', 'id' => $row['page_id']);
     if (!is_null($root)) {
         $map['keep_forum_root'] = $root;
     }
@@ -85,7 +85,7 @@ function render_wiki_page_box($row, $zone = '_SEARCH', $give_context = true, $in
 
     $content = get_translated_tempcode('wiki_pages', $just_wiki_page_row, 'description');
 
-    $map = array('page' => 'wiki', 'type' => 'misc', 'id' => $row['id']);
+    $map = array('page' => 'wiki', 'type' => 'browse', 'id' => $row['id']);
     if (!is_null($root)) {
         $map['keep_forum_root'] = $root;
     }
@@ -572,7 +572,7 @@ function wiki_breadcrumbs($chain, $current_title = null, $final_link = false, $l
             $id = intval($GLOBALS['SITE_DB']->query_select_value('url_id_monikers', 'm_resource_id', $url_moniker_where));
         }
 
-        $url = build_url(array('page' => 'wiki', 'type' => 'misc', 'id' => $link_id) + (($this_link_virtual_root && ($next_token === false)) ? array('keep_wiki_root' => $id) : array()), get_module_zone('wiki'));
+        $url = build_url(array('page' => 'wiki', 'type' => 'browse', 'id' => $link_id) + (($this_link_virtual_root && ($next_token === false)) ? array('keep_wiki_root' => $id) : array()), get_module_zone('wiki'));
 
         if ($next_token !== false) { // If not the last token (i.e. not the current page)
             $title = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages', 'title', array('id' => $id));
@@ -645,7 +645,7 @@ function wiki_derive_chain($id, $root = null)
         }
         if (get_option('url_monikers_enabled') == '1') {
             $moniker_src = $parent_details[$page_id][1];
-            $page_moniker = suggest_new_idmoniker_for('wiki', 'misc', strval($page_id), '', $moniker_src);
+            $page_moniker = suggest_new_idmoniker_for('wiki', 'browse', strval($page_id), '', $moniker_src);
         } else {
             $page_moniker = strval($page_id);
         }
@@ -877,7 +877,7 @@ function dispatch_wiki_post_notification($post_id, $type)
     $page_name = get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages', 'title', array('id' => $page_id)));
     $_the_message = get_translated_text($the_message);
 
-    $_view_url = build_url(array('page' => 'wiki', 'type' => 'misc', 'id' => $page_id), get_page_zone('wiki'), null, false, false, true);
+    $_view_url = build_url(array('page' => 'wiki', 'type' => 'browse', 'id' => $page_id), get_page_zone('wiki'), null, false, false, true);
     $view_url = $_view_url->evaluate();
     $their_displayname = $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true);
     $their_username = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
@@ -901,7 +901,7 @@ function dispatch_wiki_page_notification($page_id, $type)
     $page_name = get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages', 'title', array('id' => $page_id)));
     $_the_message = get_translated_text($GLOBALS['SITE_DB']->query_select_value('wiki_pages', 'description', array('id' => $page_id)));
 
-    $_view_url = build_url(array('page' => 'wiki', 'type' => 'misc', 'id' => $page_id), get_page_zone('wiki'), null, false, false, true);
+    $_view_url = build_url(array('page' => 'wiki', 'type' => 'browse', 'id' => $page_id), get_page_zone('wiki'), null, false, false, true);
     $view_url = $_view_url->evaluate();
     $their_displayname = $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true);
     $their_username = $GLOBALS['FORUM_DRIVER']->get_username(get_member());

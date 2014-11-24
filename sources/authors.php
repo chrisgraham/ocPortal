@@ -31,7 +31,7 @@ function render_author_box($row, $zone = '_SEARCH', $give_context = true, $guid 
 {
     require_lang('authors');
 
-    $url = build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), $zone);
+    $url = build_url(array('page' => 'authors', 'type' => 'browse', 'id' => $row['author']), $zone);
 
     $title = $give_context ? do_lang('CONTENT_IS_OF_TYPE', do_lang('AUTHOR'), $row['author']) : $row['author'];
 

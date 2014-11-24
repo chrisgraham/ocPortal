@@ -678,7 +678,7 @@ class Hook_ecommerce_catalogue_items
 
         require_lang('shopping');
 
-        $shopping_cart_url = build_url(array('page' => 'shopping', 'type' => 'misc'), '_SELF');
+        $shopping_cart_url = build_url(array('page' => 'shopping', 'type' => 'browse'), '_SELF');
 
         $product_title = null;
 

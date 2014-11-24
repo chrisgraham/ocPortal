@@ -82,7 +82,7 @@ class Forum_driver_base
         if ((!$definitely_profile) && ($id != $this->get_guest_id()) && (addon_installed('chat')) && (has_privilege(get_member(), 'start_im'))) {
             $username_click_im = get_option('username_click_im');
             if ($username_click_im == '1') {
-                $url = build_url(array('page' => 'chat', 'type' => 'misc', 'enter_im' => $id), get_module_zone('chat'));
+                $url = build_url(array('page' => 'chat', 'type' => 'browse', 'enter_im' => $id), get_module_zone('chat'));
                 if (!$tempcode_okay) {
                     $url = $url->evaluate();
                 }

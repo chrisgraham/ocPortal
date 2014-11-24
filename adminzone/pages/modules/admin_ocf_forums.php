@@ -45,7 +45,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -55,7 +55,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
         }
 
         $ret = array(
-                'misc' => array('MANAGE_FORUMS', 'menu/social/forum/forums'),
+                'browse' => array('MANAGE_FORUMS', 'menu/social/forum/forums'),
             ) + parent::get_entry_points();
 
         if ($support_crosslinks) {
@@ -63,11 +63,11 @@ class Module_admin_ocf_forums extends Standard_crud_module
             $ret['_SEARCH:admin_ocf_forum_groupings:edit'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('EDIT_FORUM_GROUPING'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'COUNT(*)', null, '', true))))), 'menu/_generic_admin/edit_one_category');
             if (addon_installed('ocf_post_templates')) {
                 require_lang('ocf_post_templates');
-                $ret['_SEARCH:admin_ocf_post_templates:misc'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('POST_TEMPLATES'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates', 'COUNT(*)', null, '', true))))), 'menu/adminzone/structure/forum/post_templates');
+                $ret['_SEARCH:admin_ocf_post_templates:browse'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('POST_TEMPLATES'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates', 'COUNT(*)', null, '', true))))), 'menu/adminzone/structure/forum/post_templates');
             }
             if (addon_installed('ocf_multi_moderations')) {
                 require_lang('ocf_multi_moderations');
-                $ret['_SEARCH:admin_ocf_multi_moderations:misc'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('MULTI_MODERATIONS'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_multi_moderations', 'COUNT(*)', null, '', true))))), 'menu/adminzone/structure/forum/multi_moderations');
+                $ret['_SEARCH:admin_ocf_multi_moderations:browse'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('MULTI_MODERATIONS'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_multi_moderations', 'COUNT(*)', null, '', true))))), 'menu/adminzone/structure/forum/multi_moderations');
             }
 
             require_code('fields');
@@ -87,7 +87,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
         require_css('ocf_admin');
@@ -132,8 +132,8 @@ class Module_admin_ocf_forums extends Standard_crud_module
 
         load_up_all_module_category_permissions($GLOBALS['FORUM_DRIVER']->get_guest_id(), 'forums');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'reorder') {
             return $this->reorder();
@@ -147,7 +147,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         $menu_links = array(
             array('menu/_generic_admin/add_one_category', array('admin_ocf_forum_groupings', array('type' => 'add'), get_module_zone('admin_ocf_forum_groupings')), do_lang('ADD_FORUM_GROUPING')),
@@ -158,11 +158,11 @@ class Module_admin_ocf_forums extends Standard_crud_module
 
         if (addon_installed('ocf_post_templates')) {
             require_lang('ocf_post_templates');
-            $menu_links[] = array('menu/adminzone/structure/forum/post_templates', array('admin_ocf_post_templates', array('type' => 'misc'), get_module_zone('admin_ocf_post_templates')), do_lang_tempcode('POST_TEMPLATES'), 'DOC_POST_TEMPLATES');
+            $menu_links[] = array('menu/adminzone/structure/forum/post_templates', array('admin_ocf_post_templates', array('type' => 'browse'), get_module_zone('admin_ocf_post_templates')), do_lang_tempcode('POST_TEMPLATES'), 'DOC_POST_TEMPLATES');
         }
         if (addon_installed('ocf_multi_moderations')) {
             require_lang('ocf_multi_moderations');
-            $menu_links[] = array('menu/adminzone/structure/forum/multi_moderations', array('admin_ocf_multi_moderations', array('type' => 'misc'), get_module_zone('admin_ocf_multi_moderations')), do_lang_tempcode('MULTI_MODERATIONS'), 'DOC_MULTI_MODERATIONS');
+            $menu_links[] = array('menu/adminzone/structure/forum/multi_moderations', array('admin_ocf_multi_moderations', array('type' => 'browse'), get_module_zone('admin_ocf_multi_moderations')), do_lang_tempcode('MULTI_MODERATIONS'), 'DOC_MULTI_MODERATIONS');
         }
 
         require_code('templates_donext');
@@ -579,7 +579,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
 
         if ((has_actual_page_access(get_modal_user(), 'forumview')) && (has_category_access(get_modal_user(), 'forums', $id))) {
             require_code('activities');
-            syndicate_described_activity('ocf:ACTIVITY_ADD_FORUM', $name, '', '', '_SEARCH:forumview:misc:' . $id, '', '', 'ocf_forum');
+            syndicate_described_activity('ocf:ACTIVITY_ADD_FORUM', $name, '', '', '_SEARCH:forumview:browse:' . $id, '', '', 'ocf_forum');
         }
 
         return $id;

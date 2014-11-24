@@ -574,7 +574,7 @@ function _log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_
             'http://www.iplists.com.nyud.net/nw/askjeeves.txt' => false,
             'http://www.iplists.com.nyud.net/northernlight.txt' => false,
             'http://www.iplists.com.nyud.net/nw/altavista.txt' => false,
-            'http://www.iplists.com.nyud.net/nw/misc.txt' => false,
+            'http://www.iplists.com.nyud.net/nw/browse.txt' => false,
             'https://www.cloudflare.com/ips-v4' => true,
             'https://www.cloudflare.com/ips-v6' => true,
         );
@@ -642,7 +642,7 @@ function _log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_
                 syndicate_spammer_report($alt_ip ? $ip2 : $ip, is_guest() ? '' : $GLOBALS['FORUM_DRIVER']->get_username(get_member()), $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), do_lang('SPAM_REPORT_TRIGGERED_SPAM_HEURISTICS'));
             }
             $ban_happened = add_ip_ban($alt_ip ? $ip2 : $ip, $full_reason);
-            $_ip_ban_url = build_url(array('page' => 'admin_ip_ban', 'type' => 'misc'), get_module_zone('admin_ip_ban'), null, false, false, true);
+            $_ip_ban_url = build_url(array('page' => 'admin_ip_ban', 'type' => 'browse'), get_module_zone('admin_ip_ban'), null, false, false, true);
             $ip_ban_url = $_ip_ban_url->evaluate();
             if ($ban_happened) {
                 $ip_ban_todo = do_lang('AUTO_BAN_HACK_MESSAGE', $alt_ip ? $ip2 : $ip, integer_format($hack_threshold), array($summary, $ip_ban_url), get_site_default_lang());
@@ -1378,7 +1378,7 @@ function _access_denied($class, $param, $force_login)
         $redirect = get_self_url(true, true, array('page' => get_param('page', ''))); // We have to pass in 'page' because an access-denied situation tells get_page_name() (which get_self_url() relies on) that we are on page ''.
         $_GET['redirect'] = $redirect;
         $_GET['page'] = 'login';
-        $_GET['type'] = 'misc';
+        $_GET['type'] = 'browse';
         global $PAGE_NAME_CACHE;
         $PAGE_NAME_CACHE = 'login';
 

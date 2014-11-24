@@ -33,7 +33,7 @@ class Hook_page_groupings_debrand
     public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('style', 'menu/adminzone/style/debrand', array('admin_debrand', array('type' => 'misc'), get_module_zone('admin_debrand')), do_lang_tempcode('debrand:SUPER_DEBRAND'), 'debrand:DOC_SUPERDEBRAND'),
+            array('style', 'menu/adminzone/style/debrand', array('admin_debrand', array('type' => 'browse'), get_module_zone('admin_debrand')), do_lang_tempcode('debrand:SUPER_DEBRAND'), 'debrand:DOC_SUPERDEBRAND'),
         );
     }
 }

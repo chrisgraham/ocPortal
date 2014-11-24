@@ -37,7 +37,7 @@ class Hook_page_groupings_messaging
         }
 
         return array(
-            array('audit', 'menu/adminzone/audit/messaging', array('admin_messaging', array('type' => 'misc'), get_module_zone('admin_messaging')), do_lang_tempcode('messaging:CONTACT_US_MESSAGING'), 'messaging:DOC_MESSAGING'),
+            array('audit', 'menu/adminzone/audit/messaging', array('admin_messaging', array('type' => 'browse'), get_module_zone('admin_messaging')), do_lang_tempcode('messaging:CONTACT_US_MESSAGING'), 'messaging:DOC_MESSAGING'),
         );
     }
 }

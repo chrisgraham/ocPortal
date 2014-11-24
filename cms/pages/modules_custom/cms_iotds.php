@@ -22,7 +22,7 @@ class Module_cms_iotds extends Standard_crud_module
 {
     public $lang_type = 'IOTD';
     public $special_edit_frontend = true;
-    public $archive_entry_point = '_SEARCH:iotds:misc';
+    public $archive_entry_point = '_SEARCH:iotds:browse';
     public $view_entry_point = '_SEARCH:iotds:view:_ID';
     public $user_facing = true;
     public $send_validation_request = false;
@@ -42,7 +42,7 @@ class Module_cms_iotds extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('iotds');
 
@@ -79,8 +79,8 @@ class Module_cms_iotds extends Standard_crud_module
         $this->edit_one_label = do_lang_tempcode('EDIT_OR_CHOOSE_IOTD');
         $this->edit_this_label = do_lang_tempcode('EDIT_THIS_IOTD');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == '_choose') {
             return $this->set_iotd();
@@ -99,13 +99,13 @@ class Module_cms_iotds extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('MANAGE_IOTDS', 'menu/rich_content/iotds'),
+            'browse' => array('MANAGE_IOTDS', 'menu/rich_content/iotds'),
         ) + parent::get_entry_points();
     }
 
@@ -125,7 +125,7 @@ class Module_cms_iotds extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_IOTDS'), comcode_lang_string('DOC_IOTDS'),

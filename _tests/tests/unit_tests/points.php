@@ -76,7 +76,7 @@ class points_test_set extends ocp_test_case
     function testBanner()
     {
         $browser=new SimpleBrowser();
-        $browser->get(get_base_url().'/site/index.php?page=pointstore&type=misc');
+        $browser->get(get_base_url().'/site/index.php?page=pointstore&type=browse');
         $title1=$browser->getTitle();
         $this->assertTrue($title1=="Login &ndash; ocPortal 4.2");
     }

@@ -49,13 +49,13 @@ class Module_cms_news extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-                'misc' => array('MANAGE_NEWS', 'menu/rich_content/news'),
+                'browse' => array('MANAGE_NEWS', 'menu/rich_content/news'),
             ) + parent::get_entry_points();
 
         if ($support_crosslinks) {
@@ -115,7 +115,7 @@ class Module_cms_news extends Standard_crud_module
     {
         $this->cat_crud_module = class_exists('Mx_cms_news_cat') ? new Mx_cms_news_cat() : new Module_cms_news_cat();
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('news');
 
@@ -132,7 +132,7 @@ class Module_cms_news extends Standard_crud_module
         }
 
         if ($type == '_import_news') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_NEWS')), array('_SELF:_SELF:import', do_lang_tempcode('IMPORT_NEWS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_NEWS')), array('_SELF:_SELF:import', do_lang_tempcode('IMPORT_NEWS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
@@ -153,8 +153,8 @@ class Module_cms_news extends Standard_crud_module
         require_css('news');
 
         // Decide what to do
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'import') {
             return $this->import_news();
@@ -171,7 +171,7 @@ class Module_cms_news extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         require_code('fields');
@@ -244,7 +244,7 @@ class Module_cms_news extends Standard_crud_module
                 $news_cat_titles[$row['news_category']] = $nc_title;
             }
             if (!is_null($nc_title)) {
-                $fr[] = protect_from_escaping(hyperlink(build_url(array('page' => 'news', 'type' => 'misc', 'filter' => $row['news_category']), get_module_zone('news')), get_translated_text($nc_title), false, true));
+                $fr[] = protect_from_escaping(hyperlink(build_url(array('page' => 'news', 'type' => 'browse', 'filter' => $row['news_category']), get_module_zone('news')), get_translated_text($nc_title), false, true));
             } else {
                 $fr[] = do_lang('UNKNOWN');
             }
@@ -1083,7 +1083,7 @@ class Module_cms_news_cat extends Standard_crud_module
                 null, // Edit this
                 has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
                 null, // View this
-                array('news', array('type' => 'misc'), get_module_zone('news')), // View archive
+                array('news', array('type' => 'browse'), get_module_zone('news')), // View archive
                 null, // Add to category
                 has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
                 has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
@@ -1100,7 +1100,7 @@ class Module_cms_news_cat extends Standard_crud_module
             (is_null($id) || (!has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news', array('news', $cat)))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id), '_SELF'), // Edit this
             has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
             is_null($id) ? null : array('news', array('type' => 'view', 'id' => $id), get_module_zone('news')), // View this
-            array('news', array('type' => 'misc'), get_module_zone('news')), // View archive
+            array('news', array('type' => 'browse'), get_module_zone('news')), // View archive
             (!is_null($id)) ? null : array('_SELF', array('type' => 'add', 'cat' => $cat), '_SELF'), // Add to category
             has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
             has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category

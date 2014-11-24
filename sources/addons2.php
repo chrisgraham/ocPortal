@@ -932,7 +932,7 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
                 $post_fields->attach(form_input_hidden('install_' . $in . '.tar', $in . '.tar'));
             }
 
-            if (get_param('type', 'misc') == 'addon_install') {
+            if (get_param('type', 'browse') == 'addon_install') {
                 $post_fields->attach(form_input_hidden('install_' . $file, $file));
                 $url = static_evaluate_tempcode(build_url(array('page' => '_SELF', 'type' => 'multi_action'), '_SELF'));
             } else {
@@ -1071,7 +1071,7 @@ function inform_about_addon_uninstall($addon, $also_uninstalling = null, $addon_
             foreach ($dependencies as $in) {
                 $post_fields->attach(form_input_hidden('uninstall_' . $in, $in));
             }
-            if (get_param('type', 'misc') == 'addon_uninstall') {
+            if (get_param('type', 'browse') == 'addon_uninstall') {
                 $post_fields->attach(form_input_hidden('uninstall_' . $addon, $addon));
                 $url = static_evaluate_tempcode(build_url(array('page' => '_SELF', 'type' => 'multi_action'), '_SELF'));
             } else {

@@ -120,7 +120,7 @@ class Module_points
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -129,7 +129,7 @@ class Module_points
             return array();
         }
         $ret = array(
-            'misc' => array('MEMBER_POINT_FIND', 'buttons/search'),
+            'browse' => array('MEMBER_POINT_FIND', 'buttons/search'),
         );
         if (!$check_perms || !is_guest($member_id)) {
             $ret['member'] = array('POINTS', 'menu/social/points');
@@ -147,25 +147,25 @@ class Module_points
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('points');
 
-        if ($type == 'misc' || $type == '_search') {
+        if ($type == 'browse' || $type == '_search') {
             set_feed_url('?mode=points&filter=');
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->member_id_of = db_get_first_id() + 1;
             set_feed_url('?mode=points&filter=' . strval($this->member_id_of));
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MEMBER_POINT_FIND'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MEMBER_POINT_FIND'))));
 
             $this->title = get_screen_title('MEMBER_POINT_FIND');
         }
 
         if ($type == '_search') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MEMBER_POINT_FIND'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MEMBER_POINT_FIND'))));
 
             $this->title = get_screen_title('MEMBER_POINT_FIND');
         }
@@ -173,7 +173,7 @@ class Module_points
         if ($type == 'give') {
             $member_id_of = get_param_integer('id');
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MEMBER_POINT_FIND')), array('_SELF:_SELF:member:' . strval($member_id_of), do_lang_tempcode('_POINTS', escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of, true))))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MEMBER_POINT_FIND')), array('_SELF:_SELF:member:' . strval($member_id_of), do_lang_tempcode('_POINTS', escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of, true))))));
 
             $this->title = get_screen_title('POINTS');
         }
@@ -203,9 +203,9 @@ class Module_points
         require_css('points');
 
         // Work out what we're doing here
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->points_search_form();
         }
         if ($type == '_search') {

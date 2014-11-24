@@ -41,7 +41,7 @@ class Module_admin_ocf_post_templates extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -55,7 +55,7 @@ class Module_admin_ocf_post_templates extends Standard_crud_module
         }
 
         return array(
-            'misc' => array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('POST_TEMPLATES'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates', 'COUNT(*)', null, '', true))))), 'menu/adminzone/structure/forum/post_templates'),
+            'browse' => array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('POST_TEMPLATES'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates', 'COUNT(*)', null, '', true))))), 'menu/adminzone/structure/forum/post_templates'),
         ) + parent::get_entry_points();
     }
 
@@ -70,7 +70,7 @@ class Module_admin_ocf_post_templates extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
         require_lang('ocf_post_templates');
@@ -79,11 +79,11 @@ class Module_admin_ocf_post_templates extends Standard_crud_module
         set_helper_panel_tutorial('tut_forum_helpdesk');
 
         if ($type == 'import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('POST_TEMPLATES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('POST_TEMPLATES'))));
         }
 
         if ($type == '_import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('POST_TEMPLATES')), array('_SELF:_SELF:import', do_lang_tempcode('IMPORT_STOCK_RESPONSES_PT'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('POST_TEMPLATES')), array('_SELF:_SELF:import', do_lang_tempcode('IMPORT_STOCK_RESPONSES_PT'))));
         }
 
         if ($type == 'import' || $type == '_import') {
@@ -113,8 +113,8 @@ class Module_admin_ocf_post_templates extends Standard_crud_module
         require_code('ocf_general_action');
         require_code('ocf_general_action2');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'import') {
             return $this->import();
@@ -130,7 +130,7 @@ class Module_admin_ocf_post_templates extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('POST_TEMPLATES'), comcode_lang_string('DOC_POST_TEMPLATES'),

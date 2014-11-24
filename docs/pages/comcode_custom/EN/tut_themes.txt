@@ -166,7 +166,7 @@ On devices like iphones or Android, it still works if mobile mode is not enabled
 8) Remember to test how your e-mails look as well as your screens
 9) The font-size changer assumes you will use em-based (i.e. relative) sizing for all styles. The font sizer works by setting a larger base font size. The default theme sizes almost everything relatively (using 'em'), so a larger base font size has an effect that cascades through everything. If you change styles to 'pt' or 'px' then that is absolute and hence the cascade will be stopped at that point.
 
-For more tips, see [page="forum:topicview:misc:9553"]a walk-through guide[/page] on our forum.
+For more tips, see [page="forum:topicview:browse:9553"]a walk-through guide[/page] on our forum.
 
 [concepts
  1_key="Theme"   1_value="Your theme is the sum of your CSS, images, and templates, which work together to create the style and layout for your site."

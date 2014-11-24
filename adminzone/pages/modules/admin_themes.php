@@ -101,20 +101,20 @@ class Module_admin_themes
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('MANAGE_THEMES', 'menu/adminzone/style/themes/themes'),
+            'browse' => array('MANAGE_THEMES', 'menu/adminzone/style/themes/themes'),
             'add_theme' => array('ADD_THEME', 'menu/_generic_admin/add_one'),
             'tempcode_tester' => array('TEMPCODE_TESTER', 'menu/_generic_admin/tool'),
         );
 
         if ($support_crosslinks) {
             if (addon_installed('themewizard')) {
-                $ret['_SEARCH:admin_themewizard:misc'] = array('THEMEWIZARD', 'menu/adminzone/style/themes/themewizard');
+                $ret['_SEARCH:admin_themewizard:browse'] = array('THEMEWIZARD', 'menu/adminzone/style/themes/themewizard');
             }
         }
 
@@ -133,7 +133,7 @@ class Module_admin_themes
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('themes');
 
@@ -141,14 +141,14 @@ class Module_admin_themes
             set_helper_panel_tutorial('tut_themes');
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             set_helper_panel_text(comcode_lang_string('DOC_THEMES'));
 
             $this->title = get_screen_title('MANAGE_THEMES');
         }
 
         if ($type == 'choose_css') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE_CSS'));
 
             $this->title = get_screen_title('EDIT_CSS');
@@ -160,10 +160,10 @@ class Module_admin_themes
 
             $theme = get_param('theme', '');
             if ($theme == '') {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
                 breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
             } else {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:choose_css:theme=' . $theme, do_lang_tempcode('CHOOSE_CSS'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:choose_css:theme=' . $theme, do_lang_tempcode('CHOOSE_CSS'))));
             }
 
             $file = filter_naughty(get_param('file', 'global.css'));
@@ -177,7 +177,7 @@ class Module_admin_themes
         }
 
         if ($type == '_edit_css') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_css:theme=' . $theme, do_lang_tempcode('CHOOSE_CSS')), array('_SELF:_SELF:_edit_css:file=' . $file, do_lang_tempcode('EDIT_CSS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_css:theme=' . $theme, do_lang_tempcode('CHOOSE_CSS')), array('_SELF:_SELF:_edit_css:file=' . $file, do_lang_tempcode('EDIT_CSS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('EDIT_CSS');
@@ -187,7 +187,7 @@ class Module_admin_themes
             set_helper_panel_text(comcode_lang_string('DOC_TEMPLATES'));
             set_helper_panel_tutorial('tut_markup');
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE_TEMPLATES'));
 
             $this->title = get_screen_title('EDIT_TEMPLATES');
@@ -198,7 +198,7 @@ class Module_admin_themes
             set_helper_panel_tutorial('tut_themes');
 
             $theme = get_param('theme');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_templates:theme=' . $theme, do_lang_tempcode('CHOOSE_TEMPLATES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_templates:theme=' . $theme, do_lang_tempcode('CHOOSE_TEMPLATES'))));
 
             $this->title = get_screen_title('EDIT_TEMPLATES');
         }
@@ -211,7 +211,7 @@ class Module_admin_themes
                     $file = basename($_i);
                 }
             }
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_templates:theme=' . $theme, do_lang_tempcode('CHOOSE_TEMPLATES')), array('_SELF:_SELF:_edit_templates:theme=' . $theme . ':file=' . $file, do_lang_tempcode('EDIT_TEMPLATES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_templates:theme=' . $theme, do_lang_tempcode('CHOOSE_TEMPLATES')), array('_SELF:_SELF:_edit_templates:theme=' . $theme . ':file=' . $file, do_lang_tempcode('EDIT_TEMPLATES'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->theme = $theme;
@@ -220,7 +220,7 @@ class Module_admin_themes
         }
 
         if ($type == 'manage_images') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE_THEME_IMAGE'));
 
             $this->title = get_screen_title('EDIT_THEME_IMAGES');
@@ -254,7 +254,7 @@ class Module_admin_themes
 
             set_short_title($id);
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:manage_images:theme=' . $theme, do_lang_tempcode('CHOOSE_THEME_IMAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:manage_images:theme=' . $theme, do_lang_tempcode('CHOOSE_THEME_IMAGE'))));
 
             $this->title = get_screen_title('EDIT_THEME_IMAGE');
 
@@ -265,20 +265,20 @@ class Module_admin_themes
         if ($type == '_edit_image') {
             $theme = post_param('theme');
             $id = post_param('id');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:manage_images:theme=' . $theme, do_lang_tempcode('CHOOSE_THEME_IMAGE')), array('_SELF:_SELF:edit_theme_image:' . $id, do_lang_tempcode('EDIT_THEME_IMAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:manage_images:theme=' . $theme, do_lang_tempcode('CHOOSE_THEME_IMAGE')), array('_SELF:_SELF:edit_theme_image:' . $id, do_lang_tempcode('EDIT_THEME_IMAGE'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('EDIT_THEME_IMAGE');
         }
 
         if ($type == 'add_image') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('ADD_THEME_IMAGE');
         }
 
         if ($type == '_add_image') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:add_image:theme=' . post_param('theme'), do_lang_tempcode('ADD_THEME_IMAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:add_image:theme=' . post_param('theme'), do_lang_tempcode('ADD_THEME_IMAGE'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             breadcrumb_set_self(do_lang_tempcode('DONE'));
@@ -287,13 +287,13 @@ class Module_admin_themes
         }
 
         if ($type == 'add_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('ADD_THEME');
         }
 
         if ($type == '_add_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             breadcrumb_set_self(do_lang_tempcode('DONE'));
@@ -302,13 +302,13 @@ class Module_admin_themes
         }
 
         if ($type == 'edit_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('EDIT_THEME');
         }
 
         if ($type == '_edit_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             breadcrumb_set_self(do_lang_tempcode('DONE'));
@@ -323,7 +323,7 @@ class Module_admin_themes
         }
 
         if ($type == 'screen_previews') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('SCREEN_PREVIEWS');
         }
@@ -339,7 +339,7 @@ class Module_admin_themes
         if ($type == 'tempcode_tester') {
             $this->title = get_screen_title('TEMPCODE_TESTER');
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_THEMES'))));
         }
 
         return null;
@@ -362,9 +362,9 @@ class Module_admin_themes
 
         require_javascript('themeing');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->manage_themes();
         }
         if ($type == 'choose_css') {
@@ -696,7 +696,7 @@ class Module_admin_themes
         $submit_name = do_lang_tempcode('ADD_THEME');
 
         if (addon_installed('themewizard')) {
-            $theme_wizard_url = build_url(array('page' => 'admin_themewizard', 'type' => 'misc'), get_module_zone('admin_themewizard'));
+            $theme_wizard_url = build_url(array('page' => 'admin_themewizard', 'type' => 'browse'), get_module_zone('admin_themewizard'));
             $text = do_lang_tempcode('DESCRIPTION_ADD_THEME_MANUAL', escape_html($theme_wizard_url->evaluate()));
         } else {
             $text = new Tempcode();
@@ -916,7 +916,7 @@ class Module_admin_themes
                 is_null($theme) ? null : array('menu/adminzone/style/themes/css', array('_SELF', array('type' => 'choose_css', 'theme' => $theme), '_SELF'), do_lang('EDIT_CSS')),
                 is_null($theme) ? null : array('menu/adminzone/style/themes/templates', array('_SELF', array('type' => 'edit_templates', 'theme' => $theme), '_SELF'), do_lang('EDIT_TEMPLATES')),
                 is_null($theme) ? null : array('menu/adminzone/style/themes/theme_images', array('_SELF', array('type' => 'manage_images', 'theme' => $theme, 'lang' => $lang), '_SELF'), do_lang('EDIT_THEME_IMAGES')),
-                array('menu/adminzone/style/themes/themes', array('_SELF', array('type' => 'misc'), '_SELF'), do_lang('MANAGE_THEMES'))
+                array('menu/adminzone/style/themes/themes', array('_SELF', array('type' => 'browse'), '_SELF'), do_lang('MANAGE_THEMES'))
             ),
             do_lang('MANAGE_THEMES'),
             null,

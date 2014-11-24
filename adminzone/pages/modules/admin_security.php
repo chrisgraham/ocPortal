@@ -93,13 +93,13 @@ class Module_admin_security
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('SECURITY_LOG', 'menu/adminzone/audit/security_log'),
+            'browse' => array('SECURITY_LOG', 'menu/adminzone/audit/security_log'),
         );
     }
 
@@ -115,13 +115,13 @@ class Module_admin_security
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('security');
 
         set_helper_panel_tutorial('tut_security');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             inform_non_canonical_parameter('alert_sort');
             inform_non_canonical_parameter('failed_sort');
 
@@ -133,7 +133,7 @@ class Module_admin_security
         }
 
         if ($type == 'view') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SECURITY_LOG'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SECURITY_LOG'))));
 
             $id = get_param_integer('id');
             $rows = $GLOBALS['SITE_DB']->query_select('hackattack', array('*'), array('id' => $id));
@@ -161,9 +161,9 @@ class Module_admin_security
         require_code('lookup');
         require_all_lang();
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->security_interface();
         }
         if ($type == 'clean') {
@@ -250,7 +250,7 @@ class Module_admin_security
         }
 
         // Redirect
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc', 'start' => get_param_integer('start'), 'max' => get_param_integer('max')), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse', 'start' => get_param_integer('start'), 'max' => get_param_integer('max')), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 

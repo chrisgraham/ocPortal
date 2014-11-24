@@ -55,7 +55,7 @@ class Hook_checklist_tickets
             $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1', array('_GUID' => 'h578142633c6f3d37776e82a869deb91'));
         }
 
-        $url = build_url(array('page' => 'tickets', 'type' => 'misc'), get_module_zone('tickets'));
+        $url = build_url(array('page' => 'tickets', 'type' => 'browse'), get_module_zone('tickets'));
 
         $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => '8202af47a2f1d24675acbe4c6d20c8b4', 'URL' => $url, 'STATUS' => $status, 'TASK' => do_lang_tempcode('SUPPORT_TICKETS'), 'INFO' => do_lang_tempcode('NUM_QUEUE', escape_html(integer_format($outstanding)))));
         return array(array($tpl, null, $outstanding, null));

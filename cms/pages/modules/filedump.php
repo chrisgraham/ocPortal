@@ -93,13 +93,13 @@ class Module_filedump
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('FILEDUMP', 'menu/cms/filedump'),
+            'browse' => array('FILEDUMP', 'menu/cms/filedump'),
         );
         if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) {
             $ret += array(
@@ -121,9 +121,9 @@ class Module_filedump
     {
         require_lang('filedump');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $place = filter_naughty(get_param('place', '/'));
             if (substr($place, -1, 1) != '/') {
                 $place .= '/';
@@ -219,9 +219,9 @@ class Module_filedump
         require_code('filedump');
         require_code('files2');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->do_gui();
         }
         if ($type == 'embed') {
@@ -1206,7 +1206,7 @@ class Module_filedump
         fix_permissions($path, 0777);
         sync_file($path);
 
-        $redirect_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'place' => $place), '_SELF');
+        $redirect_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'place' => $place), '_SELF');
 
         // Add description
         $test = $GLOBALS['SITE_DB']->query_select_value_if_there('filedump', 'description', array('name' => $name, 'path' => $place));

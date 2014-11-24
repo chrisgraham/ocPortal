@@ -47,7 +47,7 @@ class galleries_test_set extends ocp_test_case
 
         $this->cms_gal = new Module_cms_galleries();
         $this->cms_gal->pre_run();
-        $this->cms_gal->run_start('misc');
+        $this->cms_gal->run_start('browse');
         $this->cms_gal_alt = new Module_cms_galleries_alt();
         $this->cms_gal_category = new Module_cms_galleries_cat();
     }

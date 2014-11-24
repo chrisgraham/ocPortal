@@ -48,13 +48,13 @@ class Module_admin_ecommerce_logs
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('ECOMMERCE', 'menu/adminzone/audit/ecommerce/ecommerce'),
+            'browse' => array('ECOMMERCE', 'menu/adminzone/audit/ecommerce/ecommerce'),
             'trigger' => array('MANUAL_TRANSACTION', 'menu/rich_content/ecommerce/purchase'),
             'logs' => array('TRANSACTIONS', 'menu/adminzone/audit/ecommerce/transactions'),
             'profit_loss' => array('PROFIT_LOSS', 'menu/adminzone/audit/ecommerce/profit_loss'),
@@ -63,9 +63,9 @@ class Module_admin_ecommerce_logs
         );
 
         if ($support_crosslinks) {
-            $ret['_SEARCH:admin_invoices:misc'] = array('INVOICES', 'menu/adminzone/audit/ecommerce/invoices');
+            $ret['_SEARCH:admin_invoices:browse'] = array('INVOICES', 'menu/adminzone/audit/ecommerce/invoices');
             if (addon_installed('shopping')) {
-                $ret['_SEARCH:admin_orders:misc'] = array('shopping:ORDERS', 'menu/adminzone/audit/ecommerce/orders');
+                $ret['_SEARCH:admin_orders:browse'] = array('shopping:ORDERS', 'menu/adminzone/audit/ecommerce/orders');
             }
         }
         return $ret;
@@ -80,7 +80,7 @@ class Module_admin_ecommerce_logs
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ecommerce');
         require_css('ecommerce');
@@ -94,27 +94,27 @@ class Module_admin_ecommerce_logs
         }
 
         if ($type == 'cash_flow') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ECOMMERCE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ECOMMERCE'))));
             breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
             $this->title = get_screen_title('CASH_FLOW');
         }
 
         if ($type == 'profit_loss') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ECOMMERCE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ECOMMERCE'))));
             breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
             $this->title = get_screen_title('PROFIT_LOSS');
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('TRANSACTIONS');
 
             set_helper_panel_text(comcode_lang_string('DOC_ECOMMERCE'));
         }
 
         if ($type == 'trigger') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ECOMMERCE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ECOMMERCE'))));
 
             $this->title = get_screen_title('MANUAL_TRANSACTION');
         }
@@ -123,9 +123,9 @@ class Module_admin_ecommerce_logs
             breadcrumb_set_self(do_lang_tempcode('DONE'));
             $type_code = get_param('type_code', null);
             if (is_null($type_code)) {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:trigger', do_lang_tempcode('PRODUCT'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:trigger', do_lang_tempcode('PRODUCT'))));
             } else {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:trigger', do_lang_tempcode('PRODUCT')), array('_SELF:_SELF:trigger:type_code=' . $type_code, do_lang_tempcode('MANUAL_TRANSACTION'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:trigger', do_lang_tempcode('PRODUCT')), array('_SELF:_SELF:trigger:type_code=' . $type_code, do_lang_tempcode('MANUAL_TRANSACTION'))));
             }
 
             $this->title = get_screen_title('MANUAL_TRANSACTION');
@@ -160,10 +160,10 @@ class Module_admin_ecommerce_logs
             }
         }
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'logs') {
             return $this->logs();
@@ -196,7 +196,7 @@ class Module_admin_ecommerce_logs
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager($this->title, new Tempcode(),
@@ -205,8 +205,8 @@ class Module_admin_ecommerce_logs
                 array('menu/adminzone/audit/ecommerce/profit_loss', array('_SELF', array('type' => 'profit_loss'), '_SELF'), do_lang('PROFIT_LOSS')),
                 array('menu/rich_content/ecommerce/purchase', array('_SELF', array('type' => 'trigger'), '_SELF'), do_lang('MANUAL_TRANSACTION')),
                 array('menu/adminzone/audit/ecommerce/transactions', array('_SELF', array('type' => 'logs'), '_SELF'), do_lang('LOGS')),
-                array('menu/adminzone/audit/ecommerce/invoices', array('admin_invoices', array('type' => 'misc'), get_module_zone('admin_invoices')), do_lang('INVOICES')),
-                addon_installed('shopping') ? array('menu/adminzone/audit/ecommerce/orders', array('admin_orders', array('type' => 'misc'), get_module_zone('admin_orders')), do_lang('shopping:ORDERS')) : null,
+                array('menu/adminzone/audit/ecommerce/invoices', array('admin_invoices', array('type' => 'browse'), get_module_zone('admin_invoices')), do_lang('INVOICES')),
+                addon_installed('shopping') ? array('menu/adminzone/audit/ecommerce/orders', array('admin_orders', array('type' => 'browse'), get_module_zone('admin_orders')), do_lang('shopping:ORDERS')) : null,
                 array('menu/adminzone/audit/ecommerce/subscriptions', array('_SELF', array('type' => 'view_manual_subscriptions'), '_SELF'), do_lang('MANUAL_SUBSCRIPTIONS')),
             ),
             do_lang('ECOMMERCE')

@@ -190,13 +190,13 @@ class Module_shopping
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('SHOPPING', 'menu/rich_content/ecommerce/shopping_cart'),
+            'browse' => array('SHOPPING', 'menu/rich_content/ecommerce/shopping_cart'),
         );
         if (!$check_perms || !is_guest($member_id)) {
             $ret += array(
@@ -215,13 +215,13 @@ class Module_shopping
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('shopping');
         require_lang('catalogues');
 
-        if ($type == 'misc') {
-            breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1', do_lang_tempcode('CATALOGUES'))));
+        if ($type == 'browse') {
+            breadcrumb_set_parents(array(array('_SELF:catalogues:browse:ecommerce=1', do_lang_tempcode('CATALOGUES'))));
 
             $this->title = get_screen_title('SHOPPING');
         }
@@ -239,7 +239,7 @@ class Module_shopping
         }
 
         if ($type == 'finish') {
-            breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1', do_lang_tempcode('CATALOGUES')), array('_SELF:_SELF:misc', do_lang_tempcode('SHOPPING'))));
+            breadcrumb_set_parents(array(array('_SELF:catalogues:browse:ecommerce=1', do_lang_tempcode('CATALOGUES')), array('_SELF:_SELF:browse', do_lang_tempcode('SHOPPING'))));
 
             $this->title = get_screen_title('_PURCHASE_FINISHED');
         }
@@ -249,7 +249,7 @@ class Module_shopping
         }
 
         if ($type == 'order_det') {
-            breadcrumb_set_parents(array(array('_SELF:orders:misc', do_lang_tempcode('MY_ORDERS'))));
+            breadcrumb_set_parents(array(array('_SELF:orders:browse', do_lang_tempcode('MY_ORDERS'))));
 
             $id = get_param_integer('id');
             $this->title = get_screen_title('_MY_ORDER_DETAILS', true, array($id));
@@ -283,11 +283,11 @@ class Module_shopping
 
         $GLOBALS['NO_QUERY_LIMIT'] = true;
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         delete_incomplete_orders();
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->view_shopping_cart();
         }
         if ($type == 'add_item') {
@@ -467,7 +467,7 @@ class Module_shopping
 
         log_cart_actions('Added to cart');
 
-        $cart_view = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $cart_view = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
 
         return redirect_screen($this->title, $cart_view, do_lang_tempcode('SUCCESS'));
     }
@@ -522,7 +522,7 @@ class Module_shopping
         }
 
 
-        $cart_view = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $cart_view = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
 
         return redirect_screen($this->title, $cart_view, do_lang_tempcode('CART_UPDATED'));
     }
@@ -538,7 +538,7 @@ class Module_shopping
 
         empty_cart(true);
 
-        $cart_view = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $cart_view = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
 
         return redirect_screen($this->title, $cart_view, do_lang_tempcode('CART_EMPTIED'));
     }

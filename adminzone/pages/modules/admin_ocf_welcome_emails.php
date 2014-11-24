@@ -98,7 +98,7 @@ class Module_admin_ocf_welcome_emails extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -112,7 +112,7 @@ class Module_admin_ocf_welcome_emails extends Standard_crud_module
         }
 
         return array(
-            'misc' => array('WELCOME_EMAILS', 'menu/adminzone/setup/welcome_emails'),
+            'browse' => array('WELCOME_EMAILS', 'menu/adminzone/setup/welcome_emails'),
         ) + parent::get_entry_points();
     }
 
@@ -127,7 +127,7 @@ class Module_admin_ocf_welcome_emails extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf_welcome_emails');
         require_css('ocf_admin');
@@ -135,7 +135,7 @@ class Module_admin_ocf_welcome_emails extends Standard_crud_module
         set_helper_panel_tutorial('tut_members');
         set_helper_panel_text(comcode_lang_string('DOC_WELCOME_EMAIL_PREVIEW'));
 
-        breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS'))));
+        breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS'))));
 
         return parent::pre_run($top_level);
     }
@@ -177,8 +177,8 @@ class Module_admin_ocf_welcome_emails extends Standard_crud_module
         $this->edit_this_label = do_lang_tempcode('EDIT_THIS_WELCOME_EMAIL');
         $this->edit_one_label = do_lang_tempcode('EDIT_WELCOME_EMAIL');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         return new Tempcode();
     }
@@ -188,7 +188,7 @@ class Module_admin_ocf_welcome_emails extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         if (!cron_installed()) {
             attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK', escape_html(get_tutorial_url('tut_configuration'))), 'warn');

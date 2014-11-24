@@ -212,7 +212,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
                         $where = array('c_name' => $content_id, 'cc_parent_id' => null);
                         $rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('*'), $where, '', SITEMAP_MAX_ROWS_PER_LOOP, $start);
                         foreach ($rows as $child_row) {
-                            $child_page_link = $zone . ':' . $page . ':misc:' . strval($child_row['id']);
+                            $child_page_link = $zone . ':' . $page . ':browse:' . strval($child_row['id']);
                             $child_node = $child_hook_ob->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $child_row);
                             if ($child_node !== null) {
                                 if (($meta_gather & SITEMAP_GATHER_IMAGE) != 0) {

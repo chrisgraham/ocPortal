@@ -243,7 +243,7 @@ class Block_main_news
                 // Author
                 $author_url = new Tempcode();
                 if ($show_author) {
-                    $url_map = array('page' => 'authors', 'type' => 'misc', 'id' => $myrow['author']);
+                    $url_map = array('page' => 'authors', 'type' => 'browse', 'id' => $myrow['author']);
                     if ($attach_to_url_filter) {
                         $url_map += propagate_ocselect();
                     }
@@ -373,7 +373,7 @@ class Block_main_news
         }
 
         // Work out management URLs
-        $tmp = array('page' => 'news', 'type' => 'misc');
+        $tmp = array('page' => 'news', 'type' => 'browse');
         if ($filter != '*') {
             $tmp[is_numeric($filter) ? 'id' : 'filter'] = $filter;
         }

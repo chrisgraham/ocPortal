@@ -47,7 +47,7 @@ class Module_admin_sitemap
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -57,7 +57,7 @@ class Module_admin_sitemap
         );
         if (!has_js()) {
             $ret += array(
-                'misc' => array('SITEMAP_TOOLS', 'menu/adminzone/structure/sitemap/sitemap_editor'),
+                'browse' => array('SITEMAP_TOOLS', 'menu/adminzone/structure/sitemap/sitemap_editor'),
                 'move' => array('MOVE_PAGES', 'menu/adminzone/structure/sitemap/page_move'),
                 'delete' => array('DELETE_PAGES', 'menu/adminzone/structure/sitemap/page_delete'),
             );
@@ -74,7 +74,7 @@ class Module_admin_sitemap
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('zones');
 
@@ -82,7 +82,7 @@ class Module_admin_sitemap
             set_helper_panel_tutorial('tut_structure');
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             set_helper_panel_tutorial('tut_structure');
         }
 
@@ -94,40 +94,40 @@ class Module_admin_sitemap
         }
 
         if ($type == 'sitemap') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('PAGES'))));
 
             $this->title = get_screen_title('SITEMAP_EDITOR');
         }
 
         if ($type == 'delete') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('PAGES'))));
 
             $this->title = get_screen_title('DELETE_PAGES');
         }
 
         if ($type == '_delete') {
             breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES')), array('_SELF:_SELF:delete', do_lang_tempcode('DELETE_PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('PAGES')), array('_SELF:_SELF:delete', do_lang_tempcode('DELETE_PAGES'))));
 
             $this->title = get_screen_title('DELETE_PAGES');
         }
 
         if ($type == '__delete') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES')), array('_SELF:_SELF:delete', do_lang_tempcode('DELETE_PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('PAGES')), array('_SELF:_SELF:delete', do_lang_tempcode('DELETE_PAGES'))));
 
             $this->title = get_screen_title('DELETE_PAGES');
         }
 
         if ($type == 'move') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('PAGES'))));
 
             $this->title = get_screen_title('MOVE_PAGES');
         }
 
         if ($type == '_move') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES')), array('_SELF:_SELF:move', do_lang_tempcode('MOVE_PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('PAGES')), array('_SELF:_SELF:move', do_lang_tempcode('MOVE_PAGES'))));
 
             $this->title = get_screen_title('MOVE_PAGES');
         }
@@ -145,10 +145,10 @@ class Module_admin_sitemap
         require_code('zones2');
         require_code('zones3');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
-            return $this->misc(); // Do-next menu
+        if ($type == 'browse') {
+            return $this->browse(); // Do-next menu
         }
         if ($type == 'sitemap') {
             return $this->sitemap();
@@ -177,7 +177,7 @@ class Module_admin_sitemap
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('PAGES'), comcode_lang_string('DOC_PAGES'),

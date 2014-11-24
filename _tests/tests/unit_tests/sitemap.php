@@ -59,7 +59,7 @@ class sitemap_test_set extends ocp_test_case
             foreach ($children as $c) {
                 $_c = $this->flatten_sitemap($c);
                 foreach ($_c as $k => $__c) {
-                    if ($k != '' && $k != 'site:members:misc') {
+                    if ($k != '' && $k != 'site:members:browse') {
                         //if (isset($ret[$k])) { @var_dump($ret);@exit($k); }
                         $this->assertTrue(!isset($ret[$k]), 'Duplicated page: ' . $k);
                     }
@@ -77,7 +77,7 @@ class sitemap_test_set extends ocp_test_case
         $this->assertTrue(isset($this->flattened['adminzone:admin_config:base']));
 
         // Test we have an arbitrary resource, just to ensure things are still generating deeply
-        $this->assertTrue(isset($this->flattened[get_module_zone('calendar') . ':calendar:misc:1']));
+        $this->assertTrue(isset($this->flattened[get_module_zone('calendar') . ':calendar:browse:1']));
     }
 
     public function testPageGroupingHelpDocsDefined()

@@ -214,13 +214,13 @@ class Module_wiki
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('WIKI_HOME', 'menu/rich_content/wiki'),
+            'browse' => array('WIKI_HOME', 'menu/rich_content/wiki'),
             'random' => array('RANDOM_PAGE', 'menu/rich_content/wiki/random_page'),
             'changes' => array('WIKI_CHANGELOG', 'menu/rich_content/wiki/change_log'),
         );
@@ -243,14 +243,14 @@ class Module_wiki
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('wiki');
         require_code('wiki');
 
         set_feed_url('?mode=wiki&filter=');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             // Find our page by whatever means
             $find = get_param('find', '');
             if ($find != '') { // Allow quick 'find' remapping to a real ID
@@ -307,7 +307,7 @@ class Module_wiki
                 'modified' => '',
                 'type' => 'Wiki+ Page',
                 'title' => get_translated_text($page['title']),
-                'identifier' => '_SEARCH:wiki:misc:' . strval($page['id']),
+                'identifier' => '_SEARCH:wiki:browse:' . strval($page['id']),
                 'description' => get_translated_text($page['description']),
                 'numposts' => strval($num_posts),
                 'image' => find_theme_image('icons/48x48/menu/rich_content/wiki'),
@@ -324,7 +324,7 @@ class Module_wiki
                     $non_canonical[$n] = null;
                 }
             }
-            $CANONICAL_URL = get_self_url(true, false, $non_canonical + array('id' => $id, 'type' => 'misc', 'find' => null));
+            $CANONICAL_URL = get_self_url(true, false, $non_canonical + array('id' => $id, 'type' => 'browse', 'find' => null));
 
             $this->id = $id;
             $this->chain = $chain;
@@ -337,7 +337,7 @@ class Module_wiki
         }
 
         if ($type == 'changes') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('WIKI'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('WIKI'))));
 
             $this->title = get_screen_title('WIKI_CHANGELOG');
         }
@@ -388,7 +388,7 @@ class Module_wiki
      */
     public function run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_css('wiki');
 
@@ -396,12 +396,12 @@ class Module_wiki
         if ($type == 'findpost') {
             $post_id = get_param_integer('id');
             $page_id = $GLOBALS['SITE_DB']->query_select('wiki_posts', 'page_id', array('id' => $post_id));
-            $redirect = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $page_id), '_SELF', null, false, false, false, 'post_' . strval($post_id));
+            $redirect = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $page_id), '_SELF', null, false, false, false, 'post_' . strval($post_id));
             require_code('site2');
             assign_refresh($redirect, 0.0);
             return redirect_screen(get_screen_title('WIKI'), $redirect);
         }
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->page();
         }
         if ($type == 'random') {
@@ -448,7 +448,7 @@ class Module_wiki
             $pages = $GLOBALS['SITE_DB']->query_select('wiki_pages', array('*'), array('id' => $id), '', 1);
         }
         while (!array_key_exists(0, $pages));
-        $redir_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $id), '_SELF');
+        $redir_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $id), '_SELF');
         return redirect_screen(get_screen_title('RANDOM_PAGE'), $redir_url, '');
     }
 
@@ -517,7 +517,7 @@ class Module_wiki
                     $sup = ($myrow['hide_posts'] == 1) ? new Tempcode() : do_lang_tempcode('EMPTY');
                 }
 
-                $url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => wiki_derive_chain($child_id)), '_SELF');
+                $url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => wiki_derive_chain($child_id)), '_SELF');
                 $children->attach(do_template('WIKI_SUBCATEGORY_LINK', array('_GUID' => 'e9f9b504093220dc23a1ab59b3e8e5df', 'URL' => $url, 'CHILD' => $child_title, 'SUP' => $sup)));
 
                 $num_children++;
@@ -544,8 +544,8 @@ class Module_wiki
             $post_date = get_timezoned_date($myrow['date_and_time']);
 
             // Rating
-            actualise_rating(true, 'wiki_post', strval($post_id), build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $chain), '_SELF'), $current_title);
-            $rating_array = get_rating_simple_array(build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $chain), '_SELF'), $current_title, 'wiki_post', strval($post_id), 'WIKI_RATING_FORM', $poster);
+            actualise_rating(true, 'wiki_post', strval($post_id), build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $chain), '_SELF'), $current_title);
+            $rating_array = get_rating_simple_array(build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $chain), '_SELF'), $current_title, 'wiki_post', strval($post_id), 'WIKI_RATING_FORM', $poster);
             if (!is_null($rating_array)) {
                 $rating = do_template('WIKI_RATING', $rating_array);
             } else {
@@ -620,12 +620,12 @@ class Module_wiki
      */
     public function _render_buttons($chain, $id, $include_expansion, $may_post = true)
     {
-        $page_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $chain), '_SELF');
+        $page_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $chain), '_SELF');
         $pos = strpos($chain, '/');
         $id = intval(substr($chain, ($pos === false) ? 0 : ($pos + 1)));
         /*if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search'))) // Not enough space
         {
-            $search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
+            $search_url=build_url(array('page'=>'search','type'=>'browse','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
             $search_button=do_template('BUTTON_SCREEN',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
         } else */
         $search_button = new Tempcode();
@@ -744,7 +744,7 @@ class Module_wiki
      */
     public function do_wiki_merge_interface()
     {
-        $_redir_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => get_param('id', false, true)), '_SELF');
+        $_redir_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => get_param('id', false, true)), '_SELF');
         $redir_url = $_redir_url->evaluate();
         $merge_url = build_url(array('page' => '_SELF', 'redirect' => $redir_url, 'type' => 'do', 'id' => get_param('id', false, true)), '_SELF', null, true);
 
@@ -850,7 +850,7 @@ class Module_wiki
         }
         check_edit_permission('low', $original_poster, array('wiki_page', $true_page_id), 'cms_wiki');
 
-        $_redir_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => get_param('id', false, true)), '_SELF');
+        $_redir_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => get_param('id', false, true)), '_SELF');
         $redir_url = $_redir_url->evaluate();
         $move_url = build_url(array('page' => '_SELF', 'redirect' => $redir_url, 'type' => '_move', 'id' => get_param('id', false, true)), '_SELF');
 
@@ -1020,7 +1020,7 @@ class Module_wiki
         }
 
         if (addon_installed('points')) {
-            $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
+            $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
             $_login_url = escape_html($login_url->evaluate());
             if ((is_guest()) && ((get_forum_type() != 'ocf') || (has_actual_page_access(get_member(), 'join')))) {
                 $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT', $_login_url)));
@@ -1041,7 +1041,7 @@ class Module_wiki
 
         $breadcrumbs = wiki_breadcrumbs($chain, null, true, true);
 
-        $_redir_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => get_param('id', strval($id), true)), '_SELF');
+        $_redir_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => get_param('id', strval($id), true)), '_SELF');
         $redir_url = $_redir_url->evaluate();
         $post_url = build_url(array('page' => '_SELF', 'id' => get_param('id', strval(db_get_first_id()), false), 'redirect' => $redir_url, 'type' => '_post'), '_SELF');
 

@@ -46,7 +46,7 @@ class Module_topics
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -83,7 +83,7 @@ class Module_topics
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
 
@@ -103,7 +103,7 @@ class Module_topics
             inform_non_canonical_parameter('intended_solely_for');
         }
 
-        if ($type == 'misc' || $type == 'whisper') {
+        if ($type == 'browse' || $type == 'whisper') {
             attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
         }
 
@@ -130,7 +130,7 @@ class Module_topics
 
         require_code('form_templates');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         if (strpos($type, '__') !== false) {
             list($type, $_GET['id']) = explode('__', $type, 2);
@@ -224,7 +224,7 @@ class Module_topics
             return $this->mass_multimod();
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
         }
 
@@ -243,7 +243,7 @@ class Module_topics
         $text = paragraph(do_lang_tempcode('OPTIONAL_REASON'));
         $submit_icon = 'buttons__proceed';
         $submit_name = do_lang_tempcode('PROCEED');
-        $type = '_' . get_param('type', 'misc');
+        $type = '_' . get_param('type', 'browse');
         $post_url = build_url(array('page' => '_SELF', 'type' => $type, 'id' => get_param_integer('id', -1)), '_SELF', null, true);
         $fields = new Tempcode();
         $hidden = new Tempcode();
@@ -592,7 +592,7 @@ class Module_topics
                 }
             } else {
                 if (!is_numeric($_to_topic_id)) {
-                    $_to_topic_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('url_id_monikers', 'm_resource_id', array('m_resource_page' => 'topicview', 'm_resource_type' => 'misc', 'm_moniker' => urldecode($_to_topic_id)));
+                    $_to_topic_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('url_id_monikers', 'm_resource_id', array('m_resource_page' => 'topicview', 'm_resource_type' => 'browse', 'm_moniker' => urldecode($_to_topic_id)));
                     if (is_null($_to_topic_id)) {
                         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
                     }
@@ -929,7 +929,7 @@ class Module_topics
     {
         require_lang('ocf_multi_moderations');
 
-        $mm_id = intval(substr(get_param('type', 'misc'), 4));
+        $mm_id = intval(substr(get_param('type', 'browse'), 4));
 
         $topics = $this->get_markers();
         if (count($topics) == 0) {
@@ -1653,7 +1653,7 @@ class Module_topics
 
         // Note about points?
         if (addon_installed('points')) {
-            $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
+            $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
             $_login_url = escape_html($login_url->evaluate());
             if ((is_guest()) && ((get_forum_type() != 'ocf') || (has_actual_page_access(get_member(), 'join')))) {
                 $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT', $_login_url)));
@@ -1812,7 +1812,7 @@ class Module_topics
 
         $hidden_fields = new Tempcode();
         $hidden_fields->attach(form_input_hidden('topic_id', strval($topic_id)));
-        $hidden_fields->attach(form_input_hidden('from_url', get_self_url(true, false, array('type' => get_param('type', 'misc')))));
+        $hidden_fields->attach(form_input_hidden('from_url', get_self_url(true, false, array('type' => get_param('type', 'browse')))));
 
         $map = array('page' => '_SELF', 'type' => '_add_reply', 'parent_id' => $parent_id);
         $test = get_param_integer('kfs' . (is_null($forum_id) ? '' : strval($forum_id)), -1);
@@ -1899,7 +1899,7 @@ class Module_topics
         }
 
         if (addon_installed('points')) {
-            $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
+            $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
             $_login_url = escape_html($login_url->evaluate());
             if ((is_guest()) && ((get_forum_type() != 'ocf') || (has_actual_page_access(get_member(), 'join')))) {
                 $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT', $_login_url)));
@@ -2056,7 +2056,7 @@ class Module_topics
         }
 
         if (addon_installed('points')) {
-            $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
+            $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
             $_login_url = escape_html($login_url->evaluate());
             if ((is_guest()) && ((get_forum_type() != 'ocf') || (has_actual_page_access(get_member(), 'join')))) {
                 $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT', $_login_url)));
@@ -2354,7 +2354,7 @@ END;
             require_code('users2');
             if ((has_actual_page_access(get_modal_user(), 'forumview')) && (has_category_access(get_modal_user(), 'forums', strval($forum_id)))) {
                 require_code('activities');
-                syndicate_described_activity($first_post ? 'ocf:ACTIVITY_ADD_TOPIC' : 'ocf:ACTIVITY_ADD_POST_IN', $first_post ? $title : $topic_title, '', '', '_SEARCH:topicview:misc:' . strval($topic_id) . '#post_' . strval($post_id), '', '', 'ocf_forum');
+                syndicate_described_activity($first_post ? 'ocf:ACTIVITY_ADD_TOPIC' : 'ocf:ACTIVITY_ADD_POST_IN', $first_post ? $title : $topic_title, '', '', '_SEARCH:topicview:browse:' . strval($topic_id) . '#post_' . strval($post_id), '', '', 'ocf_forum');
             }
         }
 
@@ -2744,7 +2744,7 @@ END;
         if (get_param_integer('try_validate', 0) == 1) {
             $map['try_validate'] = 1;
         }
-        if ((get_param('type', 'misc') == '_add_reply') && (post_param_integer('validated', 0) == 1)) {
+        if ((get_param('type', 'browse') == '_add_reply') && (post_param_integer('validated', 0) == 1)) {
             $map['re_validate'] = 1;
         }
         $post_url = build_url($map, '_SELF');
@@ -3781,7 +3781,7 @@ END;
     {
         require_lang('ocf_multi_moderations');
 
-        $mm_id = intval(substr(get_param('type', 'misc'), 3));
+        $mm_id = intval(substr(get_param('type', 'browse'), 3));
         $topic_id = get_param_integer('id');
 
         $this->check_has_mod_access($topic_id);
@@ -3890,7 +3890,7 @@ END;
         $title = get_screen_title('POST_HISTORY');
 
         // We should be somewhere else entirely - it's just our moderator action list took us here
-        $url = build_url(array('page' => 'admin_ocf_history', 'type' => 'misc', 'topic_id' => get_param_integer('id')), 'adminzone');
+        $url = build_url(array('page' => 'admin_ocf_history', 'type' => 'browse', 'topic_id' => get_param_integer('id')), 'adminzone');
         require_code('site2');
         assign_refresh($url->evaluate(), 0.0);
         return redirect_screen($title, $url);

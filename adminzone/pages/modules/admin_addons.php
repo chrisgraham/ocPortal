@@ -47,13 +47,13 @@ class Module_admin_addons
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('ADDONS', 'menu/adminzone/structure/addons'),
+            'browse' => array('ADDONS', 'menu/adminzone/structure/addons'),
             'modules' => array('MODULE_MANAGEMENT', 'menu/_generic_admin/component'),
             'addon_import' => array('IMPORT_ADDON', 'menu/_generic_admin/import'),
             'addon_export' => array('EXPORT_ADDON', 'menu/_generic_admin/export'),
@@ -124,18 +124,18 @@ class Module_admin_addons
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('addons');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             set_helper_panel_tutorial('tut_adv_configuration');
 
             $this->title = get_screen_title('ADDONS');
         }
 
         if ($type == 'addon_export') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
 
             $this->title = get_screen_title('EXPORT_ADDON');
         }
@@ -145,101 +145,101 @@ class Module_admin_addons
                 set_helper_panel_tutorial('tut_releasing_themes');
             }
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS')), array('_SELF:_SELF:misc', do_lang_tempcode('EXPORT_ADDON'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS')), array('_SELF:_SELF:browse', do_lang_tempcode('EXPORT_ADDON'))));
             breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
 
             $this->title = get_screen_title('EXPORT_ADDON');
         }
 
         if ($type == '__addon_export') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('EXPORT_ADDON');
         }
 
         if ($type == 'addon_import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
 
             $this->title = get_screen_title('IMPORT_ADDON');
         }
 
         if ($type == '_addon_import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('IMPORT_ADDON');
         }
 
         if ($type == 'addon_install') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
 
             $this->title = get_screen_title('INSTALL_ADDON');
         }
 
         if ($type == '_addon_install') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('INSTALL_ADDON');
         }
 
         if ($type == 'addon_uninstall') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
 
             $this->title = get_screen_title('UNINSTALL_ADDON');
         }
 
         if ($type == '_addon_uninstall') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('UNINSTALL_ADDON');
         }
 
         if ($type == 'multi_action') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
 
             $this->title = get_screen_title('INSTALL_AND_UNINSTALL');
         }
 
         if ($type == '_multi_action') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('INSTALL_AND_UNINSTALL');
         }
 
         if ($type == 'reinstall') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('REINSTALL_MODULE');
         }
 
         if ($type == 'uninstall') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('UNINSTALL_MODULE');
         }
 
         if ($type == 'upgrade') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('UPGRADE_MODULE');
         }
 
         if ($type == 'modules') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
             $this->title = get_screen_title('MODULE_MANAGEMENT');
         }
 
         if ($type == 'view') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ADDONS')), array('_SELF:_SELF:modules', do_lang_tempcode('CHOOSE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('ADDONS')), array('_SELF:_SELF:modules', do_lang_tempcode('CHOOSE'))));
 
             $this->title = get_screen_title('MODULE_MANAGEMENT');
         }
@@ -265,9 +265,9 @@ class Module_admin_addons
         disable_php_memory_limit(); // Choice of what to export, or tricky import
 
         // Decide what we're doing
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->gui();
         }
         if ($type == 'addon_export') {
@@ -624,7 +624,7 @@ class Module_admin_addons
         erase_cached_templates();
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -701,7 +701,7 @@ class Module_admin_addons
             $url = build_url(array('page' => 'admin_themes', 'type' => 'edit_theme', 'theme' => $theme), 'adminzone');
             return redirect_screen($this->title, $url, do_lang_tempcode('INSTALL_THEME_SUCCESS'));
         }
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -776,7 +776,7 @@ class Module_admin_addons
         erase_cached_templates();
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -1026,7 +1026,7 @@ class Module_admin_addons
 
         $map = array('page' => '_SELF', 'type' => '__addon_export');
         if (!is_null($theme)) {
-            $_redirect = build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone');
+            $_redirect = build_url(array('page' => 'admin_themes', 'type' => 'browse'), 'adminzone');
             $redirect = $_redirect->evaluate();
             $map['redirect'] = $redirect;
             $map['theme'] = $theme;
@@ -1082,7 +1082,7 @@ class Module_admin_addons
         log_it('EXPORT_ADDON', $file);
 
         // Show it worked / Refresh
-        $_url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $_url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         $url = $_url->evaluate();
         $url = get_param('redirect', $url);
         return redirect_screen($this->title, $url, do_lang_tempcode('ADDON_CREATED', escape_html($download_url)));

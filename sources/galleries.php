@@ -204,7 +204,7 @@ function render_gallery_box($myrow, $root = 'root', $show_member_stats_if_approp
     $is_member = !is_null($member_id);
 
     // URL
-    $map = array('page' => 'galleries', 'type' => 'misc', 'keep_gallery_root' => ($root == 'root') ? null : $root, 'id' => $myrow['name']);
+    $map = array('page' => 'galleries', 'type' => 'browse', 'keep_gallery_root' => ($root == 'root') ? null : $root, 'id' => $myrow['name']);
     if (!is_null($root)) {
         $map['keep_gallery_root'] = $root;
     }
@@ -849,7 +849,7 @@ function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = tru
         $gallery = 'root'; // To fix corrupt data
     }
 
-    $url_map = array('page' => 'galleries', 'type' => 'misc', 'id' => $gallery, 'keep_gallery_root' => ($root == 'root') ? null : $root);
+    $url_map = array('page' => 'galleries', 'type' => 'browse', 'id' => $gallery, 'keep_gallery_root' => ($root == 'root') ? null : $root);
     if (get_page_name() == 'galleries') {
         $url_map += propagate_ocselect();
     }
@@ -888,7 +888,7 @@ function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = tru
         $owner = get_member_id_from_gallery_name($gallery, null, true);
         if (!is_null($owner)) {
             $below = new Tempcode();
-            foreach (array(array('_SEARCH:members:misc', do_lang_tempcode('MEMBERS')), array('_SEARCH:members:view:' . strval($owner) . '#tab__galleries', do_lang_tempcode('ocf:MEMBER_PROFILE', escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner, true))))) as $i => $bits) {
+            foreach (array(array('_SEARCH:members:browse', do_lang_tempcode('MEMBERS')), array('_SEARCH:members:view:' . strval($owner) . '#tab__galleries', do_lang_tempcode('ocf:MEMBER_PROFILE', escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner, true))))) as $i => $bits) {
                 list($page_link, $title) = $bits;
                 list($zone, $map, $hash) = page_link_decode($page_link);
                 if (get_page_name() == 'galleries') {

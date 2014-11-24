@@ -54,7 +54,7 @@ class Block_main_count
         // The counter we're using
         $name = array_key_exists('param', $map) ? $map['param'] : '';
         if ($name == '-') {
-            $name = get_page_name() . ':' . get_param('type', 'misc') . ':' . get_param('id', '');
+            $name = get_page_name() . ':' . get_param('type', 'browse') . ':' . get_param('id', '');
         }
         if ($name == '') {
             $name = 'hits';

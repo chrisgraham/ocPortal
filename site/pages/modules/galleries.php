@@ -225,13 +225,13 @@ class Module_galleries
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('GALLERIES_HOME', 'menu/rich_content/galleries'),
+            'browse' => array('GALLERIES_HOME', 'menu/rich_content/galleries'),
         );
     }
 
@@ -257,7 +257,7 @@ class Module_galleries
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_code('galleries');
         require_lang('galleries');
@@ -272,7 +272,7 @@ class Module_galleries
             }
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $cat = get_param('id', 'root');
             set_feed_url('?mode=galleries&filter=' . $cat);
 
@@ -345,7 +345,7 @@ class Module_galleries
                 'modified' => '',
                 'type' => 'Gallery',
                 'title' => $fullname,
-                'identifier' => '_SEARCH:galleries:misc:' . $cat,
+                'identifier' => '_SEARCH:galleries:browse:' . $cat,
                 'description' => get_translated_text($myrow['description']),
                 //'category'=>???,
             ));
@@ -490,8 +490,8 @@ class Module_galleries
         require_javascript('galleries');
 
         // What are we doing?
-        $type = get_param('type', 'misc');
-        if ($type == 'misc') {
+        $type = get_param('type', 'browse');
+        if ($type == 'browse') {
             return $this->do_gallery();
         }
         if ($type == 'image') {
@@ -901,7 +901,7 @@ class Module_galleries
             $entry_title = get_translated_text($row['title']);
             $entry_description = get_translated_tempcode('galleries', $row, 'description');
 
-            $probe_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $cat, 'flow_mode_interface' => get_param_integer('flow_mode_interface', null), 'probe_type' => $type, 'probe_id' => $row['id'], 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select), '_SELF');
+            $probe_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $cat, 'flow_mode_interface' => get_param_integer('flow_mode_interface', null), 'probe_type' => $type, 'probe_id' => $row['id'], 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select), '_SELF');
             $view_url_2 = build_url(array('page' => '_SELF', 'type' => $type, 'id' => $row['id'], 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select), '_SELF');
             if (array_key_exists('url', $row)) {
                 $thumb_url = ensure_thumbnail($row['url'], $row['thumb_url'], 'galleries', 'images', $row['id']);
@@ -1094,7 +1094,7 @@ class Module_galleries
 
         if ((get_value('no_individual_gallery_view') === '1') && ($GLOBALS['SITE_DB']->query_select_value('galleries', 'flow_mode_interface', array('name' => $cat)) == '1')) {
             require_code('site2');
-            assign_refresh(build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $cat, 'probe_id' => $id, 'probe_type' => 'image'), '_SELF'), 0.0);
+            assign_refresh(build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $cat, 'probe_id' => $id, 'probe_type' => 'image'), '_SELF'), 0.0);
         }
 
         // Views
@@ -1212,7 +1212,7 @@ class Module_galleries
 
         if ((get_value('no_individual_gallery_view') === '1') && ($GLOBALS['SITE_DB']->query_select_value('galleries', 'flow_mode_interface', array('name' => $cat)) == '1')) {
             require_code('site2');
-            assign_refresh(build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $cat, 'probe_id' => $id, 'probe_type' => 'video'), '_SELF'), 0.0);
+            assign_refresh(build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $cat, 'probe_id' => $id, 'probe_type' => 'video'), '_SELF'), 0.0);
         }
 
         // Views
@@ -1478,7 +1478,7 @@ class Module_galleries
 
         // Link to show more. Preserve info about where we were
         $slideshow_url = build_url(array('page' => '_SELF', 'type' => $first_type, 'wide_high' => 1, 'id' => $first_id, 'slideshow' => 1, 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select) + propagate_ocselect(), '_SELF', null, true);
-        $more_url = is_null($cat) ? null : build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => $cat, 'gallery_entries_start' => ($start == 0) ? null : $start, 'gallery_entries_max' => ($max == get_default_gallery_max()) ? null : $max, 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select) + propagate_ocselect(), '_SELF');
+        $more_url = is_null($cat) ? null : build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $cat, 'gallery_entries_start' => ($start == 0) ? null : $start, 'gallery_entries_max' => ($max == get_default_gallery_max()) ? null : $max, 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select) + propagate_ocselect(), '_SELF');
 
         // Only one entry?
         if ($n == 1) {

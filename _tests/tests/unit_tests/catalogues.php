@@ -38,7 +38,7 @@ class catalogues_test_set extends ocp_test_case
         $this->cms_catalogues_cat = new Module_cms_catalogues_cat();
         $this->cms_catalogues_alt = new Module_cms_catalogues_alt();
         $this->cms_catalogues->pre_run();
-        $this->cms_catalogues->run_start('misc');
+        $this->cms_catalogues->run_start('browse');
     }
 
     public function testAddCatalogueUI()

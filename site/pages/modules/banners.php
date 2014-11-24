@@ -213,7 +213,7 @@ class Module_banners
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -233,7 +233,7 @@ class Module_banners
         }
 
         return array(
-            'misc' => array('BANNERS', 'menu/cms/banners'),
+            'browse' => array('BANNERS', 'menu/cms/banners'),
         );
     }
 
@@ -248,11 +248,11 @@ class Module_banners
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('banners');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('BANNERS');
         }
 
@@ -278,7 +278,7 @@ class Module_banners
                 //'category'=>$type,
             ));
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('BANNERS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('BANNERS'))));
 
             $this->title = get_screen_title('BANNER_INFORMATION');
 
@@ -303,9 +303,9 @@ class Module_banners
         require_code('banners');
 
         // Decide what we're doing
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->choose_banner();
         }
         if ($type == 'view') {
@@ -390,7 +390,7 @@ class Module_banners
             }
 
             $fr = array(
-                $row['name'],
+                do_template('COMCODE_TELETYPE', array('CONTENT' => escape_html($row['name']))),
                 ($row['b_type'] == '') ? do_lang('GENERAL') : $row['b_type'],
                 //$deployment_agreement,  Too much detail
                 //integer_format($row['campaign_remaining']),  Too much detail

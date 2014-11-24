@@ -47,7 +47,7 @@ class Hook_task_notify_topics_moved
                 $topic_id = $_topic['id'];
                 $topic_title = $_topic['t_cache_first_title'];
 
-                suggest_new_idmoniker_for('topicview', 'misc', strval($topic_id), '', $topic_title);
+                suggest_new_idmoniker_for('topicview', 'browse', strval($topic_id), '', $topic_title);
 
                 // Now lets inform people tracking the topic that it has moved
                 $subject = do_lang('TOPIC_MOVE_MAIL_SUBJECT', get_site_name(), $topic_title);

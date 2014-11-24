@@ -41,11 +41,11 @@ class Hook_members_ecommerce
 
         /*  Now we provide this link under the embedded list of subscriptions
         if ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)',array('s_member_id'=>$member_id))!=0)
-            $modules[]=array('views',do_lang_tempcode('MY_SUBSCRIPTIONS'),build_url(array('page'=>'subscriptions','type'=>'misc','id'=>$member_id),get_module_zone('subscriptions')),'menu/adminzone/audit/ecommerce/subscriptions');
+            $modules[]=array('views',do_lang_tempcode('MY_SUBSCRIPTIONS'),build_url(array('page'=>'subscriptions','type'=>'browse','id'=>$member_id),get_module_zone('subscriptions')),'menu/adminzone/audit/ecommerce/subscriptions');
         */
 
         if ($GLOBALS['SITE_DB']->query_select_value('invoices', 'COUNT(*)', array('i_member_id' => $member_id)) != 0) {
-            $modules[] = array('views', do_lang_tempcode('MY_INVOICES'), build_url(array('page' => 'invoices', 'type' => 'misc', 'id' => $member_id), get_module_zone('invoices')), 'menu/adminzone/audit/ecommerce/invoices');
+            $modules[] = array('views', do_lang_tempcode('MY_INVOICES'), build_url(array('page' => 'invoices', 'type' => 'browse', 'id' => $member_id), get_module_zone('invoices')), 'menu/adminzone/audit/ecommerce/invoices');
         }
 
         if (has_actual_page_access(get_member(), 'admin_ecommerce', get_module_zone('admin_ecommerce'))) {

@@ -100,7 +100,7 @@ function do_search_block($map)
     unset($url_map['title']);
     unset($url_map['limit_to']);
     unset($url_map['block']);
-    $full_link = build_url(array('page' => 'search', 'type' => 'misc') + $url_map + $extra + $extrax, $zone);
+    $full_link = build_url(array('page' => 'search', 'type' => 'browse') + $url_map + $extra + $extrax, $zone);
 
     if ((!array_key_exists('content', $input_fields)) && (count($input_fields) != 1)) {
         $extra['content'] = '';

@@ -1859,7 +1859,7 @@ function render_catalogue_entry_screen($id, $no_title = false, $attach_to_url_fi
 
     breadcrumb_add_segment($map['BREADCRUMBS'], protect_from_escaping('<span>' . $title_to_use->evaluate() . '</span>'));
     if ($root === null) {
-        breadcrumb_set_parents(array(array('_SELF:_SELF:misc' . ($ecommerce ? ':ecommerce=1' : ''), do_lang('CATALOGUES'))));
+        breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . ($ecommerce ? ':ecommerce=1' : ''), do_lang('CATALOGUES'))));
     }
 
     set_extra_request_metadata(array(

@@ -46,13 +46,13 @@ class Module_admin_email_log
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('EMAIL_LOG', 'menu/adminzone/audit/email_log'),
+            'browse' => array('EMAIL_LOG', 'menu/adminzone/audit/email_log'),
         );
     }
 
@@ -65,11 +65,11 @@ class Module_admin_email_log
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('email_log');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('EMAIL_LOG');
         }
 
@@ -95,9 +95,9 @@ class Module_admin_email_log
      */
     public function run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->show();
         }
         if ($type == 'edit') {
@@ -358,7 +358,7 @@ class Module_admin_email_log
                 break;
         }
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -387,7 +387,7 @@ class Module_admin_email_log
 
         $GLOBALS['SITE_DB']->query_update('logged_mail_messages', array('m_queued' => 0), array('m_queued' => 1));
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SENT_NUM', escape_html(integer_format(count($rows)))));
     }
 
@@ -402,7 +402,7 @@ class Module_admin_email_log
 
         $GLOBALS['SITE_DB']->query_delete('logged_mail_messages', array('m_queued' => 1));
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('DELETE_NUM', escape_html(integer_format($count))));
     }
 }

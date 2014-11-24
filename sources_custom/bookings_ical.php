@@ -66,7 +66,7 @@ function bookables_ical_script()
         echo "CLASS:" . (($event['price'] == 0.0) ? 'PUBLIC' : 'PRIVATE') . "\n";
         echo "STATUS:" . (($event['enabled'] == 1) ? 'CONFIRMED' : 'TENTATIVE') . "\n";
         echo "UID:" . ical_escape(strval($event['id']) . '-bookable@' . get_base_url()) . "\n";
-        $_url = build_url(array('page' => 'booking', 'type' => 'misc', 'filter' => $event['id']), get_module_zone('booking'), null, false, false, true);
+        $_url = build_url(array('page' => 'booking', 'type' => 'browse', 'filter' => $event['id']), get_module_zone('booking'), null, false, false, true);
         $url = $_url->evaluate();
         echo "URL:" . ical_escape($url) . "\n";
 

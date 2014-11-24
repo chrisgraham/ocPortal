@@ -501,10 +501,10 @@ function handle_symbol_preprocessing($bit, &$children)
                     return;
                 }
                 if (!array_key_exists('type', $url_parts)) {
-                    $url_parts['type'] = 'misc';
+                    $url_parts['type'] = 'browse';
                 }
                 if (is_null($url_parts['type'])) {
-                    $url_parts['type'] = 'misc'; // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+                    $url_parts['type'] = 'browse'; // NULL means "do not take from environment"; so we default it to 'browse' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
                 }
                 if (!array_key_exists('page', $url_parts)) {
                     return;

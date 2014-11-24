@@ -340,7 +340,7 @@ function edit_download_category($category_id, $category, $parent_id, $descriptio
     }
 
     require_code('urls2');
-    suggest_new_idmoniker_for('downloads', 'misc', strval($category_id), '', $category);
+    suggest_new_idmoniker_for('downloads', 'browse', strval($category_id), '', $category);
 
     $rows = $GLOBALS['SITE_DB']->query_select('download_categories', array('category', 'description'), array('id' => $category_id), '', 1);
     if (!array_key_exists(0, $rows)) {

@@ -155,7 +155,7 @@ class Module_news
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -163,7 +163,7 @@ class Module_news
         $has_blogs = ($GLOBALS['SITE_DB']->query_select_value('news_categories', 'COUNT(*)', null, 'WHERE nc_owner IS NOT NULL') > 0);
 
         $ret = array(
-            'misc' => array('NEWS_ARCHIVE', 'menu/rich_content/news'),
+            'browse' => array('NEWS_ARCHIVE', 'menu/rich_content/news'),
             'cat_select' => array('NEWS_CATEGORIES', 'menu/_generic_admin/view_archive'),
         );
         if ($has_blogs) {
@@ -193,7 +193,7 @@ class Module_news
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('news');
 
@@ -213,7 +213,7 @@ class Module_news
             $this->title = get_screen_title('BLOGS');
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $blog = get_param_integer('blog', null);
 
             $filter = get_param('id', get_param('filter', '*'));
@@ -294,7 +294,7 @@ class Module_news
                     $parent_title = do_lang_tempcode('NEWS_ARCHIVE');
                 }
             }
-            breadcrumb_set_parents(array($first_bc, array('_SELF:_SELF:misc' . (($blog === 1) ? ':blog=1' : (($blog === 0) ? ':blog=0' : '')) . (($filter == '*') ? '' : (is_numeric($filter) ? (':id=' . $filter) : (':filter=' . $filter))) . (($filter_and == '*') ? '' : (':filter_and=' . $filter_and)) . propagate_ocselect_page_link(), $parent_title)));
+            breadcrumb_set_parents(array($first_bc, array('_SELF:_SELF:browse' . (($blog === 1) ? ':blog=1' : (($blog === 0) ? ':blog=0' : '')) . (($filter == '*') ? '' : (is_numeric($filter) ? (':id=' . $filter) : (':filter=' . $filter))) . (($filter_and == '*') ? '' : (':filter_and=' . $filter_and)) . propagate_ocselect_page_link(), $parent_title)));
             breadcrumb_set_self(get_translated_tempcode('news', $myrow, 'title'));
 
             // Permissions
@@ -386,12 +386,12 @@ class Module_news
         require_code('news');
         require_css('news');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         if ($type == 'view') {
             return $this->view_news();
         }
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->news_archive();
         }
         if ($type == 'cat_select') {
@@ -555,7 +555,7 @@ class Module_news
 
         // Load details
         $date = get_timezoned_date($myrow['date_and_time']);
-        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $myrow['author']), get_module_zone('authors')) : new Tempcode();
+        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'browse', 'id' => $myrow['author']), get_module_zone('authors')) : new Tempcode();
         $author = $myrow['author'];
         $news_full_plain = get_translated_text($myrow['news_article']);
         if ($news_full->is_empty()) {
@@ -587,7 +587,7 @@ class Module_news
         } else {
             $edit_url = new Tempcode();
         }
-        $tmp = array('page' => '_SELF', 'type' => 'misc');
+        $tmp = array('page' => '_SELF', 'type' => 'browse');
         if ($filter != '*') {
             $tmp[is_numeric($filter) ? 'id' : 'filter'] = $filter;
         }

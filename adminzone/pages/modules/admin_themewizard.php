@@ -46,13 +46,13 @@ class Module_admin_themewizard
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('THEMEWIZARD', 'menu/adminzone/style/themes/themewizard'),
+            'browse' => array('THEMEWIZARD', 'menu/adminzone/style/themes/themewizard'),
             'make_logo' => array('LOGOWIZARD', 'menu/adminzone/style/themes/logowizard'),
         );
 
@@ -68,7 +68,7 @@ class Module_admin_themewizard
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('themes');
 
@@ -80,7 +80,7 @@ class Module_admin_themewizard
             set_helper_panel_text(comcode_lang_string('DOC_THEMEWIZARD'));
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             breadcrumb_set_self(do_lang_tempcode('THEMEWIZARD'));
 
             $this->title = get_screen_title('_THEMEWIZARD', true, array(integer_format(1), integer_format(4)));
@@ -99,7 +99,7 @@ class Module_admin_themewizard
         }
 
         if ($type == 'step2' || $type == 'step3' || $type == 'step4') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('THEMEWIZARD'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('THEMEWIZARD'))));
         }
 
         if ($type == 'make_logo') {
@@ -134,9 +134,9 @@ class Module_admin_themewizard
         require_code('themewizard');
         require_css('themes_editor');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->step1();
         }
         if ($type == 'step2') {
@@ -267,7 +267,7 @@ class Module_admin_themewizard
         $theme['DARK'] = $_theme['dark'];
         $theme['SEED'] = $_theme['seed'];
         $theme['TITLE'] = $this->title;
-        $theme['CHANGE_URL'] = build_url(array('page' => '_SELF', 'type' => 'misc', 'source_theme' => $source_theme, 'algorithm' => $algorithm, 'seed' => $seed, 'dark' => $dark, 'inherit_css' => $inherit_css, 'themename' => $themename), '_SELF');
+        $theme['CHANGE_URL'] = build_url(array('page' => '_SELF', 'type' => 'browse', 'source_theme' => $source_theme, 'algorithm' => $algorithm, 'seed' => $seed, 'dark' => $dark, 'inherit_css' => $inherit_css, 'themename' => $themename), '_SELF');
         $theme['STAGE3_URL'] = build_url(array('page' => '_SELF', 'type' => 'step3', 'source_theme' => $source_theme, 'algorithm' => $algorithm, 'seed' => $seed, 'dark' => $dark, 'inherit_css' => $inherit_css, 'themename' => $themename), '_SELF');
 
         return do_template('THEMEWIZARD_2_SCREEN', $theme);
@@ -364,7 +364,7 @@ class Module_admin_themewizard
                 array('menu/adminzone/style/themes/css', array('admin_themes', array('type' => 'choose_css', 'theme' => $themename), get_module_zone('admin_themes'))),
                 array('menu/adminzone/style/themes/templates', array('admin_themes', array('type' => 'edit_templates', 'theme' => $themename), get_module_zone('admin_themes'))),
                 array('menu/adminzone/style/themes/theme_images', array('admin_themes', array('type' => 'manage_images', 'theme' => $themename), get_module_zone('admin_themes'))),
-                array('menu/adminzone/style/themes/themes', array('admin_themes', array('type' => 'misc'), get_module_zone('admin_themes')))
+                array('menu/adminzone/style/themes/themes', array('admin_themes', array('type' => 'browse'), get_module_zone('admin_themes')))
             ),
             do_lang('THEME')
         );

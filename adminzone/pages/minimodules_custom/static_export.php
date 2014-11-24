@@ -156,12 +156,12 @@ foreach ($directory as $entry) {
         continue;
     }
     $done_non_spec[$dir_name] = 1;
-    if (($dir_name != '') && (basename($entry['path']) == 'misc.htm')) {
-        $data .= 'RewriteRule ^' . $dir_name . '\.htm(.*) ' . $dir_name . '/misc.htm$1 [R,L]' . "\n";
+    if (($dir_name != '') && (basename($entry['path']) == 'browse.htm')) {
+        $data .= 'RewriteRule ^' . $dir_name . '\.htm(.*) ' . $dir_name . '/browse.htm$1 [R,L]' . "\n";
 
         // If .htaccess not supported let it redirect via simple stub file instead
         if (get_param_integer('save__redirects', 1) == 1) {
-            $datax = '<meta http-equiv="refresh" content="0;' . escape_html(basename($dir_name)) . '/misc.htm" />';
+            $datax = '<meta http-equiv="refresh" content="0;' . escape_html(basename($dir_name)) . '/browse.htm" />';
             foreach (array_keys($langs) as $lang) {
                 if (($lang != fallback_lang()) && (count(get_directory_contents(get_custom_file_base() . '/lang_custom/' . $lang, '', true, false, true)) < 5)) {
                     continue; // Probably this is just the utf8 addon

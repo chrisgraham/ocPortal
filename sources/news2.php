@@ -83,7 +83,7 @@ function edit_news_category($id, $title, $img, $notes, $owner)
     $old_title = get_translated_text($myrow['nc_title']);
 
     require_code('urls2');
-    suggest_new_idmoniker_for('news', 'misc', strval($id), '', $title);
+    suggest_new_idmoniker_for('news', 'browse', strval($id), '', $title);
 
     // Sync meta keywords, if we have auto-sync for these
     if (get_option('enable_seo_fields') === '0') {

@@ -39,13 +39,13 @@ class Module_admin_newsletter extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('MANAGE_NEWSLETTER', 'menu/site_meta/newsletters'),
+            'browse' => array('MANAGE_NEWSLETTER', 'menu/site_meta/newsletters'),
             'new' => array('NEWSLETTER_SEND', 'menu/site_meta/newsletters'),
             'whatsnew' => array('WHATSNEW', 'menu/adminzone/tools/newsletter/newsletter_from_changes'),
             'subscribers' => array('VIEW_NEWSLETTER_SUBSCRIBERS', 'menu/adminzone/tools/newsletter/subscribers'),
@@ -70,24 +70,24 @@ class Module_admin_newsletter extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('newsletter');
 
         set_helper_panel_tutorial('tut_newsletter');
 
         if ($type == 'confirm') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_NEWSLETTER')), array('_SELF:_SELF:new', do_lang_tempcode('NEWSLETTER_SEND'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_NEWSLETTER')), array('_SELF:_SELF:new', do_lang_tempcode('NEWSLETTER_SEND'))));
             breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
         }
 
         if ($type == 'send') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_NEWSLETTER')), array('_SELF:_SELF:new', do_lang_tempcode('NEWSLETTER_SEND'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_NEWSLETTER')), array('_SELF:_SELF:new', do_lang_tempcode('NEWSLETTER_SEND'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
         if ($type == 'view') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_NEWSLETTER')), array('_SELF:_SELF:archive', do_lang_tempcode('NEWSLETTER_ARCHIVE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_NEWSLETTER')), array('_SELF:_SELF:archive', do_lang_tempcode('NEWSLETTER_ARCHIVE'))));
             breadcrumb_set_self(do_lang_tempcode('VIEW'));
         }
 
@@ -155,8 +155,8 @@ class Module_admin_newsletter extends Standard_crud_module
 
         $this->add_text = do_lang_tempcode('HELP_ADD_NEWSLETTER', escape_html(static_evaluate_tempcode(build_url(array('page' => '_SELF', 'type' => 'new'), '_SELF'))));
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
 
         if ($type == 'import_subscribers') {
@@ -218,7 +218,7 @@ class Module_admin_newsletter extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         $num_in_queue = $GLOBALS['SITE_DB']->query_select_value('newsletter_drip_send', 'COUNT(*)');
         if ($num_in_queue > 0) {
@@ -1028,7 +1028,7 @@ class Module_admin_newsletter extends Standard_crud_module
             $GLOBALS['SITE_DB']->query_delete('newsletter_periodic', array('id' => intval($matches[1])), '', 1);
 
             // We redirect back to the admin_newsletter main page
-            $url = build_url(array('page' => 'admin_newsletter', 'type' => 'misc', 'redirected' => '1'), get_module_zone('admin_newsletter'));
+            $url = build_url(array('page' => 'admin_newsletter', 'type' => 'browse', 'redirected' => '1'), get_module_zone('admin_newsletter'));
             return redirect_screen(do_lang('PERIODIC_REMOVED'), $url, do_lang('PERIODIC_REMOVED_TEXT'));
         }
 
@@ -1704,7 +1704,7 @@ class Module_admin_newsletter extends Standard_crud_module
                 $message = do_lang('PERIODIC_SUCCESS_MESSAGE_ADD', $when, $each);
             }
 
-            $url = build_url(array('page' => 'admin_newsletter', 'type' => 'misc', 'redirected' => '1'), get_module_zone('admin_newsletter'));
+            $url = build_url(array('page' => 'admin_newsletter', 'type' => 'browse', 'redirected' => '1'), get_module_zone('admin_newsletter'));
             return redirect_screen(do_lang('SUCCESS'), $url, $message, false, 'inform');
         }
 

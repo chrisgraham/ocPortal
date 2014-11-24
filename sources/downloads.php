@@ -184,7 +184,7 @@ function render_download_category_box($row, $zone = '_SEARCH', $give_context = t
 {
     require_lang('downloads');
 
-    $map = array('page' => 'downloads', 'type' => 'misc', 'id' => ($row['id'] == db_get_first_id()) ? null : $row['id']);
+    $map = array('page' => 'downloads', 'type' => 'browse', 'id' => ($row['id'] == db_get_first_id()) ? null : $row['id']);
     if (!is_null($root)) {
         $map['keep_download_root'] = $root;
     }
@@ -508,7 +508,7 @@ function download_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = 
         $zone = get_module_zone('downloads');
     }
 
-    $map = array('page' => 'downloads', 'type' => 'misc', 'id' => ($category_id == db_get_first_id()) ? null : $category_id, 'keep_download_root' => ($root == db_get_first_id()) ? null : $root);
+    $map = array('page' => 'downloads', 'type' => 'browse', 'id' => ($category_id == db_get_first_id()) ? null : $category_id, 'keep_download_root' => ($root == db_get_first_id()) ? null : $root);
     if (get_page_name() == 'catalogues') {
         $map += propagate_ocselect();
     }

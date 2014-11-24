@@ -245,7 +245,7 @@ function closed_site()
         if (is_object($redirect)) {
             $redirect = $redirect->evaluate();
         }
-        $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => $redirect), get_module_zone('login'));
+        $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => $redirect), get_module_zone('login'));
         $join_url = (get_forum_type() == 'none') ? '' : $GLOBALS['FORUM_DRIVER']->join_url();
         $middle = do_template('CLOSED_SITE', array('_GUID' => '4e753c50eca7c98344d2107fc18c4554', 'CLOSED' => comcode_to_tempcode(get_option('closed'), null, true), 'LOGIN_URL' => $login_url, 'JOIN_URL' => $join_url));
         $echo = globalise($middle, null, '', true);
@@ -316,7 +316,7 @@ function page_not_found($codename, $zone)
     $redirect_access = addon_installed('redirects_editor') && has_actual_page_access(get_member(), 'admin_redirects');
     require_lang('zones');
     $add_url = $add_access ? build_url(array('page' => 'cms_comcode_pages', 'type' => '_edit', 'page_link' => $zone . ':' . $codename), get_module_zone('cms_comcode_pages')) : new Tempcode();
-    $add_redirect_url = $redirect_access ? build_url(array('page' => 'admin_redirects', 'type' => 'misc', 'page_link' => $zone . ':' . $codename), get_module_zone('admin_redirects')) : new Tempcode();
+    $add_redirect_url = $redirect_access ? build_url(array('page' => 'admin_redirects', 'type' => 'browse', 'page_link' => $zone . ':' . $codename), get_module_zone('admin_redirects')) : new Tempcode();
     return do_template('MISSING_SCREEN', array('_GUID' => '22f371577cd2ba437e7b0cb241931575', 'TITLE' => $title, 'DID_MEAN' => $_did_mean, 'ADD_URL' => $add_url, 'ADD_REDIRECT_URL' => $add_redirect_url, 'PAGE' => $codename));
 }
 

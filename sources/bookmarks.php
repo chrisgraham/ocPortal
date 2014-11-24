@@ -114,7 +114,7 @@ function add_bookmark_form($post_url)
     $fields->attach(form_input_line(do_lang_tempcode('PAGE_LINK'), do_lang_tempcode('DESCRIPTION_PAGE_LINK_BOOKMARK'), 'page_link', $page_link, true));
     $submit_name = do_lang_tempcode('ADD_BOOKMARK');
 
-    breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_BOOKMARKS'))));
+    breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_BOOKMARKS'))));
 
     $javascript = 'var title=document.getElementById(\'title\'); if (((title.value==\'\') || (title.value==\'0\')) && (window.opener)) title.value=get_inner_html(window.opener.document.getElementsByTagName(\'title\')[0]); ';
 

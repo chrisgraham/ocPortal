@@ -39,13 +39,13 @@ class Module_cms_booking extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('BOOKINGS', 'menu/booking'),
+            'browse' => array('BOOKINGS', 'menu/booking'),
             'add_booking' => array('ADD_BOOKING', 'menu/booking'),
             'edit_booking' => array('EDIT_BOOKING', 'menu/booking'),
             'add' => array('ADD_BOOKABLE', 'menu/bookable'),
@@ -88,7 +88,7 @@ class Module_cms_booking extends Standard_crud_module
         require_lang('booking');
 
         if (is_null($type)) {
-            $type = get_param('type', 'misc');
+            $type = get_param('type', 'browse');
 
             // Type equivalencies, for meta-data purposes (i.e. activate correct title-generation code)
             if ($type == 'add_booking') {
@@ -122,8 +122,8 @@ class Module_cms_booking extends Standard_crud_module
     {
         require_code('booking2');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'add_booking') {
             return $this->bookings_crud_module->add();
@@ -149,7 +149,7 @@ class Module_cms_booking extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         return booking_do_next();
     }

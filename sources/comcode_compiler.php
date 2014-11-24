@@ -858,7 +858,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                         } else {
                                             $jump_to = '';
                                         }
-                                        $wiki_page_url = build_url(array('page' => 'wiki', 'type' => 'misc', 'find' => $wiki_page_name), get_module_zone('wiki'));
+                                        $wiki_page_url = build_url(array('page' => 'wiki', 'type' => 'browse', 'find' => $wiki_page_name), get_module_zone('wiki'));
                                         if ($jump_to != '') {
                                             $wiki_page_url->attach('#' . $jump_to);
                                         }

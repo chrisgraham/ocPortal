@@ -46,7 +46,7 @@ class Module_admin_ocf_history
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -56,7 +56,7 @@ class Module_admin_ocf_history
         }
 
         return array(
-            'misc' => array('POST_HISTORY', 'buttons/history'),
+            'browse' => array('POST_HISTORY', 'buttons/history'),
         );
     }
 
@@ -69,12 +69,12 @@ class Module_admin_ocf_history
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
         require_css('ocf_admin');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $member_id = get_param_integer('member_id', -1);
             $post_id = get_param_integer('post_id', -1);
             $topic_id = get_param_integer('topic_id', -1);
@@ -119,9 +119,9 @@ class Module_admin_ocf_history
         }
         require_css('ocf');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->gui();
         }
         if ($type == 'restore') {
@@ -289,7 +289,7 @@ class Module_admin_ocf_history
         }
         ocf_make_post($post['h_topic_id'], '', $post['h_before'], 0, false, 1, 0, $owner_username, null, $post['h_create_date_and_time'], $post['h_owner_member_id'], null, time(), get_member(), false, true, null, true, '', 0, null, false, false, false, false, null, false);
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF', null, true);
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF', null, true);
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -318,7 +318,7 @@ class Module_admin_ocf_history
         require_code('ocf_posts_action3');
         ocf_edit_post($post['h_post_id'], $post2['p_validated'], $post2['p_title'], $post['h_before'], 0, $post2['p_is_emphasised'], $post2['p_intended_solely_for'], false, false, do_lang('REVERT_HISTORY_POST'));
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF', null, true);
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF', null, true);
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -333,7 +333,7 @@ class Module_admin_ocf_history
 
         $GLOBALS['FORUM_DB']->query_delete('f_post_history', array('id' => get_param_integer('h_id')), '', 1);
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF', null, true);
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF', null, true);
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

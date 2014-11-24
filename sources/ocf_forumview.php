@@ -35,7 +35,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
 {
     require_css('ocf');
 
-    $type = is_null($id) ? 'pt' : 'misc';
+    $type = is_null($id) ? 'pt' : 'browse';
 
     if ($type == 'pt') {
         if (is_guest()) {
@@ -284,13 +284,13 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
     }
     if ($type != 'pt') {
         if (addon_installed('search')) {
-            $search_url = build_url(array('page' => 'search', 'type' => 'misc', 'id' => 'ocf_posts', 'search_under' => $id), get_module_zone('search'));
+            $search_url = build_url(array('page' => 'search', 'type' => 'browse', 'id' => 'ocf_posts', 'search_under' => $id), get_module_zone('search'));
             $button_array[] = array('immediate' => false, 'rel' => 'search', 'title' => do_lang_tempcode('SEARCH'), 'url' => $search_url, 'img' => 'buttons__search');
         }
         $new_topic_url = build_url(array('page' => 'topics', 'type' => 'new_topic', 'id' => $id), get_module_zone('topics'));
     } else {
         if (addon_installed('search')) {
-            $search_url = build_url(array('page' => 'search', 'type' => 'misc', 'id' => 'ocf_own_pt'), get_module_zone('search'));
+            $search_url = build_url(array('page' => 'search', 'type' => 'browse', 'id' => 'ocf_own_pt'), get_module_zone('search'));
             $button_array[] = array('immediate' => false, 'rel' => 'search', 'title' => do_lang_tempcode('SEARCH'), 'url' => $search_url, 'img' => 'buttons__search');
         }
         $new_topic_url = build_url(array('page' => 'topics', 'type' => 'new_pt', 'id' => get_member()), get_module_zone('topics'));

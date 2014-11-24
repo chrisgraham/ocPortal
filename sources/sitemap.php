@@ -596,7 +596,7 @@ abstract class Hook_sitemap_base
      * @param  ?ID_TEXT                 The ID (null: unknown).
      * @return ?array                   Faked database row (null: derive).
      */
-    protected function _load_row_from_page_groupings($row, $zone, $page, $type = 'misc', $id = null)
+    protected function _load_row_from_page_groupings($row, $zone, $page, $type = 'browse', $id = null)
     {
         if (!isset($row[0])) { // If the first tuple element is not defined (a property map may be, for Comcode pages)
             // Find from page grouping
@@ -715,7 +715,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     protected $entry_content_type = null;
     protected $entry_sitetree_hook = null;
     protected $cma_info = null;
-    protected $screen_type = 'misc';
+    protected $screen_type = 'browse';
 
     /**
      * Find if a page-link will be covered by this node.
@@ -1158,7 +1158,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     public function extract_child_page_link_permission_pair($page_link)
     {
         $matches = array();
-        preg_match('#^([^:]*):([^:]*):misc:(.*)$#', $page_link, $matches);
+        preg_match('#^([^:]*):([^:]*):browse:(.*)$#', $page_link, $matches);
         $id = $matches[3];
 
         require_code('content');

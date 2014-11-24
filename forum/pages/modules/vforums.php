@@ -46,7 +46,7 @@ class Module_vforums
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -60,13 +60,13 @@ class Module_vforums
 
         if ($check_perms && is_guest($member_id)) {
             return array(
-                'misc' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
+                'browse' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
                 'unanswered' => array('UNANSWERED_TOPICS', 'menu/social/forum/vforums/unanswered_topics')
             );
         }
 
         return array(
-            'misc' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
+            'browse' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
             'unread' => array('TOPICS_UNREAD', 'menu/social/forum/vforums/unread_topics'),
             'recently_read' => array('RECENTLY_READ', 'menu/social/forum/vforums/recently_read_topics'),
             'unanswered' => array('UNANSWERED_TOPICS', 'menu/social/forum/vforums/unanswered_topics'),
@@ -83,11 +83,11 @@ class Module_vforums
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('POSTS_SINCE');
         }
 
@@ -126,8 +126,8 @@ class Module_vforums
 
         require_css('ocf');
 
-        $type = get_param('type', 'misc');
-        if ($type == 'misc') {
+        $type = get_param('type', 'browse');
+        if ($type == 'browse') {
             $content = $this->new_posts();
         } elseif ($type == 'unread') {
             $content = $this->unread_topics();
@@ -263,7 +263,7 @@ class Module_vforums
 
         $max = get_param_integer('forum_max', intval(get_option('forum_topics_per_page')));
         $start = get_param_integer('forum_start', 0);
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
         $forum_name = do_lang_tempcode('VIRTUAL_FORUM');
 
         // Don't allow guest bots to probe too deep into the forum index, it gets very slow; the XML Sitemap is for guiding to topics like this

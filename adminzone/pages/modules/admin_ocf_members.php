@@ -46,7 +46,7 @@ class Module_admin_ocf_members
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -56,7 +56,7 @@ class Module_admin_ocf_members
         }
 
         $ret = array(
-            'misc' => array('MEMBERS', 'menu/social/members'),
+            'browse' => array('MEMBERS', 'menu/social/members'),
             'step1' => array('ADD_MEMBER', 'menu/adminzone/tools/users/member_add'),
             'delurk' => array('DELETE_LURKERS', 'menu/adminzone/tools/users/delete_lurkers'),
             'download_csv' => array('DOWNLOAD_MEMBER_CSV', 'menu/_generic_admin/download_csv'),
@@ -65,23 +65,23 @@ class Module_admin_ocf_members
 
         if ($support_crosslinks) {
             if (has_privilege(get_member(), 'member_maintenance')) {
-                $ret['_SEARCH:members:misc'] = array('MEMBERS', 'menu/adminzone/tools/users/member_edit');
+                $ret['_SEARCH:members:browse'] = array('MEMBERS', 'menu/adminzone/tools/users/member_edit');
             }
-            $ret['_SEARCH:admin_ocf_merge_members:misc'] = array('MERGE_MEMBERS', 'menu/adminzone/tools/users/merge_members');
+            $ret['_SEARCH:admin_ocf_merge_members:browse'] = array('MERGE_MEMBERS', 'menu/adminzone/tools/users/merge_members');
             if (addon_installed('ocf_cpfs')) {
-                $ret['_SEARCH:admin_ocf_customprofilefields:misc'] = array('CUSTOM_PROFILE_FIELDS', 'menu/adminzone/tools/users/custom_profile_fields');
+                $ret['_SEARCH:admin_ocf_customprofilefields:browse'] = array('CUSTOM_PROFILE_FIELDS', 'menu/adminzone/tools/users/custom_profile_fields');
             }
             if (addon_installed('welcome_emails')) {
-                $ret['_SEARCH:admin_ocf_welcome_emails:misc'] = array('WELCOME_EMAILS', 'menu/adminzone/setup/welcome_emails');
+                $ret['_SEARCH:admin_ocf_welcome_emails:browse'] = array('WELCOME_EMAILS', 'menu/adminzone/setup/welcome_emails');
             }
             if (addon_installed('securitylogging')) {
                 $ret['_SEARCH:admin_lookup'] = array('INVESTIGATE_USER', 'menu/adminzone/tools/users/investigate_user');
             }
             //if (addon_installed('ecommerce'))
-            // $ret['_SEARCH:admin_ecommerce:misc']=array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/ecommerce');
-            //$ret['_SEARCH:admin_ocf_groups:misc']=array('USERGROUPS','menu/social/groups');
+            // $ret['_SEARCH:admin_ecommerce:browse']=array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/ecommerce');
+            //$ret['_SEARCH:admin_ocf_groups:browse']=array('USERGROUPS','menu/social/groups');
             //if (addon_installed('staff'))
-            // $ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff');
+            // $ret['_SEARCH:admin_staff:browse']=array('STAFF','menu/site_meta/staff');
             $ret['_SEARCH:warnings:edit'] = array('WARNINGS', 'tabs/member_account/warnings');
         }
 
@@ -97,7 +97,7 @@ class Module_admin_ocf_members
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
         require_css('ocf_admin');
@@ -107,34 +107,34 @@ class Module_admin_ocf_members
         if ($type == 'step1') {
             set_helper_panel_tutorial('tut_members');
 
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS'))));
             breadcrumb_set_self(do_lang_tempcode('ADD_MEMBER'));
         }
 
         if ($type == 'step2') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS')), array('_SELF:_SELF:step1', do_lang_tempcode('ADD_MEMBER'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS')), array('_SELF:_SELF:step1', do_lang_tempcode('ADD_MEMBER'))));
             breadcrumb_set_self(do_lang_tempcode('DETAILS'));
         }
 
         if ($type == 'delurk') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS'))));
         }
 
         if ($type == '_delurk') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS')), array('_SEARCH:admin_ocf_members:delurk', do_lang_tempcode('DELETE_LURKERS'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS')), array('_SEARCH:admin_ocf_members:delurk', do_lang_tempcode('DELETE_LURKERS'))));
             breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
         }
 
         if ($type == '__delurk') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS')), array('_SEARCH:admin_ocf_members:delurk', do_lang_tempcode('DELETE_LURKERS'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS')), array('_SEARCH:admin_ocf_members:delurk', do_lang_tempcode('DELETE_LURKERS'))));
         }
 
         if ($type == 'import_csv') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS'))));
         }
 
         if ($type == '_import_csv') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS')), array('_SEARCH:admin_ocf_members:import_csv', do_lang_tempcode('IMPORT_MEMBER_CSV'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS')), array('_SEARCH:admin_ocf_members:import_csv', do_lang_tempcode('IMPORT_MEMBER_CSV'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
@@ -174,10 +174,10 @@ class Module_admin_ocf_members
         require_code('ocf_members_action');
         require_code('ocf_members_action2');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'step1') {
             return $this->step1();
@@ -212,7 +212,7 @@ class Module_admin_ocf_members
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_lang('lookup');
         if (addon_installed('welcome_emails')) {
@@ -230,19 +230,19 @@ class Module_admin_ocf_members
         return do_next_manager(get_screen_title('MEMBERS'), comcode_lang_string('DOC_MEMBERS'),
             array(
                 array('menu/adminzone/tools/users/member_add', array('admin_ocf_members', array('type' => 'step1'), get_module_zone('admin_ocf_members')), do_lang_tempcode('ADD_MEMBER'), 'DOC_ADD_MEMBER'),
-                (!has_privilege(get_member(), 'member_maintenance')) ? null : array('menu/adminzone/tools/users/member_edit', array('members', array('type' => 'misc'), get_module_zone('members'), do_lang_tempcode('SWITCH_ZONE_WARNING')), do_lang_tempcode('EDIT_MEMBER'), 'DOC_EDIT_MEMBER'),
-                array('menu/adminzone/tools/users/merge_members', array('admin_ocf_merge_members', array('type' => 'misc'), get_module_zone('admin_ocf_merge_members')), do_lang_tempcode('MERGE_MEMBERS'), 'DOC_MERGE_MEMBERS'),
+                (!has_privilege(get_member(), 'member_maintenance')) ? null : array('menu/adminzone/tools/users/member_edit', array('members', array('type' => 'browse'), get_module_zone('members'), do_lang_tempcode('SWITCH_ZONE_WARNING')), do_lang_tempcode('EDIT_MEMBER'), 'DOC_EDIT_MEMBER'),
+                array('menu/adminzone/tools/users/merge_members', array('admin_ocf_merge_members', array('type' => 'browse'), get_module_zone('admin_ocf_merge_members')), do_lang_tempcode('MERGE_MEMBERS'), 'DOC_MERGE_MEMBERS'),
                 array('menu/adminzone/tools/users/delete_lurkers', array('admin_ocf_members', array('type' => 'delurk'), get_module_zone('admin_ocf_members')), do_lang_tempcode('DELETE_LURKERS'), 'DOC_DELETE_LURKERS'),
                 array('menu/_generic_admin/download_csv', array('admin_ocf_members', array('type' => 'download_csv'), get_module_zone('admin_ocf_members')), do_lang_tempcode('DOWNLOAD_MEMBER_CSV'), 'DOC_DOWNLOAD_MEMBER_CSV'),
                 array('/menu/_generic_admin/import_csv', array('admin_ocf_members', array('type' => 'import_csv'), get_module_zone('admin_ocf_members')), do_lang_tempcode('IMPORT_MEMBER_CSV'), 'DOC_IMPORT_MEMBER_CSV'),
-                addon_installed('ocf_cpfs') ? array('menu/adminzone/tools/users/custom_profile_fields', array('admin_ocf_customprofilefields', array('type' => 'misc'), get_module_zone('admin_ocf_customprofilefields')), do_lang_tempcode('CUSTOM_PROFILE_FIELDS'), 'DOC_CUSTOM_PROFILE_FIELDS') : null,
-                addon_installed('welcome_emails') ? array('menu/adminzone/setup/welcome_emails', array('admin_ocf_welcome_emails', array('type' => 'misc'), get_module_zone('admin_ocf_welcome_emails')), do_lang_tempcode('WELCOME_EMAILS'), 'DOC_WELCOME_EMAILS') : null,
+                addon_installed('ocf_cpfs') ? array('menu/adminzone/tools/users/custom_profile_fields', array('admin_ocf_customprofilefields', array('type' => 'browse'), get_module_zone('admin_ocf_customprofilefields')), do_lang_tempcode('CUSTOM_PROFILE_FIELDS'), 'DOC_CUSTOM_PROFILE_FIELDS') : null,
+                addon_installed('welcome_emails') ? array('menu/adminzone/setup/welcome_emails', array('admin_ocf_welcome_emails', array('type' => 'browse'), get_module_zone('admin_ocf_welcome_emails')), do_lang_tempcode('WELCOME_EMAILS'), 'DOC_WELCOME_EMAILS') : null,
                 addon_installed('securitylogging') ? array('menu/adminzone/tools/users/investigate_user', array('admin_lookup', array(), get_module_zone('admin_lookup')), do_lang_tempcode('INVESTIGATE_USER'), 'DOC_INVESTIGATE_USER') : null,
                 array('tabs/member_account/warnings', array('warnings', array('type' => 'edit'), get_module_zone('warnings')), do_lang_tempcode('WARNINGS')),
-                array('menu/adminzone/security/usergroups_temp', array('admin_group_member_timeouts', array('type' => 'misc'), get_module_zone('admin_group_member_timeouts')), do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'), 'DOC_GROUP_MEMBER_TIMEOUTS'),
-                addon_installed('ecommerce') ? array('menu/adminzone/audit/ecommerce/ecommerce', array('admin_ecommerce', array('type' => 'misc'), get_module_zone('admin_ecommerce')), do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'), 'DOC_ECOMMERCE') : null,
-                array('menu/social/groups', array('admin_ocf_groups', array('type' => 'misc'), get_module_zone('admin_ocf_groups'), do_lang_tempcode('SWITCH_SECTION_WARNING')), do_lang_tempcode('USERGROUPS'), 'DOC_GROUPS'),
-                addon_installed('staff') ? array('menu/site_meta/staff', array('admin_staff', array('type' => 'misc'), get_module_zone('admin_staff'), do_lang_tempcode('SWITCH_SECTION_WARNING')), do_lang_tempcode('STAFF'), 'DOC_STAFF') : null,
+                array('menu/adminzone/security/usergroups_temp', array('admin_group_member_timeouts', array('type' => 'browse'), get_module_zone('admin_group_member_timeouts')), do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'), 'DOC_GROUP_MEMBER_TIMEOUTS'),
+                addon_installed('ecommerce') ? array('menu/adminzone/audit/ecommerce/ecommerce', array('admin_ecommerce', array('type' => 'browse'), get_module_zone('admin_ecommerce')), do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'), 'DOC_ECOMMERCE') : null,
+                array('menu/social/groups', array('admin_ocf_groups', array('type' => 'browse'), get_module_zone('admin_ocf_groups'), do_lang_tempcode('SWITCH_SECTION_WARNING')), do_lang_tempcode('USERGROUPS'), 'DOC_GROUPS'),
+                addon_installed('staff') ? array('menu/site_meta/staff', array('admin_staff', array('type' => 'browse'), get_module_zone('admin_staff'), do_lang_tempcode('SWITCH_SECTION_WARNING')), do_lang_tempcode('STAFF'), 'DOC_STAFF') : null,
             ), do_lang('MEMBERS')
         );
     }
@@ -359,7 +359,7 @@ class Module_admin_ocf_members
             null,// Edit this
             null, // Edit one
             array('members', array('type' => 'view', 'id' => $id), get_module_zone('members')), // View this
-            array('members', array('type' => 'misc'), get_module_zone('members'), do_lang_tempcode('MEMBERS')), // View archive
+            array('members', array('type' => 'browse'), get_module_zone('members'), do_lang_tempcode('MEMBERS')), // View archive
             null, // Add to category
             null, // Add one category
             null, // Edit one category

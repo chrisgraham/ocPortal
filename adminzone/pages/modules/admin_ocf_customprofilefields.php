@@ -38,7 +38,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -50,7 +50,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
         $ret = array();
         if (!$be_deferential) {
             $ret += array(
-                'misc' => array('CUSTOM_PROFILE_FIELDS', 'menu/adminzone/tools/users/custom_profile_fields'),
+                'browse' => array('CUSTOM_PROFILE_FIELDS', 'menu/adminzone/tools/users/custom_profile_fields'),
             );
         }
 
@@ -76,15 +76,15 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
         require_css('ocf_admin');
 
         set_helper_panel_tutorial('tut_adv_members');
 
-        if ($type == 'misc') {
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS'))));
+        if ($type == 'browse') {
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:browse', do_lang_tempcode('MEMBERS'))));
         }
 
         if ($type == 'stats') {
@@ -125,8 +125,8 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
         $this->edit_this_label = do_lang_tempcode('EDIT_THIS_CUSTOM_PROFILE_FIELD');
         $this->edit_one_label = do_lang_tempcode('EDIT_CUSTOM_PROFILE_FIELD');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'stats') {
             return $this->stats();
@@ -142,7 +142,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('CUSTOM_PROFILE_FIELDS'), comcode_lang_string('DOC_CUSTOM_PROFILE_FIELDS'),

@@ -42,7 +42,7 @@ class Hook_checklist_usergroup_membership
             $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1', array('_GUID' => 'p578142633c6f3d37776e82a869deb91'));
         }
 
-        $url = build_url(array('page' => 'groups', 'type' => 'misc'), get_module_zone('groups'));
+        $url = build_url(array('page' => 'groups', 'type' => 'browse'), get_module_zone('groups'));
 
         require_lang('ocf');
 

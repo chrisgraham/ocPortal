@@ -24,7 +24,7 @@
 
 	<nav role="navigation" class="installer_completed_calltoaction">
 		<ul class="actions_list">
-			<li class="actions_list_strong"><a href="{$BASE_URL*}/adminzone/index.php?page=admin_setupwizard&amp;type=misc">{!CONFIGURE}</a> ({!RECOMMENDED})</li>
+			<li class="actions_list_strong"><a href="{$BASE_URL*}/adminzone/index.php?page=admin_setupwizard&amp;type=browse">{!CONFIGURE}</a> ({!RECOMMENDED})</li>
 			<li><a href="{$BASE_URL*}/index.php">{!GO}</a></li>
 		</ul>
 	</nav>

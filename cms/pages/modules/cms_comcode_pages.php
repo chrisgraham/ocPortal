@@ -47,13 +47,13 @@ class Module_cms_comcode_pages
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('COMCODE_PAGE_MANAGEMENT', 'menu/cms/comcode_page_edit'),
+            'browse' => array('COMCODE_PAGE_MANAGEMENT', 'menu/cms/comcode_page_edit'),
         );
     }
 
@@ -79,7 +79,7 @@ class Module_cms_comcode_pages
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('zones');
 
@@ -87,7 +87,7 @@ class Module_cms_comcode_pages
 
         set_helper_panel_tutorial('tut_comcode_pages');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGES'));
 
             set_helper_panel_text(comcode_lang_string('DOC_COMCODE_PAGE_EDIT'));
@@ -117,7 +117,7 @@ class Module_cms_comcode_pages
             if ($page_link != '') {
                 breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
             }
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang=' . get_param('lang', ''), do_lang_tempcode('CHOOSE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse:lang=' . get_param('lang', ''), do_lang_tempcode('CHOOSE'))));
 
             $this->title = get_screen_title(($file == '') ? 'COMCODE_PAGE_ADD' : '_COMCODE_PAGE_EDIT', true, array(escape_html($zone), escape_html($file)));
 
@@ -146,9 +146,9 @@ class Module_cms_comcode_pages
         require_code('zones3');
         require_code('files');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->edit();
         }
         if ($type == '_edit') {
@@ -173,7 +173,7 @@ class Module_cms_comcode_pages
     public function do_next_manager($title, $page, $zone, $completion_text)
     {
         if (!addon_installed('page_management')) {
-            return redirect_screen($title, build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF'), $completion_text);
+            return redirect_screen($title, build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF'), $completion_text);
         }
 
         require_code('zones2');
@@ -867,7 +867,7 @@ class Module_cms_comcode_pages
 
         $text = new Tempcode();
         if (addon_installed('points')) {
-            $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
+            $login_url = build_url(array('page' => 'login', 'type' => 'browse', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
             $_login_url = escape_html($login_url->evaluate());
             if ((is_guest()) && ((get_forum_type() != 'ocf') || (has_actual_page_access(get_member(), 'join')))) {
                 $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT', $_login_url)));

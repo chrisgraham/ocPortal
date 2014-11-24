@@ -192,7 +192,7 @@ class Hook_pointstore_community_billboard
         require_code('points2');
         charge_member($member_id, $total, do_lang('PURCHASED_COMMUNITY_BILLBOARD'));
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($title, $url, do_lang_tempcode('ORDER_COMMUNITY_BILLBOARD_DONE'));
     }
 }

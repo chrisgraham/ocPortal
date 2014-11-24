@@ -166,7 +166,7 @@ function delete_incomplete_orders()
  */
 function show_cart_link()
 {
-    $cart_url = build_url(array('page' => 'shopping', 'type' => 'misc'), get_module_zone('shopping'));
+    $cart_url = build_url(array('page' => 'shopping', 'type' => 'browse'), get_module_zone('shopping'));
 
     $where = array('is_deleted' => 0);
     if (is_guest()) {

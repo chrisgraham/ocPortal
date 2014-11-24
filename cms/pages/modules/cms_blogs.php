@@ -50,13 +50,13 @@ class Module_cms_blogs extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('MANAGE_BLOGS', 'tabs/member_account/blog'),
+            'browse' => array('MANAGE_BLOGS', 'tabs/member_account/blog'),
         );
         $ret += parent::get_entry_points();
         $ret = array(
@@ -76,7 +76,7 @@ class Module_cms_blogs extends Standard_crud_module
      */
     public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('news');
 
@@ -94,7 +94,7 @@ class Module_cms_blogs extends Standard_crud_module
         }
 
         if ($type == '_import_wordpress') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_BLOGS')), array('_SELF:_SELF:import_wordpress', do_lang_tempcode('IMPORT_WORDPRESS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MANAGE_BLOGS')), array('_SELF:_SELF:import_wordpress', do_lang_tempcode('IMPORT_WORDPRESS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
@@ -119,8 +119,8 @@ class Module_cms_blogs extends Standard_crud_module
         require_css('news');
 
         // Decide what to do
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
         if ($type == 'import_wordpress') {
             return $this->import_wordpress();
@@ -137,7 +137,7 @@ class Module_cms_blogs extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_BLOGS'), comcode_lang_string('DOC_BLOGS'),
@@ -626,7 +626,7 @@ class Module_cms_blogs extends Standard_crud_module
             (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news', array('news', $cat)))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id), '_SELF'), // Edit this
             has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
             is_null($id) ? null : array('news', array('type' => 'view', 'id' => $id, 'blog' => 1), get_module_zone('news')), // View this
-            array('news', array('type' => 'misc', 'blog' => 1), get_module_zone('news')), // View archive
+            array('news', array('type' => 'browse', 'blog' => 1), get_module_zone('news')), // View archive
             null, // Add to category
             has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => 'add_category'), '_SELF') : null, // Add one category
             has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => 'edit_category'), '_SELF') : null, // Edit one category

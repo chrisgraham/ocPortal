@@ -37,7 +37,7 @@ class Hook_page_groupings_backup
         }
 
         return array(
-            array('tools', 'menu/adminzone/tools/bulk_content_actions/backups', array('admin_backup', array('type' => 'misc'), get_module_zone('admin_backup')), do_lang_tempcode('backups:BACKUPS'), 'backups:DOC_BACKUPS'),
+            array('tools', 'menu/adminzone/tools/bulk_content_actions/backups', array('admin_backup', array('type' => 'browse'), get_module_zone('admin_backup')), do_lang_tempcode('backups:BACKUPS'), 'backups:DOC_BACKUPS'),
         );
     }
 }

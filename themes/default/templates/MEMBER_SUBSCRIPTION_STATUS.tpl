@@ -64,6 +64,6 @@
 			</tbody>
 		</table></div>
 
-		<p class="associated_link suggested_link"><a title="{!MODULE_TRANS_NAME_subscriptions}" href="{$PAGE_LINK*,_SEARCH:subscriptions:misc:{MEMBER_ID}}">{!MORE}</a></p>
+		<p class="associated_link suggested_link"><a title="{!MODULE_TRANS_NAME_subscriptions}" href="{$PAGE_LINK*,_SEARCH:subscriptions:browse:{MEMBER_ID}}">{!MORE}</a></p>
 	</div>
 </div>

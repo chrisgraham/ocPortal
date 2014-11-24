@@ -46,13 +46,13 @@ class Module_cms_chat
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('CHAT_MODERATION', 'menu/social/chat/chat'),
+            'browse' => array('CHAT_MODERATION', 'menu/social/chat/chat'),
         );
     }
 
@@ -78,13 +78,13 @@ class Module_cms_chat
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('chat');
 
         set_helper_panel_tutorial('tut_chat');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             if (has_actual_page_access(get_member(), 'admin_chat')) {
                 $also_url = build_url(array('page' => 'admin_chat'), get_module_zone('admin_chat'));
                 attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS', escape_html($also_url->evaluate())), 'inform', true);
@@ -96,21 +96,21 @@ class Module_cms_chat
         }
 
         if ($type == 'room') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHATROOMS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHATROOMS'))));
 
             $this->title = get_screen_title('CHAT_MODERATION');
         }
 
         if ($type == 'ban') {
             $id = get_param_integer('id');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($id), do_lang_tempcode('CHAT_MODERATION'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($id), do_lang_tempcode('CHAT_MODERATION'))));
 
             $this->title = get_screen_title('CHAT_BAN');
         }
 
         if ($type == 'unban') {
             $id = get_param_integer('id');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($id), do_lang_tempcode('CHAT_MODERATION'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($id), do_lang_tempcode('CHAT_MODERATION'))));
 
             $this->title = get_screen_title('CHAT_UNBAN');
         }
@@ -124,7 +124,7 @@ class Module_cms_chat
             }
             $myrow = $rows[0];
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($myrow['room_id']), do_lang_tempcode('CHAT_MODERATION'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($myrow['room_id']), do_lang_tempcode('CHAT_MODERATION'))));
 
             $this->title = get_screen_title('EDIT_MESSAGE');
 
@@ -144,7 +144,7 @@ class Module_cms_chat
                 }
                 $myrow = $rows[0];
 
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($myrow['room_id']), do_lang_tempcode('CHAT_MODERATION'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($myrow['room_id']), do_lang_tempcode('CHAT_MODERATION'))));
 
                 $this->title = get_screen_title('DELETE_MESSAGE');
 
@@ -157,7 +157,7 @@ class Module_cms_chat
 
         if ($type == 'delete') {
             $id = get_param_integer('id');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($id), do_lang_tempcode('CHAT_MODERATION'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('CHATROOMS')), array('_SELF:_SELF:room:' . strval($id), do_lang_tempcode('CHAT_MODERATION'))));
 
             $this->title = get_screen_title('DELETE_ALL_MESSAGES');
         }
@@ -188,9 +188,9 @@ class Module_cms_chat
         require_code('chat2');
         require_css('chat');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->chat_choose_room();
         }
         if ($type == 'room') {
@@ -574,7 +574,7 @@ class Module_cms_chat
                 array(),
                 array(),
                 array(
-                    has_actual_page_access(get_member(), 'admin_chat') ? array('menu/social/chat/chat', array('admin_chat', array('type' => 'misc'), get_module_zone('admin_chat')), do_lang('CHATROOMS')) : null,
+                    has_actual_page_access(get_member(), 'admin_chat') ? array('menu/social/chat/chat', array('admin_chat', array('type' => 'browse'), get_module_zone('admin_chat')), do_lang('CHATROOMS')) : null,
                 ),
                 do_lang('SETUP')
             );
@@ -630,7 +630,7 @@ class Module_cms_chat
             null, // View this category
             /* SPECIALLY TYPED 'LINKS' */
             array(
-                has_actual_page_access(get_member(), 'admin_chat') ? array('menu/social/chat/chat', array('admin_chat', array('type' => 'misc'), get_module_zone('admin_chat')), do_lang('SETUP')) : null,
+                has_actual_page_access(get_member(), 'admin_chat') ? array('menu/social/chat/chat', array('admin_chat', array('type' => 'browse'), get_module_zone('admin_chat')), do_lang('SETUP')) : null,
             )
         );
     }
@@ -674,7 +674,7 @@ class Module_cms_chat
     {
         $delete = post_param_integer('continue_delete', 0);
         if ($delete != 1) {
-            $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             return redirect_screen($this->title, $url, do_lang_tempcode('CANCELLED'));
         } else {
             $room_id = get_param_integer('id');
@@ -697,7 +697,7 @@ class Module_cms_chat
             log_it('DELETE_ALL_MESSAGES', strval($room_id));
 
             // Redirect
-            $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
         }
     }
@@ -739,7 +739,7 @@ class Module_cms_chat
 
         $num_remaining = $GLOBALS['SITE_DB']->query_select_value('chat_messages', 'COUNT(*)', array('room_id' => $room_id));
         if ($num_remaining == 0) {
-            $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         } else {
             $url = build_url(array('page' => '_SELF', 'type' => 'room', 'id' => $room_id, 'start' => get_param_integer('start'), 'max' => get_param_integer('max')), '_SELF');
         }

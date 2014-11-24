@@ -71,7 +71,7 @@ class Module_bookmarks
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -85,7 +85,7 @@ class Module_bookmarks
         $ret = array();
         if ($cnt != 0) {
             $ret += array(
-                'misc' => array('MANAGE_BOOKMARKS', 'menu/site_meta/bookmarks'),
+                'browse' => array('MANAGE_BOOKMARKS', 'menu/site_meta/bookmarks'),
             );
         }
         $ret += array(
@@ -103,11 +103,11 @@ class Module_bookmarks
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('bookmarks');
 
-        if ($type == 'misc' || $type == '_manage') {
+        if ($type == 'browse' || $type == '_manage') {
             $this->title = get_screen_title('MANAGE_BOOKMARKS');
         }
 
@@ -137,9 +137,9 @@ class Module_bookmarks
         }
 
         // Decide what we're doing
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->manage_bookmarks();
         }
         if ($type == '_manage') {
@@ -234,7 +234,7 @@ class Module_bookmarks
             }
         }
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -271,7 +271,7 @@ class Module_bookmarks
         add_bookmark(get_member(), $folder, post_param('title'), post_param('page_link'));
 
         if (get_param_integer('do_redirect') == 1) {
-            $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
         } else {
             return inform_screen($this->title, do_lang_tempcode('SUCCESS'));
@@ -297,7 +297,7 @@ class Module_bookmarks
             edit_bookmark($id, $member, $caption, $page_link);
         }
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

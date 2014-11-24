@@ -52,11 +52,11 @@ class Module_contact_member
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
             $member_id = get_param_integer('id');
@@ -75,7 +75,7 @@ class Module_contact_member
             $member_id = get_param_integer('id');
             $to_name = $GLOBALS['FORUM_DRIVER']->get_username($member_id, true);
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('EMAIL_MEMBER', escape_html($to_name)))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('EMAIL_MEMBER', escape_html($to_name)))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('EMAIL_MEMBER', true, array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id, true))));
@@ -103,14 +103,14 @@ class Module_contact_member
             ocf_require_all_forum_stuff();
         }
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         $member_id = get_param_integer('id');
         if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id, 'm_email_address') == '') || ((get_option('allow_email_disable') == '1') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id, 'm_allow_emails') == 0)) || (is_guest($member_id))) {
             warn_exit(do_lang_tempcode('NO_ACCEPT_EMAILS'));
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->gui();
         }
         if ($type == 'actual') {

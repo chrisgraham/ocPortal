@@ -46,13 +46,13 @@ class Module_admin_menus
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('MENU_MANAGEMENT', 'menu/adminzone/structure/menus'),
+            'browse' => array('MENU_MANAGEMENT', 'menu/adminzone/structure/menus'),
         );
     }
 
@@ -65,18 +65,18 @@ class Module_admin_menus
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('menus');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             set_helper_panel_tutorial('tut_menus');
 
             $this->title = get_screen_title('MENU_MANAGEMENT');
         }
 
         if ($type == 'edit') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MENU_MANAGEMENT'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('MENU_MANAGEMENT'))));
 
             $id = get_param('id', get_param('id_new', ''));
             if ($id == '') {
@@ -108,9 +108,9 @@ class Module_admin_menus
 
         require_css('menu_editor');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->choose_menu_name();
         }
         if ($type == 'edit') {
@@ -447,7 +447,7 @@ class Module_admin_menus
         $url = get_param('redirect', '!');
         if ($url == '!') {
             if (count($_POST) == 1) {
-                $_url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+                $_url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
             } else {
                 $_url = build_url(array('page' => '_SELF', 'type' => 'edit', 'id' => $menu_id), '_SELF');
             }

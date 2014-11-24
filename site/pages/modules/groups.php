@@ -46,7 +46,7 @@ class Module_groups
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -56,7 +56,7 @@ class Module_groups
         }
 
         return array(
-            'misc' => array('USERGROUPS', 'menu/social/groups'),
+            'browse' => array('USERGROUPS', 'menu/social/groups'),
         );
     }
 
@@ -73,11 +73,11 @@ class Module_groups
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             $this->title = get_screen_title('USERGROUPS');
         }
 
@@ -99,7 +99,7 @@ class Module_groups
             $club = ($group['g_is_private_club'] == 1);
 
             breadcrumb_set_self(make_string_tempcode($group_name));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('USERGROUPS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('USERGROUPS'))));
 
             set_extra_request_metadata(array(
                 'created' => '',
@@ -148,7 +148,7 @@ class Module_groups
                 $group_name = ocf_get_group_name($id);
 
                 breadcrumb_set_self(do_lang_tempcode('DONE'));
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('USERGROUPS')), array('_SELF:_SELF:view:' . strval($id), do_lang_tempcode('USERGROUP', escape_html($group_name)))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('USERGROUPS')), array('_SELF:_SELF:view:' . strval($id), do_lang_tempcode('USERGROUP', escape_html($group_name)))));
             } else {
                 $group_name = ocf_get_group_name($id);
             }
@@ -191,9 +191,9 @@ class Module_groups
         require_code('ocf_groups_action2');
         require_code('ocf_groups2');
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             return $this->directory();
         }
         if ($type == 'view') {

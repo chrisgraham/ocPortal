@@ -213,7 +213,7 @@ class Hook_pointstore_topic_pin
         charge_member(get_member(), $total, do_lang('TOPIC_PINNING'));
         $GLOBALS['SITE_DB']->query_insert('sales', array('date_and_time' => time(), 'memberid' => get_member(), 'purchasetype' => 'TOPIC_PINNING', 'details' => strval($topic_id), 'details2' => strval($days)));
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($title, $url, do_lang_tempcode('ORDER_GENERAL_DONE'));
     }
 }

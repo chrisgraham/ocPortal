@@ -37,7 +37,7 @@ class Hook_page_groupings_occle
         }
 
         return array(
-            array('tools', 'menu/adminzone/tools/occle', array('admin_occle', array('type' => 'misc'), get_module_zone('admin_occle')), do_lang_tempcode('occle:OCCLE'), 'DOC_OCCLE'),
+            array('tools', 'menu/adminzone/tools/occle', array('admin_occle', array('type' => 'browse'), get_module_zone('admin_occle')), do_lang_tempcode('occle:OCCLE'), 'DOC_OCCLE'),
         );
     }
 }

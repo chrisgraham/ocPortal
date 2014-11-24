@@ -53,7 +53,7 @@ class Module_cms_banners extends Standard_crud_module
     {
         $this->cat_crud_module = class_exists('Mx_cms_banners_cat') ? new Mx_cms_banners_cat() : new Module_cms_banners_cat();
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('banners');
 
@@ -65,7 +65,7 @@ class Module_cms_banners extends Standard_crud_module
             attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'), 'inform', true);
         }
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             if (has_actual_page_access(get_member(), 'admin_banners')) {
                 $also_url = build_url(array('page' => 'admin_banners'), get_module_zone('admin_banners'));
                 attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN', escape_html($also_url->evaluate())), 'inform', true);
@@ -88,8 +88,8 @@ class Module_cms_banners extends Standard_crud_module
         require_code('banners');
         require_code('banners2');
 
-        if ($type == 'misc') {
-            return $this->misc();
+        if ($type == 'browse') {
+            return $this->browse();
         }
 
         $this->javascript = '
@@ -162,13 +162,13 @@ class Module_cms_banners extends Standard_crud_module
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('MANAGE_BANNERS', 'menu/cms/banners'),
+            'browse' => array('MANAGE_BANNERS', 'menu/cms/banners'),
         ) + parent::get_entry_points();
     }
 
@@ -188,7 +188,7 @@ class Module_cms_banners extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function misc()
+    public function browse()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_BANNERS'), comcode_lang_string('DOC_BANNERS'),
@@ -283,7 +283,7 @@ class Module_cms_banners extends Standard_crud_module
             }
 
             $fr = array(
-                hyperlink(build_url(array('page' => 'banners', 'type' => 'view', 'source' => $row['name']), get_module_zone('banners')), escape_html($row['name'])),
+                hyperlink(build_url(array('page' => 'banners', 'type' => 'view', 'source' => $row['name']), get_module_zone('banners')), do_template('COMCODE_TELETYPE', array('CONTENT' => escape_html($row['name'])))),
                 ($row['b_type'] == '') ? do_lang('GENERAL') : $row['b_type'],
                 $deployment_agreement,
                 //integer_format($row['campaign_remaining']),
@@ -764,7 +764,7 @@ class Module_cms_banners_cat extends Standard_crud_module
             has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners') ? array('_SELF', array('type' => 'edit'), '_SELF', do_lang_tempcode('EDIT_BANNER')) : null, // Edit one
             ((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/
                     get_option('simplified_donext') == '1')) ? null : array('banners', array('type' => 'view', 'source' => $id), get_module_zone('banners')), // View this
-            array('admin_banners', array('type' => 'misc'), get_module_zone('admin_banners')), // View archive
+            array('admin_banners', array('type' => 'browse'), get_module_zone('admin_banners')), // View archive
             null, // Add to category
             has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'add_category'), '_SELF', do_lang_tempcode('ADD_BANNER_TYPE')) : null, // Add one category
             has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'edit_category'), '_SELF', do_lang_tempcode('EDIT_BANNER_TYPE')) : null, // Edit one category

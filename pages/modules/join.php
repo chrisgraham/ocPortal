@@ -46,7 +46,7 @@ class Module_join
      * @param  boolean                  Whether to check permissions.
      * @param  ?MEMBER                  The member to check permissions as (null: current user).
      * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -59,7 +59,7 @@ class Module_join
         }
 
         return array(
-            'misc' => array('_JOIN', 'menu/site_meta/user_actions/join'),
+            'browse' => array('_JOIN', 'menu/site_meta/user_actions/join'),
         );
     }
 
@@ -72,28 +72,28 @@ class Module_join
      */
     public function pre_run()
     {
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
         require_lang('ocf');
 
         $this->title = get_screen_title('__JOIN', true, array(escape_html(get_site_name())));
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             breadcrumb_set_self(do_lang_tempcode('_JOIN'));
         }
 
         if ($type == 'step2') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('_JOIN'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('_JOIN'))));
             breadcrumb_set_self(do_lang_tempcode('DETAILS'));
         }
 
         if ($type == 'step3') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('_JOIN'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('_JOIN'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
         if ($type == 'step4') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('_JOIN'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('_JOIN'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
@@ -111,9 +111,9 @@ class Module_join
 
         ocf_require_all_forum_stuff();
 
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
 
-        if ($type == 'misc') {
+        if ($type == 'browse') {
             check_joining_allowed();
             return (get_option('show_first_join_page') != '1') ? $this->step2() : $this->step1();
         }
@@ -267,7 +267,7 @@ class Module_join
                 warn_exit(do_lang_tempcode('INCORRECT_CONFIRM_CODE'));
             } else {
                 $redirect = get_param('redirect', '');
-                $map = array('page' => 'login', 'type' => 'misc');
+                $map = array('page' => 'login', 'type' => 'browse');
                 if ($redirect != '') {
                     $map['redirect'] = $redirect;
                 }
@@ -287,7 +287,7 @@ class Module_join
 
         // Alert user to situation
         $redirect = get_param('redirect', '');
-        $map = array('page' => 'login', 'type' => 'misc');
+        $map = array('page' => 'login', 'type' => 'browse');
         if ($redirect != '') {
             $map['redirect'] = $redirect;
         }

@@ -69,7 +69,7 @@ function adminzone_extend_breadcrumbs(&$stub)
     if ((count($BREADCRUMB_SET_PARENTS) > 0) && (!is_object($BREADCRUMB_SET_PARENTS[0][0]))) { // Ideally
         // Works by finding where our oldest ancestor connects on to the do-next menus, and carries from there
         list($zone, $attributes,) = page_link_decode($BREADCRUMB_SET_PARENTS[0][0]);
-        $type = array_key_exists('type', $attributes) ? $attributes['type'] : 'misc';
+        $type = array_key_exists('type', $attributes) ? $attributes['type'] : 'browse';
         $page = $attributes['page'];
         if ($page == '_SELF') {
             $page = get_page_name();
@@ -82,7 +82,7 @@ function adminzone_extend_breadcrumbs(&$stub)
         }
     } else {
         // Works by finding where we connect on to the do-next menus, and carries from there
-        $type = get_param('type', 'misc');
+        $type = get_param('type', 'browse');
         $page = get_page_name();
         $zone = get_zone_name();
     }
@@ -108,7 +108,7 @@ function adminzone_extend_breadcrumbs(&$stub)
                         continue;
                     }
 
-                    if ((is_array($i[2])) && ($page == $i[2][0]) && (((!isset($i[2][1]['type'])) && ($type == 'misc')) || ((isset($i[2][1]['type'])) && (($type == $i[2][1]['type']) || ($i[2][1]['type'] == 'misc')))) && ($zone == $i[2][2])) {
+                    if ((is_array($i[2])) && ($page == $i[2][0]) && (((!isset($i[2][1]['type'])) && ($type == 'browse')) || ((isset($i[2][1]['type'])) && (($type == $i[2][1]['type']) || ($i[2][1]['type'] == 'browse')))) && ($zone == $i[2][2])) {
                         if ($i[0] == 'cms') {
                             $url = build_url(array('page' => 'cms', 'type' => ($i[0] == 'cms') ? null : $i[0]), 'cms');
                         } else {

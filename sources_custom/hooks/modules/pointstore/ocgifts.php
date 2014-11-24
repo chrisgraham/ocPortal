@@ -190,7 +190,7 @@ class Hook_pointstore_ocgifts
 
         // Show message / done
         $result = do_lang_tempcode('GIFT_CONGRATULATIONS');
-        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
         return redirect_screen($title, $url, $result);
     }
 }

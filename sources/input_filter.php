@@ -271,7 +271,7 @@ function load_field_restrictions($this_page = null, $this_type = null)
                 $this_page = get_page_name();
             }
             if (is_null($this_type)) {
-                $this_type = get_param('type', array_key_exists('type', $_POST) ? $_POST['type'] : 'misc');
+                $this_type = get_param('type', array_key_exists('type', $_POST) ? $_POST['type'] : 'browse');
             }
             $temp->this_page = $this_page;
             $temp->this_type = $this_type;
