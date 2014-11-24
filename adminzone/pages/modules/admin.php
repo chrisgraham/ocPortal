@@ -728,14 +728,14 @@ class Module_admin
             foreach ($all_groups as $p) {
                 $n = get_translated_text($p['g_name'], $GLOBALS['FORUM_DB']);
                 if ($this->_keyword_match($n)) {
-                    $_url = build_url(array('page' => 'admin_ocf_groups', 'type' => '_ed', 'id' => $p['id']), 'adminzone');
+                    $_url = build_url(array('page' => 'admin_ocf_groups', 'type' => '_edit', 'id' => $p['id']), 'adminzone');
                     $url = $_url->evaluate();
                     $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('USERGROUPS')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'ed'), 'adminzone'), do_lang_tempcode('EDIT_GROUP')));
+                    $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'edit'), 'adminzone'), do_lang_tempcode('EDIT_GROUP')));
                     $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
                     $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => '785e7208a7b10dfd095197754cedf505', 'NAME' => $n, 'URL' => $url, 'TITLE' => '', 'DESCRIPTION' => '', 'SUP' => $sup)));
                 }
@@ -904,7 +904,7 @@ class Module_admin
                     $n = do_lang($langstring);
                     if ($this->_keyword_match($n)) {
                         $n = do_lang_tempcode($array[0]);
-                        $_url = build_url(array('page' => 'admin_ocf_groups', 'type' => 'ed'), 'adminzone');
+                        $_url = build_url(array('page' => 'admin_ocf_groups', 'type' => 'edit'), 'adminzone');
                         $descrip = array_key_exists(1, $array) ? do_lang_tempcode($array[1]) : new Tempcode();
                         $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));

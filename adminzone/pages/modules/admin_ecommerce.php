@@ -118,7 +118,7 @@ class Module_admin_ecommerce extends Standard_crud_module
             $this->title = get_screen_title('CUSTOM_PRODUCT_USERGROUP');
         }
 
-        if (($type == 'ad') || ($type == '_ad') || ($type == 'ed') || ($type == '_ed') || ($type == '__ed')) {
+        if (($type == 'add') || ($type == '_add') || ($type == 'edit') || ($type == '_edit') || ($type == '__edit')) {
             if (get_forum_type() == 'ocf') {
                 breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS'))));
             }
@@ -167,8 +167,8 @@ class Module_admin_ecommerce extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager($this->title, comcode_lang_string('DOC_USERGROUP_SUBSCRIPTION'),
             array(
-                ((get_forum_type() != 'ocf') && (get_value('unofficial_ecommerce') != '1')) ? null : array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_USERGROUP_SUBSCRIPTION')),
-                ((get_forum_type() != 'ocf') && (get_value('unofficial_ecommerce') != '1')) ? null : array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_USERGROUP_SUBSCRIPTION')),
+                ((get_forum_type() != 'ocf') && (get_value('unofficial_ecommerce') != '1')) ? null : array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_USERGROUP_SUBSCRIPTION')),
+                ((get_forum_type() != 'ocf') && (get_value('unofficial_ecommerce') != '1')) ? null : array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_USERGROUP_SUBSCRIPTION')),
             ),
             do_lang('CUSTOM_PRODUCT_USERGROUP')
         );
@@ -197,7 +197,7 @@ class Module_admin_ecommerce extends Standard_crud_module
     public function get_form_fields($title = '', $description = '', $cost = '9.99', $length = 12, $length_units = 'm', $auto_recur = 1, $group_id = null, $uses_primary = 0, $enabled = 1, $mail_start = null, $mail_end = null, $mail_uhoh = null, $mails = null, $id = null)
     {
         if (($title == '') && (get_forum_type() == 'ocf')) {
-            $add_usergroup_url = build_url(array('page' => 'admin_ocf_groups', 'type' => 'ad'), get_module_zone('admin_ocf_groups'));
+            $add_usergroup_url = build_url(array('page' => 'admin_ocf_groups', 'type' => 'add'), get_module_zone('admin_ocf_groups'));
             attach_message(do_lang_tempcode('ADD_USER_GROUP_FIRST', escape_html($add_usergroup_url->evaluate())), 'inform', true);
         }
 

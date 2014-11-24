@@ -1016,7 +1016,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             if ($temp->is_empty()) {
                 $temp_tpl = do_template('WARNING_BOX', array(
                     '_GUID' => '1d617fd24b632640dddeeadd8432d7a9',
-                    'WARNING' => do_lang_tempcode('MISSING_RESOURCE_COMCODE', 'include', hyperlink(build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $zone . ':' . $codename), get_module_zone('cms_comcode_pages')), $zone . ':' . $codename, false, true)),
+                    'WARNING' => do_lang_tempcode('MISSING_RESOURCE_COMCODE', 'include', hyperlink(build_url(array('page' => 'cms_comcode_pages', 'type' => '_edit', 'page_link' => $zone . ':' . $codename), get_module_zone('cms_comcode_pages')), $zone . ':' . $codename, false, true)),
                 ));
                 if ((!in_array(get_page_name(), $GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index'))) {
                     require_code('failure');

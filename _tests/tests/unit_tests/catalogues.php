@@ -44,9 +44,9 @@ class catalogues_test_set extends ocp_test_case
     public function testAddCatalogueUI()
     {
         require_code('content2');
-        $_GET['type'] = 'ad';
+        $_GET['type'] = 'add';
         $this->cms_catalogues_alt->pre_run();
-        $this->cms_catalogues_alt->ad();
+        $this->cms_catalogues_alt->add();
     }
 
     public function testAddCatalogueActulizer()
@@ -354,9 +354,9 @@ class catalogues_test_set extends ocp_test_case
         );
 
         require_code('autosave');
-        $_GET['type'] = '_ad';
+        $_GET['type'] = '_add';
         $this->cms_catalogues_alt->pre_run();
-        $this->cms_catalogues_alt->_ad();
+        $this->cms_catalogues_alt->_add();
     }
 
     public function testDeleteCatalogue()

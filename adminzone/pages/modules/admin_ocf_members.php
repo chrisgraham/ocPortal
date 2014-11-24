@@ -82,7 +82,7 @@ class Module_admin_ocf_members
             //$ret['_SEARCH:admin_ocf_groups:misc']=array('USERGROUPS','menu/social/groups');
             //if (addon_installed('staff'))
             // $ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff');
-            $ret['_SEARCH:warnings:ed'] = array('WARNINGS', 'tabs/member_account/warnings');
+            $ret['_SEARCH:warnings:edit'] = array('WARNINGS', 'tabs/member_account/warnings');
         }
 
         return $ret;
@@ -238,7 +238,7 @@ class Module_admin_ocf_members
                 addon_installed('ocf_cpfs') ? array('menu/adminzone/tools/users/custom_profile_fields', array('admin_ocf_customprofilefields', array('type' => 'misc'), get_module_zone('admin_ocf_customprofilefields')), do_lang_tempcode('CUSTOM_PROFILE_FIELDS'), 'DOC_CUSTOM_PROFILE_FIELDS') : null,
                 addon_installed('welcome_emails') ? array('menu/adminzone/setup/welcome_emails', array('admin_ocf_welcome_emails', array('type' => 'misc'), get_module_zone('admin_ocf_welcome_emails')), do_lang_tempcode('WELCOME_EMAILS'), 'DOC_WELCOME_EMAILS') : null,
                 addon_installed('securitylogging') ? array('menu/adminzone/tools/users/investigate_user', array('admin_lookup', array(), get_module_zone('admin_lookup')), do_lang_tempcode('INVESTIGATE_USER'), 'DOC_INVESTIGATE_USER') : null,
-                array('tabs/member_account/warnings', array('warnings', array('type' => 'ed'), get_module_zone('warnings')), do_lang_tempcode('WARNINGS')),
+                array('tabs/member_account/warnings', array('warnings', array('type' => 'edit'), get_module_zone('warnings')), do_lang_tempcode('WARNINGS')),
                 array('menu/adminzone/security/usergroups_temp', array('admin_group_member_timeouts', array('type' => 'misc'), get_module_zone('admin_group_member_timeouts')), do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'), 'DOC_GROUP_MEMBER_TIMEOUTS'),
                 addon_installed('ecommerce') ? array('menu/adminzone/audit/ecommerce/ecommerce', array('admin_ecommerce', array('type' => 'misc'), get_module_zone('admin_ecommerce')), do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'), 'DOC_ECOMMERCE') : null,
                 array('menu/social/groups', array('admin_ocf_groups', array('type' => 'misc'), get_module_zone('admin_ocf_groups'), do_lang_tempcode('SWITCH_SECTION_WARNING')), do_lang_tempcode('USERGROUPS'), 'DOC_GROUPS'),
@@ -347,7 +347,7 @@ class Module_admin_ocf_members
 
         if (addon_installed('galleries')) {
             require_lang('galleries');
-            $special_links[] = array('menu/rich_content/galleries', array('cms_galleries', array('type' => 'gimp', 'member_id' => $id), get_module_zone('cms_galleries')), do_lang('ADD_GALLERY'));
+            $special_links[] = array('menu/rich_content/galleries', array('cms_galleries', array('type' => 'import', 'member_id' => $id), get_module_zone('cms_galleries')), do_lang('ADD_GALLERY'));
         }
 
         require_code('templates_donext');

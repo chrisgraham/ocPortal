@@ -31,7 +31,7 @@ class Hook_preview_video
     public function applies()
     {
         require_code('uploads');
-        $applies = (get_param('page', '') == 'cms_galleries') && ((get_param('type') == '_ev') || (get_param('type') == 'av'));
+        $applies = (get_param('page', '') == 'cms_galleries') && ((get_param('type') == '_edit_other') || (get_param('type') == 'add_other'));
         return array($applies, null, false);
     }
 

@@ -252,7 +252,7 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
 
     require_code('templates_donext');
     $special = array(
-        array('menu/_generic_admin/add_one', array('cms_comcode_pages', array('type' => 'ed'), get_module_zone('cms_comcode_pages')), do_lang('COMCODE_PAGE_ADD')),
+        array('menu/_generic_admin/add_one', array('cms_comcode_pages', array('type' => 'edit'), get_module_zone('cms_comcode_pages')), do_lang('COMCODE_PAGE_ADD')),
         array('menu/cms/comcode_page_edit', array('cms_comcode_pages', array('type' => 'misc'), get_module_zone('cms_comcode_pages')), do_lang_tempcode('COMCODE_PAGE_EDIT')),
     );
     if (addon_installed('redirects_editor')) {
@@ -274,7 +274,7 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
         do_lang('PAGES'),
         /* TYPED-ORDERED LIST OF 'LINKS'   */
         null, // Add one
-        is_null($page) ? null : array('_SELF', array('type' => '_ed', 'page_link' => $zone . ':' . $page), '_SELF'), // Edit this
+        is_null($page) ? null : array('_SELF', array('type' => '_edit', 'page_link' => $zone . ':' . $page), '_SELF'), // Edit this
         null, // Edit one
         is_null($page) ? null : array($page, array(), $zone), // View this
         null, // View archive

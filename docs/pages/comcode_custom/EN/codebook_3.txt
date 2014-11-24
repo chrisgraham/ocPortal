@@ -475,24 +475,24 @@ topics
   intended_solely_for
 
 warnings
- ad
+ add
   member_id
   post_id
 
 admin_aggregate_types
- ad
+ add
   aggregate_type
  sync
   type
 
 admin_ecommerce_logs
- ad
+ add
   group_id
  trigger
   type_code
 
 admin_ocf_forums
- ad
+ add
   parent_forum
   forum_grouping_id
 
@@ -502,20 +502,20 @@ admin_ocf_merge_members
   to
 
 cms_authors
- _ad
+ _add
   author
 
 cms_banners
- ad
+ add
   b_type
 
 cms_blogs
- ad
+ add
   cat
   validated
 
 cms_booking
- ab
+ add_booking
   bookable_id
   day
   month
@@ -534,37 +534,37 @@ cms_catalogues
   id
 
 cms_calendar
- ad
+ add
   date
   e_type
   validated
 
 cms_downloads
- ad
+ add
   cat
   validated
- ac
+ add_category
   parent_id
 
 cms_galleries
- gimp
+ import
   member_id
   cat
- ad
+ add
   cat
   validated
- av
+ add_other
   cat
   validated
- ac
+ add_category
   parent_id
 
 cms_news
- ad
+ add
   cat
 
 cms_quiz
- ad
+ add
   validated
 [/code]
 

@@ -57,9 +57,9 @@ class Hook_resource_meta_aware_zone
             'title_field_dereference__resource_fs' => false,
 
             'view_page_link_pattern' => null,
-            'edit_page_link_pattern' => '_SEARCH:admin_zones:_ed:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:admin_zones:_edit:_WILD',
             'view_category_page_link_pattern' => null,
-            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_zones')) ? (get_module_zone('admin_zones') . ':admin_zones:ad') : null,
+            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_zones')) ? (get_module_zone('admin_zones') . ':admin_zones:add') : null,
             'archive_url' => null,
 
             'support_url_monikers' => false,

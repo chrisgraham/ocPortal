@@ -43,7 +43,7 @@ function init__form_templates()
     require_css('forms');
 
     if (function_exists('get_member')) {
-        if ((has_privilege(get_member(), 'allow_html')) && (get_value('edit_with_my_comcode_perms') === '1') && ((strpos(get_param('type', ''), 'ed') !== false) || (strpos(get_param('type', ''), 'ec') !== false))) {
+        if ((has_privilege(get_member(), 'allow_html')) && (get_value('edit_with_my_comcode_perms') === '1') && ((strpos(get_param('type', ''), 'edit') !== false) || (strpos(get_param('type', ''), 'edit_category') !== false))) {
             attach_message('You have enabled content editing to assume your permissions via a hidden option. Be VERY careful to check whatever Comcode/HTML you edit.', 'warn');
         }
     }

@@ -23,7 +23,7 @@
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_groups}}
 	{+START,INCLUDE,STAFF_ACTIONS}
-		1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_groups:ad}
+		1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_groups:add}
 		1_TITLE={!ADD_GROUP}
 		1_REL=add
 		1_ICON=menu/_generic_admin/add_one

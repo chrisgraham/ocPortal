@@ -170,7 +170,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
                         }
                     }
 
-                    $edit_url = has_actual_page_access(get_member(), 'admin_ocf_forums') ? build_url(array('page' => 'admin_ocf_forums', 'type' => '_ed', 'id' => $subforum['id']), 'adminzone') : new Tempcode();
+                    $edit_url = has_actual_page_access(get_member(), 'admin_ocf_forums') ? build_url(array('page' => 'admin_ocf_forums', 'type' => '_edit', 'id' => $subforum['id']), 'adminzone') : new Tempcode();
 
                     $forum_rules_url = '';
                     $intro_question_url = '';

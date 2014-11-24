@@ -69,7 +69,7 @@ class Hook_profiles_tabs_blog
 
         // Add link
         if ($member_id_of == $member_id_viewing) {
-            $add_blog_post_url = build_url(array('page' => 'cms_blogs', 'type' => 'ad'), get_module_zone('cms_blogs'));
+            $add_blog_post_url = build_url(array('page' => 'cms_blogs', 'type' => 'add'), get_module_zone('cms_blogs'));
         } else {
             $add_blog_post_url = new Tempcode();
         }

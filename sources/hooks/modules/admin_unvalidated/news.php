@@ -45,7 +45,7 @@ class Hook_unvalidated_news
         $info['db_add_date'] = 'date_and_time';
         $info['db_edit_date'] = 'edit_date';
         $info['edit_module'] = 'cms_news';
-        $info['edit_type'] = '_ed';
+        $info['edit_type'] = '_edit';
         $info['edit_identifier'] = 'id';
         $info['title'] = do_lang_tempcode('NEWS');
 

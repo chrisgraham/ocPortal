@@ -115,7 +115,7 @@ class Module_cms_chat
             $this->title = get_screen_title('CHAT_UNBAN');
         }
 
-        if ($type == 'ed') {
+        if ($type == 'edit') {
             $id = get_param_integer('id');
 
             $rows = $GLOBALS['SITE_DB']->query_select('chat_messages', array('*'), array('id' => $id), '', 1);
@@ -131,7 +131,7 @@ class Module_cms_chat
             $this->myrow = $myrow;
         }
 
-        if ($type == '_ed') {
+        if ($type == '_edit') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $delete = post_param_integer('delete', 0);
@@ -211,10 +211,10 @@ class Module_cms_chat
         if ($type == 'mass_delete') {
             return $this->_chat_delete_many_messages();
         }
-        if ($type == 'ed') {
+        if ($type == 'edit') {
             return $this->chat_edit_message();
         }
-        if ($type == '_ed') {
+        if ($type == '_edit') {
             return $this->_chat_edit_message();
         }
 
@@ -343,7 +343,7 @@ class Module_cms_chat
         }
         $fields_title = results_field_title($array, $sortables, 'sort', $sortable . ' ' . $sort_order);
         foreach ($rows as $myrow) {
-            $url = build_url(array('page' => '_SELF', 'type' => 'ed', 'room_id' => $room_id, 'id' => $myrow['id']), '_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'edit', 'room_id' => $room_id, 'id' => $myrow['id']), '_SELF');
 
             $username = $GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
             if (is_null($username)) {
@@ -500,7 +500,7 @@ class Module_cms_chat
             access_denied('PRIVILEGE', 'edit_lowrange_content');
         }
 
-        $post_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'id' => $myrow['id'], 'room_id' => $room_id), '_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'id' => $myrow['id'], 'room_id' => $room_id), '_SELF');
 
         $message = get_translated_tempcode('chat_messages', $myrow, 'the_message');
 
@@ -561,7 +561,7 @@ class Module_cms_chat
                 null,
                 /* TYPED-ORDERED LIST OF 'LINKS'    */
                 null, // Add one
-                array('_SELF', array('type' => 'ed', 'id' => $message_id, 'room_id' => $room_id), '_SELF'), // Edit this
+                array('_SELF', array('type' => 'edit', 'id' => $message_id, 'room_id' => $room_id), '_SELF'), // Edit this
                 array('_SELF', array('type' => 'room', 'id' => $room_id), '_SELF'), // Edit one
                 null, // View this
                 array('_SELF', array(), '_SELF'), // View archive

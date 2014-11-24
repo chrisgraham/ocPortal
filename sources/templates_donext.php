@@ -154,7 +154,7 @@ function do_next_manager($title, $text, $main = null, $main_title = null, $url_a
                 break;
             case 'menu/_generic_admin/add_one':
                 $x = $url_add_one;
-                if (($current_page_type == '_ad') || ($current_page_type == '_add_entry')) {
+                if (($current_page_type == '_add') || ($current_page_type == '_add_entry')) {
                     if (get_param_integer('auto__add_one', 0) == 1) {
                         $x[1]['auto__add_one'] = '1';
                         $_url_redirect = build_url(array_merge(array('page' => $x[0]), $x[1]), $x[2]);
@@ -213,7 +213,7 @@ function do_next_manager($title, $text, $main = null, $main_title = null, $url_a
         switch ($option) {
             case 'menu/_generic_admin/add_one_category':
                 $x = $url_add_one_category;
-                if (($current_page_type == '_ac') || ($current_page_type == '_add_category')) {
+                if (($current_page_type == '_add_category') || ($current_page_type == '_add_category')) {
                     if (get_param_integer('auto__add_one_category', 0) == 1) {
                         $x[1]['auto__add_one_category'] = '1';
                         $_url_redirect = build_url(array_merge(array('page' => $x[0]), $x[1]), $x[2]);

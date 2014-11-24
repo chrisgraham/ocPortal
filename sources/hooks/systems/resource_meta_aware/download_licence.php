@@ -55,9 +55,9 @@ class Hook_resource_meta_aware_download_licence
             'title_field_dereference' => false,
 
             'view_page_link_pattern' => null,
-            'edit_page_link_pattern' => '_SEARCH:cms_downloads:_ev:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_downloads:_edit_other:_WILD',
             'view_category_page_link_pattern' => null,
-            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'cms_downloads')) ? (get_module_zone('cms_downloads') . ':cms_downloads:av') : null,
+            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'cms_downloads')) ? (get_module_zone('cms_downloads') . ':cms_downloads:add_other') : null,
             'archive_url' => null,
 
             'support_url_monikers' => false,

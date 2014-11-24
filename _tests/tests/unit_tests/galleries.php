@@ -55,9 +55,9 @@ class galleries_test_set extends ocp_test_case
     public function testAddGalleryUI()
     {
         require_code('content2');
-        $_GET['type'] = 'ad';
+        $_GET['type'] = 'add';
         $this->cms_gal_category->pre_run();
-        $this->cms_gal_category->ad();
+        $this->cms_gal_category->add();
     }
 
     public function testAddGalleryActualiser()
@@ -134,9 +134,9 @@ class galleries_test_set extends ocp_test_case
             'description__is_wysiwyg' => 1,
         );
 
-        $_GET['type'] = '_ad';
+        $_GET['type'] = '_add';
         $this->cms_gal_category->pre_run();
-        $this->cms_gal_category->_ad();
+        $this->cms_gal_category->_add();
     }
 
     public function testEditGalleryActualiser()
@@ -212,15 +212,15 @@ class galleries_test_set extends ocp_test_case
             'require__award_3' => 0,
             'description__is_wysiwyg' => 1,
         );
-        //$this->cms_gal_category->_ed();
+        //$this->cms_gal_category->_edit();
     }
 
     public function testAddImageUI()
     {
         //Checking gallery image adding UI
-        $_GET['type'] = 'ad';
+        $_GET['type'] = 'add';
         $this->cms_gal->pre_run();
-        $this->cms_gal->ad();
+        $this->cms_gal->add();
     }
 
     public function testAddImageActualiser()
@@ -264,16 +264,16 @@ class galleries_test_set extends ocp_test_case
             'description__is_wysiwyg' => 1,
         );
 
-        $_GET['type'] = '_ad';
+        $_GET['type'] = '_add';
         $this->cms_gal->pre_run();
-        $this->cms_gal->_ad();
+        $this->cms_gal->_add();
     }
 
     public function testAddVideoUI()
     {
-        $_GET['type'] = 'ad';
+        $_GET['type'] = 'add';
         $this->cms_gal_alt->pre_run();
-        $this->cms_gal_alt->ad();
+        $this->cms_gal_alt->add();
     }
 
     public function testAddVideoActuliser()
@@ -315,7 +315,7 @@ class galleries_test_set extends ocp_test_case
             'require__meta_description' => 0,
             'description__is_wysiwyg' => 1,
         );
-        //$this->cms_gal_alt->_ad();
+        //$this->cms_gal_alt->_add();
     }
 
     public function testDeleteGallery()

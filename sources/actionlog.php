@@ -56,7 +56,7 @@ function actionlog_linkage($type, $a, $b, $_a, $_b)
         return array($_a, $_b);
     }
     if ($type == 'COMCODE_PAGE_EDIT') {
-        $tmp_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $b . ':' . $a), get_module_zone('cms_comcode_pages'));
+        $tmp_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_edit', 'page_link' => $b . ':' . $a), get_module_zone('cms_comcode_pages'));
         $_a = hyperlink($tmp_url, $_a, false, false, $type_str);
         return array($_a, $_b);
     }

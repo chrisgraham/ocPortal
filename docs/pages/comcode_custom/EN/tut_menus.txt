@@ -92,7 +92,7 @@ In the form part of the interface there are the following fields:
 
 Entry points are used in the site-tree tool in the menu editor.
 
-Entry points are basically ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=ad[/tt]' is the entry point to add a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
+Entry points are basically ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=add[/tt]' is the entry point to add a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
 
 Entry points are the subset of all "page-links" that point to specific parts of the software, rather than some content that you have added. Page-links are described in full in the [page="_SEARCH:tut_structure"]ocPortal site structure[/page] tutorial.
 
@@ -181,17 +181,17 @@ The only differences between a page-link and a match-key are:
  - Related to the above, it makes no sense to use '_SEARCH' or '_SELF' as the zone/page in a match-key
  - While all specified components of a match-key enforce a match, the URL may also have additional parameters and the match-key does not need to state them -- i.e. the match-key may specify a subset of the parameters of a URL, broadening the match
 
-An example match-key list is '_WILD:cms_downloads:type=ad,_WILD:cms_galleries:type=ed'. This would match URLs that were generated from the following page-links (whether these page-links points themselves actually work is irrelevant):
- - [tt]cms:cms_downloads:type=ad[/tt]
- - [tt]randomzone:cms_downloads:type=ad[/tt]
- - [tt]:cms_downloads:type=ad:wide=1[/tt]
- - [tt]cms:cms_galleries:type=ed[/tt]
- - [tt]adminzone:cms_galleries:type=ed:keep_novalidate=1[/tt]
+An example match-key list is '_WILD:cms_downloads:type=add,_WILD:cms_galleries:type=edit'. This would match URLs that were generated from the following page-links (whether these page-links points themselves actually work is irrelevant):
+ - [tt]cms:cms_downloads:type=add[/tt]
+ - [tt]randomzone:cms_downloads:type=add[/tt]
+ - [tt]:cms_downloads:type=add:wide=1[/tt]
+ - [tt]cms:cms_galleries:type=edit[/tt]
+ - [tt]adminzone:cms_galleries:type=edit:keep_novalidate=1[/tt]
 
 It would not match URLs generated from the following page-links:
- - [tt]site:cms_galleries:type=ad[/tt]
+ - [tt]site:cms_galleries:type=add[/tt]
  - [tt]randomzone:cms_example[/tt]
- - [tt]:cms_downloads:type=ed:wide=1[/tt]
+ - [tt]:cms_downloads:type=edit:wide=1[/tt]
 
 In the menu editor, multiple match-keys may be entered in the "Restrict link visibility" field with commas to separate them.
 

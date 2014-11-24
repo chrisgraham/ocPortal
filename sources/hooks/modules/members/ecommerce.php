@@ -50,7 +50,7 @@ class Hook_members_ecommerce
 
         if (has_actual_page_access(get_member(), 'admin_ecommerce', get_module_zone('admin_ecommerce'))) {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
-            $modules[] = array('views', do_lang_tempcode('CREATE_INVOICE'), build_url(array('page' => 'admin_invoices', 'type' => 'ad', 'to' => $username), get_module_zone('admin_invoices')), 'menu/adminzone/audit/ecommerce/create_invoice');
+            $modules[] = array('views', do_lang_tempcode('CREATE_INVOICE'), build_url(array('page' => 'admin_invoices', 'type' => 'add', 'to' => $username), get_module_zone('admin_invoices')), 'menu/adminzone/audit/ecommerce/create_invoice');
         }
 
         return $modules;

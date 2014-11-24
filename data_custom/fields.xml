@@ -8,14 +8,14 @@
 		<maxLength error="!ecommerce:BAD_CARD_DATE">5</maxLength>
 	</qualify>
 	<filter notstaff="1">
-		<qualify pages="cms_news" types="ad,_ad" fields="post">
+		<qualify pages="cms_news" types="add,_add" fields="post">
 <!--			<minLength>5</minLength>-->
 <!--			<maxLength>32000</maxLength>-->
 <!--			<shun>Testing</shun>-->
 <!--			<disallowedWord>shit*</disallowedWord>-->
 <!--			<disallowedSubstring>I shouldn't be telling you this, but</disallowedSubstring>-->
 		</qualify>
-		<qualify pages="cms_news" types="ad,_ad" fields="title">
+		<qualify pages="cms_news" types="add,_add" fields="title">
 <!--			<removeShout />-->
 		</qualify>
 		<qualify pages="cms_comcode_pages" fields="post">
@@ -27,7 +27,7 @@
 	</filter>
 
 	<!-- Example as might be used for a custom module -->
-	<qualify pages="property" types="ad,_ad,_ed,__ed" fields="descrip_features,descrip_accomodation,descrip_exterior">
+	<qualify pages="property" types="add,_add,_edit,__edit" fields="descrip_features,descrip_accomodation,descrip_exterior">
 		<maxLength error="!property:P_DESCRIPT_TOO_LONG">1500</maxLength>
 	</qualify>
 </fieldRestrictions>

@@ -554,7 +554,7 @@ class Module_chat
         $message->attach(do_lang_tempcode('WELCOME_CHAT_LOBBY', $private_room->is_empty() ? new Tempcode() : do_lang_tempcode('WELCOME_CHAT_LOBBY_PRIVATE_CHATROOMS'), $can_im ? do_lang_tempcode('WELCOME_CHAT_LOBBY_USE_IM') : new Tempcode(), $can_im ? do_lang_tempcode((get_option('sitewide_im') == '1') ? 'WELCOME_CHAT_LOBBY_USE_IM2_SITEWIDE' : 'WELCOME_CHAT_LOBBY_USE_IM2_NO_SITEWIDE') : new Tempcode()));
 
         if (has_actual_page_access(get_member(), 'admin_chat')) {
-            $add_room_url = build_url(array('page' => 'admin_chat', 'type' => 'ad'), get_module_zone('admin_chat'));
+            $add_room_url = build_url(array('page' => 'admin_chat', 'type' => 'add'), get_module_zone('admin_chat'));
         } else {
             $add_room_url = new Tempcode();
         }
@@ -662,7 +662,7 @@ class Module_chat
         $admin_link = new Tempcode();
         if (has_actual_page_access(get_member(), 'admin_chat')) {
             // The user is staff, so let him have the admin link
-            $admin_url = build_url(array('page' => 'admin_chat', 'type' => '_ed', 'id' => $room_id), 'adminzone');
+            $admin_url = build_url(array('page' => 'admin_chat', 'type' => '_edit', 'id' => $room_id), 'adminzone');
             $admin_link = hyperlink($admin_url, do_lang_tempcode('EDIT_CHATROOM'), true);
         }
 

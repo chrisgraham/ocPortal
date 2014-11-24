@@ -244,8 +244,8 @@ Configuration options are created using the [tt]config[/tt] hooks. The hooks con
 Modules functionality is subdivided by 'screen'. 'Screens' are segregated by their unique expected output -- individual error messages don't run from separate screen functions, because error messages aren't expected in advance, they're incidental.
 
 As an example, if a module was designed to add a resource, it would need at least two screens:
-1) The interface to allow the user to add the resource (a form screen). By convention this would be identified by 'type'='ad'.
-2) The actualiser to actually add the resource, and the screen to say that the resource had been added. By convention this would be identified by 'type'='_ad'.
+1) The interface to allow the user to add the resource (a form screen). By convention this would be identified by 'type'='add'.
+2) The actualiser to actually add the resource, and the screen to say that the resource had been added. By convention this would be identified by 'type'='_add'.
 
 The function names of screens do not need to mirror the names of the 'type' parameter, but usually it is clearer this way.
 
@@ -995,7 +995,7 @@ return do_next_manager(
 		...
 		array(
 			'blog_icon',
-			array('cms_news',array('type'=>'ad'),'cms'),
+			array('cms_news',array('type'=>'add'),'cms'),
 			'Add a blog entry',
 			'Blah blah this text is hovered'
 		),
@@ -1007,7 +1007,7 @@ return do_next_manager(
 Going from top to bottom:
  - the icon theme image name
  - the page name (cms_news)
- - the list of URL parameters (in this case, one: 'type' as 'ad')
+ - the list of URL parameters (in this case, one: 'type' as 'add')
  - the zone (cms)
  - the link caption
  - the hover text

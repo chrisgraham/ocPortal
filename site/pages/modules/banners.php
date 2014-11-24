@@ -475,7 +475,7 @@ class Module_banners
 
         $edit_url = new Tempcode();
         if ((has_actual_page_access(null, 'cms_banners', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_banners'))) {
-            $edit_url = build_url(array('page' => 'cms_banners', 'type' => '_ed', 'id' => $source), get_module_zone('cms_banners'));
+            $edit_url = build_url(array('page' => 'cms_banners', 'type' => '_edit', 'id' => $source), get_module_zone('cms_banners'));
         }
 
         return do_template('BANNER_VIEW_SCREEN', array(

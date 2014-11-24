@@ -184,8 +184,8 @@ class Module_admin_ocdeadpeople extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('OCDEADPEOPLE_TITLE'), comcode_lang_string('DOC_OCDEADPEOPLE'),
             array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_DISEASE')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_DISEASE')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_DISEASE')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_DISEASE')),
             ),
             do_lang('OCDEADPEOPLE_TITLE')
         );

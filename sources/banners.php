@@ -58,7 +58,7 @@ function render_banner_box($row, $zone = '_SEARCH', $give_context = true, $guid 
         'SUMMARY' => $summary,
         'URL' => $url,
         'FRACTIONAL_EDIT_FIELD_NAME' => $give_context ? null : 'name',
-        'FRACTIONAL_EDIT_FIELD_URL' => $give_context ? null : '_SEARCH:cms_banners:__ed:' . $row['name'],
+        'FRACTIONAL_EDIT_FIELD_URL' => $give_context ? null : '_SEARCH:cms_banners:__edit:' . $row['name'],
     ));
 }
 
@@ -278,7 +278,7 @@ function banners_script($ret = false, $type = null, $dest = null, $b_type = null
         if ($tally == 0) {
             require_code('permissions');
             if ((has_actual_page_access(null, 'cms_banners')) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_banners'))) {
-                $add_banner_url = build_url(array('page' => 'cms_banners', 'type' => 'ad'), get_module_zone('cms_banners'));
+                $add_banner_url = build_url(array('page' => 'cms_banners', 'type' => 'add'), get_module_zone('cms_banners'));
             } else {
                 $add_banner_url = new Tempcode();
             }

@@ -183,8 +183,8 @@ class Module_admin_aggregate_types extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('AGGREGATE_TYPES'), comcode_lang_string('DOC_AGGREGATE_TYPES'),
             array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_AGGREGATE_TYPE_INSTANCE')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_AGGREGATE_TYPE_INSTANCE')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_AGGREGATE_TYPE_INSTANCE')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_AGGREGATE_TYPE_INSTANCE')),
                 array('menu/_generic_admin/xml', array('_SELF', array('type' => 'xml'), '_SELF'), do_lang('EDIT_AGGREGATE_TYPES')),
                 array('menu/_generic_admin/sync', array('_SELF', array('type' => 'sync'), '_SELF'), do_lang('SYNCHRONISE_AGGREGATE_TYPES')),
             ),

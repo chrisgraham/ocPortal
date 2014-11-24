@@ -164,7 +164,7 @@ class Module_admin_custom_comcode extends Standard_crud_module
         $this->edit_this_label = do_lang_tempcode('EDIT_THIS_CUSTOM_COMCODE_TAG');
         $this->edit_one_label = do_lang_tempcode('EDIT_CUSTOM_COMCODE_TAG');
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript .= "
@@ -202,8 +202,8 @@ class Module_admin_custom_comcode extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('CUSTOM_COMCODE'), comcode_lang_string('DOC_CUSTOM_COMCODE'),
             array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_CUSTOM_COMCODE_TAG')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_CUSTOM_COMCODE_TAG')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_CUSTOM_COMCODE_TAG')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_CUSTOM_COMCODE_TAG')),
             ),
             do_lang('CUSTOM_COMCODE')
         );

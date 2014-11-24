@@ -275,7 +275,7 @@ class Hook_task_import_member_csv
                         require_code('ocf_groups_action');
                         $g_id = ocf_make_group($p, 0, 0, 0, '');
                         $all_groups[$p] = $g_id;
-                        $_group_edit_url = build_url(array('page' => 'admin_ocf_groups', 'type' => '_ed', 'id' => $g_id), get_module_zone('admin_ocf_groups'));
+                        $_group_edit_url = build_url(array('page' => 'admin_ocf_groups', 'type' => '_edit', 'id' => $g_id), get_module_zone('admin_ocf_groups'));
                         $group_edit_url = $_group_edit_url->evaluate();
                         $outputted_messages->attach(do_lang_tempcode('MEMBER_IMPORT_GROUP_ADDED', escape_html($p), escape_html($group_edit_url)));
                     }
@@ -345,7 +345,7 @@ class Hook_task_import_member_csv
             unset($line[$dob_key]);
             foreach ($line as $h => $f) { // New CPFs
                 $cf_id = ocf_make_custom_field($h, 0, '', '', 0, 0, 0, 0, 'long_text');
-                $_cpf_edit_url = build_url(array('page' => 'admin_ocf_customprofilefields', 'type' => '_ed', 'id' => $cf_id), get_module_zone('admin_ocf_customprofilefields'));
+                $_cpf_edit_url = build_url(array('page' => 'admin_ocf_customprofilefields', 'type' => '_edit', 'id' => $cf_id), get_module_zone('admin_ocf_customprofilefields'));
                 $cpf_edit_url = $_cpf_edit_url->evaluate();
                 $outputted_messages->attach(do_lang_tempcode('MEMBER_IMPORT_CPF_ADDED', escape_html($h), escape_html($cpf_edit_url)));
                 $custom_fields[$cf_id] = $f;

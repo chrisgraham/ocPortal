@@ -48,7 +48,7 @@ class Module_cms_iotds extends Standard_crud_module
 
         set_helper_panel_tutorial('tut_featured');
 
-        if ($type == 'ed') {
+        if ($type == 'edit') {
             $this->title = get_screen_title('EDIT_OR_CHOOSE_IOTD');
         }
 
@@ -130,8 +130,8 @@ class Module_cms_iotds extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_IOTDS'), comcode_lang_string('DOC_IOTDS'),
             array(
-                has_privilege(get_member(), 'submit_midrange_content', 'cms_iotds') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_IOTD')) : null,
-                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_iotds') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_OR_CHOOSE_IOTD')) : null,
+                has_privilege(get_member(), 'submit_midrange_content', 'cms_iotds') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_IOTD')) : null,
+                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_iotds') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_OR_CHOOSE_IOTD')) : null,
             ),
             do_lang('MANAGE_IOTDS')
         );
@@ -216,7 +216,7 @@ class Module_cms_iotds extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function ed()
+    public function edit()
     {
         $count = $GLOBALS['SITE_DB']->query_select_value('iotd', 'COUNT(*)');
         if ($count == 0) {
@@ -233,7 +233,7 @@ class Module_cms_iotds extends Standard_crud_module
         if ($used == 1) {
             $used_iotd = $this->_get_iotd_boxes(1);
         }
-        $used_url = build_url(array('page' => '_SELF', 'type' => 'ed', 'used' => 1), '_SELF');
+        $used_url = build_url(array('page' => '_SELF', 'type' => 'edit', 'used' => 1), '_SELF');
 
         $search_url = build_url(array('page' => 'search', 'id' => 'iotds'), get_module_zone('search'));
         $archive_url = build_url(array('page' => 'iotds'), get_module_zone('iotds'));

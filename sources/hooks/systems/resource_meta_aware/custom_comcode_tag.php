@@ -55,9 +55,9 @@ class Hook_resource_meta_aware_custom_comcode_tag
             'title_field_dereference' => false,
 
             'view_page_link_pattern' => null,
-            'edit_page_link_pattern' => '_SEARCH:admin_custom_comcode:_ed:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:admin_custom_comcode:_edit:_WILD',
             'view_category_page_link_pattern' => null,
-            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_custom_comcode')) ? (get_module_zone('admin_custom_comcode') . ':admin_custom_comcode:ad') : null,
+            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_custom_comcode')) ? (get_module_zone('admin_custom_comcode') . ':admin_custom_comcode:add') : null,
             'archive_url' => null,
 
             'support_url_monikers' => false,

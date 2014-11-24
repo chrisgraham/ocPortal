@@ -368,7 +368,7 @@ class Module_downloads
                     $image_description = get_translated_tempcode('images', $row, 'description');
                     $thumb = do_image_thumb($thumb_url, '');
                     if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $row['submitter'], 'cms_galleries', array('galleries', 'download_' . strval($id))))) {
-                        $iedit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ed', 'id' => $row['id']), get_module_zone('cms_galleries'));
+                        $iedit_url = build_url(array('page' => 'cms_galleries', 'type' => '_edit', 'id' => $row['id']), get_module_zone('cms_galleries'));
                     } else {
                         $iedit_url = new Tempcode();
                     }
@@ -509,17 +509,17 @@ class Module_downloads
 
         // Management links
         if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'submit_midrange_content')) {
-            $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'ad', 'cat' => $category_id), get_module_zone('cms_downloads'));
+            $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'add', 'cat' => $category_id), get_module_zone('cms_downloads'));
         } else {
             $submit_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'submit_cat_midrange_content')) {
-            $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'ac', 'parent_id' => $category_id), get_module_zone('cms_downloads'));
+            $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'add_category', 'parent_id' => $category_id), get_module_zone('cms_downloads'));
         } else {
             $add_cat_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'edit_cat_midrange_content')) {
-            $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_ec', 'id' => $category_id), get_module_zone('cms_downloads'));
+            $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_edit_category', 'id' => $category_id), get_module_zone('cms_downloads'));
         } else {
             $edit_cat_url = new Tempcode();
         }
@@ -609,17 +609,17 @@ class Module_downloads
 
         // Management links
         if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'submit_midrange_content'))) {
-            $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'ad', 'cat' => $id), get_module_zone('cms_downloads'));
+            $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'add', 'cat' => $id), get_module_zone('cms_downloads'));
         } else {
             $submit_url = new Tempcode();
         }
         if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'submit_cat_midrange_content'))) {
-            $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'ac', 'parent_id' => $id), get_module_zone('cms_downloads'));
+            $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'add_category', 'parent_id' => $id), get_module_zone('cms_downloads'));
         } else {
             $add_cat_url = new Tempcode();
         }
         if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'edit_cat_midrange_content'))) {
-            $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_ec', 'id' => $id), get_module_zone('cms_downloads'));
+            $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_edit_category', 'id' => $id), get_module_zone('cms_downloads'));
         } else {
             $edit_cat_url = new Tempcode();
         }
@@ -693,12 +693,12 @@ class Module_downloads
         $edit_url = new Tempcode();
         $add_img_url = new Tempcode();
         if ((has_actual_page_access(null, 'cms_downloads', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_downloads', array('downloads', $myrow['category_id'])))) {
-            $edit_url = build_url(array('page' => 'cms_downloads', 'type' => '_ed', 'id' => $id), get_module_zone('cms_downloads'));
+            $edit_url = build_url(array('page' => 'cms_downloads', 'type' => '_edit', 'id' => $id), get_module_zone('cms_downloads'));
         }
         if (addon_installed('galleries')) {
             if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_galleries', array('galleries', 'download_' . strval($id))))) {
                 require_lang('galleries');
-                $add_img_url = build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => 'download_' . strval($id)), get_module_zone('cms_galleries'));
+                $add_img_url = build_url(array('page' => 'cms_galleries', 'type' => 'add', 'cat' => 'download_' . strval($id)), get_module_zone('cms_galleries'));
             }
         }
 

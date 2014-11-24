@@ -45,7 +45,7 @@ class Hook_unvalidated_videos
         $info['db_add_date'] = 'add_date';
         $info['db_edit_date'] = 'edit_date';
         $info['edit_module'] = 'cms_galleries';
-        $info['edit_type'] = '_ev';
+        $info['edit_type'] = '_edit_other';
         $info['view_module'] = 'galleries';
         $info['view_type'] = 'video';
         $info['edit_identifier'] = 'id';

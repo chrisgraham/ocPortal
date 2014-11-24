@@ -34,7 +34,7 @@ If you feel you have cause for a permanent banner of yours to be displayed on ou
 
 We have the ability to change the regularity a banner is shown on the network. If you have been given a number of hits for any particular reason, you may choose to have them spread out over a long length of time, or for your banners to be shown all at once, giving you a sudden burst of visitors.
 
-[page="_SEARCH:cms_banners:ad"]Join our banner scheme[/page]
+[page="_SEARCH:cms_banners:add"]Join our banner scheme[/page]
 
 Or contact us [email="by email"]{$STAFF_ADDRESS}[/email].
 

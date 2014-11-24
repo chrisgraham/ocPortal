@@ -149,7 +149,7 @@ class Module_admin_workflow extends Standard_crud_module
         // TODO: Add tutorial
         //set_helper_panel_tutorial('tut_workflow');
 
-        if ($type == '_ad') {
+        if ($type == '_add') {
             $doing = 'ADD_' . $this->lang_type;
 
             $this->title = get_screen_title($doing);
@@ -157,7 +157,7 @@ class Module_admin_workflow extends Standard_crud_module
             $this->doing = $doing;
         }
 
-        if ($type == '__ed') {
+        if ($type == '__edit') {
             $delete = post_param_integer('delete', 0);
             if ($delete == 1) {
                 $doing = 'DELETE_' . $this->lang_type;
@@ -208,8 +208,8 @@ class Module_admin_workflow extends Standard_crud_module
         return do_next_manager(get_screen_title('MANAGE_WORKFLOWS'), comcode_to_tempcode(do_lang('DOC_WORKFLOWS'), null, true),
             array(
                 /*  type                     page    params                                       zone   */
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_WORKFLOW')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_WORKFLOW')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_WORKFLOW')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_WORKFLOW')),
             ),
             do_lang('MANAGE_WORKFLOWS')
         );
@@ -577,7 +577,7 @@ class Module_admin_workflow extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function _ad()
+    public function _add()
     {
         // We override the add screen here so that we can provide multiple screens
 
@@ -625,7 +625,7 @@ class Module_admin_workflow extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function __ed()
+    public function __edit()
     {
         // We override the standard CRUD edit actualiser in order to redirect to a
         // second edit screen if certain conditions are met. Other than this, the

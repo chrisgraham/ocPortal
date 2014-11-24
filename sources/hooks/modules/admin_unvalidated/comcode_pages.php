@@ -39,7 +39,7 @@ class Hook_unvalidated_comcode_pages
         $info['db_add_date'] = 'p_add_date';
         $info['db_edit_date'] = 'p_edit_date';
         $info['edit_module'] = 'cms_comcode_pages';
-        $info['edit_type'] = '_ed';
+        $info['edit_type'] = '_edit';
         $info['edit_identifier'] = 'page_link';
         $info['title'] = do_lang_tempcode('COMCODE_PAGE');
 

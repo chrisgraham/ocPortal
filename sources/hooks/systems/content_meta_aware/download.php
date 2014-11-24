@@ -57,9 +57,9 @@ class Hook_content_meta_aware_download
             'thumb_field' => 'rep_image',
 
             'view_page_link_pattern' => '_SEARCH:downloads:entry:_WILD',
-            'edit_page_link_pattern' => '_SEARCH:cms_downloads:_ed:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_downloads:_edit:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:downloads:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_downloads')) ? (get_module_zone('cms_downloads') . ':cms_downloads:ad') : null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_downloads')) ? (get_module_zone('cms_downloads') . ':cms_downloads:add') : null,
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('downloads')) . ':downloads',
 
             'support_url_monikers' => true,

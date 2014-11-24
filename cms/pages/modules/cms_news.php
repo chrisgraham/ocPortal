@@ -123,7 +123,7 @@ class Module_cms_news extends Standard_crud_module
 
         set_helper_panel_tutorial('tut_news');
 
-        if ($type == 'ad' || $type == '_ed') {
+        if ($type == 'add' || $type == '_edit') {
             set_helper_panel_text(comcode_lang_string('DOC_NEWS'));
         }
 
@@ -177,10 +177,10 @@ class Module_cms_news extends Standard_crud_module
         require_code('fields');
         return do_next_manager(get_screen_title('MANAGE_NEWS'), comcode_lang_string('DOC_NEWS'),
             array_merge(array(
-                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'ac'), '_SELF'), do_lang('ADD_NEWS_CATEGORY')) : null,
-                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'ec'), '_SELF'), do_lang('EDIT_NEWS_CATEGORY')) : null,
-                has_privilege(get_member(), 'submit_highrange_content', 'cms_news') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_NEWS')) : null,
-                has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_NEWS')) : null,
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'add_category'), '_SELF'), do_lang('ADD_NEWS_CATEGORY')) : null,
+                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'edit_category'), '_SELF'), do_lang('EDIT_NEWS_CATEGORY')) : null,
+                has_privilege(get_member(), 'submit_highrange_content', 'cms_news') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_NEWS')) : null,
+                has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_NEWS')) : null,
                 has_privilege(get_member(), 'mass_import', 'cms_news') ? array('menu/_generic_admin/import', array('_SELF', array('type' => 'import'), '_SELF'), do_lang('IMPORT_NEWS')) : null,
             ), manage_custom_fields_donext_link('news')),
             do_lang('MANAGE_NEWS')
@@ -1079,14 +1079,14 @@ class Module_cms_news_cat extends Standard_crud_module
                 null,
                 null,
                 /* TYPED-ORDERED LIST OF 'LINKS'    */
-                array('_SELF', array('type' => 'ad'), '_SELF'), // Add one
+                array('_SELF', array('type' => 'add'), '_SELF'), // Add one
                 null, // Edit this
-                has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'ed'), '_SELF') : null, // Edit one
+                has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
                 null, // View this
                 array('news', array('type' => 'misc'), get_module_zone('news')), // View archive
                 null, // Add to category
-                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'ac'), '_SELF') : null, // Add one category
-                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'ec'), '_SELF') : null, // Edit one category
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
+                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
                 null, // Edit this category
                 null // View this category
             );
@@ -1096,15 +1096,15 @@ class Module_cms_news_cat extends Standard_crud_module
             null,
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
-            array('_SELF', array('type' => 'ad', 'cat' => $cat), '_SELF'), // Add one
-            (is_null($id) || (!has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news', array('news', $cat)))) ? null : array('_SELF', array('type' => '_ed', 'id' => $id), '_SELF'), // Edit this
-            has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'ed'), '_SELF') : null, // Edit one
+            array('_SELF', array('type' => 'add', 'cat' => $cat), '_SELF'), // Add one
+            (is_null($id) || (!has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news', array('news', $cat)))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id), '_SELF'), // Edit this
+            has_privilege(get_member(), 'edit_own_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
             is_null($id) ? null : array('news', array('type' => 'view', 'id' => $id), get_module_zone('news')), // View this
             array('news', array('type' => 'misc'), get_module_zone('news')), // View archive
-            (!is_null($id)) ? null : array('_SELF', array('type' => 'ad', 'cat' => $cat), '_SELF'), // Add to category
-            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'ac'), '_SELF') : null, // Add one category
-            has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'ec'), '_SELF') : null, // Edit one category
-            is_null($cat) ? null : has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => '_ec', 'id' => $cat), '_SELF') : null, // Edit this category
+            (!is_null($id)) ? null : array('_SELF', array('type' => 'add', 'cat' => $cat), '_SELF'), // Add to category
+            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
+            has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
+            is_null($cat) ? null : has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_news') ? array('_SELF', array('type' => '_edit_category', 'id' => $cat), '_SELF') : null, // Edit this category
             null // View this category
         );
     }

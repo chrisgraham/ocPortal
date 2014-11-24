@@ -513,15 +513,15 @@ class Module_groups
             if ((!has_privilege(get_member(), 'control_usergroups')) || ($is_super_admin == 1)) {
                 $leader_tmp = $group['g_group_leader'];
                 if ($leader_tmp == get_member()) {
-                    $edit_url = build_url(array('page' => 'cms_ocf_groups', 'type' => '_ed', 'id' => $id), get_module_zone('cms_ocf_groups'));
+                    $edit_url = build_url(array('page' => 'cms_ocf_groups', 'type' => '_edit', 'id' => $id), get_module_zone('cms_ocf_groups'));
                 }
             } else {
-                $edit_url = build_url(array('page' => 'cms_ocf_groups', 'type' => '_ed', 'id' => $id), get_module_zone('cms_ocf_groups'));
+                $edit_url = build_url(array('page' => 'cms_ocf_groups', 'type' => '_edit', 'id' => $id), get_module_zone('cms_ocf_groups'));
             }
         }
 
         if (has_actual_page_access(get_member(), 'admin_ocf_groups', get_module_zone('admin_ocf_groups'))) {
-            $edit_url = build_url(array('page' => 'admin_ocf_groups', 'type' => '_ed', 'id' => $id), get_module_zone('admin_ocf_groups'));
+            $edit_url = build_url(array('page' => 'admin_ocf_groups', 'type' => '_edit', 'id' => $id), get_module_zone('admin_ocf_groups'));
         }
 
         $club_forum = null;

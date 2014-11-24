@@ -220,7 +220,7 @@ function render_download_category_box($row, $zone = '_SEARCH', $give_context = t
         'ENTRY_DETAILS' => $entry_details,
         'URL' => $url,
         'FRACTIONAL_EDIT_FIELD_NAME' => $give_context ? null : 'title',
-        'FRACTIONAL_EDIT_FIELD_URL' => $give_context ? null : '_SEARCH:cms_downloads:__ec:' . strval($row['id']),
+        'FRACTIONAL_EDIT_FIELD_URL' => $give_context ? null : '_SEARCH:cms_downloads:__edit_category:' . strval($row['id']),
     ));
 }
 

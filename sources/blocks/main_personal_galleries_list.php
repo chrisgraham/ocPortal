@@ -88,22 +88,22 @@ class Block_main_personal_galleries_list
                 $test = $GLOBALS['SITE_DB']->query_select('galleries', array('accept_images', 'accept_videos', 'name'), array('is_member_synched' => 1));
                 if (array_key_exists(0, $test)) {
                     if ($test[0]['accept_images'] == 1) {
-                        $add_image_url = build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => 'member_' . strval($member_id) . '_' . $test[0]['name']), get_module_zone('cms_galleries'));
+                        $add_image_url = build_url(array('page' => 'cms_galleries', 'type' => 'add', 'cat' => 'member_' . strval($member_id) . '_' . $test[0]['name']), get_module_zone('cms_galleries'));
                     }
                     if ($test[0]['accept_videos'] == 1) {
-                        $add_video_url = build_url(array('page' => 'cms_galleries', 'type' => 'av', 'cat' => 'member_' . strval($member_id) . '_' . $test[0]['name']), get_module_zone('cms_galleries'));
+                        $add_video_url = build_url(array('page' => 'cms_galleries', 'type' => 'add_other', 'cat' => 'member_' . strval($member_id) . '_' . $test[0]['name']), get_module_zone('cms_galleries'));
                     }
                 }
             } else { // Or invite them to explicitly add a gallery (they can add images/videos from their existing gallery now)
                 if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_submit_permission('cat_mid', get_member(), get_ip_address(), 'cms_galleries'))) {
-                    $add_gallery_url = build_url(array('page' => 'cms_galleries', 'type' => 'ac', 'cat' => $rows[0]['name']), get_module_zone('cms_galleries'));
+                    $add_gallery_url = build_url(array('page' => 'cms_galleries', 'type' => 'add_category', 'cat' => $rows[0]['name']), get_module_zone('cms_galleries'));
                 }
                 if (count($rows) == 1) {
                     if ($rows[0]['accept_images'] == 1) {
-                        $add_image_url = build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => $rows[0]['name']), get_module_zone('cms_galleries'));
+                        $add_image_url = build_url(array('page' => 'cms_galleries', 'type' => 'add', 'cat' => $rows[0]['name']), get_module_zone('cms_galleries'));
                     }
                     if ($rows[0]['accept_videos'] == 1) {
-                        $add_video_url = build_url(array('page' => 'cms_galleries', 'type' => 'av', 'cat' => $rows[0]['name']), get_module_zone('cms_galleries'));
+                        $add_video_url = build_url(array('page' => 'cms_galleries', 'type' => 'add_other', 'cat' => $rows[0]['name']), get_module_zone('cms_galleries'));
                     }
                 }
             }

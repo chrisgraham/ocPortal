@@ -228,8 +228,8 @@ class Module_admin_newsletter extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_NEWSLETTER'), comcode_lang_string('DOC_NEWSLETTER'),
             array_merge(array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_NEWSLETTER')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_NEWSLETTER')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_NEWSLETTER')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_NEWSLETTER')),
             ), $this->extra_donext_entries),
             do_lang('MANAGE_NEWSLETTER')
         );

@@ -112,7 +112,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
         require_code('ocf_general_action');
         require_code('ocf_general_action2');
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript = "
@@ -157,8 +157,8 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
         return do_next_manager(get_screen_title('EMOTICONS'), comcode_lang_string('DOC_EMOTICONS'),
             array(
                 array('menu/_generic_admin/import', array('_SELF', array('type' => 'import'), '_SELF'), do_lang('IMPORT_EMOTICONS')),
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_EMOTICON')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_EMOTICON')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_EMOTICON')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_EMOTICON')),
             ),
             do_lang('EMOTICONS')
         );

@@ -59,8 +59,8 @@ class Module_admin_ocf_forums extends Standard_crud_module
             ) + parent::get_entry_points();
 
         if ($support_crosslinks) {
-            $ret['_SEARCH:admin_ocf_forum_groupings:ad'] = array('ADD_FORUM_GROUPING', 'menu/_generic_admin/add_one_category');
-            $ret['_SEARCH:admin_ocf_forum_groupings:ed'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('EDIT_FORUM_GROUPING'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'COUNT(*)', null, '', true))))), 'menu/_generic_admin/edit_one_category');
+            $ret['_SEARCH:admin_ocf_forum_groupings:add'] = array('ADD_FORUM_GROUPING', 'menu/_generic_admin/add_one_category');
+            $ret['_SEARCH:admin_ocf_forum_groupings:edit'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('EDIT_FORUM_GROUPING'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'COUNT(*)', null, '', true))))), 'menu/_generic_admin/edit_one_category');
             if (addon_installed('ocf_post_templates')) {
                 require_lang('ocf_post_templates');
                 $ret['_SEARCH:admin_ocf_post_templates:misc'] = array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('POST_TEMPLATES'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates', 'COUNT(*)', null, '', true))))), 'menu/adminzone/structure/forum/post_templates');
@@ -97,7 +97,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
 
         set_helper_panel_tutorial('tut_forums');
 
-        if ($type == 'reorder' || $type == 'ed') {
+        if ($type == 'reorder' || $type == 'edit') {
             $this->title = get_screen_title('EDIT_FORUM');
         }
 
@@ -150,10 +150,10 @@ class Module_admin_ocf_forums extends Standard_crud_module
     public function misc()
     {
         $menu_links = array(
-            array('menu/_generic_admin/add_one_category', array('admin_ocf_forum_groupings', array('type' => 'ad'), get_module_zone('admin_ocf_forum_groupings')), do_lang('ADD_FORUM_GROUPING')),
-            array('menu/_generic_admin/edit_one_category', array('admin_ocf_forum_groupings', array('type' => 'ed'), get_module_zone('admin_ocf_forum_groupings')), do_lang('EDIT_FORUM_GROUPING')),
-            array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_FORUM')),
-            array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_FORUM')),
+            array('menu/_generic_admin/add_one_category', array('admin_ocf_forum_groupings', array('type' => 'add'), get_module_zone('admin_ocf_forum_groupings')), do_lang('ADD_FORUM_GROUPING')),
+            array('menu/_generic_admin/edit_one_category', array('admin_ocf_forum_groupings', array('type' => 'edit'), get_module_zone('admin_ocf_forum_groupings')), do_lang('EDIT_FORUM_GROUPING')),
+            array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_FORUM')),
+            array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_FORUM')),
         );
 
         if (addon_installed('ocf_post_templates')) {
@@ -358,7 +358,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
             $forum_groupings->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING', array('_GUID' => '6cb30ec5189f75a9631b2bb430c89fd0', 'ORDERINGS' => $orderings, 'GROUPING' => $C_TITLE[$forum_grouping_id], 'SUBFORUMS' => $forums)));
         }
 
-        $edit_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'id' => $id), '_SELF');
+        $edit_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'id' => $id), '_SELF');
         $view_map = array('page' => 'forumview');
         if ($id != db_get_first_id()) {
             $view_map['id'] = $id;
@@ -387,7 +387,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function ed()
+    public function edit()
     {
         $huge = ($GLOBALS['FORUM_DB']->query_select_value('f_forums', 'COUNT(*)') > 300);
 
@@ -442,7 +442,7 @@ class Module_admin_ocf_forums extends Standard_crud_module
             }
         }
 
-        $url = build_url(array('page' => '_SELF', 'type' => 'ed'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'edit'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 

@@ -57,7 +57,7 @@ class Hook_content_meta_aware_catalogue_category
             'thumb_field' => 'rep_image',
 
             'view_page_link_pattern' => '_SEARCH:catalogues:category:_WILD',
-            'edit_page_link_pattern' => '_SEARCH:cms_catalogues:_ec:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_catalogues:_edit_category:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:catalogues:category:_WILD',
             'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_catalogues')) ? (get_module_zone('cms_catalogues') . ':cms_catalogues:add_category:catalogue_name=!') : null,
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('catalogues')) . ':catalogues',

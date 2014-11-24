@@ -55,9 +55,9 @@ class Hook_resource_meta_aware_usergroup_subscription
             'title_field_dereference' => true,
 
             'view_page_link_pattern' => null,
-            'edit_page_link_pattern' => '_SEARCH:admin_ecommerce:_ed:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:admin_ecommerce:_edit:_WILD',
             'view_category_page_link_pattern' => null,
-            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_ecommerce')) ? (get_module_zone('admin_ecommerce') . ':admin_ecommerce:ad') : null,
+            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_ecommerce')) ? (get_module_zone('admin_ecommerce') . ':admin_ecommerce:add') : null,
             'archive_url' => null,
 
             'support_url_monikers' => false,

@@ -62,7 +62,7 @@ class Hook_content_meta_aware_group
             'thumb_field_is_theme_image' => true,
 
             'view_page_link_pattern' => '_SEARCH:groups:view:_WILD',
-            'edit_page_link_pattern' => 'adminzone:admin_ocf_groups:_ed:_WILD',
+            'edit_page_link_pattern' => 'adminzone:admin_ocf_groups:_edit:_WILD',
             'view_category_page_link_pattern' => null,
             'add_url' => '',
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('groups')) . ':groups',

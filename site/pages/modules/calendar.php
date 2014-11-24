@@ -670,7 +670,7 @@ class Module_calendar
         if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_submit_permission('low', get_member(), get_ip_address(), 'cms_calendar'))) {
             $and_filter = $this->get_and_filter(true);
             if ((has_privilege(get_member(), 'calendar_add_to_others')) || (is_null(get_param_integer('member_id', null)))) {
-                $add_url = build_url(array('page' => 'cms_calendar', 'type' => 'ad', 'date' => $self_encompassing ? null : $date, 'e_type' => (count($and_filter) == 1) ? $and_filter[0] : null, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
+                $add_url = build_url(array('page' => 'cms_calendar', 'type' => 'add', 'date' => $self_encompassing ? null : $date, 'e_type' => (count($and_filter) == 1) ? $and_filter[0] : null, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
             }
         }
 
@@ -838,7 +838,7 @@ class Module_calendar
                     if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_submit_permission('low', get_member(), get_ip_address(), 'cms_calendar'))) {
                         $and_filter = $this->get_and_filter(true);
                         if ((has_privilege(get_member(), 'calendar_add_to_others')) || (is_null(get_param_integer('member_id', null)))) {
-                            $add_url = build_url(array('page' => 'cms_calendar', 'type' => 'ad', 'date' => date('Y-m-d H:i:s', $timestamp), 'e_type' => (count($and_filter) == 1) ? $and_filter[0] : null, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
+                            $add_url = build_url(array('page' => 'cms_calendar', 'type' => 'add', 'date' => date('Y-m-d H:i:s', $timestamp), 'e_type' => (count($and_filter) == 1) ? $and_filter[0] : null, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
                         }
                     }
                     $_streams->attach(/*XHTMLXHTML*/
@@ -994,7 +994,7 @@ class Module_calendar
                     if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_submit_permission('low', get_member(), get_ip_address(), 'cms_calendar'))) {
                         $and_filter = $this->get_and_filter(true);
                         if ((has_privilege(get_member(), 'calendar_add_to_others')) || (is_null(get_param_integer('member_id', null)))) {
-                            $add_url = build_url(array('page' => 'cms_calendar', 'type' => 'ad', 'date' => date('Y-m-d H:i:s', $timestamp), 'e_type' => (count($and_filter) == 1) ? $and_filter[0] : null, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
+                            $add_url = build_url(array('page' => 'cms_calendar', 'type' => 'add', 'date' => date('Y-m-d H:i:s', $timestamp), 'e_type' => (count($and_filter) == 1) ? $and_filter[0] : null, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
                         }
                     }
                     $days->attach(do_template('CALENDAR_WEEK_HOUR_DAY', array('_GUID' => 'e001b4b2ea1995760ef0d4460d93b2e1', 'CURRENT' => date('Y-m-d', utctime_to_usertime()) == date('Y-m-d', $timestamp), 'ADD_URL' => $add_url, 'DOWN' => strval($down + 1), 'DAY' => $day, 'HOUR' => $hour, 'CLASS' => $class, 'ENTRIES' => $entries)));
@@ -1462,7 +1462,7 @@ class Module_calendar
 
         // Edit URL
         if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_edit_permission(($event['e_member_calendar'] !== null) ? 'low' : 'mid', get_member(), $event['e_submitter'], 'cms_calendar', array('calendar', $event['e_type'])))) {
-            $edit_url = build_url(array('page' => 'cms_calendar', 'type' => '_ed', 'id' => $id, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
+            $edit_url = build_url(array('page' => 'cms_calendar', 'type' => '_edit', 'id' => $id, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
         } else {
             $edit_url = new Tempcode();
         }

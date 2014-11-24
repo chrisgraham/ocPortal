@@ -45,7 +45,7 @@ class Hook_unvalidated_downloads
         $info['db_add_date'] = 'add_date';
         $info['db_edit_date'] = 'edit_date';
         $info['edit_module'] = 'cms_downloads';
-        $info['edit_type'] = '_ed';
+        $info['edit_type'] = '_edit';
         $info['edit_identifier'] = 'id';
         $info['title'] = do_lang_tempcode('SECTION_DOWNLOADS');
 

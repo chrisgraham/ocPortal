@@ -360,7 +360,7 @@ class Module_admin_zones
                     $comcode = '';
                 }
 
-                $edit_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $current_zone . ':' . $current_for), get_module_zone('cms_comcode_pages'));
+                $edit_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_edit', 'page_link' => $current_zone . ':' . $current_for), get_module_zone('cms_comcode_pages'));
 
                 // WYSIWYG?
                 require_javascript('editing');

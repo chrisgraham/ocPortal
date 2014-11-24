@@ -261,10 +261,10 @@ class Module_cms_calendar extends Standard_crud_module
         require_code('fields');
         return do_next_manager(get_screen_title('MANAGE_CALENDARS'), comcode_lang_string('DOC_CALENDAR'),
             array_merge(array(
-                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_calendar') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'ac'), '_SELF'), do_lang('ADD_EVENT_TYPE')) : null,
-                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'ec'), '_SELF'), do_lang('EDIT_EVENT_TYPE')) : null,
-                has_privilege(get_member(), 'submit_lowrange_content', 'cms_calendar') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_CALENDAR_EVENT')) : null,
-                has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_CALENDAR_EVENT')) : null,
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_calendar') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'add_category'), '_SELF'), do_lang('ADD_EVENT_TYPE')) : null,
+                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'edit_category'), '_SELF'), do_lang('EDIT_EVENT_TYPE')) : null,
+                has_privilege(get_member(), 'submit_lowrange_content', 'cms_calendar') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_CALENDAR_EVENT')) : null,
+                has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_CALENDAR_EVENT')) : null,
                 has_privilege(get_member(), 'mass_import', 'cms_calendar') ? array('menu/_generic_admin/import', array('_SELF', array('type' => 'import'), '_SELF'), do_lang('IMPORT_ICAL')) : null,
                 array('menu/_generic_admin/export', array('_SELF', array('type' => 'export'), '_SELF'), do_lang('EXPORT_ICAL')),
             ), manage_custom_fields_donext_link('event')),
@@ -1491,14 +1491,14 @@ class Module_cms_calendar_cat extends Standard_crud_module
                 null,
                 null,
                 /* TYPED-ORDERED LIST OF 'LINKS'    */
-                array('_SELF', array('type' => 'ad'), '_SELF', do_lang_tempcode('ADD_CALENDAR_EVENT')), // Add one
+                array('_SELF', array('type' => 'add'), '_SELF', do_lang_tempcode('ADD_CALENDAR_EVENT')), // Add one
                 null, // Edit this
-                has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'ed') + $extra, '_SELF', do_lang_tempcode('EDIT_CALENDAR_EVENT')) : null, // Edit one
+                has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'edit') + $extra, '_SELF', do_lang_tempcode('EDIT_CALENDAR_EVENT')) : null, // Edit one
                 null, // View this
                 array('calendar', $archive_map + $extra, get_module_zone('calendar'), do_lang('CALENDAR')), // View archive
                 null, // Add to category
-                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'ac') + $extra, '_SELF', do_lang_tempcode('ADD_EVENT_TYPE')) : null, // Add one category
-                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'ec') + $extra, '_SELF', do_lang_tempcode('EDIT_EVENT_TYPE')) : null, // Edit one category
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'add_category') + $extra, '_SELF', do_lang_tempcode('ADD_EVENT_TYPE')) : null, // Add one category
+                has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'edit_category') + $extra, '_SELF', do_lang_tempcode('EDIT_EVENT_TYPE')) : null, // Edit one category
                 null, // Edit this category
                 null, // View this category
                 null,
@@ -1515,15 +1515,15 @@ class Module_cms_calendar_cat extends Standard_crud_module
             null,
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
-            array('_SELF', array('type' => 'ad', 'e_type' => $type) + $extra, '_SELF', do_lang_tempcode('ADD_CALENDAR_EVENT')), // Add one
-            (is_null($id) || (!has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar', array('calendar', 'type') + $extra))) ? null : array('_SELF', array('type' => '_ed', 'id' => $id) + $extra, '_SELF', do_lang_tempcode('EDIT_THIS_CALENDAR_EVENT')), // Edit this
-            has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'ed') + $extra, '_SELF', do_lang_tempcode('EDIT_CALENDAR_EVENT')) : null, // Edit one
+            array('_SELF', array('type' => 'add', 'e_type' => $type) + $extra, '_SELF', do_lang_tempcode('ADD_CALENDAR_EVENT')), // Add one
+            (is_null($id) || (!has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar', array('calendar', 'type') + $extra))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id) + $extra, '_SELF', do_lang_tempcode('EDIT_THIS_CALENDAR_EVENT')), // Edit this
+            has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'edit') + $extra, '_SELF', do_lang_tempcode('EDIT_CALENDAR_EVENT')) : null, // Edit one
             is_null($id) ? null : array('calendar', array('type' => 'view', 'id' => $id) + $extra, get_module_zone('calendar')), // View this
             array('calendar', $archive_map + $extra, get_module_zone('calendar'), do_lang('CALENDAR')), // View archive
             null, // Add to category
-            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'ac') + $extra, '_SELF', do_lang_tempcode('ADD_EVENT_TYPE')) : null, // Add one category
-            has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'ec') + $extra, '_SELF', do_lang_tempcode('EDIT_EVENT_TYPE')) : null, // Edit one category
-            has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar', array('calendar', 'type') + $extra) ? array('_SELF', array('type' => '_ec', 'id' => $type) + $extra, '_SELF', do_lang_tempcode('EDIT_THIS_EVENT_TYPE')) : null, // Edit this category
+            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'add_category') + $extra, '_SELF', do_lang_tempcode('ADD_EVENT_TYPE')) : null, // Add one category
+            has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar') ? array('_SELF', array('type' => 'edit_category') + $extra, '_SELF', do_lang_tempcode('EDIT_EVENT_TYPE')) : null, // Edit one category
+            has_privilege(get_member(), 'edit_own_cat_highrange_content', 'cms_calendar', array('calendar', 'type') + $extra) ? array('_SELF', array('type' => '_edit_category', 'id' => $type) + $extra, '_SELF', do_lang_tempcode('EDIT_THIS_EVENT_TYPE')) : null, // Edit this category
             null, // View this category
             null,
             null,

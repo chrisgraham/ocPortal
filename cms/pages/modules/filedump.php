@@ -164,7 +164,7 @@ class Module_filedump
             $this->title = get_screen_title('FILEDUMP_EMBED');
         }
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             $this->title = get_screen_title('FILEDUMP_UPLOAD');
         }
 
@@ -230,10 +230,10 @@ class Module_filedump
         if ($type == 'mass') {
             return $this->do_mass();
         }
-        if ($type == 'ac') {
+        if ($type == 'add_category') {
             return $this->do_add_folder();
         }
-        if ($type == 'ad') {
+        if ($type == 'add') {
             return $this->do_upload();
         }
         if ($type == 'broken') {
@@ -552,7 +552,7 @@ class Module_filedump
 
         // Do a form so people can upload their own stuff
         if (has_privilege(get_member(), 'upload_filedump')) {
-            $post_url = build_url(array('page' => '_SELF', 'type' => 'ad', 'uploading' => 1), '_SELF');
+            $post_url = build_url(array('page' => '_SELF', 'type' => 'add', 'uploading' => 1), '_SELF');
 
             $submit_name = do_lang_tempcode('FILEDUMP_UPLOAD');
 
@@ -595,7 +595,7 @@ class Module_filedump
 
         // Do a form so people can make folders
         if ((get_option('is_on_folder_create') == '1') && (has_privilege(get_member(), 'upload_filedump'))) {
-            $post_url = build_url(array('page' => '_SELF', 'type' => 'ac'), '_SELF');
+            $post_url = build_url(array('page' => '_SELF', 'type' => 'add_category'), '_SELF');
 
             $submit_name = do_lang_tempcode('FILEDUMP_CREATE_FOLDER');
 

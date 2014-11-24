@@ -165,7 +165,7 @@ class Module_awards
 
         $add_url = new Tempcode();
         if (has_actual_page_access(get_member(), 'admin_awards')) {
-            $add_url = build_url(array('page' => 'admin_awards', 'type' => 'ad'), get_module_zone('admin_awards'));
+            $add_url = build_url(array('page' => 'admin_awards', 'type' => 'add'), get_module_zone('admin_awards'));
         }
 
         return do_template('INDEX_SCREEN_FANCIER_SCREEN', array('_GUID' => 'c8351f627333434d426db3b9ffe09d1c', 'ADD_URL' => $add_url, 'PRE' => '', 'POST' => '', 'TITLE' => $this->title, 'CONTENT' => $out));

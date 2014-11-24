@@ -413,7 +413,7 @@ class Module_galleries
                     array(
                         make_string_tempcode(get_translated_text($myrow['title'])),
                         make_string_tempcode('title'),
-                        make_string_tempcode('_SEARCH:cms_galleries:type=__ed:id=' . strval($id)),
+                        make_string_tempcode('_SEARCH:cms_galleries:__edit:' . strval($id)),
                         make_string_tempcode('1'),
                         make_string_tempcode('1'),
                         make_string_tempcode(has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_galleries', array('galleries', $cat)) ? '1' : '0'),
@@ -528,19 +528,19 @@ class Module_galleries
         // Management links
         if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries', array('galleries', $cat))) && (can_submit_to_gallery($cat))) {
             $submit_cat = ($myrow['is_member_synched'] == 1) ? ('member_' . strval(get_member()) . '_' . $cat) : $cat;
-            $submit_image_url = ($myrow['accept_images'] == 0) ? new Tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
-            $submit_video_url = ($myrow['accept_videos'] == 0) ? new Tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'av', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
+            $submit_image_url = ($myrow['accept_images'] == 0) ? new Tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'add', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
+            $submit_video_url = ($myrow['accept_videos'] == 0) ? new Tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'add_other', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
         } else {
             $submit_image_url = new Tempcode();
             $submit_video_url = new Tempcode();
         }
         if ((!$implied_existence) && (has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('cat_mid', get_member(), get_member_id_from_gallery_name($cat), 'cms_galleries', array('galleries', $cat)))) {
-            $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ec', 'id' => $cat), get_module_zone('cms_galleries'));
+            $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_edit_category', 'id' => $cat), get_module_zone('cms_galleries'));
         } else {
             $edit_url = new Tempcode();
         }
         if ((!$implied_existence) && (has_actual_page_access(null, 'cms_galleries', null, null)) && (has_submit_permission('cat_mid', get_member(), get_ip_address(), 'cms_galleries'))) {
-            $add_gallery_url = build_url(array('page' => 'cms_galleries', 'type' => 'ac', 'cat' => $cat), get_module_zone('cms_galleries'));
+            $add_gallery_url = build_url(array('page' => 'cms_galleries', 'type' => 'add_category', 'cat' => $cat), get_module_zone('cms_galleries'));
         } else {
             $add_gallery_url = new Tempcode();
         }
@@ -753,7 +753,7 @@ class Module_galleries
                 }
 
                 if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $row['submitter'], 'cms_galleries', array('galleries', $cat)))) {
-                    $entry_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ev', 'id' => $row['id']), get_module_zone('cms_galleries'));
+                    $entry_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_edit_other', 'id' => $row['id']), get_module_zone('cms_galleries'));
                 }
 
                 // Video HTML
@@ -812,7 +812,7 @@ class Module_galleries
                 }
 
                 if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $row['submitter'], 'cms_galleries', array('galleries', $cat)))) {
-                    $entry_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ed', 'id' => $row['id']), get_module_zone('cms_galleries'));
+                    $entry_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_edit', 'id' => $row['id']), get_module_zone('cms_galleries'));
                 }
 
                 $thumb_url = $row['url'];
@@ -917,7 +917,7 @@ class Module_galleries
 
             $_edit_url = new Tempcode();
             if (has_delete_permission('mid', get_member(), $row['submitter'], 'cms_galleries', array('gallery', $row['cat']))) {
-                $_edit_url = build_url(array('page' => 'cms_galleries', 'type' => ($type == 'image') ? '__ed' : '__ev', 'id' => $row['id'], 'redirect' => get_self_url(true)), get_module_zone('cms_galleries'));
+                $_edit_url = build_url(array('page' => 'cms_galleries', 'type' => ($type == 'image') ? '__edit' : '__edit_other', 'id' => $row['id'], 'redirect' => get_self_url(true)), get_module_zone('cms_galleries'));
             }
 
             $class = (($type == $probe_type) && ($row['id'] == $probe_id)) ? 'currentimage' : '';
@@ -1134,7 +1134,7 @@ class Module_galleries
         }
 
         if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_galleries', array('galleries', $cat)))) {
-            $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ed', 'id' => $id), get_module_zone('cms_galleries'));
+            $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_edit', 'id' => $id), get_module_zone('cms_galleries'));
         } else {
             $edit_url = new Tempcode();
         }
@@ -1252,7 +1252,7 @@ class Module_galleries
         $description = get_translated_tempcode('galleries', $myrow, 'description');
 
         if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_galleries', array('galleries', $cat)))) {
-            $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ev', 'id' => $id), get_module_zone('cms_galleries'));
+            $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_edit_other', 'id' => $id), get_module_zone('cms_galleries'));
         } else {
             $edit_url = new Tempcode();
         }

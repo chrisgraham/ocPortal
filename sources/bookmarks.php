@@ -27,7 +27,7 @@ function bookmarks_script()
 
     $type = get_param('type');
     switch ($type) {
-        case '_ad':
+        case '_add':
             $title = get_screen_title('ADD_BOOKMARK');
 
             $folder = post_param('folder_new', '');
@@ -46,7 +46,7 @@ function bookmarks_script()
             //]]></script>');
             break;
         default:
-            $url = find_script('bookmarks') . '?no_redirect=1&type=_ad';
+            $url = find_script('bookmarks') . '?no_redirect=1&type=_add';
             $keep = symbol_tempcode('KEEP');
             $url .= $keep->evaluate();
             $content = add_bookmark_form($url);

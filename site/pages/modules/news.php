@@ -463,7 +463,7 @@ class Module_news
         }
 
         if ((($blogs !== 1) || (has_privilege(get_member(), 'have_personal_category', 'cms_news'))) && (has_actual_page_access(null, ($blogs === 1) ? 'cms_blogs' : 'cms_news', null, null)) && (has_submit_permission('high', get_member(), get_ip_address(), 'cms_news'))) {
-            $map = array('page' => ($blogs === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'ad');
+            $map = array('page' => ($blogs === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'add');
             if (is_numeric($filter)) {
                 $map['cat'] = $filter;
             }
@@ -500,7 +500,7 @@ class Module_news
 
         // Management links
         if ((($blog !== 1) || (has_privilege(get_member(), 'have_personal_category', 'cms_news'))) && (has_actual_page_access(null, ($blog === 1) ? 'cms_blogs' : 'cms_news', null, null)) && (has_submit_permission('high', get_member(), get_ip_address(), 'cms_news'))) {
-            $map = array('page' => ($blog === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'ad');
+            $map = array('page' => ($blog === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'add');
             if (is_numeric($filter)) {
                 $map['cat'] = $filter;
             }
@@ -583,7 +583,7 @@ class Module_news
 
         // Management links
         if ((has_actual_page_access(null, ($blog === 1) ? 'cms_blogs' : 'cms_news', null, null)) && (has_edit_permission('high', get_member(), $myrow['submitter'], ($blog === 1) ? 'cms_blogs' : 'cms_news', array('news', $myrow['news_category'])))) {
-            $edit_url = build_url(array('page' => ($blog === 1) ? 'cms_blogs' : 'cms_news', 'type' => '_ed', 'id' => $id), get_module_zone(($blog === 1) ? 'cms_blogs' : 'cms_news'));
+            $edit_url = build_url(array('page' => ($blog === 1) ? 'cms_blogs' : 'cms_news', 'type' => '_edit', 'id' => $id), get_module_zone(($blog === 1) ? 'cms_blogs' : 'cms_news'));
         } else {
             $edit_url = new Tempcode();
         }
@@ -599,7 +599,7 @@ class Module_news
         }
         $archive_url = build_url($tmp + propagate_ocselect(), '_SELF');
         if ((($blog !== 1) || (has_privilege(get_member(), 'have_personal_category', 'cms_news'))) && (has_actual_page_access(null, ($blog === 1) ? 'cms_blogs' : 'cms_news', null, null)) && (has_submit_permission('high', get_member(), get_ip_address(), 'cms_news', array('news', $myrow['news_category'])))) {
-            $map = array('page' => ($blog === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'ad');
+            $map = array('page' => ($blog === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'add');
             if (is_numeric($filter)) {
                 $map['cat'] = $filter;
             }

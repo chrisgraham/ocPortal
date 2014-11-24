@@ -207,8 +207,8 @@ class Module_admin_ocgifts extends Standard_crud_module
 
         return do_next_manager(get_screen_title('OCGIFTS_TITLE'), comcode_lang_string('DOC_OCGIFTS'),
             array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_GIFT')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_GIFT')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_GIFT')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_GIFT')),
             ),
             do_lang('OCGIFTS_TITLE')
         );

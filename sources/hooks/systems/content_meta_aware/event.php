@@ -57,9 +57,9 @@ class Hook_content_meta_aware_event
             'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:calendar:view:_WILD',
-            'edit_page_link_pattern' => '_SEARCH:cms_calendar:_ed:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_calendar:_edit:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:calendar:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_calendar')) ? (get_module_zone('cms_calendar') . ':cms_calendar:ad') : null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_calendar')) ? (get_module_zone('cms_calendar') . ':cms_calendar:add') : null,
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('calendar')) . ':calendar',
 
             'support_url_monikers' => true,

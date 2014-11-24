@@ -95,7 +95,7 @@ class Module_cms_comcode_pages
             $this->title = get_screen_title('COMCODE_PAGE_EDIT');
         }
 
-        if ($type == '_ed') {
+        if ($type == '_edit') {
             require_lang('menus');
             set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
 
@@ -126,7 +126,7 @@ class Module_cms_comcode_pages
             $this->file = $file;
         }
 
-        if ($type == '__ed') {
+        if ($type == '__edit') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('COMCODE_PAGE_EDIT');
@@ -149,13 +149,13 @@ class Module_cms_comcode_pages
         $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
-            return $this->ed();
+            return $this->edit();
         }
-        if ($type == '_ed') {
-            return $this->_ed();
+        if ($type == '_edit') {
+            return $this->_edit();
         }
-        if ($type == '__ed') {
-            return $this->__ed();
+        if ($type == '__edit') {
+            return $this->__edit();
         }
 
         return new Tempcode();
@@ -271,7 +271,7 @@ class Module_cms_comcode_pages
      *
      * @return tempcode                 The UI
      */
-    public function ed()
+    public function edit()
     {
         $lang = choose_language($this->title, true);
         if (is_object($lang)) {
@@ -291,10 +291,10 @@ class Module_cms_comcode_pages
 
         $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('lang', $lang));
-        $hidden->attach(form_input_hidden('type', '_ed'));
+        $hidden->attach(form_input_hidden('type', '_edit'));
         $hidden->attach(build_keep_form_fields('_SELF'));
 
-        $map = array('page' => '_SELF', 'type' => '_ed', 'lang' => $lang);
+        $map = array('page' => '_SELF', 'type' => '_edit', 'lang' => $lang);
         $post_url = build_url($map, '_SELF', null, false, true);
 
         $search_url = build_url(array('page' => 'search', 'id' => 'comcode_pages'), get_module_zone('search'));
@@ -428,9 +428,9 @@ class Module_cms_comcode_pages
                 continue;
             }
 
-            $edit_link = build_url(array('page' => '_SELF', 'type' => '_ed', 'page_link' => $page_link, 'lang' => $lang), '_SELF');
+            $edit_link = build_url(array('page' => '_SELF', 'type' => '_edit', 'page_link' => $page_link, 'lang' => $lang), '_SELF');
 
-            $clone_link = build_url(array('page' => '_SELF', 'type' => '_ed', 'page_link' => $zone . ':', 'restore_from' => $path_bits[0] . '.txt', 'lang' => $lang), '_SELF');
+            $clone_link = build_url(array('page' => '_SELF', 'type' => '_edit', 'page_link' => $zone . ':', 'restore_from' => $path_bits[0] . '.txt', 'lang' => $lang), '_SELF');
 
             $zone_name = array_key_exists($zone, $all_zones) ? $all_zones[$zone][1] : $zone;
 
@@ -597,7 +597,7 @@ class Module_cms_comcode_pages
      *
      * @return tempcode                 The UI
      */
-    public function _ed()
+    public function _edit()
     {
         require_code('form_templates');
 
@@ -693,7 +693,7 @@ class Module_cms_comcode_pages
         }
 
         // Actualiser URL
-        $post_url = build_url(array('page' => '_SELF', 'type' => '__ed'), '_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '__edit'), '_SELF');
 
         // Revision history
         $filesarray = $this->get_comcode_revisions($zone, 'comcode_custom/' . $lang, $file . '.txt');
@@ -721,7 +721,7 @@ class Module_cms_comcode_pages
                     $size = filesize($old_file);
                     $date = get_timezoned_date($time);
                     $url = get_custom_base_url() . '/' . $zone . '/' . 'pages/comcode_custom/' . $lang . '/' . $file . '.txt.' . strval($time);
-                    $restore_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'page_link' => $zone . ':' . $file, 'restore_from' => zone_black_magic_filterer($zone . (($zone != '') ? '/' : '') . 'pages/comcode_custom/' . $lang . '/' . $file . '.txt.' . strval($time), true)), '_SELF');
+                    $restore_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'page_link' => $zone . ':' . $file, 'restore_from' => zone_black_magic_filterer($zone . (($zone != '') ? '/' : '') . 'pages/comcode_custom/' . $lang . '/' . $file . '.txt.' . strval($time), true)), '_SELF');
                     require_code('diff');
                     if (function_exists('diff_simple')) {
                         $rendered_diff = diff_simple($old_file, $last_path);
@@ -741,7 +741,7 @@ class Module_cms_comcode_pages
             if ((strpos($restore_from, '/comcode_custom/') !== false) && (zone_black_magic_filterer($zone . '/' . 'pages/comcode/' . $lang . '/' . $file . '.txt', true) != $restore_from) && (file_exists(zone_black_magic_filterer(get_file_base() . '/' . $zone . '/' . 'pages/comcode/' . $lang . '/' . $file . '.txt')))) {
                 $url = get_base_url() . '/' . $zone . '/' . 'pages/comcode/' . $lang . '/' . $file . '.txt';
                 $size = filesize(zone_black_magic_filterer(get_file_base() . '/' . $zone . '/' . 'pages/comcode/' . $lang . '/' . $file . '.txt'));
-                $restore_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'page_link' => $zone . ':' . $file, 'restore_from' => $zone . (($zone == '') ? '' : '/') . 'pages/comcode/' . $lang . '/' . $file . '.txt'), '_SELF');
+                $restore_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'page_link' => $zone . ':' . $file, 'restore_from' => $zone . (($zone == '') ? '' : '/') . 'pages/comcode/' . $lang . '/' . $file . '.txt'), '_SELF');
                 require_code('diff');
                 if (function_exists('diff_simple')) {
                     $rendered_diff = diff_simple(zone_black_magic_filterer(get_file_base() . '/' . $zone . '/' . 'pages/comcode/' . $lang . '/' . $file . '.txt'), $last_path);
@@ -896,7 +896,7 @@ class Module_cms_comcode_pages
      *
      * @return tempcode                 The UI
      */
-    public function __ed()
+    public function __edit()
     {
         // Load up settings from the environments
         $file = filter_naughty(post_param('file'));
@@ -1009,7 +1009,7 @@ class Module_cms_comcode_pages
         // Messaging to user
         if ($validated == 0) {
             require_code('submit');
-            $edit_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'page_link' => $zone . ':' . $new_file), '_SELF', null, false, false, true);
+            $edit_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'page_link' => $zone . ':' . $new_file), '_SELF', null, false, false, true);
             if (addon_installed('unvalidated')) {
                 send_validation_request('COMCODE_PAGE_EDIT', 'comcode_pages', true, $zone . ':' . $new_file, $edit_url);
             }

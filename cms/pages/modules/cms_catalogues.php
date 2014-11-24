@@ -82,10 +82,10 @@ class Module_cms_catalogues extends Standard_crud_module
         $this->alt_crud_module = class_exists('Mx_cms_catalogues_alt') ? new Mx_cms_catalogues_alt() : new Module_cms_catalogues_alt();
 
         $ret += parent::get_entry_points();
-        unset($ret['ac']);
-        unset($ret['ec']);
-        unset($ret['av']);
-        unset($ret['ev']);
+        unset($ret['add_category']);
+        unset($ret['edit_category']);
+        unset($ret['add_other']);
+        unset($ret['edit_other']);
 
         if (!$simplified) {
             if ($support_crosslinks) {
@@ -153,19 +153,19 @@ class Module_cms_catalogues extends Standard_crud_module
 
         switch ($type) {
             case 'add_catalogue':
-                $type = 'av';
+                $type = 'add_other';
                 break;
             case '_add_catalogue':
-                $type = '_av';
+                $type = '_add_other';
                 break;
             case 'edit_catalogue':
-                $type = 'ev';
+                $type = 'edit_other';
                 break;
             case '_edit_catalogue':
-                $type = '_ev';
+                $type = '_edit_other';
                 break;
             case '__edit_catalogue':
-                $type = '__ev';
+                $type = '__edit_other';
                 break;
         }
 

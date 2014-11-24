@@ -85,7 +85,7 @@ class Module_cms_blogs extends Standard_crud_module
 
         set_helper_panel_tutorial('tut_news');
 
-        if ($type == 'ad' || $type == '_ed') {
+        if ($type == 'add' || $type == '_edit') {
             set_helper_panel_text(comcode_lang_string('DOC_NEWS'));
         }
 
@@ -142,8 +142,8 @@ class Module_cms_blogs extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_BLOGS'), comcode_lang_string('DOC_BLOGS'),
             array(
-                has_privilege(get_member(), 'submit_midrange_content', 'cms_news') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_NEWS_BLOG')) : null,
-                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_NEWS_BLOG')) : null,
+                has_privilege(get_member(), 'submit_midrange_content', 'cms_news') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_NEWS_BLOG')) : null,
+                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_NEWS_BLOG')) : null,
                 has_privilege(get_member(), 'mass_import', 'cms_news') ? array('menu/_generic_admin/import', array('_SELF', array('type' => 'import_wordpress'), '_SELF'), do_lang('IMPORT_WORDPRESS')) : null,
             ),
             do_lang('MANAGE_BLOGS')
@@ -622,15 +622,15 @@ class Module_cms_blogs extends Standard_crud_module
             null,
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
-            array('_SELF', array('type' => 'ad', 'cat' => $cat), '_SELF'), // Add one
-            (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news', array('news', $cat)))) ? null : array('_SELF', array('type' => '_ed', 'id' => $id), '_SELF'), // Edit this
-            has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news') ? array('_SELF', array('type' => 'ed'), '_SELF') : null, // Edit one
+            array('_SELF', array('type' => 'add', 'cat' => $cat), '_SELF'), // Add one
+            (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news', array('news', $cat)))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id), '_SELF'), // Edit this
+            has_privilege(get_member(), 'edit_own_midrange_content', 'cms_news') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
             is_null($id) ? null : array('news', array('type' => 'view', 'id' => $id, 'blog' => 1), get_module_zone('news')), // View this
             array('news', array('type' => 'misc', 'blog' => 1), get_module_zone('news')), // View archive
             null, // Add to category
-            has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => 'ac'), '_SELF') : null, // Add one category
-            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => 'ec'), '_SELF') : null, // Edit one category
-            is_null($cat) ? null : has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => '_ec', 'id' => $cat), '_SELF') : null, // Edit this category
+            has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => 'add_category'), '_SELF') : null, // Add one category
+            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
+            is_null($cat) ? null : has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_news') ? array('cms_news', array('type' => '_edit_category', 'id' => $cat), '_SELF') : null, // Edit this category
             null // View this category
         );
     }

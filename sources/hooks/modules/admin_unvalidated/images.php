@@ -45,7 +45,7 @@ class Hook_unvalidated_images
         $info['db_add_date'] = 'add_date';
         $info['db_edit_date'] = 'edit_date';
         $info['edit_module'] = 'cms_galleries';
-        $info['edit_type'] = '_ed';
+        $info['edit_type'] = '_edit';
         $info['view_module'] = 'galleries';
         $info['view_type'] = 'image';
         $info['edit_identifier'] = 'id';

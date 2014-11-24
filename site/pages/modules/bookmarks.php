@@ -89,7 +89,7 @@ class Module_bookmarks
             );
         }
         $ret += array(
-            'ad' => array('ADD_BOOKMARK', 'menu/_generic_admin/add_one'),
+            'add' => array('ADD_BOOKMARK', 'menu/_generic_admin/add_one'),
         );
         return $ret;
     }
@@ -111,7 +111,7 @@ class Module_bookmarks
             $this->title = get_screen_title('MANAGE_BOOKMARKS');
         }
 
-        if ($type == 'ad' || $type == '_ad') {
+        if ($type == 'add' || $type == '_add') {
             $this->title = get_screen_title('ADD_BOOKMARK');
         }
 
@@ -145,11 +145,11 @@ class Module_bookmarks
         if ($type == '_manage') {
             return $this->_manage_bookmarks();
         }
-        if ($type == 'ad') {
-            return $this->ad();
+        if ($type == 'add') {
+            return $this->add();
         }
-        if ($type == '_ad') {
-            return $this->_ad();
+        if ($type == '_add') {
+            return $this->_add();
         }
         if ($type == '_edit') {
             return $this->_edit_bookmark();
@@ -243,12 +243,12 @@ class Module_bookmarks
      *
      * @return tempcode                 The UI
      */
-    public function ad()
+    public function add()
     {
         require_code('form_templates');
 
         url_default_parameters__enable();
-        $ret = add_bookmark_form(build_url(array('page' => '_SELF', 'type' => '_ad', 'do_redirect' => (get_param_integer('no_redirect', 0) == 0) ? '1' : '0'), '_SELF'));
+        $ret = add_bookmark_form(build_url(array('page' => '_SELF', 'type' => '_add', 'do_redirect' => (get_param_integer('no_redirect', 0) == 0) ? '1' : '0'), '_SELF'));
         url_default_parameters__disable();
         return $ret;
     }
@@ -258,7 +258,7 @@ class Module_bookmarks
      *
      * @return tempcode                 The UI
      */
-    public function _ad()
+    public function _add()
     {
         $folder = post_param('folder_new', '');
         if ($folder == '') {

@@ -5,7 +5,7 @@
 		{+END}
 
 		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-			{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:cms_calendar:__ed:{ID},0}{TITLE*}{+END}
+			{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:cms_calendar:__edit:{ID},0}{TITLE*}{+END}
 		{+END}
 	{+END}
 	{+START,IF,{$NOT,{$GET,skip_content_box_title}}}

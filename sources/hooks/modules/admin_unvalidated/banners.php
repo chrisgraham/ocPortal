@@ -43,7 +43,7 @@ class Hook_unvalidated_banners
         $info['db_add_date'] = 'add_date';
         $info['db_edit_date'] = 'edit_date';
         $info['edit_module'] = 'cms_banners';
-        $info['edit_type'] = '_ed';
+        $info['edit_type'] = '_edit';
         $info['edit_identifier'] = 'id';
         $info['title'] = do_lang_tempcode('BANNERS');
 

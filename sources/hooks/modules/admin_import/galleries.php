@@ -34,7 +34,7 @@ class Hook_galleries
         $info['product'] = 'Gallery media';
         $info['hook_type'] = 'redirect';
         $info['import_module'] = 'cms_galleries';
-        $info['import_method_name'] = 'gimp';
+        $info['import_method_name'] = 'import';
         return $info;
     }
 }

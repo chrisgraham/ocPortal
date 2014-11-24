@@ -57,9 +57,9 @@ class Hook_content_meta_aware_comcode_page
             'thumb_field' => null,
 
             'view_page_link_pattern' => '_WILD:_WILD',
-            'edit_page_link_pattern' => '_SEARCH:cms_comcode_pages:_ed:page_link=_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_comcode_pages:_edit:page_link=_WILD',
             'view_category_page_link_pattern' => '_WILD:',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high', get_member(), get_ip_address(), 'cms_comcode_pages')) ? (get_module_zone('cms_comcode_pages') . ':cms_comcode_pages:ed') : null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high', get_member(), get_ip_address(), 'cms_comcode_pages')) ? (get_module_zone('cms_comcode_pages') . ':cms_comcode_pages:edit') : null,
             'archive_url' => ((!is_null($zone)) ? $zone : get_page_zone('sitemap')) . ':sitemap',
 
             'support_url_monikers' => true,

@@ -29,14 +29,14 @@ function booking_do_next()
     require_code('fields');
     return do_next_manager(get_screen_title('BOOKINGS'), comcode_lang_string('DOC_BOOKING'),
         array(
-            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_booking') ? array('menu/bookable', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_BOOKABLE')) : null,
-            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_booking') ? array('menu/bookable', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_BOOKABLE')) : null,
-            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_booking') ? array('menu/supplement', array('_SELF', array('type' => 'av'), '_SELF'), do_lang('ADD_BOOKABLE_SUPPLEMENT')) : null,
-            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_booking') ? array('menu/supplement', array('_SELF', array('type' => 'ev'), '_SELF'), do_lang('EDIT_BOOKABLE_SUPPLEMENT')) : null,
-            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_booking') ? array('menu/blacked', array('_SELF', array('type' => 'ac'), '_SELF'), do_lang('ADD_BOOKABLE_BLACKED')) : null,
-            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_booking') ? array('menu/blacked', array('_SELF', array('type' => 'ec'), '_SELF'), do_lang('EDIT_BOOKABLE_BLACKED')) : null,
-            has_privilege(get_member(), 'submit_highrange_content', 'cms_booking') ? array('menu/booking', array('_SELF', array('type' => 'ab'), '_SELF'), do_lang('ADD_BOOKING')) : null,
-            has_privilege(get_member(), 'edit_highrange_content', 'cms_booking') ? array('menu/booking', array('_SELF', array('type' => 'eb'), '_SELF'), do_lang('EDIT_BOOKING')) : null,
+            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_booking') ? array('menu/bookable', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_BOOKABLE')) : null,
+            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_booking') ? array('menu/bookable', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_BOOKABLE')) : null,
+            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_booking') ? array('menu/supplement', array('_SELF', array('type' => 'add_other'), '_SELF'), do_lang('ADD_BOOKABLE_SUPPLEMENT')) : null,
+            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_booking') ? array('menu/supplement', array('_SELF', array('type' => 'edit_other'), '_SELF'), do_lang('EDIT_BOOKABLE_SUPPLEMENT')) : null,
+            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_booking') ? array('menu/blacked', array('_SELF', array('type' => 'add_category'), '_SELF'), do_lang('ADD_BOOKABLE_BLACKED')) : null,
+            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_booking') ? array('menu/blacked', array('_SELF', array('type' => 'edit_category'), '_SELF'), do_lang('EDIT_BOOKABLE_BLACKED')) : null,
+            has_privilege(get_member(), 'submit_highrange_content', 'cms_booking') ? array('menu/booking', array('_SELF', array('type' => 'add_booking'), '_SELF'), do_lang('ADD_BOOKING')) : null,
+            has_privilege(get_member(), 'edit_highrange_content', 'cms_booking') ? array('menu/booking', array('_SELF', array('type' => 'edit_booking'), '_SELF'), do_lang('EDIT_BOOKING')) : null,
             has_actual_page_access(get_member(), 'calendar') ? array('menu/rich_content/calendar', array('calendar', array('type' => 'misc', 'view' => 'month'), '_SEARCH'), do_lang('CALENDAR')) : null,
         ),
         do_lang('BOOKINGS')

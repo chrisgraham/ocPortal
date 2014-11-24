@@ -58,7 +58,7 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
 
         $ret = array(
                 'misc' => array('FORUM_GROUPINGS', 'menu/_generic_admin/view_this_category'),
-                'ed' => array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('EDIT_FORUM_GROUPING'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'COUNT(*)', null, '', true))))), 'menu/_generic_admin/view_this_category'),
+                'edit' => array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('EDIT_FORUM_GROUPING'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'COUNT(*)', null, '', true))))), 'menu/_generic_admin/view_this_category'),
             ) + parent::get_entry_points();
 
         return $ret;
@@ -96,8 +96,8 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     {
         $this->extra_donext_whatever_title = do_lang('SECTION_FORUMS');
         $this->extra_donext_whatever = array(
-            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'ad'), get_module_zone('admin_ocf_forums'))),
-            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'ed'), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'add'), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'edit'), get_module_zone('admin_ocf_forums'))),
         );
 
         $this->add_one_cat_label = do_lang_tempcode('ADD_FORUM_GROUPING');
@@ -238,8 +238,8 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     {
         $tmp = strval(ocf_make_forum_grouping(post_param('title'), post_param('description'), post_param_integer('expanded_by_default', 0)));
         $this->extra_donext_whatever = array(
-            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'ad', 'forum_grouping_id' => $tmp), get_module_zone('admin_ocf_forums'))),
-            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'ed'), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'add', 'forum_grouping_id' => $tmp), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'edit'), get_module_zone('admin_ocf_forums'))),
         );
         return $tmp;
     }
@@ -253,8 +253,8 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     {
         ocf_edit_forum_grouping(intval($id), post_param('title'), post_param('description', STRING_MAGIC_NULL), post_param_integer('expanded_by_default', fractional_edit() ? INTEGER_MAGIC_NULL : 0));
         $this->extra_donext_whatever = array(
-            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'ad', 'forum_grouping_id' => $id), get_module_zone('admin_ocf_forums'))),
-            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'ed'), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'add', 'forum_grouping_id' => $id), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'edit'), get_module_zone('admin_ocf_forums'))),
         );
     }
 

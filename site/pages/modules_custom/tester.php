@@ -113,8 +113,8 @@ class Module_tester
     {
         return array(
             'add_test' => array('ADD_TEST', 'menu/_generic_admin/add_one'),
-            'ad' => array('ADD_TEST_SECTION', 'menu/_generic_admin/add_one_category'),
-            'ed' => array('EDIT_TEST_SECTION', 'menu/_generic_admin/edit_one_category'),
+            'add' => array('ADD_TEST_SECTION', 'menu/_generic_admin/add_one_category'),
+            'edit' => array('EDIT_TEST_SECTION', 'menu/_generic_admin/edit_one_category'),
             'go' => array('RUN_THROUGH_TESTS', 'buttons/proceed'),
             'stats' => array('TEST_STATISTICS', 'menu/_generic_admin/view_this'),
         );
@@ -177,23 +177,23 @@ class Module_tester
             $this->title = get_screen_title('ADD_TEST');
         }
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             $this->title = get_screen_title('ADD_TEST_SECTION');
         }
 
-        if ($type == '_ad') {
+        if ($type == '_add') {
             $this->title = get_screen_title('ADD_TEST_SECTION');
         }
 
-        if ($type == 'ed') {
+        if ($type == 'edit') {
             $this->title = get_screen_title('EDIT_TEST_SECTION');
         }
 
-        if ($type == '_ed') {
+        if ($type == '_edit') {
             $this->title = get_screen_title('EDIT_TEST_SECTION');
         }
 
-        if ($type == '__ed') {
+        if ($type == '__edit') {
             if (post_param_integer('delete', 0) == 1) {
                 $this->title = get_screen_title('DELETE_TEST_SECTION');
             } else {
@@ -236,20 +236,20 @@ class Module_tester
         if ($type == '_add_test') {
             return $this->_add_test();
         }
-        if ($type == 'ad') {
-            return $this->ad();
+        if ($type == 'add') {
+            return $this->add();
         }
-        if ($type == '_ad') {
-            return $this->_ad();
+        if ($type == '_add') {
+            return $this->_add();
         }
-        if ($type == 'ed') {
-            return $this->ed();
+        if ($type == 'edit') {
+            return $this->edit();
         }
-        if ($type == '_ed') {
-            return $this->_ed();
+        if ($type == '_edit') {
+            return $this->_edit();
         }
-        if ($type == '__ed') {
-            return $this->__ed();
+        if ($type == '__edit') {
+            return $this->__edit();
         }
 
         return new Tempcode();
@@ -341,7 +341,7 @@ class Module_tester
             if ((!is_null($current)) && ($current != $test['t_section'])) {
                 $edit_test_section_url = new Tempcode();
                 if ((has_privilege(get_member(), 'edit_own_tests')) && (($test['s_assigned_to'] == get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))) {
-                    $edit_test_section_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'id' => $current), '_SELF');
+                    $edit_test_section_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'id' => $current), '_SELF');
                 }
 
                 $sections->attach(do_template('TESTER_GO_SECTION', array('_GUID' => '5ac788f72b881e403f75f76815706032', 'ID' => strval($current), 'EDIT_TEST_SECTION_URL' => $edit_test_section_url, 'NOTES' => $current_3, 'SECTION' => $current_2, 'TESTS' => $tests)));
@@ -372,7 +372,7 @@ class Module_tester
         } else {
             $edit_test_section_url = new Tempcode();
             if ((has_privilege(get_member(), 'edit_own_tests')) && (($test['s_assigned_to'] == get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))) {
-                $edit_test_section_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'id' => $test['t_section']), '_SELF');
+                $edit_test_section_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'id' => $test['t_section']), '_SELF');
             }
 
             $sections->attach(do_template('TESTER_GO_SECTION', array('_GUID' => '9bd53d8b0f0aab1a683660fac2b6ad85', 'ID' => strval($test['t_section']), 'EDIT_TEST_SECTION_URL' => $edit_test_section_url, 'NOTES' => $test['s_notes'], 'SECTION' => $test['s_section'], 'TESTS' => $tests)));
@@ -380,7 +380,7 @@ class Module_tester
 
         $add_test_section_url = new Tempcode();
         if (has_privilege(get_member(), 'add_tests')) {
-            $add_test_section_url = build_url(array('page' => '_SELF', 'type' => 'ad'), '_SELF');
+            $add_test_section_url = build_url(array('page' => '_SELF', 'type' => 'add'), '_SELF');
         }
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_go'), '_SELF');
@@ -594,7 +594,7 @@ class Module_tester
      *
      * @return tempcode                 The result of execution.
      */
-    public function ad()
+    public function add()
     {
         check_privilege('add_tests');
 
@@ -607,7 +607,7 @@ class Module_tester
 
         url_default_parameters__disable();
 
-        $post_url = build_url(array('page' => '_SELF', 'type' => '_ad'), '_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_add'), '_SELF');
 
         $tests = '';
 
@@ -653,7 +653,7 @@ class Module_tester
      *
      * @return tempcode                 The result of execution.
      */
-    public function _ad()
+    public function _add()
     {
         check_privilege('add_tests');
 
@@ -672,7 +672,7 @@ class Module_tester
         $this->_add_new_tests($section_id);
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF', 'type' => 'ad'), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'add'), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -681,7 +681,7 @@ class Module_tester
      *
      * @return tempcode                 The result of execution.
      */
-    public function ed()
+    public function edit()
     {
         check_privilege('edit_own_tests');
         if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
@@ -694,7 +694,7 @@ class Module_tester
         }
 
         $text = paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST'));
-        $post_url = build_url(array('page' => '_SELF', 'type' => '_ed'), '_SELF', null, false, true);
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_edit'), '_SELF', null, false, true);
         require_code('form_templates');
         $fields = form_input_list(do_lang_tempcode('NAME'), '', 'id', $list, null, true);
         $submit_name = do_lang_tempcode('PROCEED');
@@ -707,7 +707,7 @@ class Module_tester
      *
      * @return tempcode                 The result of execution.
      */
-    public function _ed()
+    public function _edit()
     {
         check_privilege('edit_own_tests');
 
@@ -738,7 +738,7 @@ class Module_tester
             $tests->attach($_test);
         }
 
-        $post_url = build_url(array('page' => '_SELF', 'type' => '__ed', 'id' => $id), '_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '__edit', 'id' => $id), '_SELF');
 
         return do_template('TESTER_ADD_SECTION_SCREEN', array('_GUID' => 'ee10a568b6dacd8baf1efeac3e7bcb40', 'TITLE' => $this->title, 'SUBMIT_ICON' => 'menu___generic_admin__edit_one_category', 'SUBMIT_NAME' => do_lang_tempcode('SAVE'), 'TESTS' => $tests, 'URL' => $post_url, 'FIELDS' => $fields, 'ADD_TEMPLATE' => $add_template));
     }
@@ -763,7 +763,7 @@ class Module_tester
      *
      * @return tempcode                 The result of execution.
      */
-    public function __ed()
+    public function __edit()
     {
         check_privilege('edit_own_tests');
 

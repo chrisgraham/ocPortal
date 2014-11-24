@@ -1534,7 +1534,7 @@ class Forum_driver_ocf extends Forum_driver_base
         }
 
         // Do some flood control
-        $submitting = ((count($_POST) > 0) && (get_param('type', null) !== 'ed') && (get_param('type', null) !== 'ec') && (!running_script('preview')));
+        $submitting = ((count($_POST) > 0) && (get_param('type', null) !== 'edit') && (get_param('type', null) !== 'edit_category') && (!running_script('preview')));
         if (get_value('no_flood_control') !== '1') {
             $restrict = $submitting ? 'flood_control_submit_secs' : 'flood_control_access_secs';
             $restrict_setting = $submitting ? 'm_last_submit_time' : 'm_last_visit_time';

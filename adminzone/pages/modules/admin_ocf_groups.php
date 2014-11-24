@@ -105,7 +105,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
         $this->add_text = do_lang_tempcode('GROUP_TEXT');
         $this->edit_text = do_lang_tempcode('GROUP_TEXT');
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript .= "
@@ -148,8 +148,8 @@ class Module_admin_ocf_groups extends Standard_crud_module
         require_code('fields');
         return do_next_manager(get_screen_title('MANAGE_USERGROUPS'), comcode_lang_string('DOC_GROUPS'),
             array_merge(array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_GROUP')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_GROUP')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_GROUP')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_GROUP')),
             ), manage_custom_fields_donext_link('group')),
             do_lang('MANAGE_USERGROUPS')
         );
@@ -542,7 +542,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
                     if ($i != 0) {
                         $subs->attach(do_lang_tempcode('LIST_SEP'));
                     }
-                    $subs->attach(hyperlink(build_url(array('page' => 'admin_ecommerce', 'type' => '_ed', 'id' => $sub['id']), get_module_zone('admin_ecommerce')), get_translated_text($sub['s_title'], $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB'])));
+                    $subs->attach(hyperlink(build_url(array('page' => 'admin_ecommerce', 'type' => '_edit', 'id' => $sub['id']), get_module_zone('admin_ecommerce')), get_translated_text($sub['s_title'], $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB'])));
                 }
                 require_lang('ecommerce');
                 $text->attach(paragraph(do_lang_tempcode('HAS_THESE_SUBS', $subs)));
@@ -647,7 +647,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
         if (addon_installed('ecommerce')) {
             require_lang('ecommerce');
             $this->extra_donext_whatever = array(
-                array('menu/adminzone/audit/ecommerce/ecommerce', array('admin_ecommerce', array('type' => 'ad', 'group_id' => $id), '_SELF'), do_lang_tempcode('ADD_USERGROUP_SUBSCRIPTION')),
+                array('menu/adminzone/audit/ecommerce/ecommerce', array('admin_ecommerce', array('type' => 'add', 'group_id' => $id), '_SELF'), do_lang_tempcode('ADD_USERGROUP_SUBSCRIPTION')),
             );
             $this->extra_donext_whatever_title = do_lang_tempcode('MODULE_TRANS_NAME_subscriptions');
         }
@@ -672,7 +672,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
         list($group_leader, $promotion_target, $promotion_threshold) = $this->read_in_data();
         if ((!is_null($group_leader)) && ($group_leader != INTEGER_MAGIC_NULL) && (post_param_integer('confirm', 0) == 0) && (!in_array(intval($id), $GLOBALS['FORUM_DRIVER']->get_members_groups($group_leader)))) {
             require_code('templates_confirm_screen');
-            return confirm_screen(get_screen_title('EDIT_GROUP'), paragraph(do_lang_tempcode('MAKE_MEMBER_GROUP_LEADER', post_param('group_leader'))), '__ed', '_ed', array('confirm' => 1));
+            return confirm_screen(get_screen_title('EDIT_GROUP'), paragraph(do_lang_tempcode('MAKE_MEMBER_GROUP_LEADER', post_param('group_leader'))), '__edit', '_edit', array('confirm' => 1));
         }
 
         $was_club = ($GLOBALS['FORUM_DB']->query_select_value('f_groups', 'g_is_private_club', array('id' => intval($id))) == 1);
@@ -714,7 +714,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
         if (addon_installed('ecommerce')) {
             require_lang('ecommerce');
             $this->extra_donext_whatever = array(
-                array('menu/adminzone/audit/ecommerce/ecommerce', array('admin_ecommerce', array('type' => 'ad', 'group_id' => $id), '_SELF'), do_lang_tempcode('ADD_USERGROUP_SUBSCRIPTION')),
+                array('menu/adminzone/audit/ecommerce/ecommerce', array('admin_ecommerce', array('type' => 'add', 'group_id' => $id), '_SELF'), do_lang_tempcode('ADD_USERGROUP_SUBSCRIPTION')),
             );
             $this->extra_donext_whatever_title = do_lang_tempcode('MODULE_TRANS_NAME_subscriptions');
         }

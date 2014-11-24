@@ -506,7 +506,7 @@ class Module_quiz
 
         $edit_url = new Tempcode();
         if ((has_actual_page_access(null, 'cms_quiz', null, null)) && (has_edit_permission('mid', get_member(), $quiz['q_submitter'], 'cms_quiz', array('quiz', $quiz_id)))) {
-            $edit_url = build_url(array('page' => 'cms_quiz', 'type' => '_ed', 'id' => $quiz_id), get_module_zone('cms_quiz'));
+            $edit_url = build_url(array('page' => 'cms_quiz', 'type' => '_edit', 'id' => $quiz_id), get_module_zone('cms_quiz'));
         }
 
         // Display UI: start text, questions. Including timeout

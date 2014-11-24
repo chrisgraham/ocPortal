@@ -54,14 +54,14 @@ class Module_cms_galleries extends Standard_crud_module
     {
         $ret = array(
             'misc' => array('MANAGE_GALLERIES', 'menu/rich_content/galleries'),
-            'ad' => array('ADD_IMAGE', 'menu/cms/galleries/add_one_image'),
-            'ed' => array('EDIT_IMAGE', 'menu/cms/galleries/edit_one_image'),
-            'av' => array('ADD_VIDEO', 'menu/cms/galleries/add_one_video'),
-            'ev' => array('EDIT_VIDEO', 'menu/cms/galleries/edit_one_video'),
+            'add' => array('ADD_IMAGE', 'menu/cms/galleries/add_one_image'),
+            'edit' => array('EDIT_IMAGE', 'menu/cms/galleries/edit_one_image'),
+            'add_other' => array('ADD_VIDEO', 'menu/cms/galleries/add_one_video'),
+            'edit_other' => array('EDIT_VIDEO', 'menu/cms/galleries/edit_one_video'),
         );
 
         if (has_privilege(get_member(), 'mass_import', 'cms_galleries')) {
-            $ret['gimp'] = array('GALLERY_IMPORT', 'menu/_generic_admin/import');
+            $ret['import'] = array('GALLERY_IMPORT', 'menu/_generic_admin/import');
         }
 
         $this->cat_crud_module = class_exists('Mx_cms_galleries_cat') ? new Mx_cms_galleries_cat() : new Module_cms_galleries_cat();
@@ -109,47 +109,47 @@ class Module_cms_galleries extends Standard_crud_module
         inform_non_canonical_parameter('validated');
         inform_non_canonical_parameter('parent_id');
 
-        if ($type == 'gimp') {
+        if ($type == 'import') {
             inform_non_canonical_parameter('member_id');
 
             breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_GALLERIES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
         }
 
-        if ($type == '_gimp') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_GALLERIES')), array('_SELF:_SELF:gimp', do_lang_tempcode('GALLERY'))));
+        if ($type == '_import') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_GALLERIES')), array('_SELF:_SELF:import', do_lang_tempcode('GALLERY'))));
             breadcrumb_set_self(do_lang_tempcode('UPLOAD'));
         }
 
-        if ($type == '__gimp') {
+        if ($type == '__import') {
             $cat = get_param('cat');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_GALLERIES')), array('_SELF:_SELF:gimp', do_lang_tempcode('CHOOSE')), array('_SELF:_SELF:_gimp:name=' . $cat, do_lang_tempcode('GALLERY_IMPORT'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_GALLERIES')), array('_SELF:_SELF:import', do_lang_tempcode('CHOOSE')), array('_SELF:_SELF:_import:name=' . $cat, do_lang_tempcode('GALLERY_IMPORT'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
-        if (($type == 'ss') || ($type == 'sa') || ($type == 'sd')) {
+        if (($type == 'orphaned') || ($type == 'orphan_add') || ($type == 'orphan_delete')) {
             $cat = post_param('ss_cat');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_GALLERIES')), array('_SELF:_SELF:gimp', do_lang_tempcode('CHOOSE')), array('_SELF:_SELF:_gimp:name=' . $cat, do_lang_tempcode('GALLERY_IMPORT'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_GALLERIES')), array('_SELF:_SELF:import', do_lang_tempcode('CHOOSE')), array('_SELF:_SELF:_import:name=' . $cat, do_lang_tempcode('GALLERY_IMPORT'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
         }
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             if (has_privilege(get_member(), 'mass_import', 'cms_galleries')) {
                 $cat = get_param('cat', null);
-                $mass_url = build_url(array('page' => '_SELF', 'type' => 'gimp', 'cat' => $cat), '_SELF');
+                $mass_url = build_url(array('page' => '_SELF', 'type' => 'import', 'cat' => $cat), '_SELF');
                 attach_message(do_lang_tempcode('CAN_MASS_UPLOAD', escape_html($mass_url->evaluate())), 'inform', true);
             }
         }
 
-        if ($type == 'gimp' || $type == '_gimp' || $type == '__gimp' || $type == 'ss') {
+        if ($type == 'import' || $type == '_import' || $type == '__import' || $type == 'orphaned') {
             $this->title = get_screen_title('GALLERY_IMPORT');
         }
 
-        if ($type == 'sa') {
+        if ($type == 'orphan_add') {
             $this->title = get_screen_title('ADD_IMAGE');
         }
 
-        if ($type == 'sd') {
+        if ($type == 'orphan_delete') {
             $this->title = get_screen_title('DELETE_IMAGE');
         }
 
@@ -191,7 +191,7 @@ class Module_cms_galleries extends Standard_crud_module
             $this->alt_crud_module->add_text->attach(paragraph(do_lang_tempcode('ALSO_AUDIO')));
         }
 
-        if ($type == 'ac') {
+        if ($type == 'add_category') {
             require_javascript('ajax');
             $script = find_script('snippet');
             $this->cat_crud_module->javascript .= "
@@ -217,23 +217,23 @@ class Module_cms_galleries extends Standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        if ($type == 'gimp') {
-            return $this->gimp();
+        if ($type == 'import') {
+            return $this->import();
         }
-        if ($type == '_gimp') {
-            return $this->_gimp();
+        if ($type == '_import') {
+            return $this->_import();
         }
-        if ($type == '__gimp') {
-            return $this->__gimp();
+        if ($type == '__import') {
+            return $this->__import();
         }
-        if ($type == 'ss') {
-            return $this->ss(); // actualiser: orphan mass add/delete
+        if ($type == 'orphaned') {
+            return $this->orphaned();
         }
-        if ($type == 'sa') {
-            return $this->sa(); // actualiser: orphan add
+        if ($type == 'orphan_add') {
+            return $this->orphan_add();
         }
-        if ($type == 'sd') {
-            return $this->sd(); // actualiser: orphan delete
+        if ($type == 'orphan_delete') {
+            return $this->orphan_delete();
         }
 
         return new Tempcode();
@@ -253,13 +253,13 @@ class Module_cms_galleries extends Standard_crud_module
         require_code('fields');
         return do_next_manager(get_screen_title('MANAGE_GALLERIES'), comcode_lang_string('DOC_GALLERIES'),
             array_merge(array(
-                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_galleries') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'ac'), '_SELF'), do_lang('ADD_GALLERY')) : null,
-                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'ec'), '_SELF'), do_lang('EDIT_GALLERY')) : null,
-                has_privilege(get_member(), 'mass_import', 'cms_galleries') ? array('menu/_generic_admin/import', array('_SELF', array('type' => 'gimp'), '_SELF'), do_lang('GALLERY_IMPORT'), 'DOC_GALLERY_IMPORT') : null,
-                (!$allow_images) ? null : has_privilege(get_member(), 'submit_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/add_one_image', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_IMAGE')) : null,
-                (!$allow_images) ? null : has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_image', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_IMAGE')) : null,
-                (!$allow_videos) ? null : has_privilege(get_member(), 'submit_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/add_one_video', array('_SELF', array('type' => 'av'), '_SELF'), do_lang('ADD_VIDEO')) : null,
-                (!$allow_videos) ? null : has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_video', array('_SELF', array('type' => 'ev'), '_SELF'), do_lang('EDIT_VIDEO')) : null,
+                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_galleries') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'add_category'), '_SELF'), do_lang('ADD_GALLERY')) : null,
+                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'edit_category'), '_SELF'), do_lang('EDIT_GALLERY')) : null,
+                has_privilege(get_member(), 'mass_import', 'cms_galleries') ? array('menu/_generic_admin/import', array('_SELF', array('type' => 'import'), '_SELF'), do_lang('GALLERY_IMPORT'), 'DOC_GALLERY_IMPORT') : null,
+                (!$allow_images) ? null : has_privilege(get_member(), 'submit_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/add_one_image', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_IMAGE')) : null,
+                (!$allow_images) ? null : has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_image', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_IMAGE')) : null,
+                (!$allow_videos) ? null : has_privilege(get_member(), 'submit_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/add_one_video', array('_SELF', array('type' => 'add_other'), '_SELF'), do_lang('ADD_VIDEO')) : null,
+                (!$allow_videos) ? null : has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_video', array('_SELF', array('type' => 'edit_other'), '_SELF'), do_lang('EDIT_VIDEO')) : null,
             ), manage_custom_fields_donext_link('image'), manage_custom_fields_donext_link('video'), manage_custom_fields_donext_link('gallery')),
             do_lang('MANAGE_GALLERIES')
         );
@@ -270,7 +270,7 @@ class Module_cms_galleries extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function gimp()
+    public function import()
     {
         check_privilege('mass_import');
 
@@ -283,7 +283,7 @@ class Module_cms_galleries extends Standard_crud_module
 
         $cat = get_param('cat', '');
 
-        $post_url = build_url(array('page' => '_SELF', 'type' => '_gimp'), '_SELF', null, false, true);
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_import'), '_SELF', null, false, true);
 
         require_code('form_templates');
 
@@ -301,7 +301,7 @@ class Module_cms_galleries extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function _gimp()
+    public function _import()
     {
         $cat = get_param('name', 'root');
         check_privilege('mass_import'/*Not currently scoped to categories,array('galleries',$cat)*/);
@@ -317,14 +317,14 @@ class Module_cms_galleries extends Standard_crud_module
         require_lang('trackbacks');
 
         // To choose to batch import from an attached tar or zip file (zip file only supported if zip module running on php install)
-        $post_url = build_url(array('page' => '_SELF', 'type' => '__gimp', 'cat' => $cat, 'uploading' => 1, 'redirect' => get_param('redirect', null)), '_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '__import', 'cat' => $cat, 'uploading' => 1, 'redirect' => get_param('redirect', null)), '_SELF');
         $fields = new Tempcode();
         $supported = 'tar';
         if ((function_exists('zip_open')) || (get_option('unzip_cmd') != '')) {
             $supported .= ', zip';
         }
         $fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'), do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA', escape_html($supported), escape_html(str_replace(',', ', ', get_option('valid_images') . ',' . get_allowed_video_file_types()))), 'file', true, null, null, true, str_replace(' ', '', get_option('valid_images') . ',' . $supported)));
-        $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_GIMP_TITLE'), 'set_title', '', get_option('gallery_media_title_required') == '1'));
+        $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_GALLERY_IMPORT_TITLE'), 'set_title', '', get_option('gallery_media_title_required') == '1'));
         $hidden = new Tempcode();
         handle_max_file_size($hidden);
         if (function_exists('imagecreatefromstring')) {
@@ -388,7 +388,7 @@ class Module_cms_galleries extends Standard_crud_module
                     }
                 }
             }
-            $add_url = build_url(array('page' => '_SELF', 'type' => 'ss'), '_SELF');
+            $add_url = build_url(array('page' => '_SELF', 'type' => 'orphaned'), '_SELF');
             if (!$orphaned_content->is_empty()) {
                 $fields_2 = new Tempcode();
                 $hidden_2 = new Tempcode();
@@ -399,8 +399,8 @@ class Module_cms_galleries extends Standard_crud_module
                     $fields_2->attach(form_input_various_ticks(array(array(do_lang_tempcode('WATERMARK'), 'ss_watermark', true, '')), '', null, do_lang_tempcode('OPTIONS')));
                 }
                 $radios = new Tempcode();
-                $radios->attach(form_input_radio_entry('type', 'sa', true, do_lang_tempcode('ADD_GALLERY_SELECTION')));
-                $radios->attach(form_input_radio_entry('type', 'sd', false, do_lang_tempcode('DELETE_GALLERY_SELECTION')));
+                $radios->attach(form_input_radio_entry('type', 'orphan_add', true, do_lang_tempcode('ADD_GALLERY_SELECTION')));
+                $radios->attach(form_input_radio_entry('type', 'orphan_delete', false, do_lang_tempcode('DELETE_GALLERY_SELECTION')));
                 $fields_2->attach(form_input_radio(do_lang_tempcode('ACTION'), '', 'type', $radios, true));
                 // Feedback
                 require_code('feedback2');
@@ -422,7 +422,7 @@ class Module_cms_galleries extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function __gimp()
+    public function __import()
     {
         $cat = get_param('cat');
 
@@ -463,7 +463,7 @@ class Module_cms_galleries extends Standard_crud_module
                     if (!is_integer($myfile)) {
                         $directory = array();
                         while (false !== ($entry = zip_read($myfile))) {
-                            // Strip off our slash to gimp right
+                            // Strip off our slash to import right
                             $_file = zip_entry_name($entry);
                             $slash = strrpos($_file, '/');
                             if ($slash === false) {
@@ -526,7 +526,7 @@ class Module_cms_galleries extends Standard_crud_module
                             // Load in file
                             $_in = tar_get_file($myfile, $entry['path'], false, $tmp_name_2);
 
-                            // Strip off our slash to gimp right
+                            // Strip off our slash to import right
                             $_file = $entry['path'];
                             $slash = strrpos($_file, '/');
                             if ($slash === false) {
@@ -587,7 +587,7 @@ class Module_cms_galleries extends Standard_crud_module
             return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
         }
 
-        return $this->cat_crud_module->_do_next_manager($this->title, do_lang_tempcode('GIMP_SUCCESS_EDIT_TITLES_INLINE', escape_html(integer_format(count($media_imported)))), $cat);
+        return $this->cat_crud_module->_do_next_manager($this->title, do_lang_tempcode('GALLERY_IMPORT_SUCCESS_EDIT_TITLES_INLINE', escape_html(integer_format(count($media_imported)))), $cat);
     }
 
     /**
@@ -621,7 +621,7 @@ class Module_cms_galleries extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function ss()
+    public function orphaned()
     {
         $cat = post_param('ss_cat');
 
@@ -765,7 +765,7 @@ class Module_cms_galleries extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function sa()
+    public function orphan_add()
     {
         $cat = post_param('cat');
 
@@ -797,7 +797,7 @@ class Module_cms_galleries extends Standard_crud_module
         }
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF', 'type' => '_gimp', 'name' => $cat), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => '_import', 'name' => $cat), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -940,7 +940,7 @@ class Module_cms_galleries extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function sd()
+    public function orphan_delete()
     {
         $cat = post_param('cat');
 
@@ -959,7 +959,7 @@ class Module_cms_galleries extends Standard_crud_module
         }
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF', 'type' => '_gimp', 'name' => $cat), '_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => '_import', 'name' => $cat), '_SELF');
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
@@ -2483,16 +2483,16 @@ class Module_cms_galleries_cat extends Standard_crud_module
                 null, // View this
                 array('galleries', array('type' => 'misc'), get_module_zone('galleries'), do_lang_tempcode('GALLERIES')), // View archive
                 null, // Add to category
-                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'ac'), '_SELF', do_lang('ADD_GALLERY')) : null, // Add one category
-                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'ec'), '_SELF', do_lang('EDIT_GALLERY')) : null, // Edit one category
-                is_null($cat) ? null : array('_SELF', array('type' => '_ec', 'id' => $cat), '_SELF', do_lang_tempcode('EDIT_THIS_GALLERY')), // Edit this category
+                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'add_category'), '_SELF', do_lang('ADD_GALLERY')) : null, // Add one category
+                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'edit_category'), '_SELF', do_lang('EDIT_GALLERY')) : null, // Edit one category
+                is_null($cat) ? null : array('_SELF', array('type' => '_edit_category', 'id' => $cat), '_SELF', do_lang_tempcode('EDIT_THIS_GALLERY')), // Edit this category
                 is_null($cat) ? null : array('galleries', array('type' => 'misc', 'id' => $cat), get_module_zone('galleries'), do_lang_tempcode('VIEW_THIS_GALLERY')), // View this category
                 /* SPECIALLY TYPED 'LINKS' */
                 array_merge($extra, array(
-                    array('menu/cms/galleries/add_one_image', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_IMAGE')),
-                    array('menu/cms/galleries/add_one_video', array('_SELF', array('type' => 'av'), '_SELF'), do_lang('ADD_VIDEO')),
-                    has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_image', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_IMAGE')) : null,
-                    has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_video', array('_SELF', array('type' => 'ev'), '_SELF'), do_lang('EDIT_VIDEO')) : null,
+                    array('menu/cms/galleries/add_one_image', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_IMAGE')),
+                    array('menu/cms/galleries/add_one_video', array('_SELF', array('type' => 'add_other'), '_SELF'), do_lang('ADD_VIDEO')),
+                    has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_image', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_IMAGE')) : null,
+                    has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array('menu/cms/galleries/edit_one_video', array('_SELF', array('type' => 'edit_other'), '_SELF'), do_lang('EDIT_VIDEO')) : null,
                 )),
                 null,
                 null,
@@ -2522,22 +2522,22 @@ class Module_cms_galleries_cat extends Standard_crud_module
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
             null, // Add one
-            (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries', array('galleries', $cat)))) ? null : array('_SELF', array('type' => $video ? '_ev' : '_ed', 'id' => $id), '_SELF'), // Edit this
+            (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries', array('galleries', $cat)))) ? null : array('_SELF', array('type' => $video ? '_edit_other' : '_edit', 'id' => $id), '_SELF'), // Edit this
             null, // Edit one
             is_null($id) ? null : array('galleries', array('type' => $video ? 'video' : 'image', 'id' => $id, 'wide' => 1), get_module_zone('galleries')), // View this
             array('galleries', array('type' => 'misc'), get_module_zone('galleries'), do_lang_tempcode('GALLERIES')), // View archive
             null, // Add to category
-            has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'ac'), '_SELF', do_lang('ADD_GALLERY')) : null, // Add one category
-            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'ec'), '_SELF', do_lang('EDIT_GALLERY')) : null, // Edit one category
-            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => '_ec', 'id' => $cat), '_SELF', do_lang_tempcode('EDIT_THIS_GALLERY')) : null, // Edit this category
+            has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'add_category'), '_SELF', do_lang('ADD_GALLERY')) : null, // Add one category
+            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => 'edit_category'), '_SELF', do_lang('EDIT_GALLERY')) : null, // Edit one category
+            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_galleries') ? array('_SELF', array('type' => '_edit_category', 'id' => $cat), '_SELF', do_lang_tempcode('EDIT_THIS_GALLERY')) : null, // Edit this category
             array('galleries', array('type' => 'misc', 'id' => $cat), get_module_zone('galleries'), do_lang_tempcode('VIEW_THIS_GALLERY')), // View this category
             /* SPECIALLY TYPED 'LINKS' */
             array_merge($extra, array(
-                array($video ? 'menu/cms/galleries/add_one_video' : 'menu/cms/galleries/add_one_image', array('_SELF', array('type' => $video ? 'av' : 'ad', 'cat' => ((!$video && !$support_images) || ($video && !$support_videos) || (is_null($cat))) ? null : $cat), '_SELF'), do_lang($video ? 'ADD_VIDEO' : 'ADD_IMAGE')),
-                array($video ? 'menu/cms/galleries/add_one_image' : 'menu/cms/galleries/add_one_video', array('_SELF', array('type' => $video ? 'av' : 'ad', 'cat' => (($video && !$support_images) || (!$video && !$support_videos) || (is_null($cat))) ? null : $cat), '_SELF'), do_lang($video ? 'ADD_IMAGE' : 'ADD_VIDEO')),
-                (has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array($video ? 'menu/cms/galleries/edit_one_video' : 'menu/cms/galleries/edit_one_image', array('_SELF', array('type' => $video ? 'ev' : 'ed'), '_SELF'), do_lang($video ? 'EDIT_VIDEO' : 'EDIT_IMAGE')) : null), // Edit one
-                (has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array($video ? 'menu/cms/galleries/edit_one_image' : 'menu/cms/galleries/edit_one_video', array('_SELF', array('type' => $video ? 'ed' : 'ev'), '_SELF'), do_lang($video ? 'EDIT_IMAGE' : 'EDIT_VIDEO')) : null), // Edit one
-                has_privilege(get_member(), 'mass_import', 'cms_galleries') ? array('menu/_generic_admin/import', array('_SELF', array('type' => '_gimp', 'name' => $cat), '_SELF'), do_lang('GALLERY_IMPORT')) : null
+                array($video ? 'menu/cms/galleries/add_one_video' : 'menu/cms/galleries/add_one_image', array('_SELF', array('type' => $video ? 'add_other' : 'add', 'cat' => ((!$video && !$support_images) || ($video && !$support_videos) || (is_null($cat))) ? null : $cat), '_SELF'), do_lang($video ? 'ADD_VIDEO' : 'ADD_IMAGE')),
+                array($video ? 'menu/cms/galleries/add_one_image' : 'menu/cms/galleries/add_one_video', array('_SELF', array('type' => $video ? 'add_other' : 'add', 'cat' => (($video && !$support_images) || (!$video && !$support_videos) || (is_null($cat))) ? null : $cat), '_SELF'), do_lang($video ? 'ADD_IMAGE' : 'ADD_VIDEO')),
+                (has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array($video ? 'menu/cms/galleries/edit_one_video' : 'menu/cms/galleries/edit_one_image', array('_SELF', array('type' => $video ? 'edit_other' : 'edit'), '_SELF'), do_lang($video ? 'EDIT_VIDEO' : 'EDIT_IMAGE')) : null), // Edit one
+                (has_privilege(get_member(), 'edit_own_midrange_content', 'cms_galleries') ? array($video ? 'menu/cms/galleries/edit_one_image' : 'menu/cms/galleries/edit_one_video', array('_SELF', array('type' => $video ? 'edit' : 'edit_other'), '_SELF'), do_lang($video ? 'EDIT_IMAGE' : 'EDIT_VIDEO')) : null), // Edit one
+                has_privilege(get_member(), 'mass_import', 'cms_galleries') ? array('menu/_generic_admin/import', array('_SELF', array('type' => '_import', 'name' => $cat), '_SELF'), do_lang('GALLERY_IMPORT')) : null
             )),
             null,
             null,

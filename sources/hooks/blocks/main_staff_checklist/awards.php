@@ -60,7 +60,7 @@ class Hook_checklist_awards
                     $status = 0;
                 }
 
-                $config_url = build_url(array('page' => 'admin_awards', 'type' => '_ed', 'id' => $award['id']), get_module_zone('admin_awards'));
+                $config_url = build_url(array('page' => 'admin_awards', 'type' => '_edit', 'id' => $award['id']), get_module_zone('admin_awards'));
 
                 $_status = ($status == 0) ? do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0') : do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 

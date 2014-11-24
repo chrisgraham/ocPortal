@@ -309,7 +309,7 @@ class Module_polls
 
         // Management links
         if ((has_actual_page_access(null, 'cms_polls', null, null)) && (has_edit_permission('high', get_member(), $myrow['submitter'], 'cms_polls'))) {
-            $edit_url = build_url(array('page' => 'cms_polls', 'type' => '_ed', 'id' => $id), get_module_zone('cms_polls'));
+            $edit_url = build_url(array('page' => 'cms_polls', 'type' => '_edit', 'id' => $id), get_module_zone('cms_polls'));
         } else {
             $edit_url = new Tempcode();
         }

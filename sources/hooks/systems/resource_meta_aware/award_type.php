@@ -55,9 +55,9 @@ class Hook_resource_meta_aware_award_type
             'title_field_dereference' => true,
 
             'view_page_link_pattern' => null,
-            'edit_page_link_pattern' => '_SEARCH:admin_awards:ad:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:admin_awards:add:_WILD',
             'view_category_page_link_pattern' => null,
-            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_awards')) ? (get_module_zone('admin_awards') . ':admin_awards:ad') : null,
+            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_awards')) ? (get_module_zone('admin_awards') . ':admin_awards:add') : null,
             'archive_url' => null,
 
             'support_url_monikers' => false,

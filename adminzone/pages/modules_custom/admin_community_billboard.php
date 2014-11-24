@@ -22,7 +22,7 @@ class Module_admin_community_billboard extends Standard_crud_module
 {
     public $lang_type = 'COMMUNITY_BILLBOARD';
     public $special_edit_frontend = true;
-    public $redirect_type = 'ed';
+    public $redirect_type = 'edit';
     public $menu_label = 'COMMUNITY_BILLBOARD';
     public $select_name = 'MESSAGE';
     public $table = 'community_billboard';
@@ -138,8 +138,8 @@ class Module_admin_community_billboard extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('COMMUNITY_BILLBOARD'), comcode_lang_string('DOC_COMMUNITY_BILLBOARD'),
             array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_COMMUNITY_BILLBOARD')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_COMMUNITY_BILLBOARD')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_COMMUNITY_BILLBOARD')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_COMMUNITY_BILLBOARD')),
             ),
             do_lang('COMMUNITY_BILLBOARD')
         );

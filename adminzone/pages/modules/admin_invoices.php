@@ -59,7 +59,7 @@ class Module_admin_invoices
             'misc' => array('INVOICES', 'menu/adminzone/audit/ecommerce/invoices'),
             'outstanding' => array('OUTSTANDING_INVOICES', 'menu/adminzone/audit/ecommerce/outstanding_invoices'),
             'undelivered' => array('UNDELIVERED_INVOICES', 'menu/adminzone/audit/ecommerce/undelivered_invoices'),
-            'ad' => array('CREATE_INVOICE', 'menu/adminzone/audit/ecommerce/create_invoice'),
+            'add' => array('CREATE_INVOICE', 'menu/adminzone/audit/ecommerce/create_invoice'),
         );
     }
 
@@ -72,7 +72,7 @@ class Module_admin_invoices
      */
     public function pre_run()
     {
-        $type = get_param('type', 'ad');
+        $type = get_param('type', 'add');
 
         require_lang('ecommerce');
 
@@ -83,15 +83,15 @@ class Module_admin_invoices
             breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE'))));
         }
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES'))));
 
             $this->title = get_screen_title('CREATE_INVOICE');
         }
 
-        if ($type == '_ad') {
+        if ($type == '_add') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:ad', do_lang_tempcode('CREATE_INVOICE'))));
+            breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc', do_lang_tempcode('ECOMMERCE')), array('_SELF:_SELF:misc', do_lang_tempcode('INVOICES')), array('_SELF:_SELF:add', do_lang_tempcode('CREATE_INVOICE'))));
 
             $this->title = get_screen_title('CREATE_INVOICE');
         }
@@ -138,16 +138,16 @@ class Module_admin_invoices
     {
         require_code('ecommerce');
 
-        $type = get_param('type', 'ad');
+        $type = get_param('type', 'add');
 
         if ($type == 'misc') {
             return $this->misc();
         }
-        if ($type == 'ad') {
-            return $this->ad();
+        if ($type == 'add') {
+            return $this->add();
         }
-        if ($type == '_ad') {
-            return $this->_ad();
+        if ($type == '_add') {
+            return $this->_add();
         }
         if ($type == 'outstanding') {
             return $this->outstanding();
@@ -174,7 +174,7 @@ class Module_admin_invoices
         require_code('templates_donext');
         return do_next_manager(get_screen_title('INVOICES'), comcode_lang_string('DOC_ECOMMERCE'),
             array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('CREATE_INVOICE')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('CREATE_INVOICE')),
                 array('menu/adminzone/audit/ecommerce/outstanding_invoices', array('_SELF', array('type' => 'outstanding'), '_SELF'), do_lang('OUTSTANDING_INVOICES')),
                 array('menu/adminzone/audit/ecommerce/undelivered_invoices', array('_SELF', array('type' => 'undelivered'), '_SELF'), do_lang('UNDELIVERED_INVOICES')),
             ),
@@ -187,7 +187,7 @@ class Module_admin_invoices
      *
      * @return tempcode                 The interface.
      */
-    public function ad()
+    public function add()
     {
         require_code('form_templates');
 
@@ -214,7 +214,7 @@ class Module_admin_invoices
         $fields->attach(form_input_line(do_lang_tempcode('INVOICE_SPECIAL'), do_lang_tempcode('DESCRIPTION_INVOICE_SPECIAL'), 'special', '', false));
         $fields->attach(form_input_text(do_lang_tempcode('INVOICE_NOTE'), do_lang_tempcode('DESCRIPTION_INVOICE_NOTE'), 'note', '', false));
 
-        $post_url = build_url(array('page' => '_SELF', 'type' => '_ad'), '_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_add'), '_SELF');
         $submit_name = do_lang_tempcode('CREATE_INVOICE');
 
         return do_template('FORM_SCREEN', array('_GUID' => 'b8a08145bd1262c277e00a1151d6383e', 'HIDDEN' => '', 'TITLE' => $this->title, 'URL' => $post_url, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => $submit_name, 'TEXT' => do_lang_tempcode('DESCRIPTION_INVOICE_PAGE')));
@@ -225,7 +225,7 @@ class Module_admin_invoices
      *
      * @return tempcode                 The interface.
      */
-    public function _ad()
+    public function _add()
     {
         $type_code = post_param('type_code');
         $object = find_product($type_code);

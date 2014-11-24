@@ -32,12 +32,12 @@ Products that require manual set-up will usually only be charged for upon activa
 {+END}
 {+START,IF,{$AND,{$ADDON_INSTALLED,news},{$HAS_ACTUAL_PAGE_ACCESS,cms_news}}}[title="2"]News/Blogs[/title]
 
-{$ANCHOR,ADD_NEWS}[page="_SEARCH:cms_news:ad"]The add news page[/page] allows you to add your news to {$SITE_NAME}. For most members, this will put the news into a validation queue and inform the staff of the submission.
+{$ANCHOR,ADD_NEWS}[page="_SEARCH:cms_news:add"]The add news page[/page] allows you to add your news to {$SITE_NAME}. For most members, this will put the news into a validation queue and inform the staff of the submission.
 {+START,IF,{$HAS_PRIVILEGE,have_personal_category,cms_news}}You also have the opportunity to submit to your own personal news category; this is your own blog on the website.{+END}
 {+END}
 {+START,IF,{$AND,{$ADDON_INSTALLED,galleries},{$HAS_ACTUAL_PAGE_ACCESS,cms_galleries}}}[title="2"]Galleries[/title]
 
-{$ANCHOR,ADD_MEDIA}The [page="_SEARCH:cms_galleries:ad"]add image[/page]/[page="_SEARCH:cms_galleries:av"]add video[/page] pages allow you to add your media to {$SITE_NAME}. For most members, this will put the images into a validation queue and inform the staff of the submission.
+{$ANCHOR,ADD_MEDIA}The [page="_SEARCH:cms_galleries:add"]add image[/page]/[page="_SEARCH:cms_galleries:add_other"]add video[/page] pages allow you to add your media to {$SITE_NAME}. For most members, this will put the images into a validation queue and inform the staff of the submission.
 {+END}
 [title="2"]Other things to do[/title]
 

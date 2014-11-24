@@ -175,7 +175,7 @@ class Module_authors
             if ((has_actual_page_access(get_member(), 'cms_authors')) && (has_edit_author_permission(get_member(), $author))) {
                 set_http_status_code('404');
 
-                $_author_add_url = build_url(array('page' => 'cms_authors', 'type' => '_ad', 'author' => $author), get_module_zone('cms_authors'));
+                $_author_add_url = build_url(array('page' => 'cms_authors', 'type' => '_add', 'author' => $author), get_module_zone('cms_authors'));
                 $author_add_url = $_author_add_url->evaluate();
                 $message = do_lang_tempcode('NO_SUCH_AUTHOR_CONFIGURE_ONE', escape_html($author), escape_html($author_add_url));
 
@@ -219,7 +219,7 @@ class Module_authors
 
         // Edit link, for staff
         if (has_edit_author_permission(get_member(), $author)) {
-            $edit_author_url = build_url(array('page' => 'cms_authors', 'type' => '_ad', 'author' => $author), get_module_zone('cms_authors'));
+            $edit_author_url = build_url(array('page' => 'cms_authors', 'type' => '_add', 'author' => $author), get_module_zone('cms_authors'));
             $staff_details = do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array('_GUID' => '604b1a986cee4924998cee722b72936e', 'ACTION' => hyperlink($edit_author_url, do_lang_tempcode('DEFINE_AUTHOR'), false)));
         } else {
             $staff_details = new Tempcode();
@@ -291,7 +291,7 @@ class Module_authors
         // Edit link
         $edit_url = new Tempcode();
         if (has_edit_author_permission(get_member(), $author)) {
-            $edit_url = build_url(array('page' => 'cms_authors', 'type' => '_ad', 'id' => $author), 'cms');
+            $edit_url = build_url(array('page' => 'cms_authors', 'type' => '_add', 'id' => $author), 'cms');
         }
 
         return do_template('AUTHOR_SCREEN', array(

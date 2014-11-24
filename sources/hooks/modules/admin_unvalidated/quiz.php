@@ -45,7 +45,7 @@ class Hook_unvalidated_quiz
         $info['db_add_date'] = 'q_add_date';
         $info['db_edit_date'] = 'q_add_date';
         $info['edit_module'] = 'cms_quiz';
-        $info['edit_type'] = '_ed';
+        $info['edit_type'] = '_edit';
         $info['edit_identifier'] = 'id';
         $info['title'] = do_lang_tempcode('QUIZZES');
 

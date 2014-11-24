@@ -61,7 +61,7 @@ class Hook_content_meta_aware_forum
             'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:forumview:misc:_WILD',
-            'edit_page_link_pattern' => '_SEARCH:admin_ocf_forums:_ec:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:admin_ocf_forums:_edit_category:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:forumview:misc:_WILD',
             'add_url' => '',
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('forumview')) . ':forumview',

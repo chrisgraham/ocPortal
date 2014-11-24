@@ -235,7 +235,7 @@ class Block_side_news
         $submit_url = new Tempcode();
 
         if ((($blogs !== 1) || (has_privilege(get_member(), 'have_personal_category', 'cms_news'))) && (has_actual_page_access(null, ($blogs === 1) ? 'cms_blogs' : 'cms_news', null, null)) && (has_submit_permission('high', get_member(), get_ip_address(), ($blogs === 1) ? 'cms_blogs' : 'cms_news'))) {
-            $map2 = array('page' => ($blogs === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'ad', 'redirect' => SELF_REDIRECT);
+            $map2 = array('page' => ($blogs === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'add', 'redirect' => SELF_REDIRECT);
             if (is_numeric($filter)) {
                 $map2['cat'] = $filter; // select news cat by default, if we are only showing one news cat in this block
             } elseif ($filter != '*') {

@@ -182,7 +182,7 @@ class Module_admin_sitemap
         require_code('templates_donext');
         return do_next_manager(get_screen_title('PAGES'), comcode_lang_string('DOC_PAGES'),
             array(
-                array('menu/cms/comcode_page_edit', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('COMCODE_PAGE_EDIT')),
+                array('menu/cms/comcode_page_edit', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('COMCODE_PAGE_EDIT')),
                 array('menu/adminzone/structure/sitemap/page_delete', array('_SELF', array('type' => 'delete'), '_SELF'), do_lang('DELETE_PAGES')),
                 array('menu/adminzone/structure/sitemap/page_move', array('_SELF', array('type' => 'move'), '_SELF'), do_lang('MOVE_PAGES')),
             ),

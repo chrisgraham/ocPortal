@@ -139,20 +139,20 @@ abstract class Standard_crud_module
         $entry_points = array();
         if (method_exists($this, 'add_actualisation')) {
             $entry_points += array(
-                'ad' => array('ADD_' . $this->lang_type, 'menu/_generic_admin/add_one'),
-                'ed' => array('EDIT_' . $this->lang_type, 'menu/_generic_admin/edit_one'),
+                'add' => array('ADD_' . $this->lang_type, 'menu/_generic_admin/add_one'),
+                'edit' => array('EDIT_' . $this->lang_type, 'menu/_generic_admin/edit_one'),
             );
         }
         if (!is_null($this->cat_crud_module)) {
             $entry_points += array(
-                'ac' => array('ADD_' . $this->cat_crud_module->lang_type, 'menu/_generic_admin/add_one_category'),
-                'ec' => array('EDIT_' . $this->cat_crud_module->lang_type, 'menu/_generic_admin/edit_one_category'),
+                'add_category' => array('ADD_' . $this->cat_crud_module->lang_type, 'menu/_generic_admin/add_one_category'),
+                'edit_category' => array('EDIT_' . $this->cat_crud_module->lang_type, 'menu/_generic_admin/edit_one_category'),
             );
         }
         if (!is_null($this->alt_crud_module)) {
             $entry_points += array(
-                'av' => array('ADD_' . $this->alt_crud_module->lang_type, 'menu/_generic_admin/add_one'),
-                'ev' => array('EDIT_' . $this->alt_crud_module->lang_type, 'menu/_generic_admin/edit_one'),
+                'add_other' => array('ADD_' . $this->alt_crud_module->lang_type, 'menu/_generic_admin/add_one'),
+                'edit_other' => array('EDIT_' . $this->alt_crud_module->lang_type, 'menu/_generic_admin/edit_one'),
             );
         }
         return $entry_points;
@@ -171,7 +171,7 @@ abstract class Standard_crud_module
     public function pre_run($top_level = true, $type = null)
     {
         if (is_null($this->default_type)) {
-            $this->default_type = method_exists($this, 'misc') ? 'misc' : 'ad';
+            $this->default_type = method_exists($this, 'misc') ? 'misc' : 'add';
         }
         if (is_null($type)) {
             $type = get_param('type', $this->default_type);
@@ -205,11 +205,11 @@ abstract class Standard_crud_module
                 $this->alt_crud_module->type_code = 'v';
             }
 
-            if (($type == 'ac') || ($type == '_ac') || ($type == 'ec') || ($type == '_ec') || ($type == '__ec') || ($type == 'add_category') || ($type == '_add_category') || ($type == 'edit_category') || ($type == '_edit_category') || ($type == '__edit_category')) {
+            if (($type == 'add_category') || ($type == '_add_category') || ($type == 'edit_category') || ($type == '_edit_category') || ($type == '__edit_category') || ($type == 'add_category') || ($type == '_add_category') || ($type == 'edit_category') || ($type == '_edit_category') || ($type == '__edit_category')) {
                 if ($this->cat_crud_module !== null) {
                     $this->cat_crud_module->pre_run(false, $type);
                 }
-            } elseif (($type == 'av') || ($type == '_av') || ($type == 'ev') || ($type == '_ev') || ($type == '__ev') || ($type == 'add_catalogue') || ($type == '_add_catalogue') || ($type == 'edit_catalogue') || ($type == '_edit_catalogue') || ($type == '__edit_catalogue')) {
+            } elseif (($type == 'add_other') || ($type == '_add_other') || ($type == 'edit_other') || ($type == '_edit_other') || ($type == '__edit_other') || ($type == 'add_catalogue') || ($type == '_add_catalogue') || ($type == 'edit_catalogue') || ($type == '_edit_catalogue') || ($type == '__edit_catalogue')) {
                 if ($this->alt_crud_module !== null) {
                     $this->alt_crud_module->pre_run(false, $type);
                 }
@@ -217,11 +217,11 @@ abstract class Standard_crud_module
                 self::pre_run(false, $type);
             }
         } else {
-            if ($type == '_ad' || $type == '_av' || $type == '_ac' || $type == '_add_entry' || $type == '_add_category' || $type == '__ed' || $type == '__ev' || $type == '__ec' || $type == '__edit_entry' || $type == '__edit_category') {
+            if ($type == '_add' || $type == '_add_other' || $type == '_add_category' || $type == '_add_entry' || $type == '_add_category' || $type == '__edit' || $type == '__edit_other' || $type == '__edit_category' || $type == '__edit_entry' || $type == '__edit_category') {
                 breadcrumb_set_self(do_lang_tempcode('DONE'));
             }
 
-            if ($type == 'ad' || $type == 'av' || $type == 'ac' || $type == 'add_entry' || $type == 'add_category') {
+            if ($type == 'add' || $type == 'add_other' || $type == 'add_category' || $type == 'add_entry' || $type == 'add_category') {
                 if (multi_lang()) {
                     require_code('lang2');
                     $switch_url = get_self_url(false, false, array('keep_lang' => get_site_default_lang()));
@@ -248,7 +248,7 @@ abstract class Standard_crud_module
                 $this->doing = $doing;
             }
 
-            if ($type == '_ad' || $type == '_av' || $type == '_ac' || $type == '_add_entry' || $type == '_add_category') {
+            if ($type == '_add' || $type == '_add_other' || $type == '_add_category' || $type == '_add_entry' || $type == '_add_category') {
                 $doing = 'ADD_' . $this->lang_type;
 
                 $success_message_str = 'SUCCESS_MESSAGE__' . $doing;
@@ -276,7 +276,7 @@ abstract class Standard_crud_module
                 $this->success_message_str = $success_message_str;
             }
 
-            if ($type == 'ed' || $type == 'ev' || $type == 'ec' || $type == 'edit_entry' || $type == 'edit_category') {
+            if ($type == 'edit' || $type == 'edit_other' || $type == 'edit_category' || $type == 'edit_entry' || $type == 'edit_category') {
                 $doing = 'EDIT_' . $this->lang_type;
 
                 if (($this->catalogue) && (get_param('catalogue_name', '') != '')) {
@@ -293,7 +293,7 @@ abstract class Standard_crud_module
                 $this->doing = $doing;
             }
 
-            if ($type == '_ed' || $type == '_ev' || $type == '_ec' || $type == '_edit_entry' || $type == '_edit_category') {
+            if ($type == '_edit' || $type == '_edit_other' || $type == '_edit_category' || $type == '_edit_entry' || $type == '_edit_category') {
                 $doing = 'EDIT_' . $this->lang_type;
 
                 if ((multi_lang()) && (has_actual_page_access(get_member(), 'admin_lang')) && (user_lang() != get_site_default_lang())) {
@@ -316,7 +316,7 @@ abstract class Standard_crud_module
                 $this->doing = $doing;
             }
 
-            if ($type == '__ed' || $type == '__ev' || $type == '__ec' || $type == '__edit_entry' || $type == '__edit_category') {
+            if ($type == '__edit' || $type == '__edit_other' || $type == '__edit_category' || $type == '__edit_entry' || $type == '__edit_category') {
                 $id = get_param('id', '');
 
                 $delete = post_param_integer('delete', 0);
@@ -366,7 +366,7 @@ abstract class Standard_crud_module
             }
 
             if ((method_exists($this, 'misc')) && ($type != 'misc')) {
-                if (($this->special_edit_frontend) && (($type == '_ed') || ($type == '_ec'))) {
+                if (($this->special_edit_frontend) && (($type == '_edit') || ($type == '_edit_category'))) {
                     breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode(is_null($this->menu_label) ? 'MENU' : $this->menu_label)), array('_SELF:_SELF:' . substr($type, 1), do_lang_tempcode('CHOOSE'))));
                 } else {
                     if (($this->catalogue) && (either_param('catalogue_name', '') != '')) {
@@ -377,7 +377,7 @@ abstract class Standard_crud_module
                     }
                 }
             } else {
-                if (($this->special_edit_frontend) && (($type == '_ed') || ($type == '_ec'))) {
+                if (($this->special_edit_frontend) && (($type == '_edit') || ($type == '_edit_category'))) {
                     breadcrumb_set_parents(array(array('_SELF:_SELF:' . substr($type, 1), do_lang_tempcode('CHOOSE'))));
                 }
             }
@@ -412,7 +412,7 @@ abstract class Standard_crud_module
         }
 
         if (is_null($this->default_type)) {
-            $this->default_type = method_exists($this, 'misc') ? 'misc' : 'ad';
+            $this->default_type = method_exists($this, 'misc') ? 'misc' : 'add';
         }
         $type = get_param('type', $this->default_type);
 
@@ -449,104 +449,104 @@ abstract class Standard_crud_module
             }
         }
 
-        if ($type == 'ad') {
-            return $this->ad();
+        if ($type == 'add') {
+            return $this->add();
         }
-        if ($type == '_ad') {
-            return $this->_ad();
+        if ($type == '_add') {
+            return $this->_add();
         }
-        if ($type == 'ed') {
-            return $this->ed();
+        if ($type == 'edit') {
+            return $this->edit();
         }
-        if ($type == '_ed') {
-            return $this->_ed();
+        if ($type == '_edit') {
+            return $this->_edit();
         }
-        if ($type == '__ed') {
-            return $this->__ed();
+        if ($type == '__edit') {
+            return $this->__edit();
         }
         if (!is_null($this->cat_crud_module)) {
-            if ($type == 'ac') {
-                return $this->cat_crud_module->ad();
+            if ($type == 'add_category') {
+                return $this->cat_crud_module->add();
             }
-            if ($type == '_ac') {
-                return $this->cat_crud_module->_ad();
+            if ($type == '_add_category') {
+                return $this->cat_crud_module->_add();
             }
-            if ($type == 'ec') {
-                return $this->cat_crud_module->ed();
+            if ($type == 'edit_category') {
+                return $this->cat_crud_module->edit();
             }
-            if ($type == '_ec') {
-                return $this->cat_crud_module->_ed();
+            if ($type == '_edit_category') {
+                return $this->cat_crud_module->_edit();
             }
-            if ($type == '__ec') {
-                return $this->cat_crud_module->__ed();
+            if ($type == '__edit_category') {
+                return $this->cat_crud_module->__edit();
             }
         }
         if (!is_null($this->alt_crud_module)) {
-            if ($type == 'av') {
-                return $this->alt_crud_module->ad();
+            if ($type == 'add_other') {
+                return $this->alt_crud_module->add();
             }
-            if ($type == '_av') {
-                return $this->alt_crud_module->_ad();
+            if ($type == '_add_other') {
+                return $this->alt_crud_module->_add();
             }
-            if ($type == 'ev') {
-                return $this->alt_crud_module->ed();
+            if ($type == 'edit_other') {
+                return $this->alt_crud_module->edit();
             }
-            if ($type == '_ev') {
-                return $this->alt_crud_module->_ed();
+            if ($type == '_edit_other') {
+                return $this->alt_crud_module->_edit();
             }
-            if ($type == '__ev') {
-                return $this->alt_crud_module->__ed();
+            if ($type == '__edit_other') {
+                return $this->alt_crud_module->__edit();
             }
         }
 
         // These ones are for catalogues only...
         if ($type == 'add_entry') {
-            return $this->ad();
+            return $this->add();
         }
         if ($type == '_add_entry') {
-            return $this->_ad();
+            return $this->_add();
         }
         if ($type == 'edit_entry') {
-            return $this->ed();
+            return $this->edit();
         }
         if ($type == '_edit_entry') {
-            return $this->_ed();
+            return $this->_edit();
         }
         if ($type == '__edit_entry') {
-            return $this->__ed();
+            return $this->__edit();
         }
         if (!is_null($this->cat_crud_module)) {
             if ($type == 'add_category') {
-                return $this->cat_crud_module->ad();
+                return $this->cat_crud_module->add();
             }
             if ($type == '_add_category') {
-                return $this->cat_crud_module->_ad();
+                return $this->cat_crud_module->_add();
             }
             if ($type == 'edit_category') {
-                return $this->cat_crud_module->ed();
+                return $this->cat_crud_module->edit();
             }
             if ($type == '_edit_category') {
-                return $this->cat_crud_module->_ed();
+                return $this->cat_crud_module->_edit();
             }
             if ($type == '__edit_category') {
-                return $this->cat_crud_module->__ed();
+                return $this->cat_crud_module->__edit();
             }
         }
         if (!is_null($this->alt_crud_module)) {
             if ($type == 'add_catalogue') {
-                return $this->alt_crud_module->ad();
+                return $this->alt_crud_module->add();
             }
             if ($type == '_add_catalogue') {
-                return $this->alt_crud_module->_ad();
+                return $this->alt_crud_module->_add();
             }
             if ($type == 'edit_catalogue') {
-                return $this->alt_crud_module->ed();
+                return $this->alt_crud_module->edit();
             }
             if ($type == '_edit_catalogue') {
-                return $this->alt_crud_module->_ed();
+                return $this->alt_crud_module->_edit();
             }
             if ($type == '__edit_catalogue') {
-                return $this->alt_crud_module->__ed();
+                return $this->alt_crud_module->__edit();
             }
         }
 
@@ -762,7 +762,7 @@ abstract class Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function ad()
+    public function add()
     {
         if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require))) {
             check_submit_permission($this->permissions_require, $this->privilege_page_name);
@@ -882,7 +882,7 @@ abstract class Standard_crud_module
 
         $submit_icon = ($this->type_code == 'c') ? 'menu___generic_admin__add_one_category' : 'menu___generic_admin__add_one';
 
-        if (get_param('type', 'ad') == 'add_catalogue') {
+        if (get_param('type', 'add') == 'add_catalogue') {
             require_javascript('catalogues');
 
             // New field
@@ -943,7 +943,7 @@ abstract class Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function _ad()
+    public function _add()
     {
         if (!is_null($this->permissions_require)) {
             check_submit_permission($this->permissions_require, array($this->permissions_cat_require, is_null($this->permissions_cat_name) ? '' : post_param($this->permissions_cat_name), $this->permissions_cat_require_b, is_null($this->permissions_cat_name_b) ? '' : post_param($this->permissions_cat_name_b)), $this->privilege_page_name);
@@ -1121,7 +1121,7 @@ abstract class Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function ed()
+    public function edit()
     {
         if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require))) {
             check_some_edit_permission($this->permissions_require, null, $this->privilege_page_name);
@@ -1135,7 +1135,7 @@ abstract class Standard_crud_module
         $text = paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST'));
 
         $next_type = '_e' . $this->type_code;
-        if (get_param('type', 'ed') == 'edit_catalogue') {
+        if (get_param('type', 'edit') == 'edit_catalogue') {
             $next_type = '_edit_catalogue';
         }
         $map = array('page' => '_SELF', 'type' => $next_type);
@@ -1257,7 +1257,7 @@ abstract class Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function _ed()
+    public function _edit()
     {
         $submit_name = do_lang_tempcode('SAVE');
 
@@ -1403,7 +1403,7 @@ abstract class Standard_crud_module
             }
         }
 
-        if (get_param('type', '_ed') == '_edit_catalogue') {
+        if (get_param('type', '_edit') == '_edit_catalogue') {
             require_javascript('catalogues');
 
             // Existing fields
@@ -1498,7 +1498,7 @@ abstract class Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function __ed()
+    public function __edit()
     {
         $id = mixed(); // Define type as mixed
         $id = $this->non_integer_id ? get_param('id', false, true) : strval(get_param_integer('id'));

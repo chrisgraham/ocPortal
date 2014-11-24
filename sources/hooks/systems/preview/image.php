@@ -30,7 +30,7 @@ class Hook_preview_image
      */
     public function applies()
     {
-        $applies = (get_param('page', '') == 'cms_galleries') && ((get_param('type') == '_ed') || (get_param('type') == 'ad'));
+        $applies = (get_param('page', '') == 'cms_galleries') && ((get_param('type') == '_edit') || (get_param('type') == 'add'));
         return array($applies, null, false);
     }
 

@@ -109,7 +109,7 @@ class Module_cms_banners extends Standard_crud_module
             }
         ';
 
-        if ($type == 'ad') {
+        if ($type == 'add') {
             require_javascript('ajax');
             $script = find_script('snippet');
             $this->javascript .= "
@@ -131,7 +131,7 @@ class Module_cms_banners extends Standard_crud_module
             ";
         }
 
-        if ($type == 'ac') {
+        if ($type == 'add_category') {
             require_javascript('ajax');
             $script = find_script('snippet');
             $this->cat_crud_module->javascript = "
@@ -193,10 +193,10 @@ class Module_cms_banners extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_BANNERS'), comcode_lang_string('DOC_BANNERS'),
             array(
-                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'ac'), '_SELF'), do_lang('ADD_BANNER_TYPE')) : null,
-                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'ec'), '_SELF'), do_lang('EDIT_BANNER_TYPE')) : null,
-                has_privilege(get_member(), 'submit_midrange_content', 'cms_banners') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_BANNER')) : null,
-                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_banners') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_BANNER')) : null,
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'add_category'), '_SELF'), do_lang('ADD_BANNER_TYPE')) : null,
+                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'edit_category'), '_SELF'), do_lang('EDIT_BANNER_TYPE')) : null,
+                has_privilege(get_member(), 'submit_midrange_content', 'cms_banners') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_BANNER')) : null,
+                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_banners') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_BANNER')) : null,
             ),
             do_lang('MANAGE_BANNERS')
         );
@@ -735,14 +735,14 @@ class Module_cms_banners_cat extends Standard_crud_module
                 null,
                 null,
                 /* TYPED-ORDERED LIST OF 'LINKS'    */
-                array('_SELF', array('type' => 'ad'), '_SELF', do_lang_tempcode('ADD_BANNER')), // Add one
+                array('_SELF', array('type' => 'add'), '_SELF', do_lang_tempcode('ADD_BANNER')), // Add one
                 null, // Edit this
-                has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ed'), '_SELF', do_lang_tempcode('EDIT_BANNER')) : null, // Edit one
+                has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners') ? array('_SELF', array('type' => 'edit'), '_SELF', do_lang_tempcode('EDIT_BANNER')) : null, // Edit one
                 null, // View this
                 null, // View archive
                 null, // Add to category
-                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ac'), '_SELF', do_lang_tempcode('ADD_BANNER_TYPE')) : null, // Add one category
-                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ec'), '_SELF', do_lang_tempcode('EDIT_BANNER_TYPE')) : null, // Edit one category
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'add_category'), '_SELF', do_lang_tempcode('ADD_BANNER_TYPE')) : null, // Add one category
+                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'edit_category'), '_SELF', do_lang_tempcode('EDIT_BANNER_TYPE')) : null, // Edit one category
                 null, // Edit this category
                 null, // View this category
                 null,
@@ -759,16 +759,16 @@ class Module_cms_banners_cat extends Standard_crud_module
             null,
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
-            array('_SELF', array('type' => 'ad', 'b_type' => $type), '_SELF', do_lang_tempcode('ADD_BANNER')), // Add one
-            (is_null($id) || (!has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners'))) ? null : array('_SELF', array('type' => '_ed', 'id' => $id), '_SELF', do_lang_tempcode('EDIT_THIS_BANNER')), // Edit this
-            has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ed'), '_SELF', do_lang_tempcode('EDIT_BANNER')) : null, // Edit one
+            array('_SELF', array('type' => 'add', 'b_type' => $type), '_SELF', do_lang_tempcode('ADD_BANNER')), // Add one
+            (is_null($id) || (!has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners'))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id), '_SELF', do_lang_tempcode('EDIT_THIS_BANNER')), // Edit this
+            has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners') ? array('_SELF', array('type' => 'edit'), '_SELF', do_lang_tempcode('EDIT_BANNER')) : null, // Edit one
             ((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/
                     get_option('simplified_donext') == '1')) ? null : array('banners', array('type' => 'view', 'source' => $id), get_module_zone('banners')), // View this
             array('admin_banners', array('type' => 'misc'), get_module_zone('admin_banners')), // View archive
             null, // Add to category
-            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ac'), '_SELF', do_lang_tempcode('ADD_BANNER_TYPE')) : null, // Add one category
-            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ec'), '_SELF', do_lang_tempcode('EDIT_BANNER_TYPE')) : null, // Edit one category
-            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => '_ec', 'id' => $type), '_SELF', do_lang_tempcode('EDIT_THIS_BANNER_TYPE')) : null, // Edit this category
+            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'add_category'), '_SELF', do_lang_tempcode('ADD_BANNER_TYPE')) : null, // Add one category
+            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'edit_category'), '_SELF', do_lang_tempcode('EDIT_BANNER_TYPE')) : null, // Edit one category
+            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => '_edit_category', 'id' => $type), '_SELF', do_lang_tempcode('EDIT_THIS_BANNER_TYPE')) : null, // Edit this category
             null, // View this category
             null,
             null,

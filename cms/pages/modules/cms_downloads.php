@@ -62,8 +62,8 @@ class Module_cms_downloads extends Standard_crud_module
         $ret += parent::get_entry_points();
 
         $ret += array(
-            'av' => array('ADD_DOWNLOAD_LICENCE', 'menu/cms/downloads/add_one_licence'),
-            'ev' => array('EDIT_DOWNLOAD_LICENCE', 'menu/cms/downloads/edit_one_licence'),
+            'add_other' => array('ADD_DOWNLOAD_LICENCE', 'menu/cms/downloads/add_one_licence'),
+            'edit_other' => array('EDIT_DOWNLOAD_LICENCE', 'menu/cms/downloads/edit_one_licence'),
         );
 
         if (has_privilege(get_member(), 'mass_import', 'cms_downloads')) {
@@ -189,14 +189,14 @@ class Module_cms_downloads extends Standard_crud_module
         require_code('fields');
         return do_next_manager(get_screen_title('MANAGE_DOWNLOADS'), comcode_lang_string('DOC_DOWNLOADS'),
             array_merge(array(
-                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'ac'), '_SELF'), do_lang('ADD_DOWNLOAD_CATEGORY')) : null,
-                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'ec'), '_SELF'), do_lang('EDIT_DOWNLOAD_CATEGORY')) : null,
-                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('menu/cms/downloads/add_one_licence', array('_SELF', array('type' => 'av'), '_SELF'), do_lang('ADD_DOWNLOAD_LICENCE')) : null,
-                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('menu/cms/downloads/edit_one_licence', array('_SELF', array('type' => 'ev'), '_SELF'), do_lang('EDIT_DOWNLOAD_LICENCE')) : null,
+                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'add_category'), '_SELF'), do_lang('ADD_DOWNLOAD_CATEGORY')) : null,
+                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'edit_category'), '_SELF'), do_lang('EDIT_DOWNLOAD_CATEGORY')) : null,
+                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('menu/cms/downloads/add_one_licence', array('_SELF', array('type' => 'add_other'), '_SELF'), do_lang('ADD_DOWNLOAD_LICENCE')) : null,
+                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('menu/cms/downloads/edit_one_licence', array('_SELF', array('type' => 'edit_other'), '_SELF'), do_lang('EDIT_DOWNLOAD_LICENCE')) : null,
                 has_privilege(get_member(), 'mass_import') ? array('menu/_generic_admin/import', array('_SELF', array('type' => 'import'), '_SELF'), do_lang('LOAD_FTP_FILES')) : null,
                 has_privilege(get_member(), 'mass_import') ? array('menu/_generic_admin/import', array('_SELF', array('type' => 'import2'), '_SELF'), do_lang('LOAD_FILESYSTEM_FILES')) : null,
-                has_privilege(get_member(), 'submit_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_DOWNLOAD')) : null,
-                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_DOWNLOAD')) : null,
+                has_privilege(get_member(), 'submit_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_DOWNLOAD')) : null,
+                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_DOWNLOAD')) : null,
             ), manage_custom_fields_donext_link('download'), manage_custom_fields_donext_link('download_category')),
             do_lang('MANAGE_DOWNLOADS')
         );
@@ -582,7 +582,7 @@ class Module_cms_downloads extends Standard_crud_module
 
         if ((!is_null(get_param('redirect', null))) && (addon_installed('galleries'))) {
             $redirect_url = build_url(array('page' => 'downloads', 'type' => 'entry', 'id' => $id), get_module_zone('downloads'));
-            $add_image_url = build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => 'download_' . strval($id), 'redirect' => $redirect_url->evaluate()), get_module_zone('cms_galleries'));
+            $add_image_url = build_url(array('page' => 'cms_galleries', 'type' => 'add', 'cat' => 'download_' . strval($id), 'redirect' => $redirect_url->evaluate()), get_module_zone('cms_galleries'));
             $this->do_next_description = do_lang_tempcode('DOWNLOAD_ADDED', escape_html($add_image_url->evaluate()));
         }
 
@@ -1053,14 +1053,14 @@ class Module_cms_downloads_cat extends Standard_crud_module
                 null,
                 null,
                 /* TYPED-ORDERED LIST OF 'LINKS'    */
-                array('_SELF', array('type' => 'ad'), '_SELF'), // Add one
+                array('_SELF', array('type' => 'add'), '_SELF'), // Add one
                 null, // Edit this
-                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'ed'), '_SELF') : null, // Edit one
+                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
                 null, // View this
                 array('downloads', array('type' => 'misc'), get_module_zone('downloads')), // View archive
                 null, // Add to category
-                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'ac'), '_SELF') : null, // Add one category
-                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'ec'), '_SELF') : null, // Edit one category
+                has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
+                has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
                 null, // Edit this category
                 null, // View this category
                 /* SPECIALLY TYPED 'LINKS' */
@@ -1069,8 +1069,8 @@ class Module_cms_downloads_cat extends Standard_crud_module
                 ),
                 array(),
                 array(
-                    has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/add_one_licence', array('_SELF', array('type' => 'av'), '_SELF'), do_lang('ADD_DOWNLOAD_LICENCE')) : null,
-                    has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/edit_one_licence', array('_SELF', array('type' => 'ev'), '_SELF'), do_lang('EDIT_DOWNLOAD_LICENCE')) : null
+                    has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/add_one_licence', array('_SELF', array('type' => 'add_other'), '_SELF'), do_lang('ADD_DOWNLOAD_LICENCE')) : null,
+                    has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/edit_one_licence', array('_SELF', array('type' => 'edit_other'), '_SELF'), do_lang('EDIT_DOWNLOAD_LICENCE')) : null
                 ),
                 do_lang('LICENCES')
             );
@@ -1080,29 +1080,29 @@ class Module_cms_downloads_cat extends Standard_crud_module
 
         if ((addon_installed('galleries')) && (!is_null($id))) {
             require_lang('galleries');
-            $special_links[] = (has_privilege(get_member(), 'submit_midrange_content', 'cms_galleries', array('galleries', 'download_' . strval($id))) && (!is_null($id))) ? array('menu/cms/downloads/add_image_to_this', array('cms_galleries', array('type' => 'ad', 'cat' => 'download_' . strval($id)), get_module_zone('cms_galleries'))) : null;
+            $special_links[] = (has_privilege(get_member(), 'submit_midrange_content', 'cms_galleries', array('galleries', 'download_' . strval($id))) && (!is_null($id))) ? array('menu/cms/downloads/add_image_to_this', array('cms_galleries', array('type' => 'add', 'cat' => 'download_' . strval($id)), get_module_zone('cms_galleries'))) : null;
         }
 
         return do_next_manager($title, $description,
             null,
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
-            is_null($id) ? null : array('_SELF', array('type' => 'ad', 'cat' => $category_id), '_SELF'), // Add one
-            (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads', array('downloads', $category_id)))) ? null : array('_SELF', array('type' => '_ed', 'id' => $id), '_SELF'), // Edit this
-            has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'ed'), '_SELF') : null, // Edit one
+            is_null($id) ? null : array('_SELF', array('type' => 'add', 'cat' => $category_id), '_SELF'), // Add one
+            (is_null($id) || (!has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads', array('downloads', $category_id)))) ? null : array('_SELF', array('type' => '_edit', 'id' => $id), '_SELF'), // Edit this
+            has_privilege(get_member(), 'edit_own_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit'), '_SELF') : null, // Edit one
             is_null($id) ? null : array('downloads', array('type' => 'entry', 'id' => $id), get_module_zone('downloads')), // View this
             array('downloads', array('type' => 'misc'), get_module_zone('downloads')), // View archive
-            (!is_null($id)) ? null : array('_SELF', array('type' => 'ad', 'cat' => $category_id), '_SELF'), // Add to category
-            has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'ac'), '_SELF') : null, // Add one category
-            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'ec'), '_SELF') : null, // Edit one category
-            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => '_ec', 'id' => $category_id), '_SELF') : null, // Edit this category
+            (!is_null($id)) ? null : array('_SELF', array('type' => 'add', 'cat' => $category_id), '_SELF'), // Add to category
+            has_privilege(get_member(), 'submit_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'add_category'), '_SELF') : null, // Add one category
+            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => 'edit_category'), '_SELF') : null, // Edit one category
+            has_privilege(get_member(), 'edit_own_cat_midrange_content', 'cms_downloads') ? array('_SELF', array('type' => '_edit_category', 'id' => $category_id), '_SELF') : null, // Edit this category
             array('downloads', array('type' => 'misc', 'id' => ($category_id == db_get_first_id()) ? null : $category_id), get_module_zone('downloads')), // View this category
             /* SPECIALLY TYPED 'LINKS' */
             $special_links,
             array(),
             array(
-                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/add_one_licence', array('_SELF', array('type' => 'av'), '_SELF'), do_lang('ADD_DOWNLOAD_LICENCE')) : null,
-                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/edit_one_licence', array('_SELF', array('type' => 'ev'), '_SELF'), do_lang('EDIT_DOWNLOAD_LICENCE')) : null
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/add_one_licence', array('_SELF', array('type' => 'add_other'), '_SELF'), do_lang('ADD_DOWNLOAD_LICENCE')) : null,
+                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_downloads') ? array('menu/cms/downloads/edit_one_licence', array('_SELF', array('type' => 'edit_other'), '_SELF'), do_lang('EDIT_DOWNLOAD_LICENCE')) : null
             ),
             do_lang('LICENCES')
         );

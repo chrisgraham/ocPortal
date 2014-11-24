@@ -125,8 +125,8 @@ class Module_cms_polls extends Standard_crud_module
         require_code('fields');
         return do_next_manager(get_screen_title('MANAGE_POLLS'), comcode_lang_string('DOC_POLLS'),
             array_merge(array(
-                has_privilege(get_member(), 'submit_midrange_content', 'cms_polls') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_POLL')) : null,
-                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_polls') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_OR_CHOOSE_POLL')) : null,
+                has_privilege(get_member(), 'submit_midrange_content', 'cms_polls') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_POLL')) : null,
+                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_polls') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_OR_CHOOSE_POLL')) : null,
             ), manage_custom_fields_donext_link('poll')),
             do_lang('MANAGE_POLLS')
         );

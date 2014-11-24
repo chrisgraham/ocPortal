@@ -58,9 +58,9 @@ class Hook_content_meta_aware_video
             'thumb_field' => 'thumb_url',
 
             'view_page_link_pattern' => '_SEARCH:galleries:video:_WILD',
-            'edit_page_link_pattern' => '_SEARCH:cms_galleries:_ev:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_galleries:_edit_other:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:galleries:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries')) ? (get_module_zone('cms_galleries') . ':cms_galleries:av') : null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries')) ? (get_module_zone('cms_galleries') . ':cms_galleries:add_other') : null,
             'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('galleries')) . ':galleries',
 
             'support_url_monikers' => true,

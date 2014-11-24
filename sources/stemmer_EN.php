@@ -82,7 +82,7 @@ class Stemmer_EN
 
             // ing and ed
             if (   preg_match("#$v+#", substr($word, 0, -3)) && self::replace($word, 'ing', '')
-                OR preg_match("#$v+#", substr($word, 0, -2)) && self::replace($word, 'ed', '')) { // Note use of && and OR, for precedence reasons
+                OR preg_match("#$v+#", substr($word, 0, -2)) && self::replace($word, 'edit', '')) { // Note use of && and OR, for precedence reasons
 
                 // If one of above two test successful
                 if (    !self::replace($word, 'at', 'ate')

@@ -62,7 +62,7 @@ function render_chat_box($row, $zone = '_SEARCH', $give_context = true, $guid = 
         'SUMMARY' => '',
         'URL' => $url,
         'FRACTIONAL_EDIT_FIELD_NAME' => $give_context ? null : 'room_name',
-        'FRACTIONAL_EDIT_FIELD_URL' => $give_context ? null : '_SEARCH:admin_chat:__ed:' . strval($row['id']),
+        'FRACTIONAL_EDIT_FIELD_URL' => $give_context ? null : '_SEARCH:admin_chat:__edit:' . strval($row['id']),
     ));
 }
 
@@ -448,7 +448,7 @@ function _chat_messages_script_ajax($room_id, $backlog = false, $message_id = nu
         $chat_unban_url = new Tempcode();
         if ((!is_null($room_check)) && (array_key_exists(0, $room_check))) {
             $moderator = is_chat_moderator($_message['member_id'], $room_id, $room_row['room_owner']);
-            $edit_url = build_url(array('page' => 'cms_chat', 'type' => 'ed', 'id' => $_message['id'], 'room_id' => $_message['room_id']), get_module_zone('cms_chat'));
+            $edit_url = build_url(array('page' => 'cms_chat', 'type' => 'edit', 'id' => $_message['id'], 'room_id' => $_message['room_id']), get_module_zone('cms_chat'));
             if (has_privilege(get_member(), 'ban_chatters_from_rooms')) {
                 if (check_chatroom_access($room_row, true, $_message['member_id'])) {
                     $chat_ban_url = build_url(array('page' => 'cms_chat', 'type' => 'ban', 'id' => $_message['room_id'], 'member_id' => $_message['member_id']), get_module_zone('cms_chat'));

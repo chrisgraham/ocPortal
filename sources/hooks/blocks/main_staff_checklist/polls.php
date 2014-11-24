@@ -56,7 +56,7 @@ class Hook_checklist_polls
         require_code('config2');
         $config_url = config_option_url('poll_update_time');
 
-        $url = build_url(array('page' => 'cms_polls', 'type' => 'ed'), get_module_zone('cms_polls'));
+        $url = build_url(array('page' => 'cms_polls', 'type' => 'edit'), get_module_zone('cms_polls'));
         $num_queue = $this->get_num_poll_queue();
         list($info, $seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago, $limit_hours);
         $info->attach(do_lang_tempcode('NUM_QUEUE', integer_format($num_queue)));

@@ -91,7 +91,7 @@ class ecommerce_test_set extends ocp_test_case
 
     /*function testAddShippingEquationUI()
     {
-        $this->admin_shipping->ad();
+        $this->admin_shipping->add();
     }
 
     function testAddShippingEquationActualiser()

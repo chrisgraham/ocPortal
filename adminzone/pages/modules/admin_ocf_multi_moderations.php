@@ -135,8 +135,8 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MULTI_MODERATIONS'), comcode_lang_string('DOC_MULTI_MODERATIONS'),
             array(
-                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_MULTI_MODERATION')),
-                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_MULTI_MODERATION')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_MULTI_MODERATION')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_MULTI_MODERATION')),
                 array('menu/_generic_admin/import', array('_SELF', array('type' => 'import'), '_SELF'), do_lang('IMPORT_STOCK_RESPONSES')),
             ),
             do_lang('MULTI_MODERATIONS')

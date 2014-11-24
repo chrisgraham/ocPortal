@@ -46,14 +46,14 @@ class Module_cms_booking extends Standard_crud_module
     {
         return array(
             'misc' => array('BOOKINGS', 'menu/booking'),
-            'ab' => array('ADD_BOOKING', 'menu/booking'),
-            'eb' => array('EDIT_BOOKING', 'menu/booking'),
-            'ad' => array('ADD_BOOKABLE', 'menu/bookable'),
-            'ed' => array('EDIT_BOOKABLE', 'menu/bookable'),
-            'ac' => array('ADD_BOOKABLE_SUPPLEMENT', 'menu/supplement'),
-            'ec' => array('EDIT_BOOKABLE_SUPPLEMENT', 'menu/supplement'),
-            'av' => array('ADD_BOOKABLE_BLACKED', 'menu/blacked'),
-            'ev' => array('EDIT_BOOKABLE_BLACKED', 'menu/blacked'),
+            'add_booking' => array('ADD_BOOKING', 'menu/booking'),
+            'edit_booking' => array('EDIT_BOOKING', 'menu/booking'),
+            'add' => array('ADD_BOOKABLE', 'menu/bookable'),
+            'edit' => array('EDIT_BOOKABLE', 'menu/bookable'),
+            'add_category' => array('ADD_BOOKABLE_SUPPLEMENT', 'menu/supplement'),
+            'edit_category' => array('EDIT_BOOKABLE_SUPPLEMENT', 'menu/supplement'),
+            'add_other' => array('ADD_BOOKABLE_BLACKED', 'menu/blacked'),
+            'edit_other' => array('EDIT_BOOKABLE_BLACKED', 'menu/blacked'),
         ) + parent::get_entry_points();
     }
 
@@ -91,20 +91,20 @@ class Module_cms_booking extends Standard_crud_module
             $type = get_param('type', 'misc');
 
             // Type equivalencies, for meta-data purposes (i.e. activate correct title-generation code)
-            if ($type == 'ab') {
-                $type = 'ad';
+            if ($type == 'add_booking') {
+                $type = 'add';
             }
-            if ($type == '_ab') {
-                $type = '_ad';
+            if ($type == '_add_booking') {
+                $type = '_add';
             }
-            if ($type == 'eb') {
-                $type = 'ed';
+            if ($type == 'edit_booking') {
+                $type = 'edit';
             }
-            if ($type == '_eb') {
-                $type = '_ed';
+            if ($type == '_edit_booking') {
+                $type = '_edit';
             }
-            if ($type == '__eb') {
-                $type = '__ed';
+            if ($type == '__edit_booking') {
+                $type = '__edit';
             }
             $this->bookings_crud_module->pre_run(false, $type);
         }
@@ -125,20 +125,20 @@ class Module_cms_booking extends Standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        if ($type == 'ab') {
-            return $this->bookings_crud_module->ad();
+        if ($type == 'add_booking') {
+            return $this->bookings_crud_module->add();
         }
-        if ($type == '_ab') {
-            return $this->bookings_crud_module->_ad();
+        if ($type == '_add_booking') {
+            return $this->bookings_crud_module->_add();
         }
-        if ($type == 'eb') {
-            return $this->bookings_crud_module->ed();
+        if ($type == 'edit_booking') {
+            return $this->bookings_crud_module->edit();
         }
-        if ($type == '_eb') {
-            return $this->bookings_crud_module->_ed();
+        if ($type == '_edit_booking') {
+            return $this->bookings_crud_module->_edit();
         }
-        if ($type == '__eb') {
-            return $this->bookings_crud_module->__ed();
+        if ($type == '__edit_booking') {
+            return $this->bookings_crud_module->__edit();
         }
 
         return new Tempcode();

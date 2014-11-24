@@ -33,7 +33,7 @@ To enable this:
 3) Make sure members have View Access to the Content Management zone. This can again be done in the Permissions Tree Editor, at "Zone: Content Management".
 4) Add/edit a gallery (the "Galleries home" gallery will do, if you want personal galleries to be created directly underneath this) to have the 'Personal category container' option ticked (checked). You can find this on the gallery add/edit form under 'Advanced'.
 5) On the same add/edit gallery form, make sure that the gallery you add/edit also has "Accept images" and "Accept videos" enabled (assuming you want to allow both images and videos). This is because the properties of this gallery will be transferred to new personal galleries underneath it.
-Now when members submit a new image/video, they will get the choice to create their personal gallery in the process, and further submissions can then also go into their personal gallery. If you want to add a quick link that members may use to submit images, add a link to [tt]cms:cms_galleries:ad[/tt] to a menu using the menu editor.
+Now when members submit a new image/video, they will get the choice to create their personal gallery in the process, and further submissions can then also go into their personal gallery. If you want to add a quick link that members may use to submit images, add a link to [tt]cms:cms_galleries:add[/tt] to a menu using the menu editor.
 
 Members may have multiple personal galleries if you set multiple galleries to be 'Personal category container'.
 [/surround]
@@ -107,12 +107,12 @@ JavaScript developers may also make use of the fact that the uploader will retur
 [title="3"]Linking directly for a member to add to their own member gallery[/title]
 
 If you find the link to submit to a particular member gallery, you'll find it looks something like:
-[tt]http://baseurl/cms/index.php?page=cms_galleries&type=ad&cat=member_13_foobar[/tt]
+[tt]http://baseurl/cms/index.php?page=cms_galleries&type=add&cat=member_13_foobar[/tt]
 
 (this is for member #13's gallery under [tt]foobar[/tt])
 
 If you change the member ID to a question mark, it will work as a generic URL that you can give any member:
-[tt]http://baseurl/cms/index.php?page=cms_galleries&type=ad&cat=member_?_foobar[/tt]
+[tt]http://baseurl/cms/index.php?page=cms_galleries&type=add&cat=member_?_foobar[/tt]
 
 (ocPortal automatically will substitute the question mark with the ID of the current member)
 

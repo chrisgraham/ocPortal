@@ -819,7 +819,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
         if ((array_key_exists('may_warn_members', $topic_info)) && ($_postdetails['poster'] != $GLOBALS['OCF_DRIVER']->get_guest_id()) && (addon_installed('ocf_warnings'))) {
             $redir_url = get_self_url(true);
             $redir_url .= '#post_' . strval($_postdetails['id']);
-            $action_url = build_url(array('page' => 'warnings', 'type' => 'ad', 'member_id' => $_postdetails['poster'], 'post_id' => $_postdetails['id'], 'redirect' => $redir_url), get_module_zone('warnings'));
+            $action_url = build_url(array('page' => 'warnings', 'type' => 'add', 'member_id' => $_postdetails['poster'], 'post_id' => $_postdetails['id'], 'redirect' => $redir_url), get_module_zone('warnings'));
             $_title = do_lang_tempcode('__WARN_MEMBER');
             $_title_full = do_lang_tempcode('WARN_MEMBER');
             $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
