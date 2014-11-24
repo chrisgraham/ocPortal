@@ -402,6 +402,13 @@ class Module_search
 			if ($catalogue_name!='') $url_map['catalogue_name']=$catalogue_name;
 			$force_non_tabular=get_param_integer('force_non_tabular',0);
 			if ($force_non_tabular==1) $url_map['force_non_tabular']=1;
+			$force_like=get_param_integer('force_like',0);
+			if ($force_like==1)
+			{
+				$url_map['force_like']=1;
+				$boolean_search=get_param_integer('boolean_search',0);
+				if ($boolean_search==1) $url_map['boolean_search']=1;
+			}
 			$embedded=get_param_integer('embedded',0);
 			if ($embedded==1) $url_map['embedded']=1;
 			$url=build_url($url_map,'_SELF',NULL,false,true);
