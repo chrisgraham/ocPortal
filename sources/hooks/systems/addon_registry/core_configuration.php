@@ -168,6 +168,7 @@ class Hook_addon_registry_core_configuration
             'sources/hooks/systems/config/bottom_show_top_button.php',
             'sources/hooks/systems/config/crypt_ratchet.php',
             'sources/hooks/systems/config/cc_address.php',
+            'sources/hooks/systems/config/security_token_exceptions.php',
             'sources/hooks/systems/config/closed.php',
             'sources/hooks/systems/config/comment_text.php',
             'sources/hooks/systems/config/comments_forum_name.php',

@@ -414,11 +414,24 @@ function init__global2()
         register_shutdown_function('memory_tracking');
     }
 
-    // Detect and deal with spammers that triggered the spam blackhole
-    if ((count($_POST) > 0) && (get_option('spam_blackhole_detection') == '1')) {
-        $blackhole = post_param(md5(get_site_name() . ': antispam'), '');
-        if ($blackhole != '') {
-            log_hack_attack_and_exit('LAME_SPAM_HACK', '<blackhole>' . $blackhole . '</blackhole>');
+    if (count($_POST) > 0) {
+        // Detect and deal with spammers that triggered the spam blackhole
+        if (get_option('spam_blackhole_detection') == '1') {
+            $blackhole = post_param(md5(get_site_name() . ': antispam'), '');
+            if ($blackhole != '') {
+                log_hack_attack_and_exit('LAME_SPAM_HACK', '<blackhole>' . $blackhole . '</blackhole>');
+            }
+        }
+
+        // Check security token, if necessary
+        $security_token_exceptions = get_option('security_token_exceptions') . "\nlogin";
+        $_security_token_exceptions = ($security_token_exceptions == '') ? array() : explode("\n", $security_token_exceptions);
+        if (!in_array(get_page_name(), $_security_token_exceptions)) {
+            if (post_param('session_id', null) === null) {
+                warn_exit(do_lang_tempcode('EVIL_POSTED_FORM_2_HACK'));
+            } elseif (post_param('session_id') != get_session_id()) {
+                warn_exit(do_lang_tempcode('EVIL_POSTED_FORM_3_HACK'));
+            }
         }
     }
 

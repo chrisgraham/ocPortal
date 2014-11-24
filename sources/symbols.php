@@ -3885,6 +3885,12 @@ function ecv_INSERT_SPAMMER_BLACKHOLE($lang, $escaped, $param)
         }
     }
 
+    $security_token_exceptions = get_option('security_token_exceptions');
+    $_security_token_exceptions = ($security_token_exceptions == '') ? array() : explode("\n", $security_token_exceptions);
+    if (!in_array(get_page_name(), $_security_token_exceptions)) {
+        $value .= '<input type="hidden" name="session_id" value="' . get_session_id() . '" />';
+    }
+
     if ($escaped != array()) {
         apply_tempcode_escaping($escaped, $value);
     }
