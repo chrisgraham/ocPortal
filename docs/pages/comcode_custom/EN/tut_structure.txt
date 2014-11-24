@@ -69,6 +69,8 @@ It is also worth understanding that page-links have a long-form and a short form
 
 If you do not want to hard-code what zone to use, you may specify either '_SEARCH' or '_SELF' as the zone name in the page-link. '_SEARCH' will cause ocPortal to dynamically find the module involved, whilst '_SELF' will use the same zone as the page-link is dynamically being interpreted in (e.g. If if it used on a menu in the site zone, '_SELF' will be equivalent to 'site').
 
+If you have a URL scheme enabled it can be hard to find out what the URL parameters to a screen are. If you go to [tt]http://baseurl/index.php?keep_no_short_url=1[/tt] then all URLs shown will reveal the raw parameter values (this just happens for you, via the [tt]keep_no_short_url=1[/tt] you temporarily set in your address bar).
+
 [title="3"]Panels and blocks[/title]
 
 Panel pages rest around your main page, if they exist. Panel pages are nothing more than pages given special names in the same zone as the pages that they surround. The special names are:
