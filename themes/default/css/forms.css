@@ -311,15 +311,15 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	background: url('{$IMG;,1x/editor/off}') no-repeat;
 }
 .form_table_field_input>input[name="validated"].input_tick:checked:before {
-	background: url('{$IMG;,1x/editor/on}') no-repeat !important;
+	background-image: url('{$IMG;,1x/editor/on}') !important;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.form_table_field_input>input[name="validated"].input_tick:before {
-		background: url('{$IMG;,2x/editor/off}') no-repeat;
+		background-image: url('{$IMG;,2x/editor/off}');
 		background-size: {$IMG_WIDTH%,{$IMG,1x/editor/off}}px {$IMG_HEIGHT%,{$IMG,1x/editor/off}}px;
 	}
 	.form_table_field_input>input[name="validated"].input_tick:checked:before {
-		background: url('{$IMG;,2x/editor/on}') no-repeat !important;
+		background-image: url('{$IMG;,2x/editor/on}') !important;
 	}
 }
 .form_table_field_input>input[name="validated"].input_tick {
