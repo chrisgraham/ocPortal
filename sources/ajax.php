@@ -28,7 +28,7 @@ function username_check_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-Type: text/plain; charset='.get_charset());
 
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
@@ -48,7 +48,7 @@ function find_permissions_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-Type: text/plain; charset='.get_charset());
 
 	require_code('zones2');
 	require_code('permissions2');
@@ -108,7 +108,7 @@ function retrieve_autosave()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-Type: text/plain; charset='.get_charset());
 
 	$member_id=get_member();
 	$key=post_param('key');
@@ -306,7 +306,7 @@ function comcode_convert_script()
 		if (is_object($out)) $out=$out->evaluate();
 		if (($box_title!='') && ($out!='')) $out=static_evaluate_tempcode(put_in_standard_box(make_string_tempcode($out),$box_title));
 
-		header('Content-Type: text/xml');
+		header('Content-Type: text/xml; charset='.get_charset());
 		echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 		echo '<request><result>';
 		echo xmlentities($out);
@@ -433,7 +433,7 @@ function namelike_script()
 
 	@ini_set('ocproducts.xss_detect','0');
 
-	header('Content-Type: text/xml');
+	header('Content-Type: text/xml; charset='.get_charset());
 	echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 	echo '<request><result>';
 	foreach ($names as $name)
@@ -452,14 +452,14 @@ function ajax_tree_script()
 	$site_closed=get_option('site_closed');
 	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
-		header('Content-Type: text/plain');
+		header('Content-Type: text/plain; charset='.get_charset());
 		@exit(get_option('closed'));
 	}
 
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/xml');
+	header('Content-Type: text/xml; charset='.get_charset());
 	$hook=filter_naughty_harsh(get_param('hook'));
 	require_code('hooks/systems/ajax_tree/'.$hook);
 	$object=object_factory('Hook_'.$hook);
@@ -488,7 +488,7 @@ function confirm_session_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-Type: text/plain; charset='.get_charset());
 	global $SESSION_CONFIRMED;
 	if ($SESSION_CONFIRMED==0) echo $GLOBALS['FORUM_DRIVER']->get_username(get_member());
 	echo '';
@@ -524,7 +524,7 @@ function sheet_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/css');
+	header('Content-Type: text/css; charset='.get_charset());
 	$sheet=get_param('sheet');
 	if ($sheet!='') echo str_replace('../../../','',file_get_contents(css_enforce(filter_naughty_harsh($sheet))));
 }

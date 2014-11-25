@@ -27,7 +27,7 @@ function backend_cloud_script()
 	$site_closed=get_option('site_closed');
 	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
-		header('Content-Type: text/plain');
+		header('Content-Type: text/plain; charset='.get_charset());
 		@exit(get_option('closed'));
 	}
 
@@ -71,7 +71,7 @@ function backend_script()
 	$site_closed=get_option('site_closed');
 	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (get_ip_address()!=ocp_srv('SERVER_ADDR')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
-		header('Content-Type: text/plain');
+		header('Content-Type: text/plain; charset='.get_charset());
 		@exit(get_option('closed'));
 	}
 
@@ -85,7 +85,7 @@ function backend_script()
 	if ($type=='xslt-rss')
 	{
 		// Feed stylesheet for RSS
-		header('Content-Type: text/xsl');
+		header('Content-Type: text/xsl; charset='.get_charset());
 		require_css('rss');
 		$js=get_custom_base_url().substr(javascript_enforce('JAVASCRIPT_XSL_MOPUP'),strlen(get_custom_file_base()));
 		$echo=do_template('RSS_XSLT',array('_GUID'=>'c443e0195c935117cf0d9a7bc2730d7a','JAVASCRIPT_XSL_MOPUP'=>$js));
@@ -95,7 +95,7 @@ function backend_script()
 	if ($type=='xslt-atom')
 	{
 		// Feed stylesheet for Atom
-		header('Content-Type: text/xsl');
+		header('Content-Type: text/xsl; charset='.get_charset());
 		require_css('rss');
 		$js=get_custom_base_url().substr(javascript_enforce('JAVASCRIPT_XSL_MOPUP'),strlen(get_custom_file_base()));
 		$echo=do_template('ATOM_XSLT',array('_GUID'=>'27fec456a6b3144aa847130e74463d99','JAVASCRIPT_XSL_MOPUP'=>$js));
@@ -105,7 +105,7 @@ function backend_script()
 	if ($type=='xslt-opml')
 	{
 		// Feed stylesheet for Atom
-		header('Content-Type: text/xsl');
+		header('Content-Type: text/xsl; charset='.get_charset());
 		require_css('rss');
 		$js=get_custom_base_url().substr(javascript_enforce('JAVASCRIPT_XSL_MOPUP'),strlen(get_custom_file_base()));
 		$echo=do_template('OPML_XSLT',array('_GUID'=>'c0c6bd1d7a0e263768a2208061f799f5','JAVASCRIPT_XSL_MOPUP'=>$js));
@@ -121,7 +121,7 @@ function backend_script()
 	/*if (get_param_integer('force_text',0)==0)
 	{
 		if ($type=='atom') header('Content-Type: text/xml+atom; charset='.get_charset());
-		else header('Content-Type: text/xml');
+		else header('Content-Type: text/xml; charset='.get_charset());
 	}
 	header('Content-Disposition: inline');*/
 
@@ -156,7 +156,7 @@ function backend_script()
 
 	if ($mode=='opml')
 	{
-		header('Content-Type: text/xml');
+		header('Content-Type: text/xml; charset='.get_charset());
 
 		$_feeds=find_all_hooks('systems','rss');
 		$feeds=array();
@@ -216,7 +216,7 @@ function backend_script()
 	} else $rss_cloud=new ocp_tempcode();
 
 	// Firefox (and probably other browsers, but I didn't test) doesn't want to display Atom feeds inline if they're sent as text/xml+atom, even if the Content-Disposition is sent to inline :(
-	header('Content-Type: text/xml'); // application/rss+xml ?
+	header('Content-Type: text/xml; charset='.get_charset()); // application/rss+xml ?
 
 	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
