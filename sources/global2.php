@@ -424,13 +424,15 @@ function init__global2()
         }
 
         // Check security token, if necessary
-        $security_token_exceptions = get_option('security_token_exceptions') . "\nlogin";
-        $_security_token_exceptions = ($security_token_exceptions == '') ? array() : explode("\n", $security_token_exceptions);
-        if (!in_array(get_page_name(), $_security_token_exceptions)) {
-            if (post_param('session_id', null) === null) {
-                warn_exit(do_lang_tempcode('EVIL_POSTED_FORM_2_HACK'));
-            } elseif (post_param('session_id') != get_session_id()) {
-                warn_exit(do_lang_tempcode('EVIL_POSTED_FORM_3_HACK'));
+        if (running_script('index') || running_script('iframe')) {
+            $security_token_exceptions = get_option('security_token_exceptions') . "\nlogin";
+            $_security_token_exceptions = ($security_token_exceptions == '') ? array() : explode("\n", $security_token_exceptions);
+            if (!in_array(get_page_name(), $_security_token_exceptions)) {
+                if (post_param('session_id', null) === null) {
+                    warn_exit(do_lang_tempcode('EVIL_POSTED_FORM_2_HACK'));
+                } elseif (post_param('session_id') != get_session_id()) {
+                    warn_exit(do_lang_tempcode('EVIL_POSTED_FORM_3_HACK'));
+                }
             }
         }
     }

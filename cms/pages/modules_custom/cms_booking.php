@@ -793,7 +793,7 @@ class Module_cms_booking_bookings extends Standard_crud_module
     public $orderer = 'id';
     public $title_is_multi_lang = true;
     public $table = 'booking';
-    public $type_code = 'b';
+    public $type_code = 'booking';
     public $non_integer_id = true;
 
     public $donext_type = null;
