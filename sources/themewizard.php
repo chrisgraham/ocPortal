@@ -618,7 +618,7 @@ function themewizard_script()
 		@ini_set('ocproducts.xss_detect','0');
 		list($colours,$landscape)=calculate_theme($seed,$source_theme,$algorithm,'colours',$dark);
 		$css=theme_wizard_colours_to_sheet($show,$landscape,$source_theme,$algorithm,$seed);
-		header('Content-type: text/css');
+		header('Content-type: text/css; charset='.get_charset());
 		require_code('tempcode_compiler');
 		$tpl=template_to_tempcode($css);
 		$tpl->evaluate_echo();

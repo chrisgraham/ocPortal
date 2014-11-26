@@ -857,7 +857,7 @@ function render_screen_preview($template,$hook,$function)
 	}
 	if (is_plain_text_template($temp_name))
 	{
-		//@header('Content-type: text/plain');		Let it show with WITH_WHITESPACE
+		//@header('Content-type: text/plain; charset='.get_charset());		Let it show with WITH_WHITESPACE
 		$text=true;
 	} else
 	{

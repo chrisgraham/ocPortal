@@ -73,7 +73,7 @@ function make_installers($skip_file_grab=false)
 		make_files_manifest();
 	}
 
-	//header('Content-type: text/plain');var_dump(array_keys($MAKE_INSTALLERS__FILE_ARRAY));exit(); Useful for testing quickly what files will be built
+	//header('Content-type: text/plain; charset='.get_charset());var_dump(array_keys($MAKE_INSTALLERS__FILE_ARRAY));exit(); Useful for testing quickly what files will be built
 
 	// What we'll be building
 	$bundled=$builds_path.'/builds/'.$version_dotted.'/ocportal-'.$version_dotted.'.tar';

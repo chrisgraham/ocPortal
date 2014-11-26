@@ -22,7 +22,7 @@ if (!isset($_GET['testing']))
 	header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 } else
 {
-	header('Content-type: text/plain');
+	header('Content-type: text/plain; charset='.get_charset());
 }
 
 require_code('database_toolkit');

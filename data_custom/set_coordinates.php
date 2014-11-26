@@ -37,7 +37,7 @@ set_coordinates();
 
 function set_coordinates()
 {
-	header('Content-Type: text/plain');
+	header('Content-Type: text/plain; charset='.get_charset());
 
 	$_coords=get_param('coord','');
 	$member_id=get_param_integer('mid',get_member());

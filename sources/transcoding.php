@@ -192,7 +192,7 @@ function transcode_video($url,$table,$url_field,$orig_filename_field,$width_fiel
  */
 function zencoder_receive_script()
 {
-	header('Content-type: text/plain');
+	header('Content-type: text/plain; charset='.get_charset());
 
 	$matches=array();
 

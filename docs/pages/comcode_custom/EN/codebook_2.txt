@@ -289,7 +289,7 @@ The XML frame you should output from PHP should be structured as follows:
 
 This example of the full usage. However normally you don't return any method or messages, so you will see real code is usually much simpler, like:
 [code="PHP"]
-header('Content-Type: text/xml');
+header('Content-Type: text/xml; charset='.get_charset());
 echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 echo '<request><result>';
 echo xmlentities($out);

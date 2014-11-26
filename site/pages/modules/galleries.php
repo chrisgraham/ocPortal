@@ -1129,7 +1129,7 @@ class Module_galleries
 	{
 		$id=get_param_integer('id');
 
-		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');
+		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml; charset='.get_charset());
 
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
@@ -1259,7 +1259,7 @@ class Module_galleries
 	{
 		$id=get_param_integer('id');
 
-		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');
+		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml; charset='.get_charset());
 
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 

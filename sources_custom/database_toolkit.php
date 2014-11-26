@@ -132,7 +132,7 @@ function xml_dump_script()
 	if ($only=='') $only=NULL;
 
 
-	@header('Content-type: text/plain');
+	@header('Content-type: text/plain; charset='.get_charset());
 	@ob_end_clean();
 
 	$sql=get_sql_dump(true,true,$from,is_null($skip)?array():explode(',',$skip),is_null($only)?NULL:explode(',',$only));

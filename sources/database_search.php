@@ -274,7 +274,7 @@ function opensearch_script()
 		// Provide details about the site search engine
 		default:
 			//header('Content-Type: application/opensearchdescription+xml');
-			header('Content-Type: text/xml');
+			header('Content-Type: text/xml; charset='.get_charset());
 			$tpl=do_template('OPENSEARCH',array('DESCRIPTION'=>get_option('description')));
 			$tpl->evaluate_echo();
 			break;

@@ -39,7 +39,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'
 $out=cleanup();
 if (!headers_sent())
 {
-	header('Content-Type: text/plain');
+	header('Content-Type: text/plain; charset='.get_charset());
 	@ini_set('ocproducts.xss_detect','0');
 	if (!is_null($out)) echo is_object($out)?$out->evaluate():(is_bool($out)?($out?'true':'false'):$out);
 	echo do_lang('SUCCESS');

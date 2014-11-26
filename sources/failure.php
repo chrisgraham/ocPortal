@@ -766,10 +766,10 @@ function _fatal_exit($text,$return=false)
 
 	if (running_script('occle'))
 	{
-		header('Content-Type: text/xml');
+		header('Content-Type: text/xml; charset='.get_charset());
 		header('HTTP/1.0 200 Ok');
 
-		header('Content-type: text/xml');
+		header('Content-type: text/xml; charset='.get_charset());
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <response>
 	<result>

@@ -104,7 +104,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
  */
 function activities_ajax_submit_handler()
 {
-	header('Content-Type: text/xml');
+	header('Content-Type: text/xml; charset='.get_charset());
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
@@ -262,7 +262,7 @@ function activities_ajax_removal_handler()
 
 	$can_remove_others=(has_zone_access($viewer_id,'adminzone'));
 
-	header('Content-Type: text/xml');
+	header('Content-Type: text/xml; charset='.get_charset());
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 

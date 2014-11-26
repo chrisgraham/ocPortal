@@ -45,7 +45,7 @@ function occle_script()
 		$site_closed=get_option('site_closed');
 		if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
-			header('Content-Type: text/plain');
+			header('Content-Type: text/plain; charset='.get_charset());
 			@exit(get_option('closed'));
 		}
 
@@ -223,7 +223,7 @@ class virtual_bash
 	{
 		if (count($this->parsed_input)<1) return false;
 
-		header('Content-Type: text/xml');
+		header('Content-Type: text/xml; charset='.get_charset());
 		header('HTTP/1.0 200 Ok');
 
 		if (is_object($this->output[STREAM_STDCOMMAND])) $this->output[STREAM_STDCOMMAND]=$this->output[STREAM_STDCOMMAND]->evaluate();

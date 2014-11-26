@@ -27,7 +27,7 @@ function get_problem_match()
 	$error_message=get_param('error_message',false,true);
 
 	$ret=get_problem_match_worker($error_message);
-	header('Content-type: text/plain');
+	header('Content-type: text/plain; charset='.get_charset());
 	if (!is_null($ret))
 	{
 		$output=$ret[2]->evaluate();

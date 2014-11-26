@@ -115,7 +115,7 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 {
 	if ($headers)
 	{
-		header('Content-type: text/csv');
+		header('Content-type: text/csv; charset='.get_charset());
 		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 
 		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';

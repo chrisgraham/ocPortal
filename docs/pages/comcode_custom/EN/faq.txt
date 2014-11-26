@@ -373,6 +373,10 @@ This can be very difficult to debug, but is unlikely to be the fault of ocPortal
 [b]How can I show different content to different usergroups?[/b]
 Permissions are usually the tool to use to customise things for different users, but sometimes the actual message is what you need to customise rather than just limiting access. In this case, use the Comcode [tt]if_in_group[/tt] tag in your Comcode pages to deliver targetted portions of Comcode to limited sets of usergroups.
 
+[b]I turned off WYSIWYG for a page, and now I can't get it back on, how do I?[/b]
+In order to stop other potentially authors accidentally corrupting the hand-crafted page while using WYSIWYG, WYSIWYG will have been locked off for the page when you originally disabled it.
+Simply remove [tt]{$,page hint: no_wysiwyg}[/tt] from the bottom of the page's Comcode (it will have been added there automatically), re-save, then go back in to edit.
+
 [b]How do I show random content in a box in the front page?[/b]
 Place the [tt]main_content[/tt] block on the page with the right parameters. Here is an example to pick a random download: [tt][block="download"]main_content[/block][/tt].
 To get a full list of valid content-types, look to see what filenames exist in the [tt]sources/hooks/systems/awards[/tt] directory.

@@ -174,7 +174,7 @@ function incoming_uploads_script()
 		echo $outstr;
 	} else
 	{
-		//header('Content-type: text/plain'); @print('No file ('.serialize($_FILES).')');
+		//header('Content-type: text/plain; charset='.get_charset()); @print('No file ('.serialize($_FILES).')');
 		header('HTTP/1.1 500 File Upload Error');
 
 		// Test harness

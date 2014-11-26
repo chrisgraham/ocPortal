@@ -37,7 +37,7 @@ if (!file_exists($FILE_BASE.'/sources/global.php')) exit('<html><head><title>Cri
 
 $news_id=get_param_integer('news_id');
 
-header('Content-type: text/plain');
+header('Content-type: text/plain; charset='.get_charset());
 
 $news_rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news WHERE validated=1 AND id='.strval($news_id));
 if ((array_key_exists(0,$news_rows)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',$news_rows[0]['news_category'])))

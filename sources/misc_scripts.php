@@ -159,7 +159,7 @@ function cron_bridge_script($caller)
 
 	if (get_param_integer('querymode',0)==1)
 	{
-		header('Content-Type: text/plain');
+		header('Content-Type: text/plain; charset='.get_charset());
 		@ini_set('ocproducts.xss_detect','0');
 		require_code('files2');
 		$php_path=find_php_path();
@@ -198,7 +198,7 @@ function cron_bridge_script($caller)
 		$object->run();
 	}
 
-	if (!headers_sent()) header('Content-type: text/plain');
+	if (!headers_sent()) header('Content-type: text/plain; charset='.get_charset());
 }
 
 /**
@@ -223,7 +223,7 @@ function iframe_script()
 	$site_closed=get_option('site_closed');
 	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
-		header('Content-Type: text/plain');
+		header('Content-Type: text/plain; charset='.get_charset());
 		@exit(get_option('closed'));
 	}
 
