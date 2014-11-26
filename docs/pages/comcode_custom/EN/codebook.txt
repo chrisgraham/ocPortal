@@ -30,23 +30,27 @@ ocPortal's file system is basically split up into:
 When you make modifications to any of ocPortal's default files, There is no need to overwrite the existing files, because ocPortal comes with a file-based override/inheritance system. This allows files to be overridden with replacements whilst leaving the old files intact for reference. This is done by saving your modified files in the [tt]*_custom[/tt] directories. i.e. if we need to make modifications in [tt]site/pages/modules/polls.php[/tt], then we need to save our modified version as [tt]site/pages/modules_custom/polls.php[/tt]) .
 
 [title="3"]ocPortal structure[/title]
-ocPortal is written to the '[url="front controller"]http://en.wikipedia.org/wiki/Front_controller[/url]' and MVC '[url="design patterns"]http://en.wikipedia.org/wiki/Model-view-controller[/url]':
- - Model/API: Most of the scripts from the 'sources' directory represent the model/API.
- - View: The templates (see 'themes/default/templates' directory) represent the 'view'. Comcode pages could also be considered part of the view (though they are also content).
- - Controller: The entry scripts (e.g. the [tt]index.php[/tt] files, or files like [tt]site/dload.php[/tt]) represent the 'front controllers'. The modules (i.e. scripts from the '*/pages/modules' directories) and blocks (i.e. scripts from the 'sources/[mini]blocks' directory) represent the controllers. [tt]sources/site.php[/tt] and the initialisation functions in [tt]sources/global.php[/tt] and [tt]sources/global2.php[/tt] bind the entry scripts to the modules and control final output.
 
+[surround]
 [media width="150" description="MVC structure for SITE-ZONE" float="left"]data_custom/images/docs/mvc_site.png[/media]
 [media width="150" description="MVC structure for ADMIN-ZONE" float="right"]data_custom/images/docs/mvc_admin.png[/media]
+[/surround]
 
-
-- Dynamic pages (modules) are written in PHP and can output a set of different 'screens'. Screens are constructed out of templates (nested in a tree structure), with the PHP code specifying a certain kind of template structure, calling up templates with appropriate parameters to match the data being displayed.
-
-- Static pages are simpler. Static pages may be easily developed and edited by regular ocPortal webmasters. To create a static page, you can just add a Comcode page and either write it in Comcode (for more info see the [page="userguide_comcode"]Comcode tutorial[/page]), or just put your HTML between Comcode '[tt][html][/tt]' tags.
+ocPortal is written to the '[url="front controller"]http://en.wikipedia.org/wiki/Front_controller[/url]' and MVC '[url="design patterns"]http://en.wikipedia.org/wiki/Model-view-controller[/url]':
+[list]
+[*]Model/API: Most of the scripts from the 'sources' directory represent the model/API.
+[*]View: The templates (see 'themes/default/templates' directory) represent the 'view'. Comcode pages could also be considered part of the view (though they are also content).
+[*]Controller: The entry scripts (e.g. the [tt]index.php[/tt] files, or files like [tt]site/dload.php[/tt]) represent the 'front controllers'. The modules (i.e. scripts from the '*/pages/modules' directories) and blocks (i.e. scripts from the 'sources/[mini]blocks' directory) represent the controllers. [tt]sources/site.php[/tt] and the initialisation functions in [tt]sources/global.php[/tt] and [tt]sources/global2.php[/tt] bind the entry scripts to the modules and control final output.
+[*]Dynamic pages (modules) are written in PHP and can output a set of different 'screens'. Screens are constructed out of templates (nested in a tree structure), with the PHP code specifying a certain kind of template structure, calling up templates with appropriate parameters to match the data being displayed.
+[*]Static pages are simpler. Static pages may be easily developed and edited by regular ocPortal webmasters. To create a static page, you can just add a Comcode page and either write it in Comcode (for more info see the [page="userguide_comcode"]Comcode tutorial[/page]), or just put your HTML between Comcode '[tt][html][/tt]' tags.
 [/list]
+
 [title="3"]ocPortal template briefing[/title]
+
 Page output is displayed  by wrapping the primary page output within  the GLOBAL template, prefixed with the HEADER template, and followed by the FOOTER template. The GLOBAL template references panels, and if those panels exist, they will also be included. Typically zones will include a 'panel_left' and a 'panel_right', so any pages within said zone will be surrounded by these panels.
 
 [title="3"]ocPortal framework (in-depth)[/title]
+
 An introduction to the ocPortal framework:
  - [page="docs:tut_framework"]The ocPortal programming framework[/page]
 
@@ -68,6 +72,7 @@ and information about integrating third-party code:
  - [page="docs:tut_integration"]Integration of ocPortal and other installed scripts/applications[/page]
 
 [title="2"]ocPortal terms[/title]
+
 Here is a glossary of some of the terms that are used to describe ocPortal concepts:
  - Addon, A defined set of ocPortal files that work together towards a common purpose. Many addons come with ocPortal, and even the 'core' of the system is considered to consist of non-optional addons.
  - CRUD module, (Create/Edit/Delete module) a module that inherits from the CRUD base class, in order to abstract away standard content management interfaces, speeding implementation and improving consistency. Most content management modules are CRUD module. The CRUD module base class is very rich and provides a lot of optional functionality that CRUD modules can choose to inherit.

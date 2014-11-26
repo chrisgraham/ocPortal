@@ -178,11 +178,11 @@ function script_load_stuff()
 
 	if (typeof window.script_load_stuff_b!='undefined') window.script_load_stuff_b(); // This is designed to allow you to easily define additional initialisation code in JAVASCRIPT_CUSTOM_GLOBALS.tpl
 
-	page_loaded=true;
+	window.page_loaded=true;
 
 	add_event_listener_abstract(window,'real_load',function() { // When images etc have loaded
 		script_page_rendered();
-		page_fully_loaded=true;
+		window.page_fully_loaded=true;
 	});
 
 	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof window.script_load_stuff_staff!='undefined')) script_load_stuff_staff();
@@ -532,7 +532,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 
 	if ((typeof window.showModalDialog!='undefined')/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/ || true/*{+END}*/)
 	{
-		if (button_set.length>4) height+=5*(button_set.length-4);
+		if (button_set.length>4) dialog_height+=5*(button_set.length-4);
 
 		// Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups do not know if they run on HTTPS if behind a transparent reverse proxy
 		var url=maintain_theme_in_link('{$FIND_SCRIPT;,question_ui}?message='+window.encodeURIComponent(message)+'&image_set='+window.encodeURIComponent(image_set.join(','))+'&button_set='+window.encodeURIComponent(button_set.join(','))+'&window_title='+window.encodeURIComponent(window_title)+keep_stub());
@@ -2258,12 +2258,12 @@ function add_event_listener_abstract(element,the_event,func,capture)
 			// W3C
 			if (the_event=='load') // Try and be smarter
 			{
-				element.addEventListener('DOMContentLoaded',function() { page_loaded=true; window.has_DOMContentLoaded=true; window.setTimeout(func,0); },capture);
-				return element.addEventListener(the_event,function() { page_loaded=true; if (!window.has_DOMContentLoaded) window.setTimeout(func,0); },capture);
+				element.addEventListener('DOMContentLoaded',function() { window.page_loaded=true; window.has_DOMContentLoaded=true; window.setTimeout(func,0); },capture);
+				return element.addEventListener(the_event,function() { window.page_loaded=true; if (!window.has_DOMContentLoaded) window.setTimeout(func,0); },capture);
 			}
 			if (the_event=='real_load')
 			{
-				return element.addEventListener('load',function() { page_fully_loaded=true; func(); },capture);
+				return element.addEventListener('load',function() { window.page_fully_loaded=true; func(); },capture);
 			}
 			return element.addEventListener(the_event,func,capture);
 		}
@@ -2272,7 +2272,7 @@ function add_event_listener_abstract(element,the_event,func,capture)
 			// Microsoft - no capturing :(
 			if ((the_event=='load') || (the_event=='real_load'))
 			{
-				return element.attachEvent('onload',function() { page_loaded=true; page_fully_loaded=true; func(); });
+				return element.attachEvent('onload',function() { window.page_loaded=true; window.page_fully_loaded=true; func(); });
 			}
 			return element.attachEvent('on'+the_event,func);
 		}
@@ -3168,7 +3168,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 	if (is_threaded)
 	{
-		post.value='{!QUOTED_REPLY_MESSAGE;^}'.replace(/\\{1\\}/g,replying_to_username).replace(/\\{2\\}/g,replying_to_post_plain);
+		post.value='{!QUOTED_REPLY_MESSAGE;^}'.replace(/\{1\}/g,replying_to_username).replace(/\{2\\}/g,replying_to_post_plain);
 		post.strip_on_focus=post.value;
 		post.style.color='gray';
 	} else

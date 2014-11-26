@@ -31,45 +31,47 @@ ocPortal might seem a bit daunting with its (approximately) 4,000 files, but rem
 
 [title="2"]Making a counter block[/title]
 
-We're going to be making a new ocPortal block that does 'counting down' or 'counting up' to a date/time given as a parameter to that block. Knowledge of PHP basics are mandatory.
+We're going to be making a new ocPortal block that does 'counting down' or 'counting up' to a date/time given as a parameter to that block. Knowledge of PHP basics is required.
 
-Since we are going to make a block, a quick note about it as blocks are always completely self-contained.
+Since we are going to make a block, we'll quickly go over the fundamentals of what blocks do in ocPortal.
 
-Blocks can be of any size depending upon their functionality, their types are as follows
+Blocks are fully self-contained units. Blocks have no limit in the amount of code or page space they may take. There are two kinds:
 [list]
-[*]block
-[*]miniblock
+[*]miniblock (very simple to code, no class required, recommended for quick coding)
+[*](regular) block (supports caching, supports install/uninstall code, uses OOP, recommended for mature codebases)
 [/list]
 
-Choosing block type depends upon you.
-
-We will create a miniblock here as follows
-
-[tt]Block name:[/tt] main_count (A PHP file that contains the code placed inside [tt]sources_custom/miniblocks/main_count.php[/tt])
-[tt]Usage type:[/tt] Simple (without using template or language file).
+We will create a miniblock for this example, as follows:
+[tt]Block name:[/tt] [tt]main_counter[/tt] (the PHP file will be [tt]sources_custom/miniblocks/main_counter.php[/tt])
+[tt]Coding method:[/tt] A simple miniblock (without using template or language file).
 
 [codebox]
 <?php
 
-$target=$map['param'];
-if (!is_numeric($target)) $target=strtotime($target); else $target=intval($target); // Let's accept either a timestamp or human strings that PHP's 'strtotime' can understand
-$seconds_to_go=$target-time();
-if ($seconds_to_go>=0) $positive_seconds_to_go=$seconds_to_go; else $positive_seconds_to_go=-$seconds_to_go;
-$hours=floor($positive_seconds_to_go/60/60);
-$positive_seconds_to_go-=$hours*60*60;
-$minutes=floor($positive_seconds_to_go/60);
-$positive_seconds_to_go-=$minutes*60;
-$seconds=$positive_seconds_to_go;
-$time=$hours.':'.$minutes.':'.$seconds;
-if ($seconds_to_go>=0)
-{
-echo <<<END
+$target = $map['param'];
+if (!is_numeric($target)) {
+    $target = strtotime($target);
+} else {
+    $target = intval($target); // Let's accept either a timestamp or human strings that PHP's 'strtotime' can understand
+}
+$seconds_to_go = $target - time();
+if ($seconds_to_go >= 0) {
+    $positive_seconds_to_go = $seconds_to_go;
+} else {
+    $positive_seconds_to_go = -$seconds_to_go;
+}
+$hours = floor($positive_seconds_to_go / 60 / 60);
+$positive_seconds_to_go -= $hours * 60 * 60;
+$minutes = floor($positive_seconds_to_go / 60);
+$positive_seconds_to_go -= $minutes * 60;
+$seconds = $positive_seconds_to_go;
+$time = $hours . ':' . $minutes . ':' . $seconds;
+if ($seconds_to_go >= 0) {
+    echo <<<END
 {$time} hours to go.
 END;
-}
-else
-{
-echo <<<END
+} else {
+    echo <<<END
 {$time} hours since.
 END;
 }
@@ -80,7 +82,7 @@ END;
 Now to use our block, we just need to put some Comcode into the page that we want it on:
 [code]
 Some famous event...
-[block="5 Apr 2063"]main_count[/block]
+[block="5 Apr 2063"]main_counter[/block]
 [/code]
 
 [media width="150" description="A very simple countdown block -- but it'd be easy to style it and put it to work on useful tasks!" float="right"]data_custom/images/docs/hardcore_count.png[/media]
@@ -89,11 +91,11 @@ Some famous event...
 
 At the end of each of the tutorial in this series I will be releasing some exercises out. If you complete them, or have trouble completing them, post about it in the forum for this tutorial!
 
-[title="3"]Exercise-1 > Hit counter[/title]
+[title="3"]Exercise-1: Hit counter[/title]
 
 Make a block that acts as a good old-style hit counter. To do this you'll probably want to use the '[tt]get_value[/tt]' and '[tt]set_value[/tt]' functions. I'm not going to tell you where they are because you can find them yourself by doing a file search for '[tt]function get_value([/tt]' -- once you do, you can view the actual source code for the functions in your text editor.
 
-[title="3"]Exercise-2 > Post requestor[/title]
+[title="3"]Exercise-2: Post requestor[/title]
 
 Make a block that detects if the current logged in member has ever posted on the forum. If they have, don't do any output, but if they haven't output a suggestion that they make a post.
 You might go about this in one of two ways:
