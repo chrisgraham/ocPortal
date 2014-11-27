@@ -25,7 +25,7 @@
  *
  * @param  PATH                         $string The relative (to ocPortals base directory) path to the HTML page
  * @param  ?PATH                        $file_base The file base to load from (null: standard)
- * @param  ?object                       &$out = null Semi-filled output template (null: definitely not doing output streaming)
+ * @param  ?object                      $out Semi-filled output template (null: definitely not doing output streaming)
  * @return string                       The page
  */
 function load_html_page($string, $file_base = null, &$out = null)

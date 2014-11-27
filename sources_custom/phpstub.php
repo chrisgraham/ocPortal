@@ -4308,7 +4308,7 @@ function shuffle($array)
  *
  * @param  string                       $first First string.
  * @param  string                       $second Second string.
- * @param  ?float                        &$percent = null Returns the percentage of similarity (null: do not get).
+ * @param  ?float                       $percent Returns the percentage of similarity (null: do not get).
  * @return integer                      The number of matching characters.
  */
 function similar_text($first, $second, &$percent = null)

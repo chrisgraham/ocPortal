@@ -1991,7 +1991,7 @@ function tempcode_include($filepath)
  * In a way this can also quash problems, so only use when debugging. The "@" before eval turns off attach_message.
  *
  * @param  ?string                      $code Code to evaluate (null: code not found)
- * @param  ?array                        &$tpl_funcs = null Evaluation code context (null: N/A)
+ * @param  ?array                       $tpl_funcs Evaluation code context (null: N/A)
  * @param  ?array                       $parameters Evaluation parameters (null: N/A)
  * @param  ?ID_TEXT                     $cl Language (null: N/A)
  * @return string                       Result

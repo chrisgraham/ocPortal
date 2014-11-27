@@ -155,7 +155,7 @@ function _solemnly_enter()
 /**
  * Leave the most recent security scope (i.e. a custom block or module).
  *
- * @param  ?string                      &$out = null Output to filter, if I_UNDERSTAND_XSS is not set (null: nothing to filter).
+ * @param  ?string                      $out Output to filter, if I_UNDERSTAND_XSS is not set (null: nothing to filter).
  */
 function _solemnly_leave(&$out = null)
 {
@@ -479,7 +479,7 @@ function get_page_zone($page_name, $error = true)
  * The module result is returned.
  *
  * @param  PATH                         $string The relative path to the module file
- * @param  ?object                       &$out = null Semi-filled output template (null: definitely not doing output streaming)
+ * @param  ?object                      $out Semi-filled output template (null: definitely not doing output streaming)
  * @return tempcode                     The result of executing the module
  */
 function load_minimodule_page($string, &$out = null)
@@ -563,7 +563,7 @@ function _load_mini_code($string, $map = null)
  *
  * @param  PATH                         $string The relative path to the module file
  * @param  ID_TEXT                      $codename The page name to load
- * @param  ?object                       &$out = null Semi-filled output template (null: definitely not doing output streaming)
+ * @param  ?object                      $out Semi-filled output template (null: definitely not doing output streaming)
  * @return tempcode                     The result of executing the module
  */
 function load_module_page($string, $codename, &$out = null)

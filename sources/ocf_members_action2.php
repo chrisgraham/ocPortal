@@ -1410,7 +1410,7 @@ function ocf_set_custom_field($member_id, $field, $value, $type = null, $defer =
 /**
  * Check a username is valid for adding, and possibly also the password.
  *
- * @param  ?SHORT_TEXT                  &$username The username (may get altered) (null: nothing to check).
+ * @param  ?SHORT_TEXT                  $username The username (may get altered) (null: nothing to check).
  * @param  ?MEMBER                      $member_id The member (null: member not actually added yet; this ID is only given for the duplication check, to make sure it doesn't think we are duplicating with ourself).
  * @param  ?SHORT_TEXT                  $password The password (null: nothing to check).
  * @param  boolean                      $return_errors Whether to return errors instead of dieing on them.

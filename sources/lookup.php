@@ -30,9 +30,9 @@ function init__lookup()
  * Get information about the specified member.
  *
  * @param  mixed                        $member The member for whom we are getting the page
- * @param  ?string                       &$name The member's name (by reference) (null: unknown)
- * @param  ?AUTO_LINK                    &$id The member's ID (by reference) (null: unknown)
- * @param  ?string                       &$ip The member's IP (by reference) (null: unknown)
+ * @param  ?string                      $name The member's name (by reference) (null: unknown)
+ * @param  ?AUTO_LINK                   $id The member's ID (by reference) (null: unknown)
+ * @param  ?string                      $ip The member's IP (by reference) (null: unknown)
  * @return array                        The member's stats rows
  */
 function lookup_member_page($member, &$name, &$id, &$ip)

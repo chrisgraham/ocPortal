@@ -978,7 +978,7 @@ function do_site()
  * @param  ?ID_TEXT                     $page_type The type of page - for if you know it (null: don't know it)
  * @param  boolean                      $being_included Whether the page is being included from another
  * @param  boolean                      $no_redirect_check Whether to not check for redirects (normally you would)
- * @param  ?object                       &$out = null Semi-filled output template (null: definitely not doing output streaming)
+ * @param  ?object                      $out Semi-filled output template (null: definitely not doing output streaming)
  * @return ?tempcode                    The page (null: no page)
  */
 function request_page($codename, $required, $zone = null, $page_type = null, $being_included = false, $no_redirect_check = false, &$out = null)
@@ -1414,7 +1414,7 @@ function _request_page__redirects($codename, $zone, $wildcard_mode = false)
  * @param  ID_TEXT                      $codename The codename of the page
  * @param  ?PATH                        $file_base The file base to load from (null: standard)
  * @param  boolean                      $being_included Whether the page is being included from another
- * @param  ?object                       &$out = null Semi-filled output template (null: definitely not doing output streaming)
+ * @param  ?object                      $out Semi-filled output template (null: definitely not doing output streaming)
  * @return tempcode                     The page
  */
 function load_comcode_page($string, $zone, $codename, $file_base = null, $being_included = false, &$out = null)
