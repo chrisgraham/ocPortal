@@ -201,12 +201,12 @@ function find_cache_on($codename)
 /**
  * Find the cached result of what is named by codename and the further constraints.
  *
- * @param  ID_TEXT                      The codename to check for cacheing
- * @param  LONG_TEXT                    The further restraints (a serialized map)
- * @param  integer                      The TTL for the cache entry
- * @param  boolean                      Whether we are cacheing Tempcode (needs special care)
- * @param  boolean                      Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
- * @param  ?array                       Parameters to call up block with if we have to defer caching (null: none)
+ * @param  ID_TEXT                      $codename The codename to check for cacheing
+ * @param  LONG_TEXT                    $cache_identifier The further restraints (a serialized map)
+ * @param  integer                      $ttl The TTL for the cache entry
+ * @param  boolean                      $tempcode Whether we are cacheing Tempcode (needs special care)
+ * @param  boolean                      $caching_via_cron Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
+ * @param  ?array                       $map Parameters to call up block with if we have to defer caching (null: none)
  * @return ?mixed                       The cached result (null: no cached result)
  */
 function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode = false, $caching_via_cron = false, $map = null) // Default to a very big ttl

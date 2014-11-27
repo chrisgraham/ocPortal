@@ -183,8 +183,8 @@ function create_session($member, $session_confirmed = 0, $invisible = false)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT                       The session ID
- * @param  boolean                       Whether this is a guest session (guest sessions will use persistent cookies)
+ * @param  ID_TEXT                       $id The session ID
+ * @param  boolean                       $guest_session Whether this is a guest session (guest sessions will use persistent cookies)
  */
 function set_session_id($id, $guest_session = false)  // NB: Guests sessions can persist because they are more benign
 {

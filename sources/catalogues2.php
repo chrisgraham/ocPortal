@@ -534,18 +534,18 @@ function actual_delete_catalogue($name)
  * Edit a catalogue field.
  *
  * @param  AUTO_LINK                    $id The ID of the field
- * @param  ID_TEXT                       The name of the catalogue
- * @param  ?SHORT_TEXT                   The name of the field (null: do not change)
- * @param  ?LONG_TEXT                    Description for the field (null: do not change)
- * @param  integer                       The field order (the field order determines what order the fields are displayed within an entry)
- * @param  BINARY                        Whether the field defines entry ordering
- * @param  BINARY                        Whether the field is visible when an entry is viewed
- * @param  BINARY                        Whether the field is usable as a search key
- * @param  LONG_TEXT                     The default value for the field
- * @param  BINARY                        Whether the field is required
- * @param  BINARY                        Whether the field is to be shown in category views (not applicable for the list display type)
- * @param  BINARY                        Whether the field is to be shown in search views (not applicable for the list display type)
- * @param  ?ID_TEXT                      The field type (null: do not change)
+ * @param  ID_TEXT                       $c_name The name of the catalogue
+ * @param  ?SHORT_TEXT                   $name The name of the field (null: do not change)
+ * @param  ?LONG_TEXT                    $description Description for the field (null: do not change)
+ * @param  integer                       $order The field order (the field order determines what order the fields are displayed within an entry)
+ * @param  BINARY                        $defines_order Whether the field defines entry ordering
+ * @param  BINARY                        $visible Whether the field is visible when an entry is viewed
+ * @param  BINARY                        $searchable Whether the field is usable as a search key
+ * @param  LONG_TEXT                     $default The default value for the field
+ * @param  BINARY                        $required Whether the field is required
+ * @param  BINARY                        $put_in_category Whether the field is to be shown in category views (not applicable for the list display type)
+ * @param  BINARY                        $put_in_search Whether the field is to be shown in search views (not applicable for the list display type)
+ * @param  ?ID_TEXT                      $type The field type (null: do not change)
  */
 function actual_edit_catalogue_field($id, $c_name, $name, $description, $order, $defines_order, $visible, $searchable, $default, $required, $put_in_category = 1, $put_in_search = 1, $type = null) // You cannot edit a field type
 {

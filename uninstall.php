@@ -58,7 +58,7 @@ if (uninstall_check_master_password(post_param('given_password', ''))) {
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT                   Given master password
+ * @param  SHORT_TEXT                   $password_given Given master password
  * @return boolean                      Whether it is valid
  */
 function uninstall_check_master_password($password_given)

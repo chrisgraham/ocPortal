@@ -43,10 +43,10 @@ function map_table($title, $fields)
 /**
  * Get the tempcode for a view space field.
  *
- * @param  mixed                        The field title (Tempcode or string). Assumed unescaped.
- * @param  mixed                        The field value (Tempcode or string). Assumed unescaped.
- * @param  boolean                      Whether the field should be shown as untitled... because it is an element of a subblock of raw rows
- * @param  string                       Field abbreviation (blank: none)
+ * @param  mixed                        $name The field title (Tempcode or string). Assumed unescaped.
+ * @param  mixed                        $value The field value (Tempcode or string). Assumed unescaped.
+ * @param  boolean                      $raw Whether the field should be shown as untitled... because it is an element of a subblock of raw rows
+ * @param  string                       $abbr Field abbreviation (blank: none)
  * @return tempcode                     The generated view space field
  */
 function map_table_field($name, $value, $raw = false, $abbr = '') // Not for use with the above, which takes the fields as a raw map

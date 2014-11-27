@@ -2915,7 +2915,7 @@ function appengine_live_guard()
 /**
  * Check serialized data for objects, as a security measure.
  *
- * @param string     &$data Serialized data
+ * @param string     $data &$data Serialized data
  * @param ?mixed     $safe_replacement What to substitute if objects are contained (null: substitute null)
  */
 function secure_serialized_data(&$data, $safe_replacement = null)

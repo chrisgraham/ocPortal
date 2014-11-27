@@ -2731,7 +2731,7 @@ END;
     /**
      * The UI to add a poll.
      *
-     * @param  ?AUTO_LINK                The topic ID to add the poll to (null: it is instead gettable from a GET parameter named 'id')
+     * @param  ?AUTO_LINK                $topic_id The topic ID to add the poll to (null: it is instead gettable from a GET parameter named 'id')
      * @return tempcode                 The UI
      */
     public function add_poll($topic_id = null) // Type

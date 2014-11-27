@@ -211,7 +211,7 @@ function get_php_file_api($filename, $include_code = true)
                                 $found = false;
                                 for ($k = $i + 1; $k < count($lines) ; $k++) {
                                     $matches = array();
-                                    if (preg_match('#^\s*((public|protected|private) )?function \w+\((.*)\)\n?$#', $lines[$k], $matches) != 0) {
+                                    if (preg_match('#^\s*((public|protected|private) )?function \w+\((.*)\)#', $lines[$k], $matches) != 0) {
                                         $params = explode(',', $matches[3]);
                                         if (isset($params[$arg_counter])) {
                                             $_description = /*str_pad(*/preg_replace('#^\s*&?(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;

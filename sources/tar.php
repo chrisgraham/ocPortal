@@ -240,7 +240,7 @@ function tar_add_folder_incremental(&$resource, $logfile, $path, $threshold, $ma
  * @param  ?array                       $avoid_backing_up A map (filename=>1) of files to not back up (null: none)
  * @param  ?array                       $root_only_dirs A list of directories ONLY to back up from the root (null: no restriction)
  * @param  boolean                      $tick Whether to output spaces as we go to keep the connection alive
- * @param  boolean                      Whether to not skip "special files" (ones not normally archive)
+ * @param  boolean                      $all_files Whether to not skip "special files" (ones not normally archive)
  */
 function tar_add_folder(&$resource, $logfile, $path, $max_size = null, $subpath = '', $avoid_backing_up = null, $root_only_dirs = null, $tick = false, $all_files = false) // Note we cannot modify $resource unless we pass it by reference
 {

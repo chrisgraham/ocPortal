@@ -114,10 +114,10 @@ function get_table_backup($logfile, $db_meta, $db_meta_indices, &$install_php_fi
 /**
  * Backend function to do a backup (meant to be run as a shutdown function - essentially a background task).
  *
- * @param  string                       The filename to backup to
- * @param  string                       The type of backup to do
+ * @param  string                       $file The filename to backup to
+ * @param  string                       $b_type The type of backup to do
  * @set    full incremental
- * @param  integer                      The maximum size of a file to include in the backup
+ * @param  integer                      $max_size The maximum size of a file to include in the backup
  * @return tempcode                     Success message
  */
 function make_backup_2($file, $b_type, $max_size) // This is called as a shutdown function and thus cannot script-timeout

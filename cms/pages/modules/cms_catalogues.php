@@ -1207,15 +1207,15 @@ class Module_cms_catalogues_cat extends Standard_crud_module
      * Get tempcode for a catalogue category adding/editing form.
      *
      * @param  ?ID_TEXT                 $id The name of the catalogue the category is in (null: detect)
-     * @param  SHORT_TEXT                The title of the category
-     * @param  LONG_TEXT                 Description for the category
-     * @param  LONG_TEXT                 Admin notes
-     * @param  ?AUTO_LINK                The ID of the parent category (null: no parent) (-1: arbitrary default)
-     * @param  ?AUTO_LINK                The ID of this category (null: we're adding, not editing)
-     * @param  URLPATH                   The rep-image for the catalogue category
-     * @param  integer                   The number of days before expiry (lower limit)
-     * @param  integer                   The number of days before expiry (higher limit)
-     * @param  ?AUTO_LINK                The expiry category (null: do not expire)
+     * @param  SHORT_TEXT                $title The title of the category
+     * @param  LONG_TEXT                 $description Description for the category
+     * @param  LONG_TEXT                 $notes Admin notes
+     * @param  ?AUTO_LINK                $parent_id The ID of the parent category (null: no parent) (-1: arbitrary default)
+     * @param  ?AUTO_LINK                $id The ID of this category (null: we're adding, not editing)
+     * @param  URLPATH                   $rep_image The rep-image for the catalogue category
+     * @param  integer                   $move_days_lower The number of days before expiry (lower limit)
+     * @param  integer                   $move_days_higher The number of days before expiry (higher limit)
+     * @param  ?AUTO_LINK                $move_target The expiry category (null: do not expire)
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function get_form_fields($catalogue_name = null, $title = '', $description = '', $notes = '', $parent_id = -1, $id = null, $rep_image = '', $move_days_lower = 30, $move_days_higher = 60, $move_target = null) // Not the fields in a category (no such thing: fields are in catalogues) - the HTML form fields to input the details for a category
