@@ -873,7 +873,7 @@ function _news_import_grab_images_and_fix_links($download_images, &$data, $impor
  * Download a specific remote image and sub in the new URL.
  *
  * @param  string                       $data HTML (passed by reference)
- * @param  $url URLPATH                      $url URL
+ * @param  URLPATH                      $url URL
  */
 function _news_import_grab_image(&$data, $url)
 {
