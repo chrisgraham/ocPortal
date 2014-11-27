@@ -46,11 +46,17 @@ if ((isset($_GET['allow_custom'])) && ($_GET['allow_custom'] == '1')) {
 }
 $files = do_dir($OCPORTAL_PATH, $no_custom, true);
 
+@ini_set('memory_limit', '-1');
+
 $classes = array();
 $global = array();
 global $TO_USE;
 //$files=array($OCPORTAL_PATH.'/sources/global2.php'); For debugging
 foreach ($files as $filename) {
+    if (strpos($filename, 'sabredav/') !== false || strpos($filename, 'Swift/') !== false || strpos($filename, 'tracker/') !== false) { // Lots of complex code we want to ignore, even if doing custom files
+        continue;
+    }
+
     if (basename($filename, '.php') == 'tempcode__runtime') {
         continue;
     }

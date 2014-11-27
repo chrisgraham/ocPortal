@@ -11,13 +11,13 @@ if (!function_exists('_load_comcode_page_not_cached')) {
     /**
      * Load Comcode page from disk, then cache it.
      *
-     * @param  PATH                     The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
-     * @param  ID_TEXT                  The zone the page is being loaded from
-     * @param  ID_TEXT                  The codename of the page
-     * @param  PATH                     The file base to load from
-     * @param  ?array                   Row from database (holds submitter etc) (null: no row, originated first from disk)
-     * @param  array                    New row for database, used if necessary (holds submitter etc)
-     * @param  boolean                  Whether the page is being included from another
+     * @param  PATH                     $string The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+     * @param  ID_TEXT                  $zone The zone the page is being loaded from
+     * @param  ID_TEXT                  $codename The codename of the page
+     * @param  PATH                     $file_base The file base to load from
+     * @param  ?array                   $comcode_page_row Row from database (holds submitter etc) (null: no row, originated first from disk)
+     * @param  array                    $new_comcode_page_row New row for database, used if necessary (holds submitter etc)
+     * @param  boolean                  $being_included Whether the page is being included from another
      * @return array                    A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
      */
     function _load_comcode_page_not_cached($string, $zone, $codename, $file_base, $comcode_page_row, $new_comcode_page_row, $being_included = false)
@@ -144,12 +144,12 @@ if (!function_exists('_load_comcode_page_cache_off')) {
     /**
      * Load Comcode page from disk.
      *
-     * @param  PATH                     The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
-     * @param  ID_TEXT                  The zone the page is being loaded from
-     * @param  ID_TEXT                  The codename of the page
-     * @param  PATH                     The file base to load from
-     * @param  array                    New row for database, used if nesessary (holds submitter etc)
-     * @param  boolean                  Whether the page is being included from another
+     * @param  PATH                     $string The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+     * @param  ID_TEXT                  $zone The zone the page is being loaded from
+     * @param  ID_TEXT                  $codename The codename of the page
+     * @param  PATH                     $file_base The file base to load from
+     * @param  array                    $new_comcode_page_row New row for database, used if nesessary (holds submitter etc)
+     * @param  boolean                  $being_included Whether the page is being included from another
      * @return array                    A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
      */
     function _load_comcode_page_cache_off($string, $zone, $codename, $file_base, $new_comcode_page_row, $being_included = false)

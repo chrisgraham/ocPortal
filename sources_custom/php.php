@@ -150,7 +150,7 @@ function get_php_file_api($filename, $include_code = true)
 
                 // Method
                 $matches = array();
-                if (preg_match('#^'.$_depth . '((public|private|protected|static) )*function (.*)#', $line2, $matches) != 0) {
+                if (preg_match('#^'.$_depth . '((public|private|protected|static|abstract) )*function (.*)#', $line2, $matches) != 0) {
                     // Parse function line
                     $_line = $matches[3];
                     list($function_name, $parameters) = _read_php_function_line($_line);
@@ -212,7 +212,7 @@ function get_php_file_api($filename, $include_code = true)
                                 $found = false;
                                 for ($k = $i + 1; $k < count($lines) ; $k++) {
                                     $matches = array();
-                                    if (preg_match('#^\s*((public|protected|private|static) )*function \w+\((.*)\)#', $lines[$k], $matches) != 0) {
+                                    if (preg_match('#^\s*((public|protected|private|static|abstract) )*function \w+\((.*)\)#', $lines[$k], $matches) != 0) {
                                         $params = explode(',', $matches[3]);
                                         if (isset($params[$arg_counter])) {
                                             $_description = /*str_pad(*/preg_replace('#^\s*&?(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;

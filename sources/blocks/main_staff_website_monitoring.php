@@ -68,8 +68,8 @@ class Block_main_staff_website_monitoring
     /**
      * Install the block.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -90,7 +90,7 @@ class Block_main_staff_website_monitoring
     /**
      * Function to find Alexa details of the site.
      *
-     * @param  string                   The URL of the site which you want to find out information on.)
+     * @param  string                   $url The URL of the site which you want to find out information on.)
      * @return array                    Returns a triple array with the rank, the amount of links, and the speed of the site.
      */
     public function getAlexaRank($url)
@@ -244,7 +244,7 @@ class Block_main_staff_website_monitoring
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
