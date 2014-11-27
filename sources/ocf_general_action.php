@@ -21,10 +21,10 @@
 /**
  * Make a post template.
  *
- * @param  SHORT_TEXT                   The title for the template.
- * @param  LONG_TEXT                    The text of the template.
- * @param  SHORT_TEXT                   The multi code specifying which forums this is applicable in.
- * @param  BINARY                       Whether to use this as the default post in applicable forum.
+ * @param  SHORT_TEXT                   $title The title for the template.
+ * @param  LONG_TEXT                    $text The text of the template.
+ * @param  SHORT_TEXT                   $forum_multi_code The multi code specifying which forums this is applicable in.
+ * @param  BINARY                       $use_default_forums Whether to use this as the default post in applicable forum.
  * @return AUTO_LINK                    The added ID
  */
 function ocf_make_post_template($title, $text, $forum_multi_code, $use_default_forums)
@@ -52,12 +52,12 @@ function ocf_make_post_template($title, $text, $forum_multi_code, $use_default_f
 /**
  * Make an emoticon.
  *
- * @param  SHORT_TEXT                   The textual code entered to make the emoticon appear.
- * @param  ID_TEXT                      The image code used for the emoticon.
- * @param  integer                      The relevance level. 0 is core, shown immediately.
+ * @param  SHORT_TEXT                   $code The textual code entered to make the emoticon appear.
+ * @param  ID_TEXT                      $theme_img_code The image code used for the emoticon.
+ * @param  integer                      $relevance_level The relevance level. 0 is core, shown immediately.
  * @range  0 4
- * @param  BINARY                       Whether this may be used as a topic emoticon.
- * @param  BINARY                       Whether this may only be used by privileged members
+ * @param  BINARY                       $use_topics Whether this may be used as a topic emoticon.
+ * @param  BINARY                       $is_special Whether this may only be used by privileged members
  */
 function ocf_make_emoticon($code, $theme_img_code, $relevance_level = 1, $use_topics = 1, $is_special = 0)
 {
@@ -80,13 +80,13 @@ function ocf_make_emoticon($code, $theme_img_code, $relevance_level = 1, $use_to
 /**
  * Make a Welcome E-mail.
  *
- * @param  SHORT_TEXT                   A name for the Welcome E-mail
- * @param  SHORT_TEXT                   The subject of the Welcome E-mail
- * @param  LONG_TEXT                    The message body of the Welcome E-mail
- * @param  integer                      The number of hours before sending the e-mail
- * @param  ?AUTO_LINK                   What newsletter to send out to instead of members (null: none)
- * @param  ?AUTO_LINK                   The usergroup to tie to (null: none)
- * @param  ID_TEXT                      How to send regarding usergroups (blank: indiscriminately)
+ * @param  SHORT_TEXT                   $name A name for the Welcome E-mail
+ * @param  SHORT_TEXT                   $subject The subject of the Welcome E-mail
+ * @param  LONG_TEXT                    $text The message body of the Welcome E-mail
+ * @param  integer                      $send_time The number of hours before sending the e-mail
+ * @param  ?AUTO_LINK                   $newsletter What newsletter to send out to instead of members (null: none)
+ * @param  ?AUTO_LINK                   $usergroup The usergroup to tie to (null: none)
+ * @param  ID_TEXT                      $usergroup_type How to send regarding usergroups (blank: indiscriminately)
  * @set primary secondary ""
  * @return AUTO_LINK                    The ID
  */

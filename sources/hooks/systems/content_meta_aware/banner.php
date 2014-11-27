@@ -26,7 +26,7 @@ class Hook_content_meta_aware_banner
     /**
      * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
      *
-     * @param  ?ID_TEXT                 The zone to link through to (null: autodetect).
+     * @param  ?ID_TEXT                 $zone The zone to link through to (null: autodetect).
      * @return ?array                   Map of award content-type info (null: disabled).
      */
     public function info($zone = null)
@@ -96,13 +96,13 @@ class Hook_content_meta_aware_banner
     /**
      * Run function for content hooks. Renders a content box for an award/randomisation.
      *
-     * @param  array                    The database row for the content
-     * @param  ID_TEXT                  The zone to display in
-     * @param  boolean                  Whether to include context (i.e. say WHAT this is, not just show the actual content)
-     * @param  boolean                  Whether to include breadcrumbs (if there are any)
-     * @param  ?ID_TEXT                 Virtual root to use (null: none)
-     * @param  boolean                  Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
-     * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
+     * @param  array                    $row The database row for the content
+     * @param  ID_TEXT                  $zone The zone to display in
+     * @param  boolean                  $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+     * @param  boolean                  $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+     * @param  ?ID_TEXT                 $root Virtual root to use (null: none)
+     * @param  boolean                  $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+     * @param  ID_TEXT                  $guid Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
     public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')

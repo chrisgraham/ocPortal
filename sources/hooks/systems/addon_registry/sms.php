@@ -128,7 +128,7 @@ class Hook_addon_registry_sms
     /**
      * Install the addon.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
      */
     public function install($upgrade_from = null)
     {

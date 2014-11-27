@@ -57,8 +57,8 @@ function ocworld_map_script()
 /**
  * Wrapper function for the direct download of a map (wraps so as to download the map 'for where a member is at' [unless a direct realm given]).
  *
- * @param  MEMBER                       The member to get the map of
- * @param  ?integer                     The realm they are wanting to get (null: where they are at)
+ * @param  MEMBER                       $member_id The member to get the map of
+ * @param  ?integer                     $realm The realm they are wanting to get (null: where they are at)
  */
 function download_map_wrap($member_id, $realm)
 {
@@ -72,9 +72,9 @@ function download_map_wrap($member_id, $realm)
 /**
  * Direct download of a map.
  *
- * @param  integer                      The X of where the member is standing
- * @param  integer                      The Y of where the member is standing
- * @param  integer                      The realm to get the map for
+ * @param  integer                      $realm The X of where the member is standing
+ * @param  integer                      $sx The Y of where the member is standing
+ * @param  integer                      $sy The realm to get the map for
  */
 function download_map($realm, $sx, $sy)
 {

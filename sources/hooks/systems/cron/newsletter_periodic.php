@@ -45,7 +45,7 @@ class Hook_cron_newsletter_periodic
     /**
      * Send a periodic newsletter.
      *
-     * @param  array                    Details of periodic newsletter
+     * @param  array                    $periodic_row Details of periodic newsletter
      * @return ?TIME                    Time was sent (null: not sent)
      */
     public function newsletter_periodic_handle($periodic_row)

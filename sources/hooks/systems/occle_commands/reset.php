@@ -26,9 +26,9 @@ class Hook_occle_command_reset
     /**
      * Run function for OcCLE hooks.
      *
-     * @param  array                    The options with which the command was called
-     * @param  array                    The parameters with which the command was called
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $options The options with which the command was called
+     * @param  array                    $parameters The parameters with which the command was called
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
     public function run($options, $parameters, &$occle_fs)

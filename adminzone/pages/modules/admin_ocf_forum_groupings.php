@@ -40,10 +40,10 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -69,8 +69,8 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -120,9 +120,9 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Get tempcode for a forum grouping template adding/editing form.
      *
-     * @param  SHORT_TEXT               The title (name) of the forum grouping
-     * @param  LONG_TEXT                The description for the forum grouping
-     * @param  BINARY                   Whether the forum grouping is expanded by default when shown in the forum view
+     * @param  SHORT_TEXT               $title The title (name) of the forum grouping
+     * @param  LONG_TEXT                $description The description for the forum grouping
+     * @param  BINARY                   $expanded_by_default Whether the forum grouping is expanded by default when shown in the forum view
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($title = '', $description = '', $expanded_by_default = 1)
@@ -138,7 +138,7 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -182,7 +182,7 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Standard crud_module list function.
      *
-     * @param  ?ID_TEXT                 The entry to not show (null: none to not show)
+     * @param  ?ID_TEXT                 $avoid The entry to not show (null: none to not show)
      * @return tempcode                 The selection list
      */
     public function create_selection_list_entries($avoid = null)
@@ -193,7 +193,7 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A triple: fields, hidden-fields, delete-fields
      */
     public function fill_in_edit_form($_id)
@@ -220,7 +220,7 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Standard crud_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($id)
@@ -247,7 +247,7 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -261,7 +261,7 @@ class Module_admin_ocf_forum_groupings extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

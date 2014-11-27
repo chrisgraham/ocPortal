@@ -37,10 +37,10 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -63,8 +63,8 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -95,7 +95,7 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -276,9 +276,9 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Import a stock response.
      *
-     * @param  PATH                     Path of the file (not on disk, just for reference as a title).
-     * @param  string                   Data.
-     * @param  SHORT_TEXT               The forum multicode identifying where the multi-moderation is applicable
+     * @param  PATH                     $path Path of the file (not on disk, just for reference as a title).
+     * @param  string                   $data Data.
+     * @param  SHORT_TEXT               $target_forum The forum multicode identifying where the multi-moderation is applicable
      */
     public function _import_stock_response($path, $data, $target_forum)
     {
@@ -294,14 +294,14 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Get tempcode for adding/editing form.
      *
-     * @param  SHORT_TEXT               The name of the multi moderation
-     * @param  LONG_TEXT                The text to place as a post in the topic when the multi moderation is performed
-     * @param  ?AUTO_LINK               Move the topic to this forum (null: don't move)
-     * @param  ?BINARY                  What to change the pin state to (null: don't change)
-     * @param  ?BINARY                  What to change the open state to (null: don't change)
-     * @param  ?BINARY                  What to change the sink state to (null: don't change)
-     * @param  SHORT_TEXT               The forum multicode identifying where the multi-moderation is applicable
-     * @param  SHORT_TEXT               The title suffix
+     * @param  SHORT_TEXT               $name The name of the multi moderation
+     * @param  LONG_TEXT                $post_text The text to place as a post in the topic when the multi moderation is performed
+     * @param  ?AUTO_LINK               $move_to Move the topic to this forum (null: don't move)
+     * @param  ?BINARY                  $pin_state What to change the pin state to (null: don't change)
+     * @param  ?BINARY                  $open_state What to change the open state to (null: don't change)
+     * @param  ?BINARY                  $sink_state What to change the sink state to (null: don't change)
+     * @param  SHORT_TEXT               $forum_multi_code The forum multicode identifying where the multi-moderation is applicable
+     * @param  SHORT_TEXT               $title_suffix The title suffix
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($name = '', $post_text = '', $move_to = null, $pin_state = null, $open_state = null, $sink_state = null, $forum_multi_code = '*', $title_suffix = '')
@@ -336,7 +336,7 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
      */
     public function create_selection_list_choose_table($url_map)
@@ -438,7 +438,7 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function fill_in_edit_form($id)
@@ -484,7 +484,7 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -513,7 +513,7 @@ class Module_admin_ocf_multi_moderations extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

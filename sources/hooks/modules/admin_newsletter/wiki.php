@@ -26,9 +26,9 @@ class Hook_whatsnew_wiki
     /**
      * Run function for newsletter hooks.
      *
-     * @param  TIME                     The time that the entries found must be newer than
-     * @param  LANGUAGE_NAME            The language the entries found must be in
-     * @param  string                   Category filter to apply
+     * @param  TIME                     $cutoff_time The time that the entries found must be newer than
+     * @param  LANGUAGE_NAME            $lang The language the entries found must be in
+     * @param  string                   $filter Category filter to apply
      * @return array                    Tuple of result details
      */
     public function run($cutoff_time, $lang, $filter)

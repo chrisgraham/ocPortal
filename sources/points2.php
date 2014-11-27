@@ -29,9 +29,9 @@ function init__points2()
 /**
  * Transfer gift-points into the specified member's account, courtesy of the system.
  *
- * @param  SHORT_TEXT                   The reason for the transfer
- * @param  integer                      The size of the transfer
- * @param  MEMBER                       The member the transfer is to
+ * @param  SHORT_TEXT                   $reason The reason for the transfer
+ * @param  integer                      $amount The size of the transfer
+ * @param  MEMBER                       $member_id The member the transfer is to
  */
 function system_gift_transfer($reason, $amount, $member_id)
 {
@@ -77,12 +77,12 @@ function system_gift_transfer($reason, $amount, $member_id)
 /**
  * Give a member some points, from another member.
  *
- * @param  integer                      The amount being given
- * @param  MEMBER                       The member receiving the points
- * @param  MEMBER                       The member sending the points
- * @param  SHORT_TEXT                   The reason for the gift
- * @param  boolean                      Does the sender want to remain anonymous?
- * @param  boolean                      Whether to send out an email about it
+ * @param  integer                      $amount The amount being given
+ * @param  MEMBER                       $recipient_id The member receiving the points
+ * @param  MEMBER                       $sender_id The member sending the points
+ * @param  SHORT_TEXT                   $reason The reason for the gift
+ * @param  boolean                      $anonymous Does the sender want to remain anonymous?
+ * @param  boolean                      $send_email Whether to send out an email about it
  */
 function give_points($amount, $recipient_id, $sender_id, $reason, $anonymous = false, $send_email = true)
 {
@@ -155,9 +155,9 @@ function give_points($amount, $recipient_id, $sender_id, $reason, $anonymous = f
 /**
  * Charge points from a specified member's account.
  *
- * @param  MEMBER                       The member that is being charged
- * @param  integer                      The amount being charged
- * @param  SHORT_TEXT                   The reason for the charging
+ * @param  MEMBER                       $member_id The member that is being charged
+ * @param  integer                      $amount The amount being charged
+ * @param  SHORT_TEXT                   $reason The reason for the charging
  */
 function charge_member($member_id, $amount, $reason)
 {
@@ -182,10 +182,10 @@ function charge_member($member_id, $amount, $reason)
 /**
  * Add an entry to the change log.
  *
- * @param  MEMBER                       The member that is being charged
- * @param  integer                      The amount being charged
- * @param  SHORT_TEXT                   The reason for the charging
- * @param  ?TIME                        The time this is recorded to have happened (null: use current time)
+ * @param  MEMBER                       $member_id The member that is being charged
+ * @param  integer                      $amount The amount being charged
+ * @param  SHORT_TEXT                   $reason The reason for the charging
+ * @param  ?TIME                        $time The time this is recorded to have happened (null: use current time)
  */
 function add_to_charge_log($member_id, $amount, $reason, $time = null)
 {

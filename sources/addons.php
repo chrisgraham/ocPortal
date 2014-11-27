@@ -43,10 +43,10 @@ function get_default_addon_details()
 /**
  * Get info about an addon, simulating an extended version of the traditional ocPortal-addon database row.
  *
- * @param  string                       The name of the addon
- * @param  boolean                      Whether to search for dependencies on this
- * @param  ?array                       Database row (null: lookup via a new query)
- * @param  ?array                       .ini-format info (needs processing) (null: unknown / N/A)
+ * @param  string                       $addon The name of the addon
+ * @param  boolean                      $get_dependencies_on_this Whether to search for dependencies on this
+ * @param  ?array                       $row Database row (null: lookup via a new query)
+ * @param  ?array                       $ini_info .ini-format info (needs processing) (null: unknown / N/A)
  * @return array                        The map of details
  */
 function read_addon_info($addon, $get_dependencies_on_this = false, $row = null, $ini_info = null)
@@ -203,9 +203,9 @@ function read_addon_info($addon, $get_dependencies_on_this = false, $row = null,
 /**
  * Find the icon for an addon.
  *
- * @param  ID_TEXT                      Addon name
- * @param  boolean                      Whether to use a default icon
- * @param  ?PATH                        Path to tar file (null: don't look inside a TAR / it's installed already)
+ * @param  ID_TEXT                      $addon_name Addon name
+ * @param  boolean                      $pick_default Whether to use a default icon
+ * @param  ?PATH                        $tar_path Path to tar file (null: don't look inside a TAR / it's installed already)
  * @return string                       Theme image URL (may be a "data:" URL rather than a normal URLPATH)
  */
 function find_addon_icon($addon_name, $pick_default = true, $tar_path = null)

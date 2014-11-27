@@ -60,8 +60,8 @@ class Module_tickets
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -133,10 +133,10 @@ class Module_tickets
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -340,7 +340,7 @@ class Module_tickets
     /**
      * Render a ticket link row.
      *
-     * @param  array                    Ticket details (from forum API)
+     * @param  array                    $topic Ticket details (from forum API)
      * @return array                    A tuple: Ticket row (Tempcode), Ticket type (ID), Ticket type (String)
      */
     public function _render_ticket_row($topic)
@@ -871,9 +871,9 @@ class Module_tickets
     /**
      * Check for existing FAQs matching a ticket to be submitted, via searching.
      *
-     * @param  tempcode                 Page title
-     * @param  string                   Ticket ID we'd be creating
-     * @param  string                   What is being searched for
+     * @param  tempcode                 $title Page title
+     * @param  string                   $ticket_id Ticket ID we'd be creating
+     * @param  string                   $content What is being searched for
      * @return ?tempcode                The search results (null: could not search)
      */
     public function do_search($title, $ticket_id, $content)

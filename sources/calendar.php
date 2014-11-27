@@ -35,10 +35,10 @@ function init__calendar()
 /**
  * Render an event box.
  *
- * @param  array                        Event row
- * @param  ID_TEXT                      Zone to link through to
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row Event row
+ * @param  ID_TEXT                      $zone Zone to link through to
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The event box
  */
 function render_event_box($row, $zone = '_SEARCH', $give_context = true, $guid = '')
@@ -62,10 +62,10 @@ function render_event_box($row, $zone = '_SEARCH', $give_context = true, $guid =
 /**
  * Get tempcode for a calendar type 'feature box' for the given row
  *
- * @param  array                        The database field row of it
- * @param  ID_TEXT                      The zone to use
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The database field row of it
+ * @param  ID_TEXT                      $zone The zone to use
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     A box for it, linking to the full page
  */
 function render_calendar_type_box($row, $zone = '_SEARCH', $give_context = true, $guid = '')
@@ -100,8 +100,8 @@ function render_calendar_type_box($row, $zone = '_SEARCH', $give_context = true,
 /**
  * Get the week number for a time.
  *
- * @param  TIME                         The week timestamp
- * @param  boolean                      Whether to do it contextually to the year, rather than including the year
+ * @param  TIME                         $timestamp The week timestamp
+ * @param  boolean                      $no_year Whether to do it contextually to the year, rather than including the year
  * @return string                       The week number
  */
 function get_week_number_for($timestamp, $no_year = false)
@@ -120,8 +120,8 @@ function get_week_number_for($timestamp, $no_year = false)
 /**
  * Converts year+week to year+month+day. This is really complex. The first week of a year may actually start in December. The first day of the first week is a Monday or a Sunday, depending on configuration.
  *
- * @param  integer                      Year #
- * @param  integer                      Week #
+ * @param  integer                      $year Year #
+ * @param  integer                      $week Week #
  * @return array                        Month #,Day #,Year #
  */
 function date_from_week_of_year($year, $week)
@@ -148,26 +148,26 @@ function date_from_week_of_year($year, $week)
 /**
  * Find a list of pairs specifying the times the event occurs, for 20 years into the future, in user-time.
  *
- * @param  ID_TEXT                      The timezone for the event (null: current user's timezone)
- * @param  BINARY                       Whether the time should be converted to the viewer's own timezone
- * @param  integer                      The year the event starts at. This and the below are in server time
- * @param  integer                      The month the event starts at
- * @param  integer                      The day the event starts at
- * @param  ID_TEXT                      In-month specification type for start date
+ * @param  ID_TEXT                      $timezone The timezone for the event (null: current user's timezone)
+ * @param  BINARY                       $do_timezone_conv Whether the time should be converted to the viewer's own timezone
+ * @param  integer                      $start_year The year the event starts at. This and the below are in server time
+ * @param  integer                      $start_month The month the event starts at
+ * @param  integer                      $start_day The day the event starts at
+ * @param  ID_TEXT                      $start_monthly_spec_type In-month specification type for start date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  integer                      The hour the event starts at
- * @param  integer                      The minute the event starts at
- * @param  ?integer                     The year the event ends at (null: not a multi day event)
- * @param  ?integer                     The month the event ends at (null: not a multi day event)
- * @param  ?integer                     The day the event ends at (null: not a multi day event)
- * @param  ID_TEXT                      In-month specification type for end date
+ * @param  integer                      $start_hour The hour the event starts at
+ * @param  integer                      $start_minute The minute the event starts at
+ * @param  ?integer                     $end_year The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_month The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_day The day the event ends at (null: not a multi day event)
+ * @param  ID_TEXT                      $end_monthly_spec_type In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (null: not a multi day event / all day event)
- * @param  ?integer                     The minute the event ends at (null: not a multi day event / all day event)
- * @param  string                       The event recurrence
- * @param  ?integer                     The number of recurrences (null: none/infinite)
- * @param  ?TIME                        The timestamp that found times must exceed. In user-time (null: now)
- * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (null: 20 years time)
+ * @param  ?integer                     $end_hour The hour the event ends at (null: not a multi day event / all day event)
+ * @param  ?integer                     $end_minute The minute the event ends at (null: not a multi day event / all day event)
+ * @param  string                       $recurrence The event recurrence
+ * @param  ?integer                     $recurrences The number of recurrences (null: none/infinite)
+ * @param  ?TIME                        $period_start The timestamp that found times must exceed. In user-time (null: now)
+ * @param  ?TIME                        $period_end The timestamp that found times must not exceed. In user-time (null: 20 years time)
  * @return array                        A list of pairs for period times (timestamps, in user-time). Actually a series of pairs, 'window-bound timestamps' is first pair, then 'true coverage timestamps', then 'true coverage timestamps without timezone conversions'
  */
 function find_periods_recurrence($timezone, $do_timezone_conv, $start_year, $start_month, $start_day, $start_monthly_spec_type, $start_hour, $start_minute, $end_year, $end_month, $end_day, $end_monthly_spec_type, $end_hour, $end_minute, $recurrence, $recurrences, $period_start = null, $period_end = null)
@@ -402,15 +402,15 @@ function find_periods_recurrence($timezone, $do_timezone_conv, $start_year, $sta
 /**
  * We have just jumped a UTC-based date (i.e. timezoneless) forward by calendar units, compensate for any DST ramifications in the target timezone.
  *
- * @param  integer                      Current hour
- * @param  integer                      Current minute
- * @param  integer                      Current day
- * @param  integer                      Current month
- * @param  integer                      Current year
- * @param  ID_TEXT                      Timezone
- * @param  integer                      Jump in days that just happened
- * @param  integer                      Jump in month that just happened
- * @param  integer                      Jump in year that just happened
+ * @param  integer                      &$hour Current hour
+ * @param  integer                       &$minute Current minute
+ * @param  integer                      $day_of_month Current day
+ * @param  integer                      $month Current month
+ * @param  integer                      $year Current year
+ * @param  ID_TEXT                      $timezone Timezone
+ * @param  integer                      $dif_day Jump in days that just happened
+ * @param  integer                      $dif_month Jump in month that just happened
+ * @param  integer                      $dif_year Jump in year that just happened
  */
 function _compensate_for_dst_change(&$hour, &$minute, $day_of_month, $month, $year, $timezone, $dif_day, $dif_month, $dif_year)
 {
@@ -446,12 +446,12 @@ function _compensate_for_dst_change(&$hour, &$minute, $day_of_month, $month, $ye
 /**
  * Get the number of days between two dates (so first+dif=second).
  *
- * @param  integer                      Start month
- * @param  integer                      Start day
- * @param  integer                      Start year
- * @param  integer                      End month
- * @param  integer                      End day
- * @param  integer                      End year
+ * @param  integer                      $initial_start_month Start month
+ * @param  integer                      $initial_start_day Start day
+ * @param  integer                      $initial_start_year Start year
+ * @param  integer                      $initial_end_month End month
+ * @param  integer                      $initial_end_day End day
+ * @param  integer                      $initial_end_year End year
  * @return integer                      The number of days
  */
 function get_days_between($initial_start_month, $initial_start_day, $initial_start_year, $initial_end_month, $initial_end_day, $initial_end_year)
@@ -464,8 +464,8 @@ function get_days_between($initial_start_month, $initial_start_day, $initial_sta
 /**
  * Get a list of event types, taking security into account against the current member.
  *
- * @param  ?AUTO_LINK                   The event type to select by default (null: none)
- * @param  ?TIME                        Time from which content must be updated (null: no limit).
+ * @param  ?AUTO_LINK                   $it The event type to select by default (null: none)
+ * @param  ?TIME                        $updated_since Time from which content must be updated (null: no limit).
  * @return tempcode                     The list
  */
 function create_selection_list_event_types($it = null, $updated_since = null)
@@ -511,8 +511,8 @@ function create_selection_list_event_types($it = null, $updated_since = null)
 /**
  * Regenerate all the calendar jobs for reminders for next occurance of an event (because the event was added or edited).
  *
- * @param  AUTO_LINK                    The ID of the event
- * @param  boolean                      Force evaluation even if it's in the past. Only valid for code events
+ * @param  AUTO_LINK                    $id The ID of the event
+ * @param  boolean                      $force Force evaluation even if it's in the past. Only valid for code events
  */
 function regenerate_event_reminder_jobs($id, $force = false)
 {
@@ -562,10 +562,10 @@ function regenerate_event_reminder_jobs($id, $force = false)
 /**
  * Create a neatly human-readable date range, using various user-friendly readability tricks.
  *
- * @param  TIME                         From time in user time
- * @param  TIME                         To time in user time
- * @param  boolean                      Whether time is included in this date range
- * @param  boolean                      Whether to force absolute display
+ * @param  TIME                         $from From time in user time
+ * @param  TIME                         $to To time in user time
+ * @param  boolean                      $do_time Whether time is included in this date range
+ * @param  boolean                      $force_absolute Whether to force absolute display
  * @return string                       Textual specially-formatted range
  */
 function date_range($from, $to, $do_time = true, $force_absolute = false)
@@ -610,14 +610,14 @@ function date_range($from, $to, $do_time = true, $force_absolute = false)
 /**
  * Detect calendar matches in a time period, in user-time.
  *
- * @param  MEMBER                       The member we are running authentication against
- * @param  MEMBER                       The member to detect matches for
- * @param  boolean                      Whether to restrict only to viewable events for the current member (rarely pass this as false!)
- * @param  ?TIME                        The timestamp that found times must exceed. In user-time (null: use find_periods_recurrence default)
- * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (null: use find_periods_recurrence default)
- * @param  ?array                       The type filter (null: none)
- * @param  boolean                      Whether to include RSS/iCal events in the results
- * @param  ?BINARY                      Whether to show private events (1) or public events (0) (null: both public and private)
+ * @param  MEMBER                       $auth_member_id The member we are running authentication against
+ * @param  MEMBER                       $member_id The member to detect matches for
+ * @param  boolean                      $restrict Whether to restrict only to viewable events for the current member (rarely pass this as false!)
+ * @param  ?TIME                        $period_start The timestamp that found times must exceed. In user-time (null: use find_periods_recurrence default)
+ * @param  ?TIME                        $period_end The timestamp that found times must not exceed. In user-time (null: use find_periods_recurrence default)
+ * @param  ?array                       $filter The type filter (null: none)
+ * @param  boolean                      $do_rss Whether to include RSS/iCal events in the results
+ * @param  ?BINARY                      $private Whether to show private events (1) or public events (0) (null: both public and private)
  * @return array                        A list of events happening, with time details
  */
 function calendar_matches($auth_member_id, $member_id, $restrict, $period_start, $period_end, $filter = null, $do_rss = true, $private = null)
@@ -837,9 +837,9 @@ function calendar_matches($auth_member_id, $member_id, $restrict, $period_start,
 /**
  * Get a list of events to edit.
  *
- * @param  ?MEMBER                      Only show events owned by this member (null: no such limitation)
- * @param  ?AUTO_LINK                   Event to select by default (null: no specific default)
- * @param  boolean                      Whether owned public events should be shown
+ * @param  ?MEMBER                      $only_owned Only show events owned by this member (null: no such limitation)
+ * @param  ?AUTO_LINK                   $it Event to select by default (null: no specific default)
+ * @param  boolean                      $edit_viewable_events Whether owned public events should be shown
  * @return tempcode                     The list
  */
 function create_selection_list_events($only_owned, $it, $edit_viewable_events = true)
@@ -868,27 +868,27 @@ function create_selection_list_events($only_owned, $it, $edit_viewable_events = 
  * Detect conflicts with an event at a certain time.
  * NB: Only detects future conflicts, not conflicts on past scheduling.
  *
- * @param  MEMBER                       The member to detect conflicts for
- * @param  ?AUTO_LINK                   The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (null: not added yet)
- * @param  ?integer                     The year the event starts at. This and the below are in server time (null: default)
- * @param  ?integer                     The month the event starts at (null: default)
- * @param  ?integer                     The day the event starts at (null: default)
- * @param  ID_TEXT                      In-month specification type for start date
+ * @param  MEMBER                       $member_id The member to detect conflicts for
+ * @param  ?AUTO_LINK                   $skip_id The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (null: not added yet)
+ * @param  ?integer                     $start_year The year the event starts at. This and the below are in server time (null: default)
+ * @param  ?integer                     $start_month The month the event starts at (null: default)
+ * @param  ?integer                     $start_day The day the event starts at (null: default)
+ * @param  ID_TEXT                      $start_monthly_spec_type In-month specification type for start date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event starts at (null: default)
- * @param  ?integer                     The minute the event starts at (null: default)
- * @param  ?integer                     The year the event ends at (null: not a multi day event)
- * @param  ?integer                     The month the event ends at (null: not a multi day event)
- * @param  ?integer                     The day the event ends at (null: not a multi day event)
- * @param  ID_TEXT                      In-month specification type for end date
+ * @param  ?integer                     $start_hour The hour the event starts at (null: default)
+ * @param  ?integer                     $start_minute The minute the event starts at (null: default)
+ * @param  ?integer                     $end_year The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_month The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_day The day the event ends at (null: not a multi day event)
+ * @param  ID_TEXT                      $end_monthly_spec_type In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (null: not a multi day event)
- * @param  ?integer                     The minute the event ends at (null: not a multi day event)
- * @param  string                       The event recurrence
- * @param  ?integer                     The number of recurrences (null: none/infinite)
- * @param  AUTO_LINK                    The event type
- * @param  ?MEMBER                      The member calendar (null: none)
- * @param  integer                      The scope type, DETECT_CONFLICT_SCOPE_*
+ * @param  ?integer                     $end_hour The hour the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_minute The minute the event ends at (null: not a multi day event)
+ * @param  string                       $recurrence The event recurrence
+ * @param  ?integer                     $recurrences The number of recurrences (null: none/infinite)
+ * @param  AUTO_LINK                    $type The event type
+ * @param  ?MEMBER                      $member_calendar The member calendar (null: none)
+ * @param  integer                      $scope_type The scope type, DETECT_CONFLICT_SCOPE_*
  * @return ?tempcode                    Information about conflicts (null: none)
  */
 function detect_conflicts($member_id, $skip_id, $start_year, $start_month, $start_day, $start_monthly_spec_type, $start_hour, $start_minute, $end_year, $end_month, $end_day, $end_monthly_spec_type, $end_hour, $end_minute, $recurrence, $recurrences, $type, $member_calendar, $scope_type)
@@ -973,11 +973,11 @@ function detect_conflicts($member_id, $skip_id, $start_year, $start_month, $star
 /**
  * Find first hour in day for a timezone.
  *
- * @param  ID_TEXT                      Timezone
- * @param  integer                      Year
- * @param  integer                      Month
- * @param  integer                      Day
- * @param  ID_TEXT                      In-month specification type
+ * @param  ID_TEXT                      $timezone Timezone
+ * @param  integer                      $year Year
+ * @param  integer                      $month Month
+ * @param  integer                      $day Day
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer                      Hour
  */
@@ -994,11 +994,11 @@ function find_timezone_start_hour_in_utc($timezone, $year, $month, $day, $monthl
 /**
  * Find first minute in day for a timezone. Usually 0, but some timezones have 30 min offsets.
  *
- * @param  ID_TEXT                      Timezone
- * @param  integer                      Year
- * @param  integer                      Month
- * @param  integer                      Day
- * @param  ID_TEXT                      In-month specification type
+ * @param  ID_TEXT                      $timezone Timezone
+ * @param  integer                      $year Year
+ * @param  integer                      $month Month
+ * @param  integer                      $day Day
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer                      Hour
  */
@@ -1015,11 +1015,11 @@ function find_timezone_start_minute_in_utc($timezone, $year, $month, $day, $mont
 /**
  * Find last hour in day for a timezone.
  *
- * @param  ID_TEXT                      Timezone
- * @param  integer                      Year
- * @param  integer                      Month
- * @param  integer                      Day
- * @param  ID_TEXT                      In-month specification type
+ * @param  ID_TEXT                      $timezone Timezone
+ * @param  integer                      $year Year
+ * @param  integer                      $month Month
+ * @param  integer                      $day Day
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer                      Hour
  */
@@ -1036,11 +1036,11 @@ function find_timezone_end_hour_in_utc($timezone, $year, $month, $day, $monthly_
 /**
  * Find last minute in day for a timezone. Usually 59, but some timezones have 30 min offsets.
  *
- * @param  ID_TEXT                      Timezone
- * @param  integer                      Year
- * @param  integer                      Month
- * @param  integer                      Day
- * @param  ID_TEXT                      In-month specification type
+ * @param  ID_TEXT                      $timezone Timezone
+ * @param  integer                      $year Year
+ * @param  integer                      $month Month
+ * @param  integer                      $day Day
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer                      Hour
  */
@@ -1057,15 +1057,15 @@ function find_timezone_end_minute_in_utc($timezone, $year, $month, $day, $monthl
 /**
  * Get the UTC start time for a specified UTC time event.
  *
- * @param  ID_TEXT                      The timezone it is in; used to derive $hour and $minute if those are NULL, such that they start the day correctly for this timezone
- * @param  integer                      Year
- * @param  integer                      Month
- * @param  integer                      Day
- * @param  ID_TEXT                      In-month specification type
+ * @param  ID_TEXT                      $timezone The timezone it is in; used to derive $hour and $minute if those are NULL, such that they start the day correctly for this timezone
+ * @param  integer                      $year Year
+ * @param  integer                      $month Month
+ * @param  integer                      $day Day
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     Hour (null: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
- * @param  ?integer                     Minute (null: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
- * @param  boolean                      Whether the time should be converted to the $timezone instead instead of UTC.
+ * @param  ?integer                     $hour Hour (null: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer                     $minute Minute (null: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  boolean                      $show_in_users_timezone Whether the time should be converted to the $timezone instead instead of UTC.
  * @return TIME                         Timestamp
  */
 function cal_get_start_utctime_for_event($timezone, $year, $month, $day, $monthly_spec_type, $hour, $minute, $show_in_users_timezone)
@@ -1122,15 +1122,15 @@ function cal_get_start_utctime_for_event($timezone, $year, $month, $day, $monthl
 /**
  * Get the UTC end time for a specified UTC time event.
  *
- * @param  ID_TEXT                      Timezone
- * @param  integer                      Year
- * @param  integer                      Month
- * @param  integer                      Day
- * @param  ID_TEXT                      In-month specification type
+ * @param  ID_TEXT                      $timezone Timezone
+ * @param  integer                      $year Year
+ * @param  integer                      $month Month
+ * @param  integer                      $day Day
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     Hour (null: end hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
- * @param  ?integer                     Minute (null: end minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
- * @param  boolean                      Whether the time should be converted to the viewer's own timezone instead.
+ * @param  ?integer                     $hour Hour (null: end hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer                     $minute Minute (null: end minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  boolean                      $show_in_users_timezone Whether the time should be converted to the viewer's own timezone instead.
  * @return TIME                         Timestamp
  */
 function cal_get_end_utctime_for_event($timezone, $year, $month, $day, $monthly_spec_type, $hour, $minute, $show_in_users_timezone)
@@ -1187,9 +1187,9 @@ function cal_get_end_utctime_for_event($timezone, $year, $month, $day, $monthly_
 /**
  * Put a timestamp into the correct timezone for being reported onto the calendar.
  *
- * @param  TIME                         Timestamp (proper UTC timestamp, not in user time)
- * @param  ID_TEXT                      The timezone associated with the event (the passed $utc_timestamp should NOT be relative to this timezone, that must be UTC)
- * @param  boolean                      Whether the time should be converted to the viewer's own timezone instead
+ * @param  TIME                         $utc_timestamp Timestamp (proper UTC timestamp, not in user time)
+ * @param  ID_TEXT                      $default_timezone The timezone associated with the event (the passed $utc_timestamp should NOT be relative to this timezone, that must be UTC)
+ * @param  boolean                      $show_in_users_timezone Whether the time should be converted to the viewer's own timezone instead
  * @return TIME                         Altered timestamp
  */
 function cal_utctime_to_usertime($utc_timestamp, $default_timezone, $show_in_users_timezone)
@@ -1203,12 +1203,12 @@ function cal_utctime_to_usertime($utc_timestamp, $default_timezone, $show_in_use
 /**
  * Detect conflicts with an event in certain time periods.
  *
- * @param  MEMBER                       The member to detect conflicts for
- * @param  ?AUTO_LINK                   The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (null: not added yet)
- * @param  array                        List of pairs specifying our happening time (in time order)
- * @param  boolean                      Whether to restrict only to viewable events for the current member
- * @param  ?TIME                        The timestamp that found times must exceed. In user-time (null: use find_periods_recurrence default)
- * @param  ?TIME                        The timestamp that found times must not exceed. In user-time (null: use find_periods_recurrence default)
+ * @param  MEMBER                       $member_id The member to detect conflicts for
+ * @param  ?AUTO_LINK                   $skip_id The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (null: not added yet)
+ * @param  array                        $our_times List of pairs specifying our happening time (in time order)
+ * @param  boolean                      $restrict Whether to restrict only to viewable events for the current member
+ * @param  ?TIME                        $period_start The timestamp that found times must exceed. In user-time (null: use find_periods_recurrence default)
+ * @param  ?TIME                        $period_end The timestamp that found times must not exceed. In user-time (null: use find_periods_recurrence default)
  * @return array                        A list of events happening, with time details
  */
 function detect_happening_at($member_id, $skip_id, $our_times, $restrict = true, $period_start = null, $period_end = null)
@@ -1301,15 +1301,15 @@ function detect_happening_at($member_id, $skip_id, $our_times, $restrict = true,
 /**
  * Given a specially encoded day of month, work out the real day of the month.
  *
- * @param  integer                      The concrete year
- * @param  integer                      The concrete month
- * @param  integer                      The encoded day of month
- * @param  ID_TEXT                      In-month specification type
+ * @param  integer                      $year The concrete year
+ * @param  integer                      $month The concrete month
+ * @param  integer                      $day The encoded day of month
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  integer                      The concrete hour
- * @param  integer                      The concrete minute
- * @param  ID_TEXT                      The timezone
- * @param  boolean                      Whether to do a timezone conversion (NB: unused, as this is before conversion to what dates users see - we are only using timezones here to push the nth weekday appropriately to the correct timezone, due to alignment problems)
+ * @param  integer                      $hour The concrete hour
+ * @param  integer                      $minute The concrete minute
+ * @param  ID_TEXT                      $timezone The timezone
+ * @param  boolean                      $show_in_users_timezone Whether to do a timezone conversion (NB: unused, as this is before conversion to what dates users see - we are only using timezones here to push the nth weekday appropriately to the correct timezone, due to alignment problems)
  * @return integer                      Concrete day
  */
 function find_concrete_day_of_month($year, $month, $day, $monthly_spec_type, $hour, $minute, $timezone, $show_in_users_timezone)
@@ -1380,10 +1380,10 @@ function find_concrete_day_of_month($year, $month, $day, $monthly_spec_type, $ho
 /**
  * Given a calendar day of month, work out the day of the month within the specified encoding.
  *
- * @param  integer                      The concrete year
- * @param  integer                      The concrete month
- * @param  integer                      The concrete day of month
- * @param  ID_TEXT                      In-month specification type
+ * @param  integer                      $year The concrete year
+ * @param  integer                      $month The concrete month
+ * @param  integer                      $day_of_month The concrete day of month
+ * @param  ID_TEXT                      $monthly_spec_type In-month specification type
  * @return integer                      Concrete day
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  */
@@ -1430,10 +1430,10 @@ function find_abstract_day($year, $month, $day_of_month, $monthly_spec_type)
  * Choose how a recurring monthly event should be encoded.
  * This function is timezone-agnostic.
  *
- * @param  integer                      The concrete day
- * @param  integer                      The concrete month
- * @param  integer                      The concrete year
- * @param  ID_TEXT                      Current in-month specification type
+ * @param  integer                      $day_of_month The concrete day
+ * @param  integer                      $month The concrete month
+ * @param  integer                      $year The concrete year
+ * @param  ID_TEXT                      $default_monthly_spec_type Current in-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return tempcode                     Chooser
  */
@@ -1469,8 +1469,8 @@ function monthly_spec_type_chooser($day_of_month, $month, $year, $default_monthl
 /**
  * Adjust an event row to match a recurrence on a specific day.
  *
- * @param  string                       A day (Y-m-d)
- * @param  array                        The event row
+ * @param  string                       $day A day (Y-m-d)
+ * @param  array                        $event The event row
  * @return array                        Adjusted event row
  */
 function adjust_event_dates_for_a_recurrence($day, $event)
@@ -1533,13 +1533,13 @@ function adjust_event_dates_for_a_recurrence($day, $event)
 /**
  * An event moved from 'a' to 'b' may have an hour/minute shift due to a DST.
  *
- * @param  integer 'A' year
- * @param  integer 'A' month
- * @param  integer 'A' day
- * @param  integer 'B' year
- * @param  integer 'B' month
- * @param  integer 'B' day
- * @param  ID_TEXT                      The timezone
+ * @param  integer $a_year 'A' year
+ * @param  integer $a_month 'A' month
+ * @param  integer $a_day 'A' day
+ * @param  integer $b_year 'B' year
+ * @param  integer $b_month 'B' month
+ * @param  integer $b_day 'B' day
+ * @param  ID_TEXT                      $timezone The timezone
  * @return array                        A pair: shift in hours, shift in minutes
  */
 function dst_boundary_difference_for_recurrence($a_year, $a_month, $a_day, $b_year, $b_month, $b_day, $timezone)
@@ -1555,7 +1555,7 @@ function dst_boundary_difference_for_recurrence($a_year, $a_month, $a_day, $b_ye
  * We also want to define it (trick it) to be stated in the same month of the start date, even if that means the days will exceed the number of days in a month.
  * This will allow us to do shifts around in calendar-space.
  *
- * @param  array                        Event row
+ * @param  array                        $event Event row
  * @return array                        Event row
  */
 function resolve_complex_event_end_date($event)
@@ -1579,7 +1579,7 @@ function resolve_complex_event_end_date($event)
 /**
  * Find the timestamp of an event's start.
  *
- * @param  array                        Event row
+ * @param  array                        $event Event row
  * @return array                        A pair: timestamp, timestamp considering the viewing users timezone
  */
 function find_event_start_timestamp($event)
@@ -1598,7 +1598,7 @@ function find_event_start_timestamp($event)
 /**
  * Find the timestamp of an event's end.
  *
- * @param  array                        Event row
+ * @param  array                        $event Event row
  * @return array                        A pair: timestamp, timestamp considering the viewing users timezone
  */
 function find_event_end_timestamp($event)
@@ -1617,7 +1617,7 @@ function find_event_end_timestamp($event)
 /**
  * Find the concrete start day of a month for an event row.
  *
- * @param  array                        Event row
+ * @param  array                        $event Event row
  * @return integer                      Concrete day
  */
 function start_find_concrete_day_of_month_wrap($event)
@@ -1630,7 +1630,7 @@ function start_find_concrete_day_of_month_wrap($event)
 /**
  * Find the concrete end day of a month for an event row.
  *
- * @param  array                        Event row
+ * @param  array                        $event Event row
  * @return integer                      Concrete day
  */
 function end_find_concrete_day_of_month_wrap($event)
@@ -1643,25 +1643,25 @@ function end_find_concrete_day_of_month_wrap($event)
 /**
  * Find details of when an event happens. Preferably the next recurrence, but if it is in the past, the first.
  *
- * @param  ID_TEXT                      The timezone for the event (null: current user's timezone)
- * @param  BINARY                       Whether the time should be converted to the viewer's own timezone
- * @param  integer                      The year the event starts at. This and the below are in server time
- * @param  integer                      The month the event starts at
- * @param  integer                      The day the event starts at
- * @param  ID_TEXT                      In-month specification type for start date
+ * @param  ID_TEXT                      $timezone The timezone for the event (null: current user's timezone)
+ * @param  BINARY                       $do_timezone_conv Whether the time should be converted to the viewer's own timezone
+ * @param  integer                      $start_year The year the event starts at. This and the below are in server time
+ * @param  integer                      $start_month The month the event starts at
+ * @param  integer                      $start_day The day the event starts at
+ * @param  ID_TEXT                      $start_monthly_spec_type In-month specification type for start date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  integer                      The hour the event starts at
- * @param  integer                      The minute the event starts at
- * @param  ?integer                     The year the event ends at (null: not a multi day event)
- * @param  ?integer                     The month the event ends at (null: not a multi day event)
- * @param  ?integer                     The day the event ends at (null: not a multi day event)
- * @param  ID_TEXT                      In-month specification type for end date
+ * @param  integer                      $start_hour The hour the event starts at
+ * @param  integer                      $start_minute The minute the event starts at
+ * @param  ?integer                     $end_year The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_month The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_day The day the event ends at (null: not a multi day event)
+ * @param  ID_TEXT                      $end_monthly_spec_type In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (null: not a multi day event / all day event)
- * @param  ?integer                     The minute the event ends at (null: not a multi day event / all day event)
- * @param  string                       The event recurrence
- * @param  ?integer                     The number of recurrences (null: none/infinite)
- * @param  boolean                      Whether to forcibly get the first recurrence, not a future one
+ * @param  ?integer                     $end_hour The hour the event ends at (null: not a multi day event / all day event)
+ * @param  ?integer                     $end_minute The minute the event ends at (null: not a multi day event / all day event)
+ * @param  string                       $recurrence The event recurrence
+ * @param  ?integer                     $recurrences The number of recurrences (null: none/infinite)
+ * @param  boolean                      $force_first Whether to forcibly get the first recurrence, not a future one
  * @return array                        A tuple: Written date [range], from timestamp, to timestamp
  */
 function get_calendar_event_first_date($timezone, $do_timezone_conv, $start_year, $start_month, $start_day, $start_monthly_spec_type, $start_hour, $start_minute, $end_year, $end_month, $end_day, $end_monthly_spec_type, $end_hour, $end_minute, $recurrence, $recurrences, $force_first = false)

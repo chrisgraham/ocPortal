@@ -21,12 +21,12 @@
 /**
  * Show a post, isolated of the other posts in it's topic.
  *
- * @param  array                        The post row.
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content). Also uses the post title, as opposed to the post's topic's title.
- * @param  boolean                      Whether to embed a link to the topic.
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (null: none)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The post row.
+ * @param  boolean                      $use_post_title Whether to include context (i.e. say WHAT this is, not just show the actual content). Also uses the post title, as opposed to the post's topic's title.
+ * @param  boolean                      $give_context Whether to embed a link to the topic.
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK                   $root Virtual root to use (null: none)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The isolated post.
  */
 function render_post_box($row, $use_post_title = false, $give_context = true, $include_breadcrumbs = true, $root = null, $guid = '')

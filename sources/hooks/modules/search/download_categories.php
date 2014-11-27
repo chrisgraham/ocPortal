@@ -26,7 +26,7 @@ class Hook_search_download_categories
     /**
      * Find details for this search hook.
      *
-     * @param  boolean                  Whether to check permissions.
+     * @param  boolean                  $check_permissions Whether to check permissions.
      * @return ?array                   Map of search hook details (null: hook is disabled).
      */
     public function info($check_permissions = true)
@@ -69,24 +69,24 @@ class Hook_search_download_categories
     /**
      * Run function for search results.
      *
-     * @param  string                   Search string
-     * @param  boolean                  Whether to only do a META (tags) search
-     * @param  ID_TEXT                  Order direction
-     * @param  integer                  Start position in total results
-     * @param  integer                  Maximum results to return in total
-     * @param  boolean                  Whether only to search titles (as opposed to both titles and content)
-     * @param  string                   Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
-     * @param  SHORT_TEXT               Username/Author to match for
-     * @param  ?MEMBER                  Member-ID to match for (null: unknown)
-     * @param  TIME                     Cutoff date
-     * @param  string                   The sort type (gets remapped to a field in this function)
+     * @param  string                   $content Search string
+     * @param  boolean                  $only_search_meta Whether to only do a META (tags) search
+     * @param  ID_TEXT                  $direction Order direction
+     * @param  integer                  $max Start position in total results
+     * @param  integer                  $start Maximum results to return in total
+     * @param  boolean                  $only_titles Whether only to search titles (as opposed to both titles and content)
+     * @param  string                   $content_where Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
+     * @param  SHORT_TEXT               $author Username/Author to match for
+     * @param  ?MEMBER                  $author_id Member-ID to match for (null: unknown)
+     * @param  TIME                     $cutoff Cutoff date
+     * @param  string                   $sort The sort type (gets remapped to a field in this function)
      * @set    title add_date
-     * @param  integer                  Limit to this number of results
-     * @param  string                   What kind of boolean search to do
+     * @param  integer                  $limit_to Limit to this number of results
+     * @param  string                   $boolean_operator What kind of boolean search to do
      * @set    or and
-     * @param  string                   Where constraints known by the main search code (SQL query fragment)
-     * @param  string                   Comma-separated list of categories to search under
-     * @param  boolean                  Whether it is a boolean search
+     * @param  string                   $where_clause Where constraints known by the main search code (SQL query fragment)
+     * @param  string                   $search_under Comma-separated list of categories to search under
+     * @param  boolean                  $boolean_search Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
     public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
@@ -133,7 +133,7 @@ class Hook_search_download_categories
     /**
      * Run function for rendering a search result.
      *
-     * @param  array                    The data row stored when we retrieved the result
+     * @param  array                    $row The data row stored when we retrieved the result
      * @return tempcode                 The output
      */
     public function render($row)

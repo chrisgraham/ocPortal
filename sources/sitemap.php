@@ -179,9 +179,9 @@ function sitemap_script()
 /**
  * Convert a Sitemap node into an XML representation.
  *
- * @param  array                        The Sitemap node.
- * @param  boolean                      Whether we need selectable nodes to support some selectable permissions.
- * @param  integer                      How deep in recursion we are.
+ * @param  array                        $node The Sitemap node.
+ * @param  boolean                      $permissions_needed Whether we need selectable nodes to support some selectable permissions.
+ * @param  integer                      $recurse_level How deep in recursion we are.
  */
 function _sitemap_node_to_xml($node, $permissions_needed, $recurse_level = 0)
 {
@@ -219,17 +219,17 @@ function _sitemap_node_to_xml($node, $permissions_needed, $recurse_level = 0)
 /**
  * Find details of a position in the Sitemap (shortcut into the object structure).
  *
- * @param  ID_TEXT                      The page-link we are finding (blank: root).
- * @param  ?mixed                       Callback function to send discovered page-links to (null: return).
- * @param  ?array                       List of node types we will return/recurse-through (null: no limit)
- * @param  ?integer                     Maximum number of children before we cut off all children (null: no limit).
- * @param  ?integer                     How deep to go from the Sitemap root (null: no limit).
- * @param  boolean                      Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
- * @param  ID_TEXT                      The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
- * @param  boolean                      Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
- * @param  boolean                      Whether to consider secondary categorisations for content that primarily exists elsewhere.
- * @param  boolean                      Whether to filter out non-validated content.
- * @param  integer                      A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+ * @param  ID_TEXT                      $page_link The page-link we are finding (blank: root).
+ * @param  ?mixed                       $callback Callback function to send discovered page-links to (null: return).
+ * @param  ?array                       $valid_node_types List of node types we will return/recurse-through (null: no limit)
+ * @param  ?integer                     $child_cutoff Maximum number of children before we cut off all children (null: no limit).
+ * @param  ?integer                     $max_recurse_depth How deep to go from the Sitemap root (null: no limit).
+ * @param  boolean                      $require_permission_support Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
+ * @param  ID_TEXT                      $zone The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+ * @param  boolean                      $use_page_groupings Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
+ * @param  boolean                      $consider_secondary_categories Whether to consider secondary categorisations for content that primarily exists elsewhere.
+ * @param  boolean                      $consider_validation Whether to filter out non-validated content.
+ * @param  integer                      $meta_gather A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
  * @return ?array                       Node structure (null: working via callback / error).
  */
 function retrieve_sitemap_node($page_link = '', $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0)
@@ -261,7 +261,7 @@ function retrieve_sitemap_node($page_link = '', $callback = null, $valid_node_ty
 /**
  * Find the Sitemap object that serves a particular page-link.
  *
- * @param  ID_TEXT                      The page-link we are finding a Sitemap object for (blank: root).
+ * @param  ID_TEXT                      $page_link The page-link we are finding a Sitemap object for (blank: root).
  * @return ?array                       A pair: the Sitemap object, and whether you need to make a virtual call (null: cannot find one).
  */
 function find_sitemap_object($page_link)
@@ -443,19 +443,19 @@ abstract class Hook_sitemap_base
      * Find all nodes at the top level position in the Sitemap for this hook.
      * May be a single node (i.e. a category root) or multiple nodes (if there's a flat structure).
      *
-     * @param  ID_TEXT                  The page-link we are finding.
-     * @param  ?string                  Callback function to send discovered page-links to (null: return).
-     * @param  ?array                   List of node types we will return/recurse-through (null: no limit)
-     * @param  ?integer                 Maximum number of children before we cut off all children (null: no limit).
-     * @param  ?integer                 How deep to go from the Sitemap root (null: no limit).
-     * @param  integer                  Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
-     * @param  boolean                  Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
-     * @param  ID_TEXT                  The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
-     * @param  boolean                  Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
-     * @param  boolean                  Whether to consider secondary categorisations for content that primarily exists elsewhere.
-     * @param  boolean                  Whether to filter out non-validated content.
-     * @param  integer                  A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-     * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
+     * @param  ID_TEXT                  $page_link The page-link we are finding.
+     * @param  ?string                  $callback Callback function to send discovered page-links to (null: return).
+     * @param  ?array                   $valid_node_types List of node types we will return/recurse-through (null: no limit)
+     * @param  ?integer                 $child_cutoff Maximum number of children before we cut off all children (null: no limit).
+     * @param  ?integer                 $max_recurse_depth How deep to go from the Sitemap root (null: no limit).
+     * @param  integer                  $recurse_level Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
+     * @param  boolean                  $require_permission_support Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
+     * @param  ID_TEXT                  $zone The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+     * @param  boolean                  $use_page_groupings Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
+     * @param  boolean                  $consider_secondary_categories Whether to consider secondary categorisations for content that primarily exists elsewhere.
+     * @param  boolean                  $consider_validation Whether to filter out non-validated content.
+     * @param  integer                  $meta_gather A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+     * @param  boolean                  $return_anyway Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   List of node structures (null: working via callback).
      */
     public function get_virtual_nodes($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $return_anyway = false)
@@ -567,7 +567,7 @@ abstract class Hook_sitemap_base
      * Get the permission page that nodes matching $page_link in this hook are tied to.
      * The permission page is where privileges may be overridden against.
      *
-     * @param  string                   The page-link
+     * @param  string                   $page_link The page-link
      * @return ?ID_TEXT                 The permission page (null: none)
      */
     public function get_privilege_page($page_link)
@@ -578,7 +578,7 @@ abstract class Hook_sitemap_base
     /**
      * Convert a page-link to a category ID and category permission module type.
      *
-     * @param  string                   The page-link
+     * @param  string                   $page_link The page-link
      * @return ?array                   The pair (null: permission modules not handled)
      */
     public function extract_child_page_link_permission_pair($page_link)
@@ -720,7 +720,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     /**
      * Find if a page-link will be covered by this node.
      *
-     * @param  ID_TEXT                  The page-link.
+     * @param  ID_TEXT                  $page_link The page-link.
      * @return integer                  A SITEMAP_NODE_* constant.
      */
     public function handles_page_link($page_link)
@@ -1152,7 +1152,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     /**
      * Convert a page-link to a category ID and category permission module type.
      *
-     * @param  ID_TEXT                  The page-link
+     * @param  ID_TEXT                  $page_link The page-link
      * @return ?array                   The pair (null: permission modules not handled)
      */
     public function extract_child_page_link_permission_pair($page_link)
@@ -1194,7 +1194,7 @@ function get_page_grouping_links()
 /**
  * Get Comcode pages from a zone, that sit in the root of that zone.
  *
- * @param  ID_TEXT                      The zone to get for.
+ * @param  ID_TEXT                      $zone The zone to get for.
  * @return array                        Root Comcode pages.
  */
 function get_root_comcode_pages($zone)
@@ -1223,17 +1223,17 @@ function get_root_comcode_pages($zone)
 /**
  * Get an HTML selection list for some part of the Sitemap.
  *
- * @param  ID_TEXT                      The page-link we are starting from.
- * @param  boolean                      Create from under this node, rather than at it.
- * @param  ?ID_TEXT                     Default selection (null: none).
- * @param  ?array                       List of node types we will return/recurse-through (null: no limit)
- * @param  ?array                       List of node types we will allow to be selectable (null: no limit)
- * @param  integer                      Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
- * @param  ?MEMBER                      The member we are checking permissions for (null: current member)
- * @param  boolean                      Whether to filter out non-validated entries if the $check_permissions_for user doesn't have the privilege to see them AND doesn't own them
- * @param  ?MEMBER                      The member we are only finding owned content of (null: no such limit); nodes leading up to owned content will be shown, but not as selectable
- * @param  boolean                      Whether to produce selection IDs as a comma-separated list of all selectable sub-nodes.
- * @param  ?mixed                       Filter function for limiting what rows will be included (null: none).
+ * @param  ID_TEXT                      $root_page_link The page-link we are starting from.
+ * @param  boolean                      $under_only Create from under this node, rather than at it.
+ * @param  ?ID_TEXT                     $default Default selection (null: none).
+ * @param  ?array                       $valid_node_types List of node types we will return/recurse-through (null: no limit)
+ * @param  ?array                       $valid_selectable_content_types List of node types we will allow to be selectable (null: no limit)
+ * @param  integer                      $check_permissions_against Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
+ * @param  ?MEMBER                      $check_permissions_for The member we are checking permissions for (null: current member)
+ * @param  boolean                      $consider_validation Whether to filter out non-validated entries if the $check_permissions_for user doesn't have the privilege to see them AND doesn't own them
+ * @param  ?MEMBER                      $only_owned The member we are only finding owned content of (null: no such limit); nodes leading up to owned content will be shown, but not as selectable
+ * @param  boolean                      $use_compound_list Whether to produce selection IDs as a comma-separated list of all selectable sub-nodes.
+ * @param  ?mixed                       $filter_func Filter function for limiting what rows will be included (null: none).
  * @return tempcode                     List.
  */
 function create_selection_list($root_page_link, $under_only = false, $default = null, $valid_node_types = null, $valid_selectable_content_types = null, $check_permissions_against = 0, $check_permissions_for = null, $consider_validation = false, $only_owned = null, $use_compound_list = false, $filter_func = null)
@@ -1261,16 +1261,16 @@ function create_selection_list($root_page_link, $under_only = false, $default = 
 /**
  * Recurse function for create_selection_list.
  *
- * @param  tempcode                     Output Tempcode.
- * @param  array                        Node being recursed.
- * @param  ?ID_TEXT                     Default selection (null: none).
- * @param  ?array                       List of node types we will allow to be selectable (null: no limit)
- * @param  integer                      Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
- * @param  ?MEMBER                      The member we are checking permissions for (null: current member)
- * @param  ?MEMBER                      The member we are only finding owned content of (null: no such limit); nodes leading up to owned content will be shown, but not as selectable
- * @param  boolean                      Whether to produce selection IDs as a comma-separated list of all selectable sub-nodes.
- * @param  ?mixed                       Filter function for limiting what rows will be included (null: none).
- * @param  integer                      Recursion depth.
+ * @param  tempcode                     &$out Output Tempcode.
+ * @param  array                        $node Node being recursed.
+ * @param  ?ID_TEXT                     $default Default selection (null: none).
+ * @param  ?array                       $valid_selectable_content_types List of node types we will allow to be selectable (null: no limit)
+ * @param  integer                      $check_permissions_against Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
+ * @param  ?MEMBER                      $check_permissions_for The member we are checking permissions for (null: current member)
+ * @param  ?MEMBER                      $only_owned The member we are only finding owned content of (null: no such limit); nodes leading up to owned content will be shown, but not as selectable
+ * @param  boolean                      $use_compound_list Whether to produce selection IDs as a comma-separated list of all selectable sub-nodes.
+ * @param  ?mixed                       $filter_func Filter function for limiting what rows will be included (null: none).
+ * @param  integer                      $depth Recursion depth.
  * @return string                       Compound list.
  */
 function _create_selection_list(&$out, $node, $default, $valid_selectable_content_types, $check_permissions_against, $check_permissions_for, $only_owned, $use_compound_list, $filter_func, $depth = 0)

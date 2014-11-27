@@ -37,20 +37,20 @@ class Hook_pointstore_permission
     /**
      * Get fields for adding/editing one of these.
      *
-     * @param  string                   What to place onto the end of the field name
-     * @param  SHORT_TEXT               Title
-     * @param  LONG_TEXT                Description
-     * @param  BINARY                   Whether it is enabled
-     * @param  ?integer                 The cost in points (null: not set)
-     * @param  ?integer                 Number of hours for it to last for (null: unlimited)
-     * @param  ID_TEXT                  Permission scope 'type'
-     * @param  ID_TEXT                  Permission scope 'privilege'
-     * @param  ID_TEXT                  Permission scope 'zone'
-     * @param  ID_TEXT                  Permission scope 'page'
-     * @param  ID_TEXT                  Permission scope 'module'
-     * @param  ID_TEXT                  Permission scope 'category'
-     * @param  SHORT_TEXT               Confirmation mail subject
-     * @param  LONG_TEXT                Confirmation mail body
+     * @param  string                   $name_suffix What to place onto the end of the field name
+     * @param  SHORT_TEXT               $title Title
+     * @param  LONG_TEXT                $description Description
+     * @param  BINARY                   $enabled Whether it is enabled
+     * @param  ?integer                 $cost The cost in points (null: not set)
+     * @param  ?integer                 $hours Number of hours for it to last for (null: unlimited)
+     * @param  ID_TEXT                  $type Permission scope 'type'
+     * @param  ID_TEXT                  $privilege Permission scope 'privilege'
+     * @param  ID_TEXT                  $zone Permission scope 'zone'
+     * @param  ID_TEXT                  $page Permission scope 'page'
+     * @param  ID_TEXT                  $module Permission scope 'module'
+     * @param  ID_TEXT                  $category Permission scope 'category'
+     * @param  SHORT_TEXT               $mail_subject Confirmation mail subject
+     * @param  LONG_TEXT                $mail_body Confirmation mail body
      * @return tempcode                 The fields
      */
     public function get_fields($name_suffix = '', $title = '', $description = '', $enabled = 1, $cost = null, $hours = null, $type = 'member_privileges', $privilege = '', $zone = '', $page = '', $module = '', $category = '', $mail_subject = '', $mail_body = '')
@@ -367,7 +367,7 @@ class Hook_pointstore_permission
     /**
      * Get a database map for our permission row.
      *
-     * @param  array                    Map row of item
+     * @param  array                    $row Map row of item
      * @return array                    Permission map row
      */
     public function get_map($row)
@@ -399,7 +399,7 @@ class Hook_pointstore_permission
     /**
      * Standard actualisation stage of pointstore item purchase.
      *
-     * @param  array                    Map row
+     * @param  array                    $row Map row
      * @return boolean                  Whether the current member has bought it already
      */
     public function bought($row)

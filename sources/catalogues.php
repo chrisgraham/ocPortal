@@ -44,8 +44,8 @@ function init__catalogues()
 /**
  * Get a catalogue row.
  *
- * @param  ID_TEXT                      The catalogue name
- * @param  boolean                      Whether to return NULL if we can't find it (as opposed to a fatal error)
+ * @param  ID_TEXT                      $catalogue_name The catalogue name
+ * @param  boolean                      $fail_ok Whether to return NULL if we can't find it (as opposed to a fatal error)
  * @return ?array                       Catalogue row (null: could not find it, and $fail_ok was set to true)
  */
 function load_catalogue_row($catalogue_name, $fail_ok = false)
@@ -68,12 +68,12 @@ function load_catalogue_row($catalogue_name, $fail_ok = false)
 /**
  * Render a catalogue box.
  *
- * @param  array                        Catalogue row
- * @param  ID_TEXT                      Zone to link through to
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (null: none)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row Catalogue row
+ * @param  ID_TEXT                      $zone Zone to link through to
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK                   $root Virtual root to use (null: none)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The catalogue box
  */
 function render_catalogue_entry_box($row, $zone = '_SEARCH', $give_context = true, $include_breadcrumbs = true, $root = null, $guid = '')
@@ -105,13 +105,13 @@ function render_catalogue_entry_box($row, $zone = '_SEARCH', $give_context = tru
 /**
  * Get tempcode for a catalogue category 'feature box' for the given row
  *
- * @param  array                        The database field row of it
- * @param  ID_TEXT                      The zone to use
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (null: none)
- * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The database field row of it
+ * @param  ID_TEXT                      $zone The zone to use
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK                   $root Virtual root to use (null: none)
+ * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     A box for it, linking to the full page
  */
 function render_catalogue_category_box($row, $zone = '_SEARCH', $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
@@ -184,10 +184,10 @@ function render_catalogue_category_box($row, $zone = '_SEARCH', $give_context = 
 /**
  * Render a catalogue box.
  *
- * @param  array                        Catalogue row
- * @param  ID_TEXT                      Zone to link through to
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row Catalogue row
+ * @param  ID_TEXT                      $zone Zone to link through to
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The catalogue box
  */
 function render_catalogue_box($row, $zone = '_SEARCH', $give_context = true, $guid = '')
@@ -227,7 +227,7 @@ function render_catalogue_box($row, $zone = '_SEARCH', $give_context = true, $gu
 /**
  * Grant all usergroups access to the specified catalogue category.
  *
- * @param  AUTO_LINK                    The ID of the category that access is being given to
+ * @param  AUTO_LINK                    $category_id The ID of the category that access is being given to
  */
 function grant_catalogue_full_access($category_id)
 {
@@ -240,7 +240,7 @@ function grant_catalogue_full_access($category_id)
 /**
  * Count the entries and subcategories underneath the specified category, recursively.
  *
- * @param  AUTO_LINK                    The ID of the category for which count details are collected
+ * @param  AUTO_LINK                    $category_id The ID of the category for which count details are collected
  * @return array                        The number of entries is returned in $output['num_entries'], and the number of subcategories is returned in $output['num_children'], the (possibly recursive) number of subcategories in $output['num_children_children'], and the (possibly recursive) number of entries is returned in $output['num_entries_children'].
  */
 function count_catalogue_category_children($category_id)
@@ -269,23 +269,23 @@ function count_catalogue_category_children($category_id)
 /**
  * Get an ordered array of all the entries in the specified catalogue.
  *
- * @param  ?AUTO_LINK                   The ID of the category for which the entries are being collected (null: entries are [and must be] passed instead)
- * @param  ID_TEXT                      The name of the catalogue
- * @param  ?array                       A database row of the catalogue we are working with (null: read it in)
- * @param  ID_TEXT                      The view type we're doing
+ * @param  ?AUTO_LINK                   $category_id The ID of the category for which the entries are being collected (null: entries are [and must be] passed instead)
+ * @param  ID_TEXT                      $catalogue_name The name of the catalogue
+ * @param  ?array                       $catalogue A database row of the catalogue we are working with (null: read it in)
+ * @param  ID_TEXT                      $view_type The view type we're doing
  * @set    PAGE SEARCH CATEGORY
- * @param  ID_TEXT                      The template set we are rendering this category using
- * @param  ?integer                     The maximum number of entries to show on a single page of this this category (null: all)
- * @param  ?integer                     The entry number to start at (null: all)
- * @param  ?mixed                       The entries to show, may be from other categories. Can either be SQL fragment, or array (null: use $start and $max)
- * @param  ?AUTO_LINK                   The virtual root for display of this category (null: default)
- * @param  ?SHORT_INTEGER               The display type to use (null: lookup from $catalogue)
- * @param  boolean                      Whether to perform sorting
- * @param  ?array                       A list of entry rows (null: select them normally)
- * @param  string                       ocSelect to apply (blank: none).
- * @param  ?ID_TEXT                     Orderer (null: read from environment)
- * @param  ID_TEXT                      Environment param used for ordering
- * @param  ?MEMBER                      Viewing member ID (null: current user)
+ * @param  ID_TEXT                      $tpl_set The template set we are rendering this category using
+ * @param  ?integer                     $max The maximum number of entries to show on a single page of this this category (null: all)
+ * @param  ?integer                     $start The entry number to start at (null: all)
+ * @param  ?mixed                       $filter The entries to show, may be from other categories. Can either be SQL fragment, or array (null: use $start and $max)
+ * @param  ?AUTO_LINK                   $root The virtual root for display of this category (null: default)
+ * @param  ?SHORT_INTEGER               $display_type The display type to use (null: lookup from $catalogue)
+ * @param  boolean                      $do_sorting Whether to perform sorting
+ * @param  ?array                       $entries A list of entry rows (null: select them normally)
+ * @param  string                       $_ocselect ocSelect to apply (blank: none).
+ * @param  ?ID_TEXT                     $_order_by Orderer (null: read from environment)
+ * @param  ID_TEXT                      $ordering_param Environment param used for ordering
+ * @param  ?MEMBER                      $viewing_member_id Viewing member ID (null: current user)
  * @return array                        An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
 function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $catalogue, $view_type, $tpl_set, $max, $start, $filter, $root, $display_type = null, $do_sorting = true, $entries = null, $_ocselect = '', $_order_by = null, $ordering_param = 'sort', $viewing_member_id = null)
@@ -583,15 +583,15 @@ function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $ca
 /**
  * Make sure we are doing necessary join to be able to access the given field
  *
- * @param  object                       Database connection
- * @param  array                        Content type info
- * @param  ?ID_TEXT                     Name of the catalogue (null: unknown; reduces performance)
- * @param  array                        List of joins (passed as reference)
- * @param  array                        List of selects (passed as reference)
- * @param  ID_TEXT                      The field to get
- * @param  string                       The field value for this
- * @param  array                        Database field data
- * @param  string                       What MySQL will join the table with
+ * @param  object                       $db Database connection
+ * @param  array                        $info Content type info
+ * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
+ * @param  array                         &$extra_join List of joins (passed as reference)
+ * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  ID_TEXT                      $filter_key The field to get
+ * @param  string                       $filter_val The field value for this
+ * @param  array                        $db_fields Database field data
+ * @param  string                       $table_join_code What MySQL will join the table with
  * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _catalogues_ocselect($db, $info, $catalogue_name, &$extra_join, &$extra_select, $filter_key, $filter_val, $db_fields, $table_join_code)
@@ -615,17 +615,17 @@ function _catalogues_ocselect($db, $info, $catalogue_name, &$extra_join, &$extra
 /**
  * Fetch entries from database, with sorting if possible.
  *
- * @param  ID_TEXT                      Name of the catalogue
- * @param  ?AUTO_LINK                   The ID of the category for which the entries are being collected (null: entries are [and must be] passed instead)
- * @param  ?integer                     The maximum number of entries to show on a single page of this this category (ignored if $filter is not NULL) (null: all)
- * @param  ?integer                     The entry number to start at (ignored if $filter is not NULL) (null: all)
- * @param  ?mixed                       The entries to show, may be from other categories. Can either be SQL fragment, or array (null: use $start and $max)
- * @param  boolean                      Whether to perform sorting
- * @param  ?array                       List of filters to apply (null: none). Each filter is a triple: ORd comparison key(s) [separated by pipe symbols], comparison type (one of '<', '>', '<=', '>=', '=', '~=', or '~'), comparison value
- * @param  ID_TEXT                      Orderer
- * @param  ID_TEXT                      Order direction
- * @param  string                       Additional WHERE SQL to add on to query
- * @param  ?MEMBER                      Viewing member ID (null: current user)
+ * @param  ID_TEXT                      $catalogue_name Name of the catalogue
+ * @param  ?AUTO_LINK                   $category_id The ID of the category for which the entries are being collected (null: entries are [and must be] passed instead)
+ * @param  ?integer                     $max The maximum number of entries to show on a single page of this this category (ignored if $filter is not NULL) (null: all)
+ * @param  ?integer                     $start The entry number to start at (ignored if $filter is not NULL) (null: all)
+ * @param  ?mixed                       $filter The entries to show, may be from other categories. Can either be SQL fragment, or array (null: use $start and $max)
+ * @param  boolean                      $do_sorting Whether to perform sorting
+ * @param  ?array                       $ocselect List of filters to apply (null: none). Each filter is a triple: ORd comparison key(s) [separated by pipe symbols], comparison type (one of '<', '>', '<=', '>=', '=', '~=', or '~'), comparison value
+ * @param  ID_TEXT                      $order_by Orderer
+ * @param  ID_TEXT                      $direction Order direction
+ * @param  string                       $extra_where Additional WHERE SQL to add on to query
+ * @param  ?MEMBER                      $viewing_member_id Viewing member ID (null: current user)
  * @return array                        A tuple: whether sorting was done, number of entries returned, list of entries
  */
 function get_catalogue_entries($catalogue_name, $category_id, $max, $start, $filter, $do_sorting, $ocselect, $order_by, $direction, $extra_where = '', $viewing_member_id = null)
@@ -754,10 +754,10 @@ function get_catalogue_entries($catalogue_name, $category_id, $max, $start, $fil
 /**
  * Manually sort some catalogue entries.
  *
- * @param  array                        Fields array for catalogue
- * @param  array                        Entries to sort (by reference)
- * @param  ID_TEXT                      What to sort by
- * @param  ID_TEXT                      Sort direction
+ * @param  array                        $fields Fields array for catalogue
+ * @param  array                         &$entries Entries to sort (by reference)
+ * @param  ID_TEXT                      $order_by What to sort by
+ * @param  ID_TEXT                      $direction Sort direction
  * @return array                        Entries
  */
 function catalogue_entries_manual_sort($fields, &$entries, $order_by, $direction)
@@ -846,17 +846,17 @@ function catalogue_entries_manual_sort($fields, &$entries, $order_by, $direction
 /**
  * Get a map of the fields for the given entry.
  *
- * @param  array                        A database row of the entry we are working with
- * @param  ?array                       A database row of the catalogue we are working with (null: read it in here)
- * @param  ID_TEXT                      The view type we're doing
+ * @param  array                        $entry A database row of the entry we are working with
+ * @param  ?array                       $catalogue A database row of the catalogue we are working with (null: read it in here)
+ * @param  ID_TEXT                      $view_type The view type we're doing
  * @set    PAGE SEARCH CATEGORY
- * @param  ID_TEXT                      The template set we are rendering this category using
- * @param  ?AUTO_LINK                   The virtual root for display of this category (null: none)
- * @param  ?array                       The database rows for the fields for this catalogue (null: find them)
- * @param  ?array                       A list of fields (sequence numbers) that we are limiting ourselves to (null: get ALL fields)
- * @param  boolean                      Whether to grab the feedback details
- * @param  boolean                      Whether to grab the breadcrumbs details
- * @param  ?integer                     Field index to order by (null: none)
+ * @param  ID_TEXT                      $tpl_set The template set we are rendering this category using
+ * @param  ?AUTO_LINK                   $root The virtual root for display of this category (null: none)
+ * @param  ?array                       $fields The database rows for the fields for this catalogue (null: find them)
+ * @param  ?array                       $only_fields A list of fields (sequence numbers) that we are limiting ourselves to (null: get ALL fields)
+ * @param  boolean                      $feedback_details Whether to grab the feedback details
+ * @param  boolean                      $breadcrumbs_details Whether to grab the breadcrumbs details
+ * @param  ?integer                     $order_by Field index to order by (null: none)
  * @return array                        A map of information relating to the entry. The map contains 'FIELDS' (tempcode for all accumulated fields), 'FIELD_x' (for each field x applying to the entry), STAFF_DETAILS, COMMENT_DETAILS, RATING_DETAILS, VIEW_URL, BREADCRUMBS
  */
 function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root = null, $fields = null, $only_fields = null, $feedback_details = false, $breadcrumbs_details = false, $order_by = null)
@@ -1062,12 +1062,12 @@ function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root
 /**
  * Get the values for the specified fields, for the stated catalogue entry.
  *
- * @param  ?ID_TEXT                     The catalogue name we are getting an entry in (null: lookup)
- * @param  mixed                        The ID of the entry we are getting OR the row
- * @param  ?array                       A list of fields that we are limiting ourselves to (null: get ALL fields)
- * @param  ?array                       The database rows for the fields for this catalogue (null: find them)
- * @param  boolean                      Whether to order the fields in their natural database order
- * @param  ID_TEXT                      The view type we're doing
+ * @param  ?ID_TEXT                     $catalogue_name The catalogue name we are getting an entry in (null: lookup)
+ * @param  mixed                        $entry_id The ID of the entry we are getting OR the row
+ * @param  ?array                       $only_fields A list of fields that we are limiting ourselves to (null: get ALL fields)
+ * @param  ?array                       $fields The database rows for the fields for this catalogue (null: find them)
+ * @param  boolean                      $natural_order Whether to order the fields in their natural database order
+ * @param  ID_TEXT                      $view_type The view type we're doing
  * @set    PAGE SEARCH CATEGORY
  * @return array                        A list of maps (each field for the entry gets a map), where each map contains 'effective_value' (the value for the field). Some maps get additional fields (effective_value_pure), depending on the field type
  */
@@ -1134,10 +1134,10 @@ function get_catalogue_entry_field_values($catalogue_name, $entry_id, $only_fiel
 /**
  * Get the standardised details for a catalogue entry field.
  *
- * @param  array                        The field row
- * @param  mixed                        The ID of the entry we are getting OR the row
- * @param  ?array                       A list of field IDs that we are limiting ourselves to (null: get ALL fields)
- * @param  array                        Save the result into here
+ * @param  array                        $field The field row
+ * @param  mixed                        $entry_id The ID of the entry we are getting OR the row
+ * @param  ?array                       $only_field_ids A list of field IDs that we are limiting ourselves to (null: get ALL fields)
+ * @param  array                         &$target Save the result into here
  */
 function _resolve_catalogue_entry_field($field, $entry_id, $only_field_ids, &$target)
 {
@@ -1204,11 +1204,11 @@ function _resolve_catalogue_entry_field($field, $entry_id, $only_field_ids, &$ta
 /**
  * Get the value for the specified field, for the stated catalogue entry.
  *
- * @param  AUTO_LINK                    The ID of the field we are getting
- * @param  mixed                        The ID of the entry we are getting for OR the row
- * @param  ID_TEXT                      The type of field
+ * @param  AUTO_LINK                    $field_id The ID of the field we are getting
+ * @param  mixed                        $entry_id The ID of the entry we are getting for OR the row
+ * @param  ID_TEXT                      $type The type of field
  * @set    short long
- * @param  ?array                       A list of field IDs that we are limiting ourselves to (null: get ALL fields)
+ * @param  ?array                       $only_field_ids A list of field IDs that we are limiting ourselves to (null: get ALL fields)
  * @return ?array                       The row (null: not found)
  */
 function _get_catalogue_entry_field($field_id, $entry_id, $type = 'short', $only_field_ids = null)
@@ -1273,10 +1273,10 @@ function _get_catalogue_entry_field($field_id, $entry_id, $type = 'short', $only
 /**
  * Get a nice, formatted, XHTML list of all the catalogues.
  *
- * @param  ?ID_TEXT                     The name of the currently selected catalogue (null: none selected)
- * @param  boolean                      If there are too many to list prefer to get ones with entries rather than just the newest
- * @param  boolean                      Whether to only show catalogues that can be submitted to
- * @param  ?TIME                        Time from which content must be updated (null: no limit).
+ * @param  ?ID_TEXT                     $it The name of the currently selected catalogue (null: none selected)
+ * @param  boolean                      $prefer_ones_with_entries If there are too many to list prefer to get ones with entries rather than just the newest
+ * @param  boolean                      $only_submittable Whether to only show catalogues that can be submitted to
+ * @param  ?TIME                        $updated_since Time from which content must be updated (null: no limit).
  * @return tempcode                     Catalogue selection list
  */
 function create_selection_list_catalogues($it = null, $prefer_ones_with_entries = false, $only_submittable = false, $updated_since = null)
@@ -1328,10 +1328,10 @@ function create_selection_list_catalogues($it = null, $prefer_ones_with_entries 
 /**
  * Get a nice, formatted XHTML list extending from the root, and showing all subcategories, and their subcategories (ad infinitum).
  *
- * @param  ID_TEXT                      The catalogue name
- * @param  ?AUTO_LINK                   The currently selected entry (null: none)
- * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  boolean                      Whether to make the list elements store comma-separated child lists instead of IDs
+ * @param  ID_TEXT                      $catalogue_name The catalogue name
+ * @param  ?AUTO_LINK                   $it The currently selected entry (null: none)
+ * @param  boolean                      $addable_filter Whether to only show for what may be added to by the current member
+ * @param  boolean                      $use_compound_list Whether to make the list elements store comma-separated child lists instead of IDs
  * @return tempcode                     The list of categories
  */
 function create_selection_list_catalogue_category_tree($catalogue_name, $it = null, $addable_filter = false, $use_compound_list = false)
@@ -1372,14 +1372,14 @@ function create_selection_list_catalogue_category_tree($catalogue_name, $it = nu
 /**
  * Get a list of maps containing all the subcategories, and path information, of the specified category - and those beneath it, recursively.
  *
- * @param  ID_TEXT                      The catalogue name
- * @param  ?AUTO_LINK                   The category being at the root of our recursion (null: true root category)
- * @param  ?tempcode                    The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
- * @param  ?string                      The category details of the $category_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs details
- * @param  ?integer                     The number of recursive levels to search (null: all)
- * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  boolean                      Whether to make the list elements store comma-separated child lists instead of IDs
- * @param  boolean                      Whether to collect entry counts with our tree information
+ * @param  ID_TEXT                      $catalogue_name The catalogue name
+ * @param  ?AUTO_LINK                   $category_id The category being at the root of our recursion (null: true root category)
+ * @param  ?tempcode                    $breadcrumbs The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
+ * @param  ?string                      $category_details The category details of the $category_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs details
+ * @param  ?integer                     $levels The number of recursive levels to search (null: all)
+ * @param  boolean                      $addable_filter Whether to only show for what may be added to by the current member
+ * @param  boolean                      $use_compound_list Whether to make the list elements store comma-separated child lists instead of IDs
+ * @param  boolean                      $do_stats Whether to collect entry counts with our tree information
  * @return array                        A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title), and 'entries_count' (the number of entries in the category).
  */
 function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs = null, $category_details = null, $levels = null, $addable_filter = false, $use_compound_list = false, $do_stats = false)
@@ -1469,10 +1469,10 @@ function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs
 /**
  * Get a nice, formatted XHTML list of entries, in catalogue category tree structure
  *
- * @param  ID_TEXT                      The catalogue name
- * @param  ?AUTO_LINK                   The currently selected entry (null: none selected)
- * @param  ?AUTO_LINK                   Only show entries submitted by this member (null: no filter)
- * @param  boolean                      Whether to only show for what may be edited by the current member
+ * @param  ID_TEXT                      $catalogue_name The catalogue name
+ * @param  ?AUTO_LINK                   $it The currently selected entry (null: none selected)
+ * @param  ?AUTO_LINK                   $submitter Only show entries submitted by this member (null: no filter)
+ * @param  boolean                      $editable_filter Whether to only show for what may be edited by the current member
  * @return tempcode                     The list of entries
  */
 function create_selection_list_catalogue_entries_tree($catalogue_name, $it = null, $submitter = null, $editable_filter = false)
@@ -1498,13 +1498,13 @@ function create_selection_list_catalogue_entries_tree($catalogue_name, $it = nul
 /**
  * Get a list of maps containing all the catalogue entries, and path information, under the specified category - and those beneath it, recursively.
  *
- * @param  ID_TEXT                      The catalogue name
- * @param  ?AUTO_LINK                   Only show entries submitted by this member (null: no filter)
- * @param  ?AUTO_LINK                   The category being at the root of our recursion (null: true root)
- * @param  ?string                      The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
- * @param  ?ID_TEXT                     The name of the $category_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
- * @param  ?integer                     The number of recursive levels to search (null: all)
- * @param  boolean                      Whether to only show for what may be edited by the current member
+ * @param  ID_TEXT                      $catalogue_name The catalogue name
+ * @param  ?AUTO_LINK                   $submitter Only show entries submitted by this member (null: no filter)
+ * @param  ?AUTO_LINK                   $category_id The category being at the root of our recursion (null: true root)
+ * @param  ?string                      $breadcrumbs The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
+ * @param  ?ID_TEXT                     $title The name of the $category_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
+ * @param  ?integer                     $levels The number of recursive levels to search (null: all)
+ * @param  boolean                      $editable_filter Whether to only show for what may be edited by the current member
  * @return array                        A list of maps for all categories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title), and more.
  */
 function get_catalogue_entries_tree($catalogue_name, $submitter = null, $category_id = null, $breadcrumbs = null, $title = null, $levels = null, $editable_filter = false)
@@ -1621,10 +1621,10 @@ function get_catalogue_entries_tree($catalogue_name, $submitter = null, $categor
 /**
  * Get a formatted XHTML string of the route back to the specified root, from the specified category.
  *
- * @param  AUTO_LINK                    The category we are finding for
- * @param  ?AUTO_LINK                   The root of the tree (null: the true root)
- * @param  boolean                      Whether to include category links at this level (the recursed levels will always contain links - the top level is optional, hence this parameter)
- * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  AUTO_LINK                    $category_id The category we are finding for
+ * @param  ?AUTO_LINK                   $root The root of the tree (null: the true root)
+ * @param  boolean                      $no_link_for_me_sir Whether to include category links at this level (the recursed levels will always contain links - the top level is optional, hence this parameter)
+ * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode                     The breadcrumbs
  */
 function catalogue_category_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = true, $attach_to_url_filter = false)
@@ -1680,8 +1680,8 @@ function catalogue_category_breadcrumbs($category_id, $root = null, $no_link_for
 /**
  * Check the current catalogue is an ecommerce catalogue
  *
- * @param  SHORT_TEXT                   Catalogue name
- * @param  ?array                       Catalogue row (null: look up)
+ * @param  SHORT_TEXT                   $catalogue_name Catalogue name
+ * @param  ?array                       $catalogue Catalogue row (null: look up)
  * @return boolean                      Status of ecommerce catalogue check
  */
 function is_ecommerce_catalogue($catalogue_name, $catalogue = null)
@@ -1706,7 +1706,7 @@ function is_ecommerce_catalogue($catalogue_name, $catalogue = null)
 /**
  * Check selected entry is an ecommerce catalogue entry
  *
- * @param  AUTO_LINK                    Entry ID
+ * @param  AUTO_LINK                    $entry_id Entry ID
  * @return boolean                      Status of entry type check
  */
 function is_ecommerce_catalogue_entry($entry_id)
@@ -1719,9 +1719,9 @@ function is_ecommerce_catalogue_entry($entry_id)
 /**
  * Display a catalogue entry
  *
- * @param  AUTO_LINK                    Entry ID
- * @param  boolean                      Whether to skip rendering a title
- * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  AUTO_LINK                    $id Entry ID
+ * @param  boolean                      $no_title Whether to skip rendering a title
+ * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode                     Tempcode interface to display an entry
  */
 function render_catalogue_entry_screen($id, $no_title = false, $attach_to_url_filter = true)

@@ -21,8 +21,8 @@
 /**
  * Find the MD5 hash of the space-stripped copy of function within the given code.
  *
- * @param  string                       The code.
- * @param  string                       Name of the function.
+ * @param  string                       $code The code.
+ * @param  string                       $function Name of the function.
  * @return MD5                          The MD5 hash (blank: no such function).
  */
 function get_function_hash($code, $function)
@@ -38,10 +38,10 @@ function get_function_hash($code, $function)
 /**
  * Insert some code into a function in the given code snippet, by line number (before line number).
  *
- * @param  string                       The code.
- * @param  string                       Name of the function.
- * @param  integer                      Line number relative to start of function.
- * @param  string                       Code to insert.
+ * @param  string                       &$code The code.
+ * @param  string                       $function Name of the function.
+ * @param  integer                      $linenum Line number relative to start of function.
+ * @param  string                       $newcode Code to insert.
  * @return boolean                      Success status.
  */
 function insert_code_before__by_linenum(&$code, $function, $linenum, $newcode)
@@ -67,10 +67,10 @@ function insert_code_before__by_linenum(&$code, $function, $linenum, $newcode)
 /**
  * Insert some code into a function in the given code snippet, by line number (after line number).
  *
- * @param  string                       The code.
- * @param  string                       Name of the function.
- * @param  integer                      Line number relative to start of function.
- * @param  string                       Code to insert.
+ * @param  string                       &$code The code.
+ * @param  string                       $function Name of the function.
+ * @param  integer                      $linenum Line number relative to start of function.
+ * @param  string                       $newcode Code to insert.
  * @return boolean                      Success status.
  */
 function insert_code_after__by_linenum(&$code, $function, $linenum, $newcode)
@@ -81,11 +81,11 @@ function insert_code_after__by_linenum(&$code, $function, $linenum, $newcode)
 /**
  * Insert some code into a function in the given code snippet, by command (before command).
  *
- * @param  string                       The code.
- * @param  string                       Name of the function.
- * @param  string                       The command we're searching to insert by.
- * @param  string                       Code to insert.
- * @param  integer                      We are inserting at this instance of the line (i.e. takes into account a literal line of code may exist in other places in a function).
+ * @param  string                       &$code The code.
+ * @param  string                       $function Name of the function.
+ * @param  string                       $command The command we're searching to insert by.
+ * @param  string                       $newcode Code to insert.
+ * @param  integer                      $instance_of_command We are inserting at this instance of the line (i.e. takes into account a literal line of code may exist in other places in a function).
  * @return boolean                      Success status.
  */
 function insert_code_before__by_command(&$code, $function, $command, $newcode, $instance_of_command = 1)
@@ -111,11 +111,11 @@ function insert_code_before__by_command(&$code, $function, $command, $newcode, $
 /**
  * Insert some code into a function in the given code snippet, by command (after command).
  *
- * @param  string                       The code.
- * @param  string                       Name of the function.
- * @param  string                       The command we're searching to insert by.
- * @param  string                       Code to insert.
- * @param  integer                      We are inserting at this instance of the line (i.e. takes into account a literal line of code may exist in other places in a function).
+ * @param  string                       &$code The code.
+ * @param  string                       $function Name of the function.
+ * @param  string                       $command The command we're searching to insert by.
+ * @param  string                       $newcode Code to insert.
+ * @param  integer                      $instance_of_command We are inserting at this instance of the line (i.e. takes into account a literal line of code may exist in other places in a function).
  * @return boolean                      Success status.
  */
 function insert_code_after__by_command(&$code, $function, $command, $newcode, $instance_of_command = 1)
@@ -141,10 +141,10 @@ function insert_code_after__by_command(&$code, $function, $command, $newcode, $i
 /**
  * Remove some code from a function in the given code snippet.
  *
- * @param  string                       The code.
- * @param  string                       Name of the function.
- * @param  string                       The command we're searching to insert by.
- * @param  integer                      We remove the nth instance of this command.
+ * @param  string                       &$code The code.
+ * @param  string                       $function Name of the function.
+ * @param  string                       $command The command we're searching to insert by.
+ * @param  integer                      $instance_of_command We remove the nth instance of this command.
  * @return boolean                      Success status.
  */
 function remove_code(&$code, $function, $command, $instance_of_command = 1)

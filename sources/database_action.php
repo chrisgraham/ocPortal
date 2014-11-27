@@ -244,7 +244,7 @@ function get_true_permissions()
 /**
  * Check if a privilege exists.
  *
- * @param  ID_TEXT                      The name of the option
+ * @param  ID_TEXT                      $name The name of the option
  * @return boolean                      Whether it exists
  */
 function permission_exists($name)
@@ -256,10 +256,10 @@ function permission_exists($name)
 /**
  * Add a privilege, and apply it to every usergroup.
  *
- * @param  ID_TEXT                      The section the privilege is filled under
- * @param  ID_TEXT                      The codename for the privilege
- * @param  boolean                      Whether this permission is granted to all usergroups by default
- * @param  boolean                      Whether this permission is not granted to supermoderators by default (something very sensitive)
+ * @param  ID_TEXT                      $section The section the privilege is filled under
+ * @param  ID_TEXT                      $name The codename for the privilege
+ * @param  boolean                      $default Whether this permission is granted to all usergroups by default
+ * @param  boolean                      $not_even_mods Whether this permission is not granted to supermoderators by default (something very sensitive)
  */
 function add_privilege($section, $name, $default = false, $not_even_mods = false)
 {
@@ -279,12 +279,12 @@ function add_privilege($section, $name, $default = false, $not_even_mods = false
 /**
  * Sets the privilege of a usergroup
  *
- * @param  GROUP                        The usergroup having the permission set
- * @param  ID_TEXT                      The codename of the permission
- * @param  boolean                      Whether the usergroup has the permission
- * @param  ?ID_TEXT                     The ID code for the page being checked (null: current page)
- * @param  ?ID_TEXT                     The category-type for the permission (null: none required)
- * @param  ?ID_TEXT                     The category-name/value for the permission (null: none required)
+ * @param  GROUP                        $group_id The usergroup having the permission set
+ * @param  ID_TEXT                      $permission The codename of the permission
+ * @param  boolean                      $value Whether the usergroup has the permission
+ * @param  ?ID_TEXT                     $page The ID code for the page being checked (null: current page)
+ * @param  ?ID_TEXT                     $category_type The category-type for the permission (null: none required)
+ * @param  ?ID_TEXT                     $category_name The category-name/value for the permission (null: none required)
  */
 function set_privilege($group_id, $permission, $value, $page = null, $category_type = null, $category_name = null)
 {
@@ -305,8 +305,8 @@ function set_privilege($group_id, $permission, $value, $page = null, $category_t
 /**
  * Rename a privilege.
  *
- * @param  ID_TEXT                      The old name
- * @param  ID_TEXT                      The new name
+ * @param  ID_TEXT                      $old The old name
+ * @param  ID_TEXT                      $new The new name
  */
 function rename_privilege($old, $new)
 {
@@ -318,7 +318,7 @@ function rename_privilege($old, $new)
 /**
  * Delete a privilege, and every usergroup is then relaxed from the restrictions of this permission.
  *
- * @param  ID_TEXT                      The codename of the permission
+ * @param  ID_TEXT                      $name The codename of the permission
  */
 function delete_privilege($name)
 {
@@ -329,8 +329,8 @@ function delete_privilege($name)
 /**
  * Delete attachments solely used by the specified hook.
  *
- * @param  ID_TEXT                      The hook
- * @param  ?object                      The database connection to use (null: standard site connection)
+ * @param  ID_TEXT                      $type The hook
+ * @param  ?object                      $connection The database connection to use (null: standard site connection)
  */
 function delete_attachments($type, $connection = null)
 {
@@ -358,9 +358,9 @@ function delete_attachments($type, $connection = null)
 /**
  * Deletes all language codes linked to by the specified table and attribute identifiers, if they exist.
  *
- * @param  ID_TEXT                      The table
- * @param  array                        The attributes
- * @param  ?object                      The database connection to use (null: standard site connection)
+ * @param  ID_TEXT                      $table The table
+ * @param  array                        $attrs The attributes
+ * @param  ?object                      $connection The database connection to use (null: standard site connection)
  */
 function mass_delete_lang($table, $attrs, $connection)
 {

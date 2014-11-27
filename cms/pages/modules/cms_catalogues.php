@@ -50,11 +50,11 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-     * @param  boolean                  Whether to simplify this down for only a specific catalogue (only applied to cms_catalogues module).
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $simplified Whether to simplify this down for only a specific catalogue (only applied to cms_catalogues module).
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false, $simplified = false)
@@ -113,8 +113,8 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -175,7 +175,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -279,7 +279,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -401,14 +401,14 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Get tempcode for a catalogue entry adding/editing form.
      *
-     * @param  ?ID_TEXT                 The catalogue for the entry (null: detect)
-     * @param  ?AUTO_LINK               The category for the entry (null: first)
-     * @param  BINARY                   Whether the entry is validated
-     * @param  LONG_TEXT                Staff notes
-     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
-     * @param  ?AUTO_LINK               The ID of the entry (null: not yet added)
+     * @param  ?ID_TEXT                 $catalogue_name The catalogue for the entry (null: detect)
+     * @param  ?AUTO_LINK               $category_id The category for the entry (null: first)
+     * @param  BINARY                   $validated Whether the entry is validated
+     * @param  LONG_TEXT                $notes Staff notes
+     * @param  ?BINARY                  $allow_rating Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  $allow_trackbacks Whether trackbacks are allowed (null: decide statistically, based on existing choices)
+     * @param  ?AUTO_LINK               $id The ID of the entry (null: not yet added)
      * @return array                    Tuple: the tempcode for the visible fields, and the tempcode for the hidden fields, ..., extra templating details
      */
     public function get_form_fields($catalogue_name = null, $category_id = null, $validated = 1, $notes = '', $allow_rating = null, $allow_comments = null, $allow_trackbacks = null, $id = null)
@@ -592,7 +592,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module submitter getter.
      *
-     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @param  ID_TEXT                  $id The entry for which the submitter is sought
      * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
      */
     public function get_submitter($id)
@@ -607,7 +607,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module cat getter.
      *
-     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @param  AUTO_LINK                $id The entry for which the cat is sought
      * @return string                   The cat
      */
     public function get_cat_b($id)
@@ -622,7 +622,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module cat getter.
      *
-     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @param  AUTO_LINK                $id The entry for which the cat is sought
      * @return string                   The cat
      */
     public function get_cat($id)
@@ -634,7 +634,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A tuple of lots of info
      */
     public function fill_in_edit_form($_id)
@@ -658,9 +658,9 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Get a entry-id=>value map of what a submitted catalogue entry form has set
      *
-     * @param  ID_TEXT                  The name of the catalogue that was used
-     * @param  MEMBER                   The entry submitter
-     * @param  ?AUTO_LINK               ID of entry being edited (null: not being edited)
+     * @param  ID_TEXT                  $catalogue_name The name of the catalogue that was used
+     * @param  MEMBER                   $submitter The entry submitter
+     * @param  ?AUTO_LINK               $editing_id ID of entry being edited (null: not being edited)
      * @return array                    The map
      */
     public function get_set_field_map($catalogue_name, $submitter, $editing_id = null)
@@ -760,7 +760,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -856,7 +856,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $_id The entry being deleted
      */
     public function delete_actualisation($_id)
     {
@@ -884,7 +884,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * Standard crud_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($id)
@@ -901,9 +901,9 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * The do-next manager for after content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1098,7 +1098,7 @@ class Module_cms_catalogues extends Standard_crud_module
     /**
      * The actualiser to download a CSV of catalogues.
      *
-     * @param ID_TEXT         The name of the catalogue
+     * @param ID_TEXT         $catalogue_name The name of the catalogue
      * @return tempcode                 The UI
      */
     public function _export_catalogue($catalogue_name)
@@ -1134,7 +1134,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -1206,16 +1206,16 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Get tempcode for a catalogue category adding/editing form.
      *
-     * @param  ?ID_TEXT                 The name of the catalogue the category is in (null: detect)
-     * @param  SHORT_TEXT               The title of the category
-     * @param  LONG_TEXT                Description for the category
-     * @param  LONG_TEXT                Admin notes
-     * @param  ?AUTO_LINK               The ID of the parent category (null: no parent) (-1: arbitrary default)
-     * @param  ?AUTO_LINK               The ID of this category (null: we're adding, not editing)
-     * @param  URLPATH                  The rep-image for the catalogue category
-     * @param  integer                  The number of days before expiry (lower limit)
-     * @param  integer                  The number of days before expiry (higher limit)
-     * @param  ?AUTO_LINK               The expiry category (null: do not expire)
+     * @param  ?ID_TEXT                 $id The name of the catalogue the category is in (null: detect)
+     * @param  SHORT_TEXT                The title of the category
+     * @param  LONG_TEXT                 Description for the category
+     * @param  LONG_TEXT                 Admin notes
+     * @param  ?AUTO_LINK                The ID of the parent category (null: no parent) (-1: arbitrary default)
+     * @param  ?AUTO_LINK                The ID of this category (null: we're adding, not editing)
+     * @param  URLPATH                   The rep-image for the catalogue category
+     * @param  integer                   The number of days before expiry (lower limit)
+     * @param  integer                   The number of days before expiry (higher limit)
+     * @param  ?AUTO_LINK                The expiry category (null: do not expire)
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function get_form_fields($catalogue_name = null, $title = '', $description = '', $notes = '', $parent_id = -1, $id = null, $rep_image = '', $move_days_lower = 30, $move_days_higher = 60, $move_target = null) // Not the fields in a category (no such thing: fields are in catalogues) - the HTML form fields to input the details for a category
@@ -1276,7 +1276,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Standard crud_module cat getter.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return string                   The cat
      */
     public function get_cat($id)
@@ -1291,7 +1291,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A tuple of lots of info
      */
     public function fill_in_edit_form($_id)
@@ -1312,7 +1312,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Standard crud_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($id)
@@ -1380,7 +1380,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -1443,7 +1443,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {
@@ -1462,9 +1462,9 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * The do-next manager for after catalogue content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever catalogue category was just handled (null: deleted)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever catalogue category was just handled (null: deleted)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1530,7 +1530,7 @@ class Module_cms_catalogues_alt extends Standard_crud_module
     /**
      * Standard aed_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($id)
@@ -1544,17 +1544,17 @@ class Module_cms_catalogues_alt extends Standard_crud_module
     /**
      * Get tempcode for a catalogue adding/editing form.
      *
-     * @param  ID_TEXT                  The name of the catalogue
-     * @param  SHORT_TEXT               The human readable name/title of the catalogue
-     * @param  LONG_TEXT                The description
-     * @param  SHORT_INTEGER            The display type
-     * @param  BINARY                   Whether the catalogue uses a hierarchy
-     * @param  LONG_TEXT                Admin notes
-     * @param  integer                  How many points are given to a member that submits to the catalogue
-     * @param  BINARY                   Whether the catalogue is an eCommerce catalogue
-     * @param  ID_TEXT                  How to send view reports
+     * @param  ID_TEXT                  $name The name of the catalogue
+     * @param  SHORT_TEXT               $title The human readable name/title of the catalogue
+     * @param  LONG_TEXT                $description The description
+     * @param  SHORT_INTEGER            $display_type The display type
+     * @param  BINARY                   $is_tree Whether the catalogue uses a hierarchy
+     * @param  LONG_TEXT                $notes Admin notes
+     * @param  integer                  $submit_points How many points are given to a member that submits to the catalogue
+     * @param  BINARY                   $ecommerce Whether the catalogue is an eCommerce catalogue
+     * @param  ID_TEXT                  $send_view_reports How to send view reports
      * @set    never daily weekly monthly quarterly
-     * @param  ?integer                 Default review frequency for catalogue entries (null: none)
+     * @param  ?integer                 $default_review_freq Default review frequency for catalogue entries (null: none)
      * @return array                    A tuple: the tempcode for the visible fields, and the tempcode for the hidden fields, ..., and action fields
      */
     public function get_form_fields($name = '', $title = '', $description = '', $display_type = 0, $is_tree = 1, $notes = '', $submit_points = 0, $ecommerce = 0, $send_view_reports = 'never', $default_review_freq = null)
@@ -1664,20 +1664,20 @@ class Module_cms_catalogues_alt extends Standard_crud_module
     /**
      * Get tempcode for a catalogue field adding/editing form (many of these are put together to add/edit a single catalogue!).
      *
-     * @param  boolean                  Whether this is the first field of the entry fields
-     * @param  integer                  The number of fields that will be on the screen
-     * @param  string                   The prefix the field input fields are given (e.g. new1_)
-     * @param  integer                  The order of the field relative to the other fields
-     * @param  SHORT_TEXT               The name of the field
-     * @param  LONG_TEXT                Description for the field
-     * @param  ID_TEXT                  The field type
-     * @param  BINARY                   Whether the field defines entry ordering
-     * @param  BINARY                   Whether the field is searchable
-     * @param  BINARY                   Whether the field is visible when an entry is viewed
-     * @param  SHORT_TEXT               Default value for the field
-     * @param  BINARY                   Whether the field is required
-     * @param  BINARY                   Whether the field is to be shown in category views (not applicable for the list display type)
-     * @param  BINARY                   Whether the field is to be shown in search views (not applicable for the list display type)
+     * @param  boolean                  $first_field Whether this is the first field of the entry fields
+     * @param  integer                  $num_fields_to_show The number of fields that will be on the screen
+     * @param  string                   $prefix The prefix the field input fields are given (e.g. new1_)
+     * @param  integer                  $order The order of the field relative to the other fields
+     * @param  SHORT_TEXT               $name The name of the field
+     * @param  LONG_TEXT                $description Description for the field
+     * @param  ID_TEXT                  $type The field type
+     * @param  BINARY                   $defines_order Whether the field defines entry ordering
+     * @param  BINARY                   $visible Whether the field is searchable
+     * @param  BINARY                   $searchable Whether the field is visible when an entry is viewed
+     * @param  SHORT_TEXT               $default Default value for the field
+     * @param  BINARY                   $required Whether the field is required
+     * @param  BINARY                   $put_in_category Whether the field is to be shown in category views (not applicable for the list display type)
+     * @param  BINARY                   $put_in_search Whether the field is to be shown in search views (not applicable for the list display type)
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function get_field_fields($first_field, $num_fields_to_show, $prefix, $order, $name = '', $description = '', $type = 'short_text', $defines_order = 0, $visible = 1, $searchable = 1, $default = '', $required = 0, $put_in_category = 1, $put_in_search = 1)
@@ -1725,7 +1725,7 @@ class Module_cms_catalogues_alt extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $catalogue_name The entry being edited
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function fill_in_edit_form($catalogue_name)
@@ -1886,7 +1886,7 @@ class Module_cms_catalogues_alt extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $old_name The entry being edited
      */
     public function edit_actualisation($old_name)
     {
@@ -2081,7 +2081,7 @@ class Module_cms_catalogues_alt extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {
@@ -2097,9 +2097,9 @@ class Module_cms_catalogues_alt extends Standard_crud_module
     /**
      * The do-next manager for after catalogue content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?ID_TEXT                 The catalogue name we were working with (null: deleted)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?ID_TEXT                 $name The catalogue name we were working with (null: deleted)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $name)

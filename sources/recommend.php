@@ -21,13 +21,13 @@
 /**
  * Sends out a recommendation e-mail.
  *
- * @param  string                       Recommenders name
- * @param  mixed                        Their e-mail address (string or array of alternates)
- * @param  string                       The recommendation message
- * @param  boolean                      Whether this is an invitation
- * @param  ?string                      Email address of the recommender (null: current user's)
- * @param  ?string                      The subject (null: default)
- * @param  ?array                       List of names (null: use email addresses as names)
+ * @param  string                       $name Recommenders name
+ * @param  mixed                        $email_address Their e-mail address (string or array of alternates)
+ * @param  string                       $message The recommendation message
+ * @param  boolean                      $is_invite Whether this is an invitation
+ * @param  ?string                      $recommender_email Email address of the recommender (null: current user's)
+ * @param  ?string                      $subject The subject (null: default)
+ * @param  ?array                       $names List of names (null: use email addresses as names)
  */
 function send_recommendation_email($name, $email_address, $message, $is_invite = false, $recommender_email = null, $subject = null, $names = null)
 {
@@ -52,7 +52,7 @@ function send_recommendation_email($name, $email_address, $message, $is_invite =
 /**
  * Get number of invites available for member.
  *
- * @param  MEMBER                       Member to look for
+ * @param  MEMBER                       $member_id Member to look for
  * @return integer                      Number of invites
  */
 function get_num_invites($member_id)

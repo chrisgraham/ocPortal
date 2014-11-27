@@ -30,11 +30,11 @@ function init__zones2()
 /**
  * Render a Comcode page box.
  *
- * @param  array                        Row to render
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?ID_TEXT                     Virtual root to use (null: none)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row Row to render
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  ?ID_TEXT                     $root Virtual root to use (null: none)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     Rendered box
  */
 function render_comcode_page_box($row, $give_context = true, $include_breadcrumbs = true, $root = null, $guid = '')
@@ -86,14 +86,14 @@ function render_comcode_page_box($row, $give_context = true, $include_breadcrumb
 /**
  * Add a zone.
  *
- * @param  ID_TEXT                      Name of the zone
- * @param  SHORT_TEXT                   The zone title
- * @param  ID_TEXT                      The zones default page
- * @param  SHORT_TEXT                   The header text
- * @param  ID_TEXT                      The theme
- * @param  BINARY                       Whether the zone requires a session for pages to be used
- * @param  boolean                      Whether to force the name as unique, if there's a conflict
- * @param  string                       The base URL (blank: natural)
+ * @param  ID_TEXT                      $zone Name of the zone
+ * @param  SHORT_TEXT                   $title The zone title
+ * @param  ID_TEXT                      $default_page The zones default page
+ * @param  SHORT_TEXT                   $header_text The header text
+ * @param  ID_TEXT                      $theme The theme
+ * @param  BINARY                       $require_session Whether the zone requires a session for pages to be used
+ * @param  boolean                      $uniqify Whether to force the name as unique, if there's a conflict
+ * @param  string                       $base_url The base URL (blank: natural)
  * @return ID_TEXT                      The name
  */
 function actual_add_zone($zone, $title, $default_page = 'start', $header_text = '', $theme = 'default', $require_session = 0, $uniqify = false, $base_url = '')
@@ -201,8 +201,8 @@ function actual_add_zone($zone, $title, $default_page = 'start', $header_text = 
 /**
  * Save a zone base URL.
  *
- * @param  ID_TEXT                      The zone
- * @param  string                       The base URL (blank: natural)
+ * @param  ID_TEXT                      $zone The zone
+ * @param  string                       $base_url The base URL (blank: natural)
  */
 function save_zone_base_url($zone, $base_url)
 {
@@ -244,8 +244,8 @@ function save_zone_base_url($zone, $base_url)
 /**
  * Upgrade the specified module.
  *
- * @param  ID_TEXT                      The zone name
- * @param  ID_TEXT                      The module name
+ * @param  ID_TEXT                      $zone The zone name
+ * @param  ID_TEXT                      $module The module name
  * @return integer                      0=No upgrade. -2=Not installed, 1=Upgrade
  */
 function upgrade_module($zone, $module)
@@ -307,8 +307,8 @@ function upgrade_module($zone, $module)
 /**
  * Reinstall the specified module.
  *
- * @param  ID_TEXT                      The zone name
- * @param  ID_TEXT                      The module name
+ * @param  ID_TEXT                      $zone The zone name
+ * @param  ID_TEXT                      $module The module name
  * @return boolean                      Whether a module installer had to be run
  */
 function reinstall_module($zone, $module)
@@ -369,8 +369,8 @@ function reinstall_module($zone, $module)
 /**
  * Completely uninstall the specified module from the system.
  *
- * @param  ID_TEXT                      The zone name
- * @param  ID_TEXT                      The module name
+ * @param  ID_TEXT                      $zone The zone name
+ * @param  ID_TEXT                      $module The module name
  */
 function uninstall_module($zone, $module)
 {
@@ -438,7 +438,7 @@ function find_all_blocks()
 /**
  * Make a block codename look nice
  *
- * @param  ID_TEXT                      The raw block codename
+ * @param  ID_TEXT                      $block The raw block codename
  * @return string                       A nice human readable version of the name
  */
 function cleanup_block_name($block)
@@ -455,7 +455,7 @@ function cleanup_block_name($block)
 /**
  * Gets parameters for a block
  *
- * @param  ID_TEXT                      The name of the block to get parameters for
+ * @param  ID_TEXT                      $block The name of the block to get parameters for
  * @return array                        A list of parameters the block takes
  */
 function get_block_parameters($block)
@@ -476,7 +476,7 @@ function get_block_parameters($block)
 /**
  * Upgrades a block to the latest version available on your ocPortal installation. [b]This function can only upgrade to the latest version put into the block directory.[/b] You should not need to use this function.
  *
- * @param  ID_TEXT                      The name of the block to upgrade
+ * @param  ID_TEXT                      $block The name of the block to upgrade
  * @return integer                      0=No upgrade. -2=Not installed, 1=Upgrade
  */
 function upgrade_block($block)
@@ -524,7 +524,7 @@ function upgrade_block($block)
  * Reinstall a block if it has become corrupted for any reason.
  * Again, you should not need to use this function.
  *
- * @param  ID_TEXT                      The name of the block to reinstall
+ * @param  ID_TEXT                      $block The name of the block to reinstall
  * @return boolean                      Whether installation was required
  */
 function reinstall_block($block)
@@ -572,7 +572,7 @@ function reinstall_block($block)
 /**
  * This function totally uninstalls a block from the system. Yet again, you should not need to use this function.
  *
- * @param  ID_TEXT                      The name of the block to uninstall
+ * @param  ID_TEXT                      $block The name of the block to uninstall
  */
 function uninstall_block($block)
 {
@@ -604,10 +604,10 @@ function uninstall_block($block)
  * Extract code to execute the requested functions with the requested parameters from the module requested.
  * If it's not a module, returns an empty array.
  *
- * @param  ID_TEXT                      The zone it is in
- * @param  ID_TEXT                      The page name
- * @param  array                        Array of functions to be executing
- * @param  ?array                       A list of parameters to pass to our functions (null: none)
+ * @param  ID_TEXT                      $zone The zone it is in
+ * @param  ID_TEXT                      $page The page name
+ * @param  array                        $functions Array of functions to be executing
+ * @param  ?array                       $params A list of parameters to pass to our functions (null: none)
  * @return array                        A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
  */
 function extract_module_functions_page($zone, $page, $functions, $params = null)
@@ -634,7 +634,7 @@ function extract_module_functions_page($zone, $page, $functions, $params = null)
 /**
  * Extract the info function from a module at a given path.
  *
- * @param  PATH                         The path to the module
+ * @param  PATH                         $path The path to the module
  * @return ?array                       A module information map (null: module contains no info method)
  */
 function extract_module_info($path)
@@ -649,12 +649,12 @@ function extract_module_info($path)
 /**
  * Get an array of all the pages everywhere in the zone (for small sites everything will be returned, for larger ones it depends on the show method).
  *
- * @param  ID_TEXT                      The zone name
- * @param  boolean                      Whether to leave file extensions on the page name
- * @param  boolean                      Whether to take transparent redirects into account
- * @param  integer                      Selection algorithm constant
+ * @param  ID_TEXT                      $zone The zone name
+ * @param  boolean                      $keep_ext_on Whether to leave file extensions on the page name
+ * @param  boolean                      $consider_redirects Whether to take transparent redirects into account
+ * @param  integer                      $show_method Selection algorithm constant
  * @set 0 1 2
- * @param  ?ID_TEXT                     Page type to show (null: all)
+ * @param  ?ID_TEXT                     $page_type Page type to show (null: all)
  * @return array                        A map of page name to type (modules_custom, etc)
  */
 function _find_all_pages_wrap($zone, $keep_ext_on = false, $consider_redirects = false, $show_method = 0, $page_type = null)
@@ -707,15 +707,15 @@ function _find_all_pages_wrap($zone, $keep_ext_on = false, $consider_redirects =
 /**
  * Get an array of all the pages of the specified type (module, etc) and extension (for small sites everything will be returned, for larger ones it depends on the show method).
  *
- * @param  ID_TEXT                      The zone name
- * @param  ID_TEXT                      The type (including language, if appropriate)
+ * @param  ID_TEXT                      $zone The zone name
+ * @param  ID_TEXT                      $type The type (including language, if appropriate)
  * @set    modules modules_custom comcode/EN comcode_custom/EN html/EN html_custom/EN
- * @param  string                       The file extension to limit us to (without a dot)
- * @param  boolean                      Whether to leave file extensions on the page name
- * @param  ?TIME                        Only show pages newer than (null: no restriction)
- * @param  integer                      Selection algorithm constant
+ * @param  string                       $ext The file extension to limit us to (without a dot)
+ * @param  boolean                      $keep_ext_on Whether to leave file extensions on the page name
+ * @param  ?TIME                        $cutoff_time Only show pages newer than (null: no restriction)
+ * @param  integer                      $show_method Selection algorithm constant
  * @set 0 1 2
- * @param  ?boolean                     Whether to search under the custom-file-base (null: auto-decide)
+ * @param  ?boolean                     $custom Whether to search under the custom-file-base (null: auto-decide)
  * @return array                        A map of page name to type (modules_custom, etc)
  */
 function _find_all_pages($zone, $type, $ext = 'php', $keep_ext_on = false, $cutoff_time = null, $show_method = 0, $custom = null)
@@ -814,7 +814,7 @@ function _find_all_pages($zone, $type, $ext = 'php', $keep_ext_on = false, $cuto
 /**
  * Get an array of all the modules.
  *
- * @param  ID_TEXT                      The zone name
+ * @param  ID_TEXT                      $zone The zone name
  * @return array                        A map of page name to type (modules_custom, etc)
  */
 function _find_all_modules($zone)
@@ -849,7 +849,7 @@ function sync_htaccess_with_zones()
 /**
  * Check a zone name doesn't conflict, according to our URL scheme.
  *
- * @param  ID_TEXT                      The zone name
+ * @param  ID_TEXT                      $zone The zone name
  */
 function check_zone_name($zone)
 {
@@ -874,8 +874,8 @@ function check_zone_name($zone)
 /**
  * Check a page name doesn't conflict, according to our URL scheme.
  *
- * @param  ID_TEXT                      The zone name
- * @param  ID_TEXT                      The page name
+ * @param  ID_TEXT                      $zone The zone name
+ * @param  ID_TEXT                      $page The page name
  */
 function check_page_name($zone, $page)
 {

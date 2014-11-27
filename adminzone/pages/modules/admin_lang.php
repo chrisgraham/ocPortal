@@ -43,10 +43,10 @@ class Module_admin_lang
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -178,12 +178,12 @@ class Module_admin_lang
     /**
      * The UI to choose a language.
      *
-     * @param  tempcode                 The title to show when choosing a language
-     * @param  boolean                  Whether to also choose a language file
-     * @param  boolean                  Whether the user may add a language
-     * @param  mixed                    Text message to show (Tempcode or string)
-     * @param  boolean                  Whether to provide an N/A choice
-     * @param  ID_TEXT                  The name of the parameter for specifying language
+     * @param  tempcode                 $title The title to show when choosing a language
+     * @param  boolean                  $choose_lang_file Whether to also choose a language file
+     * @param  boolean                  $add_lang Whether the user may add a language
+     * @param  mixed                    $text Text message to show (Tempcode or string)
+     * @param  boolean                  $provide_na Whether to provide an N/A choice
+     * @param  ID_TEXT                  $param_name The name of the parameter for specifying language
      * @return tempcode                 The UI
      */
     public function choose_lang($title, $choose_lang_file = false, $add_lang = false, $text = '', $provide_na = true, $param_name = 'lang')
@@ -247,8 +247,8 @@ class Module_admin_lang
     /**
      * Finds equivalents for a given string, in a different language, by automatic searching of codes and content.
      *
-     * @param  string                   The language string we are searching for the equivalent of
-     * @param  LANGUAGE_NAME            The language we want an equivalent in
+     * @param  string                   $old The language string we are searching for the equivalent of
+     * @param  LANGUAGE_NAME            $lang The language we want an equivalent in
      * @return string                   The match (or blank if no match can be found)
      */
     public function find_lang_matches($old, $lang)
@@ -822,7 +822,7 @@ msgstr ""
     /**
      * Convert a standard language code to a google code.
      *
-     * @param  LANGUAGE_NAME            The code to convert
+     * @param  LANGUAGE_NAME            $in The code to convert
      * @return string                   The converted code (or blank if none can be found)
      */
     public function get_google_code($in)

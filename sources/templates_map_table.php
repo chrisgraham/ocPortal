@@ -21,8 +21,8 @@
 /**
  * Get the tempcode for a view space page. (a view space shows a single entry, with the field name for each field to the left of the value)
  *
- * @param  tempcode                     The title of the view space; should be out of get_screen_title
- * @param  array                        An array of mappings between title and value (each mapping being a field)
+ * @param  tempcode                     $title The title of the view space; should be out of get_screen_title
+ * @param  array                        $fields An array of mappings between title and value (each mapping being a field)
  * @return tempcode                     The generated view space
  */
 function map_table($title, $fields)

@@ -21,7 +21,7 @@ class Hook_ecommerce_classifieds
     /**
      * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
      *
-     * @param  ID_TEXT                  Product codename.
+     * @param  ID_TEXT                  $type_code Product codename.
      * @return ?tempcode                Input field in standard Tempcode format for fields (null: no identifier).
      */
     public function get_identifier_manual_field_inputter($type_code)
@@ -83,7 +83,7 @@ class Hook_ecommerce_classifieds
     /**
      * Throw out the ID we're buying.
      *
-     * @param  ID_TEXT                  The product chosen.
+     * @param  ID_TEXT                  $type_code The product chosen.
      * @return ID_TEXT                  The purchase ID.
      */
     public function set_needed_fields($type_code)
@@ -116,9 +116,9 @@ class Hook_ecommerce_classifieds
 /**
  * Handling of a purchased classifieds advert.
  *
- * @param  ID_TEXT                      The purchase ID.
- * @param  array                        Details of the product.
- * @param  ID_TEXT                      The product codename.
+ * @param  ID_TEXT                      $purchase_id The purchase ID.
+ * @param  array                        $details Details of the product.
+ * @param  ID_TEXT                      $type_code The product codename.
  */
 function handle_classifieds_advert($purchase_id, $details, $type_code)
 {

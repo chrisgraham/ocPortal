@@ -108,8 +108,8 @@ class Block_main_multi_content
     /**
      * Install the block.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -133,7 +133,7 @@ class Block_main_multi_content
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -676,9 +676,9 @@ class Block_main_multi_content
     /**
      * Make a filter SQL fragment.
      *
-     * @param  string                   The filter string.
-     * @param  array                    Map of details of our content type.
-     * @param  string                   The field name of the category to filter against.
+     * @param  string                   $filter The filter string.
+     * @param  array                    $info Map of details of our content type.
+     * @param  string                   $category_field_filter The field name of the category to filter against.
      * @return string                   SQL fragment.
      */
     public function build_filter($filter, $info, $category_field_filter)

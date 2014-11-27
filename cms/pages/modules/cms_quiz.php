@@ -58,10 +58,10 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -82,8 +82,8 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -109,7 +109,7 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -151,7 +151,7 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -229,7 +229,7 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Standard crud_module cat getter.
      *
-     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @param  AUTO_LINK                $id The entry for which the cat is sought
      * @return mixed                    The cat
      */
     public function get_cat($id)
@@ -240,27 +240,27 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Get tempcode for a adding/editing form.
      *
-     * @param  ?AUTO_LINK               The quiz ID (null: new)
-     * @param  SHORT_TEXT               The name of the quiz
-     * @param  ?integer                 The number of minutes allowed for completion (null: NA)
-     * @param  LONG_TEXT                The text shown at the start of the quiz
-     * @param  LONG_TEXT                The text shown at the end of the quiz
-     * @param  LONG_TEXT                The text shown at the end of the quiz on failure
-     * @param  LONG_TEXT                Notes
-     * @param  integer                  Percentage correctness required for competition
-     * @param  ?TIME                    The time the quiz is opened (null: now)
-     * @param  ?TIME                    The time the quiz is closed (null: never)
-     * @param  integer                  The number of winners for this if it is a competition
-     * @param  ?integer                 The minimum number of hours between attempts (null: no restriction)
-     * @param  ID_TEXT                  The type
+     * @param  ?AUTO_LINK               $id The quiz ID (null: new)
+     * @param  SHORT_TEXT               $name The name of the quiz
+     * @param  ?integer                 $timeout The number of minutes allowed for completion (null: NA)
+     * @param  LONG_TEXT                $start_text The text shown at the start of the quiz
+     * @param  LONG_TEXT                $end_text The text shown at the end of the quiz
+     * @param  LONG_TEXT                $end_text_fail The text shown at the end of the quiz on failure
+     * @param  LONG_TEXT                $notes Notes
+     * @param  integer                  $percentage Percentage correctness required for competition
+     * @param  ?TIME                    $open_time The time the quiz is opened (null: now)
+     * @param  ?TIME                    $close_time The time the quiz is closed (null: never)
+     * @param  integer                  $num_winners The number of winners for this if it is a competition
+     * @param  ?integer                 $redo_time The minimum number of hours between attempts (null: no restriction)
+     * @param  ID_TEXT                  $type The type
      * @set    SURVEY COMPETITION TEST
-     * @param  BINARY                   Whether this is validated
-     * @param  ?string                  Text for questions (null: default)
-     * @param  integer                  The number of points awarded for completing/passing the quiz/test
-     * @param  ?AUTO_LINK               Newsletter for which a member must be on to enter (null: none)
-     * @param  BINARY                   Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
-     * @param  BINARY                   Whether to shuffle questions, to make cheating a bit harder
-     * @param  BINARY                   Whether to shuffle multiple-choice answers, to make cheating a bit harder
+     * @param  BINARY                   $validated Whether this is validated
+     * @param  ?string                  $text Text for questions (null: default)
+     * @param  integer                  $points_for_passing The number of points awarded for completing/passing the quiz/test
+     * @param  ?AUTO_LINK               $tied_newsletter Newsletter for which a member must be on to enter (null: none)
+     * @param  BINARY                   $reveal_answers Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
+     * @param  BINARY                   $shuffle_questions Whether to shuffle questions, to make cheating a bit harder
+     * @param  BINARY                   $shuffle_answers Whether to shuffle multiple-choice answers, to make cheating a bit harder
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($id = null, $name = '', $timeout = null, $start_text = '', $end_text = '', $end_text_fail = '', $notes = '', $percentage = 70, $open_time = null, $close_time = null, $num_winners = 2, $redo_time = null, $type = 'SURVEY', $validated = 1, $text = null, $points_for_passing = 0, $tied_newsletter = null, $reveal_answers = 0, $shuffle_questions = 0, $shuffle_answers = 0)
@@ -347,7 +347,7 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Standard crud_module submitter getter.
      *
-     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @param  ID_TEXT                  $id The entry for which the submitter is sought
      * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
      */
     public function get_submitter($id)
@@ -362,7 +362,7 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function fill_in_edit_form($_id)
@@ -462,7 +462,7 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -531,7 +531,7 @@ class Module_cms_quiz extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $_id The entry being deleted
      */
     public function delete_actualisation($_id)
     {

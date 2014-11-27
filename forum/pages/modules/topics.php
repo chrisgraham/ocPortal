@@ -43,10 +43,10 @@ class Module_topics
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -234,7 +234,7 @@ class Module_topics
     /**
      * The UI for a trivial form page that just asks a reason before relaying the results to the same URL, but with an underscored type.
      *
-     * @param  ID_TEXT                  The language ID for the title to use in the page
+     * @param  ID_TEXT                  $_title The language ID for the title to use in the page
      * @return tempcode                 The UI
      */
     public function relay_with_reason($_title)
@@ -268,10 +268,10 @@ class Module_topics
     /**
      * Do a redirection page to a certain topic/post (because we've just done an action and want to go back).
      *
-     * @param  ID_TEXT                  The language ID for the title to use in the page
-     * @param  AUTO_LINK                The ID of the topic to redirect to
-     * @param  ?mixed                   What to output (Tempcode or string) (null: default)
-     * @param  ?AUTO_LINK               The ID of the post to redirect to (null: redirect to topic instead)
+     * @param  ID_TEXT                  $_title The language ID for the title to use in the page
+     * @param  AUTO_LINK                $topic_id The ID of the topic to redirect to
+     * @param  ?mixed                   $lang What to output (Tempcode or string) (null: default)
+     * @param  ?AUTO_LINK               $post_id The ID of the post to redirect to (null: redirect to topic instead)
      * @return tempcode                 The UI
      */
     public function redirect_to($_title, $topic_id, $lang = null, $post_id = null)
@@ -296,9 +296,9 @@ class Module_topics
     /**
      * Do a redirection page to a certain forum (because we've just done an action and want to go back).
      *
-     * @param  ID_TEXT                  The language ID for the title to use in the page
-     * @param  AUTO_LINK                The ID of the forum to redirect to
-     * @param  ?mixed                   What to output (Tempcode or string) (null: default)
+     * @param  ID_TEXT                  $_title The language ID for the title to use in the page
+     * @param  AUTO_LINK                $forum_id The ID of the forum to redirect to
+     * @param  ?mixed                   $lang What to output (Tempcode or string) (null: default)
      * @return tempcode                 The UI
      */
     public function redirect_to_forum($_title, $forum_id, $lang = null)
@@ -661,7 +661,7 @@ class Module_topics
     /**
      * Mark a topic as unread by the current member.
      *
-     * @param  AUTO_LINK                The ID of the topic to mark as unread.
+     * @param  AUTO_LINK                $topic_id The ID of the topic to mark as unread.
      * @return boolean                  Success status.
      */
     public function ocf_ping_topic_unread($topic_id)
@@ -1339,7 +1339,7 @@ class Module_topics
     /**
      * Choose an emoticon for a topic.
      *
-     * @param  ID_TEXT                  The currently selected emoticon
+     * @param  ID_TEXT                  $selected_path The currently selected emoticon
      * @return tempcode                 The emoticon input field
      */
     public function choose_topic_emoticon($selected_path = '')
@@ -1369,7 +1369,7 @@ class Module_topics
     /**
      * Create a default post based on a template of quoting the given list of quotes.
      *
-     * @param  array                    A list of posts to quote
+     * @param  array                    $quotes A list of posts to quote
      * @return tempcode                 The default post
      */
     public function attach_quotes($quotes)
@@ -1424,7 +1424,7 @@ class Module_topics
     /**
      * The form element for choosing a post template.
      *
-     * @param  AUTO_LINK                The forum ID we are looking for post templates active in
+     * @param  AUTO_LINK                $forum_id The forum ID we are looking for post templates active in
      * @return array                    A pair: The form element (tempcode) and the default post to make
      */
     public function post_templates($forum_id)
@@ -1462,10 +1462,10 @@ class Module_topics
     /**
      * The UI to create a new topic.
      *
-     * @param  boolean                  Whether a new Private Topic is being created
-     * @param  ?MEMBER                  The member ID being whispered too (null: N/A)
-     * @param  string                   Theme image code
-     * @param  ?tempcode                Text of screen (null: none)
+     * @param  boolean                  $forum_id Whether a new Private Topic is being created
+     * @param  ?MEMBER                  $topic_id The member ID being whispered too (null: N/A)
+     * @param  string                   $topic_title Theme image code
+     * @param  ?tempcode                $doing Text of screen (null: none)
      * @return tempcode                 The UI
      */
     public function new_topic($private_topic = false, $member_id = null, $img_path = '', $text = null) // Type
@@ -1735,10 +1735,10 @@ class Module_topics
     /**
      * Sort out breadcrumbing for a forum/topic/additional combination.
      *
-     * @param  AUTO_LINK                The forum for breadcrumbing
-     * @param  AUTO_LINK                The topic for breadcrumbing
-     * @param  string                   The topic title
-     * @param  string                   The action currently being done
+     * @param  AUTO_LINK                $forum_id The forum for breadcrumbing
+     * @param  AUTO_LINK                $topic_id The topic for breadcrumbing
+     * @param  string                   $topic_title The topic title
+     * @param  string                   $doing The action currently being done
      */
     public function handle_topic_breadcrumbs($forum_id, $topic_id, $topic_title, $doing)
     {
@@ -2693,13 +2693,13 @@ END;
     /**
      * Get tempcode for a poll adding/editing form.
      *
-     * @param  SHORT_TEXT               The poll question
-     * @param  ?array                   A list of current answers for the poll (null: none yet)
-     * @param  BINARY                   Whether it is a private poll (blind poll, where the results aren't visible until made public)
-     * @param  BINARY                   Whether the poll is open for voting
-     * @param  BINARY                   Whether a reply to the poll topic is required before voting
-     * @param  BINARY                   The minimum number of selections for voters
-     * @param  BINARY                   The maximum number of selections for voters
+     * @param  SHORT_TEXT               $question The poll question
+     * @param  ?array                   $answers A list of current answers for the poll (null: none yet)
+     * @param  BINARY                   $is_private Whether it is a private poll (blind poll, where the results aren't visible until made public)
+     * @param  BINARY                   $is_open Whether the poll is open for voting
+     * @param  BINARY                   $requires_reply Whether a reply to the poll topic is required before voting
+     * @param  BINARY                   $minimum_selections The minimum number of selections for voters
+     * @param  BINARY                   $maximum_selections The maximum number of selections for voters
      * @return tempcode                 The tempcode for the fields
      */
     public function get_poll_form_fields($question = '', $answers = null, $is_private = 0, $is_open = 1, $requires_reply = 0, $minimum_selections = 1, $maximum_selections = 1)
@@ -2731,7 +2731,7 @@ END;
     /**
      * The UI to add a poll.
      *
-     * @param  ?AUTO_LINK               The topic ID to add the poll to (null: it is instead gettable from a GET parameter named 'id')
+     * @param  ?AUTO_LINK                The topic ID to add the poll to (null: it is instead gettable from a GET parameter named 'id')
      * @return tempcode                 The UI
      */
     public function add_poll($topic_id = null) // Type
@@ -3149,7 +3149,7 @@ END;
     /**
      * Check there is at least some moderation access over the given topic.
      *
-     * @param  AUTO_LINK                The topic ID
+     * @param  AUTO_LINK                $topic_id The topic ID
      */
     public function check_has_mod_access($topic_id) // This is here to prevent snooping into the details of things (the backend provides the true security)
     {

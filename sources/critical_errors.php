@@ -53,9 +53,9 @@ if (!function_exists('critical_error')) {
     /**
      * Exit with a nicely formatted critical error.
      *
-     * @param  string                   The error message code
-     * @param  ?string                  Relayed additional details (null: nothing relayed)
-     * @param  boolean                  Whether to actually exit
+     * @param  string                   $code The error message code
+     * @param  ?string                  $relay Relayed additional details (null: nothing relayed)
+     * @param  boolean                  $exit Whether to actually exit
      */
     function critical_error($code, $relay = null, $exit = true)
     {

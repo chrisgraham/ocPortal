@@ -62,8 +62,8 @@ class Module_tester
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -103,10 +103,10 @@ class Module_tester
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -444,8 +444,8 @@ class Module_tester
     /**
      * Get a list to choose a section.
      *
-     * @param  ?AUTO_LINK               The section to select by default (null: no specific default)
-     * @param  boolean                  Whether to only select inheritable sections
+     * @param  ?AUTO_LINK               $it The section to select by default (null: no specific default)
+     * @param  boolean                  $unassigned Whether to only select inheritable sections
      * @return tempcode                 The list
      */
     public function get_section_list($it = null, $unassigned = false)
@@ -478,7 +478,7 @@ class Module_tester
     /**
      * Get a list to choose a tester.
      *
-     * @param  ?MEMBER                  The member to select by default (null: Select N/A)
+     * @param  ?MEMBER                  $it The member to select by default (null: Select N/A)
      * @return tempcode                 The list
      */
     public function get_tester_list($it)
@@ -503,11 +503,11 @@ class Module_tester
     /**
      * Get tempcode for a test adding/editing form.
      *
-     * @param  string                   A short stub to prefix the field name
-     * @param  SHORT_TEXT               The text of the test
-     * @param  ?MEMBER                  The member the test is assigned to (null: test section member)
-     * @param  BINARY                   Whether the test is enabled
-     * @param  string                   The section this test inherits from (blank: none)
+     * @param  string                   $stub A short stub to prefix the field name
+     * @param  SHORT_TEXT               $test The text of the test
+     * @param  ?MEMBER                  $assigned_to The member the test is assigned to (null: test section member)
+     * @param  BINARY                   $enabled Whether the test is enabled
+     * @param  string                   $inherit_from The section this test inherits from (blank: none)
      * @return tempcode                 The tempcode for the visible fields
      */
     public function get_test_form_fields($stub, $test = '', $assigned_to = null, $enabled = 1, $inherit_from = '')
@@ -529,10 +529,10 @@ class Module_tester
     /**
      * Get tempcode for a test section adding/editing form.
      *
-     * @param  SHORT_TEXT               The name of the section
-     * @param  LONG_TEXT                Notes for the section
-     * @param  ?MEMBER                  The member the tests are assigned to (null: not a normal section, one that gets inherited into tests)
-     * @param  BINARY                   Whether this test section is intended to be inherited, not used by itself
+     * @param  SHORT_TEXT               $section The name of the section
+     * @param  LONG_TEXT                $notes Notes for the section
+     * @param  ?MEMBER                  $assigned_to The member the tests are assigned to (null: not a normal section, one that gets inherited into tests)
+     * @param  BINARY                   $inheritable Whether this test section is intended to be inherited, not used by itself
      * @return tempcode                 The tempcode for the visible fields
      */
     public function get_test_section_form_fields($section = '', $notes = '', $assigned_to = null, $inheritable = 0)
@@ -618,7 +618,7 @@ class Module_tester
     /**
      * Add in any new tests added in the form.
      *
-     * @param  AUTO_LINK                The section to put the tests in.
+     * @param  AUTO_LINK                $section_id The section to put the tests in.
      */
     public function _add_new_tests($section_id)
     {
@@ -747,7 +747,7 @@ class Module_tester
     /**
      * Turn keys of a map to upper case, and return modified map.
      *
-     * @param  array                    Input map
+     * @param  array                    $array Input map
      * @return array                    Adjusted map
      */
     public function map_keys_to_upper($array)

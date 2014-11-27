@@ -21,7 +21,7 @@
 /**
  * Get the list of all available chat sound effects.
  *
- * @param  boolean                      Map to NULL if it is not overridable.
+ * @param  boolean                      $only_overridable Map to NULL if it is not overridable.
  * @return map                          All available sound effects (mapping between base code, and actual code).
  */
 function get_effect_set($only_overridable = false)
@@ -43,9 +43,9 @@ function get_effect_set($only_overridable = false)
 /**
  * Get a list of template mappings for the current member, between sound effect IDs and the URLs to the mp3 fiels.
  *
- * @param  boolean                      Whether to use full URLs in the mappings.
- * @param  ?MEMBER                      Get settings overridden for this specific member (null: global settings).
- * @param  boolean                      Get global settings and settings overridden for all members (if this is true we'd expect $for_member to be NULL).
+ * @param  boolean                      $full_urls Whether to use full URLs in the mappings.
+ * @param  ?MEMBER                      $for_member Get settings overridden for this specific member (null: global settings).
+ * @param  boolean                      $all_members Get global settings and settings overridden for all members (if this is true we'd expect $for_member to be NULL).
  * @return array                        The template mappings.
  */
 function get_effect_settings($full_urls = false, $for_member = null, $all_members = false)

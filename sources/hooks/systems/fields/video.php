@@ -30,7 +30,7 @@ class Hook_fields_video
     /**
      * Get special Tempcode for inputting this field.
      *
-     * @param  array                    The row for the field to input
+     * @param  array                    $row The row for the field to input
      * @return ?array                   List of specially encoded input detail rows (null: nothing special)
      */
     public function get_search_inputter($row)
@@ -41,8 +41,8 @@ class Hook_fields_video
     /**
      * Get special SQL from POSTed parameters for this field.
      *
-     * @param  array                    The row for the field to input
-     * @param  integer                  We're processing for the ith row
+     * @param  array                    $row The row for the field to input
+     * @param  integer                  $i We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (null: nothing special)
      */
     public function inputted_to_sql_for_search($row, $i)
@@ -57,9 +57,9 @@ class Hook_fields_video
     /**
      * Get some info bits relating to our field type, that helps us look it up / set defaults.
      *
-     * @param  ?array                   The field details (null: new field)
-     * @param  ?boolean                 Whether a default value cannot be blank (null: don't "lock in" a new default value)
-     * @param  ?string                  The given default value as a string (null: don't "lock in" a new default value)
+     * @param  ?array                   $field The field details (null: new field)
+     * @param  ?boolean                 $required Whether a default value cannot be blank (null: don't "lock in" a new default value)
+     * @param  ?string                  $default The given default value as a string (null: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
     public function get_field_value_row_bits($field, $required = null, $default = null)
@@ -70,15 +70,15 @@ class Hook_fields_video
     /**
      * Convert a field value to something renderable.
      *
-     * @param  array                    The field details
-     * @param  mixed                    The raw value
-     * @param  integer                  Position in fieldset
-     * @param  ?array                   List of fields the output is being limited to (null: N/A)
-     * @param  ?ID_TEXT                 The table we store in (null: N/A)
-     * @param  ?AUTO_LINK               The ID of the row in the table (null: N/A)
-     * @param  ?ID_TEXT                 Name of the ID field in the table (null: N/A)
-     * @param  ?ID_TEXT                 Name of the URL field in the table (null: N/A)
-     * @param  ?MEMBER                  Submitter (null: current member)
+     * @param  array                    $field The field details
+     * @param  mixed                    $ev The raw value
+     * @param  integer                  $i Position in fieldset
+     * @param  ?array                   $only_fields List of fields the output is being limited to (null: N/A)
+     * @param  ?ID_TEXT                 $table The table we store in (null: N/A)
+     * @param  ?AUTO_LINK               $id The ID of the row in the table (null: N/A)
+     * @param  ?ID_TEXT                 $id_field Name of the ID field in the table (null: N/A)
+     * @param  ?ID_TEXT                 $url_field Name of the URL field in the table (null: N/A)
+     * @param  ?MEMBER                  $submitter Submitter (null: current member)
      * @return mixed                    Rendered field (tempcode or string)
      */
     public function render_field_value($field, $ev, $i, $only_fields, $table = null, $id = null, $id_field = null, $url_field = null, $submitter = null)
@@ -165,11 +165,11 @@ class Hook_fields_video
     /**
      * Get form inputter.
      *
-     * @param  string                   The field name
-     * @param  string                   The field description
-     * @param  array                    The field details
-     * @param  ?string                  The actual current value of the field (null: none)
-     * @param  boolean                  Whether this is for a new entry
+     * @param  string                   $_cf_name The field name
+     * @param  string                   $_cf_description The field description
+     * @param  array                    $field The field details
+     * @param  ?string                  $actual_value The actual current value of the field (null: none)
+     * @param  boolean                  $new Whether this is for a new entry
      * @return ?array                   A pair: The Tempcode for the input field, Tempcode for hidden fields (null: skip the field - it's not input)
      */
     public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
@@ -187,10 +187,10 @@ class Hook_fields_video
     /**
      * Find the posted value from the get_field_inputter field
      *
-     * @param  boolean                  Whether we were editing (because on edit, it could be a fractional edit)
-     * @param  array                    The field details
-     * @param  ?string                  Where the files will be uploaded to (null: do not store an upload, return NULL if we would need to do so)
-     * @param  ?array                   Former value of field (null: none)
+     * @param  boolean                  $editing Whether we were editing (because on edit, it could be a fractional edit)
+     * @param  array                    $field The field details
+     * @param  ?string                  $upload_dir Where the files will be uploaded to (null: do not store an upload, return NULL if we would need to do so)
+     * @param  ?array                   $old_value Former value of field (null: none)
      * @return ?string                  The value (null: could not process)
      */
     public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
@@ -222,7 +222,7 @@ class Hook_fields_video
     /**
      * The field is being deleted, so delete any necessary data
      *
-     * @param  mixed                    Current field value
+     * @param  mixed                    $value Current field value
      */
     public function cleanup($value)
     {

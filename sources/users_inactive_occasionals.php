@@ -22,7 +22,7 @@
  * Make sure that the given URL contains a session if cookies are disabled.
  * NB: This is used for login redirection. It had to add the session ID into the redirect url.
  *
- * @param  URLPATH                      The URL to enforce results in session persistence for the user
+ * @param  URLPATH                      $url The URL to enforce results in session persistence for the user
  * @return URLPATH                      The fixed URL
  */
 function _enforce_sessioned_url($url)
@@ -79,9 +79,9 @@ function _enforce_sessioned_url($url)
  *
  * @sets_output_state
  *
- * @param  MEMBER                       Logged in member
- * @param  BINARY                       Whether the session should be considered confirmed
- * @param  boolean                      Whether the session should be invisible
+ * @param  MEMBER                       $member Logged in member
+ * @param  BINARY                       $session_confirmed Whether the session should be considered confirmed
+ * @param  boolean                      $invisible Whether the session should be invisible
  * @return ID_TEXT                      New session ID
  */
 function create_session($member, $session_confirmed = 0, $invisible = false)
@@ -183,8 +183,8 @@ function create_session($member, $session_confirmed = 0, $invisible = false)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT                      The session ID
- * @param  boolean                      Whether this is a guest session (guest sessions will use persistent cookies)
+ * @param  ID_TEXT                       The session ID
+ * @param  boolean                       Whether this is a guest session (guest sessions will use persistent cookies)
  */
 function set_session_id($id, $guest_session = false)  // NB: Guests sessions can persist because they are more benign
 {
@@ -233,7 +233,7 @@ function force_httpauth()
 /**
  * Filter a member ID through SU, if SU is on and if the user has permission.
  *
- * @param  MEMBER                       Real logged in member
+ * @param  MEMBER                       $member Real logged in member
  * @return MEMBER                       Simulated member
  */
 function try_su_login($member)

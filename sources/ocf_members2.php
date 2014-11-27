@@ -21,15 +21,15 @@
 /**
  * Make sure we are doing necessary join to be able to access the given field
  *
- * @param  object                       Database connection
- * @param  array                        Content type info
- * @param  ID_TEXT                      Context (unused)
- * @param  array                        List of joins (passed as reference)
- * @param  array                        List of selects (passed as reference)
- * @param  ID_TEXT                      The field to get
- * @param  string                       The field value for this
- * @param  array                        Database field data
- * @param  string                       What MySQL will join the table with
+ * @param  object                       $db Database connection
+ * @param  array                        $info Content type info
+ * @param  ID_TEXT                      $context Context (unused)
+ * @param  array                         &$extra_join List of joins (passed as reference)
+ * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  ID_TEXT                      $filter_key The field to get
+ * @param  string                       $field_val The field value for this
+ * @param  array                        $db_fields Database field data
+ * @param  string                       $table_join_code What MySQL will join the table with
  * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _members_ocselect($db, $info, $context, &$extra_join, &$extra_select, $filter_key, $field_val, $db_fields, $table_join_code)
@@ -82,14 +82,14 @@ function _members_ocselect($db, $info, $context, &$extra_join, &$extra_select, $
 /**
  * Get a member display box. Some terminology refers to a member here as a 'poster', as this function is used in forum topics also.
  *
- * @param  mixed                        Either a member ID or an array containing: ip_address, poster_num_warnings, poster, poster_posts, poster_points, poster_join_date_string, primary_group_name.
- * @param  boolean                      Whether only to show 'preview' details
- * @param  ?array                       An array of hooks. (null: lookup)
- * @param  ?array                       An array of hook objects that allow us to collect additional mouse-over member information. (null: lookup)
- * @param  boolean                      Whether to show the avatar
- * @param  ?array                       Map of extra fields to show (null: none)
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  mixed                        $poster_details Either a member ID or an array containing: ip_address, poster_num_warnings, poster, poster_posts, poster_points, poster_join_date_string, primary_group_name.
+ * @param  boolean                      $preview Whether only to show 'preview' details
+ * @param  ?array                       $hooks An array of hooks. (null: lookup)
+ * @param  ?array                       $hook_objects An array of hook objects that allow us to collect additional mouse-over member information. (null: lookup)
+ * @param  boolean                      $show_avatar Whether to show the avatar
+ * @param  ?array                       $extra_fields Map of extra fields to show (null: none)
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The member box
  */
 function render_member_box($poster_details, $preview = false, $hooks = null, $hook_objects = null, $show_avatar = true, $extra_fields = null, $give_context = true, $guid = '')
@@ -268,8 +268,8 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
 /**
  * Find if a certain member may be PTd be a certain member.
  *
- * @param  MEMBER                       Member to be PT'd
- * @param  ?MEMBER                      Member to PT. (null: current member)
+ * @param  MEMBER                       $target Member to be PT'd
+ * @param  ?MEMBER                      $member_id Member to PT. (null: current member)
  * @return boolean                      Whether the PT may be created
  */
 function ocf_may_whisper($target, $member_id = null)

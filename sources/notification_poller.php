@@ -185,8 +185,8 @@ function notification_poller_script()
 /**
  * Get web notification templating.
  *
- * @param  ?integer                     Number of notifications to show (null: no limit)
- * @param  integer                      Start offset
+ * @param  ?integer                     $max Number of notifications to show (null: no limit)
+ * @param  integer                      $start Start offset
  * @return array                        A pair: Templating, Max rows
  */
 function get_web_notifications($max = null, $start = 0)
@@ -251,7 +251,7 @@ function get_web_notifications($max = null, $start = 0)
 /**
  * Get XML for sending a notification to the current user's web browser.
  *
- * @param  array                        Notification row
+ * @param  array                        $row Notification row
  * @return string                       The XML
  */
 function web_notification_to_xml($row)
@@ -304,8 +304,8 @@ function web_notification_to_xml($row)
 /**
  * Get PTs templating.
  *
- * @param  ?integer                     Number of PTs to show (null: no limit)
- * @param  integer                      Start offset
+ * @param  ?integer                     $max Number of PTs to show (null: no limit)
+ * @param  integer                      $start Start offset
  * @return array                        A pair: Templating, Max rows
  */
 function get_pts($max = null, $start = 0)
@@ -368,7 +368,7 @@ function get_pts($max = null, $start = 0)
 /**
  * Get XML for sending a PT alert to the current user's web browser.
  *
- * @param  array                        Notification row
+ * @param  array                        $row Notification row
  * @return string                       The XML
  */
 function pt_to_xml($row)

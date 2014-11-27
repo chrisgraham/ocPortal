@@ -34,12 +34,12 @@ class Database_Static_mysqli extends Database_super_mysql
     /**
      * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
      *
-     * @param  boolean                  Whether to create a persistent connection
-     * @param  string                   The database name
-     * @param  string                   The database host (the server)
-     * @param  string                   The database connection username
-     * @param  string                   The database connection password
-     * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
+     * @param  boolean                  $persistent Whether to create a persistent connection
+     * @param  string                   $db_name The database name
+     * @param  string                   $db_host The database host (the server)
+     * @param  string                   $db_user The database connection username
+     * @param  string                   $db_password The database connection password
+     * @param  boolean                  $fail_ok Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (note for mySQL, it's actually a pair, containing the database name too: because we need to select the name before each query on the connection) (null: error)
      */
     public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
@@ -113,7 +113,7 @@ class Database_Static_mysqli extends Database_super_mysql
     /**
      * Find whether full-text-search is present
      *
-     * @param  array                    A DB connection
+     * @param  array                    $db A DB connection
      * @return boolean                  Whether it is
      */
     public function db_has_full_text($db)
@@ -128,7 +128,7 @@ class Database_Static_mysqli extends Database_super_mysql
     /**
      * Find whether subquery support is present
      *
-     * @param  array                    A DB connection
+     * @param  array                    $db A DB connection
      * @return boolean                  Whether it is
      */
     public function db_has_subqueries($db)
@@ -139,7 +139,7 @@ class Database_Static_mysqli extends Database_super_mysql
     /**
      * Find whether collate support is present
      *
-     * @param  array                    A DB connection
+     * @param  array                    $db A DB connection
      * @return boolean                  Whether it is
      */
     public function db_has_collate_settings($db)
@@ -160,7 +160,7 @@ class Database_Static_mysqli extends Database_super_mysql
     /**
      * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
      *
-     * @param  string                   The string
+     * @param  string                   $string The string
      * @return string                   The escaped string
      */
     public function db_escape_string($string)
@@ -174,12 +174,12 @@ class Database_Static_mysqli extends Database_super_mysql
     /**
      * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
      *
-     * @param  string                   The complete SQL query
-     * @param  array                    A DB connection
-     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
-     * @param  ?integer                 The start row to affect (null: no specification)
-     * @param  boolean                  Whether to output an error on failure
-     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
+     * @param  string                   $query The complete SQL query
+     * @param  array                    $db_parts A DB connection
+     * @param  ?integer                 $max The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 $start The start row to affect (null: no specification)
+     * @param  boolean                  $fail_ok Whether to output an error on failure
+     * @param  boolean                  $get_insert_id Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (null: no results), or the insert ID
      */
     public function db_query($query, $db_parts, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
@@ -271,7 +271,7 @@ class Database_Static_mysqli extends Database_super_mysql
     /**
      * Get the rows returned from a SELECT query.
      *
-     * @param  resource                 The query result pointer
+     * @param  resource                 $results The query result pointer
      * @return array                    A list of row maps
      */
     public function db_get_query_rows($results)

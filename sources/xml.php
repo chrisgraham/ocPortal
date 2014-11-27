@@ -21,8 +21,8 @@
 /**
  * XML escape the input string.
  *
- * @param  string                       Input string
- * @param  integer                      Quote style
+ * @param  string                       $string Input string
+ * @param  integer                      $quote_style Quote style
  * @return string                       Escaped version of input string
  */
 function xmlentities($string, $quote_style = ENT_COMPAT)
@@ -37,8 +37,8 @@ function xmlentities($string, $quote_style = ENT_COMPAT)
 /**
  * Convert HTML entities to plain characters for XML validity.
  *
- * @param  string                       HTML to convert entities from
- * @param  string                       The character set we are using for $data (both in and out)
+ * @param  string                       $data HTML to convert entities from
+ * @param  string                       $charset The character set we are using for $data (both in and out)
  * @return string                       Valid XHTML
  */
 function convert_bad_entities($data, $charset = 'ISO-8859-1')
@@ -79,7 +79,7 @@ class OCP_simple_xml_reader
     /**
      * Constructs the XML reader: parses the given data. Check $gleamed and $error after constructing.
      *
-     * @param  string                   The XML data
+     * @param  string                   $xml_data The XML data
      */
     public function __construct($xml_data)
     {
@@ -133,9 +133,9 @@ class OCP_simple_xml_reader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The name of the element found
-     * @param  array                    Array of attributes of the element
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $name The name of the element found
+     * @param  array                    $attributes Array of attributes of the element
      */
     public function startElement($parser, $name, $attributes)
     {
@@ -155,7 +155,7 @@ class OCP_simple_xml_reader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
+     * @param  object                   $parser The parser object (same as 'this')
      */
     public function endElement($parser)
     {
@@ -176,8 +176,8 @@ class OCP_simple_xml_reader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The text
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $data The text
      */
     public function startText($parser, $data)
     {
@@ -193,7 +193,7 @@ class OCP_simple_xml_reader
     /**
      * Pull a portion of an XML tree structure back into textual XML.
      *
-     * @param  array                    Level of XML tree
+     * @param  array                    $children Level of XML tree
      * @return string                   The combined XML
      */
     public function pull_together($children)

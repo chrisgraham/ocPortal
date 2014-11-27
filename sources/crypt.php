@@ -41,9 +41,9 @@ function init__crypt()
         /**
          * Hash the password using the specified algorithm
          *
-         * @param  string               The password to hash
-         * @param  integer              The algorithm to use (Defined by PASSWORD_* constants)
-         * @param  array                The options for the algorithm to use
+         * @param  string               $password The password to hash
+         * @param  integer              $algo The algorithm to use (Defined by PASSWORD_* constants)
+         * @param  array                $options The options for the algorithm to use
          * @return ~string              The hashed password (false: error)
          */
         function password_hash($password, $algo, $options)
@@ -153,8 +153,8 @@ function init__crypt()
         /**
          * Verify a password against a hash using a timing attack resistant approach
          *
-         * @param  string               The password to verify
-         * @param  string               The hash to verify against
+         * @param  string               $password The password to verify
+         * @param  string               $hash The hash to verify against
          * @return boolean              If the password matches the hash
          */
         function password_verify($password, $hash)
@@ -179,7 +179,7 @@ function init__crypt()
          * In this case, strlen() will count the number of *characters* based on the internal encoding. A
          * sequence of bytes might be regarded as a single multibyte character.
          *
-         * @param  string               The input string
+         * @param  string               $binary_string The input string
          * @return integer              The number of bytes
          */
         function _crypt_strlen($binary_string)
@@ -195,9 +195,9 @@ function init__crypt()
          *
          * @see _strlen()
          *
-         * @param string      The input string
-         * @param integer     Start
-         * @param integer     Length
+         * @param string      $binary_string The input string
+         * @param integer     $start Start
+         * @param integer     $length Length
          * @return string               The substring
          */
         function _crypt_substr($binary_string, $start, $length)
@@ -213,9 +213,9 @@ function init__crypt()
 /**
  * Do a hashing, with support for our "ratcheting up" algorithm (i.e. lets the admin increase the complexity over the time, as CPU speeds get faster).
  *
- * @param  SHORT_TEXT                   The password in plain text
- * @param  SHORT_TEXT                   The salt
- * @param  integer                      Legacy hashing style to fallback to
+ * @param  SHORT_TEXT                   $password The password in plain text
+ * @param  SHORT_TEXT                   $salt The salt
+ * @param  integer                      $legacy_style Legacy hashing style to fallback to
  * @return SHORT_TEXT                   The salted&hashed password
  */
 function ratchet_hash($password, $salt, $legacy_style = 0)
@@ -234,10 +234,10 @@ function ratchet_hash($password, $salt, $legacy_style = 0)
 /**
  * Verify a password is correct by comparison of the hashed version.
  *
- * @param  SHORT_TEXT                   The password in plain text
- * @param  SHORT_TEXT                   The salt
- * @param  SHORT_TEXT                   The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
- * @param  integer                      Legacy hashing style to fallback to
+ * @param  SHORT_TEXT                   $password The password in plain text
+ * @param  SHORT_TEXT                   $salt The salt
+ * @param  SHORT_TEXT                   $pass_hash_salted The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
+ * @param  integer                      $legacy_style Legacy hashing style to fallback to
  * @return boolean                      Whether the password if verified
  */
 function ratchet_hash_verify($password, $salt, $pass_hash_salted, $legacy_style = 0)
@@ -324,7 +324,7 @@ function get_secure_random_number()
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT                   Given master password
+ * @param  SHORT_TEXT                   $password_given Given master password
  * @return boolean                      Whether it is valid
  */
 function check_master_password($password_given)

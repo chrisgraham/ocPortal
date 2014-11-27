@@ -282,7 +282,7 @@ function get_site_categories()
 /**
  * Get a form field list of site categories.
  *
- * @param  string                       The default selected item
+ * @param  string                       $cat The default selected item
  * @return tempcode                     List
  */
 function create_selection_list_site_categories($cat)
@@ -298,7 +298,7 @@ function create_selection_list_site_categories($cat)
 /**
  * Get a form field list of servers.
  *
- * @param  string                       The default selected item
+ * @param  string                       $server The default selected item
  * @return tempcode                     List
  */
 function create_selection_list_servers($server)
@@ -336,7 +336,7 @@ function find_all_servers()
 /**
  * Cause the _config.php file to be rebuilt.
  *
- * @param  ID_TEXT                      The server.
+ * @param  ID_TEXT                      $server The server.
  */
 function reset_base_config_file($server)
 {
@@ -488,7 +488,7 @@ function reset_aliases()
 /**
  * Find the size of a directory.
  *
- * @param  PATH                         The pathname to the directory
+ * @param  PATH                         $dir The pathname to the directory
  * @return integer                      The size in bytes
  */
 function find_dir_size($dir)
@@ -517,7 +517,7 @@ function find_dir_size($dir)
 /**
  * Find the load of a server.
  *
- * @param  ID_TEXT                      The server to check load for.
+ * @param  ID_TEXT                      $server The server to check load for.
  * @return ?float                       The load (null: out of action).
  */
 function find_server_load($server)
@@ -657,9 +657,9 @@ function myocp_delete_old_sites()
 /**
  * Delete a site from myOCP.
  *
- * @param  ID_TEXT                      The server to delete from.
- * @param  ID_TEXT                      The site.
- * @param  boolean                      Whether this is a bulk delete (in which case we don't want to do a config file reset each time).
+ * @param  ID_TEXT                      $server The server to delete from.
+ * @param  ID_TEXT                      $codename The site.
+ * @param  boolean                      $bulk Whether this is a bulk delete (in which case we don't want to do a config file reset each time).
  */
 function myocp_delete_site($server, $codename, $bulk = false)
 {

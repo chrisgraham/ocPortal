@@ -59,8 +59,8 @@ class Module_admin_themes
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -98,10 +98,10 @@ class Module_admin_themes
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -546,13 +546,13 @@ class Module_admin_themes
     /**
      * Get standard form input fields for inputting a theme.
      *
-     * @param  string                   The name of the theme
-     * @param  string                   The theme title
-     * @param  string                   The theme description
-     * @param  ?string                  The theme author (null: current member)
-     * @param  string                   Comma-separated list mobile-supporting pages (blank: all do)
-     * @param  BINARY                   Whether the theme supports 'wide' screens
-     * @param  boolean                  Whether to use this theme on all zones
+     * @param  string                   $name The name of the theme
+     * @param  string                   $title The theme title
+     * @param  string                   $description The theme description
+     * @param  ?string                  $author The theme author (null: current member)
+     * @param  string                   $mobile_pages Comma-separated list mobile-supporting pages (blank: all do)
+     * @param  BINARY                   $supports_wide Whether the theme supports 'wide' screens
+     * @param  boolean                  $use_on_all_zones Whether to use this theme on all zones
      * @return tempcode                 The fields
      */
     public function get_theme_fields($name = '', $title = '', $description = '', $author = null, $mobile_pages = '', $supports_wide = 1, $use_on_all_zones = false)
@@ -605,7 +605,7 @@ class Module_admin_themes
     /**
      * Common theme change saving for adding and editing themes.
      *
-     * @param  ID_TEXT                  The name of the theme
+     * @param  ID_TEXT                  $theme The name of the theme
      */
     public function save_theme_changes($theme)
     {
@@ -848,12 +848,12 @@ class Module_admin_themes
     /**
      * The do-next manager for after download content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ID_TEXT                  The theme that was just handled
-     * @param  ?LANGUAGE_NAME           The language we were working in (null: autodetect) (blank: autodetect)
-     * @param  ID_TEXT                  Code to determine what kind of links to show
-     * @param  ID_TEXT                  ID of file that an edit link should load (blank: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ID_TEXT                  $theme The theme that was just handled
+     * @param  ?LANGUAGE_NAME           $lang The language we were working in (null: autodetect) (blank: autodetect)
+     * @param  ID_TEXT                  $type Code to determine what kind of links to show
+     * @param  ID_TEXT                  $file ID of file that an edit link should load (blank: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $theme, $lang, $type, $file)
@@ -927,8 +927,8 @@ class Module_admin_themes
     /**
      * The UI to choose a theme to work with.
      *
-     * @param  tempcode                 The title to show when choosing a theme
-     * @param  boolean                  Whether to also choose a language
+     * @param  tempcode                 $title The title to show when choosing a theme
+     * @param  boolean                  $lang_too Whether to also choose a language
      * @return tempcode                 The UI
      */
     public function choose_theme($title, $lang_too = false)
@@ -1853,9 +1853,9 @@ class Module_admin_themes
     /**
      * Helper function to get tempcode for insertion of symbols.
      *
-     * @param  array                    A list of pairs (symbol name,arity)
-     * @param  string                   The "stub" that determines what language codes to lookup for the given symbols, and generally, the collective naming strategy
-     * @param  string                   The ID of the actual template editor we are working with
+     * @param  array                    $array A list of pairs (symbol name,arity)
+     * @param  string                   $stub The "stub" that determines what language codes to lookup for the given symbols, and generally, the collective naming strategy
+     * @param  string                   $id The ID of the actual template editor we are working with
      * @return tempcode                 The tempcode
      */
     public function generate_from($array, $stub, $id)
@@ -1983,10 +1983,10 @@ class Module_admin_themes
     /**
      * Get tempcode for a theme image adding/editing form.
      *
-     * @param  ID_TEXT                  The theme the theme image is in
-     * @param  LANGUAGE_NAME            The language the theme image is for
-     * @param  SHORT_TEXT               The theme image ID
-     * @param  URLPATH                  The URL to the theme image
+     * @param  ID_TEXT                  $theme The theme the theme image is in
+     * @param  LANGUAGE_NAME            $lang The language the theme image is for
+     * @param  SHORT_TEXT               $id The theme image ID
+     * @param  URLPATH                  $path The URL to the theme image
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function get_image_form_fields($theme, $lang, $id = '', $path = '')

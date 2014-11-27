@@ -516,10 +516,10 @@ function post_fields_relay()
 /**
  * Generate a form-based link to relay POST information to a URL.
  *
- * @param  string                       The URL (something like 'upgrader.php?type=ocf')
- * @param  string                       The URL caption text
- * @param  boolean                      Whether it is disabled
- * @param  string                       Extra JavaScript
+ * @param  string                       $url The URL (something like 'upgrader.php?type=ocf')
+ * @param  string                       $text The URL caption text
+ * @param  boolean                      $disabled Whether it is disabled
+ * @param  string                       $js Extra JavaScript
  * @return string                       The form-based link
  */
 function fu_link($url, $text, $disabled = false, $js = '')
@@ -537,7 +537,7 @@ function fu_link($url, $text, $disabled = false, $js = '')
 /**
  * Output a login page.
  *
- * @param  ?string                      Error message (null: none)
+ * @param  ?string                      $message Error message (null: none)
  */
 function up_do_login($message = null)
 {
@@ -934,8 +934,8 @@ function move_modules()
 /**
  * Find any excess permissions
  *
- * @param  array                        Permissions that DO need to be set
- * @param  string                       Where we are searching under
+ * @param  array                        $array Permissions that DO need to be set
+ * @param  string                       $rel Where we are searching under
  * @return string                       Messages
  */
 function check_excess_perms($array, $rel = '')
@@ -979,9 +979,9 @@ function check_excess_perms($array, $rel = '')
 /**
  * Do an integrity check. This does not include an alien check in basic mode; otherwise check_alien() is called within this function.
  *
- * @param  boolean                      Whether to just do the minimum basic scan.
- * @param  boolean                      Whether merging of CSS changes is allowed.
- * @param  boolean                      Whether to give some help to unix people.
+ * @param  boolean                      $basic Whether to just do the minimum basic scan.
+ * @param  boolean                      $allow_merging Whether merging of CSS changes is allowed.
+ * @param  boolean                      $unix_help Whether to give some help to unix people.
  * @return string                       Results.
  */
 function run_integrity_check($basic = false, $allow_merging = true, $unix_help = false)
@@ -1219,11 +1219,11 @@ function run_integrity_check($basic = false, $allow_merging = true, $unix_help =
 /**
  * Check for out-dated files.
  *
- * @param  SHORT_TEXT                   The directory we are scanning relative to
- * @param  SHORT_TEXT                   The directory (relative) we are scanning
- * @param  array                        Unserialised data/files.dat
- * @param  array                        A list of the contents of our addon registry hook files
- * @param  boolean                      Whether merging of CSS changes is allowed
+ * @param  SHORT_TEXT                   $dir The directory we are scanning relative to
+ * @param  SHORT_TEXT                   $rela The directory (relative) we are scanning
+ * @param  array                         &$master_data Unserialised data/files.dat
+ * @param  array                         &$hook_files A list of the contents of our addon registry hook files
+ * @param  boolean                      $allow_merging Whether merging of CSS changes is allowed
  * @return array                        Tuple of various kinds of outdated/missing files
  */
 function check_outdated__handle_overrides($dir, $rela, &$master_data, &$hook_files, $allow_merging)
@@ -1330,12 +1330,12 @@ function check_outdated__handle_overrides($dir, $rela, &$master_data, &$hook_fil
 /**
  * Check for alien files.
  *
- * @param  array                        List of files from non-bundled addons (a map: relative file paths as keys of map)
- * @param  array                        List of files from old version
- * @param  array                        List of verbatim files
- * @param  SHORT_TEXT                   The directory we are scanning relative to
- * @param  SHORT_TEXT                   The directory (relative) we are scanning
- * @param  boolean                      Whether to give raw output (no UI)
+ * @param  array                        $addon_files List of files from non-bundled addons (a map: relative file paths as keys of map)
+ * @param  array                        $old_files List of files from old version
+ * @param  array                        $files List of verbatim files
+ * @param  SHORT_TEXT                   $dir The directory we are scanning relative to
+ * @param  SHORT_TEXT                   $rela The directory (relative) we are scanning
+ * @param  boolean                      $raw Whether to give raw output (no UI)
  * @return array                        A pair: HTML list of alien files, HTML list of addon files
  */
 function check_alien($addon_files, $old_files, $files, $dir, $rela = '', $raw = false)
@@ -1583,9 +1583,9 @@ function version_specific()
 /**
  * Rename a zone in the database and move any custom pages in it.
  *
- * @param  ID_TEXT                      The old name of the zone
- * @param  ID_TEXT                      The new name of the zone
- * @param  boolean                      Whether to assume the main zone row has already been renamed as part of a wider editing operation
+ * @param  ID_TEXT                      $zone The old name of the zone
+ * @param  ID_TEXT                      $new_zone The new name of the zone
+ * @param  boolean                      $dont_bother_with_main_row Whether to assume the main zone row has already been renamed as part of a wider editing operation
  */
 function fu_rename_zone($zone, $new_zone, $dont_bother_with_main_row = false)
 {
@@ -1740,9 +1740,9 @@ function fix_mysql_database_charset()
 /**
  * Refresh a MySQL database's character set.
  *
- * @param  ID_TEXT                      Character set
- * @param  object                       Database
- * @param  boolean                      Whether to let MySQL do a reencoding of the characters (if this is set to false we actually are adjusting the interpretation whilst leaving the disk data the same)
+ * @param  ID_TEXT                      $new_charset Character set
+ * @param  object                       $db Database
+ * @param  boolean                      $reencode Whether to let MySQL do a reencoding of the characters (if this is set to false we actually are adjusting the interpretation whilst leaving the disk data the same)
  */
 function change_mysql_database_charset($new_charset, $db, $reencode = false)
 {
@@ -1863,10 +1863,10 @@ function upgrade_themes()
 /**
  * Upgrade a theme automatically, using hand-coded migration arrays.
  *
- * @param   ID_TEXT  Theme to be upgraded
- * @param   float    From version
- * @param   float    Target version
- * @param   boolean  Whether executing a test run (i.e. not do anything)
+ * @param   ID_TEXT  $theme Theme to be upgraded
+ * @param   float    $from_version From version
+ * @param   float    $to_version Target version
+ * @param   boolean  $test_run Whether executing a test run (i.e. not do anything)
  * @return  array    A pair: List of errors, List of successes
  */
 function upgrade_theme($theme, $from_version, $to_version, $test_run = true)
@@ -2221,7 +2221,7 @@ function upgrade_theme($theme, $from_version, $to_version, $test_run = true)
 /**
  * Upgrade shared installs.
  *
- * @param   integer  Position to proceed from
+ * @param   integer  $from Position to proceed from
  */
 function upgrade_sharedinstall_sites($from = 0)
 {

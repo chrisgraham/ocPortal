@@ -16,9 +16,9 @@
 /**
  * Handling of a purchased custom product.
  *
- * @param  ID_TEXT                      The purchase ID.
- * @param  array                        Details of the product.
- * @param  ID_TEXT                      The product codename.
+ * @param  ID_TEXT                      $purchase_id The purchase ID.
+ * @param  array                        $details Details of the product.
+ * @param  ID_TEXT                      $type_code The product codename.
  */
 function handle_custom_purchase($purchase_id, $details, $type_code)
 {
@@ -121,7 +121,7 @@ class Hook_ecommerce_custom
     /**
      * Get the message for use in the purchase wizard.
      *
-     * @param  string                   The product in question.
+     * @param  string                   $type_code The product in question.
      * @return tempcode                 The message.
      */
     public function get_message($type_code)

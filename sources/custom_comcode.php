@@ -21,17 +21,17 @@
 /**
  * Add a custom Comcode tag.
  *
- * @param  ID_TEXT                      Tag name.
- * @param  mixed                        Tag title (string, or language ID).
- * @param  mixed                        Tag description (string, or language ID).
- * @param  LONG_TEXT                    Tag replacement text.
- * @param  LONG_TEXT                    Tag example.
- * @param  SHORT_TEXT                   Tag parameters.
- * @param  BINARY                       Whether the tag is enabled.
- * @param  BINARY                       Whether the tag is disabled.
- * @param  BINARY                       Whether the tag is a block tag.
- * @param  BINARY                       Whether the tag is a textual tag.
- * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @param  ID_TEXT                      $tag Tag name.
+ * @param  mixed                        $title Tag title (string, or language ID).
+ * @param  mixed                        $description Tag description (string, or language ID).
+ * @param  LONG_TEXT                    $replace Tag replacement text.
+ * @param  LONG_TEXT                    $example Tag example.
+ * @param  SHORT_TEXT                   $parameters Tag parameters.
+ * @param  BINARY                       $enabled Whether the tag is enabled.
+ * @param  BINARY                       $dangerous_tag Whether the tag is disabled.
+ * @param  BINARY                       $block_tag Whether the tag is a block tag.
+ * @param  BINARY                       $textual_tag Whether the tag is a textual tag.
+ * @param  boolean                      $uniqify Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT                      The tag name
  */
 function add_custom_comcode_tag($tag, $title, $description, $replace, $example, $parameters, $enabled, $dangerous_tag, $block_tag, $textual_tag, $uniqify = false)
@@ -88,18 +88,18 @@ function add_custom_comcode_tag($tag, $title, $description, $replace, $example, 
 /**
  * Edit a custom Comcode tag.
  *
- * @param  ID_TEXT                      Current tag name.
- * @param  ID_TEXT                      New tag name.
- * @param  SHORT_TEXT                   Tag title (string, or language ID).
- * @param  LONG_TEXT                    Tag description (string, or language ID).
- * @param  LONG_TEXT                    Tag replacement text.
- * @param  LONG_TEXT                    Tag example.
- * @param  SHORT_TEXT                   Tag parameters.
- * @param  BINARY                       Whether the tag is enabled.
- * @param  BINARY                       Whether the tag is disabled.
- * @param  BINARY                       Whether the tag is a block tag.
- * @param  BINARY                       Whether the tag is a textual tag.
- * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @param  ID_TEXT                      $old_tag Current tag name.
+ * @param  ID_TEXT                      $tag New tag name.
+ * @param  SHORT_TEXT                   $title Tag title (string, or language ID).
+ * @param  LONG_TEXT                    $description Tag description (string, or language ID).
+ * @param  LONG_TEXT                    $replace Tag replacement text.
+ * @param  LONG_TEXT                    $example Tag example.
+ * @param  SHORT_TEXT                   $parameters Tag parameters.
+ * @param  BINARY                       $enabled Whether the tag is enabled.
+ * @param  BINARY                       $dangerous_tag Whether the tag is disabled.
+ * @param  BINARY                       $block_tag Whether the tag is a block tag.
+ * @param  BINARY                       $textual_tag Whether the tag is a textual tag.
+ * @param  boolean                      $uniqify Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT                      The tag name
  */
 function edit_custom_comcode_tag($old_tag, $tag, $title, $description, $replace, $example, $parameters, $enabled, $dangerous_tag, $block_tag, $textual_tag, $uniqify = false)
@@ -158,7 +158,7 @@ function edit_custom_comcode_tag($old_tag, $tag, $title, $description, $replace,
 /**
  * Delete a custom Comcode tag.
  *
- * @param  ID_TEXT                      Tag name.
+ * @param  ID_TEXT                      $tag Tag name.
  */
 function delete_custom_comcode_tag($tag)
 {

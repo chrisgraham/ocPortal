@@ -26,7 +26,7 @@ class Hook_occle_notification_chat
     /**
      * Run function for OcCLE notification hooks.
      *
-     * @param  ?integer                  The "current" time on which to base queries (null: now)
+     * @param  ?integer                  $timestamp The "current" time on which to base queries (null: now)
      * @return ~array                    Array of section, type and message responses (false: nothing)
      */
     public function run($timestamp = null)

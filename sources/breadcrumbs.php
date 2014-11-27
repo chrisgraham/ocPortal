@@ -29,8 +29,8 @@ function init__breadcrumbs()
 /**
  * Load all breadcrumb substitutions and return them.
  *
- * @param  string                       The default breadcrumbs
- * @param  string                       The breadcrumb XML data
+ * @param  string                       $current_breadcrumb The default breadcrumbs
+ * @param  string                       $data The breadcrumb XML data
  * @return array                        The breadcrumb substitutions
  */
 function load_breadcrumb_substitutions($current_breadcrumb, $data)
@@ -59,8 +59,8 @@ class Breadcrumb_substitution_loader
     /**
      * Run the loader, to load up field-restrictions from the XML file.
      *
-     * @param  string                   The default breadcrumbs
-     * @param  string                   The breadcrumb XML data
+     * @param  string                   $current_breadcrumbs The default breadcrumbs
+     * @param  string                   $data The breadcrumb XML data
      */
     public function go($current_breadcrumbs, $data)
     {
@@ -99,9 +99,9 @@ class Breadcrumb_substitution_loader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The name of the element found
-     * @param  array                    Array of attributes of the element
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $tag The name of the element found
+     * @param  array                    $_attributes Array of attributes of the element
      */
     public function startElement($parser, $tag, $_attributes)
     {
@@ -127,7 +127,7 @@ class Breadcrumb_substitution_loader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
+     * @param  object                   $parser The parser object (same as 'this')
      */
     public function endElement($parser)
     {
@@ -236,8 +236,8 @@ class Breadcrumb_substitution_loader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The text
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $data The text
      */
     public function startText($parser, $data)
     {

@@ -29,8 +29,8 @@ if ((strpos($script_name, '/sources/') !== false) || (strpos($script_name, '/sou
  * You should remember this function, and not substitute anything else for it, as that will likely make your code unstable.
  * It is key to source code modularity in ocPortal.
  *
- * @param  string                       The codename for the source module to load (or a full relative path, ending with .php; if custom checking is needed, this must be the custom version)
- * @param  boolean                      Whether to cleanly fail when a source file is missing
+ * @param  string                       $codename The codename for the source module to load (or a full relative path, ending with .php; if custom checking is needed, this must be the custom version)
+ * @param  boolean                      $light_exit Whether to cleanly fail when a source file is missing
  */
 function require_code($codename, $light_exit = false)
 {
@@ -301,7 +301,7 @@ function require_code($codename, $light_exit = false)
 /**
  * Require code, but without looking for sources_custom overrides
  *
- * @param  string                       The codename for the source module to load
+ * @param  string                       $codename The codename for the source module to load
  */
 function require_code_no_override($codename)
 {
@@ -340,8 +340,8 @@ function tacit_https()
 /**
  * Make an object of the given class
  *
- * @param  string                       The class name
- * @param  boolean                      Whether to return NULL if there is no such class
+ * @param  string                       $class The class name
+ * @param  boolean                      $failure_ok Whether to return NULL if there is no such class
  * @return ?object                      The object (null: no such class)
  */
 function object_factory($class, $failure_ok = false)
@@ -391,8 +391,8 @@ function get_custom_file_base()
  * Get the parameter put into it, with no changes. If it detects that the parameter is naughty (i.e malicious, and probably from a hacker), it will log the hack-attack and output an error message.
  * This function is designed to be called on parameters that will be embedded in a path, and defines malicious as trying to reach a parent directory using '..'. All file paths in ocPortal should be absolute
  *
- * @param  string                       String to test
- * @param  boolean                      Whether to just filter out the naughtyness
+ * @param  string                       $in String to test
+ * @param  boolean                      $preg Whether to just filter out the naughtyness
  * @return string                       Same as input string
  */
 function filter_naughty($in, $preg = false)
@@ -418,8 +418,8 @@ function filter_naughty($in, $preg = false)
 /**
  * This function is similar to filter_naughty, except it requires the parameter to be strictly alphanumeric. It is intended for use on text that will be put into an eval.
  *
- * @param  string                       String to test
- * @param  boolean                      Whether to just filter out the naughtyness
+ * @param  string                       $in String to test
+ * @param  boolean                      $preg Whether to just filter out the naughtyness
  * @return string                       Same as input string
  */
 function filter_naughty_harsh($in, $preg = false)
@@ -441,7 +441,7 @@ function filter_naughty_harsh($in, $preg = false)
 /**
  * Include some PHP code, compiling to HHVM's hack, for type strictness (uses ocPortal phpdoc comments).
  *
- * @param  PATH                         Include path
+ * @param  PATH                         $path Include path
  * @return ?mixed                       Code return code (null: actual NULL)
  */
 function hhvm_include($path)

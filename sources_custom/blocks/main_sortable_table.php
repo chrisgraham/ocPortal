@@ -39,7 +39,7 @@ class Block_main_sortable_table
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -389,8 +389,8 @@ class Block_main_sortable_table
     /**
      * Find a field type for a row index.
      *
-     * @param  array                    Rows.
-     * @param  integer                  Column offset.
+     * @param  array                    $_rows Rows.
+     * @param  integer                  $j Column offset.
      * @return string                   Field type.
      * @set integer float date currency alphanumeric
      */
@@ -461,8 +461,8 @@ class Block_main_sortable_table
     /**
      * Apply formatting to a cell value.
      *
-     * @param  string                   Value to apply formatting to.
-     * @param  ID_TEXT                  Sortable type.
+     * @param  string                   $value Value to apply formatting to.
+     * @param  ID_TEXT                  $sortable_type Sortable type.
      * @set integer float date currency alphanumeric
      * @return string                   Formatted value.
      */

@@ -30,7 +30,7 @@ function init__caches3()
 /**
  * Automatically empty caches.
  *
- * @param  boolean                      Whether the base URL has just been changed
+ * @param  boolean                      $changed_base_url Whether the base URL has just been changed
  */
 function auto_decache($changed_base_url)
 {
@@ -49,7 +49,7 @@ function auto_decache($changed_base_url)
 /**
  * Rebuild the specified caches.
  *
- * @param  ?array                       The caches to rebuild (null: all)
+ * @param  ?array                       $caches The caches to rebuild (null: all)
  * @return tempcode                     Any messages returned
  */
 function ocportal_cleanup($caches = null)
@@ -231,7 +231,7 @@ function erase_cached_language()
 /**
  * Erase all template caches (caches in all themes).
  *
- * @param  boolean                      Whether to preserve CSS and JS files that might be linked to between requests
+ * @param  boolean                      $preserve_some Whether to preserve CSS and JS files that might be linked to between requests
  */
 function erase_cached_templates($preserve_some = false)
 {

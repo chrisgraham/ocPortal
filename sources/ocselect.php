@@ -21,8 +21,8 @@
 /**
  * Read an ocSelect parameter value from GET/POST.
  *
- * @param  ID_TEXT                      The field name
- * @param  ?ID_TEXT                     The field type (null: work out what is there to read automatically)
+ * @param  ID_TEXT                      $field_name The field name
+ * @param  ?ID_TEXT                     $field_type The field type (null: work out what is there to read automatically)
  * @return string                       The parameter value
  */
 function read_ocselect_parameter_from_env($field_name, $field_type = null)
@@ -54,10 +54,10 @@ function read_ocselect_parameter_from_env($field_name, $field_type = null)
 /**
  * Get a form for inputting unknown variables within a filter.
  *
- * @param  string                       String-based search filter (blank: make one up to cover everything, but only works if $table is known)
- * @param  ?array                       Labels for field names (null: none, use auto-generated)
- * @param  ?ID_TEXT                     Content-type to auto-probe from (null: none, use string inputs)
- * @param  ?array                       Field types (null: none, use string inputs / defaults for table)
+ * @param  string                       $filter String-based search filter (blank: make one up to cover everything, but only works if $table is known)
+ * @param  ?array                       $labels Labels for field names (null: none, use auto-generated)
+ * @param  ?ID_TEXT                     $content_type Content-type to auto-probe from (null: none, use string inputs)
+ * @param  ?array                       $types Field types (null: none, use string inputs / defaults for table)
  * @return array                        The form fields, The modded filter, Merger links
  */
 function form_for_ocselect($filter, $labels = null, $content_type = null, $types = null)
@@ -408,7 +408,7 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
 /**
  * Parse some string based ocSelect search filters into the expected array structure.
  *
- * @param  string                       String-based search filter
+ * @param  string                       $filter String-based search filter
  * @return array                        Parsed structure
  */
 function parse_ocselect($filter)
@@ -436,7 +436,7 @@ function parse_ocselect($filter)
 /**
  * Take some parsed ocSelect search filters into the string format (i.e. reverse of parse_ocselect).
  *
- * @param  array                        Parsed structure
+ * @param  array                        $parsed Parsed structure
  * @return string                       String-based search filter
  */
 function unparse_ocselect($parsed)
@@ -455,15 +455,15 @@ function unparse_ocselect($parsed)
 /**
  * Find field by checking fields API, by field name.
  *
- * @param  object                       Database connection
- * @param  array                        Content type info
- * @param  ?ID_TEXT                     Name of the catalogue (null: unknown; reduces performance)
- * @param  array                        List of joins (passed as reference)
- * @param  array                        List of selects (passed as reference)
- * @param  ID_TEXT                      The field to get
- * @param  string                       The field value for this
- * @param  array                        Database field data
- * @param  string                       What MySQL will join the table with
+ * @param  object                       $db Database connection
+ * @param  array                        $info Content type info
+ * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
+ * @param  array                         &$extra_join List of joins (passed as reference)
+ * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  ID_TEXT                      $filter_key The field to get
+ * @param  string                       $filter_val The field value for this
+ * @param  array                        $db_fields Database field data
+ * @param  string                       $table_join_code What MySQL will join the table with
  * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _fields_api_ocselect_named($db, $info, $catalogue_name, &$extra_join, &$extra_select, $filter_key, $filter_val, $db_fields, $table_join_code)
@@ -502,15 +502,15 @@ function _fields_api_ocselect_named($db, $info, $catalogue_name, &$extra_join, &
 /**
  * Find field by checking fields API, by field ID.
  *
- * @param  object                       Database connection
- * @param  array                        Content type info
- * @param  ?ID_TEXT                     Name of the catalogue (null: unknown; reduces performance)
- * @param  array                        List of joins (passed as reference)
- * @param  array                        List of selects (passed as reference)
- * @param  ID_TEXT                      The field to get
- * @param  string                       The field value for this
- * @param  array                        Database field data
- * @param  string                       What MySQL will join the table with
+ * @param  object                       $db Database connection
+ * @param  array                        $info Content type info
+ * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
+ * @param  array                         &$extra_join List of joins (passed as reference)
+ * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  ID_TEXT                      $filter_key The field to get
+ * @param  string                       $filter_val The field value for this
+ * @param  array                        $db_fields Database field data
+ * @param  string                       $table_join_code What MySQL will join the table with
  * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _fields_api_ocselect($db, $info, $catalogue_name, &$extra_join, &$extra_select, $filter_key, $filter_val, $db_fields, $table_join_code)
@@ -561,7 +561,7 @@ function _fields_api_ocselect($db, $info, $catalogue_name, &$extra_join, &$extra
 /**
  * Produce a key we can use for SQL join names, from some string that may be too complex for this. It should be reproducible and unique for the given input.
  *
- * @param  string                       Input string
+ * @param  string                       $str Input string
  * @return string                       Suitable key name
  */
 function generate_ocselect_join_key_from_string($str)
@@ -572,15 +572,15 @@ function generate_ocselect_join_key_from_string($str)
 /**
  * Make sure we are doing necessary join to be able to access the given field
  *
- * @param  object                       Database connection
- * @param  array                        Content type info
- * @param  ?ID_TEXT                     Name of the catalogue (null: unknown; reduces performance)
- * @param  array                        List of joins (passed as reference)
- * @param  array                        List of selects (passed as reference)
- * @param  ID_TEXT                      The field to get
- * @param  string                       The field value for this
- * @param  array                        Database field data
- * @param  string                       What MySQL will join the table with
+ * @param  object                       $db Database connection
+ * @param  array                        $info Content type info
+ * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
+ * @param  array                         &$extra_join List of joins (passed as reference)
+ * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  ID_TEXT                      $filter_key The field to get
+ * @param  string                       $filter_val The field value for this
+ * @param  array                        $db_fields Database field data
+ * @param  string                       $table_join_code What MySQL will join the table with
  * @return ?array                       A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (null: error)
  */
 function _default_conv_func($db, $info, $catalogue_name, &$extra_join, &$extra_select, $filter_key, $filter_val, $db_fields, $table_join_code)
@@ -706,11 +706,11 @@ function _default_conv_func($db, $info, $catalogue_name, &$extra_join, &$extra_s
 /**
  * Convert some ocSelect filters into some SQL fragments.
  *
- * @param  object                       Database object to use
- * @param  array                        Parsed ocSelect structure
- * @param  ID_TEXT                      The content type (blank: no function needed, direct in-table mapping always works)
- * @param  string                       First parameter to send to the conversion function, may mean whatever that function wants it to. If we have no conversion function, this is the name of a table to read field meta data from
- * @param  string                       What MySQL will join the table with
+ * @param  object                       $db Database object to use
+ * @param  array                        $filters Parsed ocSelect structure
+ * @param  ID_TEXT                      $content_type The content type (blank: no function needed, direct in-table mapping always works)
+ * @param  string                       $context First parameter to send to the conversion function, may mean whatever that function wants it to. If we have no conversion function, this is the name of a table to read field meta data from
+ * @param  string                       $table_join_code What MySQL will join the table with
  * @return array                        Tuple: array of extra select, array of extra join, string of extra where
  */
 function ocselect_to_sql($db, $filters, $content_type = '', $context = '', $table_join_code = 'r')
@@ -989,7 +989,7 @@ function ocselect_to_sql($db, $filters, $content_type = '', $context = '', $tabl
 /**
  * Get template-ready details for a merger-link style ocfilter. This is used to do filtering via drill-down using links.
  *
- * @param  string                       ocSelect filter
+ * @param  string                       $_link_filter ocSelect filter
  * @return array                        Template-ready details
  */
 function prepare_ocselect_merger_link($_link_filter)

@@ -258,15 +258,15 @@ function dload_script()
 /**
  * Add a download category
  *
- * @param  SHORT_TEXT                   The name of the download category
- * @param  AUTO_LINK                    The parent download category
- * @param  LONG_TEXT                    A description
- * @param  LONG_TEXT                    Hidden notes pertaining to this download category
- * @param  URLPATH                      The representative image for the category (blank: none)
- * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
- * @param  ?TIME                        Add time (null: now)
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit) (blank: implicit)
+ * @param  SHORT_TEXT                   $category The name of the download category
+ * @param  AUTO_LINK                    $parent_id The parent download category
+ * @param  LONG_TEXT                    $description A description
+ * @param  LONG_TEXT                    $notes Hidden notes pertaining to this download category
+ * @param  URLPATH                      $rep_image The representative image for the category (blank: none)
+ * @param  ?AUTO_LINK                   $id Force an ID (null: don't force an ID)
+ * @param  ?TIME                        $add_time Add time (null: now)
+ * @param  ?SHORT_TEXT                  $meta_keywords Meta keywords for this resource (null: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   $meta_description Meta description for this resource (null: do not edit) (blank: implicit)
  * @return AUTO_LINK                    The ID of the newly added download category
  */
 function add_download_category($category, $parent_id, $description, $notes, $rep_image = '', $id = null, $add_time = null, $meta_keywords = '', $meta_description = '')
@@ -319,15 +319,15 @@ function add_download_category($category, $parent_id, $description, $notes, $rep
 /**
  * Edit the given download category with the new details given
  *
- * @param  AUTO_LINK                    The ID of the category being edited
- * @param  SHORT_TEXT                   The name of the download category
- * @param  AUTO_LINK                    The parent download category
- * @param  LONG_TEXT                    A description
- * @param  LONG_TEXT                    Hidden notes pertaining to this download category
- * @param  URLPATH                      The representative image for the category (blank: none)
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit)
- * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit)
- * @param  ?TIME                        Add time (null: do not change)
+ * @param  AUTO_LINK                    $category_id The ID of the category being edited
+ * @param  SHORT_TEXT                   $category The name of the download category
+ * @param  AUTO_LINK                    $parent_id The parent download category
+ * @param  LONG_TEXT                    $description A description
+ * @param  LONG_TEXT                    $notes Hidden notes pertaining to this download category
+ * @param  URLPATH                      $rep_image The representative image for the category (blank: none)
+ * @param  ?SHORT_TEXT                  $meta_keywords Meta keywords for this resource (null: do not edit)
+ * @param  ?LONG_TEXT                   $meta_description Meta description for this resource (null: do not edit)
+ * @param  ?TIME                        $add_time Add time (null: do not change)
  */
 function edit_download_category($category_id, $category, $parent_id, $description, $notes, $rep_image, $meta_keywords, $meta_description, $add_time = null)
 {
@@ -379,7 +379,7 @@ function edit_download_category($category_id, $category, $parent_id, $descriptio
 /**
  * Delete a download category.
  *
- * @param  AUTO_LINK                    The download category to delete
+ * @param  AUTO_LINK                    $category_id The download category to delete
  */
 function delete_download_category($category_id)
 {
@@ -426,10 +426,10 @@ function delete_download_category($category_id)
 /**
  * Create a data-mash from the file at a URL. This is data useful for the search engine.
  *
- * @param  URLPATH                      The URL to make a data-mash of, or a filename if $data isn't blank
- * @param  ?string                      Data (null: use URL)
- * @param  ?ID_TEXT                     File extension (null: get from URL)
- * @param  boolean                      Whether a direct file path was given instead of a URL
+ * @param  URLPATH                      $url The URL to make a data-mash of, or a filename if $data isn't blank
+ * @param  ?string                      $data Data (null: use URL)
+ * @param  ?ID_TEXT                     $extension File extension (null: get from URL)
+ * @param  boolean                      $direct_path Whether a direct file path was given instead of a URL
  * @return LONG_TEXT                    The data-mash
  */
 function create_data_mash($url, $data = null, $extension = null, $direct_path = false)
@@ -735,32 +735,32 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
 /**
  * Add a download.
  *
- * @param  AUTO_LINK                    The ID of the category the download is to be in
- * @param  SHORT_TEXT                   The name of the download
- * @param  URLPATH                      The URL to the download
- * @param  LONG_TEXT                    The description of the download
- * @param  ID_TEXT                      The author of the download (not necessarily same as the submitter)
- * @param  LONG_TEXT                    The supplementary description for the download
- * @param  ?AUTO_LINK                   The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (null: none)
- * @param  BINARY                       Whether the download has been validated
- * @param  BINARY                       Whether the download may be rated
- * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY                       Whether the download may be trackbacked
- * @param  LONG_TEXT                    Hidden notes pertaining to the download
- * @param  SHORT_TEXT                   The downloads original filename (the URL may be obfuscated)
- * @param  integer                      The file size of the download (we can't really detect this in real-time for remote URLs)
- * @param  integer                      The cost of the download that members will have to pay to get it
- * @param  BINARY                       Whether the submitter gets the points for the download (they are selling it) (otherwise they are just thrown out, which is an alternative model - one of enforcing community point building)
- * @param  ?AUTO_LINK                   The licence to use (null: none)
- * @param  ?TIME                        The add date for the download (null: now)
- * @param  integer                      The number of downloads that this download has had
- * @param  integer                      The number of views that this download has had
- * @param  ?MEMBER                      The submitter (null: current user)
- * @param  ?TIME                        The edit date (null: never)
- * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
- * @param  SHORT_TEXT                   Meta keywords for this resource (blank: implicit)
- * @param  LONG_TEXT                    Meta description for this resource (blank: implicit)
- * @param  integer                      The ordered number of the gallery image to use as the download representative image
+ * @param  AUTO_LINK                    $category_id The ID of the category the download is to be in
+ * @param  SHORT_TEXT                   $name The name of the download
+ * @param  URLPATH                      $url The URL to the download
+ * @param  LONG_TEXT                    $description The description of the download
+ * @param  ID_TEXT                      $author The author of the download (not necessarily same as the submitter)
+ * @param  LONG_TEXT                    $additional_details The supplementary description for the download
+ * @param  ?AUTO_LINK                   $out_mode_id The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (null: none)
+ * @param  BINARY                       $validated Whether the download has been validated
+ * @param  BINARY                       $allow_rating Whether the download may be rated
+ * @param  SHORT_INTEGER                $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       $allow_trackbacks Whether the download may be trackbacked
+ * @param  LONG_TEXT                    $notes Hidden notes pertaining to the download
+ * @param  SHORT_TEXT                   $original_filename The downloads original filename (the URL may be obfuscated)
+ * @param  integer                      $file_size The file size of the download (we can't really detect this in real-time for remote URLs)
+ * @param  integer                      $cost The cost of the download that members will have to pay to get it
+ * @param  BINARY                       $submitter_gets_points Whether the submitter gets the points for the download (they are selling it) (otherwise they are just thrown out, which is an alternative model - one of enforcing community point building)
+ * @param  ?AUTO_LINK                   $licence The licence to use (null: none)
+ * @param  ?TIME                        $add_date The add date for the download (null: now)
+ * @param  integer                      $num_downloads The number of downloads that this download has had
+ * @param  integer                      $views The number of views that this download has had
+ * @param  ?MEMBER                      $submitter The submitter (null: current user)
+ * @param  ?TIME                        $edit_date The edit date (null: never)
+ * @param  ?AUTO_LINK                   $id Force an ID (null: don't force an ID)
+ * @param  SHORT_TEXT                   $meta_keywords Meta keywords for this resource (blank: implicit)
+ * @param  LONG_TEXT                    $meta_description Meta description for this resource (blank: implicit)
+ * @param  integer                      $default_pic The ordered number of the gallery image to use as the download representative image
  * @return AUTO_LINK                    The ID of the newly added download
  */
 function add_download($category_id, $name, $url, $description, $author, $additional_details, $out_mode_id, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $original_filename, $file_size, $cost, $submitter_gets_points, $licence = null, $add_date = null, $num_downloads = 0, $views = 0, $submitter = null, $edit_date = null, $id = null, $meta_keywords = '', $meta_description = '', $default_pic = 1)
@@ -877,8 +877,8 @@ function add_download($category_id, $name, $url, $description, $author, $additio
 /**
  * Set the permissions for a download gallery.
  *
- * @param  ?AUTO_LINK                   The ID of the download (null: lookup from download)
- * @param  ?MEMBER                      The submitter (null: work out automatically)
+ * @param  ?AUTO_LINK                   $id The ID of the download (null: lookup from download)
+ * @param  ?MEMBER                      $submitter The submitter (null: work out automatically)
  */
 function set_download_gallery_permissions($id, $submitter = null)
 {
@@ -911,33 +911,33 @@ function set_download_gallery_permissions($id, $submitter = null)
 /**
  * Edit a download.
  *
- * @param  AUTO_LINK                    The ID of the download to edit
- * @param  AUTO_LINK                    The ID of the category the download is to be in
- * @param  SHORT_TEXT                   The name of the download
- * @param  URLPATH                      The URL to the download
- * @param  LONG_TEXT                    The description of the download
- * @param  ID_TEXT                      The author of the download (not necessarily same as the submitter)
- * @param  LONG_TEXT                    The supplementary description for the download
- * @param  ?AUTO_LINK                   The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (null: none)
- * @param  integer                      The ordered number of the gallery image to use as the download representative image
- * @param  BINARY                       Whether the download has been validated
- * @param  BINARY                       Whether the download may be rated
- * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY                       Whether the download may be trackbacked
- * @param  LONG_TEXT                    Hidden notes pertaining to the download
- * @param  SHORT_TEXT                   The downloads original filename (the URL may be obfuscated)
- * @param  integer                      The file size of the download (we can't really detect this in real-time for remote URLs)
- * @param  integer                      The cost of the download that members will have to pay to get it
- * @param  BINARY                       Whether the submitter gets the points for the download (they are selling it) (otherwise they are just thrown out, which is an alternative model - one of enforcing community point building)
- * @param  ?AUTO_LINK                   The licence to use (null: none)
- * @param  SHORT_TEXT                   Meta keywords
- * @param  LONG_TEXT                    Meta description
- * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME                        Add time (null: do not change)
- * @param  ?integer                     Number of views (null: do not change)
- * @param  ?MEMBER                      Submitter (null: do not change)
- * @param  ?integer                     The number of downloads that this download has had (null: do not change)
- * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    $id The ID of the download to edit
+ * @param  AUTO_LINK                    $category_id The ID of the category the download is to be in
+ * @param  SHORT_TEXT                   $name The name of the download
+ * @param  URLPATH                      $url The URL to the download
+ * @param  LONG_TEXT                    $description The description of the download
+ * @param  ID_TEXT                      $author The author of the download (not necessarily same as the submitter)
+ * @param  LONG_TEXT                    $additional_details The supplementary description for the download
+ * @param  ?AUTO_LINK                   $out_mode_id The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (null: none)
+ * @param  integer                      $default_pic The ordered number of the gallery image to use as the download representative image
+ * @param  BINARY                       $validated Whether the download has been validated
+ * @param  BINARY                       $allow_rating Whether the download may be rated
+ * @param  SHORT_INTEGER                $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       $allow_trackbacks Whether the download may be trackbacked
+ * @param  LONG_TEXT                    $notes Hidden notes pertaining to the download
+ * @param  SHORT_TEXT                   $original_filename The downloads original filename (the URL may be obfuscated)
+ * @param  integer                      $file_size The file size of the download (we can't really detect this in real-time for remote URLs)
+ * @param  integer                      $cost The cost of the download that members will have to pay to get it
+ * @param  BINARY                       $submitter_gets_points Whether the submitter gets the points for the download (they are selling it) (otherwise they are just thrown out, which is an alternative model - one of enforcing community point building)
+ * @param  ?AUTO_LINK                   $licence The licence to use (null: none)
+ * @param  SHORT_TEXT                   $meta_keywords Meta keywords
+ * @param  LONG_TEXT                    $meta_description Meta description
+ * @param  ?TIME                        $edit_time Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        $add_time Add time (null: do not change)
+ * @param  ?integer                     $views Number of views (null: do not change)
+ * @param  ?MEMBER                      $submitter Submitter (null: do not change)
+ * @param  ?integer                     $num_downloads The number of downloads that this download has had (null: do not change)
+ * @param  boolean                      $null_is_literal Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_download($id, $category_id, $name, $url, $description, $author, $additional_details, $out_mode_id, $default_pic, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $original_filename, $file_size, $cost, $submitter_gets_points, $licence, $meta_keywords, $meta_description, $edit_time = null, $add_time = null, $views = null, $submitter = null, $num_downloads = null, $null_is_literal = false)
 {
@@ -1067,8 +1067,8 @@ function edit_download($id, $category_id, $name, $url, $description, $author, $a
 /**
  * Delete a download.
  *
- * @param  AUTO_LINK                    The ID of the download to delete
- * @param  boolean                      Whether to leave the actual file behind
+ * @param  AUTO_LINK                    $id The ID of the download to delete
+ * @param  boolean                      $leave Whether to leave the actual file behind
  */
 function delete_download($id, $leave = false)
 {
@@ -1125,8 +1125,8 @@ function delete_download($id, $leave = false)
 /**
  * Add a download licence.
  *
- * @param  SHORT_TEXT                   The title of the download licence
- * @param  LONG_TEXT                    The text of the download licence
+ * @param  SHORT_TEXT                   $title The title of the download licence
+ * @param  LONG_TEXT                    $text The text of the download licence
  * @return AUTO_LINK                    The ID of the new download licence
  */
 function add_download_licence($title, $text)
@@ -1149,9 +1149,9 @@ function add_download_licence($title, $text)
 /**
  * Edit a download licence.
  *
- * @param  AUTO_LINK                    The ID of the download licence to edit
- * @param  SHORT_TEXT                   The title of the download licence
- * @param  LONG_TEXT                    The text of the download licence
+ * @param  AUTO_LINK                    $id The ID of the download licence to edit
+ * @param  SHORT_TEXT                   $title The title of the download licence
+ * @param  LONG_TEXT                    $text The text of the download licence
  */
 function edit_download_licence($id, $title, $text)
 {
@@ -1168,7 +1168,7 @@ function edit_download_licence($id, $title, $text)
 /**
  * Delete a download licence.
  *
- * @param  AUTO_LINK                    The ID of the download licence to delete
+ * @param  AUTO_LINK                    $id The ID of the download licence to delete
  */
 function delete_download_licence($id)
 {
@@ -1193,9 +1193,9 @@ function delete_download_licence($id)
 /**
  * Log a file download, update the downloads counter and the download bandwidth counter.
  *
- * @param  AUTO_LINK                    The ID of the download being downloaded
- * @param  integer                      The size of the download (if zero, no bandwidth will be done - zero implies either an empty file, or a remote file that doesn't affect our bandwidth)
- * @param  boolean                      Whether the download has been downloaded before
+ * @param  AUTO_LINK                    $id The ID of the download being downloaded
+ * @param  integer                      $size The size of the download (if zero, no bandwidth will be done - zero implies either an empty file, or a remote file that doesn't affect our bandwidth)
+ * @param  boolean                      $got_before Whether the download has been downloaded before
  */
 function log_download($id, $size, $got_before)
 {

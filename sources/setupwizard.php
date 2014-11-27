@@ -21,10 +21,10 @@
 /**
  * Get Comcode for the pages in the zone.
  *
- * @param  array                        List of blocks in the install profile
- * @param  array                        Block options in the install profile
- * @param  boolean                      Whether we have zone collapsing on
- * @param  ID_TEXT                      ID of the install profile
+ * @param  array                        $installprofileblocks List of blocks in the install profile
+ * @param  array                        $block_options Block options in the install profile
+ * @param  boolean                      $collapse_zones Whether we have zone collapsing on
+ * @param  ID_TEXT                      $installprofile ID of the install profile
  * @return array                        Structure of pages
  */
 function _get_zone_pages($installprofileblocks, $block_options, $collapse_zones, $installprofile)

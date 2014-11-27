@@ -87,7 +87,7 @@ function ocp_profile_is_enabled()
 /**
  * Start a profiling block, for a specified identifier (of your own choosing).
  *
- * @param  ID_TEXT                      Identifier
+ * @param  ID_TEXT                      $identifier Identifier
  */
 function _ocp_profile_start_for($identifier)
 {
@@ -111,8 +111,8 @@ function _ocp_profile_start_for($identifier)
 /**
  * End a profiling block, for a specified identifier (of your own choosing - but you must have started it with ocp_profile_start_for).
  *
- * @param  ID_TEXT                      Identifier
- * @param  ?string                      Longer details of what happened (e.g. a specific SQL query that ran) (null: none provided)
+ * @param  ID_TEXT                      $identifier Identifier
+ * @param  ?string                      $specifics Longer details of what happened (e.g. a specific SQL query that ran) (null: none provided)
  */
 function _ocp_profile_end_for($identifier, $specifics = null)
 {
@@ -143,9 +143,9 @@ function _ocp_profile_end_for($identifier, $specifics = null)
 /**
  * Generate a line to add to the profiling log, from a recorded signature.
  *
- * @param  ID_TEXT                      Identifier
- * @param  array                        The signature for what we just profiled
- * @param  integer                      This will be the nth of this identifier to be logged
+ * @param  ID_TEXT                      $identifier Identifier
+ * @param  array                        $at The signature for what we just profiled
+ * @param  integer                      $cnt This will be the nth of this identifier to be logged
  * @return string                       Log line
  */
 function _ocp_profile_generate_line($identifier, $at, $cnt)
@@ -162,7 +162,7 @@ function _ocp_profile_generate_line($identifier, $at, $cnt)
 /**
  * Store a line in the profiling log.
  *
- * @param  string                       Log line
+ * @param  string                       $line Log line
  */
 function _ocp_profile_log_line($line)
 {

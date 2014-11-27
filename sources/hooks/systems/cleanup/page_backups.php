@@ -90,7 +90,7 @@ class Hook_cleanup_page_backups
     /**
      * Move revision files from the given path, to a subdirectory.
      *
-     * @param  PATH                     Path
+     * @param  PATH                     $path Path
      */
     public function process($path)
     {

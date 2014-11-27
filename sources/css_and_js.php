@@ -30,12 +30,12 @@ function init__css_and_js()
 /**
  * Inherit from a CSS file to create a string for a (possibly theme-gen) modified version of that file.
  *
- * @param  ID_TEXT                      Source CSS file
- * @param  ID_TEXT                      Source theme
- * @param  ID_TEXT                      Destination theme
- * @param  ?ID_TEXT                     Seed (null: do not re-seed)
- * @param  boolean                      Whether it is a dark theme
- * @param  ID_TEXT                      The algorithm to use
+ * @param  ID_TEXT                      $css_file Source CSS file
+ * @param  ID_TEXT                      $theme Source theme
+ * @param  ID_TEXT                      $destination_theme Destination theme
+ * @param  ?ID_TEXT                     $seed Seed (null: do not re-seed)
+ * @param  boolean                      $dark Whether it is a dark theme
+ * @param  ID_TEXT                      $algorithm The algorithm to use
  * @set equations hsv
  * @return string                       The sheet
  */
@@ -105,9 +105,9 @@ function css_inherit($css_file, $theme, $destination_theme, $seed, $dark, $algor
 /**
  * Compile a JavaScript file.
  *
- * @param  ID_TEXT                      Name of the JS file
- * @param  PATH                         Full path to the JS file
- * @param  boolean                      Whether to also do minification
+ * @param  ID_TEXT                      $j Name of the JS file
+ * @param  PATH                         $js_cache_path Full path to the JS file
+ * @param  boolean                      $minify Whether to also do minification
  */
 function js_compile($j, $js_cache_path, $minify = true)
 {
@@ -192,7 +192,7 @@ function js_compile($j, $js_cache_path, $minify = true)
 /**
  * Compress a file, and save with a stem of .gz.
  *
- * @param  PATH                         Full path to the file to compress
+ * @param  PATH                         $stub_file Full path to the file to compress
  */
 function compress_ocp_stub_file($stub_file)
 {
@@ -219,12 +219,12 @@ function compress_ocp_stub_file($stub_file)
 /**
  * Compile a CSS file.
  *
- * @param  ID_TEXT                      The theme the file is being loaded for
- * @param  ID_TEXT                      The theme the file is in
- * @param  ID_TEXT                      Name of the CSS file
- * @param  PATH                         Full path to the CSS file
- * @param  PATH                         Full path to where the cached CSS file will go
- * @param  boolean                      Whether to also do minification
+ * @param  ID_TEXT                      $active_theme The theme the file is being loaded for
+ * @param  ID_TEXT                      $theme The theme the file is in
+ * @param  ID_TEXT                      $c Name of the CSS file
+ * @param  PATH                         $fullpath Full path to the CSS file
+ * @param  PATH                         $css_cache_path Full path to where the cached CSS file will go
+ * @param  boolean                      $minify Whether to also do minification
  */
 function css_compile($active_theme, $theme, $c, $fullpath, $css_cache_path, $minify = true)
 {
@@ -270,7 +270,7 @@ function css_compile($active_theme, $theme, $c, $fullpath, $css_cache_path, $min
 /**
  * preg_replace callback, to handle CSS file inclusion.
  *
- * @param  array                        Matched variables
+ * @param  array                        $matches Matched variables
  * @return array                        A pair: success status, The text of the compiled file
  */
 function _css_ocp_include($matches)
@@ -296,11 +296,11 @@ function _css_ocp_include($matches)
 /**
  * Return a specific compiled CSS file.
  *
- * @param  ID_TEXT                      The theme the file is being loaded for
- * @param  string                       Theme name
- * @param  string                       The CSS file required
- * @param  PATH                         Full path to CSS file (file is in uncompiled Tempcode format)
- * @param  boolean                      Whether to also do minification
+ * @param  ID_TEXT                      $active_theme The theme the file is being loaded for
+ * @param  string                       $theme Theme name
+ * @param  string                       $c The CSS file required
+ * @param  PATH                         $fullpath Full path to CSS file (file is in uncompiled Tempcode format)
+ * @param  boolean                      $minify Whether to also do minification
  * @return array                        A pair: success status, The text of the compiled file
  */
 function _css_compile($active_theme, $theme, $c, $fullpath, $minify = true)
@@ -346,7 +346,7 @@ function _css_compile($active_theme, $theme, $c, $fullpath, $minify = true)
 /**
  * Minimise the given JavaScript
  *
- * @param   string      JavaScript to minimise
+ * @param   string      $js JavaScript to minimise
  * @return  string      Minimised JavaScript
  */
 function js_minify($js)
@@ -392,7 +392,7 @@ function js_minify($js)
 /**
  * Minifies stylesheet definitions
  *
- * @param   string      Stylesheet definitions as string
+ * @param   string      $v Stylesheet definitions as string
  * @return  string      Minified stylesheet definitions
  */
 function css_minify($v)

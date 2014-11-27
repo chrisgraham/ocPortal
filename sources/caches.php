@@ -63,8 +63,8 @@ function init__caches()
 /**
  * Get data from the persistent cache.
  *
- * @param  mixed                        Key
- * @param  ?TIME                        Minimum timestamp that entries from the cache may hold (null: don't care)
+ * @param  mixed                        $key Key
+ * @param  ?TIME                        $min_cache_date Minimum timestamp that entries from the cache may hold (null: don't care)
  * @return ?mixed                       The data (null: not found / NULL entry)
  */
 function persistent_cache_get($key, $min_cache_date = null)
@@ -85,10 +85,10 @@ function persistent_cache_get($key, $min_cache_date = null)
 /**
  * Put data into the persistent cache.
  *
- * @param  mixed                        Key
- * @param  mixed                        The data
- * @param  boolean                      Whether it is server-wide data
- * @param  ?integer                     The expiration time in seconds. (null: Default expiry in 60 minutes, or never if it is server-wide).
+ * @param  mixed                        $key Key
+ * @param  mixed                        $data The data
+ * @param  boolean                      $server_wide Whether it is server-wide data
+ * @param  ?integer                     $expire_secs The expiration time in seconds. (null: Default expiry in 60 minutes, or never if it is server-wide).
  */
 function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = null)
 {
@@ -105,8 +105,8 @@ function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = 
 /**
  * Delete data from the persistent cache.
  *
- * @param  mixed                        Key name
- * @param  boolean                      Whether we are deleting via substring
+ * @param  mixed                        $key Key name
+ * @param  boolean                      $substring Whether we are deleting via substring
  */
 function persistent_cache_delete($key, $substring = false)
 {
@@ -162,8 +162,8 @@ function erase_persistent_cache()
 /**
  * Remove an item from the general cache (most commonly used for blocks).
  *
- * @param  mixed                        The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
- * @param  ?array                       A map of identifiying characteristics (null: no identifying characteristics, decache all)
+ * @param  mixed                        $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
+ * @param  ?array                       $identifier A map of identifiying characteristics (null: no identifying characteristics, decache all)
  */
 function decache($cached_for, $identifier = null)
 {
@@ -178,7 +178,7 @@ function decache($cached_for, $identifier = null)
 /**
  * Find the cache-on parameters for 'codename's cacheing style (prevents us needing to load up extra code to find it).
  *
- * @param  ID_TEXT                      The codename of what will be checked for cacheing
+ * @param  ID_TEXT                      $codename The codename of what will be checked for cacheing
  * @return ?array                       The cached result (null: no cached result)
  */
 function find_cache_on($codename)

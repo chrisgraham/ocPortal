@@ -26,7 +26,7 @@ class Hook_whatsnew_comcode_pages
     /**
      * Find selectable (filterable) categories.
      *
-     * @param  TIME                     The time that there must be entries found newer than
+     * @param  TIME                     $updated_since The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (null: disabled)
      */
     public function choose_categories($updated_since)
@@ -39,9 +39,9 @@ class Hook_whatsnew_comcode_pages
     /**
      * Run function for newsletter hooks.
      *
-     * @param  TIME                     The time that the entries found must be newer than
-     * @param  LANGUAGE_NAME            The language the entries found must be in
-     * @param  string                   Category filter to apply
+     * @param  TIME                     $cutoff_time The time that the entries found must be newer than
+     * @param  LANGUAGE_NAME            $lang The language the entries found must be in
+     * @param  string                   $filter Category filter to apply
      * @return array                    Tuple of result details
      */
     public function run($cutoff_time, $lang, $filter)

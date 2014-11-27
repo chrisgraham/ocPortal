@@ -95,7 +95,7 @@ class Hook_aef
     /**
      * Probe a file path for DB access details.
      *
-     * @param  string                   The probe path
+     * @param  string                   $file_base The probe path
      * @return array                    A quartet of the details (db_name, db_user, db_pass, table_prefix)
      */
     public function probe_db_access($file_base)
@@ -112,9 +112,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_config($db, $table_prefix, $file_base)
     {
@@ -157,9 +157,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_groups($db, $table_prefix, $file_base)
     {
@@ -204,9 +204,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_members($db, $table_prefix, $file_base)
     {
@@ -293,9 +293,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_authors($db, $table_prefix, $old_base_dir)
     {
@@ -314,9 +314,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_news_and_categories($db, $table_prefix, $old_base_dir)
     {
@@ -343,9 +343,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_member_files($db, $table_prefix, $file_base)
     {
@@ -433,9 +433,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ip_bans($db, $table_prefix, $file_base)
     {
@@ -465,9 +465,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_forum_groupings($db, $table_prefix, $old_base_dir)
     {
@@ -495,9 +495,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_forums($db, $table_prefix, $old_base_dir)
     {
@@ -554,9 +554,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_topics($db, $table_prefix, $file_base)
     {
@@ -584,9 +584,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_posts($db, $table_prefix, $file_base)
     {
@@ -688,10 +688,10 @@ class Hook_aef
     /**
      * Convert AEF URLs pasted in text fields into ocPortal ones.
      *
-     * @param  string                   The text field text (e.g. a post)
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  string                   $post The text field text (e.g. a post)
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      * @return string                   The new text field text
      */
     public function fix_links($post, $db, $table_prefix, $file_base)
@@ -711,10 +711,10 @@ class Hook_aef
     /**
      * Convert a AEF database file to an ocPortal uploaded file (stored on disk).
      *
-     * @param  string                   The file data
-     * @param  string                   The optimal filename
-     * @param  ID_TEXT                  The upload type (e.g. ocf_photos)
-     * @param  PATH                     The base directory we are importing from
+     * @param  string                   $data The file data
+     * @param  string                   $filename The optimal filename
+     * @param  ID_TEXT                  $sections The upload type (e.g. ocf_photos)
+     * @param  PATH                     $file_base The base directory we are importing from
      * @return array                    Pair: The URL, the thumb url
      */
     public function data_to_disk($data, $filename, $sections, $file_base)
@@ -743,9 +743,9 @@ class Hook_aef
     /**
      * Standard import function. Note that this is designed for a very popular phpBB mod, and will exit silently if the mod hasn't been installed.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_post_files($db, $table_prefix, $file_base)
     {
@@ -793,9 +793,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_polls_and_votes($db, $table_prefix, $file_base)
     {
@@ -851,9 +851,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_private_topics($db, $table_prefix, $old_base_dir)
     {
@@ -927,7 +927,7 @@ class Hook_aef
     /**
      * Convert a AEF topic icon code into a standard ocPortal theme image code.
      *
-     * @param  integer                  VB code
+     * @param  integer                  $iconid VB code
      * @return ID_TEXT                  ocPortal code
      */
     public function convert_topic_emoticon($iconid)
@@ -960,9 +960,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_notifications($db, $table_prefix, $file_base)
     {
@@ -998,9 +998,9 @@ class Hook_aef
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_wordfilter($db, $table_prefix, $file_base)
     {

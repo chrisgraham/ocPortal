@@ -177,8 +177,8 @@ function init__google_appengine()
 /**
  * Find whether the current user is an admin, from the perspective of the Google Console.
  *
- * @param  array                        URL segments matched
- * @param  string                       Redirect pattern
+ * @param  array                        $matches URL segments matched
+ * @param  string                       $to Redirect pattern
  */
 function _roll_gae_redirect($matches, $to)
 {
@@ -248,7 +248,7 @@ function gae_debugger()
  * Enable/Disable GAE optimistic cache, meaning it avoids need to check the Cloud Storage if a file is updated.
  * We only set this to enabled if we are sure the persistent cache would receive a flush if the referenced file changed state.
  *
- * @param  boolean                      Whether the cache is enabled
+ * @param  boolean                      $enabled Whether the cache is enabled
  */
 function gae_optimistic_cache($enabled)
 {

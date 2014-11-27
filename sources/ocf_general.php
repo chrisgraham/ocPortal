@@ -76,8 +76,8 @@ function ocf_get_forums_stats()
 /**
  * Get details on a member profile.
  *
- * @param  MEMBER                       The member to get details of.
- * @param  boolean                      Whether to get a 'lite' version (contains less detail, therefore less costly).
+ * @param  MEMBER                       $member_id The member to get details of.
+ * @param  boolean                      $lite Whether to get a 'lite' version (contains less detail, therefore less costly).
  * @return array                        A map of details.
  */
 function ocf_read_in_member_profile($member_id, $lite = true)
@@ -171,7 +171,7 @@ function ocf_read_in_member_profile($member_id, $lite = true)
 /**
  * Get a usergroup colour based on it's ID number.
  *
- * @param  GROUP                        ID number.
+ * @param  GROUP                        $gid ID number.
  * @return string                       Colour.
  */
 function get_group_colour($gid)
@@ -183,7 +183,7 @@ function get_group_colour($gid)
 /**
  * Find all the birthdays in a certain day.
  *
- * @param  ?TIME                        A timestamps that exists in the certain day (null: now).
+ * @param  ?TIME                        $time A timestamps that exists in the certain day (null: now).
  * @return array                        List of maps describing the members whose birthday it is on the certain day.
  */
 function ocf_find_birthdays($time = null)
@@ -216,7 +216,7 @@ function ocf_find_birthdays($time = null)
 /**
  * Turn a list of maps describing buttons, into a tempcode button panel.
  *
- * @param  array                        List of maps (each map contains: url, img, title).
+ * @param  array                        $buttons List of maps (each map contains: url, img, title).
  * @return tempcode                     The button panel.
  */
 function ocf_button_screen_wrap($buttons)
@@ -235,7 +235,7 @@ function ocf_button_screen_wrap($buttons)
 /**
  * Set the forum context.
  *
- * @param  AUTO_LINK                    Forum ID.
+ * @param  AUTO_LINK                    $forum_id Forum ID.
  */
 function ocf_set_context_forum($forum_id)
 {

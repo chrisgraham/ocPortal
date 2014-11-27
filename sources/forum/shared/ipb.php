@@ -43,7 +43,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get the rows for the top given number of posters on the forum.
      *
-     * @param  integer                  The limit to the number of top posters to fetch
+     * @param  integer                  $limit The limit to the number of top posters to fetch
      * @return array                    The rows for the given number of top posters in the forum
      */
     public function get_top_posters($limit)
@@ -54,7 +54,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Attempt to to find the member's language from their forum profile. It converts between language-identifiers using a map (lang/map.ini).
      *
-     * @param  MEMBER                   The member who's language needs to be fetched
+     * @param  MEMBER                   $member The member who's language needs to be fetched
      * @return ?LANGUAGE_NAME           The member's language (null: unknown)
      */
     public function forum_get_lang($member)
@@ -69,7 +69,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Escape a value for HTML embedding, IPB style.
      *
-     * @param  string                   The value to escape
+     * @param  string                   $val The value to escape
      * @return string                   The escaped value
      */
     public function ipb_escape($val)
@@ -186,7 +186,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get an emoticon chooser template.
      *
-     * @param  string                   The ID of the form field the emoticon chooser adds to
+     * @param  string                   $field_name The ID of the form field the emoticon chooser adds to
      * @return tempcode                 The emoticon chooser template
      */
     public function get_emoticon_chooser($field_name = 'post')
@@ -205,8 +205,8 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Pin a topic.
      *
-     * @param  AUTO_LINK                The topic ID
-     * @param  boolean                  True: pin it, False: unpin it
+     * @param  AUTO_LINK                $id The topic ID
+     * @param  boolean                  $pin True: pin it, False: unpin it
      */
     public function pin_topic($id, $pin = true)
     {
@@ -216,7 +216,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * From a member row, get the member's primary usergroup.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return GROUP                    The member's primary usergroup
      */
     public function mrow_group($r)
@@ -227,7 +227,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * From a member row, get the member's member ID.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return MEMBER                   The member ID
      */
     public function mrow_id($r)
@@ -238,7 +238,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * From a member row, get the member's last visit date.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return TIME                     The last visit date
      */
     public function mrow_lastvisit($r)
@@ -249,7 +249,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * From a member row, get the member's e-mail address.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return SHORT_TEXT               The member e-mail address
      */
     public function mrow_email($r)
@@ -260,7 +260,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get a URL to the specified member's home (control panel).
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $id The member ID
      * @return URLPATH                  The URL to the members home
      */
     public function member_home_url($id)
@@ -324,7 +324,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get the forum ID from a forum name.
      *
-     * @param  SHORT_TEXT               The forum name
+     * @param  SHORT_TEXT               $forum_name The forum name
      * @return integer                  The forum ID
      */
     public function forum_id_from_name($forum_name)
@@ -335,8 +335,8 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
      *
-     * @param  string                   The forum name / ID
-     * @param  SHORT_TEXT               The topic identifier
+     * @param  string                   $forum The forum name / ID
+     * @param  SHORT_TEXT               $topic_identifier The topic identifier
      * @return ?integer                 The topic ID (null: not found)
      */
     public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
@@ -355,8 +355,8 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
      *
-     * @param  integer                  The topic ID
-     * @param  string       The forum ID
+     * @param  integer                  $id The topic ID
+     * @param  string       $forum The forum ID
      * @return URLPATH                  The URL to the topic
      */
     public function topic_url($id, $forum)
@@ -367,8 +367,8 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get a URL to the specified post ID.
      *
-     * @param  integer                  The post ID
-     * @param  string       The forum ID
+     * @param  integer                  $id The post ID
+     * @param  string       $forum The forum ID
      * @return URLPATH                  The URL to the post
      */
     public function post_url($id, $forum)
@@ -384,9 +384,9 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get an array of members who are in at least one of the given array of usergroups.
      *
-     * @param  array                    The array of usergroups
-     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
-     * @param  integer                  Return primary members after this offset and secondary members after this offset
+     * @param  array                    $groups The array of usergroups
+     * @param  ?integer                 $max Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  integer                  $start Return primary members after this offset and secondary members after this offset
      * @return ?array                   The array of members (null: no members)
      */
     public function member_group_query($groups, $max = null, $start = 0)
@@ -404,7 +404,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * This is the opposite of the get_next_member function.
      *
-     * @param  MEMBER                   The member ID to decrement
+     * @param  MEMBER                   $member The member ID to decrement
      * @return ?MEMBER                  The previous member ID (null: no previous member)
      */
     public function get_previous_member($member)
@@ -417,7 +417,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
      * Get the member ID of the next member after the given one, or NULL.
      * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
      *
-     * @param  MEMBER                   The member ID to increment
+     * @param  MEMBER                   $member The member ID to increment
      * @return ?MEMBER                  The next member ID (null: no next member)
      */
     public function get_next_member($member)
@@ -429,7 +429,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Try to find a member with the given IP address
      *
-     * @param  IP                       The IP address
+     * @param  IP                       $ip The IP address
      * @return array                    The distinct rows found
      */
     public function probe_ip($ip)
@@ -453,7 +453,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get the photo thumbnail URL for the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return URLPATH                  The URL (blank: none)
      */
     public function get_member_photo_url($member)
@@ -471,7 +471,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Find if this member may have e-mails sent to them
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member may have e-mails sent to them
      */
     public function get_member_email_allowed($member)
@@ -486,7 +486,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get the timestamp of a member's join date.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return TIME                     The timestamp
      */
     public function get_member_join_timestamp($member)
@@ -497,7 +497,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get the given member's post count.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return integer                  The post count
      */
     public function get_post_count($member)
@@ -512,7 +512,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get the given member's topic count.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return integer                  The topic count
      */
     public function get_topic_count($member)
@@ -523,7 +523,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Find out if the given member ID is banned.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is banned
      */
     public function is_banned($member)
@@ -630,7 +630,7 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Get a first known IP address of the given member.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return IP                       The IP address
      */
     public function get_member_ip($member)
@@ -641,8 +641,8 @@ class Forum_driver_ipb_shared extends Forum_driver_base
     /**
      * Gets a named field of a member row from the database.
      *
-     * @param  MEMBER                   The member ID
-     * @param  string                   The field identifier
+     * @param  MEMBER                   $member The member ID
+     * @param  string                   $field The field identifier
      * @return mixed                    The field
      */
     public function get_member_row_field($member, $field)

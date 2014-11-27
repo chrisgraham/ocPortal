@@ -31,17 +31,17 @@ class Hook_comcode_link_handler_media_rendering
     /**
      * Bind function for Comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
      *
-     * @param  URLPATH                  Link to use or reject
-     * @param  boolean                  Whether we are allowed to proceed even if this tag is marked as 'dangerous'
-     * @param  string                   A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
-     * @param  integer                  The position this tag occurred at in the Comcode
-     * @param  MEMBER                   The member who is responsible for this Comcode
-     * @param  boolean                  Whether to check as arbitrary admin
-     * @param  object                   The database connection to use
-     * @param  string                   The whole chunk of Comcode
-     * @param  boolean                  Whether this is only a structure sweep
-     * @param  boolean                  Whether we are in semi-parse-mode (some tags might convert differently)
-     * @param  ?array                   A list of words to highlight (null: none)
+     * @param  URLPATH                  $url Link to use or reject
+     * @param  boolean                  $comcode_dangerous Whether we are allowed to proceed even if this tag is marked as 'dangerous'
+     * @param  string                   $pass_id A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
+     * @param  integer                  $pos The position this tag occurred at in the Comcode
+     * @param  MEMBER                   $source_member The member who is responsible for this Comcode
+     * @param  boolean                  $as_admin Whether to check as arbitrary admin
+     * @param  object                   $connection The database connection to use
+     * @param  string                   $comcode The whole chunk of Comcode
+     * @param  boolean                  $structure_sweep Whether this is only a structure sweep
+     * @param  boolean                  $semiparse_mode Whether we are in semi-parse-mode (some tags might convert differently)
+     * @param  ?array                   $highlight_bits A list of words to highlight (null: none)
      * @return ?tempcode                Handled link (null: reject due to inappropriate link pattern)
      */
     public function bind($url, $comcode_dangerous, $pass_id, $pos, $source_member, $as_admin, $connection, $comcode, $structure_sweep, $semiparse_mode, $highlight_bits)

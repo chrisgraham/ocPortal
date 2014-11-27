@@ -21,7 +21,7 @@
 /**
  * Build a list of ticket types.
  *
- * @param  ID_TEXT                      Ticket ID
+ * @param  ID_TEXT                      $ticket_id Ticket ID
  * @return array                        Map of assigned members (member ID to display name)
  */
 function find_ticket_assigned_to($ticket_id)
@@ -38,8 +38,8 @@ function find_ticket_assigned_to($ticket_id)
 /**
  * Build a list of ticket types.
  *
- * @param  ?AUTO_LINK                   The current selected ticket type (null: none)
- * @param  ?array                       List of ticket types to show regardless of access permissions (null: none)
+ * @param  ?AUTO_LINK                   $selected_ticket_type_id The current selected ticket type (null: none)
+ * @param  ?array                       $ticket_types_to_let_through List of ticket types to show regardless of access permissions (null: none)
  * @return array                        A map between ticket types, and template-ready details about them
  */
 function build_types_list($selected_ticket_type_id, $ticket_types_to_let_through = null)
@@ -68,7 +68,7 @@ function build_types_list($selected_ticket_type_id, $ticket_types_to_let_through
 /**
  * Checks the ticket ID is valid, and there is access for the current member to view it. Bombs out if there's a problem.
  *
- * @param  string                       The ticket ID to check
+ * @param  string                       $id The ticket ID to check
  * @return MEMBER                       The ticket owner
  */
 function check_ticket_access($id)
@@ -110,10 +110,10 @@ function check_ticket_access($id)
  * Get the forum ID for a given ticket type and member, taking the ticket_member_forums and ticket_type_forums options
  * into account.
  *
- * @param  ?AUTO_LINK                   The member ID (null: no member)
- * @param  ?integer                     The ticket type (null: all ticket types)
- * @param  boolean                      Create the forum if it's missing
- * @param  boolean                      Whether to skip showing errors, returning NULL instead
+ * @param  ?AUTO_LINK                   $member The member ID (null: no member)
+ * @param  ?integer                     $ticket_type_id The ticket type (null: all ticket types)
+ * @param  boolean                      $create Create the forum if it's missing
+ * @param  boolean                      $silent_error_handling Whether to skip showing errors, returning NULL instead
  * @return ?AUTO_LINK                   Forum ID (null: not found)
  */
 function get_ticket_forum_id($member = null, $ticket_type_id = null, $create = false, $silent_error_handling = false)
@@ -175,7 +175,7 @@ function get_ticket_forum_id($member = null, $ticket_type_id = null, $create = f
 /**
  * Returns whether the given forum ID is for a ticket forum (subforum of the root ticket forum).
  *
- * @param  ?AUTO_LINK                   The forum ID (null: private topics forum)
+ * @param  ?AUTO_LINK                   $forum_id The forum ID (null: private topics forum)
  * @return boolean                      Whether the given forum is a ticket forum
  */
 function is_ticket_forum($forum_id)

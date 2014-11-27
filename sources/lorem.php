@@ -243,7 +243,7 @@ function placeholder_fields_as_divs()
 /**
  * Get form with a field
  *
- * @param  ID_TEXT                      The field name wanted.
+ * @param  ID_TEXT                      $field_name The field name wanted.
  * @return tempcode                     Place holder text.
  */
 function placeholder_form_with_field($field_name)
@@ -362,7 +362,7 @@ function placeholder_options()
 /**
  * Get an array
  *
- * @param  integer                      Number of array elements.
+ * @param  integer                      $num_elements Number of array elements.
  * @return array                        Place holder array.
  */
 function placeholder_array($num_elements = 3)
@@ -517,13 +517,13 @@ function placeholder_breadcrumbs()
 /**
  * Lorem version of do_template. It will reprocess the template into something that is "stable XHTML" and thus can work inside an XHTML editor
  *
- * @param  ID_TEXT                      The codename of the template being loaded
- * @param  ?array                       A map of parameters for the template (key to value) (null: no parameters)
- * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (null: users own language)
- * @param  boolean                      Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
- * @param  string                       File type suffix of template file (e.g. .tpl)
- * @param  string                       Subdirectory type to look in
+ * @param  ID_TEXT                      $codename The codename of the template being loaded
+ * @param  ?array                       $parameters A map of parameters for the template (key to value) (null: no parameters)
+ * @param  ?LANGUAGE_NAME               $lang The language to load the template in (templates can embed language references) (null: users own language)
+ * @param  boolean                      $light_error Whether to not produce a stack dump if the template is missing
+ * @param  ?ID_TEXT                     $fallback Alternate template to use if the primary one does not exist (null: none)
+ * @param  string                       $suffix File type suffix of template file (e.g. .tpl)
+ * @param  string                       $directory Subdirectory type to look in
  * @set    templates css javascript xml text
  * @return tempcode                     The tempcode for this template
  */
@@ -535,11 +535,11 @@ function do_lorem_template($codename, $parameters = null, $lang = null, $light_e
 /**
  * Lorem version of globalise. It will wrap the input into something that is "stable XHTML" and thus can work inside an XHTML editor.
  *
- * @param  tempcode                     The tempcode to put into a nice frame
- * @param  ?mixed                       'Additional' message (null: none)
- * @param  string                       The type of special message
+ * @param  tempcode                     $middle The tempcode to put into a nice frame
+ * @param  ?mixed                       $message 'Additional' message (null: none)
+ * @param  string                       $type The type of special message
  * @set    inform warn ""
- * @param  boolean                      Whether to include the header/footer/panels
+ * @param  boolean                      $include_header_and_footer Whether to include the header/footer/panels
  * @return tempcode                     Standalone page
  */
 function lorem_globalise($middle, $message = null, $type = '', $include_header_and_footer = false)
@@ -617,7 +617,7 @@ function placeholder_emoticon_chooser()
 /**
  * Get a theme image code.
  *
- * @param  string                       The theme image directory to find a code under
+ * @param  string                       $type The theme image directory to find a code under
  * @return string                       The code
  */
 function placeholder_img_code($type = '')
@@ -830,9 +830,9 @@ function find_all_previews__by_screen()
 /**
  * Shows the preview of a screen
  *
- * @param  ID_TEXT                      The template to be previewed (e.g. templates/DOWNLOAD_BOX.tpl)
- * @param  ?ID_TEXT                     The hook the preview is in (null: search)
- * @param  ID_TEXT                      The name of the screen preview
+ * @param  ID_TEXT                      $template The template to be previewed (e.g. templates/DOWNLOAD_BOX.tpl)
+ * @param  ?ID_TEXT                     $hook The hook the preview is in (null: search)
+ * @param  ID_TEXT                      $function The name of the screen preview
  * @return tempcode                     The previewed screen
  */
 function render_screen_preview($template, $hook, $function)
@@ -941,7 +941,7 @@ function get_text_templates()
 /**
  * Checks if the template is to be previewed as a text template
  *
- * @param  string                       Name of the template
+ * @param  string                       $temp_name Name of the template
  * @return boolean                      Whether it is
  */
 function is_plain_text_template($temp_name)
@@ -954,8 +954,8 @@ function is_plain_text_template($temp_name)
 /**
  * Checks if the template is a full screen template
  *
- * @param  ?string                      Name of the template (null: do not use as criteria, use other as criteria, which must iself be non-NULL)
- * @param  ?tempcode                    The instantiated template (null: do not use as criteria, use other as criteria, which must iself be non-NULL)
+ * @param  ?string                      $temp_name Name of the template (null: do not use as criteria, use other as criteria, which must iself be non-NULL)
+ * @param  ?tempcode                    $tempcode The instantiated template (null: do not use as criteria, use other as criteria, which must iself be non-NULL)
  * @return boolean                      Whether it is
  */
 function is_full_screen_template($temp_name = null, $tempcode = null)

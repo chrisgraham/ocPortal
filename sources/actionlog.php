@@ -21,11 +21,11 @@
 /**
  * Try and make an action log entry into a proper link.
  *
- * @param  ID_TEXT                      Action type
- * @param  string                       First parameter
- * @param  string                       Second parameter
- * @param  tempcode                     First parameter (cropped)
- * @param  tempcode                     Second parameter (cropped)
+ * @param  ID_TEXT                      $type Action type
+ * @param  string                       $a First parameter
+ * @param  string                       $b Second parameter
+ * @param  tempcode                     $_a First parameter (cropped)
+ * @param  tempcode                     $_b Second parameter (cropped)
  * @return ?array                       Pair: first parameter as possible link, second parameter as possible link (null: could not construct a nice link)
  */
 function actionlog_linkage($type, $a, $b, $_a, $_b)

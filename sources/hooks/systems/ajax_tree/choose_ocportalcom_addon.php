@@ -26,7 +26,7 @@ class Hook_choose_ocportalcom_addon
     /**
      * This will get the XML file from ocportal.com.
      *
-     * @param  ?ID_TEXT                 The ID to do under (null: root)
+     * @param  ?ID_TEXT                 $id The ID to do under (null: root)
      * @return string                   The XML file
      */
     public function get_file($id)
@@ -52,9 +52,9 @@ class Hook_choose_ocportalcom_addon
     /**
      * Run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
      *
-     * @param  ?ID_TEXT                 The ID to do under (null: root)
-     * @param  array                    Options being passed through
-     * @param  ?ID_TEXT                 The ID to select by default (null: none)
+     * @param  ?ID_TEXT                 $id The ID to do under (null: root)
+     * @param  array                    $options Options being passed through
+     * @param  ?ID_TEXT                 $default The ID to select by default (null: none)
      * @return string                   XML in the special category,entry format
      */
     public function run($id, $options, $default = null)
@@ -65,10 +65,10 @@ class Hook_choose_ocportalcom_addon
     /**
      * Generate a simple selection list for the ajax-tree hook. Returns a normal <select> style <option>-list, for fallback purposes
      *
-     * @param  ?ID_TEXT                 The ID to do under (null: root) - not always supported
-     * @param  array                    Options being passed through
-     * @param  ?ID_TEXT                 The ID to select by default (null: none)
-     * @param  string                   Prefix titles with this
+     * @param  ?ID_TEXT                 $id The ID to do under (null: root) - not always supported
+     * @param  array                    $options Options being passed through
+     * @param  ?ID_TEXT                 $it The ID to select by default (null: none)
+     * @param  string                   $prefix Prefix titles with this
      * @return tempcode                 The nice list
      */
     public function simple($id, $options, $it = null, $prefix = '')

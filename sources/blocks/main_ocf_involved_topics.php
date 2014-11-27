@@ -48,7 +48,7 @@ class Block_main_ocf_involved_topics
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)

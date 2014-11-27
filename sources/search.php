@@ -21,7 +21,7 @@
 /**
  * Generate a search block.
  *
- * @param  array                        Search block parameters
+ * @param  array                        $map Search block parameters
  * @return array                        Search block template parameters
  */
 function do_search_block($map)

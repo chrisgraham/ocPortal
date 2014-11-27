@@ -183,7 +183,7 @@ function preview_script()
 /**
  * Script to perform ocPortal CRON jobs called by the real CRON.
  *
- * @param  PATH                         File path of the cron_bridge.php script
+ * @param  PATH                         $caller File path of the cron_bridge.php script
  */
 function cron_bridge_script($caller)
 {

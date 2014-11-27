@@ -43,11 +43,11 @@ function init__database_helper()
 /**
  * Check a set of fields aren't going to exceed key limits.
  *
- * @param  boolean                      Whether this will be in a primary key
- * @param  array                        The fields (a map between field name and field type [field type must start '*' if it is to be counted])
- * @param  ID_TEXT                      The name of what we are checking (only used to generate clear error messages)
- * @param  boolean                      Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
- * @param  boolean                      Whether to skip the check for NULL string fields
+ * @param  boolean                      $primary_key Whether this will be in a primary key
+ * @param  array                        $fields The fields (a map between field name and field type [field type must start '*' if it is to be counted])
+ * @param  ID_TEXT                      $id_name The name of what we are checking (only used to generate clear error messages)
+ * @param  boolean                      $skip_size_check Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
+ * @param  boolean                      $skip_null_check Whether to skip the check for NULL string fields
  */
 function _check_sizes($primary_key, $fields, $id_name, $skip_size_check = false, $skip_null_check = false)
 {
@@ -155,11 +155,11 @@ function _check_sizes($primary_key, $fields, $id_name, $skip_size_check = false,
  * Create a table with the given name and the given array of field name to type mappings.
  * If a field type starts '*', then it is part of that field's key. If it starts '?', then it is an optional field.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
- * @param  array                        The fields
- * @param  boolean                      Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
- * @param  boolean                      Whether to skip the check for NULL string fields
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  array                        $fields The fields
+ * @param  boolean                      $skip_size_check Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
+ * @param  boolean                      $skip_null_check Whether to skip the check for NULL string fields
  */
 function _helper_create_table($this_ref, $table_name, $fields, $skip_size_check = false, $skip_null_check = false)
 {
@@ -222,11 +222,11 @@ function _helper_create_table($this_ref, $table_name, $fields, $skip_size_check 
 /**
  * Add an index to a table without disturbing the contents, after the table has been created.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
- * @param  ID_TEXT                      The index name
- * @param  array                        The fields
- * @param  ID_TEXT                      The name of the unique key field for the table
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  ID_TEXT                      $index_name The index name
+ * @param  array                        $fields The fields
+ * @param  ID_TEXT                      $unique_key_field The name of the unique key field for the table
  */
 function _helper_create_index($this_ref, $table_name, $index_name, $fields, $unique_key_field = 'id')
 {
@@ -300,9 +300,9 @@ function _helper_create_index($this_ref, $table_name, $index_name, $fields, $uni
 /**
  * Delete an index from a table.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
- * @param  ID_TEXT                      The index name
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  ID_TEXT                      $index_name The index name
  */
 function _helper_delete_index_if_exists($this_ref, $table_name, $index_name)
 {
@@ -324,8 +324,8 @@ function _helper_delete_index_if_exists($this_ref, $table_name, $index_name)
 /**
  * Drop the given table, or if it doesn't exist, silently return.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table The table name
  */
 function _helper_drop_table_if_exists($this_ref, $table)
 {
@@ -358,9 +358,9 @@ function _helper_drop_table_if_exists($this_ref, $table)
 /**
  * Rename the given table.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The old table name
- * @param  ID_TEXT                      The new table name
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $old The old table name
+ * @param  ID_TEXT                      $new The new table name
  */
 function _helper_rename_table($this_ref, $old, $new)
 {
@@ -383,11 +383,11 @@ function _helper_rename_table($this_ref, $old, $new)
 /**
  * Adds a field to an existing table.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
- * @param  ID_TEXT                      The field name
- * @param  ID_TEXT                      The field type
- * @param  ?mixed                       The default value (null: no default)
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  ID_TEXT                      $name The field name
+ * @param  ID_TEXT                      $_type The field type
+ * @param  ?mixed                       $default The default value (null: no default)
  */
 function _helper_add_table_field($this_ref, $table_name, $name, $_type, $default = null)
 {
@@ -525,11 +525,11 @@ function _helper_add_table_field($this_ref, $table_name, $name, $_type, $default
 /**
  * Change the type of a DB field in a table. Note: this function does not support ascession/decession of translatability
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
- * @param  ID_TEXT                      The field name
- * @param  ID_TEXT                      The new field type
- * @param  ?ID_TEXT                     The new field name (null: leave name)
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  ID_TEXT                      $name The field name
+ * @param  ID_TEXT                      $_type The new field type
+ * @param  ?ID_TEXT                     $new_name The new field name (null: leave name)
  */
 function _helper_alter_table_field($this_ref, $table_name, $name, $_type, $new_name = null)
 {
@@ -598,9 +598,9 @@ function _helper_alter_table_field($this_ref, $table_name, $name, $_type, $new_n
 /**
  * Change the primary key of a table.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The name of the table to create the index on
- * @param  array                        A list of fields to put in the new key
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The name of the table to create the index on
+ * @param  array                        $new_key A list of fields to put in the new key
  */
 function _helper_change_primary_key($this_ref, $table_name, $new_key)
 {
@@ -614,13 +614,13 @@ function _helper_change_primary_key($this_ref, $table_name, $new_key)
 /**
  * If a text field has picked up Comcode support, we will need to run this.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
- * @param  ID_TEXT                      The field name
- * @param  ID_TEXT                      The tables key field name
- * @param  integer                      The translation level to use
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  ID_TEXT                      $name The field name
+ * @param  ID_TEXT                      $key The tables key field name
+ * @param  integer                      $level The translation level to use
  * @set    1 2 3 4
- * @param  boolean                      Whether our data is already stored in Tempcode assembly format
+ * @param  boolean                      $in_assembly Whether our data is already stored in Tempcode assembly format
  */
 function _helper_promote_text_field_to_comcode($this_ref, $table_name, $name, $key = 'id', $level = 2, $in_assembly = false)
 {
@@ -644,9 +644,9 @@ function _helper_promote_text_field_to_comcode($this_ref, $table_name, $name, $k
 /**
  * Delete the specified field from the specified table.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The table name
- * @param  ID_TEXT                      The field name
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  ID_TEXT                      $name The field name
  */
 function _helper_delete_table_field($this_ref, $table_name, $name)
 {
@@ -689,8 +689,8 @@ function _helper_delete_table_field($this_ref, $table_name, $name)
 /**
  * If we've changed what $type is stored as, this function will need to be called to change the typing in the DB.
  *
- * @param  object                       Link to the real database object
- * @param  ID_TEXT                      The field type
+ * @param  object                       $this_ref Link to the real database object
+ * @param  ID_TEXT                      $type The field type
  */
 function _helper_refresh_field_definition($this_ref, $type)
 {

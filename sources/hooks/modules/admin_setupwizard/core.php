@@ -47,7 +47,7 @@ class Hook_sw_core
     /**
      * Run function for features in the setup wizard.
      *
-     * @param  array                    Default values for the fields, from the install-profile.
+     * @param  array                    $field_defaults Default values for the fields, from the install-profile.
      * @return tempcode                 An input field.
      */
     public function get_fields($field_defaults)

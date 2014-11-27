@@ -31,9 +31,9 @@ function init__menus()
 /**
  * Take a menu identifier, and return a menu created from it.
  *
- * @param  ID_TEXT                      The type of the menu (determines which templates to use)
- * @param  SHORT_TEXT                   The menu identifier to use (may be the name of a stored menu, or syntax to load from the Sitemap)
- * @param  boolean                      Whether to silently return blank if the menu does not exist
+ * @param  ID_TEXT                      $type The type of the menu (determines which templates to use)
+ * @param  SHORT_TEXT                   $menu The menu identifier to use (may be the name of a stored menu, or syntax to load from the Sitemap)
+ * @param  boolean                      $silent_failure Whether to silently return blank if the menu does not exist
  * @return tempcode                     The generated tempcode of the menu
  */
 function build_menu($type, $menu, $silent_failure = false)
@@ -84,7 +84,7 @@ function build_menu($type, $menu, $silent_failure = false)
 /**
  * Take a menu identifier, and return the stored menu.
  *
- * @param  SHORT_TEXT                   The menu identifier to use (the name of a stored menu)
+ * @param  SHORT_TEXT                   $menu The menu identifier to use (the name of a stored menu)
  * @return array                        The menu branch structure
  */
 function _build_stored_menu($menu)
@@ -111,7 +111,7 @@ function _build_stored_menu($menu)
 /**
  * Take a menu identifier, and return a Sitemap-based menu created from it.
  *
- * @param  SHORT_TEXT                   The menu identifier to use (syntax to load from the Sitemap)
+ * @param  SHORT_TEXT                   $menu The menu identifier to use (syntax to load from the Sitemap)
  * @return array                        The Sitemap node structure (called a 'branch structure' for menus)
  */
 function _build_sitemap_menu($menu)
@@ -254,8 +254,8 @@ function _get_menu_root_wrapper()
 /**
  * Build a menu branch map from a database row.
  *
- * @param  array                        The database row
- * @param  array                        List of all the database rows for this menu
+ * @param  array                        $item The database row
+ * @param  array                        $items List of all the database rows for this menu
  * @return array                        A list of menu branches
  */
 function _build_stored_menu_branch($item, $items)
@@ -336,8 +336,8 @@ function _build_stored_menu_branch($item, $items)
 /**
  * Append to all page-links in a branch structure.
  *
- * @param  array                        Branches
- * @param  string                       What to append to the page-links
+ * @param  array                        &$branches Branches
+ * @param  string                       $page_link_append What to append to the page-links
  */
 function _append_to_page_links(&$branches, $page_link_append)
 {
@@ -352,10 +352,10 @@ function _append_to_page_links(&$branches, $page_link_append)
 /**
  * Render a menu to Tempcode.
  *
- * @param  array                        Menu details
- * @param  ?MEMBER                      The member the menu is being built as (null: current member)
- * @param  ID_TEXT                      The menu type (determines what templates get used)
- * @param  boolean                      Whether to generate Comcode with admin privilege
+ * @param  array                        $menu Menu details
+ * @param  ?MEMBER                      $source_member The member the menu is being built as (null: current member)
+ * @param  ID_TEXT                      $type The menu type (determines what templates get used)
+ * @param  boolean                      $as_admin Whether to generate Comcode with admin privilege
  * @return tempcode                     The generated tempcode of the menu
  */
 function _render_menu($menu, $source_member, $type, $as_admin = false)
@@ -404,14 +404,14 @@ function _render_menu($menu, $source_member, $type, $as_admin = false)
 /**
  * Render a menu branch to Tempcode.
  *
- * @param  array                        The branch
- * @param  SHORT_TEXT                   An identifier for the menu (will be used as a unique ID by menu JavaScript code)
- * @param  MEMBER                       The member the menu is being built as
- * @param  integer                      The depth into the menu that this branch resides at
- * @param  ID_TEXT                      The menu type (determines what templates get used)
- * @param  boolean                      Whether to generate Comcode with admin privilege
- * @param  array                        Array of all other branches
- * @param  integer                      The level
+ * @param  array                        $branch The branch
+ * @param  SHORT_TEXT                   $codename An identifier for the menu (will be used as a unique ID by menu JavaScript code)
+ * @param  MEMBER                       $source_member The member the menu is being built as
+ * @param  integer                      $level The depth into the menu that this branch resides at
+ * @param  ID_TEXT                      $type The menu type (determines what templates get used)
+ * @param  boolean                      $as_admin Whether to generate Comcode with admin privilege
+ * @param  array                        $all_branches Array of all other branches
+ * @param  integer                      $the_level The level
  * @return array                        A pair: array of parameters of the menu branch (or NULL if unrenderable, or Tempcode of something to attach), and whether it is expanded
  */
 function _render_menu_branch($branch, $codename, $source_member, $level, $type, $as_admin, $all_branches, $the_level = 1)

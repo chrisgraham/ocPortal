@@ -48,7 +48,7 @@ class Forum_driver_base
     /**
      * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
      *
-     * @param  string                   The name of the new custom field
+     * @param  string                   $name The name of the new custom field
      */
     public function install_delete_custom_field($name)
     {
@@ -70,9 +70,9 @@ class Forum_driver_base
     /**
      * Get a URL to a forum member's member profile.
      *
-     * @param  MEMBER                   The forum member
-     * @param  boolean                  Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
+     * @param  MEMBER                   $id The forum member
+     * @param  boolean                  $definitely_profile Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
      * @return mixed                    The URL
      */
     public function member_profile_url($id, $definitely_profile = false, $tempcode_okay = false)
@@ -106,10 +106,10 @@ class Forum_driver_base
     /**
      * Get a hyperlink (i.e. HTML link, not just a URL) to a forum member's member profile.
      *
-     * @param  MEMBER                   The forum member
-     * @param  boolean                  Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
-     * @param  string                   The username (blank: look it up)
-     * @param  boolean                  Whether to use the displayname rather than the username (if we have them)
+     * @param  MEMBER                   $id The forum member
+     * @param  boolean                  $definitely_profile Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
+     * @param  string                   $_username The username (blank: look it up)
+     * @param  boolean                  $use_displayname Whether to use the displayname rather than the username (if we have them)
      * @return tempcode                 The hyperlink
      */
     public function member_profile_hyperlink($id, $definitely_profile = false, $_username = '', $use_displayname = true)
@@ -144,7 +144,7 @@ class Forum_driver_base
     /**
      * Get a URL to a forum 'user online' list.
      *
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL
      */
     public function users_online_url($tempcode_okay = false)
@@ -159,8 +159,8 @@ class Forum_driver_base
     /**
      * Get a URL to send a forum member a PM.
      *
-     * @param  MEMBER                   The forum member
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @param  MEMBER                   $id The forum member
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL
      */
     public function member_pm_url($id, $tempcode_okay = false)
@@ -175,8 +175,8 @@ class Forum_driver_base
     /**
      * Get a URL to a forum.
      *
-     * @param  integer                  The ID of the forum
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @param  integer                  $id The ID of the forum
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL
      */
     public function forum_url($id, $tempcode_okay = false)
@@ -191,8 +191,8 @@ class Forum_driver_base
     /**
      * Get a member's username.
      *
-     * @param  MEMBER                   The member
-     * @param  boolean                  Whether to use the displayname rather than the username (if we have them)
+     * @param  MEMBER                   $id The member
+     * @param  boolean                  $use_displayname Whether to use the displayname rather than the username (if we have them)
      * @return ?SHORT_TEXT              The username (null: deleted member)
      */
     public function get_username($id, $use_displayname = false)
@@ -232,7 +232,7 @@ class Forum_driver_base
     /**
      * Get a member's e-mail address.
      *
-     * @param  MEMBER                   The member
+     * @param  MEMBER                   $id The member
      * @return SHORT_TEXT               The e-mail address (blank: not known)
      */
     public function get_member_email_address($id)
@@ -250,8 +250,8 @@ class Forum_driver_base
     /**
      * Find whether a member is staff.
      *
-     * @param  MEMBER                   The member
-     * @param  boolean                  Whether to avoid checking the staff filter (i.e. ignore M.S.N.'s)
+     * @param  MEMBER                   $id The member
+     * @param  boolean                  $skip_staff_filter Whether to avoid checking the staff filter (i.e. ignore M.S.N.'s)
      * @return boolean                  The answer
      */
     public function is_staff($id, $skip_staff_filter = false)
@@ -298,7 +298,7 @@ class Forum_driver_base
     /**
      * Find whether a member is a super administrator.
      *
-     * @param  MEMBER                   The member
+     * @param  MEMBER                   $id The member
      * @return boolean                  The answer
      */
     public function is_super_admin($id)
@@ -355,12 +355,12 @@ class Forum_driver_base
     /**
      * Get a map of forum usergroups (id=>name).
      *
-     * @param  boolean                  Whether to obscure the name of hidden usergroups
-     * @param  boolean                  Whether to only grab permissive usergroups
-     * @param  boolean                  Do not limit things even if there are huge numbers of usergroups
-     * @param  ?array                   Usergroups that must be included in the results (null: no extras must be)
-     * @param  ?MEMBER                  Always return usergroups of this member (null: current member)
-     * @param  boolean                  Whether to completely skip hidden usergroups
+     * @param  boolean                  $hide_hidden Whether to obscure the name of hidden usergroups
+     * @param  boolean                  $only_permissive Whether to only grab permissive usergroups
+     * @param  boolean                  $force_show_all Do not limit things even if there are huge numbers of usergroups
+     * @param  ?array                   $force_find Usergroups that must be included in the results (null: no extras must be)
+     * @param  ?MEMBER                  $for_member Always return usergroups of this member (null: current member)
+     * @param  boolean                  $skip_hidden Whether to completely skip hidden usergroups
      * @return array                    The map
      */
     public function get_usergroup_list($hide_hidden = false, $only_permissive = false, $force_show_all = false, $force_find = null, $for_member = null, $skip_hidden = false)
@@ -383,9 +383,9 @@ class Forum_driver_base
     /**
      * Get a list of usergroups a member is in.
      *
-     * @param  MEMBER                   The member
-     * @param  boolean                  Whether to skip looking at secret usergroups.
-     * @param  boolean                  Whether to take probation into account
+     * @param  MEMBER                   $id The member
+     * @param  boolean                  $skip_secret Whether to skip looking at secret usergroups.
+     * @param  boolean                  $handle_probation Whether to take probation into account
      * @return array                    The list of usergroups
      */
     public function get_members_groups($id, $skip_secret = false, $handle_probation = true)
@@ -411,7 +411,7 @@ class Forum_driver_base
     /**
      * Get the current member's theme identifier.
      *
-     * @param  ?ID_TEXT                 The zone we are getting the theme for (null: current zone)
+     * @param  ?ID_TEXT                 $zone_for The zone we are getting the theme for (null: current zone)
      * @return ID_TEXT                  The theme identifier
      */
     public function get_theme($zone_for = null)
@@ -529,7 +529,7 @@ class Forum_driver_base
     /**
      * Find whether a forum is threaded.
      *
-     * @param  integer                  The topic ID
+     * @param  integer                  $topic_id The topic ID
      * @return boolean                  Whether it is
      */
     public function topic_is_threaded($topic_id)
@@ -540,8 +540,8 @@ class Forum_driver_base
     /**
      * Load extra details for a list of posts. Does not need to return anything if forum driver doesn't support partial post loading (which is only useful for threaded topic partial-display).
      *
-     * @param  AUTO_LINK                Topic the posts come from
-     * @param  array                    List of post IDs
+     * @param  AUTO_LINK                $topic_id Topic the posts come from
+     * @param  array                    $post_ids List of post IDs
      * @return array                    Extra details
      */
     public function get_post_remaining_details($topic_id, $post_ids)

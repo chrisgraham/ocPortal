@@ -72,7 +72,7 @@ class OCP_Topic
     /**
      * Set a rendering context.
      *
-     * @param  ID_TEXT                  Rendering context
+     * @param  ID_TEXT                  $rendering_context Rendering context
      */
     public function set_rendering_context($rendering_context)
     {
@@ -82,18 +82,18 @@ class OCP_Topic
     /**
      * Render a comment topic.
      *
-     * @param  ID_TEXT                  Content type to show topic for
-     * @param  ID_TEXT                  Content ID of content type to show topic for
-     * @param  boolean                  Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
-     * @param  boolean                  Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
-     * @param  ?string                  The name of the forum to use (null: default comment forum)
-     * @param  ?string                  The default post to use (null: standard courtesy warning)
-     * @param  ?mixed                   The raw comment array (null: lookup). This is useful if we want to pass it through a filter
-     * @param  boolean                  Whether to skip permission checks
-     * @param  boolean                  Whether to reverse the posts
-     * @param  ?MEMBER                  Member to highlight the posts of (null: none)
-     * @param  boolean                  Whether to allow ratings along with the comment (like reviews)
-     * @param  ?integer                 Maximum to load (null: default)
+     * @param  ID_TEXT                  $content_type Content type to show topic for
+     * @param  ID_TEXT                  $content_id Content ID of content type to show topic for
+     * @param  boolean                  $allow_comments Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
+     * @param  boolean                  $invisible_if_no_comments Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
+     * @param  ?string                  $forum_name The name of the forum to use (null: default comment forum)
+     * @param  ?string                  $post_warning The default post to use (null: standard courtesy warning)
+     * @param  ?mixed                   $preloaded_comments The raw comment array (null: lookup). This is useful if we want to pass it through a filter
+     * @param  boolean                  $explicit_allow Whether to skip permission checks
+     * @param  boolean                  $reverse Whether to reverse the posts
+     * @param  ?MEMBER                  $highlight_by_member Member to highlight the posts of (null: none)
+     * @param  boolean                  $allow_reviews Whether to allow ratings along with the comment (like reviews)
+     * @param  ?integer                 $num_to_show_limit Maximum to load (null: default)
      * @return tempcode                 The tempcode for the comment topic
      */
     public function render_as_comment_topic($content_type, $content_id, $allow_comments, $invisible_if_no_comments, $forum_name, $post_warning, $preloaded_comments, $explicit_allow, $reverse, $highlight_by_member, $allow_reviews, $num_to_show_limit)
@@ -228,18 +228,18 @@ class OCP_Topic
     /**
      * Render posts from a topic (usually tied into AJAX, to get iterative results).
      *
-     * @param  AUTO_LINK                The topic ID
-     * @param  integer                  Maximum to load
-     * @param  boolean                  Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
-     * @param  boolean                  Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
-     * @param  ?string                  The name of the forum to use (null: default comment forum)
-     * @param  ?mixed                   The raw comment array (null: lookup). This is useful if we want to pass it through a filter
-     * @param  boolean                  Whether to reverse the posts
-     * @param  boolean                  Whether the current user may reply to the topic (influences what buttons show)
-     * @param  ?MEMBER                  Member to highlight the posts of (null: none)
-     * @param  boolean                  Whether to allow ratings along with the comment (like reviews)
-     * @param  array                    List of post IDs to load
-     * @param  AUTO_LINK                Parent node being loaded to
+     * @param  AUTO_LINK                $topic_id The topic ID
+     * @param  integer                  $num_to_show_limit Maximum to load
+     * @param  boolean                  $allow_comments Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
+     * @param  boolean                  $invisible_if_no_comments Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
+     * @param  ?string                  $forum_name The name of the forum to use (null: default comment forum)
+     * @param  ?mixed                   $preloaded_comments The raw comment array (null: lookup). This is useful if we want to pass it through a filter
+     * @param  boolean                  $reverse Whether to reverse the posts
+     * @param  boolean                  $may_reply Whether the current user may reply to the topic (influences what buttons show)
+     * @param  ?MEMBER                  $highlight_by_member Member to highlight the posts of (null: none)
+     * @param  boolean                  $allow_reviews Whether to allow ratings along with the comment (like reviews)
+     * @param  array                    $posts List of post IDs to load
+     * @param  AUTO_LINK                $parent_id Parent node being loaded to
      * @return tempcode                 The tempcode for the comment topic
      */
     public function render_posts_from_topic($topic_id, $num_to_show_limit, $allow_comments, $invisible_if_no_comments, $forum_name, $preloaded_comments, $reverse, $may_reply, $highlight_by_member, $allow_reviews, $posts, $parent_id)
@@ -323,12 +323,12 @@ class OCP_Topic
     /**
      * Load from a given topic ID.
      *
-     * @param  ?AUTO_LINK               Topic ID (null: none yet, set up empty structure)
-     * @param  integer                  Maximum to load
-     * @param  integer                  Pagination start if non-threaded
-     * @param  ?boolean                 Whether to show in reverse date order (affects default search order only) (null: read config)
-     * @param  ?array                   List of post IDs to load (null: no filter)
-     * @param  boolean                  Whether to allow spacer posts to flow through the renderer
+     * @param  ?AUTO_LINK               $topic_id Topic ID (null: none yet, set up empty structure)
+     * @param  integer                  $num_to_show_limit Maximum to load
+     * @param  integer                  $start Pagination start if non-threaded
+     * @param  ?boolean                 $reverse Whether to show in reverse date order (affects default search order only) (null: read config)
+     * @param  ?array                   $posts List of post IDs to load (null: no filter)
+     * @param  boolean                  $load_spacer_posts_too Whether to allow spacer posts to flow through the renderer
      * @return boolean                  Success status
      */
     public function load_from_topic($topic_id, $num_to_show_limit, $start = 0, $reverse = null, $posts = null, $load_spacer_posts_too = false)
@@ -387,7 +387,7 @@ class OCP_Topic
     /**
      * Put in posts to our scoring algorithm in preparation for shooting out later.
      *
-     * @param  array                    Review titles
+     * @param  array                    $posts Review titles
      */
     public function inject_posts_for_scoring_algorithm($posts)
     {
@@ -413,7 +413,7 @@ class OCP_Topic
     /**
      * Set the particular review criteria we'll be dealing with.
      *
-     * @param  array                    Review criteria
+     * @param  array                    $reviews_rating_criteria Review criteria
      */
     public function set_reviews_rating_criteria($reviews_rating_criteria)
     {
@@ -423,15 +423,15 @@ class OCP_Topic
     /**
      * Render a topic.
      *
-     * @param  ?integer                 Number of posts to show initially (null: no limit)
-     * @param  integer                  Maximum thread depth
-     * @param  boolean                  Whether the current user may reply to the topic (influences what buttons show)
-     * @param  ?MEMBER                  Member to highlight the posts of (null: none)
-     * @param  array                    Review ratings rows
-     * @param  AUTO_LINK                ID of forum this topic in in
-     * @param  ?array                   The topic row (null: not running OCF).
-     * @param  ?AUTO_LINK               Only show posts under here (null: show posts from root)
-     * @param  boolean                  Whether to just render everything as flat (used when doing AJAX post loading). NOT actually used since we wrote better post-orphaning-fixing code.
+     * @param  ?integer                 $num_to_show_limit Number of posts to show initially (null: no limit)
+     * @param  integer                  $max_thread_depth Maximum thread depth
+     * @param  boolean                  $may_reply Whether the current user may reply to the topic (influences what buttons show)
+     * @param  ?MEMBER                  $highlight_by_member Member to highlight the posts of (null: none)
+     * @param  array                    $all_individual_review_ratings Review ratings rows
+     * @param  AUTO_LINK                $forum_id ID of forum this topic in in
+     * @param  ?array                   $topic_info The topic row (null: not running OCF).
+     * @param  ?AUTO_LINK               $parent_post_id Only show posts under here (null: show posts from root)
+     * @param  boolean                  $maybe_missing_links Whether to just render everything as flat (used when doing AJAX post loading). NOT actually used since we wrote better post-orphaning-fixing code.
      * @return array                    Tuple: Rendered topic, serialized options to render more posts, secure hash of serialized options to prevent tampering
      */
     public function render_posts($num_to_show_limit, $max_thread_depth, $may_reply, $highlight_by_member, $all_individual_review_ratings, $forum_id, $topic_info, $parent_post_id = null, $maybe_missing_links = false)
@@ -945,9 +945,9 @@ class OCP_Topic
     /**
      * Put comments RSS link into environment.
      *
-     * @param  ID_TEXT                  The forum we are working in
-     * @param  ID_TEXT                  The content type the comments are for
-     * @param  ID_TEXT                  The content ID the comments are for
+     * @param  ID_TEXT                  $forum The forum we are working in
+     * @param  ID_TEXT                  $type The content type the comments are for
+     * @param  ID_TEXT                  $id The content ID the comments are for
      */
     public function inject_rss_url($forum, $type, $id)
     {
@@ -967,11 +967,11 @@ class OCP_Topic
     /**
      * Get a form for posting.
      *
-     * @param  ID_TEXT                  The content type of what this posting will be for
-     * @param  ID_TEXT                  The content ID of what this posting will be for
-     * @param  boolean                  Whether to accept reviews
-     * @param  tempcode                 URL where form submit will go
-     * @param  ?string                  The default post to use (null: standard courtesy warning)
+     * @param  ID_TEXT                  $type The content type of what this posting will be for
+     * @param  ID_TEXT                  $id The content ID of what this posting will be for
+     * @param  boolean                  $allow_reviews Whether to accept reviews
+     * @param  tempcode                 $post_url URL where form submit will go
+     * @param  ?string                  $post_warning The default post to use (null: standard courtesy warning)
      * @return tempcode                 Posting form
      */
     public function get_posting_form($type, $id, $allow_reviews, $post_url, $post_warning)

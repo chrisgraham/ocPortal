@@ -258,7 +258,7 @@ class Browser
     /**
      * Set the name of the browser
      *
-     * @param $browser The name of the Browser
+     * @param $browser $browser The name of the Browser
      */
     public function setBrowser($browser)
     {
@@ -278,7 +278,7 @@ class Browser
     /**
      * Set the name of the platform
      *
-     * @param $platform The name of the Platform
+     * @param $platform $platform The name of the Platform
      */
     public function setPlatform($platform)
     {
@@ -298,7 +298,7 @@ class Browser
     /**
      * Set the version of the browser
      *
-     * @param $version The version of the Browser
+     * @param $version $version The version of the Browser
      */
     public function setVersion($version)
     {
@@ -318,7 +318,7 @@ class Browser
     /**
      * Set the version of AOL
      *
-     * @param $version The version of AOL
+     * @param $version $version The version of AOL
      */
     public function setAolVersion($version)
     {
@@ -398,7 +398,7 @@ class Browser
     /**
      * Set the user agent value (the construction will use the HTTP header value - this will overwrite it)
      *
-     * @param $agent_string The value for the User Agent
+     * @param $agent_string $agent_string The value for the User Agent
      */
     public function setUserAgent($agent_string)
     {

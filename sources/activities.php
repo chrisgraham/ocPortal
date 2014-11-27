@@ -21,18 +21,18 @@
 /**
  * Syndicate human-intended descriptions of activities performed to the internal wall, and external listeners.
  *
- * @param  string                       Language string code
- * @param  string                       Label 1 (given as a parameter to the language string code)
- * @param  string                       Label 2 (given as a parameter to the language string code)
- * @param  string                       Label 3 (given as a parameter to the language string code)
- * @param  string                       Page-link 1
- * @param  string                       Page-link 2
- * @param  string                       Page-link 3
- * @param  string                       Addon that caused the event
- * @param  BINARY                       Whether this post should be public or friends-only
- * @param  ?MEMBER                      Member being written for (null: current member)
- * @param  boolean                      Whether to push this out as a site event if user requested
- * @param  ?MEMBER                      Member also 'intimately' involved, such as a content submitter who is a friend (null: none)
+ * @param  string                       $a_language_string_code Language string code
+ * @param  string                       $a_label_1 Label 1 (given as a parameter to the language string code)
+ * @param  string                       $a_label_2 Label 2 (given as a parameter to the language string code)
+ * @param  string                       $a_label_3 Label 3 (given as a parameter to the language string code)
+ * @param  string                       $a_page_link_1 Page-link 1
+ * @param  string                       $a_page_link_2 Page-link 2
+ * @param  string                       $a_page_link_3 Page-link 3
+ * @param  string                       $a_addon Addon that caused the event
+ * @param  BINARY                       $a_is_public Whether this post should be public or friends-only
+ * @param  ?MEMBER                      $a_member_id Member being written for (null: current member)
+ * @param  boolean                      $sitewide_too Whether to push this out as a site event if user requested
+ * @param  ?MEMBER                      $a_also_involving Member also 'intimately' involved, such as a content submitter who is a friend (null: none)
  */
 function syndicate_described_activity($a_language_string_code = '', $a_label_1 = '', $a_label_2 = '', $a_label_3 = '', $a_page_link_1 = '', $a_page_link_2 = '', $a_page_link_3 = '', $a_addon = '', $a_is_public = 1, $a_member_id = null, $sitewide_too = false, $a_also_involving = null)
 {

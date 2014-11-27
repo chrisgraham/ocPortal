@@ -25,7 +25,7 @@ These are special functions used by the installer and upgrader.
 /**
  * Get the list of files that need CHmodding for write access.
  *
- * @param  ID_TEXT                      Language to use
+ * @param  ID_TEXT                      $lang Language to use
  * @return array                        The list of files
  */
 function get_chmod_array($lang)

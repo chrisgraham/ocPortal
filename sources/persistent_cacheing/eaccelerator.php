@@ -49,8 +49,8 @@ class Persistent_cacheing_eacceleratorcache
     /**
      * Get data from the persistent cache.
      *
-     * @param  string                   Key
-     * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (null: don't care)
+     * @param  string                   $key Key
+     * @param  ?TIME                    $min_cache_date Minimum timestamp that entries from the cache may hold (null: don't care)
      * @return ?mixed                   The data (null: not found / NULL entry)
      */
     public function get($key, $min_cache_date = null)
@@ -74,10 +74,10 @@ class Persistent_cacheing_eacceleratorcache
     /**
      * Put data into the persistent cache.
      *
-     * @param  string                   Key
-     * @param  mixed                    The data
-     * @param  integer                  Various flags (parameter not used)
-     * @param  ?integer                 The expiration time in seconds (null: no expiry)
+     * @param  string                   $key Key
+     * @param  mixed                    $data The data
+     * @param  integer                  $flags Various flags (parameter not used)
+     * @param  ?integer                 $expire_secs The expiration time in seconds (null: no expiry)
      */
     public function set($key, $data, $flags = 0, $expire_secs = null)
     {
@@ -102,7 +102,7 @@ class Persistent_cacheing_eacceleratorcache
     /**
      * Delete data from the persistent cache.
      *
-     * @param  string                   Key
+     * @param  string                   $key Key
      */
     public function delete($key)
     {

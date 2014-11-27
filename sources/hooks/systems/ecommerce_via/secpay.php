@@ -56,11 +56,11 @@ class Hook_secpay
     /**
      * Make a transaction (payment) button.
      *
-     * @param  ID_TEXT                  The product codename.
-     * @param  SHORT_TEXT               The human-readable product title.
-     * @param  ID_TEXT                  The purchase ID.
-     * @param  float                    A transaction amount.
-     * @param  ID_TEXT                  The currency to use.
+     * @param  ID_TEXT                  $type_code The product codename.
+     * @param  SHORT_TEXT               $item_name The human-readable product title.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
+     * @param  float                    $amount A transaction amount.
+     * @param  ID_TEXT                  $currency The currency to use.
      * @return tempcode                 The button.
      */
     public function make_transaction_button($type_code, $item_name, $purchase_id, $amount, $currency)
@@ -136,14 +136,14 @@ class Hook_secpay
     /**
      * Make a subscription (payment) button.
      *
-     * @param  ID_TEXT                  The product codename.
-     * @param  SHORT_TEXT               The human-readable product title.
-     * @param  ID_TEXT                  The purchase ID.
-     * @param  float                    A transaction amount.
-     * @param  integer                  The subscription length in the units.
-     * @param  ID_TEXT                  The length units.
+     * @param  ID_TEXT                  $type_code The product codename.
+     * @param  SHORT_TEXT               $item_name The human-readable product title.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
+     * @param  float                    $amount A transaction amount.
+     * @param  integer                  $length The subscription length in the units.
+     * @param  ID_TEXT                  $length_units The length units.
      * @set    d w m y
-     * @param  ID_TEXT                  The currency to use.
+     * @param  ID_TEXT                  $currency The currency to use.
      * @return tempcode                 The button.
      */
     public function make_subscription_button($type_code, $item_name, $purchase_id, $amount, $length, $length_units, $currency)
@@ -186,7 +186,7 @@ class Hook_secpay
     /**
      * Make a subscription cancellation button.
      *
-     * @param  ID_TEXT                  The purchase ID.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
      * @return tempcode                 The button.
      */
     public function make_cancel_button($purchase_id)
@@ -215,7 +215,7 @@ class Hook_secpay
     /**
      * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
      *
-     * @param  float                    A transaction amount.
+     * @param  float                    $amount A transaction amount.
      * @return float                    The fee.
      */
     public function get_transaction_fee($amount)
@@ -226,7 +226,7 @@ class Hook_secpay
     /**
      * Get a list of card types.
      *
-     * @param  ?string                  The card type to select by default (null: don't care).
+     * @param  ?string                  $it The card type to select by default (null: don't care).
      * @return tempcode                 The list.
      */
     public function create_selection_list_card_types($it = null)
@@ -242,18 +242,18 @@ class Hook_secpay
     /**
      * Perform a transaction.
      *
-     * @param  ?ID_TEXT                 The transaction ID (null: generate one).
-     * @param  SHORT_TEXT               Cardholder name.
-     * @param  SHORT_TEXT               Card number.
-     * @param  SHORT_TEXT               Transaction amount.
-     * @param  SHORT_TEXT               Card Expiry date.
-     * @param  integer                  Card Issue number.
-     * @param  SHORT_TEXT               Card Start date.
-     * @param  SHORT_TEXT               Card Type.
+     * @param  ?ID_TEXT                 $trans_id The transaction ID (null: generate one).
+     * @param  SHORT_TEXT               $name Cardholder name.
+     * @param  SHORT_TEXT               $card_number Card number.
+     * @param  SHORT_TEXT               $amount Transaction amount.
+     * @param  SHORT_TEXT               $expiry_date Card Expiry date.
+     * @param  integer                  $issue_number Card Issue number.
+     * @param  SHORT_TEXT               $start_date Card Start date.
+     * @param  SHORT_TEXT               $card_type Card Type.
      * @set    "Visa" "Master Card" "Switch" "UK Maestro" "Maestro" "Solo" "Delta" "American Express" "Diners Card" "JCB"
-     * @param  SHORT_TEXT               Card CV2 number (security number).
-     * @param  ?integer                 The subscription length in the units. (null: not a subscription)
-     * @param  ?ID_TEXT                 The length units. (null: not a subscription)
+     * @param  SHORT_TEXT               $cv2 Card CV2 number (security number).
+     * @param  ?integer                 $length The subscription length in the units. (null: not a subscription)
+     * @param  ?ID_TEXT                 $length_units The length units. (null: not a subscription)
      * @set    d w m y
      * @return array                    A tuple: success (boolean), trans-ID (string), message (string), raw message (string).
      */
@@ -445,7 +445,7 @@ class Hook_secpay
     /**
      * Store shipping address for orders.
      *
-     * @param  AUTO_LINK                Order ID.
+     * @param  AUTO_LINK                $order_id Order ID.
      * @return ?mixed                   Address ID (null: No address record found).
      */
     public function store_shipping_address($order_id)

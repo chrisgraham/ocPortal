@@ -243,7 +243,7 @@ function generate_captcha()
 /**
  * Calling this assumes captcha was needed. Checks that it was done correctly.
  *
- * @param  boolean                      Whether to possibly regenerate upon error.
+ * @param  boolean                      $regenerate_on_error Whether to possibly regenerate upon error.
  */
 function enforce_captcha($regenerate_on_error = true)
 {
@@ -260,8 +260,8 @@ function enforce_captcha($regenerate_on_error = true)
 /**
  * Checks a CAPTCHA.
  *
- * @param  string                       CAPTCHA entered.
- * @param  boolean                      Whether to possibly regenerate upon error.
+ * @param  string                       $code_entered CAPTCHA entered.
+ * @param  boolean                      $regenerate_on_error Whether to possibly regenerate upon error.
  * @return boolean                      Whether it is valid for the current session.
  */
 function check_captcha($code_entered, $regenerate_on_error = true)

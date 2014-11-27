@@ -21,9 +21,9 @@
 /**
  * Set an overridden comment topic forum for a feedback scenario. Moves topics if required.
  *
- * @param  ID_TEXT                      The feedback code to override the comment topic forum for
- * @param  ?ID_TEXT                     The category ID to override the comment topic forum for (null: none)
- * @param  ID_TEXT                      The new comment topic forum
+ * @param  ID_TEXT                      $feedback_code The feedback code to override the comment topic forum for
+ * @param  ?ID_TEXT                     $category_id The category ID to override the comment topic forum for (null: none)
+ * @param  ID_TEXT                      $forum_id The new comment topic forum
  */
 function set_comment_forum_for($feedback_code, $category_id, $forum_id)
 {
@@ -141,16 +141,16 @@ function trackback_script()
 /**
  * Get the tempcode for the manipulation of the feedback fields for some content, if they are enabled in the Admin Zone.
  *
- * @param  boolean                      Whether rating is currently/by-default allowed for this resource
- * @param  boolean                      Whether comments are currently/by-default allowed for this resource
- * @param  ?boolean                     Whether trackbacks are currently/by-default allowed for this resource (null: this resource does not support trackbacks regardless)
- * @param  boolean                      Whether we're allowed to send trackbacks for this resource
- * @param  LONG_TEXT                    The current/by-default notes for this content
- * @param  ?boolean                     Whether reviews are currently/by-default allowed for this resource (null: no reviews allowed here)
- * @param  boolean                      Whether the default values for the allow options is actually off (this determines how the tray auto-hides itself)
- * @param  boolean                      If there's to be a notes field
- * @param  boolean                      Whether to show a header
- * @param  string                       Field name prefix
+ * @param  boolean                      $allow_rating Whether rating is currently/by-default allowed for this resource
+ * @param  boolean                      $allow_comments Whether comments are currently/by-default allowed for this resource
+ * @param  ?boolean                     $allow_trackbacks Whether trackbacks are currently/by-default allowed for this resource (null: this resource does not support trackbacks regardless)
+ * @param  boolean                      $send_trackbacks Whether we're allowed to send trackbacks for this resource
+ * @param  LONG_TEXT                    $notes The current/by-default notes for this content
+ * @param  ?boolean                     $allow_reviews Whether reviews are currently/by-default allowed for this resource (null: no reviews allowed here)
+ * @param  boolean                      $default_off Whether the default values for the allow options is actually off (this determines how the tray auto-hides itself)
+ * @param  boolean                      $has_notes If there's to be a notes field
+ * @param  boolean                      $show_header Whether to show a header
+ * @param  string                       $field_name_prefix Field name prefix
  * @return tempcode                     The feedback editing fields
  */
 function feedback_fields($allow_rating, $allow_comments, $allow_trackbacks, $send_trackbacks, $notes, $allow_reviews = null, $default_off = false, $has_notes = true, $show_header = true, $field_name_prefix = '')
@@ -207,9 +207,9 @@ function feedback_fields($allow_rating, $allow_comments, $allow_trackbacks, $sen
 /**
  * Send a trackback to somebody else's website.
  *
- * @param  string                       A comma-separated list of URLs to which we should trackback
- * @param  string                       The article title
- * @param  string                       The excerpt to send
+ * @param  string                       $_urls A comma-separated list of URLs to which we should trackback
+ * @param  string                       $title The article title
+ * @param  string                       $excerpt The excerpt to send
  * @return boolean                      Success?
  */
 function send_trackbacks($_urls, $title, $excerpt)

@@ -43,10 +43,10 @@ class Module_admin_ocf_members
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -463,12 +463,12 @@ class Module_admin_ocf_members
     /**
      * Find a mapping of member IDs to usernames, of those who'll get delurked.
      *
-     * @param  integer                  Maximum forum posts
-     * @param  integer                  Maximum points
-     * @param  integer                  Maximum logged actions
-     * @param  integer                  Minimum days since last login
-     * @param  integer                  Minimum days since joining
-     * @param  array                    List of usergroups
+     * @param  integer                  $max_posts Maximum forum posts
+     * @param  integer                  $max_points Maximum points
+     * @param  integer                  $max_logged_actions Maximum logged actions
+     * @param  integer                  $min_days_since_login Minimum days since last login
+     * @param  integer                  $min_days_since_join Minimum days since joining
+     * @param  array                    $usergroups List of usergroups
      * @return array                    Mapping of lurkers
      */
     public function find_lurkers($max_posts, $max_points, $max_logged_actions, $min_days_since_login, $min_days_since_join, $usergroups)

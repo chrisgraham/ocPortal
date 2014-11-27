@@ -46,11 +46,11 @@ class Hook_paypal
     /**
      * Make a transaction (payment) button.
      *
-     * @param  ID_TEXT                  The product codename.
-     * @param  SHORT_TEXT               The human-readable product title.
-     * @param  ID_TEXT                  The purchase ID.
-     * @param  float                    A transaction amount.
-     * @param  ID_TEXT                  The currency to use.
+     * @param  ID_TEXT                  $type_code The product codename.
+     * @param  SHORT_TEXT               $item_name The human-readable product title.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
+     * @param  float                    $amount A transaction amount.
+     * @param  ID_TEXT                  $currency The currency to use.
      * @return tempcode                 The button.
      */
     public function make_transaction_button($type_code, $item_name, $purchase_id, $amount, $currency)
@@ -85,14 +85,14 @@ class Hook_paypal
     /**
      * Make a subscription (payment) button.
      *
-     * @param  ID_TEXT                  The product codename.
-     * @param  SHORT_TEXT               The human-readable product title.
-     * @param  ID_TEXT                  The purchase ID.
-     * @param  float                    A transaction amount.
-     * @param  integer                  The subscription length in the units.
-     * @param  ID_TEXT                  The length units.
+     * @param  ID_TEXT                  $type_code The product codename.
+     * @param  SHORT_TEXT               $item_name The human-readable product title.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
+     * @param  float                    $amount A transaction amount.
+     * @param  integer                  $length The subscription length in the units.
+     * @param  ID_TEXT                  $length_units The length units.
      * @set    d w m y
-     * @param  ID_TEXT                  The currency to use.
+     * @param  ID_TEXT                  $currency The currency to use.
      * @return tempcode                 The button.
      */
     public function make_subscription_button($type_code, $item_name, $purchase_id, $amount, $length, $length_units, $currency)
@@ -118,7 +118,7 @@ class Hook_paypal
     /**
      * Make a subscription cancellation button.
      *
-     * @param  ID_TEXT                  The purchase ID.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
      * @return tempcode                 The button
      */
     public function make_cancel_button($purchase_id)
@@ -129,7 +129,7 @@ class Hook_paypal
     /**
      * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
      *
-     * @param  string                   Transaction ID to cancel.
+     * @param  string                   $trans_id Transaction ID to cancel.
      * @return ?boolean                 True: yes. False: no. (null: cancels via a user-URL-directioning)
      */
     public function auto_cancel($trans_id)
@@ -140,7 +140,7 @@ class Hook_paypal
     /**
      * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
      *
-     * @param  float                    A transaction amount.
+     * @param  float                    $amount A transaction amount.
      * @return float                    The fee
      */
     public function get_transaction_fee($amount)
@@ -351,9 +351,9 @@ class Hook_paypal
     /**
      * Make a transaction (payment) button for multiple shopping cart items.
      *
-     * @param  array                    Items array.
-     * @param  tempcode                 Currency symbol.
-     * @param  AUTO_LINK                Order ID.
+     * @param  array                    $items Items array.
+     * @param  tempcode                 $currency Currency symbol.
+     * @param  AUTO_LINK                $order_id Order ID.
      * @return tempcode                 The button.
      */
     public function make_cart_transaction_button($items, $currency, $order_id)
@@ -391,7 +391,7 @@ class Hook_paypal
     /**
      * Store shipping address for orders.
      *
-     * @param  AUTO_LINK                Order ID.
+     * @param  AUTO_LINK                $order_id Order ID.
      * @return ?mixed                   Address ID (null: No address record found).
      */
     public function store_shipping_address($order_id)

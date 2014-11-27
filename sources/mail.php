@@ -33,7 +33,7 @@ function init__mail()
 /**
  * Replace an HTML img tag such that it is cid'd. Callback for preg_replace_callback.
  *
- * @param  array                        Matches
+ * @param  array                        $matches Matches
  * @return string                       Replacement
  */
 function _mail_img_rep_callback($matches)
@@ -51,7 +51,7 @@ function _mail_img_rep_callback($matches)
 /**
  * Replace CSS image references such that it is cid'd. Callback for preg_replace_callback.
  *
- * @param  array                        Matches
+ * @param  array                        $matches Matches
  * @return string                       Replacement
  */
 function _mail_css_rep_callback($matches)
@@ -68,7 +68,7 @@ function _mail_css_rep_callback($matches)
 /**
  * Indent text lines. Callback for preg_replace_callback.
  *
- * @param  array                        Matches
+ * @param  array                        $matches Matches
  * @return string                       Replacement
  */
 function _indent_callback($matches)
@@ -79,7 +79,7 @@ function _indent_callback($matches)
 /**
  * Make titles readable. Callback for preg_replace_callback.
  *
- * @param  array                        Matches
+ * @param  array                        $matches Matches
  * @return string                       Replacement
  */
 function _title_callback($matches)
@@ -94,7 +94,7 @@ function _title_callback($matches)
 /**
  * Make boxes readable. Callback for preg_replace_callback.
  *
- * @param  array                        Matches
+ * @param  array                        $matches Matches
  * @return string                       Replacement
  */
 function _box_callback($matches)
@@ -105,8 +105,8 @@ function _box_callback($matches)
 /**
  * Make some Comcode more readable.
  *
- * @param  string                       Comcode text to change
- * @param  boolean                      Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
+ * @param  string                       $message_plain Comcode text to change
+ * @param  boolean                      $for_extract Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
  * @return string                       Clean text
  */
 function comcode_to_clean_text($message_plain, $for_extract = false)
@@ -221,25 +221,25 @@ http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
  * Attempt to send an e-mail to the specified recipient. The mail will be forwarding to the CC address specified in the options (if there is one, and if not specified not to cc).
  * The mail will be sent in dual HTML/text format, where the text is the unconverted Comcode source: if a member does not read HTML mail, they may wish to fallback to reading that.
  *
- * @param  string                       The subject of the mail in plain text
- * @param  LONG_TEXT                    The message, as Comcode
- * @param  ?array                       The destination (recipient) e-mail addresses [array of strings] (null: site staff address)
- * @param  ?mixed                       The recipient name. Array or string. (null: site name)
- * @param  EMAIL                        The from address (blank: site staff address)
- * @param  string                       The from name (blank: site name)
- * @param  integer                      The message priority (1=urgent, 3=normal, 5=low)
+ * @param  string                       $subject_line The subject of the mail in plain text
+ * @param  LONG_TEXT                    $message_raw The message, as Comcode
+ * @param  ?array                       $to_email The destination (recipient) e-mail addresses [array of strings] (null: site staff address)
+ * @param  ?mixed                       $to_name The recipient name. Array or string. (null: site name)
+ * @param  EMAIL                        $from_email The from address (blank: site staff address)
+ * @param  string                       $from_name The from name (blank: site name)
+ * @param  integer                      $priority The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
- * @param  ?array                       An list of attachments (each attachment being a map, path=>filename) (null: none)
- * @param  boolean                      Whether to NOT CC to the CC address
- * @param  ?MEMBER                      Convert Comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (null: guest)
- * @param  boolean                      Replace above with arbitrary admin
- * @param  boolean                      HTML-only
- * @param  boolean                      Whether to bypass queueing, because this code is running as a part of the queue management tools
- * @param  ID_TEXT                      The template used to show the email
- * @param  ?boolean                     Whether to bypass queueing (null: auto-decide)
- * @param  ?array                       Extra CC addresses to use (null: none)
- * @param  ?array                       Extra BCC addresses to use (null: none)
- * @param  ?TIME                        Implement the Require-Recipient-Valid-Since header (null: no restriction)
+ * @param  ?array                       $attachments An list of attachments (each attachment being a map, path=>filename) (null: none)
+ * @param  boolean                      $no_cc Whether to NOT CC to the CC address
+ * @param  ?MEMBER                      $as Convert Comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (null: guest)
+ * @param  boolean                      $as_admin Replace above with arbitrary admin
+ * @param  boolean                      $in_html HTML-only
+ * @param  boolean                      $coming_out_of_queue Whether to bypass queueing, because this code is running as a part of the queue management tools
+ * @param  ID_TEXT                      $mail_template The template used to show the email
+ * @param  ?boolean                     $bypass_queue Whether to bypass queueing (null: auto-decide)
+ * @param  ?array                       $extra_cc_addresses Extra CC addresses to use (null: none)
+ * @param  ?array                       $extra_bcc_addresses Extra BCC addresses to use (null: none)
+ * @param  ?TIME                        $require_recipient_valid_since Implement the Require-Recipient-Valid-Since header (null: no restriction)
  * @return ?tempcode                    A full page (not complete XHTML) piece of tempcode to output (null: it worked so no tempcode message)
  */
 function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = null, $from_email = '', $from_name = '', $priority = 3, $attachments = null, $no_cc = false, $as = null, $as_admin = false, $in_html = false, $coming_out_of_queue = false, $mail_template = 'MAIL', $bypass_queue = null, $extra_cc_addresses = null, $extra_bcc_addresses = null, $require_recipient_valid_since = null)
@@ -920,9 +920,9 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
  * Filter out any CSS selector blocks from the given CSS if they definitely do not affect the given (X)HTML.
  * Whilst this is a clever algorithm, it isn't so clever as to actually try and match each selector against a DOM tree. If any segment of a compound selector matches, match is assumed.
  *
- * @param                                   ID_TEXT                      CSS file
- * @param                                   ID_TEXT                      Theme
- * @param  string                       (X) HTML context under which CSS is filtered
+ * @param                                   ID_TEXT                      $c CSS file
+ * @param                                   ID_TEXT                      $theme Theme
+ * @param  string                       $context (X) HTML context under which CSS is filtered
  * @return string                       Filtered CSS
  */
 function filter_css($c, $theme, $context)
@@ -1078,12 +1078,12 @@ function form_to_email_entry_script()
 /**
  * Send the posted form over email to the staff address.
  *
- * @param  ?string                      The subject of the email (null: from posted subject parameter).
- * @param  string                       The intro text to the mail (blank: none).
- * @param  ?array                       A map of fields to field titles to transmit. (null: all posted fields, except subject and email)
- * @param  ?string                      Email address to send to (null: look from post environment / staff address).
- * @param  string                       The outro text to the mail (blank: none).
- * @param  boolean                      Whether $fields refers to some POSTed fields, as opposed to a direct field->value map.
+ * @param  ?string                      $subject The subject of the email (null: from posted subject parameter).
+ * @param  string                       $intro The intro text to the mail (blank: none).
+ * @param  ?array                       $fields A map of fields to field titles to transmit. (null: all posted fields, except subject and email)
+ * @param  ?string                      $to_email Email address to send to (null: look from post environment / staff address).
+ * @param  string                       $outro The outro text to the mail (blank: none).
+ * @param  boolean                      $is_via_post Whether $fields refers to some POSTed fields, as opposed to a direct field->value map.
  */
 function form_to_email($subject = null, $intro = '', $fields = null, $to_email = null, $outro = '', $is_via_post = true)
 {

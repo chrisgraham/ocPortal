@@ -21,11 +21,11 @@
 /**
  * Edit a post template.
  *
- * @param  AUTO_LINK                    The ID of the post template to edit.
- * @param  SHORT_TEXT                   The title for the template.
- * @param  LONG_TEXT                    The text of the template.
- * @param  SHORT_TEXT                   The multi code specifying which forums this is applicable in.
- * @param  BINARY                       Whether to use this as the default post in applicable forum.
+ * @param  AUTO_LINK                    $id The ID of the post template to edit.
+ * @param  SHORT_TEXT                   $title The title for the template.
+ * @param  LONG_TEXT                    $text The text of the template.
+ * @param  SHORT_TEXT                   $forum_multi_code The multi code specifying which forums this is applicable in.
+ * @param  BINARY                       $use_default_forums Whether to use this as the default post in applicable forum.
  */
 function ocf_edit_post_template($id, $title, $text, $forum_multi_code, $use_default_forums)
 {
@@ -47,7 +47,7 @@ function ocf_edit_post_template($id, $title, $text, $forum_multi_code, $use_defa
 /**
  * Delete a post template.
  *
- * @param  AUTO_LINK                    The ID of the post template to delete.
+ * @param  AUTO_LINK                    $id The ID of the post template to delete.
  */
 function ocf_delete_post_template($id)
 {
@@ -65,7 +65,7 @@ function ocf_delete_post_template($id)
  * Utility function to import custom emoticons.
  * Not used by default, but useful when coding projects to do hot-changes to a separate live site.
  *
- * @param  boolean                      Make some of the old core emoticons non-core (level 1).
+ * @param  boolean                      $remove_old_core Make some of the old core emoticons non-core (level 1).
  */
 function import_custom_emoticons($remove_old_core = false)
 {
@@ -103,13 +103,13 @@ function import_custom_emoticons($remove_old_core = false)
 /**
  * Edit an emoticon.
  *
- * @param  SHORT_TEXT                   The textual code entered to make the emoticon appear.
- * @param  SHORT_TEXT                   The old textual code.
- * @param  ID_TEXT                      The image code used for the emoticon.
- * @param  integer                      The relevance level.
+ * @param  SHORT_TEXT                   $old_code The textual code entered to make the emoticon appear.
+ * @param  SHORT_TEXT                   $code The old textual code.
+ * @param  ID_TEXT                      $theme_img_code The image code used for the emoticon.
+ * @param  integer                      $relevance_level The relevance level.
  * @range  0 4
- * @param  BINARY                       Whether this may be used as a topic emoticon.
- * @param  BINARY                       Whether this may only be used by privileged members
+ * @param  BINARY                       $use_topics Whether this may be used as a topic emoticon.
+ * @param  BINARY                       $is_special Whether this may only be used by privileged members
  */
 function ocf_edit_emoticon($old_code, $code, $theme_img_code, $relevance_level, $use_topics, $is_special = 0)
 {
@@ -139,7 +139,7 @@ function ocf_edit_emoticon($old_code, $code, $theme_img_code, $relevance_level, 
 /**
  * Delete an emoticon.
  *
- * @param  SHORT_TEXT                   The ID of the emoticon to delete.
+ * @param  SHORT_TEXT                   $code The ID of the emoticon to delete.
  */
 function ocf_delete_emoticon($code)
 {
@@ -156,14 +156,14 @@ function ocf_delete_emoticon($code)
 /**
  * Edit a Welcome E-mail.
  *
- * @param  AUTO_LINK                    The ID
- * @param  SHORT_TEXT                   A name for the Welcome E-mail
- * @param  SHORT_TEXT                   The subject of the Welcome E-mail
- * @param  LONG_TEXT                    The message body of the Welcome E-mail
- * @param  integer                      The number of hours before sending the e-mail
- * @param  ?AUTO_LINK                   What newsletter to send out to instead of members (null: none)
- * @param  ?AUTO_LINK                   The usergroup to tie to (null: none)
- * @param  ID_TEXT                      How to send regarding usergroups (blank: indiscriminately)
+ * @param  AUTO_LINK                    $id The ID
+ * @param  SHORT_TEXT                   $name A name for the Welcome E-mail
+ * @param  SHORT_TEXT                   $subject The subject of the Welcome E-mail
+ * @param  LONG_TEXT                    $text The message body of the Welcome E-mail
+ * @param  integer                      $send_time The number of hours before sending the e-mail
+ * @param  ?AUTO_LINK                   $newsletter What newsletter to send out to instead of members (null: none)
+ * @param  ?AUTO_LINK                   $usergroup The usergroup to tie to (null: none)
+ * @param  ID_TEXT                      $usergroup_type How to send regarding usergroups (blank: indiscriminately)
  * @set primary secondary
  */
 function ocf_edit_welcome_email($id, $name, $subject, $text, $send_time, $newsletter, $usergroup, $usergroup_type)
@@ -186,7 +186,7 @@ function ocf_edit_welcome_email($id, $name, $subject, $text, $send_time, $newsle
 /**
  * Delete a Welcome E-mail.
  *
- * @param  AUTO_LINK                    The ID
+ * @param  AUTO_LINK                    $id The ID
  */
 function ocf_delete_welcome_email($id)
 {
@@ -201,7 +201,7 @@ function ocf_delete_welcome_email($id)
 /**
  * Get a form field for editing a forum multi code, set up with a default of the given forum multi code.
  *
- * @param  SHORT_TEXT                   The multi code.
+ * @param  SHORT_TEXT                   $forum_multi_code The multi code.
  * @return tempcode                     The form field.
  */
 function ocf_get_forum_multi_code_field($forum_multi_code)
@@ -222,12 +222,12 @@ function ocf_get_forum_multi_code_field($forum_multi_code)
 /**
  * Log a moderation action.
  *
- * @param  ID_TEXT                      The type of moderation.
- * @param  SHORT_TEXT                   First detailing parameter.
- * @param  SHORT_TEXT                   Second detailing parameter.
- * @param  LONG_TEXT                    The reason for the moderation (may be blank).
- * @param  ?MEMBER                      The member performing the moderation (null: current member).
- * @param  ?TIME                        The time of the moderation (null: just now).
+ * @param  ID_TEXT                      $the_type The type of moderation.
+ * @param  SHORT_TEXT                   $param_a First detailing parameter.
+ * @param  SHORT_TEXT                   $param_b Second detailing parameter.
+ * @param  LONG_TEXT                    $reason The reason for the moderation (may be blank).
+ * @param  ?MEMBER                      $by The member performing the moderation (null: current member).
+ * @param  ?TIME                        $date_and_time The time of the moderation (null: just now).
  */
 function ocf_mod_log_it($the_type, $param_a = '', $param_b = '', $reason = '', $by = null, $date_and_time = null)
 {

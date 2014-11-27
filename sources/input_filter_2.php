@@ -54,7 +54,7 @@ function rescue_shortened_post_request()
 /**
  * Count how many elements in an array, recursively.
  *
- * @param   array    The array
+ * @param   array    $arr The array
  * @return  integer  The count
  */
 function array_count_recursive($arr)

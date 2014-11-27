@@ -59,8 +59,8 @@ class Block_main_staff_checklist
     /**
      * Install the block.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -113,7 +113,7 @@ class Block_main_staff_checklist
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -212,8 +212,8 @@ class Block_main_staff_checklist
 /**
  * Work out when an action should happen, and last happened.
  *
- * @param  ?integer                     The number of seconds ago since it last happened (null: never happened) OR If $recur_hours is NULL then the number of seconds until it happens (null: won't happen)
- * @param  ?integer                     It should be done every this many hours (null: never happened)
+ * @param  ?integer                     $seconds_ago The number of seconds ago since it last happened (null: never happened) OR If $recur_hours is NULL then the number of seconds until it happens (null: won't happen)
+ * @param  ?integer                     $recur_hours It should be done every this many hours (null: never happened)
  * @return array                        A pair: Tempcode to display, and the number of seconds to go until the action should happen
  */
 function staff_checklist_time_ago_and_due($seconds_ago, $recur_hours = null)

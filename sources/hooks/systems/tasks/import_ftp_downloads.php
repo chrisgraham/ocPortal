@@ -26,9 +26,9 @@ class Hook_task_import_ftp_downloads
     /**
      * Run the task hook.
      *
-     * @param  AUTO_LINK                The category to import to
-     * @param  string                   The import URL
-     * @param  boolean                  Whether to import subfolders
+     * @param  AUTO_LINK                $destination The category to import to
+     * @param  string                   $server_url The import URL
+     * @param  boolean                  $subfolders Whether to import subfolders
      * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($destination, $server_url, $subfolders)
@@ -98,11 +98,11 @@ class Hook_task_import_ftp_downloads
     /**
      * Worker function to do an FTP import.
      *
-     * @param  resource                 The FTP connection
-     * @param  URLPATH                  The URL that is equivalent to the base path on our FTP
-     * @param  PATH                     The directory we are scanning
-     * @param  AUTO_LINK                The destination downloading category
-     * @param  boolean                  Whether we add hierarchically (as opposed to a flat category fill)
+     * @param  resource                 $conn_id The FTP connection
+     * @param  URLPATH                  $url The URL that is equivalent to the base path on our FTP
+     * @param  PATH                     $directory The directory we are scanning
+     * @param  AUTO_LINK                $dest_cat The destination downloading category
+     * @param  boolean                  $make_subfolders Whether we add hierarchically (as opposed to a flat category fill)
      * @return integer                  Number of downloads added
      */
     public function ftp_recursive_downloads_scan($conn_id, $url, $directory, $dest_cat, $make_subfolders)

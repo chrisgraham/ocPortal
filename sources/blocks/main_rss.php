@@ -58,7 +58,7 @@ class Block_main_rss
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -261,7 +261,7 @@ class Block_main_rss
 /**
  * Find the cache signature for the block.
  *
- * @param  array                        The block parameters.
+ * @param  array                        $map The block parameters.
  * @return array                        The cache signature.
  */
 function block_main_rss__cache_on($map)

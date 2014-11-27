@@ -26,11 +26,11 @@ class Hook_block_ui_renderers_galleries
     /**
      * See if a particular block parameter's UI input can be rendered by this.
      *
-     * @param  ID_TEXT                  The block
-     * @param  ID_TEXT                  The parameter of the block
-     * @param  boolean                  Whether there is a default value for the field, due to this being an edit
-     * @param  string                   Default value for field
-     * @param  tempcode                 Field description
+     * @param  ID_TEXT                  $block The block
+     * @param  ID_TEXT                  $parameter The parameter of the block
+     * @param  boolean                  $has_default Whether there is a default value for the field, due to this being an edit
+     * @param  string                   $default Default value for field
+     * @param  tempcode                 $description Field description
      * @return ?tempcode                Rendered field (null: not handled).
      */
     public function render_block_ui($block, $parameter, $has_default, $default, $description)

@@ -52,7 +52,7 @@ class Block_side_amazon_wishlist
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -112,8 +112,8 @@ class Block_side_amazon_wishlist
     /**
      * Function to create the signature for amazon web service.
      *
-     * @param  SHORT_TEXT               Amazon web service URL
-     * @param  LONG_TEXT                additional url params
+     * @param  SHORT_TEXT               $url Amazon web service URL
+     * @param  LONG_TEXT                $params additional url params
      * @return SHORT_TEXT               Amazon web service URL with signature
      */
     public function createSignature($url, $params = '')

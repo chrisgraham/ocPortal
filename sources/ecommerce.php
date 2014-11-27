@@ -91,13 +91,13 @@ function ecommerce_get_currency_symbol()
 /**
  * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
  *
- * @param  ?ID_TEXT                     The transaction ID (null: auto-generate)
- * @param  ID_TEXT                      The purchase ID
- * @param  SHORT_TEXT                   The item name
- * @param  SHORT_TEXT                   The amount
- * @param  ?integer                     The length (null: not a subscription)
- * @param  ID_TEXT                      The length units
- * @param  ?ID_TEXT                     The service the payment will go via via (null: autodetect).
+ * @param  ?ID_TEXT                     $trans_id The transaction ID (null: auto-generate)
+ * @param  ID_TEXT                      $purchase_id The purchase ID
+ * @param  SHORT_TEXT                   $item_name The item name
+ * @param  SHORT_TEXT                   $amount The amount
+ * @param  ?integer                     $length The length (null: not a subscription)
+ * @param  ID_TEXT                      $length_units The length units
+ * @param  ?ID_TEXT                     $via The service the payment will go via via (null: autodetect).
  * @return array                        A pair: The form fields, Hidden fields
  */
 function get_transaction_form_fields($trans_id, $purchase_id, $item_name, $amount, $length, $length_units, $via = null)
@@ -161,8 +161,8 @@ function get_transaction_form_fields($trans_id, $purchase_id, $item_name, $amoun
 /**
  * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
  *
- * @param  float                        A transaction amount.
- * @param  ID_TEXT                      The service the payment went via.
+ * @param  float                        $amount A transaction amount.
+ * @param  ID_TEXT                      $via The service the payment went via.
  * @return float                        The fee
  */
 function get_transaction_fee($amount, $via)
@@ -186,12 +186,12 @@ function get_transaction_fee($amount, $via)
 /**
  * Make a transaction (payment) button.
  *
- * @param  ID_TEXT                      The product codename.
- * @param  SHORT_TEXT                   The human-readable product title.
- * @param  ID_TEXT                      The purchase ID.
- * @param  float                        A transaction amount.
- * @param  ID_TEXT                      The currency to use.
- * @param  ?ID_TEXT                     The service the payment will go via via (null: autodetect).
+ * @param  ID_TEXT                      $type_code The product codename.
+ * @param  SHORT_TEXT                   $item_name The human-readable product title.
+ * @param  ID_TEXT                      $purchase_id The purchase ID.
+ * @param  float                        $amount A transaction amount.
+ * @param  ID_TEXT                      $currency The currency to use.
+ * @param  ?ID_TEXT                     $via The service the payment will go via via (null: autodetect).
  * @return tempcode                     The button
  */
 function make_transaction_button($type_code, $item_name, $purchase_id, $amount, $currency, $via = null)
@@ -207,15 +207,15 @@ function make_transaction_button($type_code, $item_name, $purchase_id, $amount, 
 /**
  * Make a subscription (payment) button.
  *
- * @param  ID_TEXT                      The product codename.
- * @param  SHORT_TEXT                   The human-readable product title.
- * @param  ID_TEXT                      The purchase ID.
- * @param  float                        A transaction amount.
- * @param  integer                      The subscription length in the units.
- * @param  ID_TEXT                      The length units.
+ * @param  ID_TEXT                      $type_code The product codename.
+ * @param  SHORT_TEXT                   $item_name The human-readable product title.
+ * @param  ID_TEXT                      $purchase_id The purchase ID.
+ * @param  float                        $amount A transaction amount.
+ * @param  integer                      $length The subscription length in the units.
+ * @param  ID_TEXT                      $length_units The length units.
  * @set    d w m y
- * @param  ID_TEXT                      The currency to use.
- * @param  ?ID_TEXT                     The service the payment will go via via (null: autodetect).
+ * @param  ID_TEXT                      $currency The currency to use.
+ * @param  ?ID_TEXT                     $via The service the payment will go via via (null: autodetect).
  * @return tempcode                     The button
  */
 function make_subscription_button($type_code, $item_name, $purchase_id, $amount, $length, $length_units, $currency, $via = null)
@@ -231,8 +231,8 @@ function make_subscription_button($type_code, $item_name, $purchase_id, $amount,
 /**
  * Make a subscription cancellation button.
  *
- * @param  AUTO_LINK                    The purchase ID.
- * @param  ID_TEXT                      The service the payment will go via via.
+ * @param  AUTO_LINK                    $purchase_id The purchase ID.
+ * @param  ID_TEXT                      $via The service the payment will go via via.
  * @return ?tempcode                    The button (null: no special cancellation -- just delete the subscription row to stop ocPortal regularly re-charging)
  */
 function make_cancel_button($purchase_id, $via)
@@ -254,8 +254,8 @@ function make_cancel_button($purchase_id, $via)
 /**
  * Send an invoice notification to a member.
  *
- * @param  MEMBER                       The member to send to.
- * @param  AUTO_LINK                    The invoice ID.
+ * @param  MEMBER                       $member_id The member to send to.
+ * @param  AUTO_LINK                    $id The invoice ID.
  */
 function send_invoice_notification($member_id, $id)
 {
@@ -269,7 +269,7 @@ function send_invoice_notification($member_id, $id)
 /**
  * Find all products, except ones from hooks that might have too many to list (so don't rely on this for important backend tasks).
  *
- * @param  boolean                      Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
+ * @param  boolean                      $site_lang Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
  * @return array                        A list of maps of product details.
  */
 function find_all_products($site_lang = false)
@@ -297,9 +297,9 @@ function find_all_products($site_lang = false)
 /**
  * Find product.
  *
- * @param  ID_TEXT                      The item name/product_id
- * @param  boolean                      Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
- * @param  boolean                      Whether $search refers to the item name rather than the product codename
+ * @param  ID_TEXT                      $search The item name/product_id
+ * @param  boolean                      $site_lang Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
+ * @param  boolean                      $search_item_names Whether $search refers to the item name rather than the product codename
  * @return ?object                      The product-class object (null: not found).
  */
 function find_product($search, $site_lang = false, $search_item_names = false)
@@ -337,9 +337,9 @@ function find_product($search, $site_lang = false, $search_item_names = false)
 /**
  * Find product info row.
  *
- * @param  ID_TEXT                      The product codename/item name
- * @param  boolean                      Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
- * @param  boolean                      Whether $search refers to the item name rather than the product codename
+ * @param  ID_TEXT                      $search The product codename/item name
+ * @param  boolean                      $site_lang Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
+ * @param  boolean                      $search_item_names Whether $search refers to the item name rather than the product codename
  * @return array                        A pair: The product-class map, and the formal product name (both will be NULL if not found).
  */
 function find_product_row($search, $site_lang = false, $search_item_names = false)
@@ -392,8 +392,8 @@ function perform_local_payment()
  * Useful for making one ocP site (caller site) pretend to be PayPal, when talking to another (target site).
  * Make sure the target site has the caller site listed as the backdoor_ip in the base config, or the verification will happen and fail.
  *
- * @param   URLPATH  URL to send IPN to
- * @param   string   Post parameters to send, in query string format
+ * @param   URLPATH  $ipn_target URL to send IPN to
+ * @param   string   $ipn_message Post parameters to send, in query string format
  * @return  string   Output
  */
 function dev__ipn_debug($ipn_target, $ipn_message)
@@ -440,19 +440,19 @@ function handle_transaction_script()
 /**
  * Handle IPN's that have been confirmed as backed up by real money.
  *
- * @param  ID_TEXT                      The ID of the purchase-type (meaning depends on item_name)
- * @param  SHORT_TEXT                   The item being purchased (aka the product) (blank: subscription, so we need to look it up). One might wonder why we use $item_name instead of $type_code. This is because we pass human-readable-names (hopefully unique!!!) through payment gateways because they are visually shown to the user. (blank: it's a subscription, so look up via a key map across the subscriptions table)
- * @param  ID_TEXT                      The status this transaction is telling of
+ * @param  ID_TEXT                      $purchase_id The ID of the purchase-type (meaning depends on item_name)
+ * @param  SHORT_TEXT                   $item_name The item being purchased (aka the product) (blank: subscription, so we need to look it up). One might wonder why we use $item_name instead of $type_code. This is because we pass human-readable-names (hopefully unique!!!) through payment gateways because they are visually shown to the user. (blank: it's a subscription, so look up via a key map across the subscriptions table)
+ * @param  ID_TEXT                      $payment_status The status this transaction is telling of
  * @set    Pending Completed SModified SCancelled
- * @param  SHORT_TEXT                   The code that gives reason to the status
- * @param  SHORT_TEXT                   The reason it is in pending status (if it is)
- * @param  SHORT_TEXT                   A note attached to the transaction
- * @param  SHORT_TEXT                   The amount of money
- * @param  SHORT_TEXT                   The currency the amount is in
- * @param  SHORT_TEXT                   The transaction ID
- * @param  SHORT_TEXT                   The ID of the parent transaction
- * @param  string                       The subscription period (blank: N/A / unknown: trust is correct on the gateway)
- * @param  ID_TEXT                      The payment gateway
+ * @param  SHORT_TEXT                   $reason_code The code that gives reason to the status
+ * @param  SHORT_TEXT                   $pending_reason The reason it is in pending status (if it is)
+ * @param  SHORT_TEXT                   $memo A note attached to the transaction
+ * @param  SHORT_TEXT                   $mc_gross The amount of money
+ * @param  SHORT_TEXT                   $mc_currency The currency the amount is in
+ * @param  SHORT_TEXT                   $txn_id The transaction ID
+ * @param  SHORT_TEXT                   $parent_txn_id The ID of the parent transaction
+ * @param  string                       $period The subscription period (blank: N/A / unknown: trust is correct on the gateway)
+ * @param  ID_TEXT                      $via The payment gateway
  * @return ID_TEXT                      The product purchased
  */
 function handle_confirmed_transaction($purchase_id, $item_name, $payment_status, $reason_code, $pending_reason, $memo, $mc_gross, $mc_currency, $txn_id, $parent_txn_id, $period, $via)
@@ -627,8 +627,8 @@ function handle_confirmed_transaction($purchase_id, $item_name, $payment_status,
 /**
  * Exit ocPortal and write to the error log file.
  *
- * @param  string                       The message.
- * @param  boolean                      Dont trigger an error
+ * @param  string                       $error The message.
+ * @param  boolean                      $dont_trigger Dont trigger an error
  */
 function fatal_ipn_exit($error, $dont_trigger = false)
 {
@@ -642,8 +642,8 @@ function fatal_ipn_exit($error, $dont_trigger = false)
 /**
  * Make a shopping cart payment button.
  *
- * @param  AUTO_LINK                    Order ID
- * @param  ID_TEXT                      The currency to use.
+ * @param  AUTO_LINK                    $order_id Order ID
+ * @param  ID_TEXT                      $currency The currency to use.
  * @return tempcode                     The button
  */
 function make_cart_payment_button($order_id, $currency)

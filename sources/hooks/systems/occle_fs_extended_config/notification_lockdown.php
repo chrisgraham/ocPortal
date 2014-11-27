@@ -37,10 +37,10 @@ class Hook_occle_fs_extended_config__notification_lockdown
     /**
      * Standard occle_fs file reading function for OcCLE FS hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  string                   The file name
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  string                   $file_name The file name
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
     public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
@@ -52,11 +52,11 @@ class Hook_occle_fs_extended_config__notification_lockdown
     /**
      * Standard occle_fs file writing function for OcCLE FS hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  string                   The file name
-     * @param  string                   The new file contents
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  string                   $file_name The file name
+     * @param  string                   $contents The new file contents
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
     public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)

@@ -23,12 +23,12 @@
  * All authorisation, cookies, and form-logins, are passed through this function.
  * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
  *
- * @param  object                       Link to the real forum driver
- * @param  ?SHORT_TEXT                  The member username (null: don't use this in the authentication - but look it up using the ID if needed)
- * @param  ?MEMBER                      The member ID (null: use member name)
- * @param  MD5                          The md5-hashed password
- * @param  string                       The raw password
- * @param  boolean                      Whether this is a cookie login, determines how the hashed password is treated for the value passed in
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  ?SHORT_TEXT                  $username The member username (null: don't use this in the authentication - but look it up using the ID if needed)
+ * @param  ?MEMBER                      $userid The member ID (null: use member name)
+ * @param  MD5                          $password_hashed The md5-hashed password
+ * @param  string                       $password_raw The raw password
+ * @param  boolean                      $cookie_login Whether this is a cookie login, determines how the hashed password is treated for the value passed in
  * @return array                        A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
  */
 function _forum_authorise_login($this_ref, $username, $userid, $password_hashed, $password_raw, $cookie_login = false)

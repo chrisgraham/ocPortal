@@ -21,7 +21,7 @@
 /**
  * Convert an IP address to a currency code.
  *
- * @param  ?IP                          IP address (null: that of current member).
+ * @param  ?IP                          $ip IP address (null: that of current member).
  * @return ID_TEXT                      The currency code.
  */
 function ip_to_currency($ip = null)
@@ -37,7 +37,7 @@ function ip_to_currency($ip = null)
 /**
  * Convert a country code to a currency code.
  *
- * @param  ID_TEXT                      The country code.
+ * @param  ID_TEXT                      $country The country code.
  * @return ID_TEXT                      The currency code.
  */
 function country_to_currency($country)
@@ -56,10 +56,10 @@ function country_to_currency($country)
 /**
  * Perform a currency conversion.
  *
- * @param  mixed                        The starting amount (integer or float).
- * @param  ID_TEXT                      The start currency code.
- * @param  ?ID_TEXT                     The end currency code (null: unknown, guess it).
- * @param  boolean                      Whether to get as a string.
+ * @param  mixed                        $amount The starting amount (integer or float).
+ * @param  ID_TEXT                      $from_currency The start currency code.
+ * @param  ?ID_TEXT                     $to_currency The end currency code (null: unknown, guess it).
+ * @param  boolean                      $string Whether to get as a string.
  * @return ?mixed                       The new amount as float, or if $string then as a string (null: failed to do it).
  */
 function currency_convert($amount, $from_currency, $to_currency = null, $string = false)

@@ -42,7 +42,7 @@ class Forum_driver_wbb2 extends forum_driver_wbb_shared
     /**
      * From a member row, get the member's primary usergroup.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return GROUP                    The member's primary usergroup
      */
     public function mrow_group($r)
@@ -53,9 +53,9 @@ class Forum_driver_wbb2 extends forum_driver_wbb_shared
     /**
      * Get an array of members who are in at least one of the given array of usergroups.
      *
-     * @param  array                    The array of usergroups
-     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
-     * @param  integer                  Return primary members after this offset and secondary members after this offset
+     * @param  array                    $groups The array of usergroups
+     * @param  ?integer                 $max Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  integer                  $start Return primary members after this offset and secondary members after this offset
      * @return ?array                   The array of members (null: no members)
      */
     public function member_group_query($groups, $max = null, $start = 0)
@@ -73,7 +73,7 @@ class Forum_driver_wbb2 extends forum_driver_wbb_shared
     /**
      * Find out if the given member ID is banned.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is banned
      */
     public function is_banned($member)
@@ -106,7 +106,7 @@ class Forum_driver_wbb2 extends forum_driver_wbb_shared
      * Try to find the theme that the logged-in/guest member is using, and map it to an ocPortal theme.
      * The themes/map.ini file functions to provide this mapping between forum themes, and ocPortal themes, and has a slightly different meaning for different forum drivers. For example, some drivers map the forum themes theme directory to the ocPortal theme name, whilst others made the humanly readeable name.
      *
-     * @param  boolean                  Whether to avoid member-specific lookup
+     * @param  boolean                  $skip_member_specific Whether to avoid member-specific lookup
      * @return ID_TEXT                  The theme
      */
     public function _get_theme($skip_member_specific = false)

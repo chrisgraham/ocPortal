@@ -59,8 +59,8 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -117,10 +117,10 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -136,8 +136,8 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -178,7 +178,7 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -218,7 +218,7 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A triple: fields, hidden-fields, delete-fields
      */
     public function fill_in_edit_form($id)
@@ -247,7 +247,7 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Get tempcode for a adding/editing form.
      *
-     * @param  ?integer                 The workflow being edited (null: adding, not editing)
+     * @param  ?integer                 $id The workflow being edited (null: adding, not editing)
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($id = null)
@@ -497,7 +497,7 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Standard crud_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($id)
@@ -509,7 +509,7 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Read in data posted by an add/edit form
      *
-     * @param  boolean                  Whether to insert unknown workflows into the database. For adding this should be true, otherwise false (the default)
+     * @param  boolean                  $insert_if_needed Whether to insert unknown workflows into the database. For adding this should be true, otherwise false (the default)
      * @return array                    (workflow_id, workflow_name, array(approval point IDs=>names), default)
      */
     public function read_in_data($insert_if_needed = false)
@@ -674,7 +674,7 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return ?tempcode                Confirm message (null: continue)
      */
     public function edit_actualisation($id)
@@ -686,7 +686,7 @@ class Module_admin_workflow extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

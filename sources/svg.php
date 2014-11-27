@@ -52,13 +52,13 @@ function init__svg()
 /**
  * Get the SVG markup for a segment of a circle. It is designed to be used in the construction of a pie chart
  *
- * @param  string                       The hexadecimal-formatted colour for the shape
- * @param  integer                      The angle of the segment
- * @param  integer                      The radius of the segment
- * @param  integer                      The X position of the start vertex
- * @param  integer                      The Y position of the start vertex
- * @param  integer                      The X position of the end vertex
- * @param  integer                      The Y position of the end vertex
+ * @param  string                       $colour The hexadecimal-formatted colour for the shape
+ * @param  integer                      $angle The angle of the segment
+ * @param  integer                      $radius The radius of the segment
+ * @param  integer                      $start_x The X position of the start vertex
+ * @param  integer                      $start_y The Y position of the start vertex
+ * @param  integer                      $end_x The X position of the end vertex
+ * @param  integer                      $end_y The Y position of the end vertex
  * @return string                       The SVG markup for the described segment
  */
 function _draw_segment($colour, $angle, $radius, $start_x, $start_y, $end_x, $end_y)
@@ -73,11 +73,11 @@ function _draw_segment($colour, $angle, $radius, $start_x, $start_y, $end_x, $en
 /**
  * Get the SVG markup for a key for a chart, such as a pie chart, using the specified data
  *
- * @param   array          An array of the data to be keyed up
- * @param   string         The starting colour for the key
- * @param   integer        The starting X position
- * @param   integer        The starting Y position
- * @param   string         The units (e.g. %)
+ * @param   array          $data An array of the data to be keyed up
+ * @param   string         $start_colour The starting colour for the key
+ * @param   integer        $start_x The starting X position
+ * @param   integer        $start_y The starting Y position
+ * @param   string         $units The units (e.g. %)
  * @return  string         The SVG markup for the described key
  */
 function _draw_key($data, $start_colour, $start_x, $start_y, $units = '')
@@ -119,7 +119,7 @@ function _draw_key($data, $start_colour, $start_x, $start_y, $units = '')
 /**
  * Get the next hexadecimal colour from the specified one, where each of the Red, Green or Blue columns can either be 00, 33, 66 or 99, to provide a viewable contrast between two adjacent colours
  *
- * @param   string         The hexadecimal-format colour to be incremented
+ * @param   string         $current_colour The hexadecimal-format colour to be incremented
  * @return  string         The incremented hexadecimal colour
  */
 function _get_next_colour($current_colour)
@@ -190,7 +190,7 @@ if (typeof window.addEventListenerAbstract==\'undefined\') addEventListenerAbstr
 /**
  * Get the markup required to finish an SVG document
  *
- * @param  string                       The plot markup to insert first
+ * @param  string                       $plot The plot markup to insert first
  * @return string                       The markup
  */
 function _finish_svg($plot = '')
@@ -201,7 +201,7 @@ function _finish_svg($plot = '')
 /**
  * Take the SVG and make all the styles inline. Disabled as not needed for native SVG implementations
  *
- * @param  string                       The SVG
+ * @param  string                       $plot The SVG
  * @return string                       ... made to have inline styles
  */
 function _filter_svg_css($plot)
@@ -212,10 +212,10 @@ function _filter_svg_css($plot)
 /**
  * Get the markup for a standard pair of axes
  *
- * @param   float          Maximum Y value
- * @param   float          Y scale
- * @param   string         X axis label
- * @param   string         Y axis label
+ * @param   float          $max_y Maximum Y value
+ * @param   float          $y_scale Y scale
+ * @param   string         $x_label X axis label
+ * @param   string         $y_label Y axis label
  * @return  string         The markup
  */
 function _draw_axes($max_y, $y_scale, $x_label = 'X axis', $y_label = 'Y axis')
@@ -252,8 +252,8 @@ function _draw_axes($max_y, $y_scale, $x_label = 'X axis', $y_label = 'Y axis')
 /**
  * Get the markup for an average line
  *
- * @param  float                        Average value
- * @param  float                        Y scale
+ * @param  float                        $average Average value
+ * @param  float                        $y_scale Y scale
  * @return string                       The markup
  */
 function _draw_average($average, $y_scale)
@@ -268,11 +268,11 @@ function _draw_average($average, $y_scale)
 /**
  * Create a bar chart from the specified data and return the SVG markup
  *
- * @param  array                        The data to be used in the creation of the bar chart
- * @param  string                       The X axis label
- * @param  string                       The Y axis label
- * @param  string                       The X axis units label
- * @param  string                       The Y axis units label
+ * @param  array                        $data The data to be used in the creation of the bar chart
+ * @param  string                       $x_label The X axis label
+ * @param  string                       $y_label The Y axis label
+ * @param  string                       $x_units The X axis units label
+ * @param  string                       $y_units The Y axis units label
  * @return string                       The SVG markup for the described bar chart
  */
 function create_bar_chart($data, $x_label = 'X axis', $y_label = 'Y axis', $x_units = '', $y_units = '')
@@ -353,11 +353,11 @@ function create_bar_chart($data, $x_label = 'X axis', $y_label = 'Y axis', $x_un
 /**
  * Create a scatter graph using the data provided and return the SVG markup
  *
- * @param  array                        The data to be used in the creation of the scatter graph
- * @param  string                       The X axis label
- * @param  string                       The Y axis label
- * @param  string                       The X axis units label
- * @param  string                       The Y axis units label
+ * @param  array                        $data The data to be used in the creation of the scatter graph
+ * @param  string                       $x_label The X axis label
+ * @param  string                       $y_label The Y axis label
+ * @param  string                       $x_units The X axis units label
+ * @param  string                       $y_units The Y axis units label
  * @return string                       The SVG markup for the described scatter graph
  */
 function create_scatter_graph($data, $x_label = 'X Axis', $y_label = 'Y Axis', $x_units = '', $y_units = '')
@@ -474,7 +474,7 @@ function create_scatter_graph($data, $x_label = 'X Axis', $y_label = 'Y Axis', $
 /**
  * Draw a pie chart with the specified data and return the SVG markup
  *
- * @param  array                        The data to be used in the creation of the pie chart
+ * @param  array                        $data The data to be used in the creation of the pie chart
  * @return string                       The SVG markup for the described pie chart
  */
 function create_pie_chart($data)

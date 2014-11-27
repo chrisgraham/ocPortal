@@ -21,8 +21,8 @@
 /**
  * Take a list of maps, and make one of the values of each array the index of a map to an array of corresponding maps
  *
- * @param  string                       The key key of our maps that reside in our map
- * @param  array                        The list of maps
+ * @param  string                       $map_value The key key of our maps that reside in our map
+ * @param  array                        $list The list of maps
  * @return array                        The collapsed map
  */
 function list_to_map_2($map_value, $list)

@@ -47,8 +47,8 @@ function init__php()
  *    range
  *    ref
  *
- * @param  PATH                         The PHP code module to get API information for
- * @param  boolean                      Whether to include function source code
+ * @param  PATH                         $filename The PHP code module to get API information for
+ * @param  boolean                      $include_code Whether to include function source code
  * @return array                        The complex structure of API information
  */
 function get_php_file_api($filename, $include_code = true)
@@ -213,8 +213,10 @@ function get_php_file_api($filename, $include_code = true)
                                     $matches = array();
                                     if (preg_match('#^\s*((public|protected|private) )?function \w+\((.*)\)\n?$#', $lines[$k], $matches) != 0) {
                                         $params = explode(',', $matches[3]);
-                                        $_description = /*str_pad(*/preg_replace('#^\s*(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;
-                                        $found = true;
+                                        if (isset($params[$arg_counter])) {
+                                            $_description = /*str_pad(*/preg_replace('#^\s*(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;
+                                            $found = true;
+                                        }
                                         break;
                                     }
                                 }
@@ -400,7 +402,7 @@ function get_php_file_api($filename, $include_code = true)
 /**
  * Read a PHP function line and return parsed details.
  *
- * @param  string                       The line
+ * @param  string                       $_line The line
  * @return array                        A pair: (function name, parameters), where parameters is a list of maps detailing each parameter
  */
 function _read_php_function_line($_line)
@@ -521,7 +523,7 @@ function _read_php_function_line($_line)
 /**
  * Remove and blank strings from the given array.
  *
- * @param  array                        List of strings
+ * @param  array                        $in List of strings
  * @return array                        List of strings, with blank strings removed
  */
 function _cleanup_array($in)
@@ -538,13 +540,13 @@ function _cleanup_array($in)
 /**
  * Type-check the specified parameter (giving an error if the type checking fails) [all checks]
  *
- * @param  ID_TEXT                      The parameter type
- * @param  string                       The functions name (used in error message)
- * @param  string                       The parameter name (used in error message)
- * @param  ?mixed                       The parameters value (null: value actually is null)
- * @param  ?string                      The string of value range of the parameter (null: no range constraint)
- * @param  ?string                      The string of value set limitation for the parameter (null: no set constraint)
- * @param  boolean                      Whether we just echo errors instead of exiting
+ * @param  ID_TEXT                      $type The parameter type
+ * @param  string                       $function_name The functions name (used in error message)
+ * @param  string                       $name The parameter name (used in error message)
+ * @param  ?mixed                       $value The parameters value (null: value actually is null)
+ * @param  ?string                      $range The string of value range of the parameter (null: no range constraint)
+ * @param  ?string                      $set The string of value set limitation for the parameter (null: no set constraint)
+ * @param  boolean                      $echo Whether we just echo errors instead of exiting
  */
 function check_function_type($type, $function_name, $name, $value, $range, $set, $echo = false)
 {
@@ -652,11 +654,11 @@ function check_function_type($type, $function_name, $name, $value, $range, $set,
 /**
  * Type-check the specified parameter (giving an error if the type checking fails) [just value against type]
  *
- * @param  ID_TEXT                      The parameter type
- * @param  string                       The functions name (used in error message)
- * @param  string                       The parameter name (used in error message)
- * @param  mixed                        The parameters value (cannot be null)
- * @param  boolean                      Whether we just echo errors instead of exiting
+ * @param  ID_TEXT                      $type The parameter type
+ * @param  string                       $function_name The functions name (used in error message)
+ * @param  string                       $name The parameter name (used in error message)
+ * @param  mixed                        $value The parameters value (cannot be null)
+ * @param  boolean                      $echo Whether we just echo errors instead of exiting
  */
 function test_fail_php_type_check($type, $function_name, $name, $value, $echo = false)
 {
@@ -818,11 +820,11 @@ function test_fail_php_type_check($type, $function_name, $name, $value, $echo = 
 /**
  * Throw out a type checker error message.
  *
- * @param  string                       The type involved
- * @param  string                       The function involved
- * @param  string                       The parameter name involved
- * @param  string                       The value involved
- * @param  boolean                      Whether we just echo errors instead of exiting
+ * @param  string                       $type The type involved
+ * @param  string                       $function_name The function involved
+ * @param  string                       $name The parameter name involved
+ * @param  string                       $value The value involved
+ * @param  boolean                      $echo Whether we just echo errors instead of exiting
  */
 function _fail_php_type_check($type, $function_name, $name, $value, $echo = false)
 {
@@ -836,9 +838,9 @@ function _fail_php_type_check($type, $function_name, $name, $value, $echo = fals
 /**
  * Render a PHP function to display in a template.
  *
- * @param  array                        The map of function information
- * @param  array                        The map of class information
- * @param  boolean                      Show filenames in the function description
+ * @param  array                        $function The map of function information
+ * @param  array                        $class The map of class information
+ * @param  boolean                      $show_filename Show filenames in the function description
  * @return array                        A pair: The rendered function, The rendered summary (for a TOC)
  */
 function render_php_function($function, $class, $show_filename = false)
@@ -904,7 +906,7 @@ function render_php_function($function, $class, $show_filename = false)
 /**
  * Get a PHP function parameter line.
  *
- * @param  array                        A map containing: name, description, default, type, set, range
+ * @param  array                        $parameter A map containing: name, description, default, type, set, range
  * @return tempcode                     The line
  */
 function render_php_function_do_bits($parameter)
@@ -945,7 +947,7 @@ function render_php_function_do_bits($parameter)
 /**
  * Convert a code file to HHVM's hack language (i.e. strict typing).
  *
- * @param  PATH                         The file path
+ * @param  PATH                         $filename The file path
  * @return string                       The new code
  */
 function convert_from_php_to_hhvm_hack($filename)
@@ -1003,7 +1005,7 @@ function convert_from_php_to_hhvm_hack($filename)
 /**
  * Convert an ocPortal type to an HHVM hack type.
  *
- * @param  ID_TEXT                      ocPortal type
+ * @param  ID_TEXT                      $t ocPortal type
  * @return ID_TEXT                      HHVM type
  */
 function ocp_type_to_hhvm_type($t)

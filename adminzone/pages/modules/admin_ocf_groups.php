@@ -42,10 +42,10 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -70,8 +70,8 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -89,7 +89,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -158,33 +158,33 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Get tempcode for a adding/editing form.
      *
-     * @param  ?GROUP                   The usergroup being edited (null: adding, not editing)
-     * @param  SHORT_TEXT               The usergroup name
-     * @param  BINARY                   Whether this is a default usergroup
-     * @param  BINARY                   Whether members of the usergroup are super-administrators
-     * @param  BINARY                   Whether members of the usergroup are super-moderators
-     * @param  ID_TEXT                  The username of the usergroup leader
-     * @param  SHORT_TEXT               The default title for members with this as their primary usergroup
-     * @param  URLPATH                  The usergroup rank image
-     * @param  ?GROUP                   The target for promotion from this usergroup (null: no promotion prospects)
-     * @param  ?integer                 The point threshold upon which promotion occurs (null: no promotion prospects)
-     * @param  ?integer                 The number of seconds between submission flood controls (null: average for existing usergroups)
-     * @param  ?integer                 The number of seconds between access flood controls (null: average for existing usergroups)
-     * @param  ?integer                 The number of gift points members of this usergroup get when they start (null: average for existing usergroups)
-     * @param  ?integer                 The number of gift points members of this usergroup get per-day (null: average for existing usergroups)
-     * @param  ?integer                 The number of megabytes members can upload per day (null: average for existing usergroups)
-     * @param  ?integer                 The maximum number of attachments members of this usergroup may have per post (null: average for existing usergroups)
-     * @param  ?integer                 The maximum avatar width members of this usergroup may have (null: average for existing usergroups)
-     * @param  ?integer                 The maximum avatar height members of this usergroup may have (null: average for existing usergroups)
-     * @param  ?integer                 The maximum post length members of this usergroup may have (null: average for existing usergroups)
-     * @param  ?integer                 The maximum signature length members of this usergroup may have (null: average for existing usergroups)
-     * @param  BINARY                   Whether to lock out unverified IP addresses until e-mail confirmation
-     * @param  BINARY                   Whether the usergroup is presented for joining at joining (implies anyone may be in the usergroup, but only choosable at joining)
-     * @param  BINARY                   Whether the name and membership of the usergroup is hidden
-     * @param  ?integer                 The display order this usergroup will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (null: last).
-     * @param  BINARY                   Whether the rank image will not be shown for secondary membership
-     * @param  BINARY                   Whether members may join this usergroup without requiring any special permission
-     * @param  BINARY                   Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
+     * @param  ?GROUP                   $id The usergroup being edited (null: adding, not editing)
+     * @param  SHORT_TEXT               $name The usergroup name
+     * @param  BINARY                   $is_default Whether this is a default usergroup
+     * @param  BINARY                   $is_super_admin Whether members of the usergroup are super-administrators
+     * @param  BINARY                   $is_super_moderator Whether members of the usergroup are super-moderators
+     * @param  ID_TEXT                  $group_leader The username of the usergroup leader
+     * @param  SHORT_TEXT               $title The default title for members with this as their primary usergroup
+     * @param  URLPATH                  $rank_image The usergroup rank image
+     * @param  ?GROUP                   $promotion_target The target for promotion from this usergroup (null: no promotion prospects)
+     * @param  ?integer                 $promotion_threshold The point threshold upon which promotion occurs (null: no promotion prospects)
+     * @param  ?integer                 $flood_control_submit_secs The number of seconds between submission flood controls (null: average for existing usergroups)
+     * @param  ?integer                 $flood_control_access_secs The number of seconds between access flood controls (null: average for existing usergroups)
+     * @param  ?integer                 $gift_points_base The number of gift points members of this usergroup get when they start (null: average for existing usergroups)
+     * @param  ?integer                 $gift_points_per_day The number of gift points members of this usergroup get per-day (null: average for existing usergroups)
+     * @param  ?integer                 $max_daily_upload_mb The number of megabytes members can upload per day (null: average for existing usergroups)
+     * @param  ?integer                 $max_attachments_per_post The maximum number of attachments members of this usergroup may have per post (null: average for existing usergroups)
+     * @param  ?integer                 $max_avatar_width The maximum avatar width members of this usergroup may have (null: average for existing usergroups)
+     * @param  ?integer                 $max_avatar_height The maximum avatar height members of this usergroup may have (null: average for existing usergroups)
+     * @param  ?integer                 $max_post_length_comcode The maximum post length members of this usergroup may have (null: average for existing usergroups)
+     * @param  ?integer                 $max_sig_length_comcode The maximum signature length members of this usergroup may have (null: average for existing usergroups)
+     * @param  BINARY                   $enquire_on_new_ips Whether to lock out unverified IP addresses until e-mail confirmation
+     * @param  BINARY                   $is_presented_at_install Whether the usergroup is presented for joining at joining (implies anyone may be in the usergroup, but only choosable at joining)
+     * @param  BINARY                   $group_is_hidden Whether the name and membership of the usergroup is hidden
+     * @param  ?integer                 $order The display order this usergroup will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (null: last).
+     * @param  BINARY                   $rank_image_pri_only Whether the rank image will not be shown for secondary membership
+     * @param  BINARY                   $open_membership Whether members may join this usergroup without requiring any special permission
+     * @param  BINARY                   $is_private_club Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($id = null, $name = '', $is_default = 0, $is_super_admin = 0, $is_super_moderator = 0, $group_leader = '', $title = '', $rank_image = '', $promotion_target = null, $promotion_threshold = null, $flood_control_submit_secs = null, $flood_control_access_secs = null, $gift_points_base = null, $gift_points_per_day = 1, $max_daily_upload_mb = null, $max_attachments_per_post = null, $max_avatar_width = null, $max_avatar_height = null, $max_post_length_comcode = null, $max_sig_length_comcode = null, $enquire_on_new_ips = 0, $is_presented_at_install = 0, $group_is_hidden = 0, $order = null, $rank_image_pri_only = 1, $open_membership = 0, $is_private_club = 0)
@@ -347,7 +347,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -484,7 +484,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($id)
@@ -495,7 +495,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A triple: fields, hidden-fields, delete-fields
      */
     public function fill_in_edit_form($id)
@@ -555,7 +555,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Handle the "copy members from" feature.
      *
-     * @param  GROUP                    The usergroup to copy members from
+     * @param  GROUP                    $g The usergroup to copy members from
      */
     public function copy_members_into($g)
     {
@@ -662,7 +662,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return ?tempcode                Confirm message (null: continue)
      */
     public function edit_actualisation($id)
@@ -747,7 +747,7 @@ class Module_admin_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

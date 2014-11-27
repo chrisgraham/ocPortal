@@ -21,7 +21,7 @@
 /**
  * See if a leader-board has been calculated since a particular cut-off time.
  *
- * @param  TIME                         Cut-off time
+ * @param  TIME                         $cutoff Cut-off time
  * @return boolean                      Whether it has
  */
 function has_leader_board_since($cutoff)
@@ -33,7 +33,7 @@ function has_leader_board_since($cutoff)
 /**
  * Calculate the leader-board.
  *
- * @param  boolean                      Whether to retrieve results too (no retrieve -> faster call)
+ * @param  boolean                      $retrieve Whether to retrieve results too (no retrieve -> faster call)
  * @return ?array                       A map of member-IDs to points, sorted by leader-board status (null: not retrieving)
  */
 function calculate_latest_leader_board($retrieve = true)

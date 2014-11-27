@@ -21,7 +21,7 @@ class Hook_members_referrals
     /**
      * Find member-related links to inject.
      *
-     * @param  MEMBER                   The ID of the member we are getting link hooks for
+     * @param  MEMBER                   $member_id The ID of the member we are getting link hooks for
      * @return array                    List of lists of tuples for results (by link section). Each tuple is: type,title,url
      */
     public function run($member_id)
@@ -75,7 +75,7 @@ class Hook_members_referrals
     /**
      * Get sections to inject to about tab of the member profile.
      *
-     * @param  MEMBER                   The ID of the member we are getting sections for
+     * @param  MEMBER                   $member_id The ID of the member we are getting sections for
      * @return array                    List of sections. Each tuple is Tempcode.
      */
     public function get_info_details($member_id)

@@ -21,9 +21,9 @@
 /**
  * Add a forum grouping.
  *
- * @param  SHORT_TEXT                   The title of the forum grouping.
- * @param  SHORT_TEXT                   The description of the forum grouping.
- * @param  BINARY                       Whether the forum grouping will be shown expanded by default (as opposed to contracted, where contained forums will not be shown until expansion).
+ * @param  SHORT_TEXT                   $title The title of the forum grouping.
+ * @param  SHORT_TEXT                   $description The description of the forum grouping.
+ * @param  BINARY                       $expanded_by_default Whether the forum grouping will be shown expanded by default (as opposed to contracted, where contained forums will not be shown until expansion).
  * @return AUTO_LINK                    The ID of the forum grouping just added.
  */
 function ocf_make_forum_grouping($title, $description, $expanded_by_default = 1)
@@ -50,19 +50,19 @@ function ocf_make_forum_grouping($title, $description, $expanded_by_default = 1)
 /**
  * Make a forum.
  *
- * @param  SHORT_TEXT                   The name of the forum.
- * @param  SHORT_TEXT                   The description for the forum.
- * @param  ?AUTO_LINK                   What forum grouping the forum will be filed with (null: this is the root forum).
- * @param  ?array                       Permission map (null: do it the standard way, outside of this function). This parameter is for import/compatibility only and works upon an emulation of 'access levels' (ala ocPortal 2.5/2.6), and it is recommended to use the normal crud_module functionality for permissions setting.
- * @param  ?AUTO_LINK                   The ID of the parent forum (null: this is the root forum).
- * @param  integer                      The position of this forum relative to other forums viewable on the same screen (if parent forum hasn't specified automatic ordering).
- * @param  BINARY                       Whether post counts will be incremented if members post in the forum.
- * @param  BINARY                       Whether the ordering of subforums is done automatically, alphabetically).
- * @param  LONG_TEXT                    The question that is shown for newbies to the forum (blank: none).
- * @param  SHORT_TEXT                   The answer to the question (blank: no specific answer.. if there's a 'question', it just requires a click-through).
- * @param  SHORT_TEXT                   Either blank for no redirection, the ID of another forum we are mirroring, or a URL to redirect to.
- * @param  ID_TEXT                      The order the topics are shown in, by default.
- * @param  BINARY                       Whether the forum is threaded.
+ * @param  SHORT_TEXT                   $name The name of the forum.
+ * @param  SHORT_TEXT                   $description The description for the forum.
+ * @param  ?AUTO_LINK                   $forum_grouping_id What forum grouping the forum will be filed with (null: this is the root forum).
+ * @param  ?array                       $access_mapping Permission map (null: do it the standard way, outside of this function). This parameter is for import/compatibility only and works upon an emulation of 'access levels' (ala ocPortal 2.5/2.6), and it is recommended to use the normal crud_module functionality for permissions setting.
+ * @param  ?AUTO_LINK                   $parent_forum The ID of the parent forum (null: this is the root forum).
+ * @param  integer                      $position The position of this forum relative to other forums viewable on the same screen (if parent forum hasn't specified automatic ordering).
+ * @param  BINARY                       $post_count_increment Whether post counts will be incremented if members post in the forum.
+ * @param  BINARY                       $order_sub_alpha Whether the ordering of subforums is done automatically, alphabetically).
+ * @param  LONG_TEXT                    $intro_question The question that is shown for newbies to the forum (blank: none).
+ * @param  SHORT_TEXT                   $intro_answer The answer to the question (blank: no specific answer.. if there's a 'question', it just requires a click-through).
+ * @param  SHORT_TEXT                   $redirection Either blank for no redirection, the ID of another forum we are mirroring, or a URL to redirect to.
+ * @param  ID_TEXT                      $order The order the topics are shown in, by default.
+ * @param  BINARY                       $is_threaded Whether the forum is threaded.
  * @return AUTO_LINK                    The ID of the newly created forum.
  */
 function ocf_make_forum($name, $description, $forum_grouping_id, $access_mapping, $parent_forum, $position = 1, $post_count_increment = 1, $order_sub_alpha = 0, $intro_question = '', $intro_answer = '', $redirection = '', $order = 'last_post', $is_threaded = 0)

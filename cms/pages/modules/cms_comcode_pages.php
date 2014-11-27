@@ -44,10 +44,10 @@ class Module_cms_comcode_pages
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -164,10 +164,10 @@ class Module_cms_comcode_pages
     /**
      * The do-next manager for after content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  ?ID_TEXT                 The name of the page just handled (null: none)
-     * @param  ID_TEXT                  The name of the zone just handled (blank: none/welcome-zone)
-     * @param  tempcode                 The text to show (blank: default)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  ?ID_TEXT                 $page The name of the page just handled (null: none)
+     * @param  ID_TEXT                  $zone The name of the zone just handled (blank: none/welcome-zone)
+     * @param  tempcode                 $completion_text The text to show (blank: default)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $page, $zone, $completion_text)
@@ -184,7 +184,7 @@ class Module_cms_comcode_pages
     /**
      * Get all pages.
      *
-     * @param  LANGUAGE_NAME            The language we are searching for pages of
+     * @param  LANGUAGE_NAME            $lang The language we are searching for pages of
      * @return array                    The map (page name => path/time)
      */
     public function get_comcode_files_array($lang)
@@ -220,10 +220,10 @@ class Module_cms_comcode_pages
     /**
      * Get a map of page names to paths, under the given specifications.
      *
-     * @param  ID_TEXT                  The zone we are searching in
-     * @param  PATH                     The subdirectory to search for pages in
-     * @param  string                   The file stub to find for
-     * @param  boolean                  Whether we are doing a multi-site check on the base directory
+     * @param  ID_TEXT                  $zone The zone we are searching in
+     * @param  PATH                     $subdir The subdirectory to search for pages in
+     * @param  string                   $find_for The file stub to find for
+     * @param  boolean                  $also_checking_base Whether we are doing a multi-site check on the base directory
      * @return array                    The map (page name => path/time)
      */
     public function get_comcode_revisions($zone, $subdir, $find_for, $also_checking_base = false)
@@ -571,9 +571,9 @@ class Module_cms_comcode_pages
     /**
      * Find the filebase-relative path of a Comcode page. Allows override via restore_from parameter.
      *
-     * @param  LANGUAGE_NAME            The language most preferable
-     * @param  ID_TEXT                  The page name
-     * @param  ID_TEXT                  The zone
+     * @param  LANGUAGE_NAME            $lang The language most preferable
+     * @param  ID_TEXT                  $file The page name
+     * @param  ID_TEXT                  $zone The zone
      * @return PATH                     The path
      */
     public function find_comcode_page($lang, $file, $zone)

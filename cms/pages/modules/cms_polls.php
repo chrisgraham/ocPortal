@@ -41,10 +41,10 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -65,8 +65,8 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -83,7 +83,7 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -135,7 +135,7 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -215,23 +215,23 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Get tempcode for a poll adding/editing form.
      *
-     * @param  ?AUTO_LINK               The poll ID (null: new)
-     * @param  SHORT_TEXT               The question
-     * @param  SHORT_TEXT               The first answer
-     * @param  SHORT_TEXT               The second answer
-     * @param  SHORT_TEXT               The third answer
-     * @param  SHORT_TEXT               The fourth answer
-     * @param  SHORT_TEXT               The fifth answer
-     * @param  SHORT_TEXT               The sixth answer
-     * @param  SHORT_TEXT               The seventh answer
-     * @param  SHORT_TEXT               The eigth answer
-     * @param  SHORT_TEXT               The ninth answer
-     * @param  SHORT_TEXT               The tenth answer
-     * @param  boolean                  Whether the poll is/will-be currently active
-     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
-     * @param  LONG_TEXT                Notes for the poll
+     * @param  ?AUTO_LINK               $id The poll ID (null: new)
+     * @param  SHORT_TEXT               $question The question
+     * @param  SHORT_TEXT               $a1 The first answer
+     * @param  SHORT_TEXT               $a2 The second answer
+     * @param  SHORT_TEXT               $a3 The third answer
+     * @param  SHORT_TEXT               $a4 The fourth answer
+     * @param  SHORT_TEXT               $a5 The fifth answer
+     * @param  SHORT_TEXT               $a6 The sixth answer
+     * @param  SHORT_TEXT               $a7 The seventh answer
+     * @param  SHORT_TEXT               $a8 The eigth answer
+     * @param  SHORT_TEXT               $a9 The ninth answer
+     * @param  SHORT_TEXT               $a10 The tenth answer
+     * @param  boolean                  $current Whether the poll is/will-be currently active
+     * @param  ?BINARY                  $allow_rating Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  $allow_trackbacks Whether trackbacks are allowed (null: decide statistically, based on existing choices)
+     * @param  LONG_TEXT                $notes Notes for the poll
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($id = null, $question = '', $a1 = '', $a2 = '', $a3 = '', $a4 = '', $a5 = '', $a6 = '', $a7 = '', $a8 = '', $a9 = '', $a10 = '', $current = false, $allow_rating = 1, $allow_comments = 1, $allow_trackbacks = 1, $notes = '')
@@ -277,7 +277,7 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Standard crud_module submitter getter.
      *
-     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @param  ID_TEXT                  $id The entry for which the submitter is sought
      * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
      */
     public function get_submitter($id)
@@ -292,7 +292,7 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A quartet: fields, hidden, delete-fields, text
      */
     public function fill_in_edit_form($id)
@@ -385,7 +385,7 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -481,7 +481,7 @@ class Module_cms_polls extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

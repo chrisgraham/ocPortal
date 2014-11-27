@@ -27,7 +27,7 @@ class Hook_notification_messaging extends Hook_notification__Staff
      * Find whether a handled notification code supports categories.
      * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
      *
-     * @param  ID_TEXT                  Notification code
+     * @param  ID_TEXT                  $notification_code Notification code
      * @return boolean                  Whether it does
      */
     public function supports_categories($notification_code)

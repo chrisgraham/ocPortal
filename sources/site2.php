@@ -105,9 +105,9 @@ function get_staff_actions_list()
 /**
  * A page is not validated, so show a warning.
  *
- * @param  ID_TEXT                      The zone the page is being loaded from
- * @param  ID_TEXT                      The codename of the page
- * @param  tempcode                     The edit URL (blank if no edit access)
+ * @param  ID_TEXT                      $zone The zone the page is being loaded from
+ * @param  ID_TEXT                      $codename The codename of the page
+ * @param  tempcode                     $edit_url The edit URL (blank if no edit access)
  * @return tempcode                     The warning
  */
 function get_page_warning_details($zone, $codename, $edit_url)
@@ -141,8 +141,8 @@ function get_page_warning_details($zone, $codename, $edit_url)
  *
  * @sets_output_state
  *
- * @param  mixed                        Refresh to this URL (URLPATH or Tempcode URL)
- * @param  float                        Take this many times longer than a 'standard ocPortal refresh'
+ * @param  mixed                        $url Refresh to this URL (URLPATH or Tempcode URL)
+ * @param  float                        $multiplier Take this many times longer than a 'standard ocPortal refresh'
  */
 function assign_refresh($url, $multiplier = 0.0)
 {
@@ -209,7 +209,7 @@ function assign_refresh($url, $multiplier = 0.0)
  *
  * @sets_output_state
  *
- * @param  mixed                        Refresh to this URL (URLPATH or Tempcode URL)
+ * @param  mixed                        $url Refresh to this URL (URLPATH or Tempcode URL)
  */
 function smart_redirect($url)
 {
@@ -257,8 +257,8 @@ function closed_site()
 /**
  * Render that the page wasn't found. Show alternate likely candidates based on misspellings.
  *
- * @param  ID_TEXT                      The codename of the page to load
- * @param  ID_TEXT                      The zone the page is being loaded in
+ * @param  ID_TEXT                      $codename The codename of the page to load
+ * @param  ID_TEXT                      $zone The zone the page is being loaded in
  * @return tempcode                     Message
  */
 function page_not_found($codename, $zone)
@@ -323,13 +323,13 @@ function page_not_found($codename, $zone)
 /**
  * Load Comcode page from disk, then cache it.
  *
- * @param  PATH                         The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
- * @param  ID_TEXT                      The zone the page is being loaded from
- * @param  ID_TEXT                      The codename of the page
- * @param  PATH                         The file base to load from
- * @param  ?array                       Row from database (holds submitter etc) (null: no row, originated first from disk)
- * @param  array                        New row for database, used if necessary (holds submitter etc)
- * @param  boolean                      Whether the page is being included from another
+ * @param  PATH                         $string The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+ * @param  ID_TEXT                      $zone The zone the page is being loaded from
+ * @param  ID_TEXT                      $codename The codename of the page
+ * @param  PATH                         $file_base The file base to load from
+ * @param  ?array                       $comcode_page_row Row from database (holds submitter etc) (null: no row, originated first from disk)
+ * @param  array                        $new_comcode_page_row New row for database, used if necessary (holds submitter etc)
+ * @param  boolean                      $being_included Whether the page is being included from another
  * @return array                        A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
  */
 function _load_comcode_page_not_cached($string, $zone, $codename, $file_base, $comcode_page_row, $new_comcode_page_row, $being_included = false)
@@ -456,7 +456,7 @@ function _load_comcode_page_not_cached($string, $zone, $codename, $file_base, $c
 /**
  * If any Comcode substitutions are configured, apply them.
  *
- * @param  string                       The Comcode page contents
+ * @param  string                       &$comcode The Comcode page contents
  */
 function apply_comcode_page_substitutions(&$comcode)
 {
@@ -471,12 +471,12 @@ function apply_comcode_page_substitutions(&$comcode)
 /**
  * Load Comcode page from disk.
  *
- * @param  PATH                         The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
- * @param  ID_TEXT                      The zone the page is being loaded from
- * @param  ID_TEXT                      The codename of the page
- * @param  PATH                         The file base to load from
- * @param  array                        New row for database, used if nesessary (holds submitter etc)
- * @param  boolean                      Whether the page is being included from another
+ * @param  PATH                         $string The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+ * @param  ID_TEXT                      $zone The zone the page is being loaded from
+ * @param  ID_TEXT                      $codename The codename of the page
+ * @param  PATH                         $file_base The file base to load from
+ * @param  array                        $new_comcode_page_row New row for database, used if nesessary (holds submitter etc)
+ * @param  boolean                      $being_included Whether the page is being included from another
  * @return array                        A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
  */
 function _load_comcode_page_cache_off($string, $zone, $codename, $file_base, $new_comcode_page_row, $being_included = false)
@@ -526,7 +526,7 @@ function _load_comcode_page_cache_off($string, $zone, $codename, $file_base, $ne
 /**
  * Turn an HTML title, which could be complex with images, into a nice simple string we can use in <title> and ;.
  *
- * @param  string                       The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+ * @param  string                       $title The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
  * @return string                       Fixed
  */
 function clean_html_title($title)

@@ -53,8 +53,8 @@ function booking_price_ajax_script()
 /**
  * See if a booking is possible.
  *
- * @param  array                        Booking details structure to check, passed by reference as statuses get added.
- * @param  array                        Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
+ * @param  array                        &$request Booking details structure to check, passed by reference as statuses get added.
+ * @param  array                        $ignore_bookings Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
  * @return ?tempcode                    Error message (null: no issue).
  */
 function check_booking_dates_available(&$request, $ignore_bookings)
@@ -77,7 +77,7 @@ function check_booking_dates_available(&$request, $ignore_bookings)
 /**
  * Read in notes from POST environment, using special naming conventions.
  *
- * @param  string                       The prefix for defining what to read in.
+ * @param  string                       $prefix The prefix for defining what to read in.
  * @return string                       The notes.
  */
 function read_booking_notes_from_form($prefix)
@@ -179,9 +179,9 @@ function get_booking_request_from_form()
 /**
  * Take details posted about a booking, and save to the database.
  *
- * @param  array                        Booking details structure.
- * @param  array                        Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
- * @param  ?MEMBER                      The member ID we are saving as (null: current user).
+ * @param  array                        $request Booking details structure.
+ * @param  array                        $ignore_bookings Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
+ * @param  ?MEMBER                      $member_id The member ID we are saving as (null: current user).
  * @return ?array                       Booking details structure (null: error -- reshow form).
  */
 function save_booking_form_to_db($request, $ignore_bookings, $member_id = null)
@@ -210,8 +210,8 @@ function save_booking_form_to_db($request, $ignore_bookings, $member_id = null)
 /**
  * Add a new booking to the database.
  *
- * @param  array                        Booking details structure.
- * @param  MEMBER                       Member ID being added against.
+ * @param  array                        $request Booking details structure.
+ * @param  MEMBER                       $member_id Member ID being added against.
  * @return array                        Booking details structure.
  */
 function add_booking($request, $member_id)
@@ -273,11 +273,11 @@ function add_booking($request, $member_id)
 /**
  * Find an available code for a booking for the bookable on a given date.
  *
- * @param  AUTO_LINK                    Bookable ID.
- * @param  integer                      Day.
- * @param  integer                      Month.
- * @param  integer                      Year.
- * @param  ID_TEXT                      Preferred code (often passed in as the last code provided, in order to provide continuity to guests).
+ * @param  AUTO_LINK                    $bookable_id Bookable ID.
+ * @param  integer                      $day Day.
+ * @param  integer                      $month Month.
+ * @param  integer                      $year Year.
+ * @param  ID_TEXT                      $preferred_code Preferred code (often passed in as the last code provided, in order to provide continuity to guests).
  * @return ?ID_TEXT                     The code (null: could not find a code).
  */
 function find_free_bookable_code($bookable_id, $day, $month, $year, $preferred_code)
@@ -296,8 +296,8 @@ function find_free_bookable_code($bookable_id, $day, $month, $year, $preferred_c
 /**
  * Find the re-constituted booking ID a specific booking row ID is in.
  *
- * @param  MEMBER                       Member ID is for.
- * @param  AUTO_LINK                    Booking row ID.
+ * @param  MEMBER                       $member_id Member ID is for.
+ * @param  AUTO_LINK                    $id Booking row ID.
  * @return ID_TEXT                      Re-constituted booking ID.
  */
 function find_booking_under($member_id, $id)
@@ -321,7 +321,7 @@ function find_booking_under($member_id, $id)
 /**
  * Find the price for a booking. This may involve multiple bookables, as at this point we don't care about that or not (once in the DB, it will actually be considered many separate bookings)
  *
- * @param  array                        Booking details structure to check.
+ * @param  array                        $request Booking details structure to check.
  * @return REAL                         The price.
  */
 function find_booking_price($request)
@@ -354,7 +354,7 @@ function find_booking_price($request)
 /**
  * Find the price of a bookable.
  *
- * @param  AUTO_LINK                    Bookable ID.
+ * @param  AUTO_LINK                    $bookable_id Bookable ID.
  * @return REAL                         Price.
  */
 function find_bookable_price($bookable_id)
@@ -365,12 +365,12 @@ function find_bookable_price($bookable_id)
 /**
  * Find a list of days within a date range (inclusive).
  *
- * @param  integer                      Day (start).
- * @param  integer                      Month (start).
- * @param  integer                      Year (start).
- * @param  integer                      Day (end).
- * @param  integer                      Month (end).
- * @param  integer                      Year (end).
+ * @param  integer                      $start_day Day (start).
+ * @param  integer                      $start_month Month (start).
+ * @param  integer                      $start_year Year (start).
+ * @param  integer                      $end_day Day (end).
+ * @param  integer                      $end_month Month (end).
+ * @param  integer                      $end_year Year (end).
  * @return array                        List of days.
  */
 function days_in_range($start_day, $start_month, $start_year, $end_day, $end_month, $end_year)
@@ -393,12 +393,12 @@ function days_in_range($start_day, $start_month, $start_year, $end_day, $end_mon
 /**
  * Finds whether a particular booking date is available for a particular bookable.
  *
- * @param  AUTO_LINK                    Bookable.
- * @param  integer                      Day.
- * @param  integer                      Month.
- * @param  integer                      Year.
- * @param  integer                      Quantity needed.
- * @param  array                        Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
+ * @param  AUTO_LINK                    $bookable_id Bookable.
+ * @param  integer                      $day Day.
+ * @param  integer                      $month Month.
+ * @param  integer                      $year Year.
+ * @param  integer                      $quantity Quantity needed.
+ * @param  array                        $ignore_bookings Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
  * @return ?tempcode                    Error message (null: no issue).
  */
 function booking_date_available($bookable_id, $day, $month, $year, $quantity, $ignore_bookings)
@@ -461,7 +461,7 @@ function booking_date_available($bookable_id, $day, $month, $year, $quantity, $i
 /**
  * Send out booking mails.
  *
- * @param  array                        Booking details structure.
+ * @param  array                        $request Booking details structure.
  */
 function send_booking_emails($request)
 {
@@ -516,7 +516,7 @@ function send_booking_emails($request)
 /**
  * Convert an internal booking details structure to a 'printable' version of the same.
  *
- * @param  array                        Booking details structure.
+ * @param  array                        $request Booking details structure.
  * @return array                        Printable booking details structure.
  */
 function make_booking_request_printable($request)

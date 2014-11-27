@@ -39,10 +39,10 @@ function init__ocf_groups()
 /**
  * Render a usergroup box.
  *
- * @param  array                        Usergroup row
- * @param  ID_TEXT                      Zone to link through to
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row Usergroup row
+ * @param  ID_TEXT                      $zone Zone to link through to
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The usergroup box
  */
 function render_group_box($row, $zone = '_SEARCH', $give_context = true, $guid = '')
@@ -75,7 +75,7 @@ function render_group_box($row, $zone = '_SEARCH', $give_context = true, $guid =
 /**
  * Get a nice list for selection from the usergroups. Suitable for admin use only (does not check hidden status).
  *
- * @param  ?AUTO_LINK                   Usergroup selected by default (null: no specific default).
+ * @param  ?AUTO_LINK                   $it Usergroup selected by default (null: no specific default).
  * @return tempcode                     The list.
  */
 function ocf_create_selection_list_usergroups($it = null)
@@ -104,8 +104,8 @@ function get_first_default_group()
 /**
  * Get a list of the default usergroups (the usergroups a member is put in when they join).
  *
- * @param  boolean                      Whether to include the default primary (at the end of the list).
- * @param  boolean                      The functionality does not usually consider configured default groups [unless there's just one], because this is a layer of uncertainity (the user PICKS one of these). If you want to return all configured default groups, set this parameter to true.
+ * @param  boolean                      $include_primary Whether to include the default primary (at the end of the list).
+ * @param  boolean                      $include_all_configured_default_groups The functionality does not usually consider configured default groups [unless there's just one], because this is a layer of uncertainity (the user PICKS one of these). If you want to return all configured default groups, set this parameter to true.
  * @return array                        The list of default IDs.
  */
 function ocf_get_all_default_groups($include_primary = false, $include_all_configured_default_groups = false)
@@ -143,7 +143,7 @@ function ocf_get_all_default_groups($include_primary = false, $include_all_confi
 /**
  * Ensure a list of usergroups are cached in memory.
  *
- * @param  mixed                        The list of usergroups (array) or '*'.
+ * @param  mixed                        $groups The list of usergroups (array) or '*'.
  */
 function ocf_ensure_groups_cached($groups)
 {
@@ -206,8 +206,8 @@ function ocf_ensure_groups_cached($groups)
 /**
  * Get a rendered link to a usergroup.
  *
- * @param  GROUP                        The ID of the group.
- * @param  boolean                      Whether to hide the name if it is a hidden group.
+ * @param  GROUP                        $id The ID of the group.
+ * @param  boolean                      $hide_hidden Whether to hide the name if it is a hidden group.
  * @return tempcode                     The link.
  */
 function ocf_get_group_link($id, $hide_hidden = true)
@@ -235,8 +235,8 @@ function ocf_get_group_link($id, $hide_hidden = true)
 /**
  * Get a usergroup name.
  *
- * @param  GROUP                        The ID of the group.
- * @param  boolean                      Whether to hide the name if it is a hidden group.
+ * @param  GROUP                        $group The ID of the group.
+ * @param  boolean                      $hide_hidden Whether to hide the name if it is a hidden group.
  * @return string                       The usergroup name.
  */
 function ocf_get_group_name($group, $hide_hidden = true)
@@ -251,9 +251,9 @@ function ocf_get_group_name($group, $hide_hidden = true)
 /**
  * Get a certain property of a certain.
  *
- * @param  GROUP                        The ID of the group.
- * @param  ID_TEXT                      The identifier of the property.
- * @param  boolean                      Whether to hide the name if it is a hidden group.
+ * @param  GROUP                        $group The ID of the group.
+ * @param  ID_TEXT                      $property The identifier of the property.
+ * @param  boolean                      $hide_hidden Whether to hide the name if it is a hidden group.
  * @return mixed                        The property value.
  */
 function ocf_get_group_property($group, $property, $hide_hidden = true)
@@ -273,8 +273,8 @@ function ocf_get_group_property($group, $property, $hide_hidden = true)
 /**
  * Get the best value of all values of a property for a member (due to members being in multiple usergroups).
  *
- * @param  MEMBER                       The ID of the member.
- * @param  ID_TEXT                      The identifier of the property.
+ * @param  MEMBER                       $member_id The ID of the member.
+ * @param  ID_TEXT                      $property The identifier of the property.
  * @return mixed                        The property value.
  */
 function ocf_get_member_best_group_property($member_id, $property)
@@ -285,8 +285,8 @@ function ocf_get_member_best_group_property($member_id, $property)
 /**
  * Get the best value of all values of a property for a list of usergroups.
  *
- * @param  array                        The list of usergroups.
- * @param  ID_TEXT                      The identifier of the property.
+ * @param  array                        $groups The list of usergroups.
+ * @param  ID_TEXT                      $property The identifier of the property.
  * @return mixed                        The best property value ('best' is dependant on the property we are looking at).
  */
 function ocf_get_best_group_property($groups, $property)
@@ -315,10 +315,10 @@ function ocf_get_best_group_property($groups, $property)
 /**
  * Get a list of the usergroups a member is in (keys say the usergroups, values are irrelevant).
  *
- * @param  ?MEMBER                      The member to find the usergroups of (null: current member).
- * @param  boolean                      Whether to skip looking at secret usergroups.
- * @param  boolean                      Whether to take probation into account
- * @param  boolean                      Whether to include implicit groups
+ * @param  ?MEMBER                      $member_id The member to find the usergroups of (null: current member).
+ * @param  boolean                      $skip_secret Whether to skip looking at secret usergroups.
+ * @param  boolean                      $handle_probation Whether to take probation into account
+ * @param  boolean                      $include_implicit Whether to include implicit groups
  * @return array                        Reverse list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)).
  */
 function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle_probation = true, $include_implicit = true)
@@ -429,7 +429,7 @@ function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle
 /**
  * Get the ID for a usergroup if we only know the title. Warning: Only use this with custom code, never core code! It assumes a single language and that usergroups aren't renamed.
  *
- * @param  SHORT_TEXT                   The title.
+ * @param  SHORT_TEXT                   $title The title.
  * @return ?AUTO_LINK                   The ID (null: could not find).
  */
 function find_usergroup_id($title)

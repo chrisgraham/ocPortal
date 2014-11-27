@@ -70,10 +70,10 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -111,8 +111,8 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -135,8 +135,8 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -153,7 +153,7 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -212,7 +212,7 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
      */
     public function create_selection_list_choose_table($url_map)
@@ -262,16 +262,16 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Get tempcode for a Custom Comcode tag adding/editing form.
      *
-     * @param  SHORT_TEXT               The title (name) of the Custom Comcode tag
-     * @param  LONG_TEXT                The description of the tag
-     * @param  BINARY                   Whether the tag is enabled
-     * @param  ID_TEXT                  The actual tag code
-     * @param  LONG_TEXT                What to replace the tag with
-     * @param  LONG_TEXT                Example usage
-     * @param  SHORT_TEXT               Comma-separated list of accepted parameters
-     * @param  BINARY                   Whether it is a dangerous tag
-     * @param  BINARY                   Whether it is a block tag
-     * @param  BINARY                   Whether it is a textual tag
+     * @param  SHORT_TEXT               $title The title (name) of the Custom Comcode tag
+     * @param  LONG_TEXT                $description The description of the tag
+     * @param  BINARY                   $enabled Whether the tag is enabled
+     * @param  ID_TEXT                  $tag The actual tag code
+     * @param  LONG_TEXT                $replace What to replace the tag with
+     * @param  LONG_TEXT                $example Example usage
+     * @param  SHORT_TEXT               $parameters Comma-separated list of accepted parameters
+     * @param  BINARY                   $dangerous_tag Whether it is a dangerous tag
+     * @param  BINARY                   $block_tag Whether it is a block tag
+     * @param  BINARY                   $textual_tag Whether it is a textual tag
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($title = '', $description = '', $enabled = 1, $tag = 'this', $replace = '<span class="example" style="color: {color}">{content}</span>', $example = '[this color="red"]blah[/this]', $parameters = 'color=black', $dangerous_tag = 0, $block_tag = 0, $textual_tag = 1)
@@ -295,7 +295,7 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function fill_in_edit_form($id)
@@ -349,7 +349,7 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -386,7 +386,7 @@ class Module_admin_custom_comcode extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

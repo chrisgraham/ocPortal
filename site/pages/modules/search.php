@@ -53,8 +53,8 @@ class Module_search
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -86,10 +86,10 @@ class Module_search
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -449,15 +449,15 @@ class Module_search
     /**
      * The actualiser of a search.
      *
-     * @param  ID_TEXT                  Codename for what's being searched (blank: mixed search)
-     * @param  string                   Author name
-     * @param  ?AUTO_LINK               Author ID (null: none given)
-     * @param  integer                  Days to search
-     * @param  ID_TEXT                  Sort key
-     * @param  ID_TEXT                  Sort direction
+     * @param  ID_TEXT                  $id Codename for what's being searched (blank: mixed search)
+     * @param  string                   $author Author name
+     * @param  ?AUTO_LINK               $author_id Author ID (null: none given)
+     * @param  integer                  $days Days to search
+     * @param  ID_TEXT                  $sort Sort key
+     * @param  ID_TEXT                  $direction Sort direction
      * @set    ASC DESC
-     * @param  boolean                  Whether to only search titles
-     * @param  string                   Comma-separated list of categories to search under
+     * @param  boolean                  $only_titles Whether to only search titles
+     * @param  string                   $search_under Comma-separated list of categories to search under
      * @return array                    A triple: The results, results browser, the number of results
      */
     public function results($id, $author, $author_id, $days, $sort, $direction, $only_titles, $search_under)

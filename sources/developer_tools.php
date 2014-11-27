@@ -93,8 +93,8 @@ function semi_dev_mode_startup()
 /**
  * Remove ocPortal's strictness, to help integration of third-party code.
  *
- * @param  boolean                      Whether to also set the content type to plain-HTML
- * @param  boolean                      Whether to destrictify MySQL commands over the ocPortal database driver
+ * @param  boolean                      $change_content_type Whether to also set the content type to plain-HTML
+ * @param  boolean                      $mysql_too Whether to destrictify MySQL commands over the ocPortal database driver
  */
 function destrictify($change_content_type = true, $mysql_too = false)
 {
@@ -190,8 +190,8 @@ function inspect_plain()
 /**
  * Output whatever arguments are given for debugging. If possible it'll output with plain text, but if output has already started it will attach messages.
  *
- * @param  array                        Arguments to output
- * @param  boolean                      Whether to force text output
+ * @param  array                        $args Arguments to output
+ * @param  boolean                      $force_plain Whether to force text output
  */
 function _inspect($args, $force_plain = false)
 {
@@ -247,7 +247,7 @@ function _inspect($args, $force_plain = false)
 /**
  * Record the memory usage at this point.
  *
- * @param  ?string                      The name of the memory point (null: use a simple counter)
+ * @param  ?string                      $name The name of the memory point (null: use a simple counter)
  */
 function memory_trace_point($name = null)
 {

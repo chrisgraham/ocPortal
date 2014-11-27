@@ -26,9 +26,9 @@ class Hook_task_import_filesystem_downloads
     /**
      * Run the task hook.
      *
-     * @param  AUTO_LINK                The category to import to
-     * @param  PATH                     The import path
-     * @param  boolean                  Whether to import subfolders
+     * @param  AUTO_LINK                $destination The category to import to
+     * @param  PATH                     $server_path The import path
+     * @param  boolean                  $subfolders Whether to import subfolders
      * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($destination, $server_path, $subfolders)
@@ -69,10 +69,10 @@ class Hook_task_import_filesystem_downloads
     /**
      * Worker function to do a filesystem import.
      *
-     * @param  PATH                     Filesystem-based path from where we are reading files
-     * @param  URLPATH                  URL-based path from where we are reading files
-     * @param  AUTO_LINK                The destination downloading category
-     * @param  boolean                  Whether we add hierarchically (as opposed to a flat category fill)
+     * @param  PATH                     $server_path Filesystem-based path from where we are reading files
+     * @param  URLPATH                  $server_url URL-based path from where we are reading files
+     * @param  AUTO_LINK                $dest_cat The destination downloading category
+     * @param  boolean                  $make_subfolders Whether we add hierarchically (as opposed to a flat category fill)
      * @return integer                  Number of downloads added
      */
     public function filesystem_recursive_downloads_scan($server_path, $server_url, $dest_cat, $make_subfolders)

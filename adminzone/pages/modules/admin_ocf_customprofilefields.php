@@ -35,10 +35,10 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -70,8 +70,8 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -105,7 +105,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -157,22 +157,22 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Get tempcode for adding/editing form.
      *
-     * @param  SHORT_TEXT               The name of the custom profile field
-     * @param  LONG_TEXT                The description of the field
-     * @param  LONG_TEXT                The default value of the field
-     * @param  BINARY                   Whether the field is publicly viewable
-     * @param  BINARY                   Whether the field may be viewed by the owner
-     * @param  BINARY                   Whether the owner may set the value of the field
-     * @param  BINARY                   Whether the field is encrypted
-     * @param  ID_TEXT                  The type of the field
+     * @param  SHORT_TEXT               $name The name of the custom profile field
+     * @param  LONG_TEXT                $description The description of the field
+     * @param  LONG_TEXT                $default The default value of the field
+     * @param  BINARY                   $public_view Whether the field is publicly viewable
+     * @param  BINARY                   $owner_view Whether the field may be viewed by the owner
+     * @param  BINARY                   $owner_set Whether the owner may set the value of the field
+     * @param  BINARY                   $encrypted Whether the field is encrypted
+     * @param  ID_TEXT                  $type The type of the field
      * @set    short_text long_text short_trans long_trans integer upload picture url list tick
-     * @param  BINARY                   Whether the field is required to be filled in
-     * @param  BINARY                   Whether the field is to be shown on the join form
-     * @param  BINARY                   Whether the field is shown in posts
-     * @param  BINARY                   Whether the field is shown in post previews
-     * @param  ?integer                 The order the field is given relative to the order of the other custom profile fields (null: last)
-     * @param  LONG_TEXT                The usergroups that this field is confined to (comma-separated list).
-     * @param  BINARY                   Whether the field is locked
+     * @param  BINARY                   $required Whether the field is required to be filled in
+     * @param  BINARY                   $show_on_join_form Whether the field is to be shown on the join form
+     * @param  BINARY                   $show_in_posts Whether the field is shown in posts
+     * @param  BINARY                   $show_in_post_previews Whether the field is shown in post previews
+     * @param  ?integer                 $order The order the field is given relative to the order of the other custom profile fields (null: last)
+     * @param  LONG_TEXT                $only_group The usergroups that this field is confined to (comma-separated list).
+     * @param  BINARY                   $locked Whether the field is locked
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function get_form_fields($name = '', $description = '', $default = '', $public_view = 1, $owner_view = 1, $owner_set = 1, $encrypted = 0, $type = 'long_text', $required = 0, $show_on_join_form = 0, $show_in_posts = 0, $show_in_post_previews = 0, $order = null, $only_group = '', $locked = 0)
@@ -245,7 +245,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
      */
     public function create_selection_list_choose_table($url_map)
@@ -401,8 +401,8 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Change the order of custom profile fields.
      *
-     * @param  integer                  Record start count.
-     * @param  integer                  Record end count.
+     * @param  integer                  $start_order Record start count.
+     * @param  integer                  $end_order Record end count.
      */
     public function change_order($start_order = 0, $end_order = 0)
     {
@@ -435,7 +435,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Standard crud_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $_id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($_id)
@@ -448,7 +448,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function fill_in_edit_form($id)
@@ -501,7 +501,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -512,7 +512,7 @@ class Module_admin_ocf_customprofilefields extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

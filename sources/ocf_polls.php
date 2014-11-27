@@ -21,9 +21,9 @@
 /**
  * Find whether a member can alter a poll owned by a certain member in a certain forum.
  *
- * @param  AUTO_LINK                    The forum.
- * @param  MEMBER                       The poll owner.
- * @param  ?MEMBER                      The member we are checking for (null: current member).
+ * @param  AUTO_LINK                    $forum_id The forum.
+ * @param  MEMBER                       $poll_owner The poll owner.
+ * @param  ?MEMBER                      $member_id The member we are checking for (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_edit_poll_by($forum_id, $poll_owner, $member_id = null)
@@ -46,11 +46,11 @@ function ocf_may_edit_poll_by($forum_id, $poll_owner, $member_id = null)
 /**
  * Find whether a member may attach a poll to a detailed topic.
  *
- * @param  AUTO_LINK                    The topic.
- * @param  ?MEMBER                      The topic owner (null: ask the DB for it).
- * @param  ?boolean                     Whether the topic already has a poll (null: ask the DB for it).
- * @param  ?MEMBER                      The forum the topic is in (null: ask the DB for it).
- * @param  ?MEMBER                      The member we are checking for (null: current member).
+ * @param  AUTO_LINK                    $topic_id The topic.
+ * @param  ?MEMBER                      $topic_owner The topic owner (null: ask the DB for it).
+ * @param  ?boolean                     $has_poll_already Whether the topic already has a poll (null: ask the DB for it).
+ * @param  ?MEMBER                      $forum_id The forum the topic is in (null: ask the DB for it).
+ * @param  ?MEMBER                      $member_id The member we are checking for (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_attach_poll($topic_id, $topic_owner = null, $has_poll_already = null, $forum_id = null, $member_id = null)
@@ -85,9 +85,9 @@ function ocf_may_attach_poll($topic_id, $topic_owner = null, $has_poll_already =
 /**
  * Find whether a member can delete a poll owned by a certain member in a certain forum.
  *
- * @param  AUTO_LINK                    The forum.
- * @param  MEMBER                       The poll owner.
- * @param  ?MEMBER                      The member we are checking for (null: current member).
+ * @param  AUTO_LINK                    $forum_id The forum.
+ * @param  MEMBER                       $poll_owner The poll owner.
+ * @param  ?MEMBER                      $member_id The member we are checking for (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_delete_poll_by($forum_id, $poll_owner, $member_id = null)
@@ -110,8 +110,8 @@ function ocf_may_delete_poll_by($forum_id, $poll_owner, $member_id = null)
 /**
  * Find a map of results relating to a certain poll.
  *
- * @param  AUTO_LINK                    The poll.
- * @param  boolean                      Whether we must record that the current member is requesting the results, blocking future voting for them.
+ * @param  AUTO_LINK                    $poll_id The poll.
+ * @param  boolean                      $request_results Whether we must record that the current member is requesting the results, blocking future voting for them.
  * @return array                        The map of results.
  */
 function ocf_poll_get_results($poll_id, $request_results = true)

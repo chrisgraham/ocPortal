@@ -21,8 +21,8 @@
 /**
  * Remove an item from the general cache (most commonly used for blocks).
  *
- * @param  mixed                        The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
- * @param  ?array                       A map of identifiying characteristics (null: no identifying characteristics, decache all)
+ * @param  mixed                        $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
+ * @param  ?array                       $identifier A map of identifiying characteristics (null: no identifying characteristics, decache all)
  */
 function _decache($cached_for, $identifier = null)
 {
@@ -107,9 +107,9 @@ function _decache($cached_for, $identifier = null)
 /**
  * Request that CRON loads up a block's caching in the background.
  *
- * @param  ID_TEXT                      The codename of the block
- * @param  ?array                       Parameters to call up block with if we have to defer caching (null: none)
- * @param  boolean                      Whether we are cacheing Tempcode (needs special care)
+ * @param  ID_TEXT                      $codename The codename of the block
+ * @param  ?array                       $map Parameters to call up block with if we have to defer caching (null: none)
+ * @param  boolean                      $tempcode Whether we are cacheing Tempcode (needs special care)
  */
 function request_via_cron($codename, $map, $tempcode)
 {
@@ -131,16 +131,16 @@ function request_via_cron($codename, $map, $tempcode)
 /**
  * Put a result into the cache.
  *
- * @param  ID_TEXT                      The codename to check for cacheing
- * @param  integer                      The TTL of what is being cached in minutes
- * @param  LONG_TEXT                    The requisite situational information (a serialized map) [-> further restraints when reading]
- * @param  mixed                        The result we are cacheing
- * @param  ?array                       A list of the language files that need loading to use tempcode embedded in the cache (null: none required)
- * @param  ?array                       A list of the javascript files that need loading to use tempcode embedded in the cache (null: none required)
- * @param  ?array                       A list of the css files that need loading to use tempcode embedded in the cache (null: none required)
- * @param  boolean                      Whether we are cacheing Tempcode (needs special care)
- * @param  ?ID_TEXT                     The theme this is being cached for (null: current theme)
- * @param  ?LANGUAGE_NAME               The language this is being cached for (null: current language)
+ * @param  ID_TEXT                      $codename The codename to check for cacheing
+ * @param  integer                      $ttl The TTL of what is being cached in minutes
+ * @param  LONG_TEXT                    $cache_identifier The requisite situational information (a serialized map) [-> further restraints when reading]
+ * @param  mixed                        $cache The result we are cacheing
+ * @param  ?array                       $_langs_required A list of the language files that need loading to use tempcode embedded in the cache (null: none required)
+ * @param  ?array                       $_javascripts_required A list of the javascript files that need loading to use tempcode embedded in the cache (null: none required)
+ * @param  ?array                       $_csss_required A list of the css files that need loading to use tempcode embedded in the cache (null: none required)
+ * @param  boolean                      $tempcode Whether we are cacheing Tempcode (needs special care)
+ * @param  ?ID_TEXT                     $theme The theme this is being cached for (null: current theme)
+ * @param  ?LANGUAGE_NAME               $lang The language this is being cached for (null: current language)
  */
 function put_into_cache($codename, $ttl, $cache_identifier, $cache, $_langs_required = null, $_javascripts_required = null, $_csss_required = null, $tempcode = false, $theme = null, $lang = null)
 {

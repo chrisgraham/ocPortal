@@ -26,18 +26,18 @@ class Hook_task_import_catalogue
     /**
      * Run the task hook.
      *
-     * @param  ID_TEXT                  The name of the catalogue that was used
-     * @param  string                   The title of the key field
-     * @param  ID_TEXT                  New handling method
-     * @param  ID_TEXT                  Delete handling method
-     * @param  ID_TEXT                  Update handling method
-     * @param  ID_TEXT                  Meta keywords field
-     * @param  ID_TEXT                  Meta description field
-     * @param  ID_TEXT                  Notes field
-     * @param  boolean                  Whether rating is allowed for this resource
-     * @param  boolean                  Whether comments are allowed for this resource
-     * @param  boolean                  Whether trackbacks are allowed for this resource
-     * @param  PATH                     The CSV file being imported
+     * @param  ID_TEXT                  $catalogue_name The name of the catalogue that was used
+     * @param  string                   $key_field The title of the key field
+     * @param  ID_TEXT                  $new_handling New handling method
+     * @param  ID_TEXT                  $delete_handling Delete handling method
+     * @param  ID_TEXT                  $update_handling Update handling method
+     * @param  ID_TEXT                  $meta_keywords_field Meta keywords field
+     * @param  ID_TEXT                  $meta_description_field Meta description field
+     * @param  ID_TEXT                  $notes_field Notes field
+     * @param  boolean                  $allow_rating Whether rating is allowed for this resource
+     * @param  boolean                  $allow_comments Whether comments are allowed for this resource
+     * @param  boolean                  $allow_trackbacks Whether trackbacks are allowed for this resource
+     * @param  PATH                     $csv_name The CSV file being imported
      * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($catalogue_name, $key_field, $new_handling, $delete_handling, $update_handling, $meta_keywords_field, $meta_description_field, $notes_field, $allow_rating, $allow_comments, $allow_trackbacks, $csv_name)
@@ -158,23 +158,23 @@ class Hook_task_import_catalogue
     /**
      * Create an entry-id=>value map of uploaded csv data and it's importing
      *
-     * @param  ID_TEXT                  The name of the catalogue that was used
-     * @param  array                    Data array of CSV imported file's lines
-     * @param  ?AUTO_LINK               Catalogue root ID (null: Not a tree catalogue)
-     * @param  array                    Array of catalogue fields
-     * @param  array                    Array of categories
-     * @param  array                    Array of csv field titles
-     * @param  ID_TEXT                  Key field
-     * @param  ID_TEXT                  New handling method
-     * @param  ID_TEXT                  Delete handling method
-     * @param  ID_TEXT                  Update handling method
-     * @param  array                    IDs that are matched are collected here
-     * @param  ID_TEXT                  Notes field
-     * @param  ID_TEXT                  Meta keywords field
-     * @param  ID_TEXT                  Meta description field
-     * @param  boolean                  Whether rating is allowed for this resource
-     * @param  boolean                  Whether comments are allowed for this resource
-     * @param  boolean                  Whether trackbacks are allowed for this resource
+     * @param  ID_TEXT                  $catalogue_name The name of the catalogue that was used
+     * @param  array                    $csv_data Data array of CSV imported file's lines
+     * @param  ?AUTO_LINK               $catalog_root Catalogue root ID (null: Not a tree catalogue)
+     * @param  array                    $fields Array of catalogue fields
+     * @param  array                     &$categories Array of categories
+     * @param  array                    $csv_field_titles Array of csv field titles
+     * @param  ID_TEXT                  $key_field Key field
+     * @param  ID_TEXT                  $new_handling New handling method
+     * @param  ID_TEXT                  $delete_handling Delete handling method
+     * @param  ID_TEXT                  $update_handling Update handling method
+     * @param  array                     &$matched_ids IDs that are matched are collected here
+     * @param  ID_TEXT                  $notes_field Notes field
+     * @param  ID_TEXT                  $meta_keywords_field Meta keywords field
+     * @param  ID_TEXT                  $meta_description_field Meta description field
+     * @param  boolean                  $allow_rating Whether rating is allowed for this resource
+     * @param  boolean                  $allow_comments Whether comments are allowed for this resource
+     * @param  boolean                  $allow_trackbacks Whether trackbacks are allowed for this resource
      * @return ?array                   Return to propagate [immediate exit] (null: nothing to propagate)
      */
     public function import_csv_lines($catalogue_name, $csv_data, $catalog_root, $fields, &$categories, $csv_field_titles, $key_field, $new_handling, $delete_handling, $update_handling, &$matched_ids, $notes_field, $meta_keywords_field, $meta_description_field, $allow_rating, $allow_comments, $allow_trackbacks)

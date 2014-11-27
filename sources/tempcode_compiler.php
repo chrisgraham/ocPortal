@@ -91,8 +91,8 @@ function init__tempcode_compiler()
 /**
  * Helper function or use getting line numbers.
  *
- * @param  array                        Compiler tokens
- * @param  integer                      How far we are through the token list
+ * @param  array                        $bits Compiler tokens
+ * @param  integer                      $i How far we are through the token list
  * @return integer                      The sum length of tokens passed
  */
 function _length_so_far($bits, $i)
@@ -111,7 +111,7 @@ function _length_so_far($bits, $i)
  * Take some Tempcode and pre-process it for Tempcode portions encapsulated within comments (or similar).
  * This is done so syntax-highlighters don't break, and WYSIWYG-editors don't corrupt the Tempcode.
  *
- * @param  string                       Input Tempcode
+ * @param  string                       $data Input Tempcode
  * @return string                       Output Tempcode
  */
 function substitute_comment_encapsulated_tempcode($data)
@@ -131,11 +131,11 @@ function substitute_comment_encapsulated_tempcode($data)
 /**
  * Compile a template into a list of appendable outputs, for the closure-style Tempcode implementation.
  *
- * @param  string                       The template file contents
- * @param  ID_TEXT                      The name of the template
- * @param  ID_TEXT                      The name of the theme
- * @param  ID_TEXT                      The language it is for
- * @param  boolean                      Whether to tolerate errors
+ * @param  string                       $data The template file contents
+ * @param  ID_TEXT                      $template_name The name of the template
+ * @param  ID_TEXT                      $theme The name of the theme
+ * @param  ID_TEXT                      $lang The language it is for
+ * @param  boolean                      $tolerate_errors Whether to tolerate errors
  * @return array                        A pair: array Compiled result structure, array preprocessable bits (special stuff needing attention that is referenced within the template)
  */
 function compile_template($data, $template_name, $theme, $lang, $tolerate_errors = false)
@@ -815,13 +815,13 @@ function compile_template($data, $template_name, $theme, $lang, $tolerate_errors
 /**
  * A template has not been structurally cached, so compile it and store in the cache.
  *
- * @param  ID_TEXT                      The theme the template is in the context of
- * @param  PATH                         The path to the template file
- * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ID_TEXT                      The actual codename to use for the template (e.g. foo_mobile)
- * @param  LANGUAGE_NAME                The language the template is in the context of
- * @param  string                       File type suffix of template file (e.g. .tpl)
- * @param  ?ID_TEXT                     The theme to cache in (null: main theme)
+ * @param  ID_TEXT                      $theme The theme the template is in the context of
+ * @param  PATH                         $path The path to the template file
+ * @param  ID_TEXT                      $codename The codename of the template (e.g. foo)
+ * @param  ID_TEXT                      $_codename The actual codename to use for the template (e.g. foo_mobile)
+ * @param  LANGUAGE_NAME                $lang The language the template is in the context of
+ * @param  string                       $suffix File type suffix of template file (e.g. .tpl)
+ * @param  ?ID_TEXT                     $theme_orig The theme to cache in (null: main theme)
  * @return tempcode                     The compiled tempcode
  */
 function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $theme_orig = null)
@@ -919,13 +919,13 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
 /**
  * Convert template text into tempcode format.
  *
- * @param  string                       The template text
- * @param  integer                      The position we are looking at in the text
- * @param  boolean                      Whether this text is infact a directive, about to be put in the context of a wider template
- * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ?ID_TEXT                     The theme it is for (null: current theme)
- * @param  ?ID_TEXT                     The language it is for (null: current language)
- * @param  boolean                      Whether to tolerate errors
+ * @param  string                       $text The template text
+ * @param  integer                      $symbol_pos The position we are looking at in the text
+ * @param  boolean                      $inside_directive Whether this text is infact a directive, about to be put in the context of a wider template
+ * @param  ID_TEXT                      $codename The codename of the template (e.g. foo)
+ * @param  ?ID_TEXT                     $theme The theme it is for (null: current theme)
+ * @param  ?ID_TEXT                     $lang The language it is for (null: current language)
+ * @param  boolean                      $tolerate_errors Whether to tolerate errors
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
 function template_to_tempcode($text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null, $tolerate_errors = false)
@@ -978,8 +978,8 @@ function template_to_tempcode($text, $symbol_pos = 0, $inside_directive = false,
 /**
  * Build a closure function for a compiled template.
  *
- * @param  string                       The function name
- * @param  array                        An array of lines to be output, each one in PHP format
+ * @param  string                       $myfunc The function name
+ * @param  array                        $parts An array of lines to be output, each one in PHP format
  * @return string                       Finished PHP code
  */
 function build_closure_function($myfunc, $parts)

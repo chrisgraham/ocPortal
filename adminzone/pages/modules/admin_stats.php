@@ -54,8 +54,8 @@ class Module_admin_stats
     /**
      * Install the module.
      *
-     * @param  ?integer                 What version we're upgrading from (null: new install)
-     * @param  ?integer                 What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
+     * @param  ?integer                 $upgrade_from What version we're upgrading from (null: new install)
+     * @param  ?integer                 $upgrade_from_hack What hack version we're upgrading from (null: new-install/not-upgrading-from-a-hacked-version)
      */
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
@@ -119,10 +119,10 @@ class Module_admin_stats
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -341,10 +341,10 @@ class Module_admin_stats
     /**
      * An interface for choosing between dates.
      *
-     * @param  tempcode                 The title to display.
-     * @param  boolean                  Whether display is dependent on what we kept in our stats table.
-     * @param  ?tempcode                Extra fields to request (null: none).
-     * @param  ?tempcode                The message to show for date selection (null: default).
+     * @param  tempcode                 $title The title to display.
+     * @param  boolean                  $stats_table Whether display is dependent on what we kept in our stats table.
+     * @param  ?tempcode                $extra_fields Extra fields to request (null: none).
+     * @param  ?tempcode                $message The message to show for date selection (null: default).
      * @return tempcode                 The result of execution.
      */
     public function get_between($title, $stats_table = false, $extra_fields = null, $message = null)
@@ -1579,12 +1579,12 @@ class Module_admin_stats
     /**
      * Create a bar chart of the views the specified page has received in relation to the specified hours. The bar chart is stored in /data_custom/admin_stats/ as an SVG image, and the tempcode for display of the graph and results table is returned.
      *
-     * @param  PATH                     The page path
-     * @param  string                   The statistic type (for use in sort parameters and such)
-     * @param  string                   Language identifier for the graph title
-     * @param  string                   Language identifier for the graph description
-     * @param  integer                  The steps of hours to use
-     * @param  integer                  The total hours to plot
+     * @param  PATH                     $page The page path
+     * @param  string                   $type The statistic type (for use in sort parameters and such)
+     * @param  string                   $graph_title Language identifier for the graph title
+     * @param  string                   $graph_description Language identifier for the graph description
+     * @param  integer                  $hours The steps of hours to use
+     * @param  integer                  $total The total hours to plot
      * @return array                    A linear array containing the graph and list tempcode objects, respectively
      */
     public function views_per_x($page, $type, $graph_title, $graph_description, $hours = 1, $total = 24)
@@ -1663,11 +1663,11 @@ class Module_admin_stats
     /**
      * Create a pie chart of the ratios of the specified statistic for the specified page. The chart is saved as an SVG image in /data_custom/admin_stats/, and the tempcode for display of the graph and results table is returned
      *
-     * @param  PATH                     The page path
-     * @param  string                   The statistic to use
-     * @param  string                   Language identifier for the graph title
-     * @param  string                   Language identifier for the graph description
-     * @param  string                   Language identifier for the list title
+     * @param  PATH                     $page The page path
+     * @param  string                   $type The statistic to use
+     * @param  string                   $graph_title Language identifier for the graph title
+     * @param  string                   $graph_description Language identifier for the graph description
+     * @param  string                   $list_title Language identifier for the list title
      * @return array                    A linear array containing the graph and list tempcode objects, respectively
      */
     public function page_x_share($page, $type, $graph_title, $graph_description, $list_title)
@@ -1745,8 +1745,8 @@ class Module_admin_stats
     /**
      * Save a graph to the server so it can be viewed client-side.
      *
-     * @param  string                   Name of the graph (no path or extension)
-     * @param  string                   SVG markup
+     * @param  string                   $path Name of the graph (no path or extension)
+     * @param  string                   $graph SVG markup
      */
     public function save_graph($path, $graph)
     {

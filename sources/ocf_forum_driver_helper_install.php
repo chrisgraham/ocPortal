@@ -23,17 +23,17 @@
 /**
  * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
  *
- * @param  object                       Link to the real forum driver
- * @param  string                       The name of the new custom field
- * @param  integer                      The length of the new custom field
- * @param  BINARY                       Whether the field is locked
- * @param  BINARY                       Whether the field is for viewing
- * @param  BINARY                       Whether the field is for setting
- * @param  BINARY                       Whether the field is required
- * @param  string                       Description
- * @param  string                       The field type
- * @param  BINARY                       Whether the field is encrypted
- * @param  ?string                      Default field value (null: standard for field type)
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  string                       $name The name of the new custom field
+ * @param  integer                      $length The length of the new custom field
+ * @param  BINARY                       $locked Whether the field is locked
+ * @param  BINARY                       $viewable Whether the field is for viewing
+ * @param  BINARY                       $settable Whether the field is for setting
+ * @param  BINARY                       $required Whether the field is required
+ * @param  string                       $description Description
+ * @param  string                       $type The field type
+ * @param  BINARY                       $encrypted Whether the field is encrypted
+ * @param  ?string                      $default Default field value (null: standard for field type)
  * @return boolean                      Whether the custom field was created successfully
  */
 function _helper_install_create_custom_field($this_ref, $name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0, $description = '', $type = 'long_text', $encrypted = 0, $default = null)
@@ -90,7 +90,7 @@ function _helper_install_specifics()
 /**
  * Searches for forum auto-config at this path.
  *
- * @param  PATH                         The path in which to search
+ * @param  PATH                         $path The path in which to search
  * @return boolean                      Whether the forum auto-config could be found
  */
 function _helper_install_test_load_from($path)

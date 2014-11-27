@@ -175,7 +175,7 @@ class OcCLE_fs
     /**
      * Convert a string-form path to an array.
      *
-     * @param  string                   Path
+     * @param  string                   $pwd Path
      * @return array                    Array-form path
      */
     public function _pwd_to_array($pwd)
@@ -252,7 +252,7 @@ class OcCLE_fs
     /**
      * Is it a directory?
      *
-     * @param  ?array                   Path to check (null: current dir is used)
+     * @param  ?array                   $dir Path to check (null: current dir is used)
      * @return boolean                  Directory?
      */
     public function _is_dir($dir = null)
@@ -283,7 +283,7 @@ class OcCLE_fs
     /**
      * Is it a file?
      *
-     * @param  array                    Path (with filename) to use
+     * @param  array                    $dir Path (with filename) to use
      * @return boolean                  Directory?
      */
     public function _is_file($dir)
@@ -370,7 +370,7 @@ class OcCLE_fs
     /**
      * Convert a directory contents structure into a template parameter structure.
      *
-     * @param  array                    Structure
+     * @param  array                    $entries Structure
      * @return array                    Template parameter structure
      */
     public function prepare_dir_contents_for_listing($entries)
@@ -392,7 +392,7 @@ class OcCLE_fs
     /**
      * Return the current working directory of the virtual filesystem. Equivalent to Unix "pwd".
      *
-     * @param  boolean                  Return the pwd in array form?
+     * @param  boolean                  $array_form Return the pwd in array form?
      * @return mixed                    The current working directory (array or string)
      */
     public function print_working_directory($array_form = false)
@@ -408,7 +408,7 @@ class OcCLE_fs
     /**
      * Return a directory and file listing of the current working directory. Equivalent to Unix "ls".
      *
-     * @param  ?array                   An alternate directory in which to perform the action (null: current directory is used)
+     * @param  ?array                   $dir An alternate directory in which to perform the action (null: current directory is used)
      * @return array                    Directories and files in the current working directory
      */
     public function listing($dir = null)
@@ -442,12 +442,12 @@ class OcCLE_fs
     /**
      * Return a listing of all the files/directories found matching the specified pattern. Equivalent to Unix "find".
      *
-     * @param  string                   The search pattern (PRCE regexp or plain)
-     * @param  boolean                  Is the search pattern a regexp?
-     * @param  boolean                  Should the search be recursive?
-     * @param  boolean                  Should files be included in the results?
-     * @param  boolean                  Should directories be included in the results?
-     * @param  ?array                   Directory (null: current directory is used)
+     * @param  string                   $pattern The search pattern (PRCE regexp or plain)
+     * @param  boolean                  $regexp Is the search pattern a regexp?
+     * @param  boolean                  $recursive Should the search be recursive?
+     * @param  boolean                  $files Should files be included in the results?
+     * @param  boolean                  $directories Should directories be included in the results?
+     * @param  ?array                   $dir Directory (null: current directory is used)
      * @return array                    The search results
      */
     public function search($pattern, $regexp = false, $recursive = false, $files = true, $directories = false, $dir = null)
@@ -501,7 +501,7 @@ class OcCLE_fs
     /**
      * Change the current working directory. Equivalent to Unix "cd".
      *
-     * @param  array                    The target directory path
+     * @param  array                    $target_directory The target directory path
      * @return boolean                  Success?
      */
     public function change_directory($target_directory)
@@ -521,7 +521,7 @@ class OcCLE_fs
     /**
      * Create a directory under the current working directory. Equivalent to Unix "mkdir".
      *
-     * @param  array                    The new directory's path and name
+     * @param  array                    $directory The new directory's path and name
      * @return boolean                  Success?
      */
     public function make_directory($directory)
@@ -545,7 +545,7 @@ class OcCLE_fs
     /**
      * Remove a directory under the current working directory. Equivalent to Unix "rmdir".
      *
-     * @param  array                    The directory-to-remove's path and name
+     * @param  array                    $directory The directory-to-remove's path and name
      * @return boolean                  Success?
      */
     public function remove_directory($directory)
@@ -586,8 +586,8 @@ class OcCLE_fs
     /**
      * Copy a directory. Equivalent to Unix "cp".
      *
-     * @param  array                    The directory to copy
-     * @param  array                    The destination path
+     * @param  array                    $to_copy The directory to copy
+     * @param  array                    $destination The destination path
      * @return boolean                  Success?
      */
     public function copy_directory($to_copy, $destination)
@@ -623,8 +623,8 @@ class OcCLE_fs
     /**
      * Move a directory. Equivalent to Unix "mv".
      *
-     * @param  array                    The directory to move
-     * @param  array                    The destination path
+     * @param  array                    $to_move The directory to move
+     * @param  array                    $destination The destination path
      * @return boolean                  Success?
      */
     public function move_directory($to_move, $destination)
@@ -661,8 +661,8 @@ class OcCLE_fs
     /**
      * Copy a file. Equivalent to Unix "cp".
      *
-     * @param  array                    The file to copy
-     * @param  array                    The destination path
+     * @param  array                    $to_copy The file to copy
+     * @param  array                    $destination The destination path
      * @return boolean                  Success?
      */
     public function copy_file($to_copy, $destination)
@@ -675,8 +675,8 @@ class OcCLE_fs
     /**
      * Move a file. Equivalent to Unix "mv".
      *
-     * @param  array                    The file to move
-     * @param  array                    The destination path
+     * @param  array                    $to_move The file to move
+     * @param  array                    $destination The destination path
      * @return boolean                  Success?
      */
     public function move_file($to_move, $destination)
@@ -712,7 +712,7 @@ class OcCLE_fs
     /**
      * Remove a file. Equivalent to Unix "rm".
      *
-     * @param  array                    The file to remove
+     * @param  array                    $to_remove The file to remove
      * @return boolean                  Success?
      */
     public function remove_file($to_remove)
@@ -736,7 +736,7 @@ class OcCLE_fs
     /**
      * Read a file and return the contents.
      *
-     * @param  array                    The file to read
+     * @param  array                    $to_read The file to read
      * @return ~string                  The file contents (false: failure)
      */
     public function read_file($to_read)
@@ -760,8 +760,8 @@ class OcCLE_fs
     /**
      * Write to a file; create the file if it doesn't exist.
      *
-     * @param  array                    The file to write
-     * @param  string                   The contents to write
+     * @param  array                    $to_write The file to write
+     * @param  string                   $contents The contents to write
      * @return boolean                  Success?
      */
     public function write_file($to_write, $contents)
@@ -785,8 +785,8 @@ class OcCLE_fs
     /**
      * Append to a file.
      *
-     * @param  array                    The file to which to append
-     * @param  string                   The contents to append
+     * @param  array                    $to_append The file to which to append
+     * @param  string                   $contents The contents to append
      * @return boolean                  Success?
      */
     public function append_file($to_append, $contents)

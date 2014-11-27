@@ -67,7 +67,7 @@ function init__m_zip()
         /**
          * Open a zip file for reading.
          *
-         * @param  PATH                         The zip file path
+         * @param  PATH                         $zip_file The zip file path
          * @return mixed                        The zip file resource (number if error)
          */
         function zip_open($zip_file)
@@ -136,7 +136,7 @@ function init__m_zip()
         /**
          * Close a zip file.
          *
-         * @param  array                        The zip file resource
+         * @param  array                        $open_zip_file The zip file resource
          * @return boolean                      Whether the file closed correctly
          */
         function zip_close($open_zip_file)
@@ -168,7 +168,7 @@ function init__m_zip()
         /**
          * Reads the next entry in a zip file archive.
          *
-         * @param  array                        The zip file resource
+         * @param  array                        $open_zip_file The zip file resource
          * @return ~array                       A directory entry resource for later use with the m_zip_entry_...() functions (false: if there's no more entries to read).
          */
         function zip_read($open_zip_file)
@@ -255,8 +255,8 @@ function init__m_zip()
         /**
          * Make a path relative.
          *
-         * @param  PATH                         The base path (path to make relative to)
-         * @param  PATH                         The path to make relative
+         * @param  PATH                         $base_path The base path (path to make relative to)
+         * @param  PATH                         $path The path to make relative
          * @return PATH                         The relative path
          */
         function _m_zip_RelPath($base_path, $path)
@@ -276,9 +276,9 @@ function init__m_zip()
         /**
          * Opens a directory entry in a zip file for reading.
          *
-         * @param  array                        The zip file resource
-         * @param  array                        Directory entry resource returned by m_zip_read()
-         * @param  string                       The file access mode
+         * @param  array                        $zip The zip file resource
+         * @param  array                        $zip_entry Directory entry resource returned by m_zip_read()
+         * @param  string                       $mode The file access mode
          * @set    rb
          * @return boolean                      Whether the operation was succesful
          */
@@ -297,7 +297,7 @@ function init__m_zip()
         /**
          * Closes a directory entry previously opened for reading.
          *
-         * @param  array                        Directory entry resource returned by m_zip_read()
+         * @param  array                        $zip_entry Directory entry resource returned by m_zip_read()
          * @return boolean                      Whether the operation was succesful
          */
         function zip_entry_close($zip_entry)
@@ -316,7 +316,7 @@ function init__m_zip()
         /**
          * Returns the name of the directory entry specified in the given entry.
          *
-         * @param  array                        Directory entry resource returned by m_zip_read()
+         * @param  array                        $zip_entry Directory entry resource returned by m_zip_read()
          * @return string                       The entry name
          */
         function zip_entry_name($zip_entry)
@@ -327,7 +327,7 @@ function init__m_zip()
         /**
          * Returns the filesize of the directory entry specified in the given entry.
          *
-         * @param  array                        Directory entry resource returned by m_zip_read()
+         * @param  array                        $zip_entry Directory entry resource returned by m_zip_read()
          * @return integer                      The file size
          */
         function zip_entry_filesize($zip_entry)
@@ -339,8 +339,8 @@ function init__m_zip()
         /**
          * Returns the file data of the directory entry specified in the given entry.
          *
-         * @param  array                        Directory entry resource returned by m_zip_read()
-         * @param  integer                      The maximum returned data size
+         * @param  array                        $zip_entry Directory entry resource returned by m_zip_read()
+         * @param  integer                      $zip_entry_file_size The maximum returned data size
          * @return ~string                      The data (false: failure)
          */
         function zip_entry_read($zip_entry, $zip_entry_file_size = 1024)
@@ -374,7 +374,7 @@ function init__m_zip()
          * Delete a directory of files.
          * From "User Contributed Notes" at http://it.php.net/manual/en/function.rmdir.php. Thanks flexer at cutephp dot com
          *
-         * @param  PATH                         The path to the directory
+         * @param  PATH                         $a_dir The path to the directory
          */
         function m_deldir($a_dir)
         {

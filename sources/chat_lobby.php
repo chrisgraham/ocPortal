@@ -49,9 +49,9 @@ function enter_chat_lobby()
 /**
  * Show IM contacts, with online/offline status and clickability to initiate IM sessions.
  *
- * @param  ?MEMBER                      The member ID (null: current user).
- * @param  boolean                      Whether to show a simpler, more compact, UI.
- * @param  ?integer                     Maximum to show (null: default).
+ * @param  ?MEMBER                      $member_id The member ID (null: current user).
+ * @param  boolean                      $simpler Whether to show a simpler, more compact, UI.
+ * @param  ?integer                     $max Maximum to show (null: default).
  * @return tempcode                     The contact UI.
  */
 function show_im_contacts($member_id = null, $simpler = false, $max = null)
@@ -125,7 +125,7 @@ function show_im_contacts($member_id = null, $simpler = false, $max = null)
 /**
  * Prune timed-out private chatrooms.
  *
- * @param  array                        The row of the chat room to possibly prune
+ * @param  array                        $row The row of the chat room to possibly prune
  * @return boolean                      Whether the room was pruned
  */
 function handle_chatroom_pruning($row)

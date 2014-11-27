@@ -21,7 +21,7 @@
 /**
  * Initialise state variables for the special page type being requested.
  *
- * @param  ID_TEXT                      The special page type.
+ * @param  ID_TEXT                      $special_page_type The special page type.
  * @set    query templates tree lang
  */
 function initialise_special_page_types($special_page_type)
@@ -56,10 +56,10 @@ function initialise_special_page_types($special_page_type)
 /**
  * Handle special page type output.
  *
- * @param  ID_TEXT                      The special page type.
+ * @param  ID_TEXT                      $special_page_type The special page type.
  * @set    query templates tree lang
- * @param  tempcode                     The normal script tempcode output
- * @param  string                       The normal script evaluated output
+ * @param  tempcode                      &$out The normal script tempcode output
+ * @param  string                       $out_evaluated The normal script evaluated output
  */
 function special_page_types($special_page_type, &$out, $out_evaluated)
 {
@@ -341,10 +341,10 @@ function special_page_types($special_page_type, &$out, $out_evaluated)
 /**
  * Convert a template tree structure into a HTML representation.
  *
- * @param  ID_TEXT                      The codename of the current template item in the recursion
- * @param  array                        The template tree structure for children
- * @param  boolean                      Whether the template tree came from a cache (if so, we can take some liberties with it's presentation)
- * @param  boolean                      As $fresh, except something underneath at any unknown point did come from the cache, so this must have by extension
+ * @param  ID_TEXT                      $codename The codename of the current template item in the recursion
+ * @param  array                        $children The template tree structure for children
+ * @param  boolean                      $fresh Whether the template tree came from a cache (if so, we can take some liberties with it's presentation)
+ * @param  boolean                      $cache_started As $fresh, except something underneath at any unknown point did come from the cache, so this must have by extension
  * @return string                       HTML representation
  */
 function find_template_tree_nice($codename, $children, $fresh, $cache_started = false)
@@ -405,11 +405,11 @@ function find_template_tree_nice($codename, $children, $fresh, $cache_started = 
 /**
  * Takes the output from the scripts, and check the XHTML for validity, then echoes the page, plus the validation results.
  *
- * @param  string                       The XHTML to validate
- * @param  boolean                      Display XHTML output regardless of whether there was an error or not
- * @param  integer                      Whether we are opening up an XHTML-fragment in a preview box (0 means no, 1 means yes, 2 means we are asking for additional manual check information)
+ * @param  string                       $out The XHTML to validate
+ * @param  boolean                      $display_regardless Display XHTML output regardless of whether there was an error or not
+ * @param  integer                      $preview_mode Whether we are opening up an XHTML-fragment in a preview box (0 means no, 1 means yes, 2 means we are asking for additional manual check information)
  * @set 0 1 2
- * @param  boolean                      Whether to return Tempcode
+ * @param  boolean                      $ret Whether to return Tempcode
  * @return string                       Returned result (won't return it $ret is false)
  */
 function do_xhtml_validation($out, $display_regardless = false, $preview_mode = 0, $ret = false)
@@ -449,10 +449,10 @@ function do_xhtml_validation($out, $display_regardless = false, $preview_mode = 
 /**
  * Show results of running a validation function.
  *
- * @param  string                       The data validated
- * @param  array                        Error information
- * @param  boolean                      Whether we are opening up an XHTML-fragment in a preview box
- * @param  boolean                      Whether to return Tempcode
+ * @param  string                       $out The data validated
+ * @param  array                        $error Error information
+ * @param  boolean                      $preview_mode Whether we are opening up an XHTML-fragment in a preview box
+ * @param  boolean                      $ret Whether to return Tempcode
  * @return string                       Returned result (won't return it $ret is false)
  */
 function display_validation_results($out, $error, $preview_mode = false, $ret = false)
@@ -708,7 +708,7 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
 /**
  * Attach a message showing memory usage.
  *
- * @param  tempcode                     Where to place the message.
+ * @param  tempcode                     &$messages_bottom Where to place the message.
  */
 function attach_message_memory_usage(&$messages_bottom)
 {

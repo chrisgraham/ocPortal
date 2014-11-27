@@ -31,7 +31,7 @@ function mailto_obfuscated()
 /**
  * Obfuscate the given text using HTML entity encoding.
  *
- * @param  string                       The text to obfuscate
+ * @param  string                       $val The text to obfuscate
  * @return string                       The obfuscated version
  */
 function obfuscate_entities($val)
@@ -67,7 +67,7 @@ function obfuscate_entities($val)
  * Obfuscate the given e-mail address.
  * This function may want to be modified on a per-site basis, to stop spammers triggering onto ocPortal's default method (possible some already do, although I think it unlikely they would go to this much effort/computation unless it was more widespread to do this).
  *
- * @param  string                       The e-mail address to obfuscate
+ * @param  string                       $email The e-mail address to obfuscate
  * @return string                       The obfuscated version
  */
 function obfuscate_email_address($email)

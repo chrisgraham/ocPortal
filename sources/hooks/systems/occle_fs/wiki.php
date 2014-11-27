@@ -31,7 +31,7 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.
      *
-     * @param  ID_TEXT                  The resource type
+     * @param  ID_TEXT                  $resource_type The resource type
      * @return integer                  How many resources there are
      */
     public function get_resources_count($resource_type)
@@ -49,8 +49,8 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs function for searching for a resource by label.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  LONG_TEXT                The resource label
+     * @param  ID_TEXT                  $resource_type The resource type
+     * @param  LONG_TEXT                $label The resource label
      * @return array                    A list of resource IDs
      */
     public function find_resource_by_label($resource_type, $label)
@@ -98,9 +98,9 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
      *
-     * @param  LONG_TEXT                Filename OR Resource label
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  LONG_TEXT                $filename Filename OR Resource label
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error)
      */
     public function folder_add($filename, $path, $properties)
@@ -141,8 +141,8 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
      *
-     * @param  SHORT_TEXT               Filename
-     * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
+     * @param  SHORT_TEXT               $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
     public function folder_load($filename, $path)
@@ -174,10 +174,10 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
      *
-     * @param  ID_TEXT                  The filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-     * @param  boolean                  Whether we are definitely moving (as opposed to possible having it in multiple positions)
+     * @param  ID_TEXT                  $filename The filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  boolean                  $explicit_move Whether we are definitely moving (as opposed to possible having it in multiple positions)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function folder_edit($filename, $path, $properties, $explicit_move = false)
@@ -229,8 +229,8 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
      *
-     * @param  ID_TEXT                  The filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $filename The filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
     public function folder_delete($filename, $path)
@@ -263,9 +263,9 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
      *
-     * @param  LONG_TEXT                Filename OR Resource label
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  LONG_TEXT                $filename Filename OR Resource label
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function file_add($filename, $path, $properties)
@@ -296,8 +296,8 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
      *
-     * @param  SHORT_TEXT               Filename
-     * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
+     * @param  SHORT_TEXT               $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
     public function file_load($filename, $path)
@@ -324,9 +324,9 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
      *
-     * @param  ID_TEXT                  The filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  ID_TEXT                  $filename The filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function file_edit($filename, $path, $properties)
@@ -361,8 +361,8 @@ class Hook_occle_fs_wiki extends Resource_fs_base
     /**
      * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
      *
-     * @param  ID_TEXT                  The filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $filename The filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
     public function file_delete($filename, $path)

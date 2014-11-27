@@ -21,10 +21,10 @@
 /**
  * Get form fields for setting content privacy.
  *
- * @param  ?ID_TEXT                     The content type (null: could be multiple)
- * @param  ?ID_TEXT                     The content ID (null: adding)
- * @param  boolean                      Whether to show a header to separate the settings out
- * @param  string                       Prefix for field naming
+ * @param  ?ID_TEXT                     $content_type The content type (null: could be multiple)
+ * @param  ?ID_TEXT                     $content_id The content ID (null: adding)
+ * @param  boolean                      $show_header Whether to show a header to separate the settings out
+ * @param  string                       $prefix Prefix for field naming
  * @return tempcode                     The form fields
  */
 function get_privacy_form_fields($content_type, $content_id = null, $show_header = true, $prefix = '')
@@ -99,7 +99,7 @@ function get_privacy_form_fields($content_type, $content_id = null, $show_header
 /**
  * Reading privacy settings from the POST environment.
  *
- * @param  string                       Prefix for field naming
+ * @param  string                       $prefix Prefix for field naming
  * @return array                        A pair: the privacy level, the list of usernames
  */
 function read_privacy_fields($prefix = '')
@@ -121,12 +121,12 @@ function read_privacy_fields($prefix = '')
 /**
  * Actualise form data for setting content privacy.
  *
- * @param  ID_TEXT                      The content type
- * @param  ?ID_TEXT                     The content ID (null: adding)
- * @param  ID_TEXT                      The privacy level
+ * @param  ID_TEXT                      $content_type The content type
+ * @param  ?ID_TEXT                     $content_id The content ID (null: adding)
+ * @param  ID_TEXT                      $privacy_level The privacy level
  * @set members friends staff guests
- * @param  array                        A list of usernames
- * @param  boolean                      Whether to send out invite notifications (only do this is it is a new content entry, rather than something obscure, like a member's photo)
+ * @param  array                        $additional_access A list of usernames
+ * @param  boolean                      $send_invites Whether to send out invite notifications (only do this is it is a new content entry, rather than something obscure, like a member's photo)
  * @return boolean                      Whether it saved something
  */
 function save_privacy_form_fields($content_type, $content_id, $privacy_level, $additional_access, $send_invites = true)
@@ -224,8 +224,8 @@ function save_privacy_form_fields($content_type, $content_id, $privacy_level, $a
 /**
  * Delete privacy data.
  *
- * @param  ID_TEXT                      The content type
- * @param  ID_TEXT                      The content ID
+ * @param  ID_TEXT                      $content_type The content type
+ * @param  ID_TEXT                      $content_id The content ID
  * @return boolean                      Whether it deleted something
  */
 function delete_privacy_form_fields($content_type, $content_id)

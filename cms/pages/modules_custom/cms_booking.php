@@ -37,10 +37,10 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -74,8 +74,8 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -116,7 +116,7 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -158,7 +158,7 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -216,10 +216,10 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Get a form for entering a bookable.
      *
-     * @param  ?array                   Details of the bookable (null: new).
-     * @param  ?array                   List of supplements (null: new).
-     * @param  ?array                   List of blacks (null: new).
-     * @param  ?array                   List of codes (null: new).
+     * @param  ?array                   $details Details of the bookable (null: new).
+     * @param  ?array                   $supplements List of supplements (null: new).
+     * @param  ?array                   $blacks List of blacks (null: new).
+     * @param  ?array                   $codes List of codes (null: new).
      * @return array                    Tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $supplements = null, $blacks = null, $codes = null)
@@ -322,7 +322,7 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A tuple of lots of info
      */
     public function fill_in_edit_form($_id)
@@ -359,7 +359,7 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -373,7 +373,7 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $_id The entry being deleted
      */
     public function delete_actualisation($_id)
     {
@@ -385,9 +385,9 @@ class Module_cms_booking extends Standard_crud_module
     /**
      * The do-next manager for after download content management (event types only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -417,7 +417,7 @@ class Module_cms_booking_supplements extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -465,8 +465,8 @@ class Module_cms_booking_supplements extends Standard_crud_module
     /**
      * Get a form for entering a bookable supplement.
      *
-     * @param  ?array                   Details of the supplement (null: new).
-     * @param  ?array                   List of bookables this is for (null: new).
+     * @param  ?array                   $details Details of the supplement (null: new).
+     * @param  ?array                   $bookables List of bookables this is for (null: new).
      * @return array                    Tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $bookables = null)
@@ -522,7 +522,7 @@ class Module_cms_booking_supplements extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A tuple of lots of info
      */
     public function fill_in_edit_form($_id)
@@ -557,7 +557,7 @@ class Module_cms_booking_supplements extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -571,7 +571,7 @@ class Module_cms_booking_supplements extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $_id The entry being deleted
      */
     public function delete_actualisation($_id)
     {
@@ -583,9 +583,9 @@ class Module_cms_booking_supplements extends Standard_crud_module
     /**
      * The do-next manager for after download content management (event types only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -615,7 +615,7 @@ class Module_cms_booking_blacks extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -663,8 +663,8 @@ class Module_cms_booking_blacks extends Standard_crud_module
     /**
      * Get a form for entering a bookable black.
      *
-     * @param  ?array                   Details of the black (null: new).
-     * @param  ?array                   List of bookables this is for (null: new).
+     * @param  ?array                   $details Details of the black (null: new).
+     * @param  ?array                   $bookables List of bookables this is for (null: new).
      * @return array                    Tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $bookables = null)
@@ -708,7 +708,7 @@ class Module_cms_booking_blacks extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A tuple of lots of info
      */
     public function fill_in_edit_form($_id)
@@ -743,7 +743,7 @@ class Module_cms_booking_blacks extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -757,7 +757,7 @@ class Module_cms_booking_blacks extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $_id The entry being deleted
      */
     public function delete_actualisation($_id)
     {
@@ -769,9 +769,9 @@ class Module_cms_booking_blacks extends Standard_crud_module
     /**
      * The do-next manager for after download content management (event types only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -802,11 +802,11 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * Standard CRUD-module entry function to get rows for selection from.
      *
-     * @param  boolean                  Whether to force a recache
-     * @param  ?ID_TEXT                 Order to use (null: automatic)
-     * @param  ?array                   Extra where clauses (null: none)
-     * @param  boolean                  Whether to always access using the site database
-     * @param  string                   Extra join clause for our query (blank: none)
+     * @param  boolean                  $recache Whether to force a recache
+     * @param  ?ID_TEXT                 $orderer Order to use (null: automatic)
+     * @param  ?array                   $where Extra where clauses (null: none)
+     * @param  boolean                  $force_site_db Whether to always access using the site database
+     * @param  string                   $join Extra join clause for our query (blank: none)
      * @return array                    A pair: Rows for selection from, Total results
      */
     public function get_entry_rows($recache = false, $orderer = null, $where = null, $force_site_db = false, $join = '')
@@ -883,7 +883,7 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -943,8 +943,8 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * Get a form for entering a booking.
      *
-     * @param  ?array                   Details of the booking (null: new).
-     * @param  ?MEMBER                  Who the booking is for (null: current member).
+     * @param  ?array                   $details Details of the booking (null: new).
+     * @param  ?MEMBER                  $member_id Who the booking is for (null: current member).
      * @return mixed                    Either Tempcode; or a tuple: form fields, hidden fields.
      */
     public function get_form_fields($details = null, $member_id = null)
@@ -1055,7 +1055,7 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A tuple of lots of info
      */
     public function fill_in_edit_form($_id)
@@ -1111,7 +1111,7 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -1141,7 +1141,7 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $_id The entry being deleted
      */
     public function delete_actualisation($_id)
     {
@@ -1161,9 +1161,9 @@ class Module_cms_booking_bookings extends Standard_crud_module
     /**
      * The do-next manager for after download content management (event types only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)

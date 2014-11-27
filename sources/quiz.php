@@ -21,10 +21,10 @@
 /**
  * Show a quiz box.
  *
- * @param  array                        The database row
- * @param  string                       The zone to show in
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The database row
+ * @param  string                       $zone The zone to show in
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The rendered quiz link
  */
 function render_quiz_box($row, $zone = '_SEARCH', $give_context = true, $guid = '')
@@ -65,7 +65,7 @@ function render_quiz_box($row, $zone = '_SEARCH', $give_context = true, $guid = 
 /**
  * Get quiz data for exporting it as a CSV.
  *
- * @param   AUTO_LINK   Quiz ID
+ * @param   AUTO_LINK   $quiz_id Quiz ID
  * @return  array       Quiz data array
  */
 function get_quiz_data_for_csv($quiz_id)
@@ -126,7 +126,7 @@ function get_quiz_data_for_csv($quiz_id)
 /**
  * Get quiz data for exporting it as CSV.
  *
- * @param   array       The quiz questions
+ * @param   array       $questions The quiz questions
  * @return  tempcode    The rendered quiz
  */
 function render_quiz($questions)
@@ -180,11 +180,11 @@ function render_quiz($questions)
 /**
  * Score a particular quiz entry.
  *
- * @param   AUTO_LINK   Entry ID
- * @param   ?AUTO_LINK  Quiz ID (null: look up from entry ID)
- * @param   ?array      Quiz row (null: look up from entry ID)
- * @param   ?array      Question rows (null: look up from entry ID)
- * @param   boolean     Whether to show answers, regardless of whether the quiz is set to do so
+ * @param   AUTO_LINK   $entry_id Entry ID
+ * @param   ?AUTO_LINK  $quiz_id Quiz ID (null: look up from entry ID)
+ * @param   ?array      $quiz Quiz row (null: look up from entry ID)
+ * @param   ?array      $questions Question rows (null: look up from entry ID)
+ * @param   boolean     $reveal_all Whether to show answers, regardless of whether the quiz is set to do so
  * @return  array       A tuple of quiz result details
  */
 function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null, $reveal_all = false)
@@ -473,9 +473,9 @@ function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null,
 /**
  * Is a typed quiz answer correct?
  *
- * @param  string                       The given (typed) answer
- * @param  array                        Answer rows
- * @param  boolean                      Whether to do a strict check
+ * @param  string                       $given_answer The given (typed) answer
+ * @param  array                        $all_answers Answer rows
+ * @param  boolean                      $strict Whether to do a strict check
  * @return boolean                      Whether it is correct
  */
 function typed_answer_is_correct($given_answer, $all_answers, $strict = false)

@@ -58,7 +58,7 @@ class Hook_cleanup_image_thumbs
     /**
      * Create filename-mirrored thumbnails for the given directory stub (mirrors stub/foo with stub_thumbs/foo).
      *
-     * @param  string                   Directory to mirror
+     * @param  string                   $dir Directory to mirror
      */
     public function directory_thumb_mirror($dir)
     {

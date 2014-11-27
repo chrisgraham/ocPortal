@@ -30,7 +30,7 @@ function init__addons2()
 /**
  * Upgrade the specified addon.
  *
- * @param  ID_TEXT                      The addon name
+ * @param  ID_TEXT                      $addon The addon name
  * @return integer                      0=No upgrade. -2=Not installed, 1=Upgrade
  */
 function upgrade_addon_soft($addon)
@@ -67,8 +67,8 @@ function upgrade_addon_soft($addon)
 /**
  * Reinstall the specified addon.
  *
- * @param  ID_TEXT                      The addon name
- * @param  ?array                       .ini-format info (needs processing) (null: unknown / N/A)
+ * @param  ID_TEXT                      $addon The addon name
+ * @param  ?array                       $ini_info .ini-format info (needs processing) (null: unknown / N/A)
  */
 function reinstall_addon_soft($addon, $ini_info = null)
 {
@@ -133,7 +133,7 @@ function reinstall_addon_soft($addon, $ini_info = null)
 /**
  * Completely uninstall the specified addon from the system.
  *
- * @param  ID_TEXT                      The addon name
+ * @param  ID_TEXT                      $addon The addon name
  */
 function uninstall_addon_soft($addon)
 {
@@ -243,7 +243,7 @@ function find_updated_addons()
 /**
  * Find all the installed addons.
  *
- * @param  boolean                      Whether to only return details on on-bundled addons
+ * @param  boolean                      $just_non_bundled Whether to only return details on on-bundled addons
  * @return array                        Map of maps describing the available addons (addon name => details)
  */
 function find_installed_addons($just_non_bundled = false)
@@ -276,7 +276,7 @@ function find_installed_addons($just_non_bundled = false)
 /**
  * Find effective modification date of an addon.
  *
- * @param  string                       The name of the addon
+ * @param  string                       $addon_name The name of the addon
  * @return ?TIME                        Modification time (null: could not find any files)
  */
 function find_addon_effective_mtime($addon_name)
@@ -295,7 +295,7 @@ function find_addon_effective_mtime($addon_name)
 /**
  * Find all the available addons (addons in imports/addons that are not necessarily installed).
  *
- * @param  boolean                      Whether to include addons that are installed already
+ * @param  boolean                      $installed_too Whether to include addons that are installed already
  * @return array                        Maps of maps describing the available addons (filename => details)
  */
 function find_available_addons($installed_too = true)
@@ -373,7 +373,7 @@ function find_available_addons($installed_too = true)
 /**
  * Find addon dependencies.
  *
- * @param  string                       The name of the addon
+ * @param  string                       $addon The name of the addon
  * @return array                        List of dependencies
  */
 function find_addon_dependencies_on($addon)
@@ -411,19 +411,19 @@ function find_addon_dependencies_on($addon)
 /**
  * Create an addon to spec.
  *
- * @param  string                       Filename to create in exports/addons directory (should end in .tar)
- * @param  array                        List of files to include
- * @param  string                       Addon name
- * @param  string                       Addon incompatibilities (comma-separated)
- * @param  string                       Addon dependencies (comma-separated)
- * @param  string                       Addon author
- * @param  string                       Addon organisation
- * @param  string                       Addon version
- * @param  string                       Addon category
- * @param  string                       Addon copyright attribution
- * @param  string                       Addon licence
- * @param  string                       Addon description
- * @param  PATH                         Directory to save to
+ * @param  string                       $file Filename to create in exports/addons directory (should end in .tar)
+ * @param  array                        $files List of files to include
+ * @param  string                       $addon Addon name
+ * @param  string                       $incompatibilities Addon incompatibilities (comma-separated)
+ * @param  string                       $dependencies Addon dependencies (comma-separated)
+ * @param  string                       $author Addon author
+ * @param  string                       $organisation Addon organisation
+ * @param  string                       $version Addon version
+ * @param  string                       $category Addon category
+ * @param  string                       $copyright_attribution Addon copyright attribution
+ * @param  string                       $licence Addon licence
+ * @param  string                       $description Addon description
+ * @param  PATH                         $dir Directory to save to
  */
 function create_addon($file, $files, $addon, $incompatibilities, $dependencies, $author, $organisation, $version, $category, $copyright_attribution, $licence, $description, $dir = 'exports/addons')
 {
@@ -532,8 +532,8 @@ function create_addon($file, $files, $addon, $incompatibilities, $dependencies, 
 /**
  * Uninstall an addon.
  *
- * @param  string                       Name of the addon TAR file
- * @param  ?array                       The files to install (null: all)
+ * @param  string                       $file Name of the addon TAR file
+ * @param  ?array                       $files The files to install (null: all)
  */
 function install_addon($file, $files = null)
 {
@@ -680,7 +680,7 @@ function install_addon($file, $files = null)
 /**
  * Uninstall an addon.
  *
- * @param  string                       Name of the addon
+ * @param  string                       $addon Name of the addon
  */
 function uninstall_addon($addon)
 {
@@ -746,10 +746,10 @@ function uninstall_addon($addon)
 /**
  * Get information for the user relating to an addon that they are intending to install.
  *
- * @param  string                       Filename of the addon TAR file
- * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (null: none)
- * @param  ?array                       List of addons that we're currently installing (so dependencies to these are irrelevant). (null: none)
- * @param  boolean                      Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
+ * @param  string                       $file Filename of the addon TAR file
+ * @param  ?array                       $also_uninstalling List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (null: none)
+ * @param  ?array                       $also_installing List of addons that we're currently installing (so dependencies to these are irrelevant). (null: none)
+ * @param  boolean                      $always_return Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
  * @return array                        Triple: warnings, files, addon info array
  */
 function inform_about_addon_install($file, $also_uninstalling = null, $also_installing = null, $always_return = false)
@@ -962,7 +962,7 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
 /**
  * Find whether a particular feature is available to ocPortal (e.g. it's an addon).
  *
- * @param  ID_TEXT                      Feature name
+ * @param  ID_TEXT                      $dependency Feature name
  * @return boolean                      Whether it is
  */
 function has_feature($dependency)
@@ -1022,10 +1022,10 @@ function has_feature($dependency)
 /**
  * Get information for the user relating to an addon that they are intending to uninstall.
  *
- * @param  string                       Name of the addon
- * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (null: none)
- * @param  ?array                       Addon details. (null: load in function)
- * @param  boolean                      Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
+ * @param  string                       $addon Name of the addon
+ * @param  ?array                       $also_uninstalling List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (null: none)
+ * @param  ?array                       $addon_info Addon details. (null: load in function)
+ * @param  boolean                      $always_return Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
  * @return array                        Pair: warnings, files
  */
 function inform_about_addon_uninstall($addon, $also_uninstalling = null, $addon_info = null, $always_return = false)

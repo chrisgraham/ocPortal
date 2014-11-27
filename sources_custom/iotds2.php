@@ -16,21 +16,21 @@
 /**
  * Add an IOTD to the database and return the ID of the new entry.
  *
- * @param  URLPATH                      The URL to the IOTD image
- * @param  SHORT_TEXT                   The IOTD title
- * @param  LONG_TEXT                    The IOTD caption
- * @param  URLPATH                      The URL to the IOTD thumbnail image
- * @param  BINARY                       Whether the IOTD is currently in use (note: setting this to 1 will not actually set the IOTD, and if it is 1, then the IOTD must be explicitly set only to this)
- * @param  BINARY                       Whether the IOTD may be rated
- * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY                       Whether the IOTD may be trackbacked
- * @param  LONG_TEXT                    Notes for the IOTD
- * @param  ?TIME                        The time of submission (null: now)
- * @param  ?MEMBER                      The IOTD submitter (null: current member)
- * @param  BINARY                       Whether the IOTD has been used before
- * @param  ?TIME                        The time the IOTD was used (null: never)
- * @param  integer                      The number of views had
- * @param  ?TIME                        The edit date (null: never)
+ * @param  URLPATH                      $url The URL to the IOTD image
+ * @param  SHORT_TEXT                   $title The IOTD title
+ * @param  LONG_TEXT                    $caption The IOTD caption
+ * @param  URLPATH                      $thumb_url The URL to the IOTD thumbnail image
+ * @param  BINARY                       $current Whether the IOTD is currently in use (note: setting this to 1 will not actually set the IOTD, and if it is 1, then the IOTD must be explicitly set only to this)
+ * @param  BINARY                       $allow_rating Whether the IOTD may be rated
+ * @param  SHORT_INTEGER                $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       $allow_trackbacks Whether the IOTD may be trackbacked
+ * @param  LONG_TEXT                    $notes Notes for the IOTD
+ * @param  ?TIME                        $time The time of submission (null: now)
+ * @param  ?MEMBER                      $submitter The IOTD submitter (null: current member)
+ * @param  BINARY                       $used Whether the IOTD has been used before
+ * @param  ?TIME                        $use_time The time the IOTD was used (null: never)
+ * @param  integer                      $views The number of views had
+ * @param  ?TIME                        $edit_date The edit date (null: never)
  * @return AUTO_LINK                    The ID of the IOTD just added
  */
 function add_iotd($url, $title, $caption, $thumb_url, $current, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $time = null, $submitter = null, $used = 0, $use_time = null, $views = 0, $edit_date = null)
@@ -77,20 +77,20 @@ function add_iotd($url, $title, $caption, $thumb_url, $current, $allow_rating, $
 /**
  * Edit an IOTD.
  *
- * @param  AUTO_LINK                    The ID of the IOTD to edit
- * @param  SHORT_TEXT                   The IOTD title
- * @param  LONG_TEXT                    The IOTD caption
- * @param  URLPATH                      The URL to the IOTD image
- * @param  URLPATH                      The URL to the IOTD thumbnail image
- * @param  BINARY                       Whether the IOTD may be rated
- * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY                       Whether the IOTD may be trackbacked
- * @param  LONG_TEXT                    Notes for the IOTD
- * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME                        Add time (null: do not change)
- * @param  ?integer                     Number of views (null: do not change)
- * @param  ?MEMBER                      Submitter (null: do not change)
- * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    $id The ID of the IOTD to edit
+ * @param  SHORT_TEXT                   $title The IOTD title
+ * @param  LONG_TEXT                    $caption The IOTD caption
+ * @param  URLPATH                      $thumb_url The URL to the IOTD image
+ * @param  URLPATH                      $url The URL to the IOTD thumbnail image
+ * @param  BINARY                       $allow_rating Whether the IOTD may be rated
+ * @param  SHORT_INTEGER                $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       $allow_trackbacks Whether the IOTD may be trackbacked
+ * @param  LONG_TEXT                    $notes Notes for the IOTD
+ * @param  ?TIME                        $edit_time Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        $add_time Add time (null: do not change)
+ * @param  ?integer                     $views Number of views (null: do not change)
+ * @param  ?MEMBER                      $submitter Submitter (null: do not change)
+ * @param  boolean                      $null_is_literal Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_iotd($id, $title, $caption, $thumb_url, $url, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $edit_time = null, $add_time = null, $views = null, $submitter = null, $null_is_literal = false)
 {
@@ -159,7 +159,7 @@ function edit_iotd($id, $title, $caption, $thumb_url, $url, $allow_rating, $allo
 /**
  * Delete an IOTD.
  *
- * @param  AUTO_LINK                    The ID of the IOTD to delete
+ * @param  AUTO_LINK                    $id The ID of the IOTD to delete
  */
 function delete_iotd($id)
 {
@@ -193,7 +193,7 @@ function delete_iotd($id)
 /**
  * Set the IOTD.
  *
- * @param  AUTO_LINK                    The IOTD ID to set
+ * @param  AUTO_LINK                    $id The IOTD ID to set
  */
 function set_iotd($id)
 {

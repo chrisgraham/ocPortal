@@ -21,8 +21,8 @@
 /**
  * Test password strength.
  *
- * @param  string                       The password to check
- * @param  string                       The username that will go with the password
+ * @param  string                       $password The password to check
+ * @param  string                       $username The username that will go with the password
  * @return integer                      Password strength (1-10)
  */
 function test_password($password, $username = '')

@@ -26,7 +26,7 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE_PLAIN
     /**
      * Run function for symbol hooks. Searches for tasks to perform.
      *
-     * @param  array                     Symbol parameters
+     * @param  array                     $param Symbol parameters
      * @return string                    Result
      */
     public function run($param)

@@ -21,7 +21,7 @@
 /**
  * Prepare a phone number for use with the SMS gateway.
  *
- * @param  string                       The number
+ * @param  string                       $number The number
  * @return string                       Cleaned number
  */
 function cleanup_mobile_number($number)
@@ -32,8 +32,8 @@ function cleanup_mobile_number($number)
 /**
  * Attempt to send an SMS.
  *
- * @param  string                       The message
- * @param  array                        The member IDs of those receiving messages
+ * @param  string                       $message The message
+ * @param  array                        $to_sms The member IDs of those receiving messages
  * @return integer                      How many were sent
  */
 function sms_wrap($message, $to_sms)

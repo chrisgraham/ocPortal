@@ -21,10 +21,10 @@
 /**
  * Write PHP code for the restoration of database data into file.
  *
- * @param  resource                     The logfile to write to
- * @param  ID_TEXT                      The meta tablename
- * @param  ID_TEXT                      The index-meta tablename
- * @param  resource                     File to write in to
+ * @param  resource                     $logfile The logfile to write to
+ * @param  ID_TEXT                      $db_meta The meta tablename
+ * @param  ID_TEXT                      $db_meta_indices The index-meta tablename
+ * @param  resource                      &$install_php_file File to write in to
  */
 function get_table_backup($logfile, $db_meta, $db_meta_indices, &$install_php_file)
 {

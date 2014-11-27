@@ -27,8 +27,8 @@ function init__type_validation()
         /**
          * Find whether the specified string is alphanumeric or not.
          *
-         * @param  string               The string to test
-         * @param  boolean              Whether to check stricter identifier-validity
+         * @param  string               $string The string to test
+         * @param  boolean              $strict Whether to check stricter identifier-validity
          * @return boolean              Whether the string is alphanumeric or not
          */
         function is_alphanumeric($string, $strict = false)
@@ -49,7 +49,7 @@ function init__type_validation()
 /**
  * Find whether the specified address is a valid e-mail address or not.
  *
- * @param  string                       The string to test (Note: This is typed string, not e-mail, because it has to function on failure + we could make an infinite loop)
+ * @param  string                       $string The string to test (Note: This is typed string, not e-mail, because it has to function on failure + we could make an infinite loop)
  * @return boolean                      Whether the string is an email address or not
  */
 function is_valid_email_address($string)

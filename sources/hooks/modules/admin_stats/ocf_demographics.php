@@ -46,8 +46,8 @@ class Hook_admin_stats_ocf_demographics
     /**
      * The UI to show OCF demographics.
      *
-     * @param  object                   The stats module object
-     * @param  string                   The screen type
+     * @param  object                   $ob The stats module object
+     * @param  string                   $type The screen type
      * @return tempcode                 The UI
      */
     public function demographics($ob, $type)

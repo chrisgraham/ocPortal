@@ -57,7 +57,7 @@ class Block_main_quotes
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -86,7 +86,7 @@ class Block_main_quotes
     /**
      * Get a random line from a file.
      *
-     * @param  PATH                     The filename
+     * @param  PATH                     $filename The filename
      * @return string                   The random line
      */
     public function get_random_line($filename)

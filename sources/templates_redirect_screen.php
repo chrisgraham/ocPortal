@@ -21,11 +21,11 @@
 /**
  * Redirect the user - transparently, storing a message that will be shown on their destination page.
  *
- * @param  tempcode                     Title to display on redirect page
- * @param  mixed                        Destination URL (may be Tempcode)
- * @param  ?mixed                       Message to show (may be Tempcode) (null: standard redirection message)
- * @param  boolean                      For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
- * @param  ID_TEXT                      Code of message type to show
+ * @param  tempcode                     $title Title to display on redirect page
+ * @param  mixed                        $url Destination URL (may be Tempcode)
+ * @param  ?mixed                       $text Message to show (may be Tempcode) (null: standard redirection message)
+ * @param  boolean                      $intermediary_hop For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
+ * @param  ID_TEXT                      $msg_type Code of message type to show
  * @set    warn inform fatal
  * @return tempcode                     Redirection message (likely to not actually be seen due to instant redirection)
  */

@@ -60,7 +60,7 @@ function bookmarks_script()
 /**
  * Get the form to add a bookmark / set breadcrumbs.
  *
- * @param  mixed                        Where the form should go to
+ * @param  mixed                        $post_url Where the form should go to
  * @return tempcode                     The form
  */
 function add_bookmark_form($post_url)
@@ -124,10 +124,10 @@ function add_bookmark_form($post_url)
 /**
  * Add a bookmark.
  *
- * @param  MEMBER                       Member who it will belong to
- * @param  string                       Folder (blank: root)
- * @param  string                       Title/caption
- * @param  string                       The page-link
+ * @param  MEMBER                       $member Member who it will belong to
+ * @param  string                       $folder Folder (blank: root)
+ * @param  string                       $title Title/caption
+ * @param  string                       $page_link The page-link
  * @return AUTO_LINK                    The ID
  */
 function add_bookmark($member, $folder, $title, $page_link)
@@ -147,10 +147,10 @@ function add_bookmark($member, $folder, $title, $page_link)
 /**
  * Edit a bookmark.
  *
- * @param  AUTO_LINK                    The ID
- * @param  MEMBER                       Member who it belongs to
- * @param  string                       Title/caption
- * @param  string                       The page-link
+ * @param  AUTO_LINK                    $id The ID
+ * @param  MEMBER                       $member Member who it belongs to
+ * @param  string                       $title Title/caption
+ * @param  string                       $page_link The page-link
  */
 function edit_bookmark($id, $member, $title, $page_link)
 {
@@ -162,8 +162,8 @@ function edit_bookmark($id, $member, $title, $page_link)
 /**
  * Delete a bookmark.
  *
- * @param  AUTO_LINK                    The ID
- * @param  ?MEMBER                      Member who it belongs to (null: do not check)
+ * @param  AUTO_LINK                    $id The ID
+ * @param  ?MEMBER                      $member Member who it belongs to (null: do not check)
  */
 function delete_bookmark($id, $member = null)
 {

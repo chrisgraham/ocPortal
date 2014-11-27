@@ -210,7 +210,7 @@ function get_afm_form_fields()
 /**
  * Return the FTP connection, from stored/posted details.
  *
- * @param  boolean                      Whether to simply echo-out errors.
+ * @param  boolean                      $light_fail Whether to simply echo-out errors.
  * @return ~resource                    The FTP connection (false: not connecting via FTP).
  */
 function _ftp_info($light_fail = false)
@@ -322,7 +322,7 @@ function _ftp_info($light_fail = false)
 /**
  * Translate truth about needing world write access to a directory to absolute permissions.
  *
- * @param  boolean                      Whether world directory access is required.
+ * @param  boolean                      $world_access Whether world directory access is required.
  * @return integer                      The absolute permission.
  */
 function _translate_dir_access($world_access)
@@ -341,8 +341,8 @@ function _translate_dir_access($world_access)
 /**
  * Translate truth about needing world write access to a file to absolute permissions.
  *
- * @param  boolean                      Whether world file access is required.
- * @param  ID_TEXT                      The file type (blank: don't care).
+ * @param  boolean                      $world_access Whether world file access is required.
+ * @param  ID_TEXT                      $file_type The file type (blank: don't care).
  * @return integer                      The absolute permission.
  */
 function _translate_file_access($world_access, $file_type = '')
@@ -376,7 +376,7 @@ function _translate_file_access($world_access, $file_type = '')
 /**
  * Convert an integer permission to the string version.
  *
- * @param  integer                      The integer permission.
+ * @param  integer                      $access_int The integer permission.
  * @return string                       The string version.
  */
 function _access_string($access_int)
@@ -387,7 +387,7 @@ function _access_string($access_int)
 /**
  * Rescope an ocPortal path to a path suitable for the AFM connection.
  *
- * @param  PATH                         Original path.
+ * @param  PATH                         $path Original path.
  * @return PATH                         Rescoped path.
  */
 function _rescope_path($path)
@@ -405,8 +405,8 @@ function _rescope_path($path)
 /**
  * Sets permissions over the open AFM connection.
  *
- * @param  PATH                         The path of the file/directory we are setting permissions of.
- * @param  boolean                      Whether world access is required.
+ * @param  PATH                         $basic_path The path of the file/directory we are setting permissions of.
+ * @param  boolean                      $world_access Whether world access is required.
  */
 function afm_set_perms($basic_path, $world_access)
 {
@@ -424,9 +424,9 @@ function afm_set_perms($basic_path, $world_access)
 /**
  * Make a directory over the open AFM connection.
  *
- * @param  PATH                         The path to and of the directory we are making.
- * @param  boolean                      Whether world access is required.
- * @param  boolean                      Whether we should recursively make any directories that are missing in the given path, until we can make the final directory.
+ * @param  PATH                         $basic_path The path to and of the directory we are making.
+ * @param  boolean                      $world_access Whether world access is required.
+ * @param  boolean                      $recursive Whether we should recursively make any directories that are missing in the given path, until we can make the final directory.
  */
 function afm_make_directory($basic_path, $world_access, $recursive = false)
 {
@@ -473,8 +473,8 @@ function afm_make_directory($basic_path, $world_access, $recursive = false)
 /**
  * Get a list of files under a directory.
  *
- * @param  PATH                         The base directory for the search.
- * @param  PATH                         The directory where we are searching under.
+ * @param  PATH                         $base The base directory for the search.
+ * @param  PATH                         $at The directory where we are searching under.
  * @return array                        An array of directories found under this recursive level.
  */
 function _get_dir_tree($base, $at = '')
@@ -503,8 +503,8 @@ function _get_dir_tree($base, $at = '')
 /**
  * Delete a directory over the open AFM connection.
  *
- * @param  PATH                         The path to and of the directory we are deleting.
- * @param  boolean                      Whether we should recursively delete any child files and directories.
+ * @param  PATH                         $basic_path The path to and of the directory we are deleting.
+ * @param  boolean                      $recursive Whether we should recursively delete any child files and directories.
  */
 function afm_delete_directory($basic_path, $recursive = false)
 {
@@ -538,9 +538,9 @@ function afm_delete_directory($basic_path, $recursive = false)
 /**
  * Make a new file over the open AFM connection. Will overwrite if already exists (assuming has access).
  *
- * @param  PATH                         The path to the file we are making.
- * @param  string                       The desired file contents.
- * @param  boolean                      Whether world access is required.
+ * @param  PATH                         $basic_path The path to the file we are making.
+ * @param  string                       $contents The desired file contents.
+ * @param  boolean                      $world_access Whether world access is required.
  */
 function afm_make_file($basic_path, $contents, $world_access)
 {
@@ -594,7 +594,7 @@ function afm_make_file($basic_path, $contents, $world_access)
 /**
  * Read a file (not actually over the open AFM connection, but same result: we can do this directly).
  *
- * @param  PATH                         The path to the file we are reading.
+ * @param  PATH                         $path The path to the file we are reading.
  * @return string                       The contents of the file.
  */
 function afm_read_file($path)
@@ -605,9 +605,9 @@ function afm_read_file($path)
 /**
  * Copies a file (NOT a directory) on the open AFM connection.
  *
- * @param  PATH                         The path to the file we are copying.
- * @param  PATH                         The target path.
- * @param  boolean                      Whether world access is required for the copy.
+ * @param  PATH                         $old_path The path to the file we are copying.
+ * @param  PATH                         $new_path The target path.
+ * @param  boolean                      $world_access Whether world access is required for the copy.
  */
 function afm_copy($old_path, $new_path, $world_access)
 {
@@ -622,8 +622,8 @@ function afm_copy($old_path, $new_path, $world_access)
 /**
  * Moves a file on the open AFM connection.
  *
- * @param  PATH                         The path to the file we are moving from.
- * @param  PATH                         The target path.
+ * @param  PATH                         $basic_old_path The path to the file we are moving from.
+ * @param  PATH                         $basic_new_path The target path.
  */
 function afm_move($basic_old_path, $basic_new_path)
 {
@@ -658,7 +658,7 @@ function afm_move($basic_old_path, $basic_new_path)
 /**
  * Deletes a file (NOT a directory) on the open AFM connection.
  *
- * @param  PATH                         The path to the file we are deleting.
+ * @param  PATH                         $basic_path The path to the file we are deleting.
  */
 function afm_delete_file($basic_path)
 {

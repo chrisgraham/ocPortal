@@ -43,7 +43,7 @@ $HTML_ESCAPE_2 = array('&amp;'/*,'&quot;','&quot;'*/, '&quot;', '&#039;', '&lt;'
 /**
  * Escape HTML text. Heavily optimised! Ended up with preg_replace after trying lots of things.
  *
- * @param  LONG_TEXT                    The text to escape.
+ * @param  LONG_TEXT                    $string The text to escape.
  * @return LONG_TEXT                    The escaped result.
  */
 function code_editor_escape_html($string)
@@ -80,8 +80,8 @@ code_editor_do_footer();
 /**
  * Output the code editors page header.
  *
- * @param  ID_TEXT                      The type our form clicks are.
- * @param  ID_TEXT                      The target our form clicks get sent to.
+ * @param  ID_TEXT                      $type The type our form clicks are.
+ * @param  ID_TEXT                      $target The target our form clicks get sent to.
  */
 function code_editor_do_header($type, $target = '_top')
 {
@@ -235,7 +235,7 @@ END;
 /**
  * Search inside a directory for editable files, whilst favouring the overridden versions.
  *
- * @param  SHORT_TEXT                   The directory path to search.
+ * @param  SHORT_TEXT                   $dir The directory path to search.
  * @return array                        A list of the HTML elements for the list box selection.
  */
 function ce_do_dir($dir)
@@ -266,7 +266,7 @@ function ce_do_dir($dir)
 /**
  * Output the file selection page.
  *
- * @param  SHORT_TEXT                   The password previously given to authorise our editing.
+ * @param  SHORT_TEXT                   $given_password The password previously given to authorise our editing.
  */
 function do_get_path($given_password)
 {
@@ -306,8 +306,8 @@ END;
 /**
  * Ensure that the specified file/folder is writeable for the FTP user (so that it can be deleted by the system), and should be called whenever a file is uploaded/created, or a folder is made. We call this function assuming we are giving world permissions
  *
- * @param  PATH                         The full pathname to the file/directory
- * @param  integer                      The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
+ * @param  PATH                          The full pathname to the file/directory
+ * @param  integer                       The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
  */
 function ce_fix_permissions($path, $perms = 0666) // We call this function assuming we are giving world permissions
 {
@@ -384,8 +384,8 @@ function open_up_ftp_connection()
 /**
  * Output the editing page and do the editing.
  *
- * @param  SHORT_TEXT                   The password previously given to authorise our editing.
- * @param  SHORT_TEXT                   The path of the file we are editing.
+ * @param  SHORT_TEXT                   $given_password The password previously given to authorise our editing.
+ * @param  SHORT_TEXT                   $path The path of the file we are editing.
  */
 function do_page($given_password, $path)
 {
@@ -615,7 +615,7 @@ END;
 /**
  * Convert a normal path to an overriden save path.
  *
- * @param  string                       The normal path
+ * @param  string                       $save_path The normal path
  * @return string                       The overridden save path
  */
 function convert_to_save_path($save_path)
@@ -633,7 +633,7 @@ function convert_to_save_path($save_path)
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH                         File/directory name to sync on (may be full or relative path)
+ * @param  PATH                         $filename File/directory name to sync on (may be full or relative path)
  */
 function ce_sync_file($filename)
 {
@@ -652,8 +652,8 @@ function ce_sync_file($filename)
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH                         File/directory name to move from (may be full or relative path)
- * @param  PATH                         File/directory name to move to (may be full or relative path)
+ * @param  PATH                         $old File/directory name to move from (may be full or relative path)
+ * @param  PATH                         $new File/directory name to move to (may be full or relative path)
  */
 function ce_sync_file_move($old, $new)
 {
@@ -675,7 +675,7 @@ function ce_sync_file_move($old, $new)
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT                   Given master password
+ * @param  SHORT_TEXT                   $password_given Given master password
  * @return boolean                      Whether it is valid
  */
 function ce_check_master_password($password_given)
@@ -704,7 +704,7 @@ function ce_check_master_password($password_given)
 /**
  * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
  *
- * @param  string                       The prefix of the temporary file name.
+ * @param  string                       $prefix The prefix of the temporary file name.
  * @return ~string                      The name of the temporary file (false: error).
  */
 function ce_ocp_tempnam($prefix)

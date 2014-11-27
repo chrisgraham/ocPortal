@@ -26,12 +26,12 @@ class Hook_rss_tickets
     /**
      * Run function for RSS hooks.
      *
-     * @param  string                   A list of categories we accept from
-     * @param  TIME                     Cutoff time, before which we do not show results from
-     * @param  string                   Prefix that represents the template set we use
+     * @param  string                   $_filters A list of categories we accept from
+     * @param  TIME                     $cutoff Cutoff time, before which we do not show results from
+     * @param  string                   $prefix Prefix that represents the template set we use
      * @set    RSS_ ATOM_
-     * @param  string                   The standard format of date to use for the syndication type represented in the prefix
-     * @param  integer                  The maximum number of entries to return, ordering by date
+     * @param  string                   $date_string The standard format of date to use for the syndication type represented in the prefix
+     * @param  integer                  $max The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (null: error)
      */
     public function run($_filters, $cutoff, $prefix, $date_string, $max)

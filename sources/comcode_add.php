@@ -173,7 +173,7 @@ function _get_details_comcode_tags()
 /**
  * Get the Comcode tags in groups
  *
- * @param  ?string                      Group Name (null: return a specific group)
+ * @param  ?string                      $group Group Name (null: return a specific group)
  * @return array                        Returns each Group name as key, values as its tags
  */
 function _get_group_tags($group = null)
@@ -575,7 +575,7 @@ function comcode_helper_script_step2()
 /**
  * Find if a Comcode tag has required contents (hard-coded).
  *
- * @param  ID_TEXT                      Tag being read.
+ * @param  ID_TEXT                      $tag Tag being read.
  * @return boolean                      Whether it has required contents.
  */
 function _find_comcode_tag_embed_required($tag)
@@ -592,16 +592,16 @@ function _find_comcode_tag_embed_required($tag)
 /**
  * See if we have specialisation code for a Comcode tag parameter input.
  *
- * @param  ID_TEXT                      Tag being read.
- * @param  ID_TEXT                      Actual tag being read.
- * @param  tempcode                     UI fields.
- * @param  tempcode                     Advanced UI fields.
- * @param  tempcode                     Hidden fields.
- * @param  boolean                      Whether the tag contents input has also been handled here.
- * @param  array                        Default parameter values.
- * @param  array                        List of tag parameters.
- * @param  string                       JavaScript to deploy.
- * @param  boolean                      Whether previewing will be allowed.
+ * @param  ID_TEXT                      $tag Tag being read.
+ * @param  ID_TEXT                      $actual_tag Actual tag being read.
+ * @param  tempcode                      &$fields UI fields.
+ * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $hidden Hidden fields.
+ * @param  boolean                       &$done_tag_contents Whether the tag contents input has also been handled here.
+ * @param  array                        $defaults Default parameter values.
+ * @param  array                        $params List of tag parameters.
+ * @param  string                        &$javascript JavaScript to deploy.
+ * @param  boolean                      $preview Whether previewing will be allowed.
  * @return boolean                      Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
  */
 function _try_for_special_comcode_tag_all_params_ui($tag, $actual_tag, &$fields, &$fields_advanced, $hidden, &$done_tag_contents, $defaults, $params, &$javascript, $preview)
@@ -685,15 +685,15 @@ function _try_for_special_comcode_tag_all_params_ui($tag, $actual_tag, &$fields,
 /**
  * See if we have specialisation code for a Comcode tag parameter input.
  *
- * @param  ID_TEXT                      Tag being read.
- * @param  ID_TEXT                      Actual tag being read.
- * @param  ID_TEXT                      The parameter.
- * @param  string                       Default human-readable name of the parameter.
- * @param  string                       Default description of the parameter.
- * @param  tempcode                     UI fields.
- * @param  tempcode                     Advanced UI fields.
- * @param  tempcode                     Hidden fields.
- * @param  string                       Default parameter value.
+ * @param  ID_TEXT                      $tag Tag being read.
+ * @param  ID_TEXT                      $actual_tag Actual tag being read.
+ * @param  ID_TEXT                      $param The parameter.
+ * @param  string                       $parameter_name Default human-readable name of the parameter.
+ * @param  string                       $descriptiont Default description of the parameter.
+ * @param  tempcode                      &$fields UI fields.
+ * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $hidden Hidden fields.
+ * @param  string                       $default Default parameter value.
  * @return boolean                      Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
  */
 function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $param, $parameter_name, $descriptiont, &$fields, &$fields_advanced, $hidden, $default)
@@ -744,12 +744,12 @@ function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $para
 /**
  * See if we have specialisation code for inserting an extra Comcode tag parameter input.
  *
- * @param  ID_TEXT                      Tag being read.
- * @param  ID_TEXT                      Actual tag being read.
- * @param  tempcode                     UI fields.
- * @param  tempcode                     Advanced UI fields.
- * @param  tempcode                     Hidden fields.
- * @param  array                        Default parameter values.
+ * @param  ID_TEXT                      $tag Tag being read.
+ * @param  ID_TEXT                      $actual_tag Actual tag being read.
+ * @param  tempcode                      &$fields UI fields.
+ * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $hidden Hidden fields.
+ * @param  array                        $defaults Default parameter values.
  */
 function _try_for_special_comcode_tag_extra_param_ui($tag, $actual_tag, &$fields, &$fields_advanced, $hidden, $defaults)
 {
@@ -766,14 +766,14 @@ function _try_for_special_comcode_tag_extra_param_ui($tag, $actual_tag, &$fields
 /**
  * See if we have specialisation code for Comcode tag contents input.
  *
- * @param  ID_TEXT                      Tag being read.
- * @param  ID_TEXT                      Actual tag being read.
- * @param  tempcode                     UI fields.
- * @param  tempcode                     Advanced UI fields.
- * @param  tempcode                     Hidden fields.
- * @param  string                       Default embed contents.
- * @param  string                       JavaScript to deploy.
- * @param  boolean                      Whether previewing will be allowed.
+ * @param  ID_TEXT                      $tag Tag being read.
+ * @param  ID_TEXT                      $actual_tag Actual tag being read.
+ * @param  tempcode                      &$fields UI fields.
+ * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $hidden Hidden fields.
+ * @param  string                       $default_embed Default embed contents.
+ * @param  string                        &$javascript JavaScript to deploy.
+ * @param  boolean                       &$preview Whether previewing will be allowed.
  * @return boolean                      Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
  */
 function _try_for_special_comcode_tag_specific_contents_ui($tag, $actual_tag, &$fields, &$fields_advanced, $hidden, $default_embed, &$javascript, &$preview)
@@ -872,7 +872,7 @@ function comcode_helper_script_step3()
 /**
  * Reads a Comcode tag from the POST environment.
  *
- * @param  ID_TEXT                      Tag being read.
+ * @param  ID_TEXT                      $tag Tag being read.
  * @return string                       The full Comcode for that tag.
  */
 function _get_preview_environment_comcode($tag)
@@ -1044,8 +1044,8 @@ function _get_preview_environment_comcode($tag)
 /**
  * Locate a set of consistently named parameters and generate an array of them for a multi-line input.
  *
- * @param  array                        All default values for the tag.
- * @param  ID_TEXT                        Match name for the parameter set.
+ * @param  array                        $defaults All default values for the tag.
+ * @param  ID_TEXT                        $param Match name for the parameter set.
  * @return array                        List of values.
  */
 function get_defaults_multi($defaults, $param)

@@ -148,7 +148,7 @@ function xml_dump_script()
 /**
  * Get a list of the defines tables.
  *
- * @param  object                       Database connection to look in
+ * @param  object                       $db Database connection to look in
  * @return array                        The tables
  */
 function find_all_tables($db)
@@ -172,12 +172,12 @@ function find_all_tables($db)
 /**
  * Get MySQL SQL code for the currently loaded database.
  *
- * @param  boolean                      Whether to include 'DROP' statements
- * @param  boolean                      Whether to output status as we go
- * @param  ?ID_TEXT                     Table to look from (null: first table)
- * @param  ?array                       Array of table names to skip (null: none)
- * @param  ?array                       Array of only table names to do (null: all)
- * @param  boolean                      Whether to echo out
+ * @param  boolean                      $include_drops Whether to include 'DROP' statements
+ * @param  boolean                      $output_statuses Whether to output status as we go
+ * @param  ?ID_TEXT                     $from Table to look from (null: first table)
+ * @param  ?array                       $skip Array of table names to skip (null: none)
+ * @param  ?array                       $only Array of only table names to do (null: all)
+ * @param  boolean                      $echo Whether to echo out
  * @return array                        The SQL statements
  */
 function get_sql_dump($include_drops = false, $output_statuses = false, $from = null, $skip = null, $only = null, $echo = false)
@@ -333,8 +333,8 @@ function db_get_type_remap()
 /**
  * Create a new table.
  *
- * @param  ID_TEXT                      The table name
- * @param  array                        A map of field names to ocPortal field types (with *#? encodings)
+ * @param  ID_TEXT                      $table_name The table name
+ * @param  array                        $fields A map of field names to ocPortal field types (with *#? encodings)
  * @return string                       The SQL for it
  */
 function db_create_table($table_name, $fields)

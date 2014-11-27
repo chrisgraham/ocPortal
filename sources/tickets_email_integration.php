@@ -41,15 +41,15 @@ function incoming_ticket_email_script()
 /**
  * Send out an e-mail message for a ticket / ticket reply.
  *
- * @param  ID_TEXT                      Ticket ID
- * @param  mixed                        URL to the ticket (URLPATH or Tempcode)
- * @param  string                       The ticket type's label
- * @param  string                       Ticket subject
- * @param  string                       Ticket message
- * @param  string                       Display name of ticket owner
- * @param  EMAIL                        E-mail address of ticket owner
- * @param  string                       Display name of staff poster
- * @param  boolean                      Whether this is a new ticket, just created by the ticket owner
+ * @param  ID_TEXT                      $ticket_id Ticket ID
+ * @param  mixed                        $ticket_url URL to the ticket (URLPATH or Tempcode)
+ * @param  string                       $ticket_type_name The ticket type's label
+ * @param  string                       $subject Ticket subject
+ * @param  string                       $message Ticket message
+ * @param  string                       $to_name Display name of ticket owner
+ * @param  EMAIL                        $to_email E-mail address of ticket owner
+ * @param  string                       $from_displayname Display name of staff poster
+ * @param  boolean                      $new Whether this is a new ticket, just created by the ticket owner
  */
 function ticket_outgoing_message($ticket_id, $ticket_url, $ticket_type_name, $subject, $message, $to_name, $to_email, $from_displayname, $new = false)
 {
@@ -87,10 +87,10 @@ function ticket_outgoing_message($ticket_id, $ticket_url, $ticket_type_name, $su
 /**
  * Send out an e-mail about us not recognising an e-mail address for a ticket.
  *
- * @param  string                       Subject line of original message
- * @param  string                       Body of original message
- * @param  string                       E-mail address we tried to bind to
- * @param  string                       E-mail address of sender (usually the same as $email, but not if it was a forwarded e-mail)
+ * @param  string                       $subject Subject line of original message
+ * @param  string                       $body Body of original message
+ * @param  string                       $email E-mail address we tried to bind to
+ * @param  string                       $email_bounce_to E-mail address of sender (usually the same as $email, but not if it was a forwarded e-mail)
  */
 function ticket_email_cannot_bind($subject, $body, $email, $email_bounce_to)
 {
@@ -183,7 +183,7 @@ function ticket_incoming_scan()
 /**
  * Convert e-mail HTML to Comcode.
  *
- * @param  string                       HTML body
+ * @param  string                       $body HTML body
  * @return string                       Comcode version
  */
 function email_comcode_from_html($body)
@@ -256,7 +256,7 @@ function email_comcode_from_html($body)
 /**
  * Convert e-mail text to Comcode.
  *
- * @param  string                       Text body
+ * @param  string                       $body Text body
  * @return string                       Comcode version
  */
 function email_comcode_from_text($body)
@@ -277,9 +277,9 @@ function email_comcode_from_text($body)
 /**
  * See if we need to skip over an e-mail message, due to it not being from a human.
  *
- * @param  string                       Subject line
- * @param  string                       Message body
- * @param  string                       Message headers
+ * @param  string                       $subject Subject line
+ * @param  string                       $body Message body
+ * @param  string                       $full_header Message headers
  * @return boolean                      Whether it should not be processed
  */
 function is_non_human_email($subject, $body, $full_header)
@@ -315,7 +315,7 @@ function is_non_human_email($subject, $body, $full_header)
 /**
  * Process a quote block in plain-text e-mail, into a Comcode quote tag. preg callback.
  *
- * @param  array                        preg Matches
+ * @param  array                        $matches preg Matches
  * @return string                       The result
  */
 function _convert_text_quote_to_comcode($matches)
@@ -326,7 +326,7 @@ function _convert_text_quote_to_comcode($matches)
 /**
  * Get the mime type for a part of the IMAP structure.
  *
- * @param  object                       Structure
+ * @param  object                       $structure Structure
  * @return string                       Mime type
  */
 function _imap_get_mime_type($structure)
@@ -342,13 +342,13 @@ function _imap_get_mime_type($structure)
  * Find a message part of an e-mail that matches a mime-type.
  * Taken from http://www.php.net/manual/en/function.imap-fetchbody.php
  *
- * @param  resource                     IMAP connection object
- * @param  integer                      Message number
- * @param  string                       Mime type (in upper case)
- * @param  array                        Map of attachments (name to file data); only populated if $mime_type is APPLICATION/OCTET-STREAM
- * @param  integer                      Total size of attachments in bytes
- * @param  ?object                      IMAP message structure (null: look up)
- * @param  string                       Message part number (blank: root)
+ * @param  resource                     $stream IMAP connection object
+ * @param  integer                      $msg_number Message number
+ * @param  string                       $mime_type Mime type (in upper case)
+ * @param  array                         &$attachments Map of attachments (name to file data); only populated if $mime_type is APPLICATION/OCTET-STREAM
+ * @param  integer                       &$attachment_size_total Total size of attachments in bytes
+ * @param  ?object                      $structure IMAP message structure (null: look up)
+ * @param  string                       $part_number Message part number (blank: root)
  * @return ?string                      The message part (null: could not find one)
  */
 function _imap_get_part($stream, $msg_number, $mime_type, &$attachments, &$attachment_size_total, $structure = null, $part_number = '')
@@ -419,10 +419,10 @@ function _imap_get_part($stream, $msg_number, $mime_type, &$attachments, &$attac
 /**
  * Process an e-mail found, sent to the support ticket system.
  *
- * @param  EMAIL                        From e-mail
- * @param  string                       E-mail subject
- * @param  string                       E-mail body
- * @param  array                        Map of attachments (name to file data); only populated if $mime_type is APPLICATION/OCTET-STREAM
+ * @param  EMAIL                        $from_email From e-mail
+ * @param  string                       $subject E-mail subject
+ * @param  string                       $body E-mail body
+ * @param  array                        $attachments Map of attachments (name to file data); only populated if $mime_type is APPLICATION/OCTET-STREAM
  */
 function ticket_incoming_message($from_email, $subject, $body, $attachments)
 {

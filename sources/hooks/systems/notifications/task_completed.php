@@ -26,7 +26,7 @@ class Hook_notification_task_completed extends Hook_Notification
     /**
      * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
      *
-     * @param  ID_TEXT                  Notification code
+     * @param  ID_TEXT                  $notification_code Notification code
      * @return integer                  Allowed settings
      */
     public function allowed_settings($notification_code)

@@ -57,7 +57,7 @@ class Block_side_calendar
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -288,8 +288,8 @@ class Block_side_calendar
     /**
      * Gets the type filter, if there is one.
      *
-     * @param  array                    What to filter according to block parameters
-     * @param  ?BINARY                  Whether to show private events (1) or public events (0) (null: both public and private)
+     * @param  array                    $filter_map What to filter according to block parameters
+     * @param  ?BINARY                  $private_events Whether to show private events (1) or public events (0) (null: both public and private)
      * @return array                    The filter
      */
     public function get_filter($filter_map, $private_events)

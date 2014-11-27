@@ -38,10 +38,10 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -60,8 +60,8 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -91,7 +91,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -320,7 +320,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Import an emoticon.
      *
-     * @param  PATH                     Path to the emoticon file, on disk (must be in theme images folder).
+     * @param  PATH                     $path Path to the emoticon file, on disk (must be in theme images folder).
      */
     public function _import_emoticon($path)
     {
@@ -350,12 +350,12 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Get tempcode for a post template adding/editing form.
      *
-     * @param  SHORT_TEXT               The emoticon code
-     * @param  SHORT_TEXT               The theme image code
-     * @param  integer                  The relevance level of the emoticon
+     * @param  SHORT_TEXT               $code The emoticon code
+     * @param  SHORT_TEXT               $theme_img_code The theme image code
+     * @param  integer                  $relevance_level The relevance level of the emoticon
      * @range  0 4
-     * @param  BINARY                   Whether the emoticon is usable as a topic emoticon
-     * @param  BINARY                   Whether this may only be used by privileged members
+     * @param  BINARY                   $use_topics Whether the emoticon is usable as a topic emoticon
+     * @param  BINARY                   $is_special Whether this may only be used by privileged members
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($code = ':-]', $theme_img_code = '', $relevance_level = 1, $use_topics = 1, $is_special = 0)
@@ -429,7 +429,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function fill_in_edit_form($id)
@@ -463,7 +463,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -479,7 +479,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

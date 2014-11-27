@@ -292,15 +292,15 @@ function init__validation()
 /**
  * Check the specified XHTML, and return the results.
  *
- * @param  string                       The XHTML to validate
- * @param  boolean                      Whether to avoid checking for relational errors (false implies just a quick structural check, aka a 'well formed' check)
- * @param  boolean                      Whether what is being validated is an HTML fragment, rather than a whole document
- * @param  boolean                      Validate javascript
- * @param  boolean                      Validate CSS
- * @param  boolean                      Validate WCAG
- * @param  boolean                      Validate for compatibility
- * @param  boolean                      Validate external files
- * @param  boolean                      Bring up messages about manual checks
+ * @param  string                       $out The XHTML to validate
+ * @param  boolean                      $well_formed_only Whether to avoid checking for relational errors (false implies just a quick structural check, aka a 'well formed' check)
+ * @param  boolean                      $is_fragment Whether what is being validated is an HTML fragment, rather than a whole document
+ * @param  boolean                      $validation_javascript Validate javascript
+ * @param  boolean                      $validation_css Validate CSS
+ * @param  boolean                      $validation_wcag Validate WCAG
+ * @param  boolean                      $validation_compat Validate for compatibility
+ * @param  boolean                      $validation_ext_files Validate external files
+ * @param  boolean                      $validation_manual Bring up messages about manual checks
  * @return ?map                         Error information (null: no error)
  */
 function check_xhtml($out, $well_formed_only = false, $is_fragment = false, $validation_javascript = true, $validation_css = true, $validation_wcag = true, $validation_compat = true, $validation_ext_files = true, $validation_manual = false)
@@ -652,12 +652,12 @@ function check_xhtml($out, $well_formed_only = false, $is_fragment = false, $val
 /**
  * Get some general debugging information for an identified XHTML error.
  *
- * @param  string                       The error that occurred
- * @param  string                       The first parameter of the error
- * @param  string                       The second parameter of the error
- * @param  string                       The third parameter of the error
- * @param  boolean                      Whether to not do a lang lookup
- * @param  integer                      Offset position
+ * @param  string                       $error The error that occurred
+ * @param  string                       $param_a The first parameter of the error
+ * @param  string                       $param_b The second parameter of the error
+ * @param  string                       $param_c The third parameter of the error
+ * @param  boolean                      $raw Whether to not do a lang lookup
+ * @param  integer                      $rel_pos Offset position
  * @return map                          A map of the error information
  */
 function _xhtml_error($error, $param_a = '', $param_b = '', $param_c = '', $raw = false, $rel_pos = 0)
@@ -684,7 +684,7 @@ function _xhtml_error($error, $param_a = '', $param_b = '', $param_c = '', $raw 
 /**
  * Checks to see if a string holds a hexadecimal number.
  *
- * @param  string                       The string to check
+ * @param  string                       $string The string to check
  * @return boolean                      Whether the string holds a hexadecimal number
  */
 function is_hex($string)
@@ -698,7 +698,7 @@ function is_hex($string)
 /**
  * Test the next entity in the output stream.
  *
- * @param  integer                      Checking offset
+ * @param  integer                      $offset Checking offset
  * @return ?mixed                       An array of error details (null: no errors)
  */
 function test_entity($offset = 0)
@@ -733,7 +733,7 @@ function test_entity($offset = 0)
 /**
  * Fix any invalid entities in the text.
  *
- * @param  string                       Text to fix in
+ * @param  string                       $in Text to fix in
  * @return string                       Fixed result
  */
 function fix_entities($in)
@@ -1205,11 +1205,11 @@ function _get_next_tag()
 /**
  * Checks an XHTML tag for validity, including attributes. Return the results.
  *
- * @param  string                       The name of the tag to check
- * @param  map                          A map of attributes (name=>value) the tag has
- * @param  boolean                      Whether this is a self-closing tag
- * @param  boolean                      Whether this is a closing tag
- * @param  list                         Errors detected so far. We will add to these and return
+ * @param  string                       $tag The name of the tag to check
+ * @param  map                          $attributes A map of attributes (name=>value) the tag has
+ * @param  boolean                      $self_close Whether this is a self-closing tag
+ * @param  boolean                      $close Whether this is a closing tag
+ * @param  list                         $errors Errors detected so far. We will add to these and return
  * @return mixed                        String for tag basis form, or array of error information
  */
 function _check_tag($tag, $attributes, $self_close, $close, $errors)
@@ -1248,7 +1248,7 @@ function _check_tag($tag, $attributes, $self_close, $close, $errors)
 /**
  * Get the tag basis for the specified tag. e.g. '<br />' would become 'br'. Note: tags with parameters given are not supported.
  *
- * @param  string                       The full tag
+ * @param  string                       $full The full tag
  * @return string                       The basis of the tag
  */
 function _get_tag_basis($full)

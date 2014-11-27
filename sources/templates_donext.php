@@ -21,10 +21,10 @@
 /**
  * Get the tempcode for a do next manager. A do next manager is a series of linked icons that are presented after performing an action. Modules that do not use do-next pages, usually use REFRESH_PAGE's.
  *
- * @param  ID_TEXT                      The title of what we are doing (a language string)
- * @param  ?mixed                       The language code for the docs of the hook defined do-next manager that we're creating OR tempcode for it (null: none)
- * @param  ID_TEXT                      The menu 'type' we are doing (filters out any icons that don't match it)
- * @param  ?string                      The title to use for the main links (a language string) (null: same as title)
+ * @param  ID_TEXT                      $title The title of what we are doing (a language string)
+ * @param  ?mixed                       $text The language code for the docs of the hook defined do-next manager that we're creating OR tempcode for it (null: none)
+ * @param  ID_TEXT                      $type The menu 'type' we are doing (filters out any icons that don't match it)
+ * @param  ?string                      $main_title The title to use for the main links (a language string) (null: same as title)
  * @return tempcode                     The do next manager
  */
 function do_next_manager_hooked($title, $text, $type, $main_title = null)
@@ -85,10 +85,10 @@ function do_next_manager_hooked($title, $text, $type, $main_title = null)
 /**
  * Get the tempcode for a do next manager. A do next manager is a series of linked icons that are presented after performing an action. Modules that do not use do-next pages, usually use REFRESH_PAGE's.
  *
- * @param  ?tempcode                    The title of what we just did (should have been passed through get_screen_title already) (null: don't do full page)
- * @param  tempcode                     The 'text' (actually, a full XHTML lump) to show on the page
- * @param  ?array                       An array of entry types, with each array entry being -- an array consisting of the type codename and a URL array as per following parameters (null: none)
- * @param  ?string                      The title to use for the main links (null: none)
+ * @param  ?tempcode                    $title The title of what we just did (should have been passed through get_screen_title already) (null: don't do full page)
+ * @param  tempcode                     $text The 'text' (actually, a full XHTML lump) to show on the page
+ * @param  ?array                       $main An array of entry types, with each array entry being -- an array consisting of the type codename and a URL array as per following parameters (null: none)
+ * @param  ?string                      $main_title The title to use for the main links (null: none)
  * @param  ?array                       The URL used to 'add-one' (null: impossible)  (format: array of page, param, zone[, custom label])
  * @param  ?array                       The URL used to 'edit-this' (null: impossible)  (format: array of page, param, zone[, custom label])
  * @param  ?array                       The URL used to 'edit-one' (null: impossible)  (format: array of page, param, zone[, custom label])
@@ -99,13 +99,13 @@ function do_next_manager_hooked($title, $text, $type, $main_title = null)
  * @param  ?array                       The URL used to 'edit-one-category' (null: impossible)  (format: array of page, param, zone[, custom label])
  * @param  ?array                       The URL used to 'edit-this-category' (null: impossible)  (format: array of page, param, zone[, custom label])
  * @param  ?array                       The URL used to 'view-this-category' (null: impossible)  (format: array of page, param, zone[, custom label])
- * @param  ?array                       An array of additional entry types, with each array entry being -- an array of type codename and a URL array as before (null: none)
- * @param  ?array                       As before, but with category types (null: none)
- * @param  ?array                       As before, but for an 'extra types' box of do next actions (null: none)
- * @param  ?mixed                       The title to use for the extra types (null: none)
- * @param  ?tempcode                    Introductory text (null: none)
- * @param  ?tempcode                    Entries section title (null: default, Entries)
- * @param  ?tempcode                    Categories section title (null: default, Categories)
+ * @param  ?array                       $entry_extras An array of additional entry types, with each array entry being -- an array of type codename and a URL array as before (null: none)
+ * @param  ?array                       $category_extras As before, but with category types (null: none)
+ * @param  ?array                       $additional_extras As before, but for an 'extra types' box of do next actions (null: none)
+ * @param  ?mixed                       $additional_title The title to use for the extra types (null: none)
+ * @param  ?tempcode                    $intro Introductory text (null: none)
+ * @param  ?tempcode                    $entries_title Entries section title (null: default, Entries)
+ * @param  ?tempcode                    $categories_title Categories section title (null: default, Categories)
  * @return tempcode                     The do next manager
  */
 function do_next_manager($title, $text, $main = null, $main_title = null, $url_add_one = null, $url_edit_this = null, $url_edit_one = null, $url_view_this = null, $url_view_archive = null, $url_add_to_category = null, $url_add_one_category = null, $url_edit_one_category = null, $url_edit_this_category = null, $url_view_this_category = null, $entry_extras = null, $category_extras = null, $additional_extras = null, $additional_title = null, $intro = null, $entries_title = null, $categories_title = null)
@@ -302,8 +302,8 @@ function do_next_manager($title, $text, $main = null, $main_title = null, $url_a
 /**
  * Get the tempcode for a do next manager. A do next manager is a series of linked icons that are presented after performing an action. Modules that do not use do-next pages, usually use REFRESH_PAGE's.
  *
- * @param  array                        A list of items (each item is a pair or a triple: <option,url[,field name=do_lang(option)]> ; url is a pair or a triple or a quarto also: <page,map[,zone[,warning]]>)
- * @param  tempcode                     The title for the section
+ * @param  array                        $list A list of items (each item is a pair or a triple: <option,url[,field name=do_lang(option)]> ; url is a pair or a triple or a quarto also: <page,map[,zone[,warning]]>)
+ * @param  tempcode                     $title The title for the section
  * @return tempcode                     The do next manager section
  */
 function _do_next_section($list, $title)

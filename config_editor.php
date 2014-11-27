@@ -140,7 +140,7 @@ function ce_do_login()
 /**
  * Output the editing page.
  *
- * @param  string                       The password given to get here (so we don't need to re-enter it each edit).
+ * @param  string                       $given_password The password given to get here (so we don't need to re-enter it each edit).
  */
 function do_access($given_password)
 {
@@ -417,7 +417,7 @@ function do_set()
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH                         File/directory name to sync on (may be full or relative path)
+ * @param  PATH                         $filename File/directory name to sync on (may be full or relative path)
  */
 function co_sync_file($filename)
 {
@@ -436,8 +436,8 @@ function co_sync_file($filename)
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH                         File/directory name to move from (may be full or relative path)
- * @param  PATH                         File/directory name to move to (may be full or relative path)
+ * @param  PATH                         $old File/directory name to move from (may be full or relative path)
+ * @param  PATH                         $new File/directory name to move to (may be full or relative path)
  */
 function co_sync_file_move($old, $new)
 {
@@ -459,7 +459,7 @@ function co_sync_file_move($old, $new)
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT                   Given master password
+ * @param  SHORT_TEXT                   $password_given Given master password
  * @return boolean                      Whether it is valid
  */
 function co_check_master_password($password_given)

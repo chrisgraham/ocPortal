@@ -21,10 +21,10 @@
 /**
  * Do a highly-simplified XML-RPC request (no actual calling supported - just messaging).
  *
- * @param  URLPATH                      The XML-RPC call URL
- * @param  string                       The method name to call.
- * @param  array                        An array of parameters.
- * @param  boolean                      Whether to accept failure.
+ * @param  URLPATH                      $url The XML-RPC call URL
+ * @param  string                       $method The method name to call.
+ * @param  array                        $params An array of parameters.
+ * @param  boolean                      $accept_failure Whether to accept failure.
  * @return ?string                      The result (null: failed).
  */
 function xml_rpc($url, $method, $params, $accept_failure = false)
@@ -59,7 +59,7 @@ END;
 /**
  * Convert some data to XML-RPC format.
  *
- * @param  mixed                        Data
+ * @param  mixed                        $_value Data
  * @return string                       XML-RPC format version
  */
 function _xml_rpc_type_convert($_value)

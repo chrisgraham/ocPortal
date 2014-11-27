@@ -26,7 +26,7 @@ class Hook_trackback_news
     /**
      * Run function for trackback hooks. They see if content of an ID relating to this content has trackback enabled.
      *
-     * @param  ID_TEXT                  The ID
+     * @param  ID_TEXT                  $id The ID
      * @return boolean                  Whether trackback is enabled
      */
     public function run($id)

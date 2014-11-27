@@ -21,8 +21,8 @@
 /**
  * Find whether a certain member may control a certain usergroup.
  *
- * @param  GROUP                        The usergroup.
- * @param  MEMBER                       The member.
+ * @param  GROUP                        $group_id The usergroup.
+ * @param  MEMBER                       $member_id The member.
  * @return boolean                      The answer.
  */
 function ocf_may_control_group($group_id, $member_id)
@@ -35,34 +35,34 @@ function ocf_may_control_group($group_id, $member_id)
 /**
  * Edit a usergroup.
  *
- * @param  AUTO_LINK                    The ID of the usergroup to edit.
- * @param  ?SHORT_TEXT                  The name of the usergroup. (null: do not change)
- * @param  ?BINARY                      Whether members are automatically put into the when they join. (null: do not change)
- * @param  ?BINARY                      Whether members of this usergroup are all super administrators. (null: do not change)
- * @param  ?BINARY                      Whether members of this usergroup are all super moderators. (null: do not change)
- * @param  ?SHORT_TEXT                  The title for primary members of this usergroup that don't have their own title. (null: do not change)
- * @param  ?URLPATH                     The rank image for this. (null: do not change)
- * @param  ?GROUP                       The that members of this usergroup get promoted to at point threshold (null: no promotion prospects).
- * @param  ?integer                     The point threshold for promotion (null: no promotion prospects).
- * @param  ?MEMBER                      The leader of this usergroup (null: none).
- * @param  ?integer                     The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The maximum avatar width that members of this usergroup may have (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The maximum avatar height that members of this usergroup may have (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The maximum post length that members of this usergroup may make (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The maximum signature length that members of this usergroup may make (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The number of gift points that members of this usergroup start with (group 'best of' applies). (null: do not change)
- * @param  ?integer                     The number of gift points that members of this usergroup get per day (group 'best of' applies). (null: do not change)
- * @param  ?BINARY                      Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies). (null: do not change)
- * @param  ?BINARY                      Whether the is presented for joining at joining (implies anyone may be in the, but only choosable at joining) (null: do not change)
- * @param  ?BINARY                      Whether the name and membership of the is hidden (null: do not change)
- * @param  ?integer                     The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups. (null: do not change)
- * @param  ?BINARY                      Whether the rank image will not be shown for secondary membership (null: do not change)
- * @param  ?BINARY                      Whether members may join this usergroup without requiring any special permission (null: do not change)
- * @param  ?BINARY                      Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum. (null: do not change)
- * @param  boolean                      Whether to force the title as unique, if there's a conflict
+ * @param  AUTO_LINK                    $group_id The ID of the usergroup to edit.
+ * @param  ?SHORT_TEXT                  $name The name of the usergroup. (null: do not change)
+ * @param  ?BINARY                      $is_default Whether members are automatically put into the when they join. (null: do not change)
+ * @param  ?BINARY                      $is_super_admin Whether members of this usergroup are all super administrators. (null: do not change)
+ * @param  ?BINARY                      $is_super_moderator Whether members of this usergroup are all super moderators. (null: do not change)
+ * @param  ?SHORT_TEXT                  $title The title for primary members of this usergroup that don't have their own title. (null: do not change)
+ * @param  ?URLPATH                     $rank_image The rank image for this. (null: do not change)
+ * @param  ?GROUP                       $promotion_target The that members of this usergroup get promoted to at point threshold (null: no promotion prospects).
+ * @param  ?integer                     $promotion_threshold The point threshold for promotion (null: no promotion prospects).
+ * @param  ?MEMBER                      $group_leader The leader of this usergroup (null: none).
+ * @param  ?integer                     $flood_control_submit_secs The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $flood_control_access_secs The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $max_daily_upload_mb The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $max_attachments_per_post The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $max_avatar_width The maximum avatar width that members of this usergroup may have (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $max_avatar_height The maximum avatar height that members of this usergroup may have (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $max_post_length_comcode The maximum post length that members of this usergroup may make (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $max_sig_length_comcode The maximum signature length that members of this usergroup may make (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $gift_points_base The number of gift points that members of this usergroup start with (group 'best of' applies). (null: do not change)
+ * @param  ?integer                     $gift_points_per_day The number of gift points that members of this usergroup get per day (group 'best of' applies). (null: do not change)
+ * @param  ?BINARY                      $enquire_on_new_ips Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies). (null: do not change)
+ * @param  ?BINARY                      $is_presented_at_install Whether the is presented for joining at joining (implies anyone may be in the, but only choosable at joining) (null: do not change)
+ * @param  ?BINARY                      $hidden Whether the name and membership of the is hidden (null: do not change)
+ * @param  ?integer                     $order The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups. (null: do not change)
+ * @param  ?BINARY                      $rank_image_pri_only Whether the rank image will not be shown for secondary membership (null: do not change)
+ * @param  ?BINARY                      $open_membership Whether members may join this usergroup without requiring any special permission (null: do not change)
+ * @param  ?BINARY                      $is_private_club Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum. (null: do not change)
+ * @param  boolean                      $uniqify Whether to force the title as unique, if there's a conflict
  */
 function ocf_edit_group($group_id, $name, $is_default, $is_super_admin, $is_super_moderator, $title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club, $uniqify = false)
 {
@@ -178,8 +178,8 @@ function ocf_edit_group($group_id, $name, $is_default, $is_super_admin, $is_supe
 /**
  * Delete a usergroup.
  *
- * @param  AUTO_LINK                    The ID of the usergroup to delete.
- * @param  ?GROUP                       The usergroup to move primary members to (null: main members).
+ * @param  AUTO_LINK                    $group_id The ID of the usergroup to delete.
+ * @param  ?GROUP                       $target_group The usergroup to move primary members to (null: main members).
  */
 function ocf_delete_group($group_id, $target_group = null)
 {
@@ -243,8 +243,8 @@ function ocf_delete_group($group_id, $target_group = null)
 /**
  * Mark a member as applying to be in a certain, and inform the leader.
  *
- * @param  GROUP                        The usergroup to apply to.
- * @param  ?MEMBER                      The member applying (null: current member).
+ * @param  GROUP                        $group_id The usergroup to apply to.
+ * @param  ?MEMBER                      $member_id The member applying (null: current member).
  */
 function ocf_member_ask_join_group($group_id, $member_id = null)
 {
@@ -313,8 +313,8 @@ function ocf_member_ask_join_group($group_id, $member_id = null)
 /**
  * Remove a member from a certain usergroup.
  *
- * @param  GROUP                        The usergroup to remove from.
- * @param  ?MEMBER                      The member leaving (null: current member).
+ * @param  GROUP                        $group_id The usergroup to remove from.
+ * @param  ?MEMBER                      $member_id The member leaving (null: current member).
  */
 function ocf_member_leave_group($group_id, $member_id = null)
 {
@@ -344,9 +344,9 @@ function ocf_member_leave_group($group_id, $member_id = null)
 /**
  * Add a member to a certain usergroup.
  *
- * @param  MEMBER                       The member.
- * @param  GROUP                        The usergroup.
- * @param  BINARY                       Whether the member is validated into the usergroup.
+ * @param  MEMBER                       $member_id The member.
+ * @param  GROUP                        $id The usergroup.
+ * @param  BINARY                       $validated Whether the member is validated into the usergroup.
  */
 function ocf_add_member_to_group($member_id, $id, $validated = 1)
 {
@@ -398,10 +398,10 @@ function ocf_add_member_to_group($member_id, $id, $validated = 1)
 /**
  * Set whether a member that has applied to be in a, may be in it, and inform them of the decision.
  *
- * @param  GROUP                        The usergroup.
- * @param  MEMBER                       The prospective member.
- * @param  boolean                      Whether the member is being declined membership.
- * @param  string                       The reason given for declining.
+ * @param  GROUP                        $group_id The usergroup.
+ * @param  MEMBER                       $prospective_member_id The prospective member.
+ * @param  boolean                      $decline Whether the member is being declined membership.
+ * @param  string                       $reason The reason given for declining.
  */
 function ocf_member_validate_into_group($group_id, $prospective_member_id, $decline = false, $reason = '')
 {
@@ -447,8 +447,8 @@ function ocf_member_validate_into_group($group_id, $prospective_member_id, $decl
 /**
  * Copy permissions relating to one, to another.
  *
- * @param  GROUP                        The that is having it's permissions replaced.
- * @param  GROUP                        The that the permissions are being drawn from.
+ * @param  GROUP                        $to The that is having it's permissions replaced.
+ * @param  GROUP                        $from The that the permissions are being drawn from.
  */
 function ocf_group_absorb_privileges_of($to, $from)
 {
@@ -461,11 +461,11 @@ function ocf_group_absorb_privileges_of($to, $from)
 /**
  * Helper function, for copy permissions relating to one, to another.
  *
- * @param  GROUP                        The that is having it's permissions replaced.
- * @param  GROUP                        The that the permissions are being drawn from.
- * @param  ID_TEXT                      The table holding the permissions.
- * @param  ID_TEXT                      The name of the field in the table that holds the ID.
- * @param  boolean                      Whether the operation is being carried out over the OCF driver.
+ * @param  GROUP                        $to The that is having it's permissions replaced.
+ * @param  GROUP                        $from The that the permissions are being drawn from.
+ * @param  ID_TEXT                      $table The table holding the permissions.
+ * @param  ID_TEXT                      $id The name of the field in the table that holds the ID.
+ * @param  boolean                      $ocf Whether the operation is being carried out over the OCF driver.
  */
 function _ocf_group_absorb_privileges_of($to, $from, $table, $id = 'group_id', $ocf = false)
 {

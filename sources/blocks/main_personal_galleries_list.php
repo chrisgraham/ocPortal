@@ -48,7 +48,7 @@ class Block_main_personal_galleries_list
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -132,10 +132,10 @@ class Block_main_personal_galleries_list
     /**
      * Show subgalleries belonging to member.
      *
-     * @param  ID_TEXT                  Gallery name
-     * @param  tempcode                 The output goes in here (passed by reference)
-     * @param  MEMBER                   The ID of the member who is being viewed
-     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  ID_TEXT                  $gallery_name Gallery name
+     * @param  tempcode                  &$galleries The output goes in here (passed by reference)
+     * @param  MEMBER                   $member_id The ID of the member who is being viewed
+     * @param  MEMBER                   $member_id_viewing The ID of the member who is doing the viewing
      */
     public function attach_gallery_subgalleries($gallery_name, &$galleries, $member_id, $member_id_viewing)
     {

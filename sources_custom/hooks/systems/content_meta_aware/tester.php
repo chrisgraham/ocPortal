@@ -21,7 +21,7 @@ class Hook_content_meta_aware_tester
     /**
      * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
      *
-     * @param  ?ID_TEXT                 The zone to link through to (null: autodetect).
+     * @param  ?ID_TEXT                 $zone The zone to link through to (null: autodetect).
      * @return ?array                   Map of award content-type info (null: disabled).
      */
     public function info($zone = null)

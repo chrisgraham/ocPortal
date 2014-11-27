@@ -44,7 +44,7 @@ class Block_main_content_filtering
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -92,8 +92,8 @@ class Block_main_content_filtering
     /**
      * Execute the module.
      *
-     * @param  string                   Comma separated, equals separated, bits.
-     * @param  string                   Separarator between pairs.
+     * @param  string                   $str Comma separated, equals separated, bits.
+     * @param  string                   $separator Separarator between pairs.
      * @return array                    Mapping.
      */
     public function interpret_pairs_from_string($str, $separator = ',')

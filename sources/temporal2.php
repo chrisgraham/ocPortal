@@ -21,7 +21,7 @@
 /**
  * Turn a boring timezone name into the pretty shortened list of ones Microsoft uses and others now use too.
  *
- * @param  string                       Boring name
+ * @param  string                       $in Boring name
  * @return string                       Nice name
  */
 function make_nice_timezone_name($in)
@@ -273,11 +273,11 @@ function _get_timezone_list()
 /**
  * Check a POST inputted date for validity, and get the dat/time components.
  *
- * @param  ID_TEXT                      The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
- * @param  ?integer                     Default year (null: none)
- * @param  ?integer                     Default month (null: none)
- * @param  ?integer                     Default day (null: none)
- * @param  boolean                      Whether to allow over get parameters also
+ * @param  ID_TEXT                      $stub The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
+ * @param  ?integer                     $year Default year (null: none)
+ * @param  ?integer                     $month Default month (null: none)
+ * @param  ?integer                     $day Default day (null: none)
+ * @param  boolean                      $get_also Whether to allow over get parameters also
  * @return array                        The date/time components
  */
 function get_input_date_components($stub, $year = null, $month = null, $day = null, $get_also = false)
@@ -381,9 +381,9 @@ function get_input_date_components($stub, $year = null, $month = null, $day = nu
 /**
  * Check a POST inputted date for validity, and get the Unix timestamp for the inputted date.
  *
- * @param  ID_TEXT                      The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
- * @param  boolean                      Whether to allow over get parameters also
- * @param  boolean                      Whether to do timezone conversion
+ * @param  ID_TEXT                      $stub The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
+ * @param  boolean                      $get_also Whether to allow over get parameters also
+ * @param  boolean                      $do_timezone_conversion Whether to do timezone conversion
  * @return ?TIME                        The timestamp of the date (null: no input date was chosen)
  */
 function _get_input_date($stub, $get_also = false, $do_timezone_conversion = true)

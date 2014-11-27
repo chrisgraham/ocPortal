@@ -23,8 +23,8 @@
 /**
  * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
  *
- * @param  object                       Link to the real forum driver
- * @param  ?MEMBER                      Only emoticons the given member can see (null: don't care)
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  ?MEMBER                      $member_id Only emoticons the given member can see (null: don't care)
  * @return array                        The map
  */
 function _helper_apply_emoticons($this_ref, $member_id = null)
@@ -67,27 +67,27 @@ function _helper_apply_emoticons($this_ref, $member_id = null)
  * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
  * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
  *
- * @param  object                       Link to the real forum driver
- * @param  SHORT_TEXT                   The forum name
- * @param  SHORT_TEXT                   The topic identifier (usually <content-type>_<content-id>)
- * @param  MEMBER                       The member ID
- * @param  LONG_TEXT                    The post title
- * @param  LONG_TEXT                    The post content in Comcode format
- * @param  string                       The topic title; must be same as content title if this is for a comment topic
- * @param  string                       This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
- * @param  ?URLPATH                     URL to the content (null: do not make spacer post)
- * @param  ?TIME                        The topic time (null: use current time)
- * @param  ?IP                          The post IP address (null: use current members IP address)
- * @param  ?BINARY                      Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
- * @param  ?BINARY                      Whether the topic is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
- * @param  boolean                      Whether to skip post checks
- * @param  SHORT_TEXT                   The name of the poster
- * @param  ?AUTO_LINK                   ID of post being replied to (null: N/A)
- * @param  boolean                      Whether the reply is only visible to staff
- * @param  ?ID_TEXT                     DO NOT send notifications to: The notification code (null: no restriction)
- * @param  ?SHORT_TEXT                  DO NOT send notifications to: The category within the notification code (null: none / no restriction)
- * @param  ?TIME                        The post time (null: use current time)
- * @param  ?MEMBER                      Owner of comment topic (null: Guest)
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  SHORT_TEXT                   $forum_name The forum name
+ * @param  SHORT_TEXT                   $topic_identifier The topic identifier (usually <content-type>_<content-id>)
+ * @param  MEMBER                       $member_id The member ID
+ * @param  LONG_TEXT                    $post_title The post title
+ * @param  LONG_TEXT                    $post The post content in Comcode format
+ * @param  string                       $content_title The topic title; must be same as content title if this is for a comment topic
+ * @param  string                       $topic_identifier_encapsulation_prefix This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+ * @param  ?URLPATH                     $content_url URL to the content (null: do not make spacer post)
+ * @param  ?TIME                        $time The topic time (null: use current time)
+ * @param  ?IP                          $ip The post IP address (null: use current members IP address)
+ * @param  ?BINARY                      $validated Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+ * @param  ?BINARY                      $topic_validated Whether the topic is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+ * @param  boolean                      $skip_post_checks Whether to skip post checks
+ * @param  SHORT_TEXT                   $poster_name_if_guest The name of the poster
+ * @param  ?AUTO_LINK                   $parent_id ID of post being replied to (null: N/A)
+ * @param  boolean                      $staff_only Whether the reply is only visible to staff
+ * @param  ?ID_TEXT                     $no_notify_for__notification_code DO NOT send notifications to: The notification code (null: no restriction)
+ * @param  ?SHORT_TEXT                  $no_notify_for__code_category DO NOT send notifications to: The category within the notification code (null: none / no restriction)
+ * @param  ?TIME                        $time_post The post time (null: use current time)
+ * @param  ?MEMBER                      $spacer_post_member_id Owner of comment topic (null: Guest)
  * @return array                        Topic ID (may be NULL), and whether a hidden post has been made
  */
 function _helper_make_post_forum_topic($this_ref, $forum_name, $topic_identifier, $member_id, $post_title, $post, $content_title, $topic_identifier_encapsulation_prefix, $content_url, $time, $ip, $validated, $topic_validated, $skip_post_checks, $poster_name_if_guest, $parent_id, $staff_only, $no_notify_for__notification_code, $no_notify_for__code_category, $time_post, $spacer_post_member_id)
@@ -217,17 +217,17 @@ function _helper_make_post_forum_topic($this_ref, $forum_name, $topic_identifier
  * - firsttitle, the title of the first post
  * - firstpost, the first post (only set if $show_first_posts was true)
  *
- * @param  object                       Link to the real forum driver
- * @param  mixed                        The forum name or an array of forum IDs
- * @param  integer                      The limit
- * @param  integer                      The start position
- * @param  integer                      The total rows (not a parameter: returns by reference)
- * @param  SHORT_TEXT                   The topic title filter
- * @param  SHORT_TEXT                   The topic description filter
- * @param  boolean                      Whether to show the first posts
- * @param  string                       The date key to sort by
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  mixed                        $name The forum name or an array of forum IDs
+ * @param  integer                      $limit The limit
+ * @param  integer                      $start The start position
+ * @param  integer                       &$max_rows The total rows (not a parameter: returns by reference)
+ * @param  SHORT_TEXT                   $filter_topic_title The topic title filter
+ * @param  SHORT_TEXT                   $filter_topic_description The topic description filter
+ * @param  boolean                      $show_first_posts Whether to show the first posts
+ * @param  string                       $date_key The date key to sort by
  * @set    lasttime firsttime
- * @param  boolean                      Whether to limit to hot topics
+ * @param  boolean                      $hot Whether to limit to hot topics
  * @return ?array                       The array of topics (null: error/none)
  */
 function _helper_show_forum_topics($this_ref, $name, $limit, $start, &$max_rows, $filter_topic_title, $filter_topic_description, $show_first_posts, $date_key, $hot)
@@ -385,7 +385,7 @@ function _helper_show_forum_topics($this_ref, $name, $limit, $start, &$max_rows,
 /**
  * Get a bit of SQL to make sure that a DB field is not like a spacer post in any of the languages.
  *
- * @param  ID_TEXT                      The field name
+ * @param  ID_TEXT                      $field The field name
  * @return string                       The SQL
  */
 function not_like_spacer_posts($field)
@@ -403,17 +403,17 @@ function not_like_spacer_posts($field)
 /**
  * Get an array of maps for the topic in the given forum.
  *
- * @param  object                       Link to the real forum driver
- * @param  ?integer                     The topic ID (null: does not exist)
- * @param  ?integer                     The comment count will be returned here by reference (null: no return)
- * @param  ?integer                     Maximum comments to returned (null: no limit)
- * @param  integer                      Comment to start at
- * @param  boolean                      Whether to mark the topic read
- * @param  boolean                      Whether to show in reverse
- * @param  boolean                      Whether to only load minimal details if it is a threaded topic
- * @param  ?array                       List of post IDs to load (null: no filter)
- * @param  boolean                      Whether to load spacer posts
- * @param  ID_TEXT                      Preferred sort order (appropriate will use rating if threaded, other
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  ?integer                     $topic_id The topic ID (null: does not exist)
+ * @param  ?integer                      &$count The comment count will be returned here by reference (null: no return)
+ * @param  ?integer                     $max Maximum comments to returned (null: no limit)
+ * @param  integer                      $start Comment to start at
+ * @param  boolean                      $mark_read Whether to mark the topic read
+ * @param  boolean                      $reverse Whether to show in reverse
+ * @param  boolean                      $light_if_threaded Whether to only load minimal details if it is a threaded topic
+ * @param  ?array                       $post_ids List of post IDs to load (null: no filter)
+ * @param  boolean                      $load_spacer_posts_too Whether to load spacer posts
+ * @param  ID_TEXT                      $sort Preferred sort order (appropriate will use rating if threaded, other
  * @set date compound_rating average_rating
  * @return mixed                        The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
@@ -524,9 +524,9 @@ function _helper_get_forum_topic_posts($this_ref, $topic_id, &$count, $max, $sta
 /**
  * Load extra details for a list of posts. Does not need to return anything if forum driver doesn't support partial post loading (which is only useful for threaded topic partial-display).
  *
- * @param  object                       Link to the real forum driver
- * @param  AUTO_LINK                    Topic the posts come from
- * @param  array                        List of post IDs
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  AUTO_LINK                    $topic_id Topic the posts come from
+ * @param  array                        $post_ids List of post IDs
  * @return array                        Extra details
  */
 function _helper_get_post_remaining_details($this_ref, $topic_id, $post_ids)
@@ -542,8 +542,8 @@ function _helper_get_post_remaining_details($this_ref, $topic_id, $post_ids)
 /**
  * Get an emoticon chooser template.
  *
- * @param  object                       Link to the real forum driver
- * @param  string                       The ID of the form field the emoticon chooser adds to
+ * @param  object                       $this_ref Link to the real forum driver
+ * @param  string                       $field_name The ID of the form field the emoticon chooser adds to
  * @return tempcode                     The emoticon chooser template
  */
 function _helper_get_emoticon_chooser($this_ref, $field_name)

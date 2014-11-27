@@ -183,7 +183,7 @@ up2_do_footer();
 /**
  * Output the upgrader page header.
  *
- * @param URLPATH   URL to go to next (blank: done)
+ * @param URLPATH   $refresh_url URL to go to next (blank: done)
  */
 function up2_do_header($refresh_url = '')
 {
@@ -231,7 +231,7 @@ END;
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT                   Given master password
+ * @param  SHORT_TEXT                   $password_given_hashed Given master password
  * @return boolean                      Whether it is valid
  */
 function upgrader2_check_master_password($password_given_hashed)

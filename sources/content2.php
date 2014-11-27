@@ -31,11 +31,11 @@ function init__content2()
 /**
  * Get template fields to insert into a form page, for manipulation of meta data.
  *
- * @param  ID_TEXT                      The type of resource (e.g. download)
- * @param  ?ID_TEXT                     The ID of the resource (null: adding)
- * @param  boolean                      Whether to allow owner to be left blank (meaning no owner)
- * @param  ?array                       List of fields to NOT take in (null: empty list)
- * @param  integer                      Whether to show a header (a META_DATA_HEADER_* constant)
+ * @param  ID_TEXT                      $content_type The type of resource (e.g. download)
+ * @param  ?ID_TEXT                     $content_id The ID of the resource (null: adding)
+ * @param  boolean                      $allow_no_owner Whether to allow owner to be left blank (meaning no owner)
+ * @param  ?array                       $fields_to_skip List of fields to NOT take in (null: empty list)
+ * @param  integer                      $show_header Whether to show a header (a META_DATA_HEADER_* constant)
  * @return tempcode                     Form page tempcode fragment
  */
 function meta_data_get_fields($content_type, $content_id, $allow_no_owner = false, $fields_to_skip = null, $show_header = 1)
@@ -136,10 +136,10 @@ function meta_data_get_fields($content_type, $content_id, $allow_no_owner = fals
 /**
  * Get field values for meta data.
  *
- * @param  ID_TEXT                      The type of resource (e.g. download)
- * @param  ?ID_TEXT                     The old ID of the resource (null: adding)
- * @param  ?array                       List of fields to NOT take in (null: empty list)
- * @param  ?ID_TEXT                     The new ID of the resource (null: not being renamed)
+ * @param  ID_TEXT                      $content_type The type of resource (e.g. download)
+ * @param  ?ID_TEXT                     $content_id The old ID of the resource (null: adding)
+ * @param  ?array                       $fields_to_skip List of fields to NOT take in (null: empty list)
+ * @param  ?ID_TEXT                     $new_content_id The new ID of the resource (null: not being renamed)
  * @return array                        A map of standard meta data fields (name to value). If adding, this map is accurate for adding. If editing, NULLs mean do-not-edit or non-editable.
  */
 function actual_meta_data_get_fields($content_type, $content_id, $fields_to_skip = null, $new_content_id = null)
@@ -404,9 +404,9 @@ function actual_meta_data_get_fields($content_type, $content_id, $fields_to_skip
 /**
  * Read in an additional meta data field, specific to a resource type.
  *
- * @param  array                        Meta data already collected
- * @param  ID_TEXT                      The parameter name
- * @param  mixed                        The default if it was not set
+ * @param  array                        &$meta_data Meta data already collected
+ * @param  ID_TEXT                      $key The parameter name
+ * @param  mixed                        $default The default if it was not set
  */
 function actual_meta_data_get_fields__special(&$meta_data, $key, $default)
 {

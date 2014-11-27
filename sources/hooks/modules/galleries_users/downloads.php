@@ -26,7 +26,7 @@ class Hook_gu_downloads
     /**
      * Add in new icons to a worked-within gallery.
      *
-     * @param  ID_TEXT                  Gallery name
+     * @param  ID_TEXT                  $cat Gallery name
      * @return array                    Results
      */
     public function new_donext_icons($cat)

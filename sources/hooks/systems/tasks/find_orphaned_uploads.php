@@ -73,7 +73,7 @@ class Hook_task_find_orphaned_uploads
     /**
      * Search a directory recursively for files.
      *
-     * @param  PATH                     Path to search
+     * @param  PATH                     $dir Path to search
      * @return array                    List of files
      */
     public function do_dir($dir)

@@ -34,7 +34,7 @@ function init__database_security_filter()
 /**
  * Find if a query is a simple one involving 'AND' maps.
  *
- * @param  string                       The query
+ * @param  string                       $query The query
  * @return boolean                      Whether it is simple
  */
 function is_simple_query($query)
@@ -65,7 +65,7 @@ function is_simple_query($query)
 /**
  * Check all strings within a query were properly escaped (by checking log of what we escaped).
  *
- * @param  string                       The query
+ * @param  string                       $query The query
  * @return boolean                      Whether it is all good
  */
 function has_escaped_dynamic_sql($query)
@@ -122,8 +122,8 @@ function has_escaped_dynamic_sql($query)
 /**
  * Find the quoted substrings within a query.
  *
- * @param  string                       The query
- * @param  boolean                      Whether to recurse (for double escaping)
+ * @param  string                       $string The query
+ * @param  boolean                      $recurse Whether to recurse (for double escaping)
  * @return array                        List of substrings
  */
 function _get_quoted_substrings($string, $recurse = false)
@@ -165,7 +165,7 @@ function _get_quoted_substrings($string, $recurse = false)
 /**
  * Blank out substrings within a query, which makes it easier to analyse (no need to consider escapings).
  *
- * @param  string                       Input string
+ * @param  string                       $string Input string
  * @return string                       Simplified substring
  */
 function _trim_quoted_substrings($string)

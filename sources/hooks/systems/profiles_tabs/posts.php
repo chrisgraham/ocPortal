@@ -26,8 +26,8 @@ class Hook_profiles_tabs_posts
     /**
      * Find whether this hook is active.
      *
-     * @param  MEMBER                   The ID of the member who is being viewed
-     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  MEMBER                   $member_id_of The ID of the member who is being viewed
+     * @param  MEMBER                   $member_id_viewing The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
     public function is_active($member_id_of, $member_id_viewing)
@@ -38,9 +38,9 @@ class Hook_profiles_tabs_posts
     /**
      * Render function for profile tab hooks.
      *
-     * @param  MEMBER                   The ID of the member who is being viewed
-     * @param  MEMBER                   The ID of the member who is doing the viewing
-     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @param  MEMBER                   $member_id_of The ID of the member who is being viewed
+     * @param  MEMBER                   $member_id_viewing The ID of the member who is doing the viewing
+     * @param  boolean                  $leave_to_ajax_if_possible Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
      */
     public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)

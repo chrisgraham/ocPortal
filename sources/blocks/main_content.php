@@ -57,7 +57,7 @@ class Block_main_content
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -322,10 +322,10 @@ class Block_main_content
     /**
      * Make a filter SQL fragment.
      *
-     * @param  string                   The filter string.
-     * @param  array                    Map of details of our content type.
-     * @param  string                   The field name of the category to filter against.
-     * @param  boolean                  Whether the category is a string.
+     * @param  string                   $filter The filter string.
+     * @param  array                    $info Map of details of our content type.
+     * @param  string                   $category_field_filter The field name of the category to filter against.
+     * @param  boolean                  $category_is_string Whether the category is a string.
      * @return string                   SQL fragment.
      */
     public function build_filter($filter, $info, $category_field_filter, $category_is_string)

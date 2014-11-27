@@ -50,10 +50,10 @@ class Database_Static_postgresql
     /**
      * Create a table index.
      *
-     * @param  ID_TEXT                  The name of the table to create the index on
-     * @param  ID_TEXT                  The index name (not really important at all)
-     * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
-     * @param  array                    The DB connection to make on
+     * @param  ID_TEXT                  $table_name The name of the table to create the index on
+     * @param  ID_TEXT                  $index_name The index name (not really important at all)
+     * @param  string                   $_fields Part of the SQL query: a comma-separated list of fields to use on the index
+     * @param  array                    $db The DB connection to make on
      */
     public function db_create_index($table_name, $index_name, $_fields, $db)
     {
@@ -66,9 +66,9 @@ class Database_Static_postgresql
     /**
      * Change the primary key of a table.
      *
-     * @param  ID_TEXT                  The name of the table to create the index on
-     * @param  array                    A list of fields to put in the new key
-     * @param  array                    The DB connection to make on
+     * @param  ID_TEXT                  $table_name The name of the table to create the index on
+     * @param  array                    $new_key A list of fields to put in the new key
+     * @param  array                    $db The DB connection to make on
      */
     public function db_change_primary_key($table_name, $new_key, $db)
     {
@@ -131,9 +131,9 @@ class Database_Static_postgresql
     /**
      * Create a new table.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
-     * @param  array                    The DB connection to make on
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  array                    $fields A map of field names to ocPortal field types (with *#? encodings)
+     * @param  array                    $db The DB connection to make on
      */
     public function db_create_table($table_name, $fields, $db)
     {
@@ -178,8 +178,8 @@ class Database_Static_postgresql
     /**
      * Encode an SQL statement fragment for a conditional to see if two strings are equal.
      *
-     * @param  ID_TEXT                  The attribute
-     * @param  string                   The comparison
+     * @param  ID_TEXT                  $attribute The attribute
+     * @param  string                   $compare The comparison
      * @return string                   The SQL
      */
     public function db_string_equal_to($attribute, $compare)
@@ -190,8 +190,8 @@ class Database_Static_postgresql
     /**
      * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
      *
-     * @param  ID_TEXT                  The attribute
-     * @param  string                   The comparison
+     * @param  ID_TEXT                  $attribute The attribute
+     * @param  string                   $compare The comparison
      * @return string                   The SQL
      */
     public function db_string_not_equal_to($attribute, $compare)
@@ -212,8 +212,8 @@ class Database_Static_postgresql
     /**
      * Delete a table.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  array                    The DB connection to delete on
+     * @param  ID_TEXT                  $table The table name
+     * @param  array                    $db The DB connection to delete on
      */
     public function db_drop_table_if_exists($table, $db)
     {
@@ -233,7 +233,7 @@ class Database_Static_postgresql
     /**
      * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
      *
-     * @param  string                   The pattern
+     * @param  string                   $pattern The pattern
      * @return string                   The encoded pattern
      */
     public function db_encode_like($pattern)
@@ -244,12 +244,12 @@ class Database_Static_postgresql
     /**
      * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
      *
-     * @param  boolean                  Whether to create a persistent connection
-     * @param  string                   The database name
-     * @param  string                   The database host (the server)
-     * @param  string                   The database connection username
-     * @param  string                   The database connection password
-     * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
+     * @param  boolean                  $persistent Whether to create a persistent connection
+     * @param  string                   $db_name The database name
+     * @param  string                   $db_host The database host (the server)
+     * @param  string                   $db_user The database connection username
+     * @param  string                   $db_password The database connection password
+     * @param  boolean                  $fail_ok Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (null: failed)
      */
     public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
@@ -288,7 +288,7 @@ class Database_Static_postgresql
     /**
      * Find whether full-text-search is present
      *
-     * @param  array                    A DB connection
+     * @param  array                    $db A DB connection
      * @return boolean                  Whether it is
      */
     public function db_has_full_text($db)
@@ -299,7 +299,7 @@ class Database_Static_postgresql
     /**
      * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
      *
-     * @param  string                   The string
+     * @param  string                   $string The string
      * @return string                   The escaped string
      */
     public function db_escape_string($string)
@@ -310,12 +310,12 @@ class Database_Static_postgresql
     /**
      * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
      *
-     * @param  string                   The complete SQL query
-     * @param  array                    A DB connection
-     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
-     * @param  ?integer                 The start row to affect (null: no specification)
-     * @param  boolean                  Whether to output an error on failure
-     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
+     * @param  string                   $query The complete SQL query
+     * @param  array                    $db A DB connection
+     * @param  ?integer                 $max The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 $start The start row to affect (null: no specification)
+     * @param  boolean                  $fail_ok Whether to output an error on failure
+     * @param  boolean                  $get_insert_id Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (null: no results), or the insert ID
      */
     public function db_query($query, $db, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
@@ -374,8 +374,8 @@ class Database_Static_postgresql
     /**
      * Get the rows returned from a SELECT query.
      *
-     * @param  resource                 The query result pointer
-     * @param  ?integer                 Whether to start reading from (null: irrelevant for this forum driver)
+     * @param  resource                 $results The query result pointer
+     * @param  ?integer                 $start Whether to start reading from (null: irrelevant for this forum driver)
      * @return array                    A list of row maps
      */
     public function db_get_query_rows($results, $start = null)

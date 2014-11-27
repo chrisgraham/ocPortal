@@ -30,7 +30,7 @@ function init__global4()
 /**
  * Attach a message mentioning how the site is closed.
  *
- * @param  tempcode                     Where to place the message.
+ * @param  tempcode                     &$messages_bottom Where to place the message.
  */
 function attach_message_site_closed(&$messages_bottom)
 {
@@ -46,7 +46,7 @@ function attach_message_site_closed(&$messages_bottom)
 /**
  * Attach a message mentioning SU is active.
  *
- * @param  tempcode                     Where to place the message.
+ * @param  tempcode                     &$messages_bottom Where to place the message.
  */
 function attach_message_su(&$messages_bottom)
 {
@@ -62,10 +62,10 @@ function attach_message_su(&$messages_bottom)
 /**
  * Save a file of merged web resources.
  *
- * @param  array                        Resources (map of keys to 1), passed by reference as we alter it
- * @param  ID_TEXT                      Resource type
+ * @param  array                        $resources Resources (map of keys to 1), passed by reference as we alter it
+ * @param  ID_TEXT                      $type Resource type
  * @set .css .js
- * @param  PATH                         Write path
+ * @param  PATH                         $write_path Write path
  * @return boolean                      If the merge happened
  */
 function _save_web_resource_merging($resources, $type, $write_path)
@@ -120,7 +120,7 @@ function _save_web_resource_merging($resources, $type, $write_path)
 /**
  * Take a Tempcode object and run some hackerish code to make it XHTML-strict.
  *
- * @param  object                       Tempcode object
+ * @param  object                       $global Tempcode object
  * @return object                       Tempcode object (no longer cache safe)
  */
 function make_xhtml_strict($global)
@@ -143,7 +143,7 @@ function make_xhtml_strict($global)
 /**
  * Find the country an IP address long is located in
  *
- * @param  ?IP                          The IP to geolocate (null: current user's IP)
+ * @param  ?IP                          $ip The IP to geolocate (null: current user's IP)
  * @return ?string                      The country initials (null: unknown)
  */
 function geolocate_ip($ip = null)
@@ -176,7 +176,7 @@ function geolocate_ip($ip = null)
 /**
  * Get links and details related to a member.
  *
- * @param  MEMBER                       A member ID
+ * @param  MEMBER                       $member_id A member ID
  * @return array                        A tuple: links (Tempcode), details (Tempcode), number of unread inline personal posts or private topics
  */
 function member_personal_links_and_details($member_id)
@@ -340,7 +340,7 @@ function member_personal_links_and_details($member_id)
 /**
  * Use the url_title_cache table (a bit of a hack but saved changed the DB structure) to see if a check-op was performed has been performed within the last 30 days.
  *
- * @param  ID_TEXT                      Special check code (often a URL but does not need to be).
+ * @param  ID_TEXT                      $id_code Special check code (often a URL but does not need to be).
  * @return boolean                      Whether the check has happened recently.
  */
 function handle_has_checked_recently($id_code)
@@ -360,7 +360,7 @@ function handle_has_checked_recently($id_code)
 /**
  * Convert a string to an array, with utf-8 awareness where possible/required.
  *
- * @param  string                       Input
+ * @param  string                       $str Input
  * @return array                        Output
  */
 function ocp_mb_str_split($str)
@@ -376,9 +376,9 @@ function ocp_mb_str_split($str)
 /**
  * Split a string into smaller chunks, with utf-8 awareness where possible/required. Can be used to split a string into smaller chunks which is useful for e.g. converting base64_encode output to match RFC 2045 semantics. It inserts end (defaults to "\r\n") every chunklen characters.
  *
- * @param  string                       The input string.
- * @param  integer                      The maximum chunking length.
- * @param  string                       Split character.
+ * @param  string                       $str The input string.
+ * @param  integer                      $len The maximum chunking length.
+ * @param  string                       $glue Split character.
  * @return string                       The chunked version of the input string.
  */
 function ocp_mb_chunk_split($str, $len = 76, $glue = "\r\n")
@@ -404,9 +404,9 @@ function ocp_mb_chunk_split($str, $len = 76, $glue = "\r\n")
 /**
  * Prevent double submission, by reference to recent matching admin log entries by the current member.
  *
- * @param  ID_TEXT                      The type of activity just carried out (a lang string)
- * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (null: none / cannot match against)
- * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none / cannot match against)
+ * @param  ID_TEXT                      $type The type of activity just carried out (a lang string)
+ * @param  ?SHORT_TEXT                  $a The most important parameter of the activity (e.g. id) (null: none / cannot match against)
+ * @param  ?SHORT_TEXT                  $b A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none / cannot match against)
  */
 function prevent_double_submit($type, $a = null, $b = null)
 {
@@ -452,9 +452,9 @@ function prevent_double_submit($type, $a = null, $b = null)
 /**
  * Log an action.
  *
- * @param  ID_TEXT                      The type of activity just carried out (a lang string)
- * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (null: none)
- * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none)
+ * @param  ID_TEXT                      $type The type of activity just carried out (a lang string)
+ * @param  ?SHORT_TEXT                  $a The most important parameter of the activity (e.g. id) (null: none)
+ * @param  ?SHORT_TEXT                  $b A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none)
  */
 function _log_it($type, $a = null, $b = null)
 {

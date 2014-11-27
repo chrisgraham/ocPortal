@@ -25,9 +25,9 @@ class Hook_ecommerce_catalogue_items
      * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
      *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
      *
-     * @param  boolean                  Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
-     * @param  ?ID_TEXT                 Product being searched for (null: none).
-     * @param  boolean                  Whether $search refers to the item name rather than the product codename.
+     * @param  boolean                  $site_lang Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
+     * @param  ?ID_TEXT                 $search Product being searched for (null: none).
+     * @param  boolean                  $search_item_names Whether $search refers to the item name rather than the product codename.
      * @return array                    A map of product name to list of product details.
      */
     public function get_products($site_lang = false, $search = null, $search_item_names = false)
@@ -103,9 +103,9 @@ class Hook_ecommerce_catalogue_items
     /**
      * Check whether the product codename is available for purchase by the member.
      *
-     * @param  ID_TEXT                  The product codename.
-     * @param  ?MEMBER                  The member we are checking against (null: current meber).
-     * @param  integer                  The number required.
+     * @param  ID_TEXT                  $type_code The product codename.
+     * @param  ?MEMBER                  $member The member we are checking against (null: current meber).
+     * @param  integer                  $req_quantity The number required.
      * @return integer                  The availability code (a ECOMMERCE_PRODUCT_* constant).
      */
     public function is_available($type_code, $member = null, $req_quantity = 1)
@@ -156,7 +156,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Get currently available quantity of selected product.
      *
-     * @param  ID_TEXT                  The product codename.
+     * @param  ID_TEXT                  $type_code The product codename.
      * @return ?integer                 Quantity (null: no limit).
      */
     public function get_available_quantity($type_code)
@@ -208,7 +208,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Get the message for use in the purchase wizard
      *
-     * @param  ID_TEXT                  The product in question.
+     * @param  ID_TEXT                  $type_code The product in question.
      * @return tempcode                 The message.
      */
     public function get_message($type_code)
@@ -240,7 +240,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Get the product's details.
      *
-     * @param  ?AUTO_LINK               Product ID (null: read from environment, product_id).
+     * @param  ?AUTO_LINK               $pid Product ID (null: read from environment, product_id).
      * @return    array       A map of product name to list of product details.
      */
     public function get_product_details($pid = null)
@@ -290,7 +290,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Add an order.
      *
-     * @param  array                    Array of product details.
+     * @param  array                    $product_det Array of product details.
      * @return AUTO_LINK                Order ID of newly added order.
      */
     public function add_order($product_det)
@@ -349,8 +349,8 @@ class Hook_ecommerce_catalogue_items
     /**
      * Add order - (order coming from purchase module).
      *
-     * @param  AUTO_LINK                Product ID.
-     * @param  array                    Product details.
+     * @param  AUTO_LINK                $product Product ID.
+     * @param  array                    $product_det Product details.
      * @return AUTO_LINK                Order ID.
      */
     public function add_purchase_order($product, $product_det)
@@ -407,8 +407,8 @@ class Hook_ecommerce_catalogue_items
     /**
      * Show shopping cart entries.
      *
-     * @param  tempcode                 Tempcode object of shopping cart result table.
-     * @param  array                    Details of new entry to the shopping cart.
+     * @param  tempcode                 &$shopping_cart Tempcode object of shopping cart result table.
+     * @param  array                    $entry Details of new entry to the shopping cart.
      * @return tempcode                 Tempcode object of shopping cart result table.
      */
     public function show_cart_entry(&$shopping_cart, $entry)
@@ -483,8 +483,8 @@ class Hook_ecommerce_catalogue_items
     /**
      * Calculate tax of catalogue product.
      *
-     * @param  float                    Gross cost of product.
-     * @param  float                    Tax in percentage.
+     * @param  float                    $gross_cost Gross cost of product.
+     * @param  float                    $tax_percentage Tax in percentage.
      * @return float                    Calculated tax for the product.
      */
     public function calculate_tax($gross_cost, $tax_percentage)
@@ -503,7 +503,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Calculate shipping cost of product.
      *
-     * @param  float                    Weight of product.
+     * @param  float                    $item_weight Weight of product.
      * @return float                    Calculated shipping cost for the product.
      */
     public function calculate_shipping_cost($item_weight)
@@ -527,9 +527,9 @@ class Hook_ecommerce_catalogue_items
     /**
      * Calculate product price.
      *
-     * @param  float                    Weight of product.
-     * @param  float                    Tax in percentage.
-     * @param  integer                  Weight of item.
+     * @param  float                    $item_price Weight of product.
+     * @param  float                    $tax Tax in percentage.
+     * @param  integer                  $item_weight Weight of item.
      * @return float                    Calculated shipping cost for the product.
      */
     public function calculate_product_price($item_price, $tax, $item_weight)
@@ -552,8 +552,8 @@ class Hook_ecommerce_catalogue_items
     /**
      * Find product image for a specific catalogue product.
      *
-     * @param  ID_TEXT                  Catalogue name.
-     * @param  AUTO_LINK                Catalogue entry ID.
+     * @param  ID_TEXT                  $catalogue_name Catalogue name.
+     * @param  AUTO_LINK                $entry_id Catalogue entry ID.
      * @return ?SHORT_TEXT              Image name (null: no image).
      */
     public function get_product_image($catalogue_name, $entry_id)
@@ -574,8 +574,8 @@ class Hook_ecommerce_catalogue_items
     /**
      * Calculate product price.
      *
-     * @param  AUTO_LINK                Catalogue entry ID.
-     * @param  integer                  Quantity to deduct.
+     * @param  AUTO_LINK                $entry_id Catalogue entry ID.
+     * @param  integer                  $quantity Quantity to deduct.
      */
     public function update_stock($entry_id, $quantity)
     {
@@ -665,7 +665,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Return product info details.
      *
-     * @param  AUTO_LINK                Product ID.
+     * @param  AUTO_LINK                $id Product ID.
      * @return tempcode                 Product information.
      */
     public function product_info($id)
@@ -676,8 +676,8 @@ class Hook_ecommerce_catalogue_items
     /**
      * Get custom fields for ecommerce product.
      *
-     * @param  AUTO_LINK                Product entry ID.
-     * @param  array                    Map where product details are placed.
+     * @param  AUTO_LINK                $id Product entry ID.
+     * @param  array                     &$map Map where product details are placed.
      */
     public function get_custom_product_map_fields($id, &$map)
     {
@@ -733,8 +733,8 @@ class Hook_ecommerce_catalogue_items
 /**
  * Update order status,transaction ID after transaction.
  *
- * @param  AUTO_LINK                    Purchase/Order ID.
- * @param  array                        Details of product.
+ * @param  AUTO_LINK                    $entry_id Purchase/Order ID.
+ * @param  array                        $details Details of product.
  */
 function handle_catalogue_items($entry_id, $details)
 {

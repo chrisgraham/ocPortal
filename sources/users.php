@@ -124,8 +124,8 @@ function handle_logins()
 /**
  * Find whether the current member is a guest.
  *
- * @param  ?MEMBER                      Member ID to check (null: current user)
- * @param  boolean                      Whether to just do a quick check, don't establish new sessions
+ * @param  ?MEMBER                      $member_id Member ID to check (null: current user)
+ * @param  boolean                      $quick_only Whether to just do a quick check, don't establish new sessions
  * @return boolean                      Whether the current member is a guest
  */
 function is_guest($member_id = null, $quick_only = false)
@@ -143,7 +143,7 @@ function is_guest($member_id = null, $quick_only = false)
  * Get the ID of the currently active member.
  * It see's if the session exists / cookie is valid -- and gets the member ID accordingly
  *
- * @param  boolean                      Whether to just do a quick check, don't establish new sessions
+ * @param  boolean                      $quick_only Whether to just do a quick check, don't establish new sessions
  * @return MEMBER                       The member requesting this web page (possibly the guest member - which strictly speaking, is not a member)
  */
 function get_member($quick_only = false)
@@ -346,7 +346,7 @@ function get_member($quick_only = false)
 /**
  * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
  *
- * @param  MEMBER                       The current member
+ * @param  MEMBER                       $member The current member
  */
 function enforce_temporary_passwords($member)
 {
@@ -360,7 +360,7 @@ function enforce_temporary_passwords($member)
  * Get the display name of a username.
  * If no display name generator is configured, this will be the same as the username.
  *
- * @param  ID_TEXT                      The username
+ * @param  ID_TEXT                      $username The username
  * @return SHORT_TEXT                   The display name
  */
 function get_displayname($username)
@@ -387,8 +387,8 @@ function get_displayname($username)
  * Apply hashing to some input. To this date, all forum drivers use md5, but some use it differently.
  * This function will pass through the parameters to an equivalent forum_md5 function if it is defined.
  *
- * @param  string                       The data to hash (the password in actuality)
- * @param  string                       The string converted member-ID in actuality, although this function is more general
+ * @param  string                       $data The data to hash (the password in actuality)
+ * @param  string                       $key The string converted member-ID in actuality, although this function is more general
  * @return string                       The hashed data
  */
 function apply_forum_driver_md5_variant($data, $key)
@@ -441,7 +441,7 @@ function is_httpauth_login()
  * Make sure that the given URL contains a session if cookies are disabled.
  * NB: This is used for login redirection. It had to add the session ID into the redirect url.
  *
- * @param  URLPATH                      The URL to enforce results in session persistence for the user
+ * @param  URLPATH                      $url The URL to enforce results in session persistence for the user
  * @return URLPATH                      The fixed URL (potentially nothing was done, depending on cookies)
  */
 function enforce_sessioned_url($url)
@@ -456,7 +456,7 @@ function enforce_sessioned_url($url)
 /**
  * Find what sessions are expired and delete them, and recover an existing one for $member if there is one.
  *
- * @param  ?MEMBER                      User to get a current session for (null: do not try, which guarantees a return result of NULL also)
+ * @param  ?MEMBER                      $member User to get a current session for (null: do not try, which guarantees a return result of NULL also)
  * @return ?AUTO_LINK                   The session ID we rebound to (null: did not rebind)
  */
 function delete_expired_sessions_or_recover($member = null)
@@ -549,8 +549,8 @@ function get_pass_cookie()
 /**
  * Get a cookie value.
  *
- * @param  string                       The name of the cookie
- * @param  ?string                      The default value (null: just use the value NULL)
+ * @param  string                       $name The name of the cookie
+ * @param  ?string                      $default The default value (null: just use the value NULL)
  * @return ?string                      The value stored in the cookie (null: the default default)
  */
 function ocp_admirecookie($name, $default = null)
@@ -568,8 +568,8 @@ function ocp_admirecookie($name, $default = null)
 /**
  * Get the value of a special 'ocp_' custom profile field. For OCF it can also do it for a pure field title, e.g. "Example Field".
  *
- * @param  ID_TEXT                      The CPF name stem
- * @param  ?MEMBER                      Member to lookup for (null: current member)
+ * @param  ID_TEXT                      $cpf The CPF name stem
+ * @param  ?MEMBER                      $member Member to lookup for (null: current member)
  * @return string                       The value (blank: has a blank value, or does not exist)
  */
 function get_ocp_cpf($cpf, $member = null)

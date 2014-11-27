@@ -36,12 +36,12 @@ function init__galleries()
 /**
  * Render an image box.
  *
- * @param  array                        The image row
- * @param  ID_TEXT                      The zone the galleries module is in
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?ID_TEXT                     Virtual root to use (null: none)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The image row
+ * @param  ID_TEXT                      $zone The zone the galleries module is in
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  ?ID_TEXT                     $root Virtual root to use (null: none)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The rendered box
  */
 function render_image_box($row, $zone = '_SEARCH', $give_context = true, $include_breadcrumbs = true, $root = null, $guid = '')
@@ -107,12 +107,12 @@ function render_image_box($row, $zone = '_SEARCH', $give_context = true, $includ
 /**
  * Render a video box.
  *
- * @param  array                        The video row
- * @param  ID_TEXT                      The zone the galleries module is in
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?ID_TEXT                     Virtual root to use (null: none)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The video row
+ * @param  ID_TEXT                      $zone The zone the galleries module is in
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  ?ID_TEXT                     $root Virtual root to use (null: none)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The rendered box
  */
 function render_video_box($row, $zone = '_SEARCH', $give_context = true, $include_breadcrumbs = true, $root = null, $guid = '')
@@ -181,16 +181,16 @@ function render_video_box($row, $zone = '_SEARCH', $give_context = true, $includ
 /**
  * Get preview detailing for a gallery.
  *
- * @param  array                        The database row of the gallery
- * @param  ID_TEXT                      The virtual root of the gallery
- * @param  boolean                      Whether to show member stats if it is a member owned gallery
- * @param  ID_TEXT                      The zone that the gallery module we are linking to is in
- * @param  boolean                      Whether to not show anything if the gallery is empty
- * @param  boolean                      Whether only to show 'preview' details
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $myrow The database row of the gallery
+ * @param  ID_TEXT                      $root The virtual root of the gallery
+ * @param  boolean                      $show_member_stats_if_appropriate Whether to show member stats if it is a member owned gallery
+ * @param  ID_TEXT                      $zone The zone that the gallery module we are linking to is in
+ * @param  boolean                      $quit_if_empty Whether to not show anything if the gallery is empty
+ * @param  boolean                      $preview Whether only to show 'preview' details
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The preview
  */
 function render_gallery_box($myrow, $root = 'root', $show_member_stats_if_appropriate = false, $zone = '_SEARCH', $quit_if_empty = true, $preview = false, $give_context = true, $include_breadcrumbs = true, $attach_to_url_filter = false, $guid = '')
@@ -334,7 +334,7 @@ function get_default_gallery_max()
 /**
  * Find whether a certain gallery has any content (images, videos, or subgalleries).
  *
- * @param  ID_TEXT                      The name of the gallery
+ * @param  ID_TEXT                      $name The name of the gallery
  * @return boolean                      The answer
  */
 function gallery_has_content($name)
@@ -389,9 +389,9 @@ function gallery_has_content($name)
 /**
  * Find the owner of a gallery.
  *
- * @param  ID_TEXT                      The name of the gallery
- * @param  ?array                       Gallery row (null: look it up)
- * @param  boolean                      Only non-NULL if it is a personal gallery
+ * @param  ID_TEXT                      $gallery_name The name of the gallery
+ * @param  ?array                       $row Gallery row (null: look it up)
+ * @param  boolean                      $only_if_personal_gallery Only non-NULL if it is a personal gallery
  * @return ?MEMBER                      The owner of the gallery (null: not a member owned gallery)
  */
 function get_member_id_from_gallery_name($gallery_name, $row = null, $only_if_personal_gallery = false)
@@ -418,7 +418,7 @@ function get_member_id_from_gallery_name($gallery_name, $row = null, $only_if_pe
 /**
  * Get preview detailing for a video.
  *
- * @param  array                        The database row of the video
+ * @param  array                        $myrow The database row of the video
  * @return tempcode                     The preview
  */
 function show_video_details($myrow)
@@ -434,9 +434,9 @@ function show_video_details($myrow)
 /**
  * Get details of the contents of a gallery.
  *
- * @param  ID_TEXT                      The name of the gallery
- * @param  boolean                      Whether to test for videos when making counts (ignore this parameter - used internally)
- * @param  boolean                      Whether to test for images when making counts (ignore this parameter - used internally)
+ * @param  ID_TEXT                      $name The name of the gallery
+ * @param  boolean                      $test_videos Whether to test for videos when making counts (ignore this parameter - used internally)
+ * @param  boolean                      $test_images Whether to test for images when making counts (ignore this parameter - used internally)
  * @return array                        A triplet: (num children, num images, num videos)
  */
 function get_recursive_gallery_details($name, $test_videos = true, $test_images = true)
@@ -472,7 +472,7 @@ function get_recursive_gallery_details($name, $test_videos = true, $test_images 
 /**
  * See whether a gallery is a download gallery (designed as a filter).
  *
- * @param  ID_TEXT                      The gallery name
+ * @param  ID_TEXT                      $cat The gallery name
  * @return boolean                      Whether the gallery is a download gallery
  */
 function only_download_galleries($cat)
@@ -483,7 +483,7 @@ function only_download_galleries($cat)
 /**
  * See whether a gallery is NOT a download gallery (designed as a filter).
  *
- * @param  ID_TEXT                      The gallery name
+ * @param  ID_TEXT                      $cat The gallery name
  * @return boolean                      Whether the gallery is NOT a download gallery
  */
 function only_conventional_galleries($cat)
@@ -494,7 +494,7 @@ function only_conventional_galleries($cat)
 /**
  * See whether a gallery accepts some media (designed as a filter).
  *
- * @param  ID_TEXT                      The gallery name
+ * @param  ID_TEXT                      $cat The gallery name
  * @return boolean                      Whether the gallery accepts some media
  */
 function only_galleries_accepting_media($cat)
@@ -510,9 +510,9 @@ function only_galleries_accepting_media($cat)
 /**
  * See whether the GET parameter 'id' is of a gallery that is a member gallery of the given member gallery container, or just a normal gallery.
  *
- * @param  ID_TEXT                      The gallery name
- * @param  ?MEMBER                      Member we are filtering for (null: not needed)
- * @param  integer                      The number of children for this gallery
+ * @param  ID_TEXT                      $cat The gallery name
+ * @param  ?MEMBER                      $member_id Member we are filtering for (null: not needed)
+ * @param  integer                      $child_count The number of children for this gallery
  * @return boolean                      The answer
  */
 function only_member_galleries_of_id($cat, $member_id, $child_count)
@@ -526,16 +526,16 @@ function only_member_galleries_of_id($cat, $member_id, $child_count)
 /**
  * Gets a gallery selection tree list, extending deeper from the given gallery, showing all sub(sub...)galleries.
  *
- * @param  ?ID_TEXT                     The gallery to select by default (null: no specific default)
- * @param  ?string                      A function name to filter galleries with (null: no filter)
- * @param  boolean                      Whether displayed galleries must support images
- * @param  boolean                      Whether displayed galleries must support videos
- * @param  boolean                      Whether to NOT show member galleries that do not exist yet
- * @param  boolean                      Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
- * @param  ?MEMBER                      Member we are filtering for (null: not needed)
- * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  boolean                      Whether to only show for what may be edited by the current member
- * @param  ?TIME                        Time from which content must be updated (null: no limit).
+ * @param  ?ID_TEXT                     $it The gallery to select by default (null: no specific default)
+ * @param  ?string                      $filter A function name to filter galleries with (null: no filter)
+ * @param  boolean                      $must_accept_images Whether displayed galleries must support images
+ * @param  boolean                      $must_accept_videos Whether displayed galleries must support videos
+ * @param  boolean                      $purity Whether to NOT show member galleries that do not exist yet
+ * @param  boolean                      $use_compound_list Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
+ * @param  ?MEMBER                      $member_id Member we are filtering for (null: not needed)
+ * @param  boolean                      $addable_filter Whether to only show for what may be added to by the current member
+ * @param  boolean                      $editable_filter Whether to only show for what may be edited by the current member
+ * @param  ?TIME                        $updated_since Time from which content must be updated (null: no limit).
  * @return tempcode                     The tree list
  */
 function create_selection_list_gallery_tree($it = null, $filter = null, $must_accept_images = false, $must_accept_videos = false, $purity = false, $use_compound_list = false, $member_id = null, $addable_filter = false, $editable_filter = false, $updated_since = null)
@@ -569,19 +569,19 @@ function create_selection_list_gallery_tree($it = null, $filter = null, $must_ac
 /**
  * Gets a gallery selection tree list, extending deeper from the given gallery, showing all sub(sub...)galleries.
  *
- * @param  ?ID_TEXT                     The gallery we are getting the tree starting from (null: root)
- * @param  string                       The parent breadcrumbs at this point of the recursion
- * @param  ?array                       The database row for the $gallery gallery (null: get it from the DB)
- * @param  boolean                      Whether to include video/image statistics in the returned tree
- * @param  ?string                      A function name to filter galleries with (null: no filter)
- * @param  boolean                      Whether displayed galleries must support images
- * @param  boolean                      Whether displayed galleries must support videos
- * @param  boolean                      Whether to NOT show member galleries that do not exist yet
- * @param  boolean                      Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
- * @param  ?integer                     The number of recursive levels to search (null: all)
- * @param  ?MEMBER                      Member we are filtering for (null: not needed)
- * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  boolean                      Whether to only show for what may be edited by the current member
+ * @param  ?ID_TEXT                     $gallery The gallery we are getting the tree starting from (null: root)
+ * @param  string                       $breadcrumbs The parent breadcrumbs at this point of the recursion
+ * @param  ?array                       $gallery_info The database row for the $gallery gallery (null: get it from the DB)
+ * @param  boolean                      $do_stats Whether to include video/image statistics in the returned tree
+ * @param  ?string                      $filter A function name to filter galleries with (null: no filter)
+ * @param  boolean                      $must_accept_images Whether displayed galleries must support images
+ * @param  boolean                      $must_accept_videos Whether displayed galleries must support videos
+ * @param  boolean                      $purity Whether to NOT show member galleries that do not exist yet
+ * @param  boolean                      $use_compound_list Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
+ * @param  ?integer                     $levels The number of recursive levels to search (null: all)
+ * @param  ?MEMBER                      $member_id Member we are filtering for (null: not needed)
+ * @param  boolean                      $addable_filter Whether to only show for what may be added to by the current member
+ * @param  boolean                      $editable_filter Whether to only show for what may be edited by the current member
  * @return array                        The tree structure, or if $use_compound_list, the tree structure built with pairs containing the compound list in addition to the child branches
  */
 function get_gallery_tree($gallery = 'root', $breadcrumbs = '', $gallery_info = null, $do_stats = false, $filter = null, $must_accept_images = false, $must_accept_videos = false, $purity = false, $use_compound_list = false, $levels = null, $member_id = null, $addable_filter = false, $editable_filter = false)
@@ -800,7 +800,7 @@ function get_gallery_tree($gallery = 'root', $breadcrumbs = '', $gallery_info = 
 /**
  * See whether the current member can submit to the named *member* gallery. Note - this function assumes that members have general submit permission, and does not check for gallery read access.
  *
- * @param  ID_TEXT                      The gallery name
+ * @param  ID_TEXT                      $name The gallery name
  * @return ~integer                     The owner of the gallery (false: we aren't allowed to submit to it) (-2: not a member gallery)
  */
 function can_submit_to_gallery($name)
@@ -832,11 +832,11 @@ function can_submit_to_gallery($name)
 /**
  * Get a UI element of a route from a known gallery back to the declared root of the tree.
  *
- * @param  ID_TEXT                      The gallery name
- * @param  ?ID_TEXT                     The virtual root (null: none)
- * @param  boolean                      Whether not to put a link at this point in the breadcrumbs (usually, because the viewer is already at it)
- * @param  ID_TEXT                      The zone that the linked to gallery module is in
- * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ID_TEXT                      $gallery The gallery name
+ * @param  ?ID_TEXT                     $root The virtual root (null: none)
+ * @param  boolean                      $no_link_for_me_sir Whether not to put a link at this point in the breadcrumbs (usually, because the viewer is already at it)
+ * @param  ID_TEXT                      $zone The zone that the linked to gallery module is in
+ * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode                     The navigation element
  */
 function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = true, $zone = '', $attach_to_url_filter = false)
@@ -914,12 +914,12 @@ function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = tru
 /**
  * Get a nice, formatted XHTML list of gallery entries, in gallery tree structure
  *
- * @param  ID_TEXT                      The table we are working with
+ * @param  ID_TEXT                      $table The table we are working with
  * @set    images videos
- * @param  ?ID_TEXT                     The currently selected entry (null: none selected)
- * @param  ?AUTO_LINK                   Only show images/videos submitted by this member (null: no filter)
- * @param  boolean                      Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
- * @param  boolean                      Whether to only show for what may be edited by the current member
+ * @param  ?ID_TEXT                     $it The currently selected entry (null: none selected)
+ * @param  ?AUTO_LINK                   $submitter Only show images/videos submitted by this member (null: no filter)
+ * @param  boolean                      $use_compound_list Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
+ * @param  boolean                      $editable_filter Whether to only show for what may be edited by the current member
  * @return tempcode                     The list of entries
  */
 function create_selection_list_gallery_content_tree($table, $it = null, $submitter = null, $use_compound_list = false, $editable_filter = false)
@@ -948,15 +948,15 @@ function create_selection_list_gallery_content_tree($table, $it = null, $submitt
 /**
  * Get a list of maps containing all the gallery entries, and path information, under the specified gallery - and those beneath it, recursively.
  *
- * @param  ID_TEXT                      The table we are working with
+ * @param  ID_TEXT                      $table The table we are working with
  * @set    images videos
- * @param  ?AUTO_LINK                   Only show images/videos submitted by this member (null: no filter)
- * @param  ?ID_TEXT                     The gallery being at the root of our recursion (null: true root)
- * @param  ?string                      The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
- * @param  ?ID_TEXT                     The name of the $gallery we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
- * @param  ?integer                     The number of recursive levels to search (null: all)
- * @param  boolean                      Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
- * @param  boolean                      Whether to only show for what may be edited by the current member
+ * @param  ?AUTO_LINK                   $submitter Only show images/videos submitted by this member (null: no filter)
+ * @param  ?ID_TEXT                     $gallery The gallery being at the root of our recursion (null: true root)
+ * @param  ?string                      $breadcrumbs The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
+ * @param  ?ID_TEXT                     $title The name of the $gallery we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
+ * @param  ?integer                     $levels The number of recursive levels to search (null: all)
+ * @param  boolean                      $use_compound_list Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
+ * @param  boolean                      $editable_filter Whether to only show for what may be edited by the current member
  * @return array                        A list of maps for all galleries. Each map entry containins the fields 'id' (gallery ID) and 'breadcrumbs' (path to the category, including the categories own title), and more. Or if $use_compound_list, the tree structure built with pairs containing the compound list in addition to the child branches
  */
 function get_gallery_content_tree($table, $submitter = null, $gallery = null, $breadcrumbs = null, $title = null, $levels = null, $use_compound_list = false, $editable_filter = false)
@@ -1037,12 +1037,12 @@ function get_gallery_content_tree($table, $submitter = null, $gallery = null, $b
 /**
  * Show a gallery media entry (not an image, something more complex); all these will render under the 'video' type even if they're technically not.
  *
- * @param  URLPATH                      URL to media
- * @param  URLPATH                      URL to thumbnail
- * @param  integer                      Width
- * @param  integer                      Height
- * @param  integer                      Length
- * @param  MEMBER                       The entry submitter
+ * @param  URLPATH                      $url URL to media
+ * @param  URLPATH                      $thumb_url URL to thumbnail
+ * @param  integer                      $width Width
+ * @param  integer                      $height Height
+ * @param  integer                      $length Length
+ * @param  MEMBER                       $submitter The entry submitter
  * @return tempcode                     Displayed media
  */
 function show_gallery_video_media($url, $thumb_url, $width, $height, $length, $submitter)

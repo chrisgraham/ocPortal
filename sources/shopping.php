@@ -39,7 +39,7 @@ function get_product_details()
 /**
  * Function to add new item to cart.
  *
- * @param  array                        Product details
+ * @param  array                        $product_det Product details
  */
 function add_to_cart($product_det)
 {
@@ -55,7 +55,7 @@ function add_to_cart($product_det)
 /**
  * Update cart
  *
- * @param  array                        Product details
+ * @param  array                        $product_det Product details
  */
 function update_cart($product_det)
 {
@@ -92,7 +92,7 @@ function update_cart($product_det)
 /**
  * Remove from cart.
  *
- * @param  array                        Products to remove
+ * @param  array                        $product_to_remove Products to remove
  */
 function remove_from_cart($product_to_remove)
 {
@@ -115,7 +115,7 @@ function remove_from_cart($product_to_remove)
 /**
  * Log cart actions
  *
- * @param  ID_TEXT                      The data
+ * @param  ID_TEXT                      $action The data
  */
 function log_cart_actions($action)
 {
@@ -188,7 +188,7 @@ function show_cart_link()
 /**
  * Tell the staff the shopping order was placed
  *
- * @param  AUTO_LINK                    Order ID
+ * @param  AUTO_LINK                    $order_id Order ID
  */
 function purchase_done_staff_mail($order_id)
 {
@@ -226,8 +226,8 @@ function find_products_in_cart()
 /**
  * Stock maintain warning mail
  *
- * @param  SHORT_TEXT                   Product name
- * @param  AUTO_LINK                    Product ID
+ * @param  SHORT_TEXT                   $product_name Product name
+ * @param  AUTO_LINK                    $product_id Product ID
  */
 function stock_maintain_warn_mail($product_name, $product_id)
 {
@@ -243,7 +243,7 @@ function stock_maintain_warn_mail($product_name, $product_id)
 /**
  * Stock reduction
  *
- * @param  AUTO_LINK                    The ID
+ * @param  AUTO_LINK                    $order_id The ID
  */
 function update_stock($order_id)
 {
@@ -268,7 +268,7 @@ function update_stock($order_id)
 /**
  * Delete cart contents for the current user.
  *
- * @param  boolean                      Whether to just do a soft delete, i.e. mark as deleted.
+ * @param  boolean                      $soft_delete Whether to just do a soft delete, i.e. mark as deleted.
  */
 function empty_cart($soft_delete = false)
 {
@@ -514,7 +514,7 @@ function get_order_status_list()
 /**
  * Return a string of order products to export as csv
  *
- * @param  AUTO_LINK                    Order ID
+ * @param  AUTO_LINK                    $order_id Order ID
  * @return LONG_TEXT                    Products names and quantity
  */
 function get_ordered_product_list_string($order_id)

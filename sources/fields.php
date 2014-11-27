@@ -21,7 +21,7 @@
 /**
  * Ensure a catalogues fields are loaded up in a cache, and return them.
  *
- * @param  ?ID_TEXT                     The name of the catalogue (null: all catalogues)
+ * @param  ?ID_TEXT                     $catalogue_name The name of the catalogue (null: all catalogues)
  * @return array                        The fields (empty array if the catalogue does not exist)
  */
 function get_catalogue_fields($catalogue_name = null)
@@ -43,7 +43,7 @@ function get_catalogue_fields($catalogue_name = null)
 /**
  * Get a fields hook, from a given codename.
  *
- * @param  ID_TEXT                      Codename
+ * @param  ID_TEXT                      $type Codename
  * @return object                       Hook object
  */
 function get_fields_hook($type)
@@ -77,7 +77,7 @@ function get_fields_hook($type)
 /**
  * Get extra do-next icon for managing custom fields for a content type.
  *
- * @param  ID_TEXT                      Content type hook codename
+ * @param  ID_TEXT                      $content_type Content type hook codename
  * @return array                        Extra do-next icon (single item array, or empty array if catalogues not installed)
  */
 function manage_custom_fields_donext_link($content_type)
@@ -104,7 +104,7 @@ function manage_custom_fields_donext_link($content_type)
 /**
  * Get extra entry point data for managing custom fields for a content type.
  *
- * @param  ID_TEXT                      Content type hook codename
+ * @param  ID_TEXT                      $content_type Content type hook codename
  * @return array                        Extra get_entry_points data
  */
 function manage_custom_fields_entry_points($content_type)
@@ -135,7 +135,7 @@ function manage_custom_fields_entry_points($content_type)
 /**
  * Find whether a content type has a tied catalogue.
  *
- * @param  ID_TEXT                      Content type hook codename
+ * @param  ID_TEXT                      $content_type Content type hook codename
  * @return boolean                      Whether it has
  */
 function has_tied_catalogue($content_type)
@@ -164,8 +164,8 @@ function has_tied_catalogue($content_type)
 /**
  * Get catalogue entry ID bound to a content entry.
  *
- * @param  ID_TEXT                      Content type hook codename
- * @param  ID_TEXT                      Content entry ID
+ * @param  ID_TEXT                      $content_type Content type hook codename
+ * @param  ID_TEXT                      $id Content entry ID
  * @return ?AUTO_LINK                   Bound catalogue entry ID (null: none)
  */
 function get_bound_content_entry($content_type, $id)
@@ -179,12 +179,12 @@ function get_bound_content_entry($content_type, $id)
 /**
  * Append fields to content add/edit form for gathering custom fields.
  *
- * @param  ID_TEXT                      Content type hook codename
- * @param  ?ID_TEXT                     Content entry ID (null: new entry)
- * @param  tempcode                     Fields (passed by reference)
- * @param  tempcode                     Hidden Fields (passed by reference)
- * @param  ?array                       Limit fields to a set (null: no limit)
- * @param  boolean                      Whether $field_filter is a whitelist (if false, it is a blacklist)
+ * @param  ID_TEXT                      $content_type Content type hook codename
+ * @param  ?ID_TEXT                     $id Content entry ID (null: new entry)
+ * @param  tempcode                      &$fields Fields (passed by reference)
+ * @param  tempcode                      &$hidden Hidden Fields (passed by reference)
+ * @param  ?array                       $field_filter Limit fields to a set (null: no limit)
+ * @param  boolean                      $field_filter_whitelist Whether $field_filter is a whitelist (if false, it is a blacklist)
  */
 function append_form_custom_fields($content_type, $id, &$fields, &$hidden, $field_filter = null, $field_filter_whitelist = true)
 {
@@ -269,9 +269,9 @@ function append_form_custom_fields($content_type, $id, &$fields, &$hidden, $fiel
 /**
  * Save custom fields to a content item.
  *
- * @param  ID_TEXT                      Content type hook codename
- * @param  ID_TEXT                      Content entry ID
- * @param  ?ID_TEXT                     Content entry ID (prior to possible rename) (null: definitely unchanged)
+ * @param  ID_TEXT                      $content_type Content type hook codename
+ * @param  ID_TEXT                      $id Content entry ID
+ * @param  ?ID_TEXT                     $old_id Content entry ID (prior to possible rename) (null: definitely unchanged)
  */
 function save_form_custom_fields($content_type, $id, $old_id = null)
 {
@@ -328,8 +328,8 @@ function save_form_custom_fields($content_type, $id, $old_id = null)
 /**
  * Delete custom fields for content item.
  *
- * @param  ID_TEXT                      Content type hook codename
- * @param  ID_TEXT                      Content entry ID
+ * @param  ID_TEXT                      $content_type Content type hook codename
+ * @param  ID_TEXT                      $id Content entry ID
  */
 function delete_form_custom_fields($content_type, $id)
 {
@@ -348,8 +348,8 @@ function delete_form_custom_fields($content_type, $id)
 /**
  * Get a list of all field types to choose from.
  *
- * @param  ID_TEXT                      Field type to select
- * @param  boolean                      Whether to only show options in the same storage set as $type
+ * @param  ID_TEXT                      $type Field type to select
+ * @param  boolean                      $limit_to_storage_set Whether to only show options in the same storage set as $type
  * @return tempcode                     List of field types
  */
 function create_selection_list_field_type($type = '', $limit_to_storage_set = false)

@@ -38,10 +38,10 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -56,8 +56,8 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -74,7 +74,7 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -119,10 +119,10 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Get tempcode for a adding/editing form.
      *
-     * @param  ?GROUP                   The usergroup being edited (null: adding, not editing, and let's choose the current member)
-     * @param  SHORT_TEXT               The usergroup name
-     * @param  ?ID_TEXT                 The username of the usergroup leader (null: none picked yet)
-     * @param  BINARY                   Whether members may join this usergroup without requiring any special permission
+     * @param  ?GROUP                   $id The usergroup being edited (null: adding, not editing, and let's choose the current member)
+     * @param  SHORT_TEXT               $name The usergroup name
+     * @param  ?ID_TEXT                 $group_leader The username of the usergroup leader (null: none picked yet)
+     * @param  BINARY                   $open_membership Whether members may join this usergroup without requiring any special permission
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($id = null, $name = '', $group_leader = null, $open_membership = 1)
@@ -143,7 +143,7 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -227,7 +227,7 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module delete possibility checker.
      *
-     * @param  ID_TEXT                  The entry being potentially deleted
+     * @param  ID_TEXT                  $id The entry being potentially deleted
      * @return boolean                  Whether it may be deleted
      */
     public function may_delete_this($id)
@@ -238,7 +238,7 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Standard aed_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function fill_in_edit_form($id)
@@ -320,8 +320,8 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Fix club's permissons (in case e.g. forum was recreated).
      *
-     * @param  AUTO_LINK                Club (usergroup) ID
-     * @param  AUTO_LINK                Forum ID
+     * @param  AUTO_LINK                $id Club (usergroup) ID
+     * @param  AUTO_LINK                $forum_id Forum ID
      */
     public function _set_permissions($id, $forum_id)
     {
@@ -351,7 +351,7 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return ?tempcode                Confirm message (null: continue)
      */
     public function edit_actualisation($id)
@@ -399,7 +399,7 @@ class Module_cms_ocf_groups extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

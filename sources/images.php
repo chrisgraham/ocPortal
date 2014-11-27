@@ -23,7 +23,7 @@
 /**
  * Render an 'IMAGE_WIDTH'/'IMAGE_HEIGHT' symbol.
  *
- * @param  array                        Symbol parameters
+ * @param  array                        $param Symbol parameters
  * @return array                        A pair: Image dimensions
  */
 function _symbol_image_dims($param)
@@ -64,7 +64,7 @@ function _symbol_image_dims($param)
 /**
  * Render a 'THUMBNAIL' symbol.
  *
- * @param  array                        Symbol parameters
+ * @param  array                        $param Symbol parameters
  * @return string                       Rendered symbol
  */
 function _symbol_thumbnail($param)
@@ -280,13 +280,13 @@ function get_max_image_size()
 /**
  * Get the tempcode for an image thumbnail.
  *
- * @param  URLPATH                      The URL to the image thumbnail
- * @param  mixed                        The caption for the thumbnail (string or Tempcode)
- * @param  boolean                      Whether to use a JS tooltip. Forcibly set to true if you pass Tempcode
- * @param  boolean                      Whether already a thumbnail (if not, function will make one)
- * @param  ?integer                     Thumbnail width to use (null: default)
- * @param  ?integer                     Thumbnail height to use (null: default)
- * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  URLPATH                      $url The URL to the image thumbnail
+ * @param  mixed                        $caption The caption for the thumbnail (string or Tempcode)
+ * @param  boolean                      $js_tooltip Whether to use a JS tooltip. Forcibly set to true if you pass Tempcode
+ * @param  boolean                      $is_thumbnail_already Whether already a thumbnail (if not, function will make one)
+ * @param  ?integer                     $width Thumbnail width to use (null: default)
+ * @param  ?integer                     $height Thumbnail height to use (null: default)
+ * @param  boolean                      $only_make_smaller Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return tempcode                     The thumbnail
  */
 function do_image_thumb($url, $caption, $js_tooltip = false, $is_thumbnail_already = true, $width = null, $height = null, $only_make_smaller = false)
@@ -345,14 +345,14 @@ function do_image_thumb($url, $caption, $js_tooltip = false, $is_thumbnail_alrea
 /**
  * Take some image/thumbnail info, and if needed make and caches a thumbnail, and return a thumb url whatever the situation.
  *
- * @param  URLPATH                      The full URL to the image which will-be/is thumbnailed
- * @param  URLPATH                      The URL to the thumbnail (blank: no thumbnail yet)
- * @param  ID_TEXT                      The directory, relative to the ocPortal install's uploads directory, where the thumbnails are stored. MINUS "_thumbs"
- * @param  ID_TEXT                      The name of the table that is storing what we are doing the thumbnail for
- * @param  AUTO_LINK                    The ID of the table record that is storing what we are doing the thumbnail for
- * @param  ID_TEXT                      The name of the table field where thumbnails are saved
- * @param  ?integer                     The thumbnail width to use (null: default)
- * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  URLPATH                      $full_url The full URL to the image which will-be/is thumbnailed
+ * @param  URLPATH                      $thumb_url The URL to the thumbnail (blank: no thumbnail yet)
+ * @param  ID_TEXT                      $thumb_dir The directory, relative to the ocPortal install's uploads directory, where the thumbnails are stored. MINUS "_thumbs"
+ * @param  ID_TEXT                      $table The name of the table that is storing what we are doing the thumbnail for
+ * @param  AUTO_LINK                    $id The ID of the table record that is storing what we are doing the thumbnail for
+ * @param  ID_TEXT                      $thumb_field_name The name of the table field where thumbnails are saved
+ * @param  ?integer                     $thumb_width The thumbnail width to use (null: default)
+ * @param  boolean                      $only_make_smaller Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return URLPATH                      The URL to the thumbnail
  */
 function ensure_thumbnail($full_url, $thumb_url, $thumb_dir, $table, $id, $thumb_field_name = 'thumb_url', $thumb_width = null, $only_make_smaller = false)
@@ -437,8 +437,8 @@ function ensure_thumbnail($full_url, $thumb_url, $thumb_dir, $table, $id, $thumb
 /**
  * Check we can load the given file, given our memory limit.
  *
- * @param  PATH                         The file path we are trying to load
- * @param  boolean                      Whether to exit ocPortal if an error occurs
+ * @param  PATH                         $file_path The file path we are trying to load
+ * @param  boolean                      $exit_on_error Whether to exit ocPortal if an error occurs
  * @return boolean                      Success status
  */
 function check_memory_limit_for($file_path, $exit_on_error = true)
@@ -508,16 +508,16 @@ function check_memory_limit_for($file_path, $exit_on_error = true)
 /**
  * Resize an image to the specified size, but retain the aspect ratio.
  *
- * @param  URLPATH                      The URL to the image to resize
- * @param  PATH                         The file path (including filename) to where the resized image will be saved
- * @param  integer                      The maximum width we want our new image to be (-1 means "don't factor this in")
- * @param  integer                      The maximum height we want our new image to be (-1 means "don't factor this in")
- * @param  integer                      This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
- * @param  boolean                      Whether to exit ocPortal if an error occurs
- * @param  ?string                      The file extension to save with (null: same as our input file)
- * @param  boolean                      Whether $from was in fact a path, not a URL
- * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
- * @param  ?array                       This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (null: no details passed)
+ * @param  URLPATH                      $from The URL to the image to resize
+ * @param  PATH                         $to The file path (including filename) to where the resized image will be saved
+ * @param  integer                      $width The maximum width we want our new image to be (-1 means "don't factor this in")
+ * @param  integer                      $height The maximum height we want our new image to be (-1 means "don't factor this in")
+ * @param  integer                      $box_width This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
+ * @param  boolean                      $exit_on_error Whether to exit ocPortal if an error occurs
+ * @param  ?string                      $ext2 The file extension to save with (null: same as our input file)
+ * @param  boolean                      $using_path Whether $from was in fact a path, not a URL
+ * @param  boolean                      $only_make_smaller Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  ?array                       $thumb_options This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (null: no details passed)
  * @return boolean                      Success
  */
 function convert_image($from, $to, $width, $height, $box_width = -1, $exit_on_error = true, $ext2 = null, $using_path = false, $only_make_smaller = true, $thumb_options = null)
@@ -531,16 +531,16 @@ function convert_image($from, $to, $width, $height, $box_width = -1, $exit_on_er
 /**
  * (Helper for above).
  *
- * @param  URLPATH                      The URL to the image to resize
- * @param  PATH                         The file path (including filename) to where the resized image will be saved
- * @param  integer                      The maximum width we want our new image to be (-1 means "don't factor this in")
- * @param  integer                      The maximum height we want our new image to be (-1 means "don't factor this in")
- * @param  integer                      This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
- * @param  boolean                      Whether to exit ocPortal if an error occurs
- * @param  ?string                      The file extension to save with (null: same as our input file)
- * @param  boolean                      Whether $from was in fact a path, not a URL
- * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
- * @param  ?array                       This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (null: no details passed)
+ * @param  URLPATH                      $from The URL to the image to resize
+ * @param  PATH                         $to The file path (including filename) to where the resized image will be saved
+ * @param  integer                      $width The maximum width we want our new image to be (-1 means "don't factor this in")
+ * @param  integer                      $height The maximum height we want our new image to be (-1 means "don't factor this in")
+ * @param  integer                      $box_width This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
+ * @param  boolean                      $exit_on_error Whether to exit ocPortal if an error occurs
+ * @param  ?string                      $ext2 The file extension to save with (null: same as our input file)
+ * @param  boolean                      $using_path Whether $from was in fact a path, not a URL
+ * @param  boolean                      $only_make_smaller Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  ?array                       $thumb_options This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (null: no details passed)
  * @return boolean                      Success
  */
 function _convert_image($from, $to, $width, $height, $box_width = -1, $exit_on_error = true, $ext2 = null, $using_path = false, $only_make_smaller = false, $thumb_options = null)
@@ -970,8 +970,8 @@ function _convert_image($from, $to, $width, $height, $box_width = -1, $exit_on_e
  * Based on a comment in:
  * http://stackoverflow.com/questions/3657023/how-to-detect-shot-angle-of-photo-and-auto-rotate-for-website-display-like-desk
  *
- * @param  resource                     GD image resource
- * @param  ~array                       EXIF details (false: could not load)
+ * @param  resource                     $img GD image resource
+ * @param  ~array                       $exif EXIF details (false: could not load)
  * @return array                        A pair: Adjusted GD image resource, Whether a change was made
  */
 function adjust_pic_orientation($img, $exif)
@@ -1056,7 +1056,7 @@ function get_gd_version()
 /**
  * Find whether the image specified is actually an image, based on file extension
  *
- * @param  string                       A URL or file path to the image
+ * @param  string                       $name A URL or file path to the image
  * @return boolean                      Whether the string pointed to a file appeared to be an image
  */
 function is_image($name)
@@ -1083,7 +1083,7 @@ function is_image($name)
 /**
  * Use the image extension to determine if the specified image is of a format (extension) saveable by ocPortal or not.
  *
- * @param  string                       A URL or file path to the image
+ * @param  string                       $name A URL or file path to the image
  * @return boolean                      Whether the string pointed to a file that appeared to be a saveable image
  */
 function is_saveable_image($name)
@@ -1116,9 +1116,9 @@ What follows are other media types, not images. However, we define them here to 
 /**
  * Find whether the video specified is actually a 'video', based on file extension
  *
- * @param  string                       A URL or file path to the video
- * @param  boolean                      Whether there are admin privileges, to render dangerous media types (client-side risk only)
- * @param  boolean                      Whether it really must be an actual video/audio, not some other kind of rich media which we may render in a video spot
+ * @param  string                       $name A URL or file path to the video
+ * @param  boolean                      $as_admin Whether there are admin privileges, to render dangerous media types (client-side risk only)
+ * @param  boolean                      $must_be_true_video Whether it really must be an actual video/audio, not some other kind of rich media which we may render in a video spot
  * @return boolean                      Whether the string pointed to a file appeared to be a video
  */
 function is_video($name, $as_admin, $must_be_true_video = false)
@@ -1148,8 +1148,8 @@ function is_video($name, $as_admin, $must_be_true_video = false)
 /**
  * Find whether the video specified is actually a 'video', based on file extension
  *
- * @param  string                       A URL or file path to the video
- * @param  boolean                      Whether there are admin privileges, to render dangerous media types (client-side risk only)
+ * @param  string                       $name A URL or file path to the video
+ * @param  boolean                      $as_admin Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @return boolean                      Whether the string pointed to a file appeared to be an audio file
  */
 function is_audio($name, $as_admin)
@@ -1163,8 +1163,8 @@ function is_audio($name, $as_admin)
 /**
  * Find whether the video specified is actually a 'video', based on file extension
  *
- * @param  string                       A URL or file path to the video
- * @param  boolean                      Whether there are admin privileges, to render dangerous media types (client-side risk only)
+ * @param  string                       $name A URL or file path to the video
+ * @param  boolean                      $as_admin Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @return boolean                      Whether the string pointed to a file appeared to be an audio file
  */
 function is_media($name, $as_admin)

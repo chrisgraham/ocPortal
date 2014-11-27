@@ -21,20 +21,20 @@
 /**
  * Edit a topic.
  *
- * @param  ?AUTO_LINK                   The ID of the topic to edit (null: Private Topic).
- * @param  ?SHORT_TEXT                  Description of the topic (null: do not change).
- * @param  ?SHORT_TEXT                  The image code of the emoticon for the topic (null: do not change).
- * @param  ?BINARY                      Whether the topic is validated (null: do not change).
- * @param  ?BINARY                      Whether the topic is open (null: do not change).
- * @param  ?BINARY                      Whether the topic is pinned (null: do not change).
- * @param  ?BINARY                      Whether the topic is sunk (null: do not change).
- * @param  ?BINARY                      Whether the topic is cascading (null: do not change).
- * @param  LONG_TEXT                    The reason for this action.
- * @param  ?string                      New title for the topic (null: do not change).
- * @param  ?SHORT_TEXT                  Link related to the topic (e.g. link to view a ticket) (null: do not change).
- * @param  boolean                      Whether to check permissions.
- * @param  ?integer                     Number of views (null: do not change)
- * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  ?AUTO_LINK                   $topic_id The ID of the topic to edit (null: Private Topic).
+ * @param  ?SHORT_TEXT                  $description Description of the topic (null: do not change).
+ * @param  ?SHORT_TEXT                  $emoticon The image code of the emoticon for the topic (null: do not change).
+ * @param  ?BINARY                      $validated Whether the topic is validated (null: do not change).
+ * @param  ?BINARY                      $open Whether the topic is open (null: do not change).
+ * @param  ?BINARY                      $pinned Whether the topic is pinned (null: do not change).
+ * @param  ?BINARY                      $sunk Whether the topic is sunk (null: do not change).
+ * @param  ?BINARY                      $cascading Whether the topic is cascading (null: do not change).
+ * @param  LONG_TEXT                    $reason The reason for this action.
+ * @param  ?string                      $title New title for the topic (null: do not change).
+ * @param  ?SHORT_TEXT                  $description_link Link related to the topic (e.g. link to view a ticket) (null: do not change).
+ * @param  boolean                      $check_perms Whether to check permissions.
+ * @param  ?integer                     $views Number of views (null: do not change)
+ * @param  boolean                      $null_is_literal Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function ocf_edit_topic($topic_id, $description = null, $emoticon = null, $validated = null, $open = null, $pinned = null, $sunk = null, $cascading = null, $reason = '', $title = null, $description_link = null, $check_perms = true, $views = null, $null_is_literal = false)
 {
@@ -144,10 +144,10 @@ function ocf_edit_topic($topic_id, $description = null, $emoticon = null, $valid
 /**
  * Delete a topic.
  *
- * @param  AUTO_LINK                    The ID of the topic to delete.
- * @param  LONG_TEXT                    The reason for this action .
- * @param  ?AUTO_LINK                   Where topic to move posts in this topic to (null: delete the posts).
- * @param  boolean                      Whether to check permissions.
+ * @param  AUTO_LINK                    $topic_id The ID of the topic to delete.
+ * @param  LONG_TEXT                    $reason The reason for this action .
+ * @param  ?AUTO_LINK                   $post_target_topic_id Where topic to move posts in this topic to (null: delete the posts).
+ * @param  boolean                      $check_perms Whether to check permissions.
  * @return AUTO_LINK                    The forum ID the topic is in (could be found without calling the function, but as we've looked it up, it is worth keeping).
  */
 function ocf_delete_topic($topic_id, $reason = '', $post_target_topic_id = null, $check_perms = true)
@@ -287,10 +287,10 @@ function ocf_delete_topic($topic_id, $reason = '', $post_target_topic_id = null,
 /**
  * Move some topics.
  *
- * @param  AUTO_LINK                    The forum the topics are currently in.
- * @param  AUTO_LINK                    The forum the topics are being moved to.
- * @param  ?array                       A list of the topic IDs to move (null: move all topics from source forum).
- * @param  boolean                      Whether to check permissions.
+ * @param  AUTO_LINK                    $member_id The forum the topics are currently in.
+ * @param  AUTO_LINK                    $topic_id The forum the topics are being moved to.
+ * @param  ?array                        A list of the topic IDs to move (null: move all topics from source forum).
+ * @param  boolean                       Whether to check permissions.
  */
 function ocf_move_topics($from, $to, $topics = null, $check_perms = true) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
 {
@@ -451,8 +451,8 @@ function ocf_move_topics($from, $to, $topics = null, $check_perms = true) // NB:
 /**
  * Invite a member to a PT.
  *
- * @param  MEMBER                       Member getting access
- * @param  AUTO_LINK                    The topic
+ * @param  MEMBER                       $member_id Member getting access
+ * @param  AUTO_LINK                    $topic_id The topic
  */
 function ocf_invite_to_pt($member_id, $topic_id)
 {
@@ -503,13 +503,13 @@ function ocf_invite_to_pt($member_id, $topic_id)
 /**
  * Send a new-PT notification.
  *
- * @param  AUTO_LINK                    The ID of the post made
- * @param  SHORT_TEXT                   PT title
- * @param  AUTO_LINK                    ID of the topic
- * @param  MEMBER                       Member getting the PT
- * @param  ?MEMBER                      Member posting the PT (null: current member)
- * @param  ?string                      Post text (null: unknown, lookup from $post_id)
- * @param  boolean                      Whether to also mark the topic as unread
+ * @param  AUTO_LINK                    $post_id The ID of the post made
+ * @param  SHORT_TEXT                   $subject PT title
+ * @param  AUTO_LINK                    $topic_id ID of the topic
+ * @param  MEMBER                       $to_id Member getting the PT
+ * @param  ?MEMBER                      $from_id Member posting the PT (null: current member)
+ * @param  ?string                      $post_comcode Post text (null: unknown, lookup from $post_id)
+ * @param  boolean                      $mark_unread Whether to also mark the topic as unread
  */
 function send_pt_notification($post_id, $subject, $topic_id, $to_id, $from_id = null, $post_comcode = null, $mark_unread = false)
 {
@@ -534,10 +534,10 @@ function send_pt_notification($post_id, $subject, $topic_id, $to_id, $from_id = 
 /**
  * If necessary, send out a support ticket reply
  *
- * @param  AUTO_LINK                    Forum ID
- * @param  AUTO_LINK                    Topic ID
- * @param  SHORT_TEXT                   Topic title
- * @param  LONG_TEXT                    Post made
+ * @param  AUTO_LINK                    $forum_id Forum ID
+ * @param  AUTO_LINK                    $topic_id Topic ID
+ * @param  SHORT_TEXT                   $topic_title Topic title
+ * @param  LONG_TEXT                    $post Post made
  */
 function handle_topic_ticket_reply($forum_id, $topic_id, $topic_title, $post)
 {

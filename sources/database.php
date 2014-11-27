@@ -70,8 +70,8 @@ function init__database()
 /**
  * Extract certain fields, including any Tempcode details for them, from a DB table row array.
  *
- * @param  array                        DB table row.
- * @param  array                        List of fields to copy through.
+ * @param  array                        $row DB table row.
+ * @param  array                        $fields List of fields to copy through.
  * @return array                        Map of fields.
  */
 function db_map_restrict($row, $fields)
@@ -161,8 +161,8 @@ function can_arbitrary_groupby()
 /**
  * Assemble part of a WHERE clause for doing full-text search
  *
- * @param  string                       Our match string (assumes "?" has been stripped already)
- * @param  boolean                      Whether to do a boolean full text search
+ * @param  string                       $content Our match string (assumes "?" has been stripped already)
+ * @param  boolean                      $boolean Whether to do a boolean full text search
  * @return string                       Part of a WHERE clause for doing full-text search
  */
 function db_full_text_assemble($content, $boolean)
@@ -183,8 +183,8 @@ function db_get_first_id()
 /**
  * Encode an SQL statement fragment for a conditional to see if two strings are equal.
  *
- * @param  ID_TEXT                      The attribute
- * @param  string                       The comparison
+ * @param  ID_TEXT                      $attribute The attribute
+ * @param  string                       $compare The comparison
  * @return string                       The SQL
  */
 function db_string_equal_to($attribute, $compare)
@@ -195,8 +195,8 @@ function db_string_equal_to($attribute, $compare)
 /**
  * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
  *
- * @param  ID_TEXT                      The attribute
- * @param  string                       The comparison
+ * @param  ID_TEXT                      $attribute The attribute
+ * @param  string                       $compare The comparison
  * @return string                       The SQL
  */
 function db_string_not_equal_to($attribute, $compare)
@@ -207,7 +207,7 @@ function db_string_not_equal_to($attribute, $compare)
 /**
  * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
  *
- * @param  string                       The pattern
+ * @param  string                       $pattern The pattern
  * @return string                       The encoded pattern
  */
 function db_encode_like($pattern)
@@ -224,7 +224,7 @@ function db_encode_like($pattern)
 /**
  * Find whether full-text-search is present
  *
- * @param  array                        A DB connection
+ * @param  array                        $db A DB connection
  * @return boolean                      Whether it is
  */
 function db_has_full_text($db)
@@ -240,7 +240,7 @@ function db_has_full_text($db)
 /**
  * Find whether subquery support is present
  *
- * @param  array                        A DB connection
+ * @param  array                        $db A DB connection
  * @return boolean                      Whether it is
  */
 function db_has_subqueries($db)
@@ -260,7 +260,7 @@ function db_has_subqueries($db)
 /**
  * Find whether expression ordering support is present
  *
- * @param  array                        A DB connection
+ * @param  array                        $db A DB connection
  * @return boolean                      Whether it is
  */
 function db_has_expression_ordering($db)
@@ -279,7 +279,7 @@ function db_has_expression_ordering($db)
 /**
  * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
  *
- * @param  string                       The string
+ * @param  string                       $string The string
  * @return string                       The escaped string
  */
 function db_escape_string($string)
@@ -462,13 +462,13 @@ class Database_driver
     /**
      * Construct a database driver from connection parameters.
      *
-     * @param string       The database name
-     * @param string       The database server
-     * @param string       The connection username
-     * @param string       The connection password
-     * @param string       The table prefix
-     * @param boolean         Whether to on error echo an error and return with a NULL, rather than giving a critical error
-     * @param ?object         Static call object (null: use global static call object)
+     * @param string       $db_name The database name
+     * @param string       $db_host The database server
+     * @param string       $db_user The connection username
+     * @param string       $db_password The connection password
+     * @param string       $table_prefix The table prefix
+     * @param boolean         $fail_ok Whether to on error echo an error and return with a NULL, rather than giving a critical error
+     * @param ?object         $static Static call object (null: use global static call object)
      */
     public function __construct($db_name, $db_host, $db_user, $db_password, $table_prefix, $fail_ok = false, $static = null)
     {
@@ -523,7 +523,7 @@ class Database_driver
     /**
      * Check if a table exists.
      *
-     * @param  ID_TEXT                  The table name
+     * @param  ID_TEXT                  $tablename The table name
      * @return boolean                  Whether it exists
      */
     public function table_exists($tablename)
@@ -553,10 +553,10 @@ class Database_driver
      * Create a table with the given name and the given array of field name to type mappings.
      * If a field type starts '*', then it is part of that field's key. If it starts '?', then it is an optional field.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  array                    The fields
-     * @param  boolean                  Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
-     * @param  boolean                  Whether to skip the check for NULL string fields
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  array                    $fields The fields
+     * @param  boolean                  $skip_size_check Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
+     * @param  boolean                  $skip_null_check Whether to skip the check for NULL string fields
      */
     public function create_table($table_name, $fields, $skip_size_check = false, $skip_null_check = false)
     {
@@ -567,10 +567,10 @@ class Database_driver
     /**
      * Add an index to a table without disturbing the contents, after the table has been created.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  ID_TEXT                  The index name
-     * @param  array                    The fields
-     * @param  ID_TEXT                  The name of the unique key field for the table
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  ID_TEXT                  $index_name The index name
+     * @param  array                    $fields The fields
+     * @param  ID_TEXT                  $unique_key_field The name of the unique key field for the table
      */
     public function create_index($table_name, $index_name, $fields, $unique_key_field = 'id')
     {
@@ -581,11 +581,11 @@ class Database_driver
     /**
      * Insert a row.
      *
-     * @param  string                   The table name
-     * @param  array                    The insertion map
-     * @param  boolean                  Whether to return the auto-insert-id
-     * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  boolean                  Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
+     * @param  string                   $table The table name
+     * @param  array                    $map The insertion map
+     * @param  boolean                  $ret Whether to return the auto-insert-id
+     * @param  boolean                  $fail_ok Whether to allow failure (outputting a message instead of exiting completely)
+     * @param  boolean                  $save_as_volatile Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
      * @return integer                  The ID of the new row
      */
     public function query_insert($table, $map, $ret = false, $fail_ok = false, $save_as_volatile = false)
@@ -741,12 +741,12 @@ class Database_driver
     /**
      * Get the specified value from the database. This is the specified value of the first row returned. A fatal error is produced if there is no matching row.
      *
-     * @param  string                   The table name
-     * @param  string                   The field to select
-     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no where conditions)
-     * @param  string                   Something to tack onto the end
-     * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @param  string                   $table The table name
+     * @param  string                   $selected_value The field to select
+     * @param  ?array                   $where_map The WHERE map [will all be AND'd together] (null: no where conditions)
+     * @param  string                   $end Something to tack onto the end
+     * @param  boolean                  $fail_ok Whether to allow failure (outputting a message instead of exiting completely)
+     * @param  ?array                   $lang_fields Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @return mixed                    The first value of the first row returned
      */
     public function query_select_value($table, $selected_value, $where_map = null, $end = '', $fail_ok = false, $lang_fields = null)
@@ -780,12 +780,12 @@ class Database_driver
     /**
      * Get the specified value from the database, or NULL if there is no matching row (or if the value itself is NULL). This is good for detection existence of records, or for use if they might may or may not be present.
      *
-     * @param  string                   The table name
-     * @param  string                   The field to select
-     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no where conditions)
-     * @param  string                   Something to tack onto the end
-     * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @param  string                   $table The table name
+     * @param  string                   $select The field to select
+     * @param  ?array                   $where_map The WHERE map [will all be AND'd together] (null: no where conditions)
+     * @param  string                   $end Something to tack onto the end
+     * @param  boolean                  $fail_ok Whether to allow failure (outputting a message instead of exiting completely)
+     * @param  ?array                   $lang_fields Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @return ?mixed                   The first value of the first row returned (null: nothing found, or null value found)
      */
     public function query_select_value_if_there($table, $select, $where_map = null, $end = '', $fail_ok = false, $lang_fields = null)
@@ -800,10 +800,10 @@ class Database_driver
     /**
      * This function is a variant of query_select_value_if_there, by the fact that it only accepts a complete (and perfect) SQL query, instead of assembling one itself from the specified parameters.
      *
-     * @param  string                   The complete SQL query
-     * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  boolean                  Whether to skip the query safety check
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @param  string                   $query The complete SQL query
+     * @param  boolean                  $fail_ok Whether to allow failure (outputting a message instead of exiting completely)
+     * @param  boolean                  $skip_safety_check Whether to skip the query safety check
+     * @param  ?array                   $lang_fields Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @return ?mixed                   The first value of the first row returned (null: nothing found, or null value found)
      */
     public function query_value_if_there($query, $fail_ok = false, $skip_safety_check = false, $lang_fields = null)
@@ -839,14 +839,14 @@ class Database_driver
      * Get the database rows found matching the specified parameters. Unlike 'query', it doesn't take raw SQL -- it assembles SQL based the parameters requested.
      * Only use this if you're where condition is a series of AND clauses doing simple property comparisons.
      *
-     * @param  string                   The table name
-     * @param  ?array                   The SELECT map (null: all fields)
-     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
-     * @param  string                   Something to tack onto the end of the SQL query
-     * @param  ?integer                 The maximum number of rows to select (null: get all)
-     * @param  ?integer                 The starting row to select (null: start at first)
-     * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @param  string                   $table The table name
+     * @param  ?array                   $select The SELECT map (null: all fields)
+     * @param  ?array                   $where_map The WHERE map [will all be AND'd together] (null: no conditions)
+     * @param  string                   $end Something to tack onto the end of the SQL query
+     * @param  ?integer                 $max The maximum number of rows to select (null: get all)
+     * @param  ?integer                 $start The starting row to select (null: start at first)
+     * @param  boolean                  $fail_ok Whether to allow failure (outputting a message instead of exiting completely)
+     * @param  ?array                   $lang_fields Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      * @return array                    The results
      */
     public function query_select($table, $select = null, $where_map = null, $end = '', $max = null, $start = null, $fail_ok = false, $lang_fields = null)
@@ -944,13 +944,13 @@ class Database_driver
     /**
      * This function is a raw query executor. It shouldn't usually be used unless you need to write SQL involving 'OR' statements or other complexities. There are abstracted versions available which you probably want instead (mainly, query_select).
      *
-     * @param  string                   The complete SQL query
-     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
-     * @param  ?integer                 The start row to affect (null: no specification)
-     * @param  boolean                  Whether to output an error on failure
-     * @param  boolean                  Whether to skip the query safety check
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
-     * @param  string                   All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
+     * @param  string                   $query The complete SQL query
+     * @param  ?integer                 $max The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 $start The start row to affect (null: no specification)
+     * @param  boolean                  $fail_ok Whether to output an error on failure
+     * @param  boolean                  $skip_safety_check Whether to skip the query safety check
+     * @param  ?array                   $lang_fields Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @param  string                   $field_prefix All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
      * @return ?mixed                   The results (null: no results)
      */
     public function query($query, $max = null, $start = null, $fail_ok = false, $skip_safety_check = false, $lang_fields = null, $field_prefix = '')
@@ -983,7 +983,7 @@ class Database_driver
      * Convert a field name of type SHORT/LONG_TRANS[__COMCODE] into something we may use directly in our SQL.
      * Assumes the query has separately been informed of the $lang_fields parameter (which is automatic for query_select).
      *
-     * @param  ID_TEXT                  Language field name
+     * @param  ID_TEXT                  $field_name Language field name
      * @return ID_TEXT                  SQL field name reference
      */
     public function translate_field_ref($field_name)
@@ -997,14 +997,14 @@ class Database_driver
     /**
      * This function is a very basic query executor. It shouldn't usually be used by you, as there are specialised abstracted versions available.
      *
-     * @param  string                   The complete SQL query
-     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
-     * @param  ?integer                 The start row to affect (null: no specification)
-     * @param  boolean                  Whether to output an error on failure
-     * @param  boolean                  Whether to get an insert ID
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
-     * @param  string                   All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
-     * @param  boolean                  Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
+     * @param  string                   $query The complete SQL query
+     * @param  ?integer                 $max The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 $start The start row to affect (null: no specification)
+     * @param  boolean                  $fail_ok Whether to output an error on failure
+     * @param  boolean                  $get_insert_id Whether to get an insert ID
+     * @param  ?array                   $lang_fields Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @param  string                   $field_prefix All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
+     * @param  boolean                  $save_as_volatile Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
      * @return ?mixed                   The results (null: no results)
      */
     public function _query($query, $max = null, $start = null, $fail_ok = false, $get_insert_id = false, $lang_fields = null, $field_prefix = '', $save_as_volatile = false)
@@ -1262,14 +1262,14 @@ class Database_driver
     /**
      * Update (edit) a row in the database.
      *
-     * @param  string                   The table name
-     * @param  array                    The UPDATE map
-     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
-     * @param  string                   Something to tack onto the end of the statement
-     * @param  ?integer                 The maximum number of rows to update (null: no limit)
-     * @param  ?integer                 The starting row to update (null: no specific start)
-     * @param  boolean                  Whether to get the number of touched rows. WARNING: Do not use in core ocPortal code as it does not work on all database drivers
-     * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
+     * @param  string                   $table The table name
+     * @param  array                    $update_map The UPDATE map
+     * @param  ?array                   $where_map The WHERE map [will all be AND'd together] (null: no conditions)
+     * @param  string                   $end Something to tack onto the end of the statement
+     * @param  ?integer                 $max The maximum number of rows to update (null: no limit)
+     * @param  ?integer                 $start The starting row to update (null: no specific start)
+     * @param  boolean                  $num_touched Whether to get the number of touched rows. WARNING: Do not use in core ocPortal code as it does not work on all database drivers
+     * @param  boolean                  $fail_ok Whether to allow failure (outputting a message instead of exiting completely)
      * @return ?integer                 The number of touched records (null: hasn't been asked / error)
      */
     public function query_update($table, $update_map, $where_map = null, $end = '', $max = null, $start = null, $num_touched = false, $fail_ok = false)
@@ -1342,12 +1342,12 @@ class Database_driver
     /**
      * Deletes rows from the specified table, that match the specified conditions (if any). It may be limited to a row range (it is likely, only a maximum, of 1, will be used, if any kind of range at all).
      *
-     * @param  string                   The table name
-     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
-     * @param  string                   Something to tack onto the end of the statement
-     * @param  ?integer                 The maximum number of rows to delete (null: no limit)
-     * @param  ?integer                 The starting row to delete (null: no specific start)
-     * @param  boolean                  Whether to allow failure (outputting a message instead of exiting completely)
+     * @param  string                   $table The table name
+     * @param  ?array                   $where_map The WHERE map [will all be AND'd together] (null: no conditions)
+     * @param  string                   $end Something to tack onto the end of the statement
+     * @param  ?integer                 $max The maximum number of rows to delete (null: no limit)
+     * @param  ?integer                 $start The starting row to delete (null: no specific start)
+     * @param  boolean                  $fail_ok Whether to allow failure (outputting a message instead of exiting completely)
      */
     public function query_delete($table, $where_map = null, $end = '', $max = null, $start = null, $fail_ok = false)
     {
@@ -1406,8 +1406,8 @@ class Database_driver
     /**
      * Delete an index from a table.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  ID_TEXT                  The index name
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  ID_TEXT                  $index_name The index name
      */
     public function delete_index_if_exists($table_name, $index_name)
     {
@@ -1418,7 +1418,7 @@ class Database_driver
     /**
      * Drop the given table, or if it doesn't exist, silently return.
      *
-     * @param  ID_TEXT                  The table name
+     * @param  ID_TEXT                  $table The table name
      */
     public function drop_table_if_exists($table)
     {
@@ -1429,8 +1429,8 @@ class Database_driver
     /**
      * Rename the given table.
      *
-     * @param  ID_TEXT                  The old table name
-     * @param  ID_TEXT                  The new table name
+     * @param  ID_TEXT                  $old The old table name
+     * @param  ID_TEXT                  $new The new table name
      */
     public function rename_table($old, $new)
     {
@@ -1441,10 +1441,10 @@ class Database_driver
     /**
      * Adds a field to an existing table.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  ID_TEXT                  The field name
-     * @param  ID_TEXT                  The field type
-     * @param  ?mixed                   The default value (null: no default)
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  ID_TEXT                  $name The field name
+     * @param  ID_TEXT                  $_type The field type
+     * @param  ?mixed                   $default The default value (null: no default)
      */
     public function add_table_field($table_name, $name, $_type, $default = null)
     {
@@ -1455,10 +1455,10 @@ class Database_driver
     /**
      * Change the type of a DB field in a table. Note: this function does not support ascession/decession of translatability
      *
-     * @param  ID_TEXT                  The table name
-     * @param  ID_TEXT                  The field name
-     * @param  ID_TEXT                  The new field type
-     * @param  ?ID_TEXT                 The new field name (null: leave name)
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  ID_TEXT                  $name The field name
+     * @param  ID_TEXT                  $_type The new field type
+     * @param  ?ID_TEXT                 $new_name The new field name (null: leave name)
      */
     public function alter_table_field($table_name, $name, $_type, $new_name = null)
     {
@@ -1469,8 +1469,8 @@ class Database_driver
     /**
      * Change the primary key of a table.
      *
-     * @param  ID_TEXT                  The name of the table to create the index on
-     * @param  array                    A list of fields to put in the new key
+     * @param  ID_TEXT                  $table_name The name of the table to create the index on
+     * @param  array                    $new_key A list of fields to put in the new key
      */
     public function change_primary_key($table_name, $new_key)
     {
@@ -1481,12 +1481,12 @@ class Database_driver
     /**
      * If a text field has picked up Comcode support, we will need to run this.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  ID_TEXT                  The field name
-     * @param  ID_TEXT                  The tables key field name
-     * @param  integer                  The translation level to use
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  ID_TEXT                  $name The field name
+     * @param  ID_TEXT                  $key The tables key field name
+     * @param  integer                  $level The translation level to use
      * @set    1 2 3 4
-     * @param  boolean                  Whether our data is already stored in Tempcode assembly format
+     * @param  boolean                  $in_assembly Whether our data is already stored in Tempcode assembly format
      */
     public function promote_text_field_to_comcode($table_name, $name, $key = 'id', $level = 2, $in_assembly = false)
     {
@@ -1497,8 +1497,8 @@ class Database_driver
     /**
      * Delete the specified field from the specified table.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  ID_TEXT                  The field name
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  ID_TEXT                  $name The field name
      */
     public function delete_table_field($table_name, $name)
     {
@@ -1509,7 +1509,7 @@ class Database_driver
     /**
      * If we've changed what $type is stored as, this function will need to be called to change the typing in the DB.
      *
-     * @param  ID_TEXT                  The field type
+     * @param  ID_TEXT                  $type The field type
      */
     public function refresh_field_definition($type)
     {
@@ -1520,7 +1520,7 @@ class Database_driver
     /**
      * Find if a table is locked for more than 5 seconds. Only works with MySQL.
      *
-     * @param  ID_TEXT                  The table name
+     * @param  ID_TEXT                  $table The table name
      * @return boolean                  Whether the table is locked
      */
     public function table_is_locked($table)

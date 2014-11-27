@@ -94,7 +94,7 @@ class Hook_smf2
     /**
      * Probe a file path for DB access details.
      *
-     * @param  string                   The probe path
+     * @param  string                   $file_base The probe path
      * @return array                    A quartet of the details (db_name, db_user, db_pass, table_prefix)
      */
     public function probe_db_access($file_base)
@@ -115,9 +115,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_config($db, $table_prefix, $file_base)
     {
@@ -248,8 +248,8 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     public function import_ocf_groups($db, $table_prefix)
     {
@@ -300,8 +300,8 @@ class Hook_smf2
     /**
      * Update Promotion Thresholds for Imported Groups
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     public function update_group_promotions($db, $table_prefix)
     {
@@ -339,9 +339,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_members($db, $table_prefix, $file_base)
     {
@@ -459,8 +459,8 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     public function import_ocf_custom_profile_fields($db, $table_prefix)
     {
@@ -568,8 +568,8 @@ class Hook_smf2
     /**
      * Used with ocf_custom_profile_fields
      *
-     * @param  string                   Default value
-     * @param  string                   List of coma seperated options
+     * @param  string                   $default Default value
+     * @param  string                   $options List of coma seperated options
      * @return string                   Imploded with pipe
      */
     public function cpf_options_string($default, $options)
@@ -594,9 +594,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_member_files($db, $table_prefix, $file_base)
     {
@@ -701,9 +701,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ip_bans($db, $table_prefix, $file_base)
     {
@@ -753,9 +753,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_forum_groupings($db, $table_prefix, $old_base_dir)
     {
@@ -783,9 +783,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_forums($db, $table_prefix, $old_base_dir)
     {
@@ -891,10 +891,10 @@ class Hook_smf2
     /**
      * Fills the static_perm_arr with profile permissions for all ocPgroups
      *
-     * @param integer      Profile ID to use
-     * @param integer      Forum ID to use
-     * @param object    The DB connection to import from
-     * @param string    The table prefix the target prefix is using
+     * @param integer      $pid Profile ID to use
+     * @param integer      $fid Forum ID to use
+     * @param object    $db The DB connection to import from
+     * @param string    $table_prefix The table prefix the target prefix is using
      */
     public function fill_static_perms_all($pid, $fid, $db, $table_prefix)
     {
@@ -925,10 +925,10 @@ class Hook_smf2
     /**
      * Gets the role value for permissions of group
      *
-     * @param  integer                  Group ID to use
-     * @param  integer                  Profile ID to use
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  integer                  $gid Group ID to use
+     * @param  integer                  $pid Profile ID to use
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      * @return integer                  The role value
      */
     public function get_role_value($gid, $pid, $db, $table_prefix)
@@ -959,9 +959,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_topics($db, $table_prefix, $file_base)
     {
@@ -990,9 +990,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_posts($db, $table_prefix, $file_base)
     {
@@ -1077,10 +1077,10 @@ class Hook_smf2
     /**
      * Convert SMF URLs pasted in text fields into ocPortal ones.
      *
-     * @param  string                   The text field text (e.g. a post)
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  string                   $post The text field text (e.g. a post)
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      * @return string                   The new text field text
      */
     public function fix_links($post, $db, $table_prefix, $file_base = '')
@@ -1100,15 +1100,15 @@ class Hook_smf2
     /**
      * Convert an SMF database file to an ocPortal uploaded file (stored on disk).
      *
-     * @param  string                   The file data
-     * @param  string                   The optimal filename
-     * @param  ID_TEXT                  The upload type (e.g. ocf_photos)
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  string                   The filename to output to
-     * @param  PATH                     The base directory we are importing from
-     * @param  string                   The attachment ID
-     * @param  string                   The file extension to use
+     * @param  string                   $data The file data
+     * @param  string                   $filename The optimal filename
+     * @param  ID_TEXT                  $sections The upload type (e.g. ocf_photos)
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  string                   $output_filename The filename to output to
+     * @param  PATH                     $file_base The base directory we are importing from
+     * @param  string                   $attachment_id The attachment ID
+     * @param  string                   $ext The file extension to use
      * @return URLPATH                  The URL
      */
     public function data_to_disk($data, $filename, $sections, $db, $table_prefix = '', $output_filename = '', $file_base = '', $attachment_id = '', $ext = '.png')
@@ -1144,9 +1144,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_post_files($db, $table_prefix, $file_base)
     {
@@ -1198,9 +1198,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_polls_and_votes($db, $table_prefix, $file_base)
     {
@@ -1269,9 +1269,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_personal_topics($db, $table_prefix, $old_base_dir)
     {
@@ -1353,7 +1353,7 @@ class Hook_smf2
     /**
      * Convert a SMF topic icon code into a standard ocPortal theme image code.
      *
-     * @param  string                   smf icon
+     * @param  string                   $icon smf icon
      * @return ID_TEXT                  ocPortal code
      */
     public function convert_topic_emoticon($icon)
@@ -1390,9 +1390,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_notifications($db, $table_prefix, $file_base)
     {
@@ -1428,9 +1428,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_wordfilter($db, $table_prefix, $file_base)
     {
@@ -1454,10 +1454,10 @@ class Hook_smf2
     /**
      * Used to build privilege permission access to Forums
      *
-     * @param  string                   Group ID to map
-     * @param  string                   Profile ID to map
-     * @param  integer                  Value to map
-     * @param  boolean                  Whether to return the map or not
+     * @param  string                   $gid Group ID to map
+     * @param  string                   $pid Profile ID to map
+     * @param  integer                  $v Value to map
+     * @param  boolean                  $r Whether to return the map or not
      * @return array                    The mapped Groups and Profile with highest privilege calculated.
      */
     public function static_perm_arr($gid, $pid, $v, $r = false)
@@ -1496,8 +1496,8 @@ class Hook_smf2
     /**
      * Used to set view access to Forums
      *
-     * @param integer The Group ID to set
-     * @param string    The Forum ID to set
+     * @param integer $gid The Group ID to set
+     * @param string    $fid The Forum ID to set
      */
     public function set_forum_view_accesss($gid, $fid)
     {
@@ -1519,8 +1519,8 @@ class Hook_smf2
     /**
      * Used to set view access to Forums
      *
-     * @param array  The static array map built from static_perm_arr
-     * @param integer The Forum ID to set
+     * @param array  $arr The static array map built from static_perm_arr
+     * @param integer $forum_id The Forum ID to set
      */
     public function sort_set_forum_perms_array($arr, $forum_id)
     {
@@ -1553,9 +1553,9 @@ class Hook_smf2
     /**
      * Used to Set Forum Permissions
      *
-     * @param integer   The Group ID to set
-     * @param string    The Forum ID to set
-     * @param integer   The basic Role they have: 0=ReadOnly, 1=Post/Submit, 2=Unvetted, 3=Moderate
+     * @param integer   $group_id The Group ID to set
+     * @param string    $forum_id The Forum ID to set
+     * @param integer   $role The basic Role they have: 0=ReadOnly, 1=Post/Submit, 2=Unvetted, 3=Moderate
      */
     public function set_forums_perms($group_id, $forum_id, $role = 0)
     {
@@ -1633,9 +1633,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_calendar($db, $table_prefix, $file_base)
     {
@@ -1712,9 +1712,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_banners($db, $table_prefix, $file_base)
     {
@@ -1736,9 +1736,9 @@ class Hook_smf2
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_news_and_categories($db, $table_prefix, $file_base)
     {

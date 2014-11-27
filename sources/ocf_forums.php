@@ -39,12 +39,12 @@ function init__ocf_forums()
 /**
  * Render a forum box.
  *
- * @param  array                        Forum row
- * @param  ID_TEXT                      Zone to link through to
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK                   Virtual root to use (null: none)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row Forum row
+ * @param  ID_TEXT                      $zone Zone to link through to
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $include_breadcrumbs Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK                   $root Virtual root to use (null: none)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The forum box
  */
 function render_forum_box($row, $zone = '_SEARCH', $give_context = true, $include_breadcrumbs = true, $root = null, $guid = '')
@@ -96,7 +96,7 @@ function render_forum_box($row, $zone = '_SEARCH', $give_context = true, $includ
 /**
  * Get SQL clause to limit a query to accessible forums.
  *
- * @param  ID_TEXT                      Field name.
+ * @param  ID_TEXT                      $field Field name.
  * @return string                       SQL clause.
  */
 function get_forum_access_sql($field)
@@ -142,8 +142,8 @@ function get_forum_access_sql($field)
 /**
  * Organise a list of forum rows into a tree structure.
  *
- * @param  array                        The list of all forum rows (be aware that this will get modified for performance reasons).
- * @param  AUTO_LINK                    The forum row that we are taking as the root of our current recursion.
+ * @param  array                        &$all_forums The list of all forum rows (be aware that this will get modified for performance reasons).
+ * @param  AUTO_LINK                    $forum_id The forum row that we are taking as the root of our current recursion.
  * @return array                        The child list of $forum_id.
  */
 function ocf_organise_into_tree(&$all_forums, $forum_id)
@@ -163,10 +163,10 @@ function ocf_organise_into_tree(&$all_forums, $forum_id)
 /**
  * Gets a list of subordinate forums of a certain forum.
  *
- * @param  AUTO_LINK                    The ID of the forum we are finding subordinate forums of.
- * @param  ?string                      The field name to use in the OR list (null: do not make an OR list, return an array).
- * @param  ?array                       The forum tree structure (null: unknown, it will be found using ocf_organise_into_tree).
- * @param  boolean                      Whether to ignore permissions in this.
+ * @param  AUTO_LINK                    $forum_id The ID of the forum we are finding subordinate forums of.
+ * @param  ?string                      $create_or_list The field name to use in the OR list (null: do not make an OR list, return an array).
+ * @param  ?array                       $tree The forum tree structure (null: unknown, it will be found using ocf_organise_into_tree).
+ * @param  boolean                      $ignore_permissions Whether to ignore permissions in this.
  * @return mixed                        The list (is either a true list, or an OR list).
  */
 function ocf_get_all_subordinate_forums($forum_id, $create_or_list = null, $tree = null, $ignore_permissions = false)
@@ -245,8 +245,8 @@ function ocf_get_all_subordinate_forums($forum_id, $create_or_list = null, $tree
 /**
  * Find whether a member may moderate a certain forum.
  *
- * @param  AUTO_LINK                    The ID of the forum.
- * @param  ?MEMBER                      The member ID (null: current member).
+ * @param  AUTO_LINK                    $forum_id The ID of the forum.
+ * @param  ?MEMBER                      $member_id The member ID (null: current member).
  * @return boolean                      The answer.
  */
 function ocf_may_moderate_forum($forum_id, $member_id = null)
@@ -265,8 +265,8 @@ function ocf_may_moderate_forum($forum_id, $member_id = null)
 /**
  * Get an OR list of a forums parents, suited for selection from the f_topics table.
  *
- * @param  AUTO_LINK                    The ID of the forum.
- * @param  ?AUTO_LINK                   The ID of the parent forum (-1: get it from the DB) (null: there is no parent, as it is the root forum).
+ * @param  AUTO_LINK                    $forum_id The ID of the forum.
+ * @param  ?AUTO_LINK                   $parent_id The ID of the parent forum (-1: get it from the DB) (null: there is no parent, as it is the root forum).
  * @return string                       The OR list.
  */
 function ocf_get_forum_parent_or_list($forum_id, $parent_id = -1)
@@ -291,11 +291,11 @@ function ocf_get_forum_parent_or_list($forum_id, $parent_id = -1)
 /**
  * Get breadcrumbs for a forum.
  *
- * @param  mixed                        The ID of the forum we are at in our path (null: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
- * @param  ?mixed                       The name of the given forum as string or Tempcode (null: find it from the DB).
- * @param  ?AUTO_LINK                   The parent forum of the given forum (null: find it from the DB).
- * @param  boolean                      Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
- * @param  ?AUTO_LINK                   Virtual root (null: none).
+ * @param  mixed                        $end_point_forum The ID of the forum we are at in our path (null: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
+ * @param  ?mixed                       $this_name The name of the given forum as string or Tempcode (null: find it from the DB).
+ * @param  ?AUTO_LINK                   $parent_forum The parent forum of the given forum (null: find it from the DB).
+ * @param  boolean                      $start Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
+ * @param  ?AUTO_LINK                   $root Virtual root (null: none).
  * @return tempcode                     The breadcrumbs.
  */
 function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_forum = null, $start = true, $root = null)

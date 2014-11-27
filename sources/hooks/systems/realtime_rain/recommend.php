@@ -26,8 +26,8 @@ class Hook_realtime_rain_recommend
     /**
      * Run function for realtime-rain hooks.
      *
-     * @param  TIME                     Start of time range.
-     * @param  TIME                     End of time range.
+     * @param  TIME                     $from Start of time range.
+     * @param  TIME                     $to End of time range.
      * @return array                    A list of template parameter sets for rendering a 'drop'.
      */
     public function run($from, $to)

@@ -21,10 +21,10 @@
 /**
  * Render an author box.
  *
- * @param  array                        Author row
- * @param  ID_TEXT                      Zone to link through to
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row Author row
+ * @param  ID_TEXT                      $zone Zone to link through to
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The author box
  */
 function render_author_box($row, $zone = '_SEARCH', $give_context = true, $guid = '')
@@ -105,7 +105,7 @@ function authors_script()
 /**
  * Get a member ID from an author name. First by trying authors table, second by trying forum usernames.
  *
- * @param  ID_TEXT                      The name of an author
+ * @param  ID_TEXT                      $author The name of an author
  * @return ?MEMBER                      The member ID (null: none found)
  */
 function get_author_id_from_name($author)
@@ -117,13 +117,13 @@ function get_author_id_from_name($author)
 /**
  * Adds an author (re-creating them if they already exist - thus it also serves to edit; the reason for this is the fluidity of authors - members are automatically authors even before an author profile is made)
  *
- * @param  ID_TEXT                      The name of an author
- * @param  URLPATH                      The URL to the authors home page
- * @param  ?MEMBER                      The member ID of the author (null: no forum profile)
- * @param  LONG_TEXT                    A description of the author
- * @param  LONG_TEXT                    A terse string showing author skills
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit) (blank: implicit)
+ * @param  ID_TEXT                      $author The name of an author
+ * @param  URLPATH                      $url The URL to the authors home page
+ * @param  ?MEMBER                      $member_id The member ID of the author (null: no forum profile)
+ * @param  LONG_TEXT                    $description A description of the author
+ * @param  LONG_TEXT                    $skills A terse string showing author skills
+ * @param  ?SHORT_TEXT                  $meta_keywords Meta keywords for this resource (null: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   $meta_description Meta description for this resource (null: do not edit) (blank: implicit)
  */
 function add_author($author, $url, $member_id, $description, $skills, $meta_keywords = '', $meta_description = '')
 {
@@ -161,7 +161,7 @@ function add_author($author, $url, $member_id, $description, $skills, $meta_keyw
 /**
  * Delete an author
  *
- * @param  ID_TEXT                      The name of an author
+ * @param  ID_TEXT                      $author The name of an author
  */
 function delete_author($author)
 {
@@ -189,8 +189,8 @@ function delete_author($author)
 /**
  * Find if a member's usergroup has permission to edit an author
  *
- * @param  MEMBER                       The member being checked whether to have the access
- * @param  ID_TEXT                      An author
+ * @param  MEMBER                       $member The member being checked whether to have the access
+ * @param  ID_TEXT                      $author An author
  * @return boolean                      Whether the member can edit this author
  */
 function has_edit_author_permission($member, $author)
@@ -210,8 +210,8 @@ function has_edit_author_permission($member, $author)
 /**
  * Find if a member's usergroup has permission to delete an author
  *
- * @param  MEMBER                       The member being checked whether to have the access
- * @param  ID_TEXT                      An author
+ * @param  MEMBER                       $member The member being checked whether to have the access
+ * @param  ID_TEXT                      $author An author
  * @return boolean                      Whether the member can edit this author
  */
 function has_delete_author_permission($member, $author)
@@ -231,8 +231,8 @@ function has_delete_author_permission($member, $author)
 /**
  * Merge two authors.
  *
- * @param  ID_TEXT                      The first author (being removed effectively)
- * @param  ID_TEXT                      The second author (subsuming the first)
+ * @param  ID_TEXT                      $from The first author (being removed effectively)
+ * @param  ID_TEXT                      $to The second author (subsuming the first)
  */
 function merge_authors($from, $to)
 {

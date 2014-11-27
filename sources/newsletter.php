@@ -45,14 +45,14 @@ function incoming_bounced_email_script()
  * Add to the newsletter, in the simplest way.
  * No authorisation support here, checks it works only for non-subscribed or non-confirmed members.
  *
- * @param  EMAIL                        The email address of the subscriber
- * @param  integer                      The interest level
+ * @param  EMAIL                        $email The email address of the subscriber
+ * @param  integer                      $interest_level The interest level
  * @range  1 4
- * @param  ?LANGUAGE_NAME               The language (null: users)
- * @param  boolean                      Whether to require a confirmation mail
- * @param  ?AUTO_LINK                   The newsletter to join (null: the first)
- * @param  string                       Subscribers forename
- * @param  string                       Subscribers surname
+ * @param  ?LANGUAGE_NAME               $lang The language (null: users)
+ * @param  boolean                      $get_confirm_mail Whether to require a confirmation mail
+ * @param  ?AUTO_LINK                   $newsletter_id The newsletter to join (null: the first)
+ * @param  string                       $forename Subscribers forename
+ * @param  string                       $surname Subscribers surname
  * @return string                       Newsletter password
  */
 function basic_newsletter_join($email, $interest_level = 4, $lang = null, $get_confirm_mail = false, $newsletter_id = null, $forename = '', $surname = '')
@@ -114,17 +114,17 @@ function basic_newsletter_join($email, $interest_level = 4, $lang = null, $get_c
 /**
  * Send out the newsletter.
  *
- * @param  LONG_TEXT                    The newsletter message
- * @param  SHORT_TEXT                   The newsletter subject
- * @param  LANGUAGE_NAME                The language
- * @param  array                        A map describing what newsletters and newsletter levels the newsletter is being sent to
- * @param  BINARY                       Whether to only send in HTML format
- * @param  string                       Override the email address the mail is sent from (blank: staff address)
- * @param  string                       Override the name the mail is sent from (blank: site name)
- * @param  integer                      The message priority (1=urgent, 3=normal, 5=low)
+ * @param  LONG_TEXT                    $message The newsletter message
+ * @param  SHORT_TEXT                   $subject The newsletter subject
+ * @param  LANGUAGE_NAME                $lang The language
+ * @param  array                        $send_details A map describing what newsletters and newsletter levels the newsletter is being sent to
+ * @param  BINARY                       $html_only Whether to only send in HTML format
+ * @param  string                       $from_email Override the email address the mail is sent from (blank: staff address)
+ * @param  string                       $from_name Override the name the mail is sent from (blank: site name)
+ * @param  integer                      $priority The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
- * @param  string                       CSV data of extra subscribers (blank: none). This is in the same ocPortal newsletter CSV format that we export elsewhere.
- * @param  ID_TEXT                      The template used to show the email
+ * @param  string                       $csv_data CSV data of extra subscribers (blank: none). This is in the same ocPortal newsletter CSV format that we export elsewhere.
+ * @param  ID_TEXT                      $mail_template The template used to show the email
  * @return tempcode                     UI
  */
 function actual_send_newsletter($message, $subject, $lang, $send_details, $html_only = 0, $from_email = '', $from_name = '', $priority = 3, $csv_data = '', $mail_template = 'MAIL')
@@ -146,12 +146,12 @@ function actual_send_newsletter($message, $subject, $lang, $send_details, $html_
 /**
  * Find a group of members the newsletter will go to.
  *
- * @param  array                        A map describing what newsletters and newsletter levels the newsletter is being sent to
- * @param  LANGUAGE_NAME                The language
- * @param  integer                      Start position in result set (results are returned in parallel for each category of result)
- * @param  integer                      Maximum records to return from each category
- * @param  boolean                      Whether to get raw rows rather than mailer-ready correspondance lists
- * @param  string                       Serialized CSV data to also consider
+ * @param  array                        $send_details A map describing what newsletters and newsletter levels the newsletter is being sent to
+ * @param  LANGUAGE_NAME                $lang The language
+ * @param  integer                      $start Start position in result set (results are returned in parallel for each category of result)
+ * @param  integer                      $max Maximum records to return from each category
+ * @param  boolean                      $get_raw_rows Whether to get raw rows rather than mailer-ready correspondance lists
+ * @param  string                       $csv_data Serialized CSV data to also consider
  * @return array                        Returns a tuple of corresponding detail lists, emails,hashes,usernames,forenames,surnames,ids, and a record count for levels (depending on requests: csv, 1, <newsletterID>, g<groupID>) [record counts not returned if $start is not zero, for performance reasons]
  */
 function newsletter_who_send_to($send_details, $lang, $start, $max, $get_raw_rows = false, $csv_data = '')
@@ -343,14 +343,14 @@ function newsletter_who_send_to($send_details, $lang, $start, $max, $get_raw_row
 /**
  * Sub in newsletter variables.
  *
- * @param  string                       The original newsletter message
- * @param  SHORT_TEXT                   The newsletter subject
- * @param  SHORT_TEXT                   Subscribers forename (blank: unknown)
- * @param  SHORT_TEXT                   Subscribers surname (blank: unknown)
- * @param  SHORT_TEXT                   Subscribers name (or username)
- * @param  EMAIL                        Subscribers email address
- * @param  ID_TEXT                      Specially encoded ID of subscriber (begins either 'n' for newsletter subscriber, or 'm' for member - then has normal subscriber/member ID following)
- * @param  SHORT_TEXT                   Double encoded password hash of subscriber (blank: can not unsubscribe by URL)
+ * @param  string                       $message The original newsletter message
+ * @param  SHORT_TEXT                   $subject The newsletter subject
+ * @param  SHORT_TEXT                   $forename Subscribers forename (blank: unknown)
+ * @param  SHORT_TEXT                   $surname Subscribers surname (blank: unknown)
+ * @param  SHORT_TEXT                   $name Subscribers name (or username)
+ * @param  EMAIL                        $email_address Subscribers email address
+ * @param  ID_TEXT                      $sendid Specially encoded ID of subscriber (begins either 'n' for newsletter subscriber, or 'm' for member - then has normal subscriber/member ID following)
+ * @param  SHORT_TEXT                   $hash Double encoded password hash of subscriber (blank: can not unsubscribe by URL)
  * @return string                       The new newsletter message
  */
 function newsletter_variable_substitution($message, $subject, $forename, $surname, $name, $email_address, $sendid, $hash)
@@ -407,8 +407,8 @@ function newsletter_block_list()
 /**
  * Make a newsletter.
  *
- * @param  SHORT_TEXT                   The title
- * @param  LONG_TEXT                    The description
+ * @param  SHORT_TEXT                   $title The title
+ * @param  LONG_TEXT                    $description The description
  * @return AUTO_LINK                    The ID
  */
 function add_newsletter($title, $description)
@@ -427,9 +427,9 @@ function add_newsletter($title, $description)
 /**
  * Edit a newsletter.
  *
- * @param  AUTO_LINK                    The ID
- * @param  SHORT_TEXT                   The title
- * @param  LONG_TEXT                    The description
+ * @param  AUTO_LINK                    $id The ID
+ * @param  SHORT_TEXT                   $title The title
+ * @param  LONG_TEXT                    $description The description
  */
 function edit_newsletter($id, $title, $description)
 {
@@ -445,7 +445,7 @@ function edit_newsletter($id, $title, $description)
 /**
  * Delete a newsletter.
  *
- * @param  AUTO_LINK                    The ID
+ * @param  AUTO_LINK                    $id The ID
  */
 function delete_newsletter($id)
 {

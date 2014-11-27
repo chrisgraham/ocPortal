@@ -21,7 +21,7 @@
 /**
  * Escapes a string as per the ical format.
  *
- * @param  string                       Input
+ * @param  string                       $in Input
  * @return string                       Output
  */
 function ical_escape($in)
@@ -310,7 +310,7 @@ function output_ical()
 /**
  * Import ical events to members's event calendar.
  *
- * @param  PATH                         File path
+ * @param  PATH                         $file_name File path
  */
 function ical_import($file_name)
 {
@@ -387,7 +387,7 @@ function ical_import($file_name)
 /**
  * Get array of an events from node of an imported ical file
  *
- * @param  array                        Array of given event details
+ * @param  array                        $calendar_nodes Array of given event details
  * @return array                        Returns array of event details for mapping
  */
 function get_event_data_ical($calendar_nodes)

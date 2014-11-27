@@ -26,12 +26,12 @@ class Hook_ocf_auth_converge
     /**
      * Try and authenticate for our password compatibility scheme.
      *
-     * @param  ?SHORT_TEXT              The member username (null: don't use this in the authentication - but look it up using the ID if needed)
-     * @param  ?MEMBER                  The member ID (null: use member name)
-     * @param  MD5                      The md5-hashed password
-     * @param  string                   The raw password
-     * @param  boolean                  Whether this is a cookie login
-     * @param  array                    Row of OCF account
+     * @param  ?SHORT_TEXT              $username The member username (null: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  ?MEMBER                  $userid The member ID (null: use member name)
+     * @param  MD5                      $password_hashed The md5-hashed password
+     * @param  string                   $password_raw The raw password
+     * @param  boolean                  $cookie_login Whether this is a cookie login
+     * @param  array                    $row Row of OCF account
      * @return ?tempcode                Error message (null: none)
      */
     public function auth($username, $userid, $password_hashed, $password_raw, $cookie_login, $row)

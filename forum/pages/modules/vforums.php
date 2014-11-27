@@ -43,10 +43,10 @@ class Module_vforums
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -248,12 +248,12 @@ class Module_vforums
     /**
      * The UI to show a virtual forum.
      *
-     * @param  tempcode                 The title to show for the v-forum
-     * @param  mixed                    The condition (a fragment of an SQL query that gets embedded in the context of a topic selection query). May be string, or array of strings (separate queries to run and merge; done for performance reasons relating to DB indexing)
-     * @param  string                   The ordering of the results
-     * @param  boolean                  Whether to not show pinning in a separate section
-     * @param  ?array                   Extra template parameters to pass through (null: none)
-     * @param  ?string                  The table to query (null: topic table)
+     * @param  tempcode                 $title The title to show for the v-forum
+     * @param  mixed                    $condition The condition (a fragment of an SQL query that gets embedded in the context of a topic selection query). May be string, or array of strings (separate queries to run and merge; done for performance reasons relating to DB indexing)
+     * @param  string                   $order The ordering of the results
+     * @param  boolean                  $no_pin Whether to not show pinning in a separate section
+     * @param  ?array                   $extra_tpl_map Extra template parameters to pass through (null: none)
+     * @param  ?string                  $initial_table The table to query (null: topic table)
      * @return tempcode                 The UI
      */
     public function _vforum($title, $condition, $order, $no_pin = false, $extra_tpl_map = null, $initial_table = null)

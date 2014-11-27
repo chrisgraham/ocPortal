@@ -21,11 +21,11 @@
 /**
  * Show a news entry box.
  *
- * @param  array                        The news row
- * @param  ID_TEXT                      The zone our news module is in
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to use the brief styling
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The news row
+ * @param  ID_TEXT                      $zone The zone our news module is in
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $brief Whether to use the brief styling
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The box
  */
 function render_news_box($row, $zone = '_SEARCH', $give_context = true, $brief = false, $guid = '')
@@ -115,12 +115,12 @@ function render_news_box($row, $zone = '_SEARCH', $give_context = true, $brief =
 /**
  * Get tempcode for a news category 'feature box' for the given row
  *
- * @param  array                        The database field row of it
- * @param  ID_TEXT                      The zone to use
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean                      Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
- * @param  ?integer                     What to show (null: news and blogs, 0: news, 1: blogs)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $row The database field row of it
+ * @param  ID_TEXT                      $zone The zone to use
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ?integer                     $blogs What to show (null: news and blogs, 0: news, 1: blogs)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     A box for it, linking to the full page
  */
 function render_news_category_box($row, $zone = '_SEARCH', $give_context = true, $attach_to_url_filter = false, $blogs = null, $guid = '')
@@ -184,13 +184,13 @@ function render_news_category_box($row, $zone = '_SEARCH', $give_context = true,
 /**
  * Get a nice formatted XHTML list of news categories.
  *
- * @param  ?mixed                       The selected news category. Array or AUTO_LINK (null: personal)
- * @param  boolean                      Whether to add all personal categories into the list (for things like the adminzone, where all categories must be shown, regardless of permissions)
- * @param  boolean                      Whether to only show for what may be added to by the current member
- * @param  boolean                      Whether to limit to only existing cats (otherwise we dynamically add unstarted blogs)
- * @param  ?boolean                     Whether to limit to only show blog categories (null: don't care, true: blogs only, false: no blogs)
- * @param  boolean                      Whether to prefer to choose a non-blog category as the default
- * @param  ?TIME                        Time from which content must be updated (null: no limit).
+ * @param  ?mixed                       $it The selected news category. Array or AUTO_LINK (null: personal)
+ * @param  boolean                      $show_all_personal_categories Whether to add all personal categories into the list (for things like the adminzone, where all categories must be shown, regardless of permissions)
+ * @param  boolean                      $addable_filter Whether to only show for what may be added to by the current member
+ * @param  boolean                      $only_existing Whether to limit to only existing cats (otherwise we dynamically add unstarted blogs)
+ * @param  ?boolean                     $only_blogs Whether to limit to only show blog categories (null: don't care, true: blogs only, false: no blogs)
+ * @param  boolean                      $prefer_not_blog_selected Whether to prefer to choose a non-blog category as the default
+ * @param  ?TIME                        $updated_since Time from which content must be updated (null: no limit).
  * @return tempcode                     The tempcode for the news category select list
  */
 function create_selection_list_news_categories($it = null, $show_all_personal_categories = false, $addable_filter = false, $only_existing = false, $only_blogs = null, $prefer_not_blog_selected = false, $updated_since = null)
@@ -275,10 +275,10 @@ function create_selection_list_news_categories($it = null, $show_all_personal_ca
 /**
  * Get a nice formatted XHTML list of news.
  *
- * @param  ?AUTO_LINK                   The selected news entry (null: none)
- * @param  ?MEMBER                      Limit news to those submitted by this member (null: show all)
- * @param  boolean                      Whether to only show for what may be edited by the current member
- * @param  boolean                      Whether to only show blog posts
+ * @param  ?AUTO_LINK                   $it The selected news entry (null: none)
+ * @param  ?MEMBER                      $only_owned Limit news to those submitted by this member (null: show all)
+ * @param  boolean                      $editable_filter Whether to only show for what may be edited by the current member
+ * @param  boolean                      $only_in_blog Whether to only show blog posts
  * @return tempcode                     The list
  */
 function create_selection_list_news($it, $only_owned = null, $editable_filter = false, $only_in_blog = false)

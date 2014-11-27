@@ -16,10 +16,10 @@
 /**
  * Add a community billboard message.
  *
- * @param  SHORT_TEXT                   The message
- * @param  integer                      The number of days to display for
- * @param  LONG_TEXT                    Notes
- * @param  BINARY                       Whether the message is for immediate use
+ * @param  SHORT_TEXT                   $message The message
+ * @param  integer                      $days The number of days to display for
+ * @param  LONG_TEXT                    $notes Notes
+ * @param  BINARY                       $validated Whether the message is for immediate use
  * @return AUTO_LINK                    The ID of the newly added message
  */
 function add_community_billboard_message($message, $days, $notes, $validated)
@@ -52,10 +52,10 @@ function add_community_billboard_message($message, $days, $notes, $validated)
 /**
  * Edit a community billboard message.
  *
- * @param  AUTO_LINK                    The ID of what to edit
- * @param  SHORT_TEXT                   The message
- * @param  LONG_TEXT                    Notes
- * @param  BINARY                       Whether the message is the active message
+ * @param  AUTO_LINK                    $id The ID of what to edit
+ * @param  SHORT_TEXT                   $message The message
+ * @param  LONG_TEXT                    $notes Notes
+ * @param  BINARY                       $validated Whether the message is the active message
  */
 function edit_community_billboard_message($id, $message, $notes, $validated)
 {
@@ -77,7 +77,7 @@ function edit_community_billboard_message($id, $message, $notes, $validated)
 /**
  * Delete a community billboard message.
  *
- * @param  AUTO_LINK                    The ID of the community billboard message to delete
+ * @param  AUTO_LINK                    $id The ID of the community billboard message to delete
  */
 function delete_community_billboard_message($id)
 {
@@ -93,7 +93,7 @@ function delete_community_billboard_message($id)
 /**
  * Choose a community billboard message.
  *
- * @param  AUTO_LINK                    The ID of the community billboard message to choose
+ * @param  AUTO_LINK                    $id The ID of the community billboard message to choose
  */
 function choose_community_billboard_message($id)
 {

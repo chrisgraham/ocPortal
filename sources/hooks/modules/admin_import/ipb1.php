@@ -79,9 +79,9 @@ class Hook_ipb1 extends Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_forum_groupings($db, $table_prefix, $old_base_dir)
     {
@@ -115,9 +115,9 @@ class Hook_ipb1 extends Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_forums($db, $table_prefix, $old_base_dir)
     {
@@ -183,9 +183,9 @@ class Hook_ipb1 extends Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_config($db, $table_prefix, $file_base)
     {
@@ -208,9 +208,9 @@ class Hook_ipb1 extends Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $old_base_dir The base directory we are importing from
      */
     public function import_ocf_private_topics($db, $table_prefix, $old_base_dir)
     {

@@ -16,7 +16,7 @@ class Hook_members_facebook
     /**
      * Get sections to inject to about tab of the member profile.
      *
-     * @param  MEMBER                   The ID of the member we are getting sections for
+     * @param  MEMBER                   $member_id The ID of the member we are getting sections for
      * @return array                    List of sections. Each tuple is Tempcode.
      */
     public function get_sections($member_id)

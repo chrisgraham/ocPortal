@@ -16,9 +16,9 @@
 /**
  * Handling of a purchased permission.
  *
- * @param  ID_TEXT                      The purchase ID.
- * @param  array                        Details of the product.
- * @param  ID_TEXT                      The product codename.
+ * @param  ID_TEXT                      $purchase_id The purchase ID.
+ * @param  array                        $details Details of the product.
+ * @param  ID_TEXT                      $type_code The product codename.
  */
 function handle_permission_purchase($purchase_id, $details, $type_code)
 {
@@ -51,8 +51,8 @@ function handle_permission_purchase($purchase_id, $details, $type_code)
 /**
  * Get a database map for our permission row.
  *
- * @param  array                        Map row of item
- * @param  MEMBER                       Member ID
+ * @param  array                        $row Map row of item
+ * @param  MEMBER                       $member Member ID
  * @return array                        Permission map row
  */
 function get_sales_permission_map($row, $member)
@@ -143,7 +143,7 @@ class Hook_ecommerce_permission
     /**
      * Get the message for use in the purchase wizard.
      *
-     * @param  string                   The product in question.
+     * @param  string                   $type_code The product in question.
      * @return tempcode                 The message.
      */
     public function get_message($type_code)

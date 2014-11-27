@@ -21,10 +21,10 @@
 /**
  * Log permission checks to the permission_checks.log file
  *
- * @param  MEMBER                       The user checking against
- * @param  ID_TEXT                      The function that was called to check a permission
- * @param  array                        Parameters to this permission-checking function
- * @param  boolean                      Whether the permission was held
+ * @param  MEMBER                       $member The user checking against
+ * @param  ID_TEXT                      $op The function that was called to check a permission
+ * @param  array                        $params Parameters to this permission-checking function
+ * @param  boolean                      $result Whether the permission was held
  */
 function _handle_permission_check_logging($member, $op, $params, $result)
 {
@@ -72,10 +72,10 @@ function _handle_permission_check_logging($member, $op, $params, $result)
 /**
  * Find if a group has a specified permission
  *
- * @param  GROUP                        The being checked whether to have the permission
- * @param  ID_TEXT                      The ID code for the permission being checked for
- * @param  ?ID_TEXT                     The ID code for the page being checked (null: current page)
- * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (null: N/A)
+ * @param  GROUP                        $group_id The being checked whether to have the permission
+ * @param  ID_TEXT                      $permission The ID code for the permission being checked for
+ * @param  ?ID_TEXT                     $page The ID code for the page being checked (null: current page)
+ * @param  ?array                       $cats A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (null: N/A)
  * @return boolean                      Whether the member has the permission
  */
 function has_privilege_group($group_id, $permission, $page = null, $cats = null)
@@ -139,12 +139,12 @@ function get_category_permissions_hidden_on()
 /**
  * Gather the permissions for the specified category as a form field input matrix.
  *
- * @param  ID_TEXT                      The ID code for the module being checked for category access
- * @param  ID_TEXT                      The ID code for the category being checked for access (often, a number cast to a string)
- * @param  ?ID_TEXT                     The page this is for (null: current page)
- * @param  ?tempcode                    Extra help to show in interface (null: none)
- * @param  boolean                      Whether this is a new category (don't load permissions, default to on)
- * @param  ?tempcode                    Label for view permissions (null: default)
+ * @param  ID_TEXT                      $module The ID code for the module being checked for category access
+ * @param  ID_TEXT                      $category The ID code for the category being checked for access (often, a number cast to a string)
+ * @param  ?ID_TEXT                     $page The page this is for (null: current page)
+ * @param  ?tempcode                    $help Extra help to show in interface (null: none)
+ * @param  boolean                      $new_category Whether this is a new category (don't load permissions, default to on)
+ * @param  ?tempcode                    $pinterface_view Label for view permissions (null: default)
  * @return tempcode                     The form field matrix
  */
 function get_category_permissions_for_environment($module, $category, $page = null, $help = null, $new_category = false, $pinterface_view = null)
@@ -231,13 +231,13 @@ function get_category_permissions_for_environment($module, $category, $page = nu
 /**
  * Create a form field input matrix for permission setting.
  *
- * @param  ID_TEXT                      Permission ID (page_link style) for the resource being set
- * @param  array                        An inverted list showing what view permissions are set for what we're setting permissions for
- * @param  array                        List of overridable privilege codes for what we're setting permissions for
- * @param  array                        List of privilege settings relating to what we're setting permissions for, from the database
- * @param  array                        Multi-dimensional array showing what the inherited defaults for this permission would be
- * @param  boolean                      Whether to not include the stuff to make it fit alongside other form fields in a normal form table
- * @param  ?tempcode                    Label for view permissions (null: default)
+ * @param  ID_TEXT                      $server_id Permission ID (page_link style) for the resource being set
+ * @param  array                        $access An inverted list showing what view permissions are set for what we're setting permissions for
+ * @param  array                        $overridables List of overridable privilege codes for what we're setting permissions for
+ * @param  array                        $privileges List of privilege settings relating to what we're setting permissions for, from the database
+ * @param  array                        $default_access Multi-dimensional array showing what the inherited defaults for this permission would be
+ * @param  boolean                      $no_outer Whether to not include the stuff to make it fit alongside other form fields in a normal form table
+ * @param  ?tempcode                    $pinterface_view Label for view permissions (null: default)
  * @return tempcode                     The form field matrix
  */
 function get_permissions_matrix($server_id, $access, $overridables, $privileges, $default_access, $no_outer = false, $pinterface_view = null)
@@ -379,9 +379,9 @@ function get_permissions_matrix($server_id, $access, $overridables, $privileges,
 /**
  * Assuming that permission details are POSTed, set the permissions for the specified category, in the current page
  *
- * @param  ID_TEXT                      The ID code for the module being checked for category access
- * @param  ID_TEXT                      The ID code for the category being checked for access (often, a number cast to a string)
- * @param  ?ID_TEXT                     The page this is for (null: current page)
+ * @param  ID_TEXT                      $module The ID code for the module being checked for category access
+ * @param  ID_TEXT                      $category The ID code for the category being checked for access (often, a number cast to a string)
+ * @param  ?ID_TEXT                     $page The page this is for (null: current page)
  */
 function set_category_permissions_from_environment($module, $category, $page = null)
 {
@@ -458,9 +458,9 @@ function set_category_permissions_from_environment($module, $category, $page = n
 /**
  * Gather the permissions for the specified page as form field inputs.
  *
- * @param  ID_TEXT                      The ID code for the zone
- * @param  ID_TEXT                      The ID code for the page
- * @param  ?tempcode                    Extra help to show in interface (null: none)
+ * @param  ID_TEXT                      $zone The ID code for the zone
+ * @param  ID_TEXT                      $page The ID code for the page
+ * @param  ?tempcode                    $help Extra help to show in interface (null: none)
  * @return tempcode                     The form fields
  */
 function get_page_permissions_for_environment($zone, $page, $help = null)
@@ -499,8 +499,8 @@ function get_page_permissions_for_environment($zone, $page, $help = null)
 /**
  * Assuming that permission details are POSTed, set the permissions for the specified category, in the current page
  *
- * @param  ID_TEXT                      The ID code for the zone
- * @param  ID_TEXT                      The ID code for the page
+ * @param  ID_TEXT                      $zone The ID code for the zone
+ * @param  ID_TEXT                      $page The ID code for the page
  */
 function set_page_permissions_from_environment($zone, $page)
 {

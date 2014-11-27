@@ -21,9 +21,9 @@
 /**
  * phpBB: Encode hash
  *
- * @param  string                       To encode
- * @param  integer                      How many chars to encode
- * @param  string                       Lookup table used internally
+ * @param  string                       $input To encode
+ * @param  integer                      $count How many chars to encode
+ * @param  string                        &$itoa64 Lookup table used internally
  * @return string                       The encoded output
  */
 function _hash_encode64($input, $count, &$itoa64)
@@ -71,9 +71,9 @@ function _hash_encode64($input, $count, &$itoa64)
  * phpBB: The crypt function/replacement
  * Get the rows for the top given number of posters on the forum.
  *
- * @param  string                       To encode
- * @param  string                       Encode settings in special format
- * @param  string                       Lookup table used internally
+ * @param  string                       $password To encode
+ * @param  string                       $setting Encode settings in special format
+ * @param  string                        &$itoa64 Lookup table used internally
  * @return string                       The encoded output
  */
 function _hash_crypt_private($password, $setting, &$itoa64)
@@ -138,7 +138,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the rows for the top given number of posters on the forum.
      *
-     * @param  integer                  The limit to the number of top posters to fetch
+     * @param  integer                  $limit The limit to the number of top posters to fetch
      * @return array                    The rows for the given number of top posters in the forum
      */
     public function get_top_posters($limit)
@@ -149,7 +149,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Attempt to to find the member's language from their forum profile. It converts between language-identifiers using a map (lang/map.ini).
      *
-     * @param  MEMBER                   The member who's language needs to be fetched
+     * @param  MEMBER                   $member The member who's language needs to be fetched
      * @return ?LANGUAGE_NAME           The member's language (null: unknown)
      */
     public function forum_get_lang($member)
@@ -201,8 +201,8 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
      *
-     * @param  string                   The name of the new custom field
-     * @param  integer                  The length of the new custom field
+     * @param  string                   $name The name of the new custom field
+     * @param  integer                  $length The length of the new custom field
      * @return boolean                  Whether the custom field was created successfully
      */
     public function install_create_custom_field($name, $length)
@@ -235,7 +235,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Searches for forum auto-config at this path.
      *
-     * @param  PATH                     The path in which to search
+     * @param  PATH                     $path The path in which to search
      * @return boolean                  Whether the forum auto-config could be found
      */
     public function install_test_load_from($path)
@@ -313,7 +313,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get an emoticon chooser template.
      *
-     * @param  string                   The ID of the form field the emoticon chooser adds to
+     * @param  string                   $field_name The ID of the form field the emoticon chooser adds to
      * @return tempcode                 The emoticon chooser template
      */
     public function get_emoticon_chooser($field_name = 'post')
@@ -332,8 +332,8 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Pin a topic.
      *
-     * @param  AUTO_LINK                The topic ID
-     * @param  boolean                  True: pin it, False: unpin it
+     * @param  AUTO_LINK                $id The topic ID
+     * @param  boolean                  $pin True: pin it, False: unpin it
      */
     public function pin_topic($id, $pin = true)
     {
@@ -343,9 +343,9 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Set a custom profile fields value. It should not be called directly.
      *
-     * @param  MEMBER                   The member ID
-     * @param  string                   The field name
-     * @param  string                   The value
+     * @param  MEMBER                   $member The member ID
+     * @param  string                   $field The field name
+     * @param  string                   $value The value
      */
     public function set_custom_field($member, $field, $value)
     {
@@ -355,7 +355,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get custom profile fields values for all 'ocp_' prefixed keys.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?array                   A map of the custom profile fields, key_suffix=>value (null: no fields)
      */
     public function get_custom_fields($member)
@@ -373,7 +373,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get a member row for the member of the given name.
      *
-     * @param  SHORT_TEXT               The member name
+     * @param  SHORT_TEXT               $name The member name
      * @return ?array                   The profile-row (null: not found)
      */
     public function get_mrow($name)
@@ -388,7 +388,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * From a member row, get the member's primary usergroup.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return GROUP                    The member's primary usergroup
      */
     public function mrow_group($r)
@@ -403,7 +403,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * From a member row, get the member's member ID.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return MEMBER                   The member ID
      */
     public function mrow_id($r)
@@ -414,7 +414,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * From a member row, get the member's last visit date.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return TIME                     The last visit date
      */
     public function mrow_lastvisit($r)
@@ -425,7 +425,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * From a member row, get the member's name.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return string                   The member name
      */
     public function mrow_username($r)
@@ -436,7 +436,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * From a member row, get the member's e-mail address.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return SHORT_TEXT               The member e-mail address
      */
     public function mrow_email($r)
@@ -447,7 +447,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get a URL to the specified member's home (control panel).
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $id The member ID
      * @return URLPATH                  The URL to the members home
      */
     public function member_home_url($id)
@@ -458,7 +458,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the photo thumbnail URL for the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return URLPATH                  The URL (blank: none)
      */
     public function get_member_photo_url($member)
@@ -469,7 +469,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the avatar URL for the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return URLPATH                  The URL (blank: none)
      */
     public function get_member_avatar_url($member)
@@ -548,7 +548,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the forum ID from a forum name.
      *
-     * @param  SHORT_TEXT               The forum name
+     * @param  SHORT_TEXT               $forum_name The forum name
      * @return integer                  The forum ID
      */
     public function forum_id_from_name($forum_name)
@@ -585,22 +585,22 @@ class Forum_driver_phpbb3 extends Forum_driver_base
      * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
      * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
      *
-     * @param  SHORT_TEXT               The forum name
-     * @param  SHORT_TEXT               The topic identifier (usually <content-type>_<content-id>)
-     * @param  MEMBER                   The member ID
-     * @param  LONG_TEXT                The post title
-     * @param  LONG_TEXT                The post content in Comcode format
-     * @param  string                   The topic title; must be same as content title if this is for a comment topic
-     * @param  string                   This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
-     * @param  ?URLPATH                 URL to the content (null: do not make spacer post)
-     * @param  ?TIME                    The post time (null: use current time)
-     * @param  ?IP                      The post IP address (null: use current members IP address)
-     * @param  ?BINARY                  Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
-     * @param  ?BINARY                  Whether the topic is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
-     * @param  boolean                  Whether to skip post checks
-     * @param  SHORT_TEXT               The name of the poster
-     * @param  ?AUTO_LINK               ID of post being replied to (null: N/A)
-     * @param  boolean                  Whether the reply is only visible to staff
+     * @param  SHORT_TEXT               $forum_name The forum name
+     * @param  SHORT_TEXT               $topic_identifier The topic identifier (usually <content-type>_<content-id>)
+     * @param  MEMBER                   $member The member ID
+     * @param  LONG_TEXT                $post_title The post title
+     * @param  LONG_TEXT                $_post The post content in Comcode format
+     * @param  string                   $content_title The topic title; must be same as content title if this is for a comment topic
+     * @param  string                   $topic_identifier_encapsulation_prefix This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+     * @param  ?URLPATH                 $content_url URL to the content (null: do not make spacer post)
+     * @param  ?TIME                    $time The post time (null: use current time)
+     * @param  ?IP                      $ip The post IP address (null: use current members IP address)
+     * @param  ?BINARY                  $validated Whether the post is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  ?BINARY                  $topic_validated Whether the topic is validated (null: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  boolean                  $skip_post_checks Whether to skip post checks
+     * @param  SHORT_TEXT               $poster_name_if_guest The name of the poster
+     * @param  ?AUTO_LINK               $parent_id ID of post being replied to (null: N/A)
+     * @param  boolean                  $staff_only Whether the reply is only visible to staff
      * @return array                    Topic ID (may be NULL), and whether a hidden post has been made
      */
     public function make_post_forum_topic($forum_name, $topic_identifier, $member, $post_title, $_post, $content_title, $topic_identifier_encapsulation_prefix, $content_url = null, $time = null, $ip = null, $validated = null, $topic_validated = 1, $skip_post_checks = false, $poster_name_if_guest = '', $parent_id = null, $staff_only = false)
@@ -661,12 +661,12 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get an array of maps for the topic in the given forum.
      *
-     * @param  integer                  The topic ID
-     * @param  integer                  The comment count will be returned here by reference
-     * @param  integer                  Maximum comments to returned
-     * @param  integer                  Comment to start at
-     * @param  boolean                  Whether to mark the topic read (ignored for this forum driver)
-     * @param  boolean                  Whether to show in reverse
+     * @param  integer                  $topic_id The topic ID
+     * @param  integer                   &$count The comment count will be returned here by reference
+     * @param  integer                  $max Maximum comments to returned
+     * @param  integer                  $start Comment to start at
+     * @param  boolean                  $mark_read Whether to mark the topic read (ignored for this forum driver)
+     * @param  boolean                  $reverse Whether to show in reverse
      * @return mixed                    The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
      */
     public function get_forum_topic_posts($topic_id, &$count, $max = 100, $start = 0, $mark_read = true, $reverse = false)
@@ -701,8 +701,8 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
      *
-     * @param  integer                  The topic ID
-     * @param  string       The forum ID
+     * @param  integer                  $id The topic ID
+     * @param  string       $forum The forum ID
      * @return URLPATH                  The URL to the topic
      */
     public function topic_url($id, $forum)
@@ -713,8 +713,8 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get a URL to the specified post ID.
      *
-     * @param  integer                  The post ID
-     * @param  string       The forum ID
+     * @param  integer                  $id The post ID
+     * @param  string       $forum The forum ID
      * @return URLPATH                  The URL to the post
      */
     public function post_url($id, $forum)
@@ -730,8 +730,8 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
      *
-     * @param  string                   The forum name / ID
-     * @param  SHORT_TEXT               The topic identifier
+     * @param  string                   $forum The forum name / ID
+     * @param  SHORT_TEXT               $topic_identifier The topic identifier
      * @return ?integer                 The topic ID (null: not found)
      */
     public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
@@ -754,16 +754,16 @@ class Forum_driver_phpbb3 extends Forum_driver_base
      * - firsttitle, the title of the first post
      * - firstpost, the first post (only set if $show_first_posts was true)
      *
-     * @param  mixed                    The forum name or an array of forum IDs
-     * @param  integer                  The limit
-     * @param  integer                  The start position
-     * @param  integer                  The total rows (not a parameter: returns by reference)
-     * @param  SHORT_TEXT               The topic title filter
-     * @param  boolean                  Whether to show the first posts
-     * @param  string                   The date key to sort by
+     * @param  mixed                    $name The forum name or an array of forum IDs
+     * @param  integer                  $limit The limit
+     * @param  integer                  $start The start position
+     * @param  integer                   &$max_rows The total rows (not a parameter: returns by reference)
+     * @param  SHORT_TEXT               $filter_topic_title The topic title filter
+     * @param  boolean                  $show_first_posts Whether to show the first posts
+     * @param  string                   $date_key The date key to sort by
      * @set    lasttime firsttime
-     * @param  boolean                  Whether to limit to hot topics
-     * @param  SHORT_TEXT               The topic description filter
+     * @param  boolean                  $hot Whether to limit to hot topics
+     * @param  SHORT_TEXT               $filter_topic_description The topic description filter
      * @return ?array                   The array of topics (null: error)
      */
     public function show_forum_topics($name, $limit, $start, &$max_rows, $filter_topic_title = '', $show_first_posts = false, $date_key = 'lasttime', $hot = false, $filter_topic_description = '')
@@ -886,9 +886,9 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get an array of members who are in at least one of the given array of usergroups.
      *
-     * @param  array                    The array of usergroups
-     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
-     * @param  integer                  Return primary members after this offset and secondary members after this offset
+     * @param  array                    $groups The array of usergroups
+     * @param  ?integer                 $max Return up to this many entries for primary members and this many entries for secondary members (null: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  integer                  $start Return primary members after this offset and secondary members after this offset
      * @return ?array                   The array of members (null: no members)
      */
     public function member_group_query($groups, $max = null, $start = 0)
@@ -909,7 +909,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * This is the opposite of the get_next_member function.
      *
-     * @param  MEMBER                   The member ID to decrement
+     * @param  MEMBER                   $member The member ID to decrement
      * @return ?MEMBER                  The previous member ID (null: no previous member)
      */
     public function get_previous_member($member)
@@ -922,7 +922,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
      * Get the member ID of the next member after the given one, or NULL.
      * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
      *
-     * @param  MEMBER                   The member ID to increment
+     * @param  MEMBER                   $member The member ID to increment
      * @return ?MEMBER                  The next member ID (null: no next member)
      */
     public function get_next_member($member)
@@ -934,7 +934,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Try to find a member with the given IP address
      *
-     * @param  IP                       The IP address
+     * @param  IP                       $ip The IP address
      * @return array                    The distinct rows found
      */
     public function probe_ip($ip)
@@ -972,7 +972,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Find if this member may have e-mails sent to them
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member may have e-mails sent to them
      */
     public function get_member_email_allowed($member)
@@ -987,7 +987,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the timestamp of a member's join date.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return TIME                     The timestamp
      */
     public function get_member_join_timestamp($member)
@@ -998,8 +998,8 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Find all members with a name matching the given SQL LIKE string.
      *
-     * @param  string                   The pattern
-     * @param  ?integer                 Maximum number to return (limits to the most recent active) (null: no limit)
+     * @param  string                   $pattern The pattern
+     * @param  ?integer                 $limit Maximum number to return (limits to the most recent active) (null: no limit)
      * @return ?array                   The array of matched members (null: none found)
      */
     public function get_matching_members($pattern, $limit = null)
@@ -1012,7 +1012,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the given member's post count.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return integer                  The post count
      */
     public function get_post_count($member)
@@ -1023,7 +1023,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get the given member's topic count.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return integer                  The topic count
      */
     public function get_topic_count($member)
@@ -1034,7 +1034,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Find out if the given member ID is banned.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is banned
      */
     public function is_banned($member)
@@ -1101,7 +1101,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
      * Try to find the theme that the logged-in/guest member is using, and map it to an ocPortal theme.
      * The themes/map.ini file functions to provide this mapping between forum themes, and ocPortal themes, and has a slightly different meaning for different forum drivers. For example, some drivers map the forum themes theme directory to the ocPortal theme name, whilst others made the humanly readeable name.
      *
-     * @param  boolean                  Whether to avoid member-specific lookup
+     * @param  boolean                  $skip_member_specific Whether to avoid member-specific lookup
      * @return ID_TEXT                  The theme
      */
     public function _get_theme($skip_member_specific = false)
@@ -1237,7 +1237,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get a member ID from the given member's username.
      *
-     * @param  SHORT_TEXT               The member name
+     * @param  SHORT_TEXT               $name The member name
      * @return MEMBER                   The member ID
      */
     public function get_member_from_username($name)
@@ -1310,9 +1310,9 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * The hashing algorithm of this forum driver. NOT used for cookie logins for this forum driver (cookies store a generated session ID).
      *
-     * @param  string                   The data to hash (the password in actuality)
-     * @param  string                   The string converted member-ID in actuality, although this function is more general. For cookie logins, 'ys'
-     * @param  boolean                  Whether to just get the old style hash
+     * @param  string                   $data The data to hash (the password in actuality)
+     * @param  string                   $key The string converted member-ID in actuality, although this function is more general. For cookie logins, 'ys'
+     * @param  boolean                  $just_first Whether to just get the old style hash
      * @return string                   The hashed data
      */
     public function forum_md5($data, $key, $just_first = false)
@@ -1329,9 +1329,9 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Create a member login cookie.
      *
-     * @param  MEMBER                   The member ID
-     * @param  ?SHORT_TEXT              The username (null: lookup)
-     * @param  string                   The password
+     * @param  MEMBER                   $id The member ID
+     * @param  ?SHORT_TEXT              $name The username (null: lookup)
+     * @param  string                   $password The password
      */
     public function forum_create_cookie($id, $name, $password)
     {
@@ -1388,11 +1388,11 @@ class Forum_driver_phpbb3 extends Forum_driver_base
      * All authorisation, cookies, and form-logins, are passed through this function.
      * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
      *
-     * @param  ?SHORT_TEXT              The member username (null: don't use this in the authentication - but look it up using the ID if needed)
-     * @param  MEMBER                   The member ID
-     * @param  MD5                      The md5-hashed password
-     * @param  string                   The raw password
-     * @param  boolean                  Whether this is a cookie login
+     * @param  ?SHORT_TEXT              $username The member username (null: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  MEMBER                   $userid The member ID
+     * @param  MD5                      $password_hashed The md5-hashed password
+     * @param  string                   $password_raw The raw password
+     * @param  boolean                  $cookie_login Whether this is a cookie login
      * @return array                    A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
      */
     public function forum_authorise_login($username, $userid, $password_hashed, $password_raw, $cookie_login = false)
@@ -1444,7 +1444,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Get a first known IP address of the given member.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return IP                       The IP address
      */
     public function get_member_ip($member)
@@ -1459,7 +1459,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Gets a whole member row from the database.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?array                   The member row (null: no such member)
      */
     public function get_member_row($member)
@@ -1479,8 +1479,8 @@ class Forum_driver_phpbb3 extends Forum_driver_base
     /**
      * Gets a named field of a member row from the database.
      *
-     * @param  MEMBER                   The member ID
-     * @param  string                   The field identifier
+     * @param  MEMBER                   $member The member ID
+     * @param  string                   $field The field identifier
      * @return mixed                    The field
      */
     public function get_member_row_field($member, $field)

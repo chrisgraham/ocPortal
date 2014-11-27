@@ -43,10 +43,10 @@ class Module_admin_menus
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -334,11 +334,11 @@ class Module_admin_menus
     /**
      * Show a branch-editor of the menu editor.
      *
-     * @param  AUTO_LINK                The ID of the branch we are displaying items for
-     * @param  integer                  The parent branch holding the branch
-     * @param  integer                  The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
-     * @param  boolean                  Whether childed branches themselves can have URLs (etc)
-     * @param  array                    All rows on the menu
+     * @param  AUTO_LINK                $id The ID of the branch we are displaying items for
+     * @param  integer                  $branch The parent branch holding the branch
+     * @param  integer                   &$order The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
+     * @param  boolean                  $clickable_sections Whether childed branches themselves can have URLs (etc)
+     * @param  array                    $menu_items All rows on the menu
      * @return tempcode                 The part of the UI
      */
     public function menu_branch($id, $branch, &$order, $clickable_sections, $menu_items)
@@ -459,12 +459,12 @@ class Module_admin_menus
     /**
      * Add a menu item from details in POST.
      *
-     * @param  ID_TEXT                  The name of the menu the item is on
-     * @param  integer                  The ID of the menu item (i.e. what it is referenced as in POST)
-     * @param  array                    The map of IDs on the menu (ID=>parent)
-     * @param  ?integer                 The ID of the parent branch (null: no parent)
-     * @param  array                    The map of menu id=>string language IDs employed by items before the edit
-     * @param  integer                  The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
+     * @param  ID_TEXT                  $menu The name of the menu the item is on
+     * @param  integer                  $id The ID of the menu item (i.e. what it is referenced as in POST)
+     * @param  array                     &$ids The map of IDs on the menu (ID=>parent)
+     * @param  ?integer                 $parent The ID of the parent branch (null: no parent)
+     * @param  array                     &$old_menu_bits The map of menu id=>string language IDs employed by items before the edit
+     * @param  integer                   &$order The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
      */
     public function add_menu_item($menu, $id, &$ids, $parent, &$old_menu_bits, &$order)
     {

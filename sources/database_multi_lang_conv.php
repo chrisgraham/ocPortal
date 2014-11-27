@@ -21,7 +21,7 @@
 /**
  * Rebuild database indices, using correct rules for new field types.
  *
- * @param  boolean                      Whether to only rebuild translatable field indexes
+ * @param  boolean                      $only_trans Whether to only rebuild translatable field indexes
  */
 function rebuild_indices($only_trans = false)
 {
@@ -234,7 +234,7 @@ function enable_content_translation()
 /**
  * Change content translation setting in th config file.
  *
- * @param  boolean                      New setting value (i.e. on or off)
+ * @param  boolean                      $new_setting New setting value (i.e. on or off)
  */
 function _update_base_config_for_content_translation($new_setting)
 {

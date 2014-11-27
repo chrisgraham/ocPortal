@@ -21,43 +21,43 @@
 /**
  * Add a calendar event.
  *
- * @param  AUTO_LINK                    The event type
- * @param  SHORT_TEXT                   The recurrence code (set to 'none' for no recurrences: blank means infinite and will basically time-out ocPortal)
- * @param  ?integer                     The number of recurrences (null: none/infinite)
- * @param  BINARY                       Whether to segregate the comment-topics/rating/trackbacks per-recurrence
- * @param  SHORT_TEXT                   The title of the event
- * @param  LONG_TEXT                    The full text describing the event
- * @param  integer                      The priority
+ * @param  AUTO_LINK                    $type The event type
+ * @param  SHORT_TEXT                   $recurrence The recurrence code (set to 'none' for no recurrences: blank means infinite and will basically time-out ocPortal)
+ * @param  ?integer                     $recurrences The number of recurrences (null: none/infinite)
+ * @param  BINARY                       $seg_recurrences Whether to segregate the comment-topics/rating/trackbacks per-recurrence
+ * @param  SHORT_TEXT                   $title The title of the event
+ * @param  LONG_TEXT                    $content The full text describing the event
+ * @param  integer                      $priority The priority
  * @range  1 5
- * @param  integer                      The year the event starts at
- * @param  integer                      The month the event starts at
- * @param  integer                      The day the event starts at
- * @param  ID_TEXT                      In-month specification type for start date
+ * @param  integer                      $start_year The year the event starts at
+ * @param  integer                      $start_month The month the event starts at
+ * @param  integer                      $start_day The day the event starts at
+ * @param  ID_TEXT                      $start_monthly_spec_type In-month specification type for start date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  integer                      The hour the event starts at
- * @param  integer                      The minute the event starts at
- * @param  ?integer                     The year the event ends at (null: not a multi day event)
- * @param  ?integer                     The month the event ends at (null: not a multi day event)
- * @param  ?integer                     The day the event ends at (null: not a multi day event)
- * @param  ID_TEXT                      In-month specification type for end date
+ * @param  integer                      $start_hour The hour the event starts at
+ * @param  integer                      $start_minute The minute the event starts at
+ * @param  ?integer                     $end_year The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_month The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_day The day the event ends at (null: not a multi day event)
+ * @param  ID_TEXT                      $end_monthly_spec_type In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (null: not a multi day event)
- * @param  ?integer                     The minute the event ends at (null: not a multi day event)
- * @param  ?ID_TEXT                     The timezone for the event (null: current user's timezone)
- * @param  BINARY                       Whether the time should be presented in the viewer's own timezone
- * @param  ?MEMBER                      The member's calendar it will be on (null: not on a specific member's calendar)
- * @param  BINARY                       Whether the event has been validated
- * @param  BINARY                       Whether the event may be rated
- * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY                       Whether the event may be trackbacked
- * @param  LONG_TEXT                    Hidden notes pertaining to the event
- * @param  ?MEMBER                      The event submitter (null: current member)
- * @param  integer                      The number of views so far
- * @param  ?TIME                        The add time (null: now)
- * @param  ?TIME                        The edit time (null: never)
- * @param  ?AUTO_LINK                   Force an ID (null: don't force an ID)
- * @param  ?SHORT_TEXT                  Meta keywords for this resource (null: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT                   Meta description for this resource (null: do not edit) (blank: implicit)
+ * @param  ?integer                     $end_hour The hour the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_minute The minute the event ends at (null: not a multi day event)
+ * @param  ?ID_TEXT                     $timezone The timezone for the event (null: current user's timezone)
+ * @param  BINARY                       $do_timezone_conv Whether the time should be presented in the viewer's own timezone
+ * @param  ?MEMBER                      $member_calendar The member's calendar it will be on (null: not on a specific member's calendar)
+ * @param  BINARY                       $validated Whether the event has been validated
+ * @param  BINARY                       $allow_rating Whether the event may be rated
+ * @param  SHORT_INTEGER                $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       $allow_trackbacks Whether the event may be trackbacked
+ * @param  LONG_TEXT                    $notes Hidden notes pertaining to the event
+ * @param  ?MEMBER                      $submitter The event submitter (null: current member)
+ * @param  integer                      $views The number of views so far
+ * @param  ?TIME                        $add_time The add time (null: now)
+ * @param  ?TIME                        $edit_time The edit time (null: never)
+ * @param  ?AUTO_LINK                   $id Force an ID (null: don't force an ID)
+ * @param  ?SHORT_TEXT                  $meta_keywords Meta keywords for this resource (null: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   $meta_description Meta description for this resource (null: do not edit) (blank: implicit)
  * @return AUTO_LINK                    The ID of the event
  */
 function add_calendar_event($type, $recurrence, $recurrences, $seg_recurrences, $title, $content, $priority, $start_year, $start_month, $start_day, $start_monthly_spec_type, $start_hour, $start_minute, $end_year = null, $end_month = null, $end_day = null, $end_monthly_spec_type = 'day_of_month', $end_hour = null, $end_minute = null, $timezone = null, $do_timezone_conv = 1, $member_calendar = null, $validated = 1, $allow_rating = 1, $allow_comments = 1, $allow_trackbacks = 1, $notes = '', $submitter = null, $views = 0, $add_time = null, $edit_time = null, $id = null, $meta_keywords = '', $meta_description = '')
@@ -189,44 +189,44 @@ function add_calendar_event($type, $recurrence, $recurrences, $seg_recurrences, 
 /**
  * Edit a calendar event.
  *
- * @param  AUTO_LINK                    The ID of the event
- * @param  ?AUTO_LINK                   The event type (null: default)
- * @param  SHORT_TEXT                   The recurrence code
- * @param  ?integer                     The number of recurrences (null: none/infinite)
- * @param  BINARY                       Whether to segregate the comment-topics/rating/trackbacks per-recurrence
- * @param  SHORT_TEXT                   The title of the event
- * @param  LONG_TEXT                    The full text describing the event
- * @param  integer                      The priority
+ * @param  AUTO_LINK                    $id The ID of the event
+ * @param  ?AUTO_LINK                   $type The event type (null: default)
+ * @param  SHORT_TEXT                   $recurrence The recurrence code
+ * @param  ?integer                     $recurrences The number of recurrences (null: none/infinite)
+ * @param  BINARY                       $seg_recurrences Whether to segregate the comment-topics/rating/trackbacks per-recurrence
+ * @param  SHORT_TEXT                   $title The title of the event
+ * @param  LONG_TEXT                    $content The full text describing the event
+ * @param  integer                      $priority The priority
  * @range  1 5
- * @param  integer                      The year the event starts at
- * @param  integer                      The month the event starts at
- * @param  integer                      The day the event starts at
- * @param  ID_TEXT                      In-month specification type for start date
+ * @param  integer                      $start_year The year the event starts at
+ * @param  integer                      $start_month The month the event starts at
+ * @param  integer                      $start_day The day the event starts at
+ * @param  ID_TEXT                      $start_monthly_spec_type In-month specification type for start date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  integer                      The hour the event starts at
- * @param  integer                      The minute the event starts at
- * @param  ?integer                     The year the event ends at (null: not a multi day event)
- * @param  ?integer                     The month the event ends at (null: not a multi day event)
- * @param  ?integer                     The day the event ends at (null: not a multi day event)
- * @param  ID_TEXT                      In-month specification type for end date
+ * @param  integer                      $start_hour The hour the event starts at
+ * @param  integer                      $start_minute The minute the event starts at
+ * @param  ?integer                     $end_year The year the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_month The month the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_day The day the event ends at (null: not a multi day event)
+ * @param  ID_TEXT                      $end_monthly_spec_type In-month specification type for end date
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
- * @param  ?integer                     The hour the event ends at (null: not a multi day event)
- * @param  ?integer                     The minute the event ends at (null: not a multi day event)
- * @param  ?ID_TEXT                     The timezone for the event (null: current user's timezone)
- * @param  BINARY                       Whether the time should be presented in the viewer's own timezone
- * @param  ?MEMBER                      The member's calendar it will be on (null: not on a specific member's calendar)
- * @param  SHORT_TEXT                   Meta keywords
- * @param  LONG_TEXT                    Meta description
- * @param  ?BINARY                      Whether the event has been validated (null: don't change)
- * @param  BINARY                       Whether the event may be rated
- * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY                       Whether the event may be trackbacked
- * @param  LONG_TEXT                    Hidden notes pertaining to the event
- * @param  ?TIME                        Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME                        Add time (null: do not change)
- * @param  ?integer                     Number of views (null: do not change)
- * @param  ?MEMBER                      Submitter (null: do not change)
- * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  ?integer                     $end_hour The hour the event ends at (null: not a multi day event)
+ * @param  ?integer                     $end_minute The minute the event ends at (null: not a multi day event)
+ * @param  ?ID_TEXT                     $timezone The timezone for the event (null: current user's timezone)
+ * @param  BINARY                       $do_timezone_conv Whether the time should be presented in the viewer's own timezone
+ * @param  ?MEMBER                      $member_calendar The member's calendar it will be on (null: not on a specific member's calendar)
+ * @param  SHORT_TEXT                   $meta_keywords Meta keywords
+ * @param  LONG_TEXT                    $meta_description Meta description
+ * @param  ?BINARY                      $validated Whether the event has been validated (null: don't change)
+ * @param  BINARY                       $allow_rating Whether the event may be rated
+ * @param  SHORT_INTEGER                $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       $allow_trackbacks Whether the event may be trackbacked
+ * @param  LONG_TEXT                    $notes Hidden notes pertaining to the event
+ * @param  ?TIME                        $edit_time Edit time (null: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        $add_time Add time (null: do not change)
+ * @param  ?integer                     $views Number of views (null: do not change)
+ * @param  ?MEMBER                      $submitter Submitter (null: do not change)
+ * @param  boolean                      $null_is_literal Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_calendar_event($id, $type, $recurrence, $recurrences, $seg_recurrences, $title, $content, $priority, $start_year, $start_month, $start_day, $start_monthly_spec_type, $start_hour, $start_minute, $end_year, $end_month, $end_day, $end_monthly_spec_type, $end_hour, $end_minute, $timezone, $do_timezone_conv, $member_calendar, $meta_keywords, $meta_description, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $edit_time = null, $add_time = null, $views = null, $submitter = null, $null_is_literal = false)
 {
@@ -375,7 +375,7 @@ function edit_calendar_event($id, $type, $recurrence, $recurrences, $seg_recurre
 /**
  * Delete a calendar event.
  *
- * @param  AUTO_LINK                    The ID of the event
+ * @param  AUTO_LINK                    $id The ID of the event
  */
 function delete_calendar_event($id)
 {
@@ -451,9 +451,9 @@ function delete_calendar_event($id)
 /**
  * Add a calendar event type.
  *
- * @param  SHORT_TEXT                   The title of the event type
- * @param  ID_TEXT                      The theme image code
- * @param  URLPATH                      URL to external feed to associate with this event type
+ * @param  SHORT_TEXT                   $title The title of the event type
+ * @param  ID_TEXT                      $logo The theme image code
+ * @param  URLPATH                      $external_feed URL to external feed to associate with this event type
  * @return AUTO_LINK                    The ID of the event type
  */
 function add_event_type($title, $logo, $external_feed = '')
@@ -484,10 +484,10 @@ function add_event_type($title, $logo, $external_feed = '')
 /**
  * Edit a calendar event type.
  *
- * @param  AUTO_LINK                    The ID of the event type
- * @param  SHORT_TEXT                   The title of the event type
- * @param  ID_TEXT                      The theme image code
- * @param  URLPATH                      URL to external feed to associate with this event type
+ * @param  AUTO_LINK                    $id The ID of the event type
+ * @param  SHORT_TEXT                   $title The title of the event type
+ * @param  ID_TEXT                      $logo The theme image code
+ * @param  URLPATH                      $external_feed URL to external feed to associate with this event type
  */
 function edit_event_type($id, $title, $logo, $external_feed)
 {
@@ -521,7 +521,7 @@ function edit_event_type($id, $title, $logo, $external_feed)
 /**
  * Delete a calendar event type.
  *
- * @param  AUTO_LINK                    The ID of the event type
+ * @param  AUTO_LINK                    $id The ID of the event type
  */
 function delete_event_type($id)
 {

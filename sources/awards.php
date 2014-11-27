@@ -21,8 +21,8 @@
 /**
  * Get details of awards won for a content item.
  *
- * @param  ID_TEXT                      The award content type
- * @param  ID_TEXT                      The content ID
+ * @param  ID_TEXT                      $content_type The award content type
+ * @param  ID_TEXT                      $id The content ID
  * @return array                        List of awards won
  */
 function find_awards_for($content_type, $id)
@@ -44,9 +44,9 @@ function find_awards_for($content_type, $id)
 /**
  * Give an award.
  *
- * @param  AUTO_LINK                    The award ID
- * @param  ID_TEXT                      The content ID
- * @param  ?TIME                        Time the award was given (null: now)
+ * @param  AUTO_LINK                    $award_id The award ID
+ * @param  ID_TEXT                      $content_id The content ID
+ * @param  ?TIME                        $time Time the award was given (null: now)
  */
 function give_award($award_id, $content_id, $time = null)
 {
@@ -124,8 +124,8 @@ function give_award($award_id, $content_id, $time = null)
 /**
  * Get all the award selection fields for a content type and content ID
  *
- * @param  ID_TEXT                      The content type
- * @param  ?ID_TEXT                     The content ID (null: not added yet - therefore can't be holding the award yet)
+ * @param  ID_TEXT                      $content_type The content type
+ * @param  ?ID_TEXT                     $id The content ID (null: not added yet - therefore can't be holding the award yet)
  * @return tempcode                     The fields
  */
 function get_award_fields($content_type, $id = null)
@@ -182,8 +182,8 @@ function get_award_fields($content_type, $id = null)
 /**
  * Situation: something that may have awards has just been added/edited. Action: add any specified awards.
  *
- * @param  ID_TEXT                      The content type
- * @param  ID_TEXT                      The content ID
+ * @param  ID_TEXT                      $content_type The content type
+ * @param  ID_TEXT                      $id The content ID
  */
 function handle_award_setting($content_type, $id)
 {

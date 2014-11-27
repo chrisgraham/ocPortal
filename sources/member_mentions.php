@@ -21,9 +21,9 @@
 /**
  * Dispatch any pending member mention notifications ("mentions").
  *
- * @param  ID_TEXT                      The content type
- * @param  ID_TEXT                      The content ID
- * @param  ?MEMBER                      The content submitter (null: current user)
+ * @param  ID_TEXT                      $content_type The content type
+ * @param  ID_TEXT                      $content_id The content ID
+ * @param  ?MEMBER                      $submitter The content submitter (null: current user)
  */
 function dispatch_member_mention_notifications($content_type, $content_id, $submitter = null)
 {

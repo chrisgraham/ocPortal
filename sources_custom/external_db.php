@@ -103,8 +103,8 @@ function external_db_user_from_session()
 /**
  * Synchronise an external user.
  *
- * @param  MEMBER                       Authorised member.
- * @param  array                        User record to sync.
+ * @param  MEMBER                       $member Authorised member.
+ * @param  array                        $record User record to sync.
  */
 function external_db_user_sync($member, $record)
 {
@@ -144,7 +144,7 @@ function external_db_user_sync($member, $record)
 /**
  * Import an external user.
  *
- * @param  array                        User record to import.
+ * @param  array                        $record User record to import.
  * @return MEMBER                       Authorised member.
  */
 function external_db_user_add($record)

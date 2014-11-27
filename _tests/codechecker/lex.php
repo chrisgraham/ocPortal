@@ -817,8 +817,8 @@ function lex($text = null)
 /**
  * Helper function for usort to sort a list by string length.
  *
- * @param  string                       The first string to compare
- * @param  string                       The second string to compare
+ * @param  string                       $a The first string to compare
+ * @param  string                       $b The second string to compare
  * @return boolean                      The comparison result
  */
 function plex__strlen_sort($a, $b)

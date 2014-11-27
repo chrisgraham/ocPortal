@@ -63,11 +63,11 @@ function get_self_url_easy()
 /**
  * Get a well formed URL equivalent to the current URL.
  *
- * @param  boolean                      Whether to evaluate the URL (so as we don't return tempcode)
- * @param  boolean                      Whether to direct to the default page if there was a POST request leading to where we are now (i.e. to avoid missing post fields when we go to this URL)
- * @param  ?array                       A map of extra parameters for the URL (null: none)
- * @param  boolean                      Whether to also keep POSTed data, in the GET request (useful if either_param is used to get the data instead of post_param - of course the POST data must be of the not--persistent-state-changing variety)
- * @param  boolean                      Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
+ * @param  boolean                      $evaluate Whether to evaluate the URL (so as we don't return tempcode)
+ * @param  boolean                      $root_if_posted Whether to direct to the default page if there was a POST request leading to where we are now (i.e. to avoid missing post fields when we go to this URL)
+ * @param  ?array                       $extra_params A map of extra parameters for the URL (null: none)
+ * @param  boolean                      $posted_too Whether to also keep POSTed data, in the GET request (useful if either_param is used to get the data instead of post_param - of course the POST data must be of the not--persistent-state-changing variety)
+ * @param  boolean                      $avoid_remap Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
  * @return mixed                        The URL (tempcode or string)
  */
 function get_self_url($evaluate = false, $root_if_posted = false, $extra_params = null, $posted_too = false, $avoid_remap = false)
@@ -131,8 +131,8 @@ function get_self_url($evaluate = false, $root_if_posted = false, $extra_params 
 /**
  * Encode a URL component in such a way that it won't get nuked by Apache %2F blocking security and url encoded '&' screwing. The get_param function will map it back. Hackerish but necessary.
  *
- * @param  URLPATH                      The URL to encode
- * @param  ?boolean                     Whether we have to consider mod_rewrite (null: don't know, look up)
+ * @param  URLPATH                      $url_part The URL to encode
+ * @param  ?boolean                     $consider_rewrite Whether we have to consider mod_rewrite (null: don't know, look up)
  * @return URLPATH                      The encoded result
  */
 function ocp_url_encode($url_part, $consider_rewrite = null)
@@ -157,8 +157,8 @@ function ocp_url_encode($url_part, $consider_rewrite = null)
 /**
  * Encode a URL component, as per ocp_url_encode but without slashes being encoded.
  *
- * @param  URLPATH                      The URL to encode
- * @param  ?boolean                     Whether we have to consider mod_rewrite (null: don't know, look up)
+ * @param  URLPATH                      $url_part The URL to encode
+ * @param  ?boolean                     $consider_rewrite Whether we have to consider mod_rewrite (null: don't know, look up)
  * @return URLPATH                      The encoded result
  */
 function ocp_url_encode_mini($url_part, $consider_rewrite = null)
@@ -175,7 +175,7 @@ function ocp_url_encode_mini($url_part, $consider_rewrite = null)
 /**
  * Decode a URL component that was encoded with hackerish_url_encode
  *
- * @param  URLPATH                      The URL to encode
+ * @param  URLPATH                      $url_part The URL to encode
  * @return URLPATH                      The encoded result
  */
 function ocp_url_decode_post_process($url_part)
@@ -190,8 +190,8 @@ function ocp_url_decode_post_process($url_part)
 /**
  * Find whether we can skip the normal preservation of a keep value, for whatever reason.
  *
- * @param  string                       Parameter name
- * @param  string                       Parameter value
+ * @param  string                       $key Parameter name
+ * @param  string                       $val Parameter value
  * @return boolean                      Whether we can skip it
  */
 function skippable_keep($key, $val)
@@ -219,8 +219,8 @@ function skippable_keep($key, $val)
  * Find whether the specified page is to use HTTPS (if not -- it will use HTTP).
  * All images (etc) on a HTTPS page should use HTTPS to avoid mixed-content browser notices.
  *
- * @param  ID_TEXT                      The zone the page is in
- * @param  ID_TEXT                      The page codename
+ * @param  ID_TEXT                      $zone The zone the page is in
+ * @param  ID_TEXT                      $page The page codename
  * @return boolean                      Whether the page is to run across an HTTPS connection
  */
 function is_page_https($zone, $page)
@@ -261,7 +261,7 @@ function is_page_https($zone, $page)
 /**
  * Find if mod_rewrite is in use
  *
- * @param  boolean                      Whether to explicitly avoid using mod_rewrite. Whilst it might seem weird to put this in as a function parameter, it removes duplicated logic checks in the code.
+ * @param  boolean                      $avoid_remap Whether to explicitly avoid using mod_rewrite. Whilst it might seem weird to put this in as a function parameter, it removes duplicated logic checks in the code.
  * @return boolean                      Whether mod_rewrite is in use
  */
 function can_try_mod_rewrite($avoid_remap = false)
@@ -277,13 +277,13 @@ function can_try_mod_rewrite($avoid_remap = false)
  * Build and return a proper URL, from the $vars array.
  * Note: URL parameters should always be in lower case (one of the coding standards)
  *
- * @param  array                        A map of parameter names to parameter values. E.g. array('page'=>'example','type'=>'foo','id'=>2). Values may be strings or integers, or Tempcode, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
- * @param  ID_TEXT                      The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
- * @param  ?array                       Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (null: don't skip any)
- * @param  boolean                      Whether to keep all non-skipped parameters that were in the current URL, in this URL
- * @param  boolean                      Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
- * @param  boolean                      Whether to skip actually putting on keep_ parameters (rarely will this skipping be desirable)
- * @param  string                       Hash portion of the URL (blank: none). May or may not start '#' - code will put it on if needed
+ * @param  array                        $vars A map of parameter names to parameter values. E.g. array('page'=>'example','type'=>'foo','id'=>2). Values may be strings or integers, or Tempcode, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
+ * @param  ID_TEXT                      $zone_name The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
+ * @param  ?array                       $skip Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (null: don't skip any)
+ * @param  boolean                      $keep_all Whether to keep all non-skipped parameters that were in the current URL, in this URL
+ * @param  boolean                      $avoid_remap Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
+ * @param  boolean                      $skip_keep Whether to skip actually putting on keep_ parameters (rarely will this skipping be desirable)
+ * @param  string                       $hash Hash portion of the URL (blank: none). May or may not start '#' - code will put it on if needed
  * @return tempcode                     The URL in tempcode format.
  */
 function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avoid_remap = false, $skip_keep = false, $hash = '')
@@ -411,13 +411,13 @@ function url_monikers_enabled()
  * Build and return a proper URL, from the $vars array.
  * Note: URL parameters should always be in lower case (one of the coding standards)
  *
- * @param  array                        A map of parameter names to parameter values. Values may be strings or integers, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
- * @param  ID_TEXT                      The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
- * @param  ?array                       Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (null: don't skip any)
- * @param  boolean                      Whether to keep all non-skipped parameters that were in the current URL, in this URL
- * @param  boolean                      Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
- * @param  boolean                      Whether to skip actually putting on keep_ parameters (rarely will this skipping be desirable)
- * @param  string                       Hash portion of the URL (blank: none).
+ * @param  array                        $vars A map of parameter names to parameter values. Values may be strings or integers, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
+ * @param  ID_TEXT                      $zone_name The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
+ * @param  ?array                       $skip Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (null: don't skip any)
+ * @param  boolean                      $keep_all Whether to keep all non-skipped parameters that were in the current URL, in this URL
+ * @param  boolean                      $avoid_remap Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
+ * @param  boolean                      $skip_keep Whether to skip actually putting on keep_ parameters (rarely will this skipping be desirable)
+ * @param  string                       $hash Hash portion of the URL (blank: none).
  * @return string                       The URL in string format.
  */
 function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avoid_remap = false, $skip_keep = false, $hash = '')
@@ -593,9 +593,9 @@ function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $av
 /**
  * Recursively put array parameters into a flat array for use in a query string.
  *
- * @param  ID_TEXT                      Primary field name
- * @param  array                        Array
- * @param  array                        Flat array to write into
+ * @param  ID_TEXT                      $key Primary field name
+ * @param  array                        $val Array
+ * @param  array                         &$vars Flat array to write into
  */
 function _handle_array_var_append($key, $val, &$vars)
 {
@@ -620,9 +620,9 @@ function _handle_array_var_append($key, $val, &$vars)
 /**
  * Attempt to use mod_rewrite to improve this URL.
  *
- * @param  ID_TEXT                      The name of the zone for this
- * @param  array                        A map of variables to include in our URL
- * @param  boolean                      Force inclusion of the index.php name into a short URL, so something may tack on extra parameters to the result here
+ * @param  ID_TEXT                      $zone_name The name of the zone for this
+ * @param  array                        $vars A map of variables to include in our URL
+ * @param  boolean                      $force_index_php Force inclusion of the index.php name into a short URL, so something may tack on extra parameters to the result here
  * @return ?URLPATH                     The improved URL (null: couldn't do anything)
  */
 function _url_rewrite_params($zone_name, $vars, $force_index_php = false)
@@ -759,7 +759,7 @@ function _url_rewrite_params($zone_name, $vars, $force_index_php = false)
 /**
  * Find if the specified URL is local or not (actually, if it is relative). This is often used by code that wishes to use file system functions on URLs (ocPortal will store such relative local URLs for uploads, etc)
  *
- * @param  URLPATH                      The URL to check
+ * @param  URLPATH                      $url The URL to check
  * @return boolean                      Whether the URL is local
  */
 function url_is_local($url)
@@ -777,8 +777,8 @@ function url_is_local($url)
 /**
  * Find if a value appears to be some kind of URL (possibly an ocPortalised Comcode one).
  *
- * @param  string                       The value to check
- * @param  boolean                      Whether to be a bit lax in the check
+ * @param  string                       $value The value to check
+ * @param  boolean                      $lax Whether to be a bit lax in the check
  * @return boolean                      Whether the value appears to be a URL
  */
 function looks_like_url($value, $lax = false)
@@ -815,9 +815,9 @@ function looks_like_url($value, $lax = false)
 /**
  * Get hidden fields for a form representing 'keep_x'. If we are having a GET form instead of a POST form, we need to do this. This function also encodes the page name, as we'll always want that.
  *
- * @param  ID_TEXT                      The page for the form to go to (blank: don't attach)
- * @param  boolean                      Whether to keep all elements of the current URL represented in this form (rather than just the keep_ fields, and page)
- * @param  ?array                       A list of parameters to exclude (null: don't exclude any)
+ * @param  ID_TEXT                      $page The page for the form to go to (blank: don't attach)
+ * @param  boolean                      $keep_all Whether to keep all elements of the current URL represented in this form (rather than just the keep_ fields, and page)
+ * @param  ?array                       $exclude A list of parameters to exclude (null: don't exclude any)
  * @return tempcode                     The builtup hidden form fields
  */
 function build_keep_form_fields($page = '', $keep_all = false, $exclude = null)
@@ -829,7 +829,7 @@ function build_keep_form_fields($page = '', $keep_all = false, $exclude = null)
 /**
  * Relay all POST variables for this URL, to the URL embedded in the form.
  *
- * @param  ?array                       A list of parameters to exclude (null: exclude none)
+ * @param  ?array                       $exclude A list of parameters to exclude (null: exclude none)
  * @return tempcode                     The builtup hidden form fields
  */
 function build_keep_post_fields($exclude = null)
@@ -841,7 +841,7 @@ function build_keep_post_fields($exclude = null)
 /**
  * Takes a URL, and converts it into a file system storable filename. This is used to cache URL contents to the servers filesystem.
  *
- * @param  URLPATH                      The URL to convert to an encoded filename
+ * @param  URLPATH                      $url_full The URL to convert to an encoded filename
  * @return string                       A usable filename based on the URL
  */
 function url_to_filename($url_full)
@@ -853,8 +853,8 @@ function url_to_filename($url_full)
 /**
  * Take a URL and base-URL, and fully qualify the URL according to it.
  *
- * @param  URLPATH                      The URL to fully qualified
- * @param  URLPATH                      The base-URL
+ * @param  URLPATH                      $url The URL to fully qualified
+ * @param  URLPATH                      $url_base The base-URL
  * @return URLPATH                      Fully qualified URL
  */
 function qualify_url($url, $url_base)
@@ -866,7 +866,7 @@ function qualify_url($url, $url_base)
 /**
  * Take a page-link and convert to attributes and zone.
  *
- * @param  SHORT_TEXT                   The page-link
+ * @param  SHORT_TEXT                   $page_link The page-link
  * @return array                        Triple: zone, attribute-array, hash part of a URL including the hash (or blank)
  */
 function page_link_decode($page_link)
@@ -951,7 +951,7 @@ function page_link_decode($page_link)
 /**
  * Convert a URL to a local file path.
  *
- * @param  URLPATH                      The value to convert
+ * @param  URLPATH                      $url The value to convert
  * @return ?PATH                        File path (null: is not local)
  */
 function convert_url_to_path($url)
@@ -963,7 +963,7 @@ function convert_url_to_path($url)
 /**
  * Sometimes users don't enter full URLs but do intend for them to be absolute. This code tries to see what relative URLs are actually absolute ones, via an algorithm. It then fixes the URL.
  *
- * @param  URLPATH                      The URL to fix
+ * @param  URLPATH                      $in The URL to fix
  * @return URLPATH                      The fixed URL (or original one if no fix was needed)
  */
 function fixup_protocolless_urls($in)
@@ -975,9 +975,9 @@ function fixup_protocolless_urls($in)
 /**
  * Convert a local URL to a page-link.
  *
- * @param  URLPATH                      The URL to convert. Note it may not be a short URL, and it must be based on the local base URL (else failure WILL occur).
- * @param  boolean                      Whether to only convert absolute URLs. Turn this on if you're not sure what you're passing is a URL not and you want to be extra safe.
- * @param  boolean                      Whether to only allow perfect conversions.
+ * @param  URLPATH                      $url The URL to convert. Note it may not be a short URL, and it must be based on the local base URL (else failure WILL occur).
+ * @param  boolean                      $abs_only Whether to only convert absolute URLs. Turn this on if you're not sure what you're passing is a URL not and you want to be extra safe.
+ * @param  boolean                      $perfect_only Whether to only allow perfect conversions.
  * @return string                       The page-link (blank: could not convert).
  */
 function url_to_page_link($url, $abs_only = false, $perfect_only = true)
@@ -989,7 +989,7 @@ function url_to_page_link($url, $abs_only = false, $perfect_only = true)
 /**
  * Convert a local page file path to a written page-link.
  *
- * @param  string                       The path.
+ * @param  string                       $page The path.
  * @return string                       The page-link (blank: could not convert).
  */
 function page_path_to_page_link($page)
@@ -1052,8 +1052,8 @@ function load_moniker_hooks()
 /**
  * Find the textual moniker for a typical ocPortal URL path. This will be called from inside build_url, based on details learned from a moniker hook (only if a hook exists to hint how to make the requested link SEO friendly).
  *
- * @param  array                        The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
- * @param  ID_TEXT                      The URL zone name (only used for Comcode Page URL monikers).
+ * @param  array                        $url_parts The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
+ * @param  ID_TEXT                      $zone The URL zone name (only used for Comcode Page URL monikers).
  * @return ?string                      The moniker ID (null: could not find)
  */
 function find_id_moniker($url_parts, $zone)

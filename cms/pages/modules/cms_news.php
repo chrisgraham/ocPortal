@@ -46,10 +46,10 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -107,8 +107,8 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -142,7 +142,7 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -190,7 +190,7 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
      */
     public function create_selection_list_choose_table($url_map)
@@ -280,20 +280,20 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Get tempcode for a news adding/editing form.
      *
-     * @param  ?AUTO_LINK               The news ID (null: new)
-     * @param  ?AUTO_LINK               The primary category for the news (null: personal)
-     * @param  ?array                   A list of categories the news is in (null: not known)
-     * @param  SHORT_TEXT               The news title
-     * @param  LONG_TEXT                The news summary
-     * @param  SHORT_TEXT               The name of the author
-     * @param  BINARY                   Whether the news is validated
-     * @param  ?BINARY                  Whether rating is allowed (null: decide statistically, based on existing choices)
-     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
-     * @param  ?BINARY                  Whether trackbacks are allowed (null: decide statistically, based on existing choices)
-     * @param  BINARY                   Whether to show the "send trackback" field
-     * @param  LONG_TEXT                Notes for the video
-     * @param  URLPATH                  URL to the image for the news entry (blank: use cat image)
-     * @param  ?array                   Scheduled go-live time (null: N/A)
+     * @param  ?AUTO_LINK               $id The news ID (null: new)
+     * @param  ?AUTO_LINK               $main_news_category The primary category for the news (null: personal)
+     * @param  ?array                   $news_category A list of categories the news is in (null: not known)
+     * @param  SHORT_TEXT               $title The news title
+     * @param  LONG_TEXT                $news The news summary
+     * @param  SHORT_TEXT               $author The name of the author
+     * @param  BINARY                   $validated Whether the news is validated
+     * @param  ?BINARY                  $allow_rating Whether rating is allowed (null: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           $allow_comments Whether comments are allowed (0=no, 1=yes, 2=review style) (null: decide statistically, based on existing choices)
+     * @param  ?BINARY                  $allow_trackbacks Whether trackbacks are allowed (null: decide statistically, based on existing choices)
+     * @param  BINARY                   $send_trackbacks Whether to show the "send trackback" field
+     * @param  LONG_TEXT                $notes Notes for the video
+     * @param  URLPATH                  $image URL to the image for the news entry (blank: use cat image)
+     * @param  ?array                   $scheduled Scheduled go-live time (null: N/A)
      * @return array                    A tuple of lots of info (fields, hidden fields, trailing fields, tabindex for posting form)
      */
     public function get_form_fields($id = null, $main_news_category = null, $news_category = null, $title = '', $news = '', $author = '', $validated = 1, $allow_rating = null, $allow_comments = null, $allow_trackbacks = null, $send_trackbacks = 1, $notes = '', $image = '', $scheduled = null)
@@ -419,7 +419,7 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Standard crud_module submitter getter.
      *
-     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @param  ID_TEXT                  $id The entry for which the submitter is sought
      * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
      */
     public function get_submitter($id)
@@ -434,7 +434,7 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Standard crud_module cat getter.
      *
-     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @param  AUTO_LINK                $id The entry for which the cat is sought
      * @return string                   The cat
      */
     public function get_cat($id)
@@ -449,7 +449,7 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A tuple of lots of info
      */
     public function fill_in_edit_form($_id)
@@ -602,7 +602,7 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      */
     public function edit_actualisation($_id)
     {
@@ -719,7 +719,7 @@ class Module_cms_news extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $_id The entry being deleted
      */
     public function delete_actualisation($_id)
     {
@@ -736,9 +736,9 @@ class Module_cms_news extends Standard_crud_module
     /**
      * The do-next manager for after download content management (events only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -839,7 +839,7 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
      */
     public function create_selection_list_choose_table($url_map)
@@ -893,12 +893,12 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * Get tempcode for a news category adding/editing form.
      *
-     * @param  ?AUTO_LINK               The news category ID (null: new)
-     * @param  SHORT_TEXT               The title of the news category
-     * @param  SHORT_TEXT               The news category image
-     * @param  LONG_TEXT                Notes relating to the news category
-     * @param  ?MEMBER                  The owner of the news category (null: public)
-     * @param  ?AUTO_LINK               The ID of this news category (null: we haven't added it yet)
+     * @param  ?AUTO_LINK               $id The news category ID (null: new)
+     * @param  SHORT_TEXT               $title The title of the news category
+     * @param  SHORT_TEXT               $img The news category image
+     * @param  LONG_TEXT                $notes Notes relating to the news category
+     * @param  ?MEMBER                  $owner The owner of the news category (null: public)
+     * @param  ?AUTO_LINK               $category_id The ID of this news category (null: we haven't added it yet)
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function get_form_fields($id = null, $title = '', $img = '', $notes = '', $owner = null, $category_id = null)
@@ -954,7 +954,7 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $_id The entry being edited
      * @return array                    A pair: The input fields, Hidden fields
      */
     public function fill_in_edit_form($_id)
@@ -999,7 +999,7 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -1030,7 +1030,7 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * Standard crud_module submitter getter.
      *
-     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @param  ID_TEXT                  $id The entry for which the submitter is sought
      * @return ?MEMBER                  The submitter (null: none)
      */
     public function get_submitter($id)
@@ -1041,7 +1041,7 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {
@@ -1051,9 +1051,9 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * The do-next manager for after download content management (event types only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -1064,10 +1064,10 @@ class Module_cms_news_cat extends Standard_crud_module
     /**
      * The do-next manager for after news content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
-     * @param  ?AUTO_LINK               The category ID we were working in (null: deleted)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
+     * @param  ?AUTO_LINK               $cat The category ID we were working in (null: deleted)
      * @return tempcode                 The UI
      */
     public function _do_next_manager($title, $description, $id = null, $cat = null)

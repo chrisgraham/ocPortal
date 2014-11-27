@@ -41,8 +41,8 @@ class Hook_admin_stats_search
     /**
      * The UI to show top search keywords.
      *
-     * @param  object                   The stats module object
-     * @param  string                   The screen type
+     * @param  object                   $ob The stats module object
+     * @param  string                   $type The screen type
      * @return tempcode                 The UI
      */
     public function search($ob, $type)

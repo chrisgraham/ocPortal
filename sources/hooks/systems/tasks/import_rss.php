@@ -26,12 +26,12 @@ class Hook_task_import_rss
     /**
      * Run the task hook.
      *
-     * @param  BINARY                   Whether to import as validated
-     * @param  BINARY                   Whether to download remote images
-     * @param  BINARY                   Whether to import everything to the task initiator's account
-     * @param  BINARY                   Whether to import comments
-     * @param  BINARY                   Whether to import everything to blog news categories
-     * @param  object                   The parsed RSS feed
+     * @param  BINARY                   $is_validated Whether to import as validated
+     * @param  BINARY                   $download_images Whether to download remote images
+     * @param  BINARY                   $to_own_account Whether to import everything to the task initiator's account
+     * @param  BINARY                   $import_blog_comments Whether to import comments
+     * @param  BINARY                   $import_to_blog Whether to import everything to blog news categories
+     * @param  object                   $rss The parsed RSS feed
      * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (null: show standard success message)
      */
     public function run($is_validated, $download_images, $to_own_account, $import_blog_comments, $import_to_blog, $rss)

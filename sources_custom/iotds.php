@@ -16,11 +16,11 @@
 /**
  * Render an IOTD box.
  *
- * @param  array                        The IOTD row
- * @param  ID_TEXT                      The zone the iotds module is in
- * @param  boolean                      Whether to include extra management links (e.g. editing, choosing, archive, etc)
- * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @param  array                        $myrow The IOTD row
+ * @param  ID_TEXT                      $zone The zone the iotds module is in
+ * @param  boolean                      $include_manage_links Whether to include extra management links (e.g. editing, choosing, archive, etc)
+ * @param  boolean                      $give_context Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      $guid Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The rendered box
  */
 function render_iotd_box($myrow, $zone = '_SEARCH', $include_manage_links = false, $give_context = true, $guid = '')

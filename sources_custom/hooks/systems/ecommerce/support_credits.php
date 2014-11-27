@@ -16,9 +16,9 @@
 /**
  * Handling of adding support credits to a member's account.
  *
- * @param  ID_TEXT                      The purchase ID.
- * @param  array                        Details of the product.
- * @param  ID_TEXT                      The product codename.
+ * @param  ID_TEXT                      $purchase_id The purchase ID.
+ * @param  array                        $details Details of the product.
+ * @param  ID_TEXT                      $type_code The product codename.
  */
 function handle_support_credits($purchase_id, $details, $type_code)
 {
@@ -81,7 +81,7 @@ class Hook_ecommerce_support_credits
     /**
      * Get the message for use in the purchase wizard.
      *
-     * @param  string                   The product in question.
+     * @param  string                   $type_code The product in question.
      * @return tempcode                 The message.
      */
     public function get_message($type_code)
@@ -103,7 +103,7 @@ class Hook_ecommerce_support_credits
     /**
      * Find the corresponding member to a given purchase ID.
      *
-     * @param  ID_TEXT                  The purchase ID.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
      * @return ?MEMBER                  The member (null: unknown / can't perform operation).
      */
     public function member_for($purchase_id)
@@ -132,7 +132,7 @@ class Hook_ecommerce_support_credits
     /**
      * Get the filled in fields and do something with them.
      *
-     * @param  ID_TEXT                  The product codename.
+     * @param  ID_TEXT                  $type_code The product codename.
      * @return ID_TEXT                  The purchase ID.
      */
     public function set_needed_fields($type_code)
@@ -166,8 +166,8 @@ class Hook_ecommerce_support_credits
     /**
      * Check whether the product codename is available for purchase by the member.
      *
-     * @param  ID_TEXT                  The product codename.
-     * @param  MEMBER                   The member.
+     * @param  ID_TEXT                  $type_code The product codename.
+     * @param  MEMBER                   $member The member.
      * @return boolean                  Whether it is.
      */
     public function is_available($type_code, $member)

@@ -26,7 +26,7 @@ class Hook_symbol_BETA_CSS_PROPERTY
     /**
      * Run function for symbol hooks. Searches for tasks to perform.
      *
-     * @param  array                     Symbol parameters
+     * @param  array                     $param Symbol parameters
      * @return string                    Result
      */
     public function run($param)

@@ -79,7 +79,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
     /**
      * Searches for forum auto-config at this path.
      *
-     * @param  PATH                     The path in which to search
+     * @param  PATH                     $path The path in which to search
      * @return boolean                  Whether the forum auto-config could be found
      */
     public function install_test_load_from($path)
@@ -151,7 +151,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
     /**
      * From a member row, get the member's last visit date.
      *
-     * @param  array                    The profile-row
+     * @param  array                    $r The profile-row
      * @return TIME                     The last visit date
      */
     public function mrow_lastvisit($r)
@@ -162,7 +162,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
     /**
      * Find out if the given member ID is banned.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is banned
      */
     public function is_banned($member)
@@ -260,9 +260,9 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
     /**
      * Create a member login cookie.
      *
-     * @param  MEMBER                   The member ID
-     * @param  ?SHORT_TEXT              The username (null: lookup)
-     * @param  string                   The password
+     * @param  MEMBER                   $id The member ID
+     * @param  ?SHORT_TEXT              $name The username (null: lookup)
+     * @param  string                   $password The password
      */
     public function forum_create_cookie($id, $name, $password)
     {
@@ -283,11 +283,11 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
      * All authorisation, cookies, and form-logins, are passed through this function.
      * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
      *
-     * @param  ?SHORT_TEXT              The member username (null: don't use this in the authentication - but look it up using the ID if needed)
-     * @param  MEMBER                   The member ID
-     * @param  MD5                      The md5-hashed password
-     * @param  string                   The raw password
-     * @param  boolean                  Whether this is a cookie login
+     * @param  ?SHORT_TEXT              $username The member username (null: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  MEMBER                   $userid The member ID
+     * @param  MD5                      $password_hashed The md5-hashed password
+     * @param  string                   $password_raw The raw password
+     * @param  boolean                  $cookie_login Whether this is a cookie login
      * @return array                    A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
      */
     public function forum_authorise_login($username, $userid, $password_hashed, $password_raw, $cookie_login = false)

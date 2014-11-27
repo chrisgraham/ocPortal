@@ -30,8 +30,8 @@ function init__input_filter()
 /**
  * Check an input field isn't 'evil'.
  *
- * @param  string                       The name of the parameter
- * @param  string                       The value retrieved
+ * @param  string                       $name The name of the parameter
+ * @param  string                       $val The value retrieved
  */
 function check_input_field($name, $val)
 {
@@ -46,8 +46,8 @@ function check_input_field($name, $val)
 /**
  * Check a posted field isn't 'evil'.
  *
- * @param  string                       The name of the parameter
- * @param  string                       The value retrieved
+ * @param  string                       $name The name of the parameter
+ * @param  string                       $val The value retrieved
  * @return string                       The filtered value
  */
 function check_posted_field($name, $val)
@@ -104,8 +104,8 @@ function get_allowed_partner_sites()
 /**
  * Filter to alter form field values based on fields.xml. Usually a no-op.
  *
- * @param  string                       The name of the parameter
- * @param  ?string                      The current value of the parameter (null: none)
+ * @param  string                       $name The name of the parameter
+ * @param  ?string                      $val The current value of the parameter (null: none)
  * @return string                       The filtered value of the parameter
  */
 function filter_form_field_default($name, $val)
@@ -234,7 +234,7 @@ function filter_form_field_default($name, $val)
 /**
  * preg_replace callback to apply sentence case.
  *
- * @param  array                        Matches
+ * @param  array                        $matches Matches
  * @return string                       De-shouted string
  */
 function make_sentence_case_callback($matches)
@@ -245,7 +245,7 @@ function make_sentence_case_callback($matches)
 /**
  * preg_replace callback to de-shout text.
  *
- * @param  array                        Matches
+ * @param  array                        $matches Matches
  * @return string                       De-shouted string
  */
 function deshout_callback($matches)
@@ -256,8 +256,8 @@ function deshout_callback($matches)
 /**
  * Find all restrictions that apply to our page/type.
  *
- * @param  ?string                      The page name scoped for (null: current page)
- * @param  ?string                      The page type scoped for (null: current type)
+ * @param  ?string                      $this_page The page name scoped for (null: current page)
+ * @param  ?string                      $this_type The page type scoped for (null: current type)
  * @return array                        List of fields, each of which is a map (restriction => attributes)
  */
 function load_field_restrictions($this_page = null, $this_type = null)
@@ -338,9 +338,9 @@ class Field_restriction_loader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The name of the element found
-     * @param  array                    Array of attributes of the element
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $tag The name of the element found
+     * @param  array                    $_attributes Array of attributes of the element
      */
     public function startElement($parser, $tag, $_attributes)
     {
@@ -438,7 +438,7 @@ class Field_restriction_loader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
+     * @param  object                   $parser The parser object (same as 'this')
      */
     public function endElement($parser)
     {
@@ -472,8 +472,8 @@ class Field_restriction_loader
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The text
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $data The text
      */
     public function startText($parser, $data)
     {

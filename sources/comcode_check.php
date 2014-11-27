@@ -21,11 +21,11 @@
 /**
  * Check the Comcode is valid.
  *
- * @param  LONG_TEXT                    The Comcode to convert
- * @param  ?MEMBER                      The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully (null: current member)
- * @param  boolean                      Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
- * @param  ?object                      The database connection to use (null: standard site connection)
- * @param  boolean                      Whether there might be new attachments. If there are, we will check as lax- as attachments are always preserved by forcing lax parsing.
+ * @param  LONG_TEXT                    $comcode The Comcode to convert
+ * @param  ?MEMBER                      $source_member The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully (null: current member)
+ * @param  boolean                      $as_admin Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
+ * @param  ?object                      $connection The database connection to use (null: standard site connection)
+ * @param  boolean                      $attachment_possibility Whether there might be new attachments. If there are, we will check as lax- as attachments are always preserved by forcing lax parsing.
  */
 function check_comcode($comcode, $source_member = null, $as_admin = false, $connection = null, $attachment_possibility = false)
 {

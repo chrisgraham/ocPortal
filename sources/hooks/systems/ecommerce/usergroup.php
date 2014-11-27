@@ -21,12 +21,12 @@
 /**
  * Handling of a usergroup subscription.
  *
- * @param  ID_TEXT                      The purchase ID.
- * @param  array                        Details of the product.
- * @param  ID_TEXT                      The product codename.
- * @param  ID_TEXT                      The status this transaction is telling of
+ * @param  ID_TEXT                      $purchase_id The purchase ID.
+ * @param  array                        $details Details of the product.
+ * @param  ID_TEXT                      $type_code The product codename.
+ * @param  ID_TEXT                      $payment_status The status this transaction is telling of
  * @set    Pending Completed SModified SCancelled
- * @param  SHORT_TEXT                   The transaction ID
+ * @param  SHORT_TEXT                   $txn_id The transaction ID
  */
 function handle_usergroup_subscription($purchase_id, $details, $type_code, $payment_status, $txn_id)
 {
@@ -141,7 +141,7 @@ class Hook_ecommerce_usergroup
     /**
      * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
      *
-     * @param  ID_TEXT                  Product codename.
+     * @param  ID_TEXT                  $type_code Product codename.
      * @return ?tempcode                Input field in standard Tempcode format for fields (null: no identifier).
      */
     public function get_identifier_manual_field_inputter($type_code)
@@ -176,7 +176,7 @@ class Hook_ecommerce_usergroup
     /**
      * Find the corresponding member to a given purchase ID.
      *
-     * @param  ID_TEXT                  The purchase ID.
+     * @param  ID_TEXT                  $purchase_id The purchase ID.
      * @return ?MEMBER                  The member (null: unknown / can't perform operation).
      */
     public function member_for($purchase_id)
@@ -190,7 +190,7 @@ class Hook_ecommerce_usergroup
      * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
      *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
      *
-     * @param  boolean                  Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
+     * @param  boolean                  $site_lang Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
      * @return array                    A map of product name to list of product details.
      */
     public function get_products($site_lang = false)
@@ -224,7 +224,7 @@ class Hook_ecommerce_usergroup
     /**
      * Get the message for use in the purchase wizard.
      *
-     * @param  ID_TEXT                  The product in question.
+     * @param  ID_TEXT                  $type_code The product in question.
      * @return tempcode                 The message.
      */
     public function get_message($type_code)
@@ -260,8 +260,8 @@ class Hook_ecommerce_usergroup
     /**
      * Check whether the product codename is available for purchase by the member.
      *
-     * @param  ID_TEXT                  The product codename.
-     * @param  MEMBER                   The member.
+     * @param  ID_TEXT                  $type_code The product codename.
+     * @param  MEMBER                   $member The member.
      * @return integer                  The availability code (a ECOMMERCE_PRODUCT_* constant).
      */
     public function is_available($type_code, $member)

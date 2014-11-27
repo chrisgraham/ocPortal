@@ -79,10 +79,10 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -99,8 +99,8 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -130,7 +130,7 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -177,21 +177,21 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Get tempcode for adding/editing form.
      *
-     * @param  SHORT_TEXT               The title
-     * @param  LONG_TEXT                The description
-     * @param  SHORT_TEXT               The cost
-     * @param  integer                  The length
-     * @param  SHORT_TEXT               The units for the length
+     * @param  SHORT_TEXT               $title The title
+     * @param  LONG_TEXT                $description The description
+     * @param  SHORT_TEXT               $cost The cost
+     * @param  integer                  $length The length
+     * @param  SHORT_TEXT               $length_units The units for the length
      * @set    y m d w
-     * @param  BINARY                   Auto-recur
-     * @param  ?GROUP                   The usergroup that purchasing gains membership to (null: super members)
-     * @param  BINARY                   Whether this is applied to primary usergroup membership
-     * @param  BINARY                   Whether this is currently enabled
-     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription is start (null: default)
-     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription is ended (null: default)
-     * @param  ?LONG_TEXT               The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (null: default)
-     * @param  ?array                   Other e-mails to send (null: none)
-     * @param  ?AUTO_LINK               ID of existing subscription (null: new)
+     * @param  BINARY                   $auto_recur Auto-recur
+     * @param  ?GROUP                   $group_id The usergroup that purchasing gains membership to (null: super members)
+     * @param  BINARY                   $uses_primary Whether this is applied to primary usergroup membership
+     * @param  BINARY                   $enabled Whether this is currently enabled
+     * @param  ?LONG_TEXT               $mail_start The text of the e-mail to send out when a subscription is start (null: default)
+     * @param  ?LONG_TEXT               $mail_end The text of the e-mail to send out when a subscription is ended (null: default)
+     * @param  ?LONG_TEXT               $mail_uhoh The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (null: default)
+     * @param  ?array                   $mails Other e-mails to send (null: none)
+     * @param  ?AUTO_LINK               $id ID of existing subscription (null: new)
      * @return array                    Tuple: The input fields, The hidden fields, The delete fields
      */
     public function get_form_fields($title = '', $description = '', $cost = '9.99', $length = 12, $length_units = 'm', $auto_recur = 1, $group_id = null, $uses_primary = 0, $enabled = 1, $mail_start = null, $mail_end = null, $mail_uhoh = null, $mails = null, $id = null)
@@ -298,7 +298,7 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
      */
     public function create_selection_list_choose_table($url_map)
@@ -369,7 +369,7 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    Tuple: The input fields, The hidden fields, The delete fields
      */
     public function fill_in_edit_form($id)
@@ -476,7 +476,7 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -490,7 +490,7 @@ class Module_admin_ecommerce extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {

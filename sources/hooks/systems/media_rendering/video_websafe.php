@@ -47,7 +47,7 @@ class Hook_media_rendering_video_websafe extends Media_renderer_with_fallback
     /**
      * See if we can recognise this mime type.
      *
-     * @param  ID_TEXT                  The mime type
+     * @param  ID_TEXT                  $mime_type The mime type
      * @return integer                  Recognition precedence
      */
     public function recognises_mime_type($mime_type)
@@ -73,7 +73,7 @@ class Hook_media_rendering_video_websafe extends Media_renderer_with_fallback
     /**
      * See if we can recognise this URL pattern.
      *
-     * @param  URLPATH                  URL to pattern match
+     * @param  URLPATH                  $url URL to pattern match
      * @return integer                  Recognition precedence
      */
     public function recognises_url($url)
@@ -84,11 +84,11 @@ class Hook_media_rendering_video_websafe extends Media_renderer_with_fallback
     /**
      * Provide code to display what is at the URL, in the most appropriate way.
      *
-     * @param  mixed                    URL to render
-     * @param  mixed                    URL to render (no sessions etc)
-     * @param  array                    Attributes (e.g. width, height, length)
-     * @param  boolean                  Whether there are admin privileges, to render dangerous media types
-     * @param  ?MEMBER                  Member to run as (null: current member)
+     * @param  mixed                    $url URL to render
+     * @param  mixed                    $url_safe URL to render (no sessions etc)
+     * @param  array                    $attributes Attributes (e.g. width, height, length)
+     * @param  boolean                  $as_admin Whether there are admin privileges, to render dangerous media types
+     * @param  ?MEMBER                  $source_member Member to run as (null: current member)
      * @return tempcode                 Rendered version
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)

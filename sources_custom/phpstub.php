@@ -29,7 +29,7 @@ The code quality checker automatically parses and uses this file, to build up th
 /**
  * Absolute value.
  *
- * @param  mixed                        The number to get the absolute value of.
+ * @param  mixed                        $number The number to get the absolute value of.
  * @return mixed                        The absolute value of number.
  */
 function abs($number)
@@ -40,7 +40,7 @@ function abs($number)
 /**
  * Counts all the values of an array.
  *
- * @param  array                        Input array.
+ * @param  array                        $input Input array.
  * @return array                        An array using the values of the input array as keys and their frequency in input as values.
  */
 function array_count_values($input)
@@ -51,9 +51,9 @@ function array_count_values($input)
 /**
  * Calculate the difference between arrays.
  *
- * @param  array                        First array.
- * @param  array                        Second array.
- * @param  ?array                       Third array (null: only 2).
+ * @param  array                        $array1 First array.
+ * @param  array                        $array2 Second array.
+ * @param  ?array                       $array3 Third array (null: only 2).
  * @return array                        The difference.
  */
 function array_diff($array1, $array2, $array3 = null)
@@ -64,9 +64,9 @@ function array_diff($array1, $array2, $array3 = null)
 /**
  * Computes the intersection of arrays with additional index check.
  *
- * @param  array                        First array.
- * @param  array                        Second array.
- * @param  ?array                       Third array (null: only 2).
+ * @param  array                        $array1 First array.
+ * @param  array                        $array2 Second array.
+ * @param  ?array                       $array3 Third array (null: only 2).
  * @return array                        The difference.
  */
 function array_diff_assoc($array1, $array2, $array3 = null)
@@ -77,7 +77,7 @@ function array_diff_assoc($array1, $array2, $array3 = null)
 /**
  * Exchanges all keys with their associated values in an array.
  *
- * @param  array                        Array to flip.
+ * @param  array                        $trans Array to flip.
  * @return array                        An array in flip order.
  */
 function array_flip($trans)
@@ -88,8 +88,8 @@ function array_flip($trans)
 /**
  * Checks if the given key or index exists in the array.
  *
- * @param  mixed                        Key.
- * @param  array                        Search array.
+ * @param  mixed                        $key Key.
+ * @param  array                        $search Search array.
  * @return boolean                      Whether the key is set in the search array.
  */
 function array_key_exists($key, $search)
@@ -100,8 +100,8 @@ function array_key_exists($key, $search)
 /**
  * Return all the keys of an array.
  *
- * @param  array                        Input array.
- * @param  ?mixed                       Only find keys with this value (null: no such filter).
+ * @param  array                        $input Input array.
+ * @param  ?mixed                       $search_value Only find keys with this value (null: no such filter).
  * @return array                        The keys of the array.
  */
 function array_keys($input, $search_value = null)
@@ -112,9 +112,9 @@ function array_keys($input, $search_value = null)
 /**
  * Calculate the intersection between arrays.
  *
- * @param  array                        First array.
- * @param  array                        Second array.
- * @param  ?array                       Third array (null: only 2).
+ * @param  array                        $array1 First array.
+ * @param  array                        $array2 Second array.
+ * @param  ?array                       $array3 Third array (null: only 2).
  * @return array                        The intersection.
  */
 function array_intersect($array1, $array2, $array3 = null)
@@ -125,9 +125,9 @@ function array_intersect($array1, $array2, $array3 = null)
 /**
  * Calculate the intersection of arrays with additional index check.
  *
- * @param  array                        First array.
- * @param  array                        Second array.
- * @param  ?array                       Third array (null: only 2).
+ * @param  array                        $array1 First array.
+ * @param  array                        $array2 Second array.
+ * @param  ?array                       $array3 Third array (null: only 2).
  * @return array                        The intersection.
  */
 function array_intersect_assoc($array1, $array2, $array3 = null)
@@ -138,11 +138,11 @@ function array_intersect_assoc($array1, $array2, $array3 = null)
 /**
  * Merge two or more arrays.
  *
- * @param  array                        First array.
- * @param  array                        Second array.
- * @param  ?array                       Third array (null: only 2).
- * @param  ?array                       Fourth array to merge (null: not this one).
- * @param  ?array                       Fifth array to merge (null: not this one).
+ * @param  array                        $array1 First array.
+ * @param  array                        $array2 Second array.
+ * @param  ?array                       $array3 Third array (null: only 2).
+ * @param  ?array                       $array4 Fourth array to merge (null: not this one).
+ * @param  ?array                       $array5 Fifth array to merge (null: not this one).
  * @return array                        Merged array.
  */
 function array_merge($array1, $array2, $array3 = null, $array4 = null, $array5 = null)
@@ -153,7 +153,7 @@ function array_merge($array1, $array2, $array3 = null, $array4 = null, $array5 =
 /**
  * Pop the element off the end of array.
  *
- * @param  array                        The array.
+ * @param  array                        &$array The array.
  * @return ?mixed                       The value (null: no value).
  */
 function array_pop(&$array)
@@ -164,8 +164,8 @@ function array_pop(&$array)
 /**
  * Push one or more elements onto the end of array.
  *
- * @param  array                        The array.
- * @param  mixed                        The value.
+ * @param  array                        &$array The array.
+ * @param  mixed                        $var The value.
  * @return integer                      The new number of elements in the array.
  */
 function array_push(&$array, $var)
@@ -176,8 +176,8 @@ function array_push(&$array, $var)
 /**
  * Return an array with elements in reverse order.
  *
- * @param  array                        The array to reverse.
- * @param  boolean                      Whether to preserve keys.
+ * @param  array                        $array The array to reverse.
+ * @param  boolean                      $preserve_keys Whether to preserve keys.
  * @return array                        The reversed array.
  */
 function array_reverse($array, $preserve_keys = false)
@@ -188,8 +188,8 @@ function array_reverse($array, $preserve_keys = false)
 /**
  * Searches the array for a given value and returns the corresponding key if successful.
  *
- * @param  mixed                        Needle.
- * @param  array                        Haystack.
+ * @param  mixed                        $needle Needle.
+ * @param  array                        $haystack Haystack.
  * @return mixed                        The key (false: not found).
  */
 function array_search($needle, $haystack)
@@ -200,7 +200,7 @@ function array_search($needle, $haystack)
 /**
  * Shift an element off the beginning of array.
  *
- * @param  array                        The array.
+ * @param  array                        &$array The array.
  * @return ?mixed                       Shifted element (null: empty array given).
  */
 function array_shift(&$array)
@@ -211,9 +211,9 @@ function array_shift(&$array)
 /**
  * Extract a slice of the array.
  *
- * @param  array                        The array.
- * @param  integer                      The offset.
- * @param  ?integer                     The length (null: up to the end of the array).
+ * @param  array                        $array The array.
+ * @param  integer                      $offset The offset.
+ * @param  ?integer                     $length The length (null: up to the end of the array).
  * @return array                        The slice.
  */
 function array_slice($array, $offset, $length = null)
@@ -224,10 +224,10 @@ function array_slice($array, $offset, $length = null)
 /**
  * Remove a portion of the array and replace it with something else.
  *
- * @param  array                        The array.
- * @param  integer                      The offset.
- * @param  ?integer                     The length (null: up to the end of the array).
- * @param  ?array                       The replacement (null: nothing put in, just bit taken out).
+ * @param  array                        $input The array.
+ * @param  integer                      $offset The offset.
+ * @param  ?integer                     $length The length (null: up to the end of the array).
+ * @param  ?array                       $replacement The replacement (null: nothing put in, just bit taken out).
  * @return array                        The spliced result.
  */
 function array_splice($input, $offset, $length = null, $replacement = null)
@@ -238,7 +238,7 @@ function array_splice($input, $offset, $length = null, $replacement = null)
 /**
  * Removes duplicate values from an array. Equivalence determined by string comparison.
  *
- * @param  array                        Input array.
+ * @param  array                        $array Input array.
  * @return array                        Output array.
  */
 function array_unique($array)
@@ -249,7 +249,7 @@ function array_unique($array)
 /**
  * Return all the values of an array.
  *
- * @param  array                        Input array.
+ * @param  array                        $array Input array.
  * @return array                        Output array.
  */
 function array_values($array)
@@ -260,8 +260,8 @@ function array_values($array)
 /**
  * Sort an array in reverse order and maintain index association.
  *
- * @param  array                        Array.
- * @param  integer                      Sort flags.
+ * @param  array                        &$array Array.
+ * @param  integer                      $sort_flags Sort flags.
  */
 function arsort(&$array, $sort_flags = 0)
 {
@@ -270,8 +270,8 @@ function arsort(&$array, $sort_flags = 0)
 /**
  * Sort an array and maintain index association.
  *
- * @param  array                        Array.
- * @param  integer                      Sort flags.
+ * @param  array                        &$array Array.
+ * @param  integer                      $sort_flags Sort flags.
  */
 function asort(&$array, $sort_flags = 0)
 {
@@ -280,7 +280,7 @@ function asort(&$array, $sort_flags = 0)
 /**
  * Decodes data encoded with MIME base64.
  *
- * @param  string                       Encoded data.
+ * @param  string                       $encoded_data Encoded data.
  * @return ~string                      Decoded data (false: error).
  */
 function base64_decode($encoded_data)
@@ -291,7 +291,7 @@ function base64_decode($encoded_data)
 /**
  * Encodes data with MIME base64.
  *
- * @param  string                       Data.
+ * @param  string                       $data Data.
  * @return string                       Encoded data.
  */
 function base64_encode($data)
@@ -302,11 +302,11 @@ function base64_encode($data)
 /**
  * Call a user function given by the first parameter.
  *
- * @param  mixed                        Function callback.
- * @param  ?mixed                       Optional parameter (null: none).
- * @param  ?mixed                       Optional parameter (null: none).
- * @param  ?mixed                       Optional parameter (null: none).
- * @param  ?mixed                       Optional parameter (null: none).
+ * @param  mixed                        $function Function callback.
+ * @param  ?mixed                       $param_a Optional parameter (null: none).
+ * @param  ?mixed                       $param_b Optional parameter (null: none).
+ * @param  ?mixed                       $param_c Optional parameter (null: none).
+ * @param  ?mixed                       $param_d Optional parameter (null: none).
  * @return mixed                        Whatever the function returns.
  */
 function call_user_func($function, $param_a = null, $param_b = null, $param_c = null, $param_d = null)
@@ -317,7 +317,7 @@ function call_user_func($function, $param_a = null, $param_b = null, $param_c = 
 /**
  * Round fractions up.
  *
- * @param  float                        Value to round up.
+ * @param  float                        $function Value to round up.
  * @return float                        Rounded value.
  */
 function ceil($function)
@@ -328,7 +328,7 @@ function ceil($function)
 /**
  * Change directory.
  *
- * @param  PATH                         Path to change to.
+ * @param  PATH                         $directory Path to change to.
  * @return boolean                      Success status.
  */
 function chdir($directory)
@@ -339,9 +339,9 @@ function chdir($directory)
 /**
  * Validate a gregorian date.
  *
- * @param  integer                      The month.
- * @param  integer                      The day.
- * @param  integer                      The year.
+ * @param  integer                      $month The month.
+ * @param  integer                      $day The day.
+ * @param  integer                      $year The year.
  * @return boolean                      Whether the date is valid.
  */
 function checkdate($month, $day, $year)
@@ -352,8 +352,8 @@ function checkdate($month, $day, $year)
 /**
  * Changes file mode.
  *
- * @param  PATH                         The file to change the mode of.
- * @param  integer                      The mode (e.g. 0777).
+ * @param  PATH                         $filename The file to change the mode of.
+ * @param  integer                      $mode The mode (e.g. 0777).
  * @return boolean                      Success status.
  */
 function chmod($filename, $mode)
@@ -364,7 +364,7 @@ function chmod($filename, $mode)
 /**
  * Return a specific character.
  *
- * @param  integer                      The ASCII code for the character required.
+ * @param  integer                      $ascii The ASCII code for the character required.
  * @return string                       A string of length 1, where the first character is as requested.
  */
 function chr($ascii)
@@ -375,9 +375,9 @@ function chr($ascii)
 /**
  * Split a string into smaller chunks. Can be used to split a string into smaller chunks which is useful for e.g. converting base64_encode output to match RFC 2045 semantics. It inserts end (defaults to "\r\n") every chunklen characters.
  *
- * @param  string                       The input string.
- * @param  integer                      The maximum chunking length.
- * @param  string                       Split character.
+ * @param  string                       $body The input string.
+ * @param  integer                      $chunklen The maximum chunking length.
+ * @param  string                       $splitter Split character.
  * @return string                       The chunked version of the input string.
  */
 function chunk_split($body, $chunklen = 76, $splitter = "\r\n")
@@ -388,7 +388,7 @@ function chunk_split($body, $chunklen = 76, $splitter = "\r\n")
 /**
  * Checks if the class has been defined.
  *
- * @param  string                       The class identifier.
+ * @param  string                       $class_name The class identifier.
  * @return boolean                      Whether the class has been defined.
  */
 function class_exists($class_name)
@@ -406,7 +406,7 @@ function clearstatcache()
 /**
  * Close directory handle.
  *
- * @param  resource                     The directory handle to close.
+ * @param  resource                     $handle The directory handle to close.
  */
 function closedir($handle)
 {
@@ -415,7 +415,7 @@ function closedir($handle)
 /**
  * Returns the value of a constant.
  *
- * @param  string                       The name of the constant.
+ * @param  string                       $name The name of the constant.
  * @return mixed                        The value of the constant.
  */
 function constant($name)
@@ -426,9 +426,9 @@ function constant($name)
 /**
  * Copies a file. {{creates-file}}
  *
- * @param  PATH                         The source path.
- * @param  PATH                         The destination path.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $source The source path.
+ * @param  PATH                         $dest The destination path.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function copy($source, $dest, $context = null)
@@ -439,7 +439,7 @@ function copy($source, $dest, $context = null)
 /**
  * Calculate the cosine of an angle.
  *
- * @param  float                        The angle in radians.
+ * @param  float                        $angle The angle in radians.
  * @return float                        The cosine.
  */
 function cos($angle)
@@ -450,7 +450,7 @@ function cos($angle)
 /**
  * Count elements in a variable.
  *
- * @param  array                        Variable to count elements of.
+ * @param  array                        $var Variable to count elements of.
  * @return integer                      The count.
  */
 function count($var)
@@ -461,8 +461,8 @@ function count($var)
 /**
  * One-way string hashing (not encryption, as not reversible).
  *
- * @param  string                       The string to hash.
- * @param  ?string                      The salt (null: generate a random salt).
+ * @param  string                       $string The string to hash.
+ * @param  ?string                      $salt The salt (null: generate a random salt).
  * @return string                       The hash. The start of the hash determines parameters (encoding, salt).
  */
 function crypt($string, $salt = null)
@@ -473,7 +473,7 @@ function crypt($string, $salt = null)
 /**
  * Return the current element in an array.
  *
- * @param  array                        The array.
+ * @param  array                        $array The array.
  * @return mixed                        The current element.
  */
 function current($array)
@@ -484,8 +484,8 @@ function current($array)
 /**
  * Format a local time/date.
  *
- * @param  string                       The format string.
- * @param  ?TIME                        The timestamp (null: current time).
+ * @param  string                       $format The format string.
+ * @param  ?TIME                        $timestamp The timestamp (null: current time).
  * @return string                       The string representation of the local time/date.
  */
 function date($format, $timestamp = null)
@@ -496,7 +496,7 @@ function date($format, $timestamp = null)
 /**
  * Integer to string representation of hexadecimal.
  *
- * @param  integer                      The integer ('decimal' form, although truly stored in binary).
+ * @param  integer                      $number The integer ('decimal' form, although truly stored in binary).
  * @return string                       The string representation.
  */
 function dechex($number)
@@ -507,7 +507,7 @@ function dechex($number)
 /**
  * Integer to string representation of octal.
  *
- * @param  integer                      The integer ('decimal' form, although truly stored in binary).
+ * @param  integer                      $number The integer ('decimal' form, although truly stored in binary).
  * @return string                       The string representation.
  */
 function decoct($number)
@@ -518,8 +518,8 @@ function decoct($number)
 /**
  * Defines a named constant.
  *
- * @param  string                       Identifier.
- * @param  mixed                        Value.
+ * @param  string                       $name Identifier.
+ * @param  mixed                        $value Value.
  * @return boolean                      Success status.
  */
 function define($name, $value)
@@ -530,7 +530,7 @@ function define($name, $value)
 /**
  * Checks whether a given named constant exists.
  *
- * @param  string                       The identifier of a constant.
+ * @param  string                       $name The identifier of a constant.
  * @return boolean                      Whether the constant exists.
  */
 function defined($name)
@@ -541,7 +541,7 @@ function defined($name)
 /**
  * Returns directory name component of path.
  *
- * @param  PATH                         The path.
+ * @param  PATH                         $name The path.
  * @return PATH                         The directory name component.
  */
 function dirname($name)
@@ -552,7 +552,7 @@ function dirname($name)
 /**
  * Converts the number in degrees to the radian equivalent.
  *
- * @param  float                        Angle in degrees.
+ * @param  float                        $number Angle in degrees.
  * @return float                        Angle in radians.
  */
 function deg2rad($number)
@@ -563,10 +563,10 @@ function deg2rad($number)
 /**
  * Send an error message somewhere.
  *
- * @param  string                       The message to log.
- * @param  integer                      The message type (0 is normal PHP logging system, 1 is e-mail address [non-Roadsend], 2 is debugger connection, 3 is file).
+ * @param  string                       $message The message to log.
+ * @param  integer                      $message_type The message type (0 is normal PHP logging system, 1 is e-mail address [non-Roadsend], 2 is debugger connection, 3 is file).
  * @set    0 1 2 3
- * @param  string                       The parameter that defines details of the message type (for type 0, meaningless).
+ * @param  string                       $destination The parameter that defines details of the message type (for type 0, meaningless).
  * @return boolean                      Success status.
  */
 function error_log($message, $message_type = 0, $destination = '')
@@ -588,7 +588,7 @@ function error_reporting($level = null)
 /**
  * Output a message and terminate the current script.
  *
- * @param  mixed                        The message (string), or status code (integer).
+ * @param  mixed                        $message The message (string), or status code (integer).
  */
 function exit($message = '')
 {
@@ -597,9 +597,9 @@ function exit($message = '')
 /**
  * Split a string by string.
  *
- * @param  string                       The separator.
- * @param  string                       The string to split.
- * @param  ?integer                     The maximum number of splits (the last element containing the remainder) (null: no limit).
+ * @param  string                       $separator The separator.
+ * @param  string                       $string The string to split.
+ * @param  ?integer                     $limit The maximum number of splits (the last element containing the remainder) (null: no limit).
  * @return array                        The split list.
  */
 function explode($separator, $string, $limit = null)
@@ -610,7 +610,7 @@ function explode($separator, $string, $limit = null)
 /**
  * Closes an open file pointer.
  *
- * @param  resource                     The file pointer.
+ * @param  resource                     $handle The file pointer.
  * @return boolean                      Success status.
  */
 function fclose($handle)
@@ -621,7 +621,7 @@ function fclose($handle)
 /**
  * Tests for end-of-file on a file pointer.
  *
- * @param  resource                     The file pointer.
+ * @param  resource                     $handle The file pointer.
  * @return boolean                      Whether the end of the file has been reached.
  */
 function feof($handle)
@@ -632,8 +632,8 @@ function feof($handle)
 /**
  * Gets line from file pointer.
  *
- * @param  resource                     The file pointer.
- * @param  ?integer                     The maximum length of the line (null: no limit).
+ * @param  resource                     $handle The file pointer.
+ * @param  ?integer                     $length The maximum length of the line (null: no limit).
  * @return string                       The string read.
  */
 function fgets($handle, $length = null)
@@ -644,8 +644,8 @@ function fgets($handle, $length = null)
 /**
  * Reads entire file into an array.
  *
- * @param  PATH                         The file name.
- * @param  integer                      Flags.
+ * @param  PATH                         $filename The file name.
+ * @param  integer                      $flags Flags.
  * @return ~array                       The array (each line being an entry in the array, and newlines still attached) (false: error).
  */
 function file($filename, $flags = 0)
@@ -656,7 +656,7 @@ function file($filename, $flags = 0)
 /**
  * Checks whether a file or directory exists.
  *
- * @param  PATH                         The path.
+ * @param  PATH                         $filename The path.
  * @return boolean                      Whether it exists.
  */
 function file_exists($filename)
@@ -667,7 +667,7 @@ function file_exists($filename)
 /**
  * Gets inode change time of file.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~TIME                        Timestamp of creation (negativity is blasphemy) (false: error).
  */
 function filectime($filename)
@@ -678,7 +678,7 @@ function filectime($filename)
 /**
  * Gets file group.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~integer                     The posix group ID (false: error).
  */
 function filegroup($filename)
@@ -689,7 +689,7 @@ function filegroup($filename)
 /**
  * Gets file modification time.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~TIME                        Timestamp of modification (false: error).
  */
 function filemtime($filename)
@@ -700,7 +700,7 @@ function filemtime($filename)
 /**
  * Gets file owner.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~integer                     The posix user ID (false: error).
  */
 function fileowner($filename)
@@ -711,7 +711,7 @@ function fileowner($filename)
 /**
  * Gets file permissions.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~integer                     The permissions (e.g. 0777) (false: error).
  */
 function fileperms($filename)
@@ -722,7 +722,7 @@ function fileperms($filename)
 /**
  * Gets file size.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~integer                     The file size (false: error).
  */
 function filesize($filename)
@@ -733,7 +733,7 @@ function filesize($filename)
 /**
  * Get float value of a variable.
  *
- * @param  mixed                        The input.
+ * @param  mixed                        $var The input.
  * @return float                        The float value.
  */
 function floatval($var)
@@ -744,7 +744,7 @@ function floatval($var)
 /**
  * Round fractions down.
  *
- * @param  float                        The input.
+ * @param  float                        $value The input.
  * @return float                        The rounded value.
  */
 function floor($value)
@@ -785,10 +785,10 @@ function get_defined_functions()
 /**
  * Opens file or URL. {{creates-file}}
  *
- * @param  PATH                         Filename.
- * @param  string                       Mode (e.g. at).
- * @param  boolean                      Whether to search within the include path.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $filename Filename.
+ * @param  string                       $mode Mode (e.g. at).
+ * @param  boolean                      $use_include_path Whether to search within the include path.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return ~resource                    The file handle (false: could not be opened).
  */
 function fopen($filename, $mode, $use_include_path = false, $context = null)
@@ -799,7 +799,7 @@ function fopen($filename, $mode, $use_include_path = false, $context = null)
 /**
  * Output all remaining data on a file pointer.
  *
- * @param  resource                     The file handle.
+ * @param  resource                     $handle The file handle.
  * @return ~integer                     The number of characters that got read (false: error).
  */
 function fpassthru($handle)
@@ -810,8 +810,8 @@ function fpassthru($handle)
 /**
  * Binary-safe file read.
  *
- * @param  resource                     The file handle.
- * @param  integer                      Maximum length to read.
+ * @param  resource                     $handle The file handle.
+ * @param  integer                      $length Maximum length to read.
  * @return string                       The read data.
  */
 function fread($handle, $length)
@@ -822,9 +822,9 @@ function fread($handle, $length)
 /**
  * Seeks on a file pointer.
  *
- * @param  resource                     The file handle.
- * @param  integer                      The offset (meaning depends on whence).
- * @param  integer                      SEEK_SET, SEEK_CUR or SEEK_END.
+ * @param  resource                     $handle The file handle.
+ * @param  integer                      $offset The offset (meaning depends on whence).
+ * @param  integer                      $whence SEEK_SET, SEEK_CUR or SEEK_END.
  * @return integer                      Success status (-1 means error).
  */
 function fseek($handle, $offset, $whence = SEEK_SET)
@@ -835,7 +835,7 @@ function fseek($handle, $offset, $whence = SEEK_SET)
 /**
  * Gets file pointer read/write position.
  *
- * @param  resource                     The file handle.
+ * @param  resource                     $handle The file handle.
  * @return ~integer                     The offset (false: error).
  */
 function ftell($handle)
@@ -846,8 +846,8 @@ function ftell($handle)
 /**
  * Changes directories on a FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The directory to change to.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $dir The directory to change to.
  * @return boolean                      Success status.
  */
 function ftp_chdir($ftp_stream, $dir)
@@ -858,7 +858,7 @@ function ftp_chdir($ftp_stream, $dir)
 /**
  * Close an FTP connection.
  *
- * @param  resource                     The FTP connection.
+ * @param  resource                     $ftp_stream The FTP connection.
  * @return boolean                      Success status.
  */
 function ftp_close($ftp_stream)
@@ -869,9 +869,9 @@ function ftp_close($ftp_stream)
 /**
  * Make an FTP connection.
  *
- * @param  string                       The FTP server to connect to.
- * @param  integer                      The port on the FTP server that holds the FTP server application.
- * @param  integer                      The timeout after which we give up with an error.
+ * @param  string                       $host The FTP server to connect to.
+ * @param  integer                      $port The port on the FTP server that holds the FTP server application.
+ * @param  integer                      $timeout The timeout after which we give up with an error.
  * @return ~resource                    The FTP connection (false: error).
  */
 function ftp_connect($host, $port = 21, $timeout = 90)
@@ -882,8 +882,8 @@ function ftp_connect($host, $port = 21, $timeout = 90)
 /**
  * Deletes a file on the FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The filename.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $filename The filename.
  * @return boolean                      Success status.
  */
 function ftp_delete($ftp_stream, $filename)
@@ -894,10 +894,10 @@ function ftp_delete($ftp_stream, $filename)
 /**
  * Uploads from an open file to the FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The remote filename.
- * @param  resource                     The open file handle.
- * @param  integer                      The file mode for the remote file (e.g. 0777).
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $remote_file The remote filename.
+ * @param  resource                     $handle The open file handle.
+ * @param  integer                      $mode The file mode for the remote file (e.g. 0777).
  * @return boolean                      Success status.
  */
 function ftp_fput($ftp_stream, $remote_file, $handle, $mode)
@@ -908,9 +908,9 @@ function ftp_fput($ftp_stream, $remote_file, $handle, $mode)
 /**
  * Logs in to an FTP connection.
  *
- * @param  resource                     The FTP connection.
- * @param  string                       The username.
- * @param  string                       The password.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  string                       $username The username.
+ * @param  string                       $password The password.
  * @return boolean                      Success status.
  */
 function ftp_login($ftp_stream, $username, $password)
@@ -921,8 +921,8 @@ function ftp_login($ftp_stream, $username, $password)
 /**
  * Creates a directory.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The directory to create.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $directory The directory to create.
  * @return ~string                      The directory name (false: error).
  */
 function ftp_mkdir($ftp_stream, $directory)
@@ -933,8 +933,8 @@ function ftp_mkdir($ftp_stream, $directory)
 /**
  * Returns a list of files in the given directory.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The directory.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $directory The directory.
  * @return ~array                       The list of files (false: error).
  */
 function ftp_nlist($ftp_stream, $directory)
@@ -945,10 +945,10 @@ function ftp_nlist($ftp_stream, $directory)
 /**
  * Uploads a file to the FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The remote filename.
- * @param  PATH                         The local filename.
- * @param  integer                      The file mode for the remote file (e.g. 0777).
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $remote_file The remote filename.
+ * @param  PATH                         $local_file The local filename.
+ * @param  integer                      $mode The file mode for the remote file (e.g. 0777).
  * @return boolean                      Success status.
  */
 function ftp_put($ftp_stream, $remote_file, $local_file, $mode)
@@ -959,9 +959,9 @@ function ftp_put($ftp_stream, $remote_file, $local_file, $mode)
 /**
  * Renames a file on the FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         Original path.
- * @param  PATH                         New path.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $from Original path.
+ * @param  PATH                         $to New path.
  * @return boolean                      Success status.
  */
 function ftp_rename($ftp_stream, $from, $to)
@@ -972,8 +972,8 @@ function ftp_rename($ftp_stream, $from, $to)
 /**
  * Removes a directory on the FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The directory to remove.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $directory The directory to remove.
  * @return boolean                      Success status.
  */
 function ftp_rmdir($ftp_stream, $directory)
@@ -984,8 +984,8 @@ function ftp_rmdir($ftp_stream, $directory)
 /**
  * Sends a SITE command to the FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  string                       The SITE command.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  string                       $cmd The SITE command.
  * @return boolean                      Success status.
  */
 function ftp_site($ftp_stream, $cmd)
@@ -996,8 +996,8 @@ function ftp_site($ftp_stream, $cmd)
 /**
  * Find the file size of a file on the FTP server.
  *
- * @param  resource                     The FTP connection.
- * @param  PATH                         The file's path.
+ * @param  resource                     $ftp_stream The FTP connection.
+ * @param  PATH                         $cmd The file's path.
  * @return ~integer                     The file size (false: error).
  */
 function ftp_size($ftp_stream, $cmd)
@@ -1008,7 +1008,7 @@ function ftp_size($ftp_stream, $cmd)
 /**
  * Find whether the function of the given function name has been defined.
  *
- * @param  string                       The name of the function.
+ * @param  string                       $function_name The name of the function.
  * @return boolean                      Whether it is defined.
  */
 function function_exists($function_name)
@@ -1019,9 +1019,9 @@ function function_exists($function_name)
 /**
  * Binary-safe file write.
  *
- * @param  resource                     The file handle.
- * @param  string                       The string to write to the file.
- * @param  ?integer                     The length of data to write (null: all of $string).
+ * @param  resource                     $handle The file handle.
+ * @param  string                       $string The string to write to the file.
+ * @param  ?integer                     $length The length of data to write (null: all of $string).
  * @return ~integer                     The number of bytes written (false: error).
  */
 function fwrite($handle, $string, $length = null)
@@ -1042,7 +1042,7 @@ function gd_info()
 /**
  * Returns the name of the class of an object.
  *
- * @param  object                       The object.
+ * @param  object                       $obj The object.
  * @return string                       The class name.
  */
 function get_class($obj)
@@ -1053,7 +1053,7 @@ function get_class($obj)
 /**
  * Gets the class methods' names.
  *
- * @param  mixed                        The class name or an object instance.
+ * @param  mixed                        $class_name The class name or an object instance.
  * @return ?array                       An array of method names defined (null: error).
  */
 function get_class_methods($class_name)
@@ -1064,7 +1064,7 @@ function get_class_methods($class_name)
 /**
  * Get the default properties of the class.
  *
- * @param  string                       The class name.
+ * @param  string                       $class_name The class name.
  * @return ~array                       An associative array of declared properties visible from the current scope, with their default value (false: error).
  */
 function get_class_vars($class_name)
@@ -1075,7 +1075,7 @@ function get_class_vars($class_name)
 /**
  * Gets the properties of the given object.
  *
- * @param  object                       An object instance.
+ * @param  object                       $object An object instance.
  * @return array                        An associative array of defined object accessible non-static properties.
  */
 function get_object_vars($object)
@@ -1086,9 +1086,9 @@ function get_object_vars($object)
 /**
  * Returns the translation table used by htmlspecialchars and htmlentities.
  *
- * @param  integer                      The table to select (HTML_ENTITIES or HTML_SPECIALCHARS).
- * @param  integer                      The quote style (ENT_QUOTES or ENT_NOQUOTES or ENT_COMPAT).
- * @param  string                       The character set to use
+ * @param  integer                      $table The table to select (HTML_ENTITIES or HTML_SPECIALCHARS).
+ * @param  integer                      $quote_style The quote style (ENT_QUOTES or ENT_NOQUOTES or ENT_COMPAT).
+ * @param  string                       $charset The character set to use
  * @return array                        The translation table.
  */
 function get_html_translation_table($table, $quote_style = ENT_COMPAT, $charset = 'UTF-8')
@@ -1119,7 +1119,7 @@ function getcwd()
 /**
  * Get date/time information.
  *
- * @param  ?TIME                        Timestamp to get information for (null: now).
+ * @param  ?TIME                        $timestamp Timestamp to get information for (null: now).
  * @return array                        The information.
  */
 function getdate($timestamp = null)
@@ -1130,7 +1130,7 @@ function getdate($timestamp = null)
 /**
  * Gets the value of an environment variable.
  *
- * @param  string                       The environment name to get (e.g. PATH).
+ * @param  string                       $string The environment name to get (e.g. PATH).
  * @return ~string                      The value (false: error).
  */
 function getenv($string)
@@ -1141,8 +1141,8 @@ function getenv($string)
 /**
  * Format a GMT/UTC date/time (uses different format to 'date' function).
  *
- * @param  string                       The 'gm' format string.
- * @param  ?TIME                        Timestamp to use (null: now).
+ * @param  string                       $format The 'gm' format string.
+ * @param  ?TIME                        $timestamp Timestamp to use (null: now).
  * @return string                       The formatted string.
  */
 function gmdate($format, $timestamp = null)
@@ -1153,7 +1153,7 @@ function gmdate($format, $timestamp = null)
 /**
  * Close an open gz-file pointer.
  *
- * @param  resource                     The handle.
+ * @param  resource                     $handle The handle.
  * @return boolean                      Success status.
  */
 function gzclose($handle)
@@ -1164,8 +1164,8 @@ function gzclose($handle)
 /**
  * Open gz-file. {{creates-file}}
  *
- * @param  PATH                         The filename.
- * @param  string                       The mode (e.g. b).
+ * @param  PATH                         $filename The filename.
+ * @param  string                       $mode The mode (e.g. b).
  * @return ~resource                    The handle (false: error).
  */
 function gzopen($filename, $mode)
@@ -1176,9 +1176,9 @@ function gzopen($filename, $mode)
 /**
  * Binary-safe gz-file write.
  *
- * @param  resource                     The file handle.
- * @param  string                       The string to write to the file.
- * @param  ?integer                     The length of data to write (null: full length of input string).
+ * @param  resource                     $handle The file handle.
+ * @param  string                       $string The string to write to the file.
+ * @param  ?integer                     $length The length of data to write (null: full length of input string).
  * @return ~integer                     The number of bytes written (false: error).
  */
 function gzwrite($handle, $string, $length = null)
@@ -1191,8 +1191,8 @@ function gzwrite($handle, $string, $length = null)
  *
  * @sets_output_state
  *
- * @param  string                       The header to send.
- * @param  boolean                      Whether to replace a previous call to set the same header (if you choose to not replace, it will send two different values for the same header).
+ * @param  string                       $string The header to send.
+ * @param  boolean                      $replace_last Whether to replace a previous call to set the same header (if you choose to not replace, it will send two different values for the same header).
  */
 function header($string, $replace_last = true)
 {
@@ -1211,7 +1211,7 @@ function headers_sent()
 /**
  * String representation of hexadecimal to decimal.
  *
- * @param  string                       The string representation.
+ * @param  string                       $hex_string The string representation.
  * @return integer                      The integer ('decimal' form, although truly stored in binary).
  */
 function hexdec($hex_string)
@@ -1222,7 +1222,7 @@ function hexdec($hex_string)
 /**
  * Syntax highlighting of a string (output directly).
  *
- * @param  string                       The string to highlight.
+ * @param  string                       $str The string to highlight.
  */
 function highlight_string($str)
 {
@@ -1231,9 +1231,9 @@ function highlight_string($str)
 /**
  * Convert all applicable characters to HTML entities.
  *
- * @param  string                       The string to encode.
- * @param  integer                      The quote style (ENT_COMPAT, ENT_QUOTES, ENT_NOQUOTES).
- * @param  string                       The character set to use.
+ * @param  string                       $string The string to encode.
+ * @param  integer                      $quote_style The quote style (ENT_COMPAT, ENT_QUOTES, ENT_NOQUOTES).
+ * @param  string                       $charset The character set to use.
  * @return string                       The encoded string.
  */
 function htmlentities($string, $quote_style = ENT_COMPAT, $charset = '')
@@ -1244,8 +1244,8 @@ function htmlentities($string, $quote_style = ENT_COMPAT, $charset = '')
 /**
  * Set the blending mode for an image.
  *
- * @param  resource                     The image handle.
- * @param  boolean                      Whether to alpha blend.
+ * @param  resource                     $image The image handle.
+ * @param  boolean                      $blendmode Whether to alpha blend.
  * @return boolean                      Success status.
  */
 function imagealphablending($image, $blendmode)
@@ -1256,10 +1256,10 @@ function imagealphablending($image, $blendmode)
 /**
  * Allocate a color for an image.
  *
- * @param  resource                     The image handle.
- * @param  integer                      Red component (0-255).
- * @param  integer                      Green component (0-255).
- * @param  integer                      Blue component (0-255).
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $red Red component (0-255).
+ * @param  integer                      $green Green component (0-255).
+ * @param  integer                      $blue Blue component (0-255).
  * @return integer                      Combined colour identifier.
  */
 function imagecolorallocate($image, $red, $green, $blue)
@@ -1270,11 +1270,11 @@ function imagecolorallocate($image, $red, $green, $blue)
 /**
  * Allocate a color for an image, with an alpha-component.
  *
- * @param  resource                     The image handle.
- * @param  integer                      Red component (0-255).
- * @param  integer                      Green component (0-255).
- * @param  integer                      Blue component (0-255).
- * @param  integer                      Alpha component (0-127).
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $red Red component (0-255).
+ * @param  integer                      $green Green component (0-255).
+ * @param  integer                      $blue Blue component (0-255).
+ * @param  integer                      $alpha Alpha component (0-127).
  * @return integer                      Combined colour identifier.
  */
 function imagecolorallocatealpha($image, $red, $green, $blue, $alpha)
@@ -1285,8 +1285,8 @@ function imagecolorallocatealpha($image, $red, $green, $blue, $alpha)
 /**
  * Define a color as transparent.
  *
- * @param  resource                     The image handle.
- * @param  ?integer                     Transparency colour identifier (null: get it, don't set it).
+ * @param  resource                     $image The image handle.
+ * @param  ?integer                     $color Transparency colour identifier (null: get it, don't set it).
  * @return integer                      Transparency colour identifier.
  */
 function imagecolortransparent($image, $color = null)
@@ -1297,14 +1297,14 @@ function imagecolortransparent($image, $color = null)
 /**
  * Copy part of an image.
  *
- * @param  resource                     Destination image handle.
- * @param  resource                     Source image handle.
- * @param  integer                      Destination X-ordinate.
- * @param  integer                      Destination Y-ordinate.
- * @param  integer                      Source X-ordinate.
- * @param  integer                      Source Y-ordinate.
- * @param  integer                      Width to copy.
- * @param  integer                      Height to copy.
+ * @param  resource                     $dst_im Destination image handle.
+ * @param  resource                     $src_im Source image handle.
+ * @param  integer                      $dst_x Destination X-ordinate.
+ * @param  integer                      $dst_y Destination Y-ordinate.
+ * @param  integer                      $src_x Source X-ordinate.
+ * @param  integer                      $src_y Source Y-ordinate.
+ * @param  integer                      $src_w Width to copy.
+ * @param  integer                      $src_h Height to copy.
  */
 function imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h)
 {
@@ -1313,16 +1313,16 @@ function imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $sr
 /**
  * Copy and resize part of an image with resampling.
  *
- * @param  resource                     Destination image handle.
- * @param  resource                     Source image handle.
- * @param  integer                      Destination X-ordinate.
- * @param  integer                      Destination Y-ordinate.
- * @param  integer                      Source X-ordinate.
- * @param  integer                      Source Y-ordinate.
- * @param  integer                      Destination width.
- * @param  integer                      Destination height.
- * @param  integer                      Source width.
- * @param  integer                      Source height.
+ * @param  resource                     $dst_im Destination image handle.
+ * @param  resource                     $src_im Source image handle.
+ * @param  integer                      $dst_x Destination X-ordinate.
+ * @param  integer                      $dst_y Destination Y-ordinate.
+ * @param  integer                      $src_x Source X-ordinate.
+ * @param  integer                      $src_y Source Y-ordinate.
+ * @param  integer                      $dst_w Destination width.
+ * @param  integer                      $dst_h Destination height.
+ * @param  integer                      $src_w Source width.
+ * @param  integer                      $src_h Source height.
  * @return boolean                      Success status.
  */
 function imagecopyresampled($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h)
@@ -1333,16 +1333,16 @@ function imagecopyresampled($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $d
 /**
  * Copy and resize part of an image.
  *
- * @param  resource                     Destination image handle.
- * @param  resource                     Source image handle.
- * @param  integer                      Destination X-ordinate.
- * @param  integer                      Destination Y-ordinate.
- * @param  integer                      Source X-ordinate.
- * @param  integer                      Source Y-ordinate.
- * @param  integer                      Destination width.
- * @param  integer                      Destination height.
- * @param  integer                      Source width.
- * @param  integer                      Source height.
+ * @param  resource                     $dst_im Destination image handle.
+ * @param  resource                     $src_im Source image handle.
+ * @param  integer                      $dst_x Destination X-ordinate.
+ * @param  integer                      $dst_y Destination Y-ordinate.
+ * @param  integer                      $src_x Source X-ordinate.
+ * @param  integer                      $src_y Source Y-ordinate.
+ * @param  integer                      $dst_w Destination width.
+ * @param  integer                      $dst_h Destination height.
+ * @param  integer                      $src_w Source width.
+ * @param  integer                      $src_h Source height.
  */
 function imagecopyresized($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h)
 {
@@ -1351,8 +1351,8 @@ function imagecopyresized($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $dst
 /**
  * Create a new palette based image.
  *
- * @param  integer                      Width.
- * @param  integer                      Height.
+ * @param  integer                      $width Width.
+ * @param  integer                      $height Height.
  * @return resource                     The image handle.
  */
 function imagecreate($width, $height)
@@ -1363,7 +1363,7 @@ function imagecreate($width, $height)
 /**
  * Create a new image from the image stream in the string.
  *
- * @param  string                       The image.
+ * @param  string                       $image The image.
  * @return ~resource                    The image handle (false: error).
  */
 function imagecreatefromstring($image)
@@ -1374,7 +1374,7 @@ function imagecreatefromstring($image)
 /**
  * Create a new image from a PNG file on disk.
  *
- * @param  PATH                         The PNG file.
+ * @param  PATH                         $path The PNG file.
  * @return ~resource                    The image handle (false: error).
  */
 function imagecreatefrompng($path)
@@ -1385,7 +1385,7 @@ function imagecreatefrompng($path)
 /**
  * Create a new image from a JPEG file on disk.
  *
- * @param  PATH                         The JPEG file.
+ * @param  PATH                         $path The JPEG file.
  * @return ~resource                    The image handle (false: error).
  */
 function imagecreatefromjpeg($path)
@@ -1396,7 +1396,7 @@ function imagecreatefromjpeg($path)
 /**
  * Finds whether an image is a truecolor image.
  *
- * @param  resource                     The image handle.
+ * @param  resource                     $image The image handle.
  * @return boolean                      Whether the image is truecolor.
  */
 function imageistruecolor($image)
@@ -1407,8 +1407,8 @@ function imageistruecolor($image)
 /**
  * Create a new truecolor image.
  *
- * @param  integer                      Width.
- * @param  integer                      Height.
+ * @param  integer                      $x Width.
+ * @param  integer                      $y Height.
  * @return resource                     The image handle.
  */
 function imagecreatetruecolor($x, $y)
@@ -1419,9 +1419,9 @@ function imagecreatetruecolor($x, $y)
 /**
  * Get the index of the color of a pixel.
  *
- * @param  resource                     The image handle.
- * @param  integer                      X ordinate.
- * @param  integer                      Y ordinate.
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $x X ordinate.
+ * @param  integer                      $y Y ordinate.
  * @return integer                      The colour.
  */
 function imagecolorat($image, $x, $y)
@@ -1432,8 +1432,8 @@ function imagecolorat($image, $x, $y)
 /**
  * Get the colors for an index.
  *
- * @param  resource                     The image handle.
- * @param  integer                      The colour.
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $color The colour.
  * @return array                        Map of components.
  */
 function imagecolorsforindex($image, $color)
@@ -1444,7 +1444,7 @@ function imagecolorsforindex($image, $color)
 /**
  * Destroy an image resource.
  *
- * @param  resource                     The image handle.
+ * @param  resource                     $image The image handle.
  */
 function imagedestroy($image)
 {
@@ -1453,10 +1453,10 @@ function imagedestroy($image)
 /**
  * Flood fill.
  *
- * @param  resource                     The image handle.
- * @param  integer                      Start from X.
- * @param  integer                      Start from Y.
- * @param  integer                      The colour code to use.
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $x Start from X.
+ * @param  integer                      $y Start from Y.
+ * @param  integer                      $colour The colour code to use.
  */
 function imagefill($image, $x, $y, $colour)
 {
@@ -1465,7 +1465,7 @@ function imagefill($image, $x, $y, $colour)
 /**
  * Get font height.
  *
- * @param  integer                      Font code.
+ * @param  integer                      $font Font code.
  * @return integer                      Height.
  */
 function imagefontheight($font)
@@ -1476,7 +1476,7 @@ function imagefontheight($font)
 /**
  * Get font width.
  *
- * @param  integer                      Font code.
+ * @param  integer                      $font Font code.
  * @return integer                      Width.
  */
 function imagefontwidth($font)
@@ -1487,9 +1487,9 @@ function imagefontwidth($font)
 /**
  * Output image to browser or file as JPEG.
  *
- * @param  resource                     The image handle.
- * @param  ?string                      The filename (null: output to browser).
- * @param  ?integer                     Quality level (null: default).
+ * @param  resource                     $image The image handle.
+ * @param  ?string                      $filename The filename (null: output to browser).
+ * @param  ?integer                     $quality Quality level (null: default).
  * @return boolean                      Success status.
  */
 function imagejpeg($image, $filename = null, $quality = null)
@@ -1500,9 +1500,9 @@ function imagejpeg($image, $filename = null, $quality = null)
 /**
  * Output image to browser or file as PNG.
  *
- * @param  resource                     The image handle.
- * @param  ?string                      The filename (null: output to browser).
- * @param  integer                      Compression level (0-9, 9 being highest compression).
+ * @param  resource                     $image The image handle.
+ * @param  ?string                      $filename The filename (null: output to browser).
+ * @param  integer                      $quality Compression level (0-9, 9 being highest compression).
  * @return boolean                      Success status.
  */
 function imagepng($image, $filename = null, $quality = 0)
@@ -1513,8 +1513,8 @@ function imagepng($image, $filename = null, $quality = 0)
 /**
  * Set the flag to save full alpha channel information (as opposed to single-color transparency) when saving PNG images.
  *
- * @param  resource                     The image handle.
- * @param  boolean                      Whether to save alpha channel information.
+ * @param  resource                     $image The image handle.
+ * @param  boolean                      $saveflag Whether to save alpha channel information.
  */
 function imagesavealpha($image, $saveflag)
 {
@@ -1523,10 +1523,10 @@ function imagesavealpha($image, $saveflag)
 /**
  * Set a single pixel.
  *
- * @param  resource                     The image handle.
- * @param  integer                      X-ordinate.
- * @param  integer                      Y-ordinate.
- * @param  integer                      Colour code.
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $x X-ordinate.
+ * @param  integer                      $y Y-ordinate.
+ * @param  integer                      $color Colour code.
  */
 function imagesetpixel($image, $x, $y, $color)
 {
@@ -1535,12 +1535,12 @@ function imagesetpixel($image, $x, $y, $color)
 /**
  * Draw a string horizontally.
  *
- * @param  resource                     The image handle.
- * @param  integer                      Font code.
- * @param  integer                      X-ordinate.
- * @param  integer                      Y-ordinate.
- * @param  string                       Text to draw.
- * @param  integer                      Colour code.
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $font Font code.
+ * @param  integer                      $x X-ordinate.
+ * @param  integer                      $y Y-ordinate.
+ * @param  string                       $s Text to draw.
+ * @param  integer                      $col Colour code.
  */
 function imagestring($image, $font, $x, $y, $s, $col)
 {
@@ -1549,7 +1549,7 @@ function imagestring($image, $font, $x, $y, $s, $col)
 /**
  * Get image width.
  *
- * @param  resource                     The image handle.
+ * @param  resource                     $image The image handle.
  * @return integer                      The image width.
  */
 function imagesx($image)
@@ -1560,7 +1560,7 @@ function imagesx($image)
 /**
  * Get image height.
  *
- * @param  resource                     The image handle.
+ * @param  resource                     $image The image handle.
  * @return integer                      The image height.
  */
 function imagesy($image)
@@ -1571,12 +1571,12 @@ function imagesy($image)
 /**
  * Give the bounding box of a text using TrueType fonts.
  *
- * @param  resource                     The image handle.
- * @param  integer                      The loaded font.
- * @param  integer                      X-ordinate.
- * @param  integer                      Y-ordinate.
- * @param  string                       Text to draw.
- * @param  integer                      Colour code.
+ * @param  resource                     $image The image handle.
+ * @param  integer                      $font The loaded font.
+ * @param  integer                      $x X-ordinate.
+ * @param  integer                      $y Y-ordinate.
+ * @param  string                       $s Text to draw.
+ * @param  integer                      $col Colour code.
  */
 function imagestringup($image, $font, $x, $y, $s, $col)
 {
@@ -1585,10 +1585,10 @@ function imagestringup($image, $font, $x, $y, $s, $col)
 /**
  * Give the bounding box of a text using TrueType fonts.
  *
- * @param  float                        The font size in pixels.
- * @param  float                        Angle in degrees in which text will be measured.
- * @param  string                       The name of the TrueType font file.
- * @param  string                       The string to be measured.
+ * @param  float                        $size The font size in pixels.
+ * @param  float                        $angle Angle in degrees in which text will be measured.
+ * @param  string                       $fontfile The name of the TrueType font file.
+ * @param  string                       $text The string to be measured.
  * @return ~array                       Tuple: lower-left-X, lower-left-Y, lower-right-X, lower-right-Y, upper-right-X, upper-right-Y, upper-left-X, upper-left-Y (false: error).
  */
 function imagettfbbox($size, $angle, $fontfile, $text)
@@ -1599,14 +1599,14 @@ function imagettfbbox($size, $angle, $fontfile, $text)
 /**
  * Give the bounding box of a text using TrueType fonts.
  *
- * @param  resource                     The image handle.
- * @param  float                        The font size in pixels.
- * @param  float                        Angle in degrees in which text will be measured.
- * @param  integer                      X-ordinate.
- * @param  integer                      Y-ordinate.
- * @param  integer                      Colour code.
- * @param  string                       The name of the TrueType font file.
- * @param  string                       Text to draw.
+ * @param  resource                     $handle The image handle.
+ * @param  float                        $size The font size in pixels.
+ * @param  float                        $angle Angle in degrees in which text will be measured.
+ * @param  integer                      $x X-ordinate.
+ * @param  integer                      $y Y-ordinate.
+ * @param  integer                      $colour Colour code.
+ * @param  string                       $fontfile The name of the TrueType font file.
+ * @param  string                       $text Text to draw.
  * @return ~array                       Tuple: lower-left-X, lower-left-Y, lower-right-X, lower-right-Y, upper-right-X, upper-right-Y, upper-left-X, upper-left-Y (false: error).
  */
 function imagettftext($handle, $size, $angle, $x, $y, $colour, $fontfile, $text)
@@ -1627,14 +1627,14 @@ function imagetypes()
 /**
  * Draw a partial ellipse.
  *
- * @param  resource                     The image involved.
- * @param  integer                      X@top-left.
- * @param  integer                      Y@top-left.
- * @param  integer                      width.
- * @param  integer                      height.
- * @param  integer                      start degrees (0 degrees=3 o clock).
- * @param  integer                      end degrees (0 degrees=3 o clock).
- * @param  integer                      Colour code.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $cx X@top-left.
+ * @param  integer                      $cy Y@top-left.
+ * @param  integer                      $w width.
+ * @param  integer                      $h height.
+ * @param  integer                      $s start degrees (0 degrees=3 o clock).
+ * @param  integer                      $e end degrees (0 degrees=3 o clock).
+ * @param  integer                      $color Colour code.
  * @return boolean                      Success status.
  */
 function imagearc($image, $cx, $cy, $w, $h, $s, $e, $color)
@@ -1645,15 +1645,15 @@ function imagearc($image, $cx, $cy, $w, $h, $s, $e, $color)
 /**
  * Draw a partial ellipse and fill it.
  *
- * @param  resource                     The image involved.
- * @param  integer                      X@top-left.
- * @param  integer                      Y@top-left.
- * @param  integer                      width.
- * @param  integer                      height.
- * @param  integer                      start degrees (0 degrees=3 o clock).
- * @param  integer                      end degrees (0 degrees=3 o clock).
- * @param  integer                      Style, bitwise of IMG_ARC_PIE, IMG_ARC_CHORD, IMG_ARC_NOFILL, IMG_ARC_EDGED.
- * @param  integer                      Colour code.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $cx X@top-left.
+ * @param  integer                      $cy Y@top-left.
+ * @param  integer                      $w width.
+ * @param  integer                      $h height.
+ * @param  integer                      $s start degrees (0 degrees=3 o clock).
+ * @param  integer                      $e end degrees (0 degrees=3 o clock).
+ * @param  integer                      $color Style, bitwise of IMG_ARC_PIE, IMG_ARC_CHORD, IMG_ARC_NOFILL, IMG_ARC_EDGED.
+ * @param  integer                      $style Colour code.
  * @return boolean                      Success status.
  */
 function imagefilledarc($image, $cx, $cy, $w, $h, $s, $e, $color, $style)
@@ -1664,15 +1664,15 @@ function imagefilledarc($image, $cx, $cy, $w, $h, $s, $e, $color, $style)
 /**
  * Copy and merge part of an image with gray scale.
  *
- * @param  resource                     Destination image handle.
- * @param  resource                     Source image handle.
- * @param  integer                      Destination X-ordinate.
- * @param  integer                      Destination Y-ordinate.
- * @param  integer                      Source X-ordinate.
- * @param  integer                      Source Y-ordinate.
- * @param  integer                      Width to copy.
- * @param  integer                      Height to copy.
- * @param  integer                      Opacity value.
+ * @param  resource                     $dst_im Destination image handle.
+ * @param  resource                     $src_im Source image handle.
+ * @param  integer                      $dst_x Destination X-ordinate.
+ * @param  integer                      $dst_y Destination Y-ordinate.
+ * @param  integer                      $src_x Source X-ordinate.
+ * @param  integer                      $src_y Source Y-ordinate.
+ * @param  integer                      $src_w Width to copy.
+ * @param  integer                      $src_h Height to copy.
+ * @param  integer                      $pct Opacity value.
  */
 function imagecopymergegray($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
 {
@@ -1681,12 +1681,12 @@ function imagecopymergegray($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $s
 /**
  * Draw a line.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Start-X.
- * @param  integer                      Start-Y.
- * @param  integer                      End-X.
- * @param  integer                      End-Y.
- * @param  integer                      The colour.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $x1 Start-X.
+ * @param  integer                      $y1 Start-Y.
+ * @param  integer                      $x2 End-X.
+ * @param  integer                      $y2 End-Y.
+ * @param  integer                      $color The colour.
  */
 function imageline($image, $x1, $y1, $x2, $y2, $color)
 {
@@ -1695,12 +1695,12 @@ function imageline($image, $x1, $y1, $x2, $y2, $color)
 /**
  * Draw an ellipse.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Centre-X.
- * @param  integer                      Centre-Y.
- * @param  integer                      Width.
- * @param  integer                      Height.
- * @param  integer                      Colour.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $cx Centre-X.
+ * @param  integer                      $cy Centre-Y.
+ * @param  integer                      $w Width.
+ * @param  integer                      $h Height.
+ * @param  integer                      $color Colour.
  * @return boolean                      Success status.
  */
 function imageellipse($image, $cx, $cy, $w, $h, $color)
@@ -1711,12 +1711,12 @@ function imageellipse($image, $cx, $cy, $w, $h, $color)
 /**
  * Draw a filled ellipse.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Centre-X.
- * @param  integer                      Centre-Y.
- * @param  integer                      Width.
- * @param  integer                      Height.
- * @param  integer                      Colour.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $cx Centre-X.
+ * @param  integer                      $cy Centre-Y.
+ * @param  integer                      $w Width.
+ * @param  integer                      $h Height.
+ * @param  integer                      $color Colour.
  * @return boolean                      Success status.
  */
 function imagefilledellipse($image, $cx, $cy, $w, $h, $color)
@@ -1727,12 +1727,12 @@ function imagefilledellipse($image, $cx, $cy, $w, $h, $color)
 /**
  * Draw a character horizontally.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Font number.
- * @param  integer                      X.
- * @param  integer                      Y.
- * @param  string                       What to write.
- * @param  integer                      Colour number.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $font Font number.
+ * @param  integer                      $x X.
+ * @param  integer                      $y Y.
+ * @param  string                       $c What to write.
+ * @param  integer                      $color Colour number.
  */
 function imagechar($image, $font, $x, $y, $c, $color)
 {
@@ -1741,10 +1741,10 @@ function imagechar($image, $font, $x, $y, $c, $color)
 /**
  * Draw a filled polygon.
  *
- * @param  resource                     The image involved.
- * @param  array                        Array of pairs.
- * @param  integer                      Number of points in array.
- * @param  integer                      Colour number.
+ * @param  resource                     $image The image involved.
+ * @param  array                        $points Array of pairs.
+ * @param  integer                      $num_points Number of points in array.
+ * @param  integer                      $colour Colour number.
  */
 function imagefilledpolygon($image, $points, $num_points, $colour)
 {
@@ -1753,10 +1753,10 @@ function imagefilledpolygon($image, $points, $num_points, $colour)
 /**
  * Draw a polygon.
  *
- * @param  resource                     The image involved.
- * @param  array                        Array of pairs.
- * @param  integer                      Number of points in array.
- * @param  integer                      Colour number.
+ * @param  resource                     $image The image involved.
+ * @param  array                        $points Array of pairs.
+ * @param  integer                      $num_points Number of points in array.
+ * @param  integer                      $colour Colour number.
  */
 function imagepolygon($image, $points, $num_points, $colour)
 {
@@ -1765,12 +1765,12 @@ function imagepolygon($image, $points, $num_points, $colour)
 /**
  * Draw a filled rectangle.
  *
- * @param  resource                     The image involved.
- * @param  integer                      First-X.
- * @param  integer                      First-Y.
- * @param  integer                      Second-X.
- * @param  integer                      Second-Y.
- * @param  integer                      Colour number.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $x1 First-X.
+ * @param  integer                      $y1 First-Y.
+ * @param  integer                      $x2 Second-X.
+ * @param  integer                      $y2 Second-Y.
+ * @param  integer                      $col Colour number.
  */
 function imagefilledrectangle($image, $x1, $y1, $x2, $y2, $col)
 {
@@ -1779,12 +1779,12 @@ function imagefilledrectangle($image, $x1, $y1, $x2, $y2, $col)
 /**
  * Draw a rectangle.
  *
- * @param  resource                     The image involved.
- * @param  integer                      First-X.
- * @param  integer                      First-Y.
- * @param  integer                      Second-X.
- * @param  integer                      Second-Y.
- * @param  integer                      Colour number.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $x1 First-X.
+ * @param  integer                      $y1 First-Y.
+ * @param  integer                      $x2 Second-X.
+ * @param  integer                      $y2 Second-Y.
+ * @param  integer                      $col Colour number.
  */
 function imagerectangle($image, $x1, $y1, $x2, $y2, $col)
 {
@@ -1793,11 +1793,11 @@ function imagerectangle($image, $x1, $y1, $x2, $y2, $col)
 /**
  * Flood fill to specific color.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Origin X.
- * @param  integer                      Origin Y.
- * @param  integer                      Border colour number.
- * @param  integer                      Fill colour number.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $x Origin X.
+ * @param  integer                      $y Origin Y.
+ * @param  integer                      $border Border colour number.
+ * @param  integer                      $color Fill colour number.
  */
 function imagefilltoborder($image, $x, $y, $border, $color)
 {
@@ -1806,9 +1806,9 @@ function imagefilltoborder($image, $x, $y, $border, $color)
 /**
  * Apply a gamma correction to a GD image.
  *
- * @param  resource                     The image involved.
- * @param  float                        Input gamma.
- * @param  float                        Output gamma.
+ * @param  resource                     $image The image involved.
+ * @param  float                        $in Input gamma.
+ * @param  float                        $out Output gamma.
  */
 function imagegammacorrect($image, $in, $out)
 {
@@ -1817,8 +1817,8 @@ function imagegammacorrect($image, $in, $out)
 /**
  * Enable or disable interlace / progressive-save.
  *
- * @param  resource                     The image involved.
- * @param  BINARY                       On/Off.
+ * @param  resource                     $image The image involved.
+ * @param  BINARY                       $interlace On/Off.
  * @return boolean                      Whether interlace is set.
  */
 function imageinterlace($image, $interlace)
@@ -1829,7 +1829,7 @@ function imageinterlace($image, $interlace)
 /**
  * Load a new font.
  *
- * @param  PATH                         File.
+ * @param  PATH                         $file File.
  * @return ~integer                     Font code (false: error).
  */
 function imageloadfont($file)
@@ -1840,8 +1840,8 @@ function imageloadfont($file)
 /**
  * Copy the palette from one image to another.
  *
- * @param  resource                     The image the palette is from.
- * @param  resource                     The image the palette is to.
+ * @param  resource                     $destination The image the palette is from.
+ * @param  resource                     $source The image the palette is to.
  */
 function imagepalettecopy($destination, $source)
 {
@@ -1850,8 +1850,8 @@ function imagepalettecopy($destination, $source)
 /**
  * Set the brush image for line drawing.
  *
- * @param  resource                     The image involved.
- * @param  resource                     The brush image.
+ * @param  resource                     $image The image involved.
+ * @param  resource                     $brush The brush image.
  * @return boolean                      Success status.
  */
 function imagesetbrush($image, $brush)
@@ -1862,8 +1862,8 @@ function imagesetbrush($image, $brush)
 /**
  * Set the style for line drawing.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Style number (IMG_COLOR_STYLED or IMG_COLOR_STYLEDBRUSHED).
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $style Style number (IMG_COLOR_STYLED or IMG_COLOR_STYLEDBRUSHED).
  */
 function imagesetstyle($image, $style)
 {
@@ -1872,8 +1872,8 @@ function imagesetstyle($image, $style)
 /**
  * Set the thickness for line drawing.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Thickness in pixels.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $thickness Thickness in pixels.
  * @return boolean                      Success status.
  */
 function imagesetthickness($image, $thickness)
@@ -1884,8 +1884,8 @@ function imagesetthickness($image, $thickness)
 /**
  * Set the tile image for filling.
  *
- * @param  resource                     The image involved.
- * @param  resource                     The tile image.
+ * @param  resource                     $image The image involved.
+ * @param  resource                     $tile The tile image.
  * @return boolean                      Success status.
  */
 function imagesettile($image, $tile)
@@ -1896,9 +1896,9 @@ function imagesettile($image, $tile)
 /**
  * Convert a truecolor image to a palette image.
  *
- * @param  resource                     The image involved.
- * @param  boolean                      Whether to use dithering.
- * @param  integer                      The maximum number of colors that should be retained in the palette.
+ * @param  resource                     $image The image involved.
+ * @param  boolean                      $dither Whether to use dithering.
+ * @param  integer                      $ncolors The maximum number of colors that should be retained in the palette.
  */
 function imagetruecolortopalette($image, $dither, $ncolors)
 {
@@ -1907,12 +1907,12 @@ function imagetruecolortopalette($image, $dither, $ncolors)
 /**
  * Draw a character vertically.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Font number.
- * @param  integer                      X.
- * @param  integer                      Y.
- * @param  string                       What to write.
- * @param  integer                      Colour number.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $font Font number.
+ * @param  integer                      $x X.
+ * @param  integer                      $y Y.
+ * @param  string                       $c What to write.
+ * @param  integer                      $color Colour number.
  */
 function imagecharup($image, $font, $x, $y, $c, $color)
 {
@@ -1921,10 +1921,10 @@ function imagecharup($image, $font, $x, $y, $c, $color)
 /**
  * Get the index of the closest color to the specified color.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
  * @return integer                      Colour number.
  */
 function imagecolorclosest($image, $red, $green, $blue)
@@ -1935,11 +1935,11 @@ function imagecolorclosest($image, $red, $green, $blue)
 /**
  * Get the index of the closest color to the specified color + alpha.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
- * @param  integer                      Alpha.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
+ * @param  integer                      $alpha Alpha.
  * @return integer                      Colour number.
  */
 function imagecolorclosestalpha($image, $red, $green, $blue, $alpha)
@@ -1950,10 +1950,10 @@ function imagecolorclosestalpha($image, $red, $green, $blue, $alpha)
 /**
  * Get the index of the color which has the hue, white and blackness nearest to the given color .
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
  * @return integer                      Colour number.
  */
 function imagecolorclosesthwb($image, $red, $green, $blue)
@@ -1964,8 +1964,8 @@ function imagecolorclosesthwb($image, $red, $green, $blue)
 /**
  * De-allocate a color for an image.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Colour number.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $colour Colour number.
  * @return boolean                      Success status.
  */
 function imagecolordeallocate($image, $colour)
@@ -1976,10 +1976,10 @@ function imagecolordeallocate($image, $colour)
 /**
  * Get the index of the specified color.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
  * @return integer                      Colour number.
  */
 function imagecolorexact($image, $red, $green, $blue)
@@ -1990,11 +1990,11 @@ function imagecolorexact($image, $red, $green, $blue)
 /**
  * Get the index of the specified color + alpha.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
- * @param  integer                      Alpha.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
+ * @param  integer                      $alpha Alpha.
  * @return ~integer                     Colour number (false: error).
  */
 function imagecolorexactalpha($image, $red, $green, $blue, $alpha)
@@ -2005,10 +2005,10 @@ function imagecolorexactalpha($image, $red, $green, $blue, $alpha)
 /**
  * Get the index of the specified color or its closest possible alternative.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
  * @return integer                      Colour number.
  */
 function imagecolorresolve($image, $red, $green, $blue)
@@ -2019,11 +2019,11 @@ function imagecolorresolve($image, $red, $green, $blue)
 /**
  * Get the index of the specified color + alpha or its closest possible alternative.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
- * @param  integer                      Alpha.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
+ * @param  integer                      $alpha Alpha.
  * @return ~integer                     Colour number (false: error).
  */
 function imagecolorresolvealpha($image, $red, $green, $blue, $alpha)
@@ -2034,10 +2034,10 @@ function imagecolorresolvealpha($image, $red, $green, $blue, $alpha)
 /**
  * Set the color for the specified palette index.
  *
- * @param  resource                     The image involved.
- * @param  integer                      Red.
- * @param  integer                      Green.
- * @param  integer                      Blue.
+ * @param  resource                     $image The image involved.
+ * @param  integer                      $red Red.
+ * @param  integer                      $green Green.
+ * @param  integer                      $blue Blue.
  */
 function imagecolorset($image, $red, $green, $blue)
 {
@@ -2046,7 +2046,7 @@ function imagecolorset($image, $red, $green, $blue)
 /**
  * Find out the number of colors in an image's palette.
  *
- * @param  resource                     The image involved.
+ * @param  resource                     $image The image involved.
  * @return integer                      Total number of colours.
  */
 function imagecolorstotal($image)
@@ -2057,15 +2057,15 @@ function imagecolorstotal($image)
 /**
  * Copy and merge part of an image.
  *
- * @param  resource                     Destination image handle.
- * @param  resource                     Source image handle.
- * @param  integer                      Destination X-ordinate.
- * @param  integer                      Destination Y-ordinate.
- * @param  integer                      Source X-ordinate.
- * @param  integer                      Source Y-ordinate.
- * @param  integer                      Width to copy.
- * @param  integer                      Height to copy.
- * @param  integer                      Opacity value.
+ * @param  resource                     $dst_im Destination image handle.
+ * @param  resource                     $src_im Source image handle.
+ * @param  integer                      $dst_x Destination X-ordinate.
+ * @param  integer                      $dst_y Destination Y-ordinate.
+ * @param  integer                      $src_x Source X-ordinate.
+ * @param  integer                      $src_y Source Y-ordinate.
+ * @param  integer                      $src_w Width to copy.
+ * @param  integer                      $src_h Height to copy.
+ * @param  integer                      $pct Opacity value.
  */
 function imagecopymerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
 {
@@ -2074,8 +2074,8 @@ function imagecopymerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w
 /**
  * Join array elements with a string.
  *
- * @param  string                       The glue component (becomes a deliminator).
- * @param  array                        The pieces to join.
+ * @param  string                       $glue The glue component (becomes a deliminator).
+ * @param  array                        $pieces The pieces to join.
  * @return string                       The joined string.
  */
 function implode($glue, $pieces)
@@ -2086,9 +2086,9 @@ function implode($glue, $pieces)
 /**
  * Checks if a value exists in an array.
  *
- * @param  mixed                        Needle.
- * @param  array                        Haystack.
- * @param  boolean                      Use strict type checking.
+ * @param  mixed                        $needle Needle.
+ * @param  array                        $haystack Haystack.
+ * @param  boolean                      $strict Use strict type checking.
  * @return boolean                      Whether the value exists in the array.
  */
 function in_array($needle, $haystack, $strict = false)
@@ -2099,7 +2099,7 @@ function in_array($needle, $haystack, $strict = false)
 /**
  * Include and evaluate the specified file.
  *
- * @param  PATH                         The filename of the file to include.
+ * @param  PATH                         $filename The filename of the file to include.
  * @return mixed                        Success status or returned value.
  */
 function include($filename)
@@ -2110,7 +2110,7 @@ function include($filename)
 /**
  * Include and evaluate the specified file, but only if it has not already been included.
  *
- * @param  PATH                         The filename of the file to include.
+ * @param  PATH                         $filename The filename of the file to include.
  * @return mixed                        Success status or returned value.
  */
 function include_once($filename)
@@ -2121,7 +2121,7 @@ function include_once($filename)
 /**
  * Gets the value of a configuration option. Note: On Phalanger any unknown config options will produce a warning if fetched.
  *
- * @param  string                       Config option.
+ * @param  string                       $varname Config option.
  * @return mixed                        Value of option (empty: no such config option, or an empty value) (false: ditto).
  */
 function ini_get($varname)
@@ -2132,7 +2132,7 @@ function ini_get($varname)
 /**
  * Restores the value of a configuration option.
  *
- * @param  string                       Config option.
+ * @param  string                       $varname Config option.
  */
 function ini_restore($varname)
 {
@@ -2141,8 +2141,8 @@ function ini_restore($varname)
 /**
  * Sets the value of a configuration option.
  *
- * @param  string                       Config option.
- * @param  string                       New value of option.
+ * @param  string                       $var Config option.
+ * @param  string                       $value New value of option.
  * @return ~string                      Old value of option (false: error).
  */
 function ini_set($var, $value)
@@ -2153,8 +2153,8 @@ function ini_set($var, $value)
 /**
  * Get integer value of a variable.
  *
- * @param  mixed                        Integer, but in some other form (usually string).
- * @param  integer                      The base.
+ * @param  mixed                        $var Integer, but in some other form (usually string).
+ * @param  integer                      $base The base.
  * @return integer                      The integer, extracted.
  */
 function intval($var, $base = 10)
@@ -2165,8 +2165,8 @@ function intval($var, $base = 10)
 /**
  * Whether the object is of this class or has this class as one of its parents.
  *
- * @param  object                       The object.
- * @param  string                       The class name.
+ * @param  object                       $object The object.
+ * @param  string                       $class_name The class name.
  * @return boolean                      Whether it is.
  */
 function is_a($object, $class_name)
@@ -2177,7 +2177,7 @@ function is_a($object, $class_name)
 /**
  * Finds whether a variable is an array.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_array($var)
@@ -2188,7 +2188,7 @@ function is_array($var)
 /**
  * Finds whether a variable is a boolean.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_bool($var)
@@ -2199,7 +2199,7 @@ function is_bool($var)
 /**
  * Finds whether a path is to a directory.
  *
- * @param  PATH                         The path to check.
+ * @param  PATH                         $path The path to check.
  * @return boolean                      Whether it is.
  */
 function is_dir($path)
@@ -2210,7 +2210,7 @@ function is_dir($path)
 /**
  * Finds whether a path is to a file.
  *
- * @param  PATH                         The path to check.
+ * @param  PATH                         $path The path to check.
  * @return boolean                      Whether it is.
  */
 function is_file($path)
@@ -2221,7 +2221,7 @@ function is_file($path)
 /**
  * Finds whether a path is to a symbolic link.
  *
- * @param  PATH                         The path to check.
+ * @param  PATH                         $path The path to check.
  * @return boolean                      Whether it is.
  */
 function is_link($path)
@@ -2232,7 +2232,7 @@ function is_link($path)
 /**
  * Finds whether a variable is a float.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_float($var)
@@ -2243,7 +2243,7 @@ function is_float($var)
 /**
  * Finds whether a variable is an integer.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_integer($var)
@@ -2254,7 +2254,7 @@ function is_integer($var)
 /**
  * Finds whether a variable holds a callable function reference.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it does.
  */
 function is_callable($var)
@@ -2265,7 +2265,7 @@ function is_callable($var)
 /**
  * Finds whether a variable is null.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_null($var)
@@ -2276,7 +2276,7 @@ function is_null($var)
 /**
  * Finds whether a variable is numeric (e.g. a numeric string, or a pure integer).
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_numeric($var)
@@ -2287,7 +2287,7 @@ function is_numeric($var)
 /**
  * Finds whether a variable is an object.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_object($var)
@@ -2298,7 +2298,7 @@ function is_object($var)
 /**
  * Finds whether a path is to an actual readable file.
  *
- * @param  PATH                         The path to check.
+ * @param  PATH                         $path The path to check.
  * @return boolean                      Whether it is.
  */
 function is_readable($path)
@@ -2309,7 +2309,7 @@ function is_readable($path)
 /**
  * Finds whether a variable is a resource.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_resource($var)
@@ -2320,7 +2320,7 @@ function is_resource($var)
 /**
  * Finds whether a variable is a string.
  *
- * @param  mixed                        What to check.
+ * @param  mixed                        $var What to check.
  * @return boolean                      Whether it is.
  */
 function is_string($var)
@@ -2331,7 +2331,7 @@ function is_string($var)
 /**
  * Finds whether a path is to an actual uploaded file.
  *
- * @param  PATH                         The path to check.
+ * @param  PATH                         $path The path to check.
  * @return boolean                      Whether it is.
  */
 function is_uploaded_file($path)
@@ -2342,7 +2342,7 @@ function is_uploaded_file($path)
 /**
  * Finds whether a path is to an actual writeable file.
  *
- * @param  PATH                         The path to check.
+ * @param  PATH                         $path The path to check.
  * @return boolean                      Whether it is.
  */
 function is_writable($path)
@@ -2353,7 +2353,7 @@ function is_writable($path)
 /**
  * Finds whether a variable exists / is not null / is an actually derefereable array element. Do not use this for the null case, and otherwise ONLY when for efficiency reasons.
  *
- * @param  mixed                        The variable.
+ * @param  mixed                        &$path The variable.
  * @return boolean                      Whether it is set.
  */
 function isset(&$path)
@@ -2364,7 +2364,7 @@ function isset(&$path)
 /**
  * Sort an array by key in reverse order.
  *
- * @param  array                        The array to sort.
+ * @param  array                        &$array The array to sort.
  */
 function krsort(&$array)
 {
@@ -2373,7 +2373,7 @@ function krsort(&$array)
 /**
  * Sort an array by key.
  *
- * @param  array                        The array to sort.
+ * @param  array                        &$array The array to sort.
  */
 function ksort(&$array)
 {
@@ -2392,8 +2392,8 @@ function localeconv()
 /**
  * Strip whitespace from the beginning of a string.
  *
- * @param  string                       The string to trim from.
- * @param  string                       Characters to trim.
+ * @param  string                       $string The string to trim from.
+ * @param  string                       $characters Characters to trim.
  * @return string                       The trimmed string.
  */
 function ltrim($string, $characters = " \t\n\r\0\x0B")
@@ -2404,11 +2404,11 @@ function ltrim($string, $characters = " \t\n\r\0\x0B")
 /**
  * Send an e-mail.
  *
- * @param  string                       The TO address.
- * @param  string                       The subject.
- * @param  string                       The message.
- * @param  string                       Additional headers.
- * @param  string                       Additional stuff to send to sendmail executable (if appropriate, only works when safe mode is off).
+ * @param  string                       $to The TO address.
+ * @param  string                       $subject The subject.
+ * @param  string                       $message The message.
+ * @param  string                       $additional_headers Additional headers.
+ * @param  string                       $additional_flags Additional stuff to send to sendmail executable (if appropriate, only works when safe mode is off).
  * @return boolean                      Success status.
  */
 function mail($to, $subject, $message, $additional_headers = '', $additional_flags = '')
@@ -2419,16 +2419,16 @@ function mail($to, $subject, $message, $additional_headers = '', $additional_fla
 /**
  * Find highest value between arguments.
  *
- * @param  mixed                        First argument (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Second argument (null: no second argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Third argument (null: no third argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fourth argument (null: no fourth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fifth argument (null: no fith argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Sixth argument (null: no sixth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Seventh argument (null: no seventh argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Eighth argument (null: no eighth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Ninth argument (null: no ninth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Tenth argument (null: no tenth argument) (if array, then each treated as a separate parameter).
+ * @param  mixed                        $arg1 First argument (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg2 Second argument (null: no second argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg3 Third argument (null: no third argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg4 Fourth argument (null: no fourth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg5 Fifth argument (null: no fith argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg6 Sixth argument (null: no sixth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg7 Seventh argument (null: no seventh argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg8 Eighth argument (null: no eighth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg9 Ninth argument (null: no ninth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg10 Tenth argument (null: no tenth argument) (if array, then each treated as a separate parameter).
  * @return mixed                        The highest valued argument.
  */
 function max($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null, $arg10 = null)
@@ -2439,7 +2439,7 @@ function max($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg
 /**
  * Calculate the md5 hash of a string.
  *
- * @param  string                       String to hash.
+ * @param  string                       $str String to hash.
  * @return string                       Hashed result.
  */
 function md5($str)
@@ -2450,8 +2450,8 @@ function md5($str)
 /**
  * Checks if the class method exists.
  *
- * @param  object                       Object of the class we want to check.
- * @param  string                       The method name.
+ * @param  object                       $object Object of the class we want to check.
+ * @param  string                       $method_name The method name.
  * @return boolean                      Whether the class method exists.
  */
 function method_exists($object, $method_name)
@@ -2462,7 +2462,7 @@ function method_exists($object, $method_name)
 /**
  * Return current UNIX timestamp with microseconds.
  *
- * @param  boolean                      Whether to return a float result. ALWAYS PASS THIS IN AS *FALSE* - FOR COMPATIBILITY WITH OLD VERSIONS OF PHP THAT DO NOT HAVE IT, WHILST PHP 6 DEFAULTS IT TO TRUE.
+ * @param  boolean                      $as_float Whether to return a float result. ALWAYS PASS THIS IN AS *FALSE* - FOR COMPATIBILITY WITH OLD VERSIONS OF PHP THAT DO NOT HAVE IT, WHILST PHP 6 DEFAULTS IT TO TRUE.
  * @return mixed                        Micro-time.
  */
 function microtime($as_float)
@@ -2473,16 +2473,16 @@ function microtime($as_float)
 /**
  * Find lowest value between arguments.
  *
- * @param  mixed                        First argument (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Second argument (null: no second argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Third argument (null: no third argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fourth argument (null: no fourth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Fifth argument (null: no fith argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Sixth argument (null: no sixth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Seventh argument (null: no seventh argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Eighth argument (null: no eighth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Ninth argument (null: no ninth argument) (if array, then each treated as a separate parameter).
- * @param  ?mixed                       Tenth argument (null: no tenth argument) (if array, then each treated as a separate parameter).
+ * @param  mixed                        $arg1 First argument (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg2 Second argument (null: no second argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg3 Third argument (null: no third argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg4 Fourth argument (null: no fourth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg5 Fifth argument (null: no fith argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg6 Sixth argument (null: no sixth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg7 Seventh argument (null: no seventh argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg8 Eighth argument (null: no eighth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg9 Ninth argument (null: no ninth argument) (if array, then each treated as a separate parameter).
+ * @param  ?mixed                       $arg10 Tenth argument (null: no tenth argument) (if array, then each treated as a separate parameter).
  * @return mixed                        The lowest valued argument.
  */
 function min($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null, $arg10 = null)
@@ -2493,10 +2493,10 @@ function min($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg
 /**
  * Makes a directory. {{creates-file}}
  *
- * @param  PATH                         The path to the directory to make.
- * @param  integer                      The mode (e.g. 0777).
- * @param  boolean                      Whether to do recursively.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $path The path to the directory to make.
+ * @param  integer                      $mode The mode (e.g. 0777).
+ * @param  boolean                      $recursive Whether to do recursively.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function mkdir($path, $mode, $recursive = false, $context = null)
@@ -2507,13 +2507,13 @@ function mkdir($path, $mode, $recursive = false, $context = null)
 /**
  * Get UNIX timestamp for a componentialised date.
  *
- * @param  integer                      The hour.
- * @param  ?integer                     The minute (null: now).
- * @param  ?integer                     The second (null: now).
- * @param  ?integer                     The month (null: now).
- * @param  ?integer                     The day (null: now).
- * @param  ?integer                     The year (null: now).
- * @param  integer                      Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
+ * @param  integer                      $hour The hour.
+ * @param  ?integer                     $minute The minute (null: now).
+ * @param  ?integer                     $second The second (null: now).
+ * @param  ?integer                     $month The month (null: now).
+ * @param  ?integer                     $day The day (null: now).
+ * @param  ?integer                     $year The year (null: now).
+ * @param  integer                      $is_dst Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
  * @return TIME                         The timestamp.
  */
 function mktime($hour, $minute = null, $second = null, $month = null, $day = null, $year = null, $is_dst = -1)
@@ -2524,8 +2524,8 @@ function mktime($hour, $minute = null, $second = null, $month = null, $day = nul
 /**
  * Moves an uploaded file to a new location. {{creates-file}}
  *
- * @param  PATH                         Filename to move (taken from tmpname element of $_FILES list entry).
- * @param  PATH                         Path to move file to (preferably containing filename component).
+ * @param  PATH                         $filename Filename to move (taken from tmpname element of $_FILES list entry).
+ * @param  PATH                         $destination Path to move file to (preferably containing filename component).
  * @return boolean                      The success status.
  */
 function move_uploaded_file($filename, $destination)
@@ -2546,8 +2546,8 @@ function mt_getrandmax()
 /**
  * Generate a better random value.
  *
- * @param  integer                      Minimum value.
- * @param  integer                      Maximum value.
+ * @param  integer                      $min Minimum value.
+ * @param  integer                      $max Maximum value.
  * @return integer                      Random value.
  */
 function mt_rand($min, $max)
@@ -2558,7 +2558,7 @@ function mt_rand($min, $max)
 /**
  * Seed the better random number generator.
  *
- * @param  integer                      The seed.
+ * @param  integer                      $seed The seed.
  */
 function mt_srand($seed)
 {
@@ -2567,10 +2567,10 @@ function mt_srand($seed)
 /**
  * Format a number with grouped thousands.
  *
- * @param  mixed                        The number to format [integer or float] (technically always float because it could be larger than an integer, but that's ugly).
- * @param  integer                      The number of decimal fraction digits to show.
- * @param  string                       The string to use as a decimal point.
- * @param  string                       The string to separate groups of 1000's with.
+ * @param  mixed                        $number The number to format [integer or float] (technically always float because it could be larger than an integer, but that's ugly).
+ * @param  integer                      $decimals The number of decimal fraction digits to show.
+ * @param  string                       $dec_point The string to use as a decimal point.
+ * @param  string                       $thousands_sep The string to separate groups of 1000's with.
  * @return string                       The string formatted number.
  */
 function number_format($number, $decimals = 0, $dec_point = '.', $thousands_sep = ',')
@@ -2645,8 +2645,8 @@ function ob_clean()
 /**
  * ob_start callback function to gzip output buffer.
  *
- * @param  string                       Input string.
- * @param  integer                      Irrelevant (we don't use this function directly anyway).
+ * @param  string                       $buffer Input string.
+ * @param  integer                      $mode Irrelevant (we don't use this function directly anyway).
  * @return string                       Filtered version.
  */
 function ob_gzhandler($buffer, $mode)
@@ -2667,8 +2667,8 @@ function ob_get_length()
 /**
  * Convert character encoding as output buffer handler.
  *
- * @param  string                       Input string.
- * @param  integer                      Irrelevant (we don't use this function directly anyway).
+ * @param  string                       $buffer Input string.
+ * @param  integer                      $mode Irrelevant (we don't use this function directly anyway).
  * @return string                       Filtered version.
  */
 function ob_iconv_handler($buffer, $mode)
@@ -2679,7 +2679,7 @@ function ob_iconv_handler($buffer, $mode)
 /**
  * Turn implicit flush on/off .
  *
- * @param  integer                      Flag (1 for on, 0 for off).
+ * @param  integer                      $flag Flag (1 for on, 0 for off).
  */
 function ob_implicit_flush($flag)
 {
@@ -2688,7 +2688,7 @@ function ob_implicit_flush($flag)
 /**
  * Output something.
  *
- * @param  string                       The string to output.
+ * @param  string                       $octal_string The string to output.
  * @return integer                      The number '1', always.
  */
 function print($octal_string)
@@ -2699,7 +2699,7 @@ function print($octal_string)
 /**
  * String representation of octal to decimal.
  *
- * @param  string                       The string representation.
+ * @param  string                       $octal_string The string representation.
  * @return integer                      The integer ('decimal' form, although truly stored in binary).
  */
 function octdec($octal_string)
@@ -2710,7 +2710,7 @@ function octdec($octal_string)
 /**
  * Open a directory for analysis.
  *
- * @param  PATH                         The path to the directory to open.
+ * @param  PATH                         $path The path to the directory to open.
  * @return ~resource                    The directory handle (false: error).
  */
 function opendir($path)
@@ -2721,7 +2721,7 @@ function opendir($path)
 /**
  * Return ASCII value of character.
  *
- * @param  string                       String of length 1, containing character to find ASCII value of.
+ * @param  string                       $string String of length 1, containing character to find ASCII value of.
  * @return integer                      The ASCII value.
  */
 function ord($string)
@@ -2732,37 +2732,37 @@ function ord($string)
 /**
  * Pack data into binary string.
  *
- * @param  string                       The formatting string.
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
- * @param  ?mixed                       Argument that binds to the formatting string (null: none).
+ * @param  string                       $format The formatting string.
+ * @param  ?mixed                       $arg1 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg2 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg3 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg4 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg5 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg6 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg7 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg8 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg9 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg10 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg11 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg12 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg13 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg14 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg15 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg16 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg17 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg18 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg19 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg20 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg21 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg22 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg23 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg24 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg25 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg26 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg27 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg28 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg29 Argument that binds to the formatting string (null: none).
+ * @param  ?mixed                       $arg30 Argument that binds to the formatting string (null: none).
  * @return string                       The binary string.
  */
 function pack($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null, $arg10 = null, $arg11 = null, $arg12 = null, $arg13 = null, $arg14 = null, $arg15 = null, $arg16 = null, $arg17 = null, $arg18 = null, $arg19 = null, $arg20 = null, $arg21 = null, $arg22 = null, $arg23 = null, $arg24 = null, $arg25 = null, $arg26 = null, $arg27 = null, $arg28 = null, $arg29 = null, $arg30 = null)
@@ -2773,7 +2773,7 @@ function pack($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $
 /**
  * Parse a URL and return its components.
  *
- * @param  string                       The URL to parse.
+ * @param  string                       $url The URL to parse.
  * @return ~array                       A map of details about the URL (false: URL cannot be parsed).
  */
 function parse_url($url)
@@ -2784,7 +2784,7 @@ function parse_url($url)
 /**
  * Returns information about a file path.
  *
- * @param  PATH                         The path to parse.
+ * @param  PATH                         $path The path to parse.
  * @return ~array                       A map of details about the path (false: error).
  */
 function pathinfo($path)
@@ -2795,7 +2795,7 @@ function pathinfo($path)
 /**
  * Return info about a user by user ID. Does not exist on Windows.
  *
- * @param  integer                      The user ID.
+ * @param  integer                      $uid The user ID.
  * @return ~array                       A map of details of the user (false: failure).
  */
 function posix_getpwuid($uid)
@@ -2816,10 +2816,10 @@ function posix_getuid()
 /**
  * Perform a regular expression match.
  *
- * @param  string                       The pattern.
- * @param  string                       The subject string.
- * @param  ?array                       Where matches will be put (note that it is a list of maps, except the arrays are turned inside out) (null: do not store matches). Note that this is actually passed by reference, but is also optional.
- * @param  integer                      Either 0, or PREG_OFFSET_CAPTURE.
+ * @param  string                       $pattern The pattern.
+ * @param  string                       $subject The subject string.
+ * @param  ?array                       $matches Where matches will be put (note that it is a list of maps, except the arrays are turned inside out) (null: do not store matches). Note that this is actually passed by reference, but is also optional.
+ * @param  integer                      $flags Either 0, or PREG_OFFSET_CAPTURE.
  * @return ~integer                     The number of matches (false: error).
  */
 function preg_match($pattern, $subject, $matches = null, $flags = 0)
@@ -2830,9 +2830,9 @@ function preg_match($pattern, $subject, $matches = null, $flags = 0)
 /**
  * Array entries that match the pattern.
  *
- * @param  string                       The pattern.
- * @param  array                        The subject strings.
- * @param  integer                      Either 0, or PREG_GREP_INVERT.
+ * @param  string                       $pattern The pattern.
+ * @param  array                        $subject The subject strings.
+ * @param  integer                      $flags Either 0, or PREG_GREP_INVERT.
  * @return array                        Matches.
  */
 function preg_grep($pattern, $subject, $flags = 0)
@@ -2843,10 +2843,10 @@ function preg_grep($pattern, $subject, $flags = 0)
 /**
  * Perform a global regular expression match.
  *
- * @param  string                       The pattern.
- * @param  string                       The subject string.
- * @param  array                        Where matches will be put (note that it is a list of maps, except the arrays are turned inside out). Note that this is actually passed by reference, but is also optional.
- * @param  integer                      Either 0, or PREG_OFFSET_CAPTURE.
+ * @param  string                       $pattern The pattern.
+ * @param  string                       $subject The subject string.
+ * @param  array                         &$matches Where matches will be put (note that it is a list of maps, except the arrays are turned inside out). Note that this is actually passed by reference, but is also optional.
+ * @param  integer                      $flags Either 0, or PREG_OFFSET_CAPTURE.
  * @return ~integer                     The number of matches (false: error).
  */
 function preg_match_all($pattern, $subject, &$matches, $flags = 0)
@@ -2857,10 +2857,10 @@ function preg_match_all($pattern, $subject, &$matches, $flags = 0)
 /**
  * Perform a regular expression search and replace.
  *
- * @param  mixed                        The pattern (string or array).
- * @param  mixed                        The replacement string (string or array).
- * @param  string                       The subject string.
- * @param  ?integer                     The limit of replacements (null: no limit).
+ * @param  mixed                        $pattern The pattern (string or array).
+ * @param  mixed                        $replacement The replacement string (string or array).
+ * @param  string                       $subject The subject string.
+ * @param  ?integer                     $limit The limit of replacements (null: no limit).
  * @return ~string                      The string with replacements made (false: error).
  */
 function preg_replace($pattern, $replacement, $subject, $limit = null)
@@ -2871,10 +2871,10 @@ function preg_replace($pattern, $replacement, $subject, $limit = null)
 /**
  * Perform a regular expression search and replace using a callback.
  *
- * @param  string                       The pattern.
- * @param  mixed                        The callback.
- * @param  string                       The subject string.
- * @param  ?integer                     The limit of replacements (null: no limit).
+ * @param  string                       $pattern The pattern.
+ * @param  mixed                        $callback The callback.
+ * @param  string                       $subject The subject string.
+ * @param  ?integer                     $limit The limit of replacements (null: no limit).
  * @return ~string                      The string with replacements made (false: error).
  */
 function preg_replace_callback($pattern, $callback, $subject, $limit = null)
@@ -2885,10 +2885,10 @@ function preg_replace_callback($pattern, $callback, $subject, $limit = null)
 /**
  * Split string by a regular expression.
  *
- * @param  string                       The pattern.
- * @param  string                       The subject.
- * @param  ?integer                     The maximum number of splits to make (null: no limit).
- * @param  ?integer                     The special mode (null: none).
+ * @param  string                       $pattern The pattern.
+ * @param  string                       $subject The subject.
+ * @param  ?integer                     $max_splits The maximum number of splits to make (null: no limit).
+ * @param  ?integer                     $mode The special mode (null: none).
  * @return array                        The array due to splitting.
  */
 function preg_split($pattern, $subject, $max_splits = null, $mode = null)
@@ -2899,7 +2899,7 @@ function preg_split($pattern, $subject, $max_splits = null, $mode = null)
 /**
  * Prints human-readable information about a variable.
  *
- * @param  mixed                        The variable.
+ * @param  mixed                        $data The variable.
  */
 function print_r($data)
 {
@@ -2908,7 +2908,7 @@ function print_r($data)
 /**
  * Sets the value of an environment variable.
  *
- * @param  string                       The string to send over (e.g. PATH=foo).
+ * @param  string                       $string The string to send over (e.g. PATH=foo).
  * @return boolean                      Success status.
  */
 function putenv($string)
@@ -2919,7 +2919,7 @@ function putenv($string)
 /**
  * Decode URL-encoded strings.
  *
- * @param  string                       The string to decode.
+ * @param  string                       $str The string to decode.
  * @return string                       Decoded string.
  */
 function rawurldecode($str)
@@ -2930,7 +2930,7 @@ function rawurldecode($str)
 /**
  * Encode URL-encoded strings.
  *
- * @param  string                       The string to encode.
+ * @param  string                       $str The string to encode.
  * @return string                       Encoded string.
  */
 function rawurlencode($str)
@@ -2941,7 +2941,7 @@ function rawurlencode($str)
 /**
  * Read entry from directory handle.
  *
- * @param  resource                     Handle.
+ * @param  resource                     $dir_handle Handle.
  * @return ~string                      Next filename (false: reached end already).
  */
 function readdir($dir_handle)
@@ -2952,7 +2952,7 @@ function readdir($dir_handle)
 /**
  * Returns canonicalized absolute pathname.
  *
- * @param  PATH                         (Possibly) perceived path.
+ * @param  PATH                         $path (Possibly) perceived path.
  * @return PATH                         Actual path.
  */
 function realpath($path)
@@ -2963,24 +2963,24 @@ function realpath($path)
 /**
  * Register a function for execution on shutdown.
  *
- * @param  mixed                        Callback.
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
- * @param  ?mixed                       Parameter (null: not used).
+ * @param  mixed                        $callback Callback.
+ * @param  ?mixed                       $parama Parameter (null: not used).
+ * @param  ?mixed                       $paramb Parameter (null: not used).
+ * @param  ?mixed                       $paramc Parameter (null: not used).
+ * @param  ?mixed                       $paramd Parameter (null: not used).
+ * @param  ?mixed                       $parame Parameter (null: not used).
+ * @param  ?mixed                       $paramf Parameter (null: not used).
+ * @param  ?mixed                       $paramg Parameter (null: not used).
+ * @param  ?mixed                       $paramh Parameter (null: not used).
+ * @param  ?mixed                       $parami Parameter (null: not used).
+ * @param  ?mixed                       $paramj Parameter (null: not used).
+ * @param  ?mixed                       $paramk Parameter (null: not used).
+ * @param  ?mixed                       $paraml Parameter (null: not used).
+ * @param  ?mixed                       $paramm Parameter (null: not used).
+ * @param  ?mixed                       $paramn Parameter (null: not used).
+ * @param  ?mixed                       $paramo Parameter (null: not used).
+ * @param  ?mixed                       $paramp Parameter (null: not used).
+ * @param  ?mixed                       $paramq Parameter (null: not used).
  */
 function register_shutdown_function($callback, $parama = null, $paramb = null, $paramc = null, $paramd = null, $parame = null, $paramf = null, $paramg = null, $paramh = null, $parami = null, $paramj = null, $paramk = null, $paraml = null, $paramm = null, $paramn = null, $paramo = null, $paramp = null, $paramq = null)
 {
@@ -2989,9 +2989,9 @@ function register_shutdown_function($callback, $parama = null, $paramb = null, $
 /**
  * Renames a file.
  *
- * @param  PATH                         Old name.
- * @param  PATH                         New name.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $oldname Old name.
+ * @param  PATH                         $newname New name.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function rename($oldname, $newname, $context = null)
@@ -3002,7 +3002,7 @@ function rename($oldname, $newname, $context = null)
 /**
  * Require and evaluate the specified file (dies with error if it can not).
  *
- * @param  PATH                         The filename of the file to require.
+ * @param  PATH                         $filename The filename of the file to require.
  * @return mixed                        Success status or returned value.
  */
 function require($filename)
@@ -3013,7 +3013,7 @@ function require($filename)
 /**
  * Require and evaluate the specified file (dies with error if it can not), but only if it has not been loaded already.
  *
- * @param  PATH                         The filename of the file to require.
+ * @param  PATH                         $filename The filename of the file to require.
  * @return mixed                        Success status or returned value.
  */
 function require_once($filename)
@@ -3024,7 +3024,7 @@ function require_once($filename)
 /**
  * Set the internal pointer of an array to its first element.
  *
- * @param  array                        The array.
+ * @param  array                        $array The array.
  * @return mixed                        The value of the first element.
  */
 function reset($array)
@@ -3035,8 +3035,8 @@ function reset($array)
 /**
  * Removes directory.
  *
- * @param  PATH                         Directory path.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $dirname Directory path.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function rmdir($dirname, $context = null)
@@ -3047,8 +3047,8 @@ function rmdir($dirname, $context = null)
 /**
  * Rounds a float.
  *
- * @param  float                        Value to round.
- * @param  integer                      Number of decimal points of precision required (-ve allowed).
+ * @param  float                        $val Value to round.
+ * @param  integer                      $precision Number of decimal points of precision required (-ve allowed).
  * @return float                        Rounded value.
  */
 function round($val, $precision = 0)
@@ -3059,7 +3059,7 @@ function round($val, $precision = 0)
 /**
  * Sort an array in reverse order.
  *
- * @param  array                        The array to sort.
+ * @param  array                        &$array The array to sort.
  */
 function rsort(&$array)
 {
@@ -3068,8 +3068,8 @@ function rsort(&$array)
 /**
  * Strip whitespace from the end of a string.
  *
- * @param  string                       String to trim from.
- * @param  string                       Characters to trim.
+ * @param  string                       $str String to trim from.
+ * @param  string                       $characters Characters to trim.
  * @return string                       Trimmed string.
  */
 function rtrim($str, $characters = " \t\n\r\0\x0B")
@@ -3080,7 +3080,7 @@ function rtrim($str, $characters = " \t\n\r\0\x0B")
 /**
  * Generates a storable representation of a value.
  *
- * @param  mixed                        Whatever is to be serialised .
+ * @param  mixed                        $value Whatever is to be serialised .
  * @return string                       The serialisation.
  */
 function serialize($value)
@@ -3091,7 +3091,7 @@ function serialize($value)
 /**
  * Sets a user-defined error handler function.
  *
- * @param  mixed                        The call back.
+ * @param  mixed                        $error_handler The call back.
  * @return mixed                        The previously defined error handler.
  */
 function set_error_handler($error_handler)
@@ -3104,12 +3104,12 @@ function set_error_handler($error_handler)
  *
  * @sets_output_state
  *
- * @param  string                       The name.
- * @param  ?string                      The value (null: unset existing cookie).
- * @param  ?integer                     Expiration timestamp (null: session cookie).
- * @param  ?string                      Path (null: current URL path).
- * @param  ?string                      Domain (null: current URL domain).
- * @param  BINARY                       Whether the cookie is only for HTTPS.
+ * @param  string                       $name The name.
+ * @param  ?string                      $value The value (null: unset existing cookie).
+ * @param  ?integer                     $expire Expiration timestamp (null: session cookie).
+ * @param  ?string                      $path Path (null: current URL path).
+ * @param  ?string                      $domain Domain (null: current URL domain).
+ * @param  BINARY                       $secure Whether the cookie is only for HTTPS.
  * @return boolean                      Success status (fails if output already started).
  */
 function setcookie($name, $value = null, $expire = null, $path = null, $domain = null, $secure = 0)
@@ -3120,8 +3120,8 @@ function setcookie($name, $value = null, $expire = null, $path = null, $domain =
 /**
  * Set locale information.
  *
- * @param  integer                      The locale category (LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME).
- * @param  mixed                        The locale (Some PHP versions require an array, and some a string with multiple calls).
+ * @param  integer                      $category The locale category (LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME).
+ * @param  mixed                        $locale The locale (Some PHP versions require an array, and some a string with multiple calls).
  * @return ~string                      The set locale (false: error).
  */
 function setlocale($category, $locale)
@@ -3132,7 +3132,7 @@ function setlocale($category, $locale)
 /**
  * Calculate the sha1 hash of a string.
  *
- * @param  string                       The string to hash.
+ * @param  string                       $str The string to hash.
  * @return string                       The hash of the string.
  */
 function sha1($str)
@@ -3143,7 +3143,7 @@ function sha1($str)
 /**
  * Calculate the sine of an angle.
  *
- * @param  float                        The angle.
+ * @param  float                        $arg The angle.
  * @return float                        The sine of the angle.
  */
 function sin($arg)
@@ -3154,7 +3154,7 @@ function sin($arg)
 /**
  * Sort an array.
  *
- * @param  array                        The array.
+ * @param  array                        &$array The array.
  */
 function sort(&$array)
 {
@@ -3163,15 +3163,15 @@ function sort(&$array)
 /**
  * Return a formatted string.
  *
- * @param  string                       Formatting string.
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  string                       $format Formatting string.
+ * @param  ?mixed                       $arg1 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg2 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg3 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg4 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg5 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg6 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg7 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg8 Argument for the formatting string (null: none required).
  * @return string                       Formatted string.
  */
 function sprintf($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null)
@@ -3182,16 +3182,16 @@ function sprintf($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null
 /**
  * Print a formatted string into a file.
  *
- * @param  resource                     File to write to.
- * @param  string                       Formatting string.
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
- * @param  ?mixed                       Argument for the formatting string (null: none required).
+ * @param  resource                     $handle File to write to.
+ * @param  string                       $format Formatting string.
+ * @param  ?mixed                       $arg1 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg2 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg3 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg4 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg5 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg6 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg7 Argument for the formatting string (null: none required).
+ * @param  ?mixed                       $arg8 Argument for the formatting string (null: none required).
  * @return string                       Formatted string.
  */
 function fprintf($handle, $format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null)
@@ -3202,7 +3202,7 @@ function fprintf($handle, $format, $arg1 = null, $arg2 = null, $arg3 = null, $ar
 /**
  * Seed the random number generator.
  *
- * @param  integer                      The seed.
+ * @param  integer                      $seed The seed.
  */
 function srand($seed)
 {
@@ -3211,10 +3211,10 @@ function srand($seed)
 /**
  * Pad a string to a certain length with another string.
  *
- * @param  string                       The subject.
- * @param  integer                      The length to pad up to.
- * @param  string                       What we are padding with.
- * @param  integer                      The padding type (STR_PAD_RIGHT, STR_PAD_LEFT, STR_PAD_BOTH).
+ * @param  string                       $input The subject.
+ * @param  integer                      $pad_length The length to pad up to.
+ * @param  string                       $pad_string What we are padding with.
+ * @param  integer                      $pad_type The padding type (STR_PAD_RIGHT, STR_PAD_LEFT, STR_PAD_BOTH).
  * @return string                       The result.
  */
 function str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
@@ -3225,8 +3225,8 @@ function str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIG
 /**
  * Repeat a string.
  *
- * @param  string                       The string to repeat.
- * @param  integer                      How many times to repeat the string.
+ * @param  string                       $input The string to repeat.
+ * @param  integer                      $multiplier How many times to repeat the string.
  * @return string                       The result.
  */
 function str_repeat($input, $multiplier)
@@ -3237,9 +3237,9 @@ function str_repeat($input, $multiplier)
 /**
  * Replace all occurrences of the search string with the replacement string.
  *
- * @param  mixed                        What's being replaced (string or array).
- * @param  mixed                        What's being replaced with (string or array).
- * @param  mixed                        Subject (string or array).
+ * @param  mixed                        $search What's being replaced (string or array).
+ * @param  mixed                        $replace What's being replaced with (string or array).
+ * @param  mixed                        $subject Subject (string or array).
  * @return mixed                        Result (string or array).
  */
 function str_replace($search, $replace, $subject)
@@ -3250,8 +3250,8 @@ function str_replace($search, $replace, $subject)
 /**
  * Binary safe string comparison.
  *
- * @param  string                       The first string.
- * @param  string                       The second string.
+ * @param  string                       $str1 The first string.
+ * @param  string                       $str2 The second string.
  * @return integer                      <0 if s1<s2, 0 if s1=s2, >1 if s1>s2.
  */
 function strcmp($str1, $str2)
@@ -3262,8 +3262,8 @@ function strcmp($str1, $str2)
 /**
  * Format a local time/date according to locale settings (uses alternative formatting to 'date' function).
  *
- * @param  string                       The formatting string.
- * @param  ?TIME                        The timestamp (null: now).
+ * @param  string                       $format The formatting string.
+ * @param  ?TIME                        $timestamp The timestamp (null: now).
  * @return string                       The formatted string.
  */
 function strftime($format, $timestamp = null)
@@ -3274,8 +3274,8 @@ function strftime($format, $timestamp = null)
 /**
  * Strip HTML and PHP tags from a string.
  *
- * @param  string                       Subject.
- * @param  string                       Comma-separated list of allowable tags.
+ * @param  string                       $str Subject.
+ * @param  string                       $allowable_tags Comma-separated list of allowable tags.
  * @return string                       Result.
  */
 function strip_tags($str, $allowable_tags = '')
@@ -3286,7 +3286,7 @@ function strip_tags($str, $allowable_tags = '')
 /**
  * Quote string for encapsulation in a written string data type.
  *
- * @param  string                       Unslashed string.
+ * @param  string                       $str Unslashed string.
  * @return string                       Slashed string.
  */
 function addslashes($str)
@@ -3297,7 +3297,7 @@ function addslashes($str)
 /**
  * Un-quote string slashed with addslashes.
  *
- * @param  string                       Slashed string.
+ * @param  string                       $str Slashed string.
  * @return string                       Unslashed string.
  */
 function stripslashes($str)
@@ -3308,7 +3308,7 @@ function stripslashes($str)
 /**
  * Get string length.
  *
- * @param  string                       The string to get the length of.
+ * @param  string                       $str The string to get the length of.
  * @return integer                      The string length.
  */
 function strlen($str)
@@ -3321,9 +3321,9 @@ function strlen($str)
 /**
  * Find position of first occurrence of a string.
  *
- * @param  string                       Haystack.
- * @param  string                       Needle.
- * @param  integer                      Offset to search from.
+ * @param  string                       $haystack Haystack.
+ * @param  string                       $needle Needle.
+ * @param  integer                      $offset Offset to search from.
  * @return ~integer                     The offset it is found at (false: not found).
  */
 function strpos($haystack, $needle, $offset = 0)
@@ -3334,8 +3334,8 @@ function strpos($haystack, $needle, $offset = 0)
 /**
  * Find position of last occurrence of a char in a string.
  *
- * @param  string                       Haystack.
- * @param  string                       Needle.
+ * @param  string                       $haystack Haystack.
+ * @param  string                       $needle Needle.
  * @return ~integer                     The offset it is found at (false: not found).
  */
 function strrpos($haystack, $needle)
@@ -3346,8 +3346,8 @@ function strrpos($haystack, $needle)
 /**
  * Find first occurrence of a string.
  *
- * @param  string                       Haystack.
- * @param  string                       Needle.
+ * @param  string                       $haystack Haystack.
+ * @param  string                       $needle Needle.
  * @return ~string                      The answer (false: does not occur).
  */
 function strstr($haystack, $needle)
@@ -3358,8 +3358,8 @@ function strstr($haystack, $needle)
 /**
  * Tokenize string.
  *
- * @param  string                       String to tokenise. EXCEPT if $deliminators=NULL, then this has actual deliminators.
- * @param  ?string                      Deliminators (null: continue with previous tokenisation).
+ * @param  string                       $subject String to tokenise. EXCEPT if $deliminators=NULL, then this has actual deliminators.
+ * @param  ?string                      $deliminators Deliminators (null: continue with previous tokenisation).
  * @return ~string                      Next token (false: could not return a token, no more tokens to return).
  */
 function strtok($subject, $deliminators = null)
@@ -3370,7 +3370,7 @@ function strtok($subject, $deliminators = null)
 /**
  * Make a string lowercase.
  *
- * @param  string                       Subject.
+ * @param  string                       $str Subject.
  * @return string                       Result.
  */
 function strtolower($str)
@@ -3381,8 +3381,8 @@ function strtolower($str)
 /**
  * Parse about any English textual datetime description into a UNIX timestamp.
  *
- * @param  string                       The subject.
- * @param  ?TIME                        The timestamp to find times relative to (null: now).
+ * @param  string                       $time The subject.
+ * @param  ?TIME                        $now The timestamp to find times relative to (null: now).
  * @return TIME                         The timetamp (-1: failed).
  */
 function strtotime($time, $now = null)
@@ -3393,7 +3393,7 @@ function strtotime($time, $now = null)
 /**
  * Make a string uppercase.
  *
- * @param  string                       Subject.
+ * @param  string                       $str Subject.
  * @return string                       Result.
  */
 function strtoupper($str)
@@ -3404,9 +3404,9 @@ function strtoupper($str)
 /**
  * Translate certain characters.
  *
- * @param  string                       Subject.
- * @param  mixed                        Map of translations to do OR from string.
- * @param  ?mixed                       To string (null: previous parameter was a map).
+ * @param  string                       $string Subject.
+ * @param  mixed                        $replace_pairs Map of translations to do OR from string.
+ * @param  ?mixed                       $to To string (null: previous parameter was a map).
  * @return string                       Result.
  */
 function strtr($string, $replace_pairs, $to = null)
@@ -3417,7 +3417,7 @@ function strtr($string, $replace_pairs, $to = null)
 /**
  * Get string value of a variable.
  *
- * @param  mixed                        The variable.
+ * @param  mixed                        $var The variable.
  * @return string                       String value of the variable.
  */
 function strval($var)
@@ -3428,9 +3428,9 @@ function strval($var)
 /**
  * Return part of a string.
  *
- * @param  string                       The subject.
- * @param  integer                      The start position.
- * @param  ?integer                     The length to extract (null: all remaining).
+ * @param  string                       $string The subject.
+ * @param  integer                      $start The start position.
+ * @param  ?integer                     $length The length to extract (null: all remaining).
  * @return ~string                      String part (false: $start was over the end of the string).
  */
 function substr($string, $start, $length = null)
@@ -3441,8 +3441,8 @@ function substr($string, $start, $length = null)
 /**
  * Count the number of substring occurrences.
  *
- * @param  string                       The subject.
- * @param  string                       The substring to search for in the subject.
+ * @param  string                       $haystack The subject.
+ * @param  string                       $needle The substring to search for in the subject.
  * @return integer                      The number of times substring occurs in the subject.
  */
 function substr_count($haystack, $needle)
@@ -3463,8 +3463,8 @@ function time()
 /**
  * Strip whitespace from both ends of a string.
  *
- * @param  string                       String to trim from.
- * @param  string                       Characters to trim.
+ * @param  string                       $str String to trim from.
+ * @param  string                       $characters Characters to trim.
  * @return string                       Trimmed string.
  */
 function trim($str, $characters = " \t\n\r\0\x0B")
@@ -3475,8 +3475,8 @@ function trim($str, $characters = " \t\n\r\0\x0B")
 /**
  * Generates a user-level error/warning/notice message.
  *
- * @param  string                       The error message.
- * @param  integer                      The PHP error type constant.
+ * @param  string                       $error_msg The error message.
+ * @param  integer                      $error_type The PHP error type constant.
  */
 function trigger_error($error_msg, $error_type)
 {
@@ -3485,8 +3485,8 @@ function trigger_error($error_msg, $error_type)
 /**
  * Sort an array with a user-defined comparison function and maintain index association.
  *
- * @param  array                        The array.
- * @param  mixed                        Comparison function.
+ * @param  array                        &$array The array.
+ * @param  mixed                        $cmp_function Comparison function.
  */
 function uasort(&$array, $cmp_function)
 {
@@ -3495,7 +3495,7 @@ function uasort(&$array, $cmp_function)
 /**
  * Make a string's first character uppercase.
  *
- * @param  string                       Subject.
+ * @param  string                       $str Subject.
  * @return string                       Result.
  */
 function ucfirst($str)
@@ -3506,7 +3506,7 @@ function ucfirst($str)
 /**
  * Uppercase the first character of each word in a string.
  *
- * @param  string                       Subject.
+ * @param  string                       $str Subject.
  * @return string                       Result.
  */
 function ucwords($str)
@@ -3517,8 +3517,8 @@ function ucwords($str)
 /**
  * Sort an array by keys using a user-defined comparison function.
  *
- * @param  array                        The array.
- * @param  mixed                        Comparison function.
+ * @param  array                        &$array The array.
+ * @param  mixed                        $cmp_function Comparison function.
  */
 function uksort(&$array, $cmp_function)
 {
@@ -3527,8 +3527,8 @@ function uksort(&$array, $cmp_function)
 /**
  * Generate a unique ID.
  *
- * @param  string                       Prefix for unique ID.
- * @param  boolean                      Whether to add additional "combined LCG" entropy at the end of the return value. Always pass as true, because on some IIS systems the timer resolution will be in seconds.
+ * @param  string                       $prefix Prefix for unique ID.
+ * @param  boolean                      $lcg Whether to add additional "combined LCG" entropy at the end of the return value. Always pass as true, because on some IIS systems the timer resolution will be in seconds.
  * @return string                       Unique ID.
  */
 function uniqid($prefix, $lcg)
@@ -3539,8 +3539,8 @@ function uniqid($prefix, $lcg)
 /**
  * Deletes a file.
  *
- * @param  PATH                         The filename.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $filename The filename.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return boolean                      Success status.
  */
 function unlink($filename, $context = null)
@@ -3551,7 +3551,7 @@ function unlink($filename, $context = null)
 /**
  * Creates a PHP value from a stored representation.
  *
- * @param  string                       Serialized string.
+ * @param  string                       $str Serialized string.
  * @return ~mixed                       What was originally serialised (false: bad data given, or actually false was serialized).
  */
 function unserialize($str)
@@ -3562,7 +3562,7 @@ function unserialize($str)
 /**
  * Unset a given variable.
  *
- * @param  mixed                        Unset this.
+ * @param  mixed                        &$var Unset this.
  */
 function unset(&$var)
 {
@@ -3571,7 +3571,7 @@ function unset(&$var)
 /**
  * Decodes URL-encoded string.
  *
- * @param  string                       URL encoded string.
+ * @param  string                       $str URL encoded string.
  * @return string                       Pure string.
  */
 function urldecode($str)
@@ -3582,7 +3582,7 @@ function urldecode($str)
 /**
  * URL-encodes string.
  *
- * @param  string                       The pure string to URL encode.
+ * @param  string                       $str The pure string to URL encode.
  * @return string                       URL encoded string.
  */
 function urlencode($str)
@@ -3593,8 +3593,8 @@ function urlencode($str)
 /**
  * Sort an array by values using a user-defined comparison function.
  *
- * @param  array                        The array.
- * @param  mixed                        Comparison function.
+ * @param  array                        &$array The array.
+ * @param  mixed                        $cmp_function Comparison function.
  */
 function usort(&$array, $cmp_function)
 {
@@ -3603,7 +3603,7 @@ function usort(&$array, $cmp_function)
 /**
  * Converts a string with ISO-8859-1 characters encoded with UTF-8 to single-byte ISO-8859-1.
  *
- * @param  string                       Subject.
+ * @param  string                       $data Subject.
  * @return string                       Result.
  */
 function utf8_decode($data)
@@ -3614,7 +3614,7 @@ function utf8_decode($data)
 /**
  * Encodes an ISO-8859-1 string to UTF-8.
  *
- * @param  string                       Subject.
+ * @param  string                       $data Subject.
  * @return string                       Result.
  */
 function utf8_encode($data)
@@ -3625,10 +3625,10 @@ function utf8_encode($data)
 /**
  * Wraps a string to a given number of characters using a string break character.
  *
- * @param  string                       Subject.
- * @param  integer                      The word wrap position.
- * @param  string                       The string to put at wrap points.
- * @param  boolean                      Whether to cut up words.
+ * @param  string                       $string Subject.
+ * @param  integer                      $width The word wrap position.
+ * @param  string                       $break The string to put at wrap points.
+ * @param  boolean                      $cut Whether to cut up words.
  * @return string                       Word-wrapped string.
  */
 function wordwrap($string, $width = 75, $break = "\n", $cut = false)
@@ -3639,7 +3639,7 @@ function wordwrap($string, $width = 75, $break = "\n", $cut = false)
 /**
  * Get XML parser error string for a certain error code.
  *
- * @param  integer                      Error code.
+ * @param  integer                      $code Error code.
  * @return string                       The string representation of the error code given.
  */
 function xml_error_string($code)
@@ -3650,7 +3650,7 @@ function xml_error_string($code)
 /**
  * Get current byte index for an XML parser.
  *
- * @param  resource                     XML parser.
+ * @param  resource                     $parser XML parser.
  * @return ~integer                     Byte index (false: invalid parser given).
  */
 function xml_get_current_byte_index($parser)
@@ -3661,7 +3661,7 @@ function xml_get_current_byte_index($parser)
 /**
  * Get current line number for an XML parser.
  *
- * @param  resource                     XML parser.
+ * @param  resource                     $parser XML parser.
  * @return ~integer                     Line number (false: invalid parser given).
  */
 function xml_get_current_line_number($parser)
@@ -3672,7 +3672,7 @@ function xml_get_current_line_number($parser)
 /**
  * Get XML parser error code for last error the occurred.
  *
- * @param  resource                     XML parser.
+ * @param  resource                     $parser XML parser.
  * @return integer                      The error code.
  */
 function xml_get_error_code($parser)
@@ -3683,9 +3683,9 @@ function xml_get_error_code($parser)
 /**
  * Start parsing an XML document.
  *
- * @param  resource                     XML parser.
- * @param  string                       The data to parse.
- * @param  boolean                      Finish parsing process with this piece of data (otherwise parsing is open to re-enter with more data).
+ * @param  resource                     $parser XML parser.
+ * @param  string                       $data The data to parse.
+ * @param  boolean                      $is_final Finish parsing process with this piece of data (otherwise parsing is open to re-enter with more data).
  * @return BINARY                       Success status.
  */
 function xml_parse($parser, $data, $is_final = false)
@@ -3696,7 +3696,7 @@ function xml_parse($parser, $data, $is_final = false)
 /**
  * Create an XML parser with namespace support.
  *
- * @param  ?string                      Encoding (null: PHP4: as-for-input/PHP5: autodetect).
+ * @param  ?string                      $encoding Encoding (null: PHP4: as-for-input/PHP5: autodetect).
  * @return ~resource                    XML parser (false: could not create, happens on default PHP5 on Windows).
  */
 function xml_parser_create_ns($encoding = null)
@@ -3707,7 +3707,7 @@ function xml_parser_create_ns($encoding = null)
 /**
  * Free an XML parser.
  *
- * @param  resource                     XML parser.
+ * @param  resource                     $parser XML parser.
  * @return boolean                      Success status.
  */
 function xml_parser_free($parser)
@@ -3718,9 +3718,9 @@ function xml_parser_free($parser)
 /**
  * Set options in an XML parser.
  *
- * @param  resource                     XML parser.
- * @param  integer                      The option to set (XML_OPTION_CASE_FOLDING [integer], XML_OPTION_TARGET_ENCODING [string]).
- * @param  mixed                        The value (BINARY or string).
+ * @param  resource                     $parser XML parser.
+ * @param  integer                      $option The option to set (XML_OPTION_CASE_FOLDING [integer], XML_OPTION_TARGET_ENCODING [string]).
+ * @param  mixed                        $value The value (BINARY or string).
  * @return boolean                      Success status.
  */
 function xml_parser_set_option($parser, $option, $value)
@@ -3731,8 +3731,8 @@ function xml_parser_set_option($parser, $option, $value)
 /**
  * Set up character data handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $handler The callback.
  * @return boolean                      Success status.
  */
 function xml_set_character_data_handler($parser, $handler)
@@ -3743,9 +3743,9 @@ function xml_set_character_data_handler($parser, $handler)
 /**
  * Set up start and end element handlers.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback for start of element.
- * @param  mixed                        The callback for end of element.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $start_handler The callback for start of element.
+ * @param  mixed                        $end_handler The callback for end of element.
  * @return boolean                      Success status.
  */
 function xml_set_element_handler($parser, $start_handler, $end_handler)
@@ -3756,8 +3756,8 @@ function xml_set_element_handler($parser, $start_handler, $end_handler)
 /**
  * Set up namespace-end decl handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $handler The callback.
  * @return boolean                      Success status.
  */
 function xml_set_end_namespace_decl_handler($parser, $handler)
@@ -3768,8 +3768,8 @@ function xml_set_end_namespace_decl_handler($parser, $handler)
 /**
  * Use XML Parser within an object.
  *
- * @param  resource                     XML parser.
- * @param  object                       The object.
+ * @param  resource                     $parser XML parser.
+ * @param  object                       $object The object.
  */
 function xml_set_object($parser, $object)
 {
@@ -3778,8 +3778,8 @@ function xml_set_object($parser, $object)
 /**
  * Set up namespace-start decl handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $handler The callback.
  * @return boolean                      Success status.
  */
 function xml_set_start_namespace_decl_handler($parser, $handler)
@@ -3790,8 +3790,8 @@ function xml_set_start_namespace_decl_handler($parser, $handler)
 /**
  * Generates XML for a method request.
  *
- * @param  string                       The method to call.
- * @param  array                        The parameters to use.
+ * @param  string                       $method The method to call.
+ * @param  array                        $params The parameters to use.
  * @return string                       The XML.
  */
 function xmlrpc_encode_request($method, $params)
@@ -3802,7 +3802,7 @@ function xmlrpc_encode_request($method, $params)
 /**
  * Arc cosine.
  *
- * @param  float                        Argument.
+ * @param  float                        $arg Argument.
  * @return float                        Angle.
  */
 function acos($arg)
@@ -3813,8 +3813,8 @@ function acos($arg)
 /**
  * Pick one or more random entries out of an array.
  *
- * @param  array                        Array to choose from.
- * @param  integer                      Number of entries required.
+ * @param  array                        $input Array to choose from.
+ * @param  integer                      $num_req Number of entries required.
  * @return mixed                        Random entry, or array of random entries if $num_req!=1.
  */
 function array_rand($input, $num_req = 1)
@@ -3825,8 +3825,8 @@ function array_rand($input, $num_req = 1)
 /**
  * Prepend one or more elements to the beginning of array.
  *
- * @param  array                        Array to prepend to.
- * @param  mixed                        Element to prepend.
+ * @param  array                        &$array Array to prepend to.
+ * @param  mixed                        $var Element to prepend.
  */
 function array_unshift(&$array, $var)
 {
@@ -3835,7 +3835,7 @@ function array_unshift(&$array, $var)
 /**
  * Arc sine.
  *
- * @param  float                        Argument.
+ * @param  float                        $arg Argument.
  * @return float                        Angle.
  */
 function asin($arg)
@@ -3846,7 +3846,7 @@ function asin($arg)
 /**
  * Checks if assertion is FALSE.
  *
- * @param  string                       The expression to assert on.
+ * @param  string                       $assertion The expression to assert on.
  */
 function assert($assertion)
 {
@@ -3855,8 +3855,8 @@ function assert($assertion)
 /**
  * Set/get the various assert flags (and sometimes, options for them).
  *
- * @param  integer                      The option (ASSERT_ACTIVE, ASSERT_WARNING, ASSERT_BAIL, ASSERT_QUIET_EVAL, ASSERT_CALLBACK).
- * @param  ?mixed                       The value for flag (null: N/A).
+ * @param  integer                      $option The option (ASSERT_ACTIVE, ASSERT_WARNING, ASSERT_BAIL, ASSERT_QUIET_EVAL, ASSERT_CALLBACK).
+ * @param  ?mixed                       $value The value for flag (null: N/A).
  * @return ~mixed                       Old value (false: error).
  */
 function assert_options($option, $value = null)
@@ -3867,7 +3867,7 @@ function assert_options($option, $value = null)
 /**
  * Arc tan.
  *
- * @param  float                        Argument.
+ * @param  float                        $num Argument.
  * @return float                        Angle.
  */
 function atan($num)
@@ -3878,9 +3878,9 @@ function atan($num)
 /**
  * Convert a number between arbitrary bases (string representations).
  *
- * @param  string                       The string representation number to convert.
- * @param  integer                      From base.
- * @param  integer                      To base.
+ * @param  string                       $number The string representation number to convert.
+ * @param  integer                      $frombase From base.
+ * @param  integer                      $tobase To base.
  * @return string                       New base representation.
  */
 function base_convert($number, $frombase, $tobase)
@@ -3891,8 +3891,8 @@ function base_convert($number, $frombase, $tobase)
 /**
  * Returns filename component of path.
  *
- * @param  PATH                         Path.
- * @param  string                       File extension to cut off (blank: none).
+ * @param  PATH                         $path Path.
+ * @param  string                       $ext File extension to cut off (blank: none).
  * @return string                       File name component.
  */
 function basename($path, $ext = '')
@@ -3903,7 +3903,7 @@ function basename($path, $ext = '')
 /**
  * Convert binary data (in string form) into hexadecimal representation.
  *
- * @param  string                       Binary string.
+ * @param  string                       $str Binary string.
  * @return string                       Hex string.
  */
 function bin2hex($str)
@@ -3914,7 +3914,7 @@ function bin2hex($str)
 /**
  * Binary (string representation) to decimal (integer).
  *
- * @param  string                       Binary in string form.
+ * @param  string                       $binary_string Binary in string form.
  * @return integer                      Number.
  */
 function bindec($binary_string)
@@ -3925,8 +3925,8 @@ function bindec($binary_string)
 /**
  * Call a user function given with an array of parameters.
  *
- * @param  mixed                        Callback.
- * @param  array                        Parameters.
+ * @param  mixed                        $callback Callback.
+ * @param  array                        $parameters Parameters.
  * @return mixed                        Whatever the function returned.
  */
 function call_user_func_array($callback, $parameters)
@@ -3957,7 +3957,7 @@ function connection_status()
 /**
  * Calculates the crc32 polynomial of a string.
  *
- * @param  string                       The string to get the CRC32 of.
+ * @param  string                       $str The string to get the CRC32 of.
  * @return integer                      The CRC32.
  */
 function crc32($str)
@@ -3968,7 +3968,7 @@ function crc32($str)
 /**
  * Decimal (integer) to binary (string representation).
  *
- * @param  integer                      Decimal.
+ * @param  integer                      $number Decimal.
  * @return string                       String representation of binary number.
  */
 function decbin($number)
@@ -3979,7 +3979,7 @@ function decbin($number)
 /**
  * Return the current key and value pair from an array and advance the array cursor.
  *
- * @param  array                        Array we're progressing through.
+ * @param  array                        $array Array we're progressing through.
  * @return array                        (key, value) pair.
  */
 function each($array)
@@ -3990,7 +3990,7 @@ function each($array)
 /**
  * Determine whether a variable is empty (empty being defined differently for different types).
  *
- * @param  mixed                        Input.
+ * @param  mixed                        $var Input.
  * @return boolean                      Whether it is CONSIDERED empty.
  */
 function empty($var)
@@ -4001,7 +4001,7 @@ function empty($var)
 /**
  * Set the internal pointer of an array to its last element.
  *
- * @param  array                        The array.
+ * @param  array                        $array The array.
  * @return mixed                        Value of the last element.
  */
 function end($array)
@@ -4012,7 +4012,7 @@ function end($array)
 /**
  * Flushes the output to a file.
  *
- * @param  resource                     The file handle to flush.
+ * @param  resource                     $handle The file handle to flush.
  * @return boolean                      Success status.
  */
 function fflush($handle)
@@ -4023,7 +4023,7 @@ function fflush($handle)
 /**
  * Gets last access time of file.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~TIME                        Timestamp of last access (false: error).
  */
 function fileatime($filename)
@@ -4034,8 +4034,8 @@ function fileatime($filename)
 /**
  * Portable advisory file locking.
  *
- * @param  resource                     File handle.
- * @param  integer                      Operation (LOCK_SH, LOCK_EX, LOCK_UN).
+ * @param  resource                     $handle File handle.
+ * @param  integer                      $operation Operation (LOCK_SH, LOCK_EX, LOCK_UN).
  * @return boolean                      Success status.
  */
 function flock($handle, $operation)
@@ -4053,7 +4053,7 @@ function flush()
 /**
  * Get the Internet host name corresponding to a given IP address.
  *
- * @param  string                       IP address.
+ * @param  string                       $ip_address IP address.
  * @return string                       Host name OR IP address if failed to look up.
  */
 function gethostbyaddr($ip_address)
@@ -4064,7 +4064,7 @@ function gethostbyaddr($ip_address)
 /**
  * Get the IP address corresponding to a given Internet host name.
  *
- * @param  string                       Host name.
+ * @param  string                       $hostname Host name.
  * @return string                       IP address OR host name if failed to look up.
  */
 function gethostbyname($hostname)
@@ -4085,13 +4085,13 @@ function getrandmax()
 /**
  * Get UNIX timestamp for a GMT date.
  *
- * @param  integer                      The hour.
- * @param  integer                      The minute.
- * @param  integer                      The second.
- * @param  integer                      The month.
- * @param  integer                      The day.
- * @param  integer                      The year.
- * @param  integer                      Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
+ * @param  integer                      $hour The hour.
+ * @param  integer                      $minute The minute.
+ * @param  integer                      $second The second.
+ * @param  integer                      $month The month.
+ * @param  integer                      $day The day.
+ * @param  integer                      $year The year.
+ * @param  integer                      $is_dst Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
  * @return integer                      The timestamp.
  */
 function gmmktime($hour, $minute, $second, $month, $day, $year, $is_dst = -1)
@@ -4102,8 +4102,8 @@ function gmmktime($hour, $minute, $second, $month, $day, $year, $is_dst = -1)
 /**
  * Format a GMT/UTC time/date according to locale settings.
  *
- * @param  string                       The formatting string.
- * @param  ?TIME                        The timestamp (null: now).
+ * @param  string                       $format The formatting string.
+ * @param  ?TIME                        $timestamp The timestamp (null: now).
  * @return string                       The formatted string.
  */
 function gmstrftime($format, $timestamp = null)
@@ -4114,7 +4114,7 @@ function gmstrftime($format, $timestamp = null)
 /**
  * Converts a string containing an (IPv4) Internet Protocol dotted address into a proper address.
  *
- * @param  string                       The IP address.
+ * @param  string                       $ip_address The IP address.
  * @return ~integer                     The long form (false: cannot perform conversion).
  */
 function ip2long($ip_address)
@@ -4125,7 +4125,7 @@ function ip2long($ip_address)
 /**
  * Fetch a key from an associative array.
  *
- * @param  array                        The array.
+ * @param  array                        $array The array.
  * @return mixed                        The index element of the current array position.
  */
 function key($array)
@@ -4136,8 +4136,8 @@ function key($array)
 /**  --> Use similar_text
  * Calculate Levenshtein distance between two strings.
  *
- * @param  string                       First string.
- * @param  string                       Second string.
+ * @param  string                       $str1 First string.
+ * @param  string                       $str2 Second string.
  * @return integer                      Distance.
  */
 function levenshtein($str1, $str2)
@@ -4148,7 +4148,7 @@ function levenshtein($str1, $str2)
 /**
  * Natural logarithm.
  *
- * @param  float                        Number to find log of.
+ * @param  float                        $arg Number to find log of.
  * @return float                        Log of given number.
  */
 function log($arg)
@@ -4159,7 +4159,7 @@ function log($arg)
 /**
  * Base-10 logarithm.
  *
- * @param  float                        Number to find log of.
+ * @param  float                        $arg Number to find log of.
  * @return float                        Log of given number.
  */
 function log10($arg)
@@ -4170,7 +4170,7 @@ function log10($arg)
 /**
  * Converts an (IPv4) Internet network address into a string in Internet standard dotted format.
  *
- * @param  string                       The IP address.
+ * @param  string                       $proper_address The IP address.
  * @return integer                      The long form.
  */
 function long2ip($proper_address)
@@ -4181,7 +4181,7 @@ function long2ip($proper_address)
 /**
  * Calculates the md5 hash of the file identified by the given filename.
  *
- * @param  PATH                         File name.
+ * @param  PATH                         $filename File name.
  * @return ~string                      The hash of the file (false: error).
  */
 function md5_file($filename)
@@ -4192,8 +4192,8 @@ function md5_file($filename)
 /**
  * Formats a number as a currency string.
  *
- * @param  string                       The formatting string.
- * @param  float                        The number to format as currency.
+ * @param  string                       $format The formatting string.
+ * @param  float                        $number The number to format as currency.
  * @return string                       The final currency string.
  */
 function money_format($format, $number)
@@ -4204,7 +4204,7 @@ function money_format($format, $number)
 /**
  * Advance the internal array pointer of an array.
  *
- * @param  array                        The array.
+ * @param  array                        $array The array.
  * @return mixed                        The array value we're now pointing at.
  */
 function next($array)
@@ -4225,8 +4225,8 @@ function pi()
 /**
  * Exponential expression.
  *
- * @param  float                        Base.
- * @param  float                        Exponent.
+ * @param  float                        $base Base.
+ * @param  float                        $exp Exponent.
  * @return float                        Result.
  */
 function pow($base, $exp)
@@ -4237,8 +4237,8 @@ function pow($base, $exp)
 /**
  * Quote regular expression characters.
  *
- * @param  string                       The string to escape.
- * @param  string                       Extra character to escape, was used in regular expression to surround it.
+ * @param  string                       $str The string to escape.
+ * @param  string                       $surround_char Extra character to escape, was used in regular expression to surround it.
  * @return string                       The escape string.
  */
 function preg_quote($str, $surround_char = '/')
@@ -4249,7 +4249,7 @@ function preg_quote($str, $surround_char = '/')
 /**
  * Rewind the internal array pointer.
  *
- * @param  array                        The array.
+ * @param  array                        $array The array.
  * @return mixed                        The array value we're now pointing at.
  */
 function prev($array)
@@ -4260,7 +4260,7 @@ function prev($array)
 /**
  * Converts the radian number to the equivalent number in degrees.
  *
- * @param  float                        The angle in radians.
+ * @param  float                        $number The angle in radians.
  * @return float                        The angle in degrees.
  */
 function rad2deg($number)
@@ -4271,9 +4271,9 @@ function rad2deg($number)
 /**
  * Create a sequence in an array.
  *
- * @param  mixed                        From (integer or character string).
- * @param  mixed                        To (integer or character string).
- * @param  integer                      Step.
+ * @param  mixed                        $from From (integer or character string).
+ * @param  mixed                        $to To (integer or character string).
+ * @param  integer                      $step Step.
  * @return array                        The sequence.
  */
 function range($from, $to, $step = 1)
@@ -4284,9 +4284,9 @@ function range($from, $to, $step = 1)
 /**
  * Outputs a file.
  *
- * @param  PATH                         The filename.
- * @param  boolean                      Whether to search within the include path.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $filename The filename.
+ * @param  boolean                      $use_include_path Whether to search within the include path.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return ~integer                     The number of bytes read (false: error).
  */
 function readfile($filename, $use_include_path = false, $context = null)
@@ -4297,7 +4297,7 @@ function readfile($filename, $use_include_path = false, $context = null)
 /**
  * Shuffle an array.
  *
- * @param  array                        The array to shuffle.
+ * @param  array                        $array The array to shuffle.
  */
 function shuffle($array)
 {
@@ -4306,9 +4306,9 @@ function shuffle($array)
 /**
  * Calculate the similarity between two strings.
  *
- * @param  string                       First string.
- * @param  string                       Second string.
- * @param  ?float                       Returns the percentage of similarity (null: do not get).
+ * @param  string                       $first First string.
+ * @param  string                       $second Second string.
+ * @param  ?float                        &$percent = null Returns the percentage of similarity (null: do not get).
  * @return integer                      The number of matching characters.
  */
 function similar_text($first, $second, &$percent = null)
@@ -4319,7 +4319,7 @@ function similar_text($first, $second, &$percent = null)
 /**
  * Square root.
  *
- * @param  float                        Number.
+ * @param  float                        $arg Number.
  * @return float                        return 0.0.
  */
 function sqrt($arg)
@@ -4330,8 +4330,8 @@ function sqrt($arg)
 /**
  * Binary safe case-insensitive string comparison.
  *
- * @param  string                       The first string.
- * @param  string                       The second string.
+ * @param  string                       $str1 The first string.
+ * @param  string                       $str2 The second string.
  * @return integer                      <0 if s1<s2, 0 if s1=s2, >1 if s1>s2.
  */
 function strcasecmp($str1, $str2)
@@ -4342,8 +4342,8 @@ function strcasecmp($str1, $str2)
 /**
  * Locale based string comparison.
  *
- * @param  string                       The first string.
- * @param  string                       The second string.
+ * @param  string                       $str1 The first string.
+ * @param  string                       $str2 The second string.
  * @return integer                      <0 if s1<s2, 0 if s1=s2, >1 if s1>s2.
  */
 function strcoll($str1, $str2)
@@ -4354,8 +4354,8 @@ function strcoll($str1, $str2)
 /**
  * Find length of initial segment not matching mask.
  *
- * @param  string                       The subject string.
- * @param  string                       The string of stop characters.
+ * @param  string                       $str1 The subject string.
+ * @param  string                       $str2 The string of stop characters.
  * @return integer                      The length.
  */
 function strcspn($str1, $str2)
@@ -4366,8 +4366,8 @@ function strcspn($str1, $str2)
 /**
  * Case-insensitive strstr.
  *
- * @param  string                       Haystack.
- * @param  string                       Needle.
+ * @param  string                       $haystack Haystack.
+ * @param  string                       $needle Needle.
  * @return string                       All of haystack from the first occurrence of needle to the end.
  */
 function stristr($haystack, $needle)
@@ -4378,8 +4378,8 @@ function stristr($haystack, $needle)
 /**
  * Case insensitive string comparisons using a "natural order" algorithm.
  *
- * @param  string                       The first string.
- * @param  string                       The second string.
+ * @param  string                       $str1 The first string.
+ * @param  string                       $str2 The second string.
  * @return integer                      <0 if s1<s2, 0 if s1=s2, >1 if s1>s2.
  */
 function strnatcasecmp($str1, $str2)
@@ -4390,8 +4390,8 @@ function strnatcasecmp($str1, $str2)
 /**
  * String comparisons using a "natural order" algorithm.
  *
- * @param  string                       The first string.
- * @param  string                       The second string.
+ * @param  string                       $str1 The first string.
+ * @param  string                       $str2 The second string.
  * @return integer                      <0 if s1<s2, 0 if s1=s2, >1 if s1>s2.
  */
 function strnatcmp($str1, $str2)
@@ -4402,9 +4402,9 @@ function strnatcmp($str1, $str2)
 /**
  * Binary safe case-insensitive string comparison of the first n characters.
  *
- * @param  string                       The first string.
- * @param  string                       The second string.
- * @param  integer                      Up to this length (n).
+ * @param  string                       $str1 The first string.
+ * @param  string                       $str2 The second string.
+ * @param  integer                      $len Up to this length (n).
  * @return integer                      <0 if s1<s2, 0 if s1=s2, >1 if s1>s2.
  */
 function strncasecmp($str1, $str2, $len)
@@ -4415,9 +4415,9 @@ function strncasecmp($str1, $str2, $len)
 /**
  * Binary safe string comparison of the first n characters.
  *
- * @param  string                       The first string.
- * @param  string                       The second string.
- * @param  integer                      Up to this length (n).
+ * @param  string                       $str1 The first string.
+ * @param  string                       $str2 The second string.
+ * @param  integer                      $len Up to this length (n).
  * @return integer                      <0 if s1<s2, 0 if s1=s2, >1 if s1>s2.
  */
 function strncmp($str1, $str2, $len)
@@ -4428,8 +4428,8 @@ function strncmp($str1, $str2, $len)
 /**
  * Find the last occurrence of a character in a string.
  *
- * @param  string                       Haystack.
- * @param  string                       Needle (string of length 1).
+ * @param  string                       $haystack Haystack.
+ * @param  string                       $needle Needle (string of length 1).
  * @length 1
  * @return string                       The portion of haystack which starts at the last occurrence of needle and goes until the end of haystack.
  */
@@ -4441,7 +4441,7 @@ function strrchr($haystack, $needle)
 /**
  * Reverse a string.
  *
- * @param  string                       String to reverse.
+ * @param  string                       $string String to reverse.
  * @return string                       Reversed string.
  */
 function strrev($string)
@@ -4452,8 +4452,8 @@ function strrev($string)
 /**
  * Find length of initial segment matching mask.
  *
- * @param  string                       String to work upon.
- * @param  string                       String consisting of alternative characters to require along our run.
+ * @param  string                       $string String to work upon.
+ * @param  string                       $mask String consisting of alternative characters to require along our run.
  * @return string                       The length of the initial segment of string which consists entirely of characters in mask.
  */
 function strspn($string, $mask)
@@ -4464,10 +4464,10 @@ function strspn($string, $mask)
 /**
  * Replace text within a portion of a string.
  *
- * @param  string                       The subject string.
- * @param  string                       The replacement string.
- * @param  integer                      The start position of what's being replaced.
- * @param  ?integer                     The run-length of what is being replaced (null: go to end of string).
+ * @param  string                       $string The subject string.
+ * @param  string                       $replacement The replacement string.
+ * @param  integer                      $start The start position of what's being replaced.
+ * @param  ?integer                     $length The run-length of what is being replaced (null: go to end of string).
  * @return string                       A copy of string delimited by the start and (optionally) length parameters with the string given in replacement.
  */
 function substr_replace($string, $replacement, $start, $length = null)
@@ -4478,7 +4478,7 @@ function substr_replace($string, $replacement, $start, $length = null)
 /**
  * Calculate the tangent of an angle.
  *
- * @param  float                        The angle in radians.
+ * @param  float                        $arg The angle in radians.
  * @return float                        The tangent.
  */
 function tan($arg)
@@ -4489,8 +4489,8 @@ function tan($arg)
 /**
  * Unpack data from binary string.
  *
- * @param  string                       The formatting string for unpacking.
- * @param  string                       The data to unpack.
+ * @param  string                       $format The formatting string for unpacking.
+ * @param  string                       $data The data to unpack.
  * @return ~array                       The unpacked data (false: error).
  */
 function unpack($format, $data)
@@ -4501,9 +4501,9 @@ function unpack($format, $data)
 /**
  * Compares two "PHP-standardized" version number strings.
  *
- * @param  string                       First version number.
- * @param  string                       Second version number.
- * @param  ?string                      The operator to compare with (null: unified).
+ * @param  string                       $version1 First version number.
+ * @param  string                       $version2 Second version number.
+ * @param  ?string                      $compare_symbol The operator to compare with (null: unified).
  * @return mixed                        For unified: -1 if v1<v2, 0 if v1=v2, 1 if v1>v2. Else BINARY or boolean.
  */
 function version_compare($version1, $version2, $compare_symbol = null)
@@ -4514,7 +4514,7 @@ function version_compare($version1, $version2, $compare_symbol = null)
 /**
  * Get the type of a variable.
  *
- * @param  mixed                        The variable.
+ * @param  mixed                        $var The variable.
  * @return string                       The type.
  */
 function gettype($var)
@@ -4544,7 +4544,7 @@ function zend_version()
 /**
  * Get current column number for an XML parser.
  *
- * @param  resource                     A reference to the XML parser to get column number from.
+ * @param  resource                     $parser A reference to the XML parser to get column number from.
  * @return ~integer                     Which column on the current line the parser is currently at (false: error).
  */
 function xml_get_current_column_number($parser)
@@ -4555,7 +4555,7 @@ function xml_get_current_column_number($parser)
 /**
  * Create an XML parser.
  *
- * @param  ?string                      Encoding (null: PHP4: as-for-input/PHP5: autodetect).
+ * @param  ?string                      $encoding Encoding (null: PHP4: as-for-input/PHP5: autodetect).
  * @return ~resource                    XML parser (false: could not create, happens on default PHP5 on Windows) (false: error).
  */
 function xml_parser_create($encoding = null)
@@ -4566,8 +4566,8 @@ function xml_parser_create($encoding = null)
 /**
  * Get options from an XML parser.
  *
- * @param  resource                     Parser.
- * @param  integer                      Option.
+ * @param  resource                     $parser Parser.
+ * @param  integer                      $option Option.
  * @return mixed                        Value.
  */
 function xml_parser_get_option($parser, $option)
@@ -4578,10 +4578,10 @@ function xml_parser_get_option($parser, $option)
 /**
  * Parse XML data into an array structure.
  *
- * @param  resource                     The parser.
- * @param  string                       The XML.
- * @param  array                        Where to put the values.
- * @param  ?array                       Where to put the indices into the XML for where the values are at (null: don't collect). Note that this is actually passed by reference, but is also optional.
+ * @param  resource                     $parser The parser.
+ * @param  string                       $data The XML.
+ * @param  array                         &$values Where to put the values.
+ * @param  ?array                       $index Where to put the indices into the XML for where the values are at (null: don't collect). Note that this is actually passed by reference, but is also optional.
  * @return BINARY                       0 is failure, 1=pass.
  */
 function xml_parse_into_struct($parser, $data, &$values, $index = null)
@@ -4592,8 +4592,8 @@ function xml_parse_into_struct($parser, $data, &$values, $index = null)
 /**
  * Set up default handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $callback The callback.
  * @return boolean                      Success status.
  */
 function xml_set_default_handler($parser, $callback)
@@ -4604,8 +4604,8 @@ function xml_set_default_handler($parser, $callback)
 /**
  * Set up external entity reference handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $callback The callback.
  * @return boolean                      Success status.
  */
 function xml_set_external_entity_ref_handler($parser, $callback)
@@ -4616,8 +4616,8 @@ function xml_set_external_entity_ref_handler($parser, $callback)
 /**
  * Set up notation declaration handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $callback The callback.
  * @return boolean                      Success status.
  */
 function xml_set_notation_decl_handler($parser, $callback)
@@ -4628,8 +4628,8 @@ function xml_set_notation_decl_handler($parser, $callback)
 /**
  * Set up processing instruction (PI) handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $callback The callback.
  * @return boolean                      Success status.
  */
 function xml_set_processing_instruction_handler($parser, $callback)
@@ -4640,8 +4640,8 @@ function xml_set_processing_instruction_handler($parser, $callback)
 /**
  * Set up unparsed entity declaration handler.
  *
- * @param  resource                     XML parser.
- * @param  mixed                        The callback.
+ * @param  resource                     $parser XML parser.
+ * @param  mixed                        $callback The callback.
  * @return boolean                      Success status.
  */
 function xml_set_unparsed_entity_decl_handler($parser, $callback)
@@ -4652,7 +4652,7 @@ function xml_set_unparsed_entity_decl_handler($parser, $callback)
 /**
  * Dumps information about a variable.
  *
- * @param  mixed                        Data.
+ * @param  mixed                        $expression Data.
  */
 function var_dump($expression)
 {
@@ -4661,8 +4661,8 @@ function var_dump($expression)
 /**
  * Output a formatted string.
  *
- * @param  string                       Formatting string.
- * @param  array                        Arguments.
+ * @param  string                       $format Formatting string.
+ * @param  array                        $args Arguments.
  * @return integer                      Length of outputed string.
  */
 function vprintf($format, $args)
@@ -4673,8 +4673,8 @@ function vprintf($format, $args)
 /**
  * Return a formatted string.
  *
- * @param  string                       Formatting string.
- * @param  array                        Arguments.
+ * @param  string                       $format Formatting string.
+ * @param  array                        $args Arguments.
  * @return string                       Fixed string.
  */
 function vsprintf($format, $args)
@@ -4685,9 +4685,9 @@ function vsprintf($format, $args)
 /**
  * Sets access and modification time of file.
  *
- * @param  PATH                         File to touch.
- * @param  ?TIME                        New modification time (null: do not change).
- * @param  ?TIME                        New access time (null: do not change).
+ * @param  PATH                         $filename File to touch.
+ * @param  ?TIME                        $time New modification time (null: do not change).
+ * @param  ?TIME                        $atime New access time (null: do not change).
  * @return boolean                      Success status.
  */
 function touch($filename, $time = null, $atime = null)
@@ -4698,7 +4698,7 @@ function touch($filename, $time = null, $atime = null)
 /**
  * Hyperbolic tangent.
  *
- * @param  float                        In.
+ * @param  float                        $in In.
  * @return float                        Out.
  */
 function tanh($in)
@@ -4709,7 +4709,7 @@ function tanh($in)
 /**
  * Hyperbolic sine.
  *
- * @param  float                        In.
+ * @param  float                        $in In.
  * @return float                        Out.
  */
 function sinh($in)
@@ -4720,7 +4720,7 @@ function sinh($in)
 /**
  * Delay execution.
  *
- * @param  integer                      Time in seconds.
+ * @param  integer                      $sec Time in seconds.
  */
 function sleep($sec)
 {
@@ -4729,7 +4729,7 @@ function sleep($sec)
 /**
  * Delay execution for microseconds.
  *
- * @param  integer                      Time in microseconds.
+ * @param  integer                      $sec Time in microseconds.
  */
 function usleep($sec)
 {
@@ -4738,7 +4738,7 @@ function usleep($sec)
 /**
  * Calculate the soundex key of a string.
  *
- * @param  string                       Input.
+ * @param  string                       $input Input.
  * @return string                       Soundex.
  */
 function soundex($input)
@@ -4761,7 +4761,7 @@ function soundex($input)
 /**
  * Un-quote string quoted with addcslashes.
  *
- * @param  string                       In.
+ * @param  string                       $in In.
  * @return string                       Out.
  */
 function stripcslashes($in)
@@ -4772,7 +4772,7 @@ function stripcslashes($in)
 /**
  * Output a gz-file.
  *
- * @param  PATH                         Path to read from.
+ * @param  PATH                         $filename Path to read from.
  * @return ~integer                     Number of uncompressed bytes handled (false: error).
  */
 function readgzfile($filename)
@@ -4790,7 +4790,7 @@ function restore_error_handler()
 /**
  * Rewind the position of a file pointer.
  *
- * @param  resource                     File handle.
+ * @param  resource                     $handle File handle.
  * @return boolean                      Success status.
  */
 function rewind($handle)
@@ -4801,7 +4801,7 @@ function rewind($handle)
 /**
  * Rewind directory handle.
  *
- * @param  resource                     Directory handle.
+ * @param  resource                     $handle Directory handle.
  */
 function rewinddir($handle)
 {
@@ -4810,7 +4810,7 @@ function rewinddir($handle)
 /**
  * Convert a quoted-printable string to an 8 bit string.
  *
- * @param  string                       In.
+ * @param  string                       $in In.
  * @return string                       Out.
  */
 function quoted_printable_decode($in)
@@ -4821,7 +4821,7 @@ function quoted_printable_decode($in)
 /**
  * Quote meta characters. Returns a version of str with a backslash character (\) before every character that is among these: . \ + * ? [ ^ ] ( $ ).
  *
- * @param  string                       In.
+ * @param  string                       $in In.
  * @return string                       Out.
  */
 function quotemeta($in)
@@ -4832,7 +4832,7 @@ function quotemeta($in)
 /**
  * Calculates the exponent of e.
  *
- * @param  float                        Arg.
+ * @param  float                        $arg Arg.
  * @return float                        Result.
  */
 function exp($arg)
@@ -4843,7 +4843,7 @@ function exp($arg)
 /**
  * Calculate the hash value needed by EZMLM mailing lists in a MySQL database.
  *
- * @param  string                       The email address that's being hashed.
+ * @param  string                       $addr The email address that's being hashed.
  * @return integer                      Hash.
  */
 function ezmlm_hash($addr)
@@ -4864,8 +4864,8 @@ function lcg_value()
 /**
  * Get the local time.
  *
- * @param  ?TIME                        Timestamp (null: now).
- * @param  boolean                      If set to FALSE or not supplied than the array is returned as a regular, numerically indexed array. If the argument is set to TRUE then localtime() is an associative array containing all the different elements of the structure returned by the C function call to localtime.
+ * @param  ?TIME                        $timestamp Timestamp (null: now).
+ * @param  boolean                      $associative If set to FALSE or not supplied than the array is returned as a regular, numerically indexed array. If the argument is set to TRUE then localtime() is an associative array containing all the different elements of the structure returned by the C function call to localtime.
  * @return array                        Components.
  */
 function localtime($timestamp, $associative = false)
@@ -4876,8 +4876,8 @@ function localtime($timestamp, $associative = false)
 /**
  * Quote string with slashes in a C style.
  *
- * @param  string                       Input string.
- * @param  string                       Chars to convert.
+ * @param  string                       $str Input string.
+ * @param  string                       $charlist Chars to convert.
  * @return string                       Result.
  */
 function addcslashes($str, $charlist)
@@ -4888,8 +4888,8 @@ function addcslashes($str, $charlist)
 /**
  * Filters elements of an array using a callback function.
  *
- * @param  array                        In.
- * @param  ?mixed                       The filter function callback (null: filter out false's).
+ * @param  array                        $input In.
+ * @param  ?mixed                       $callback The filter function callback (null: filter out false's).
  * @return array                        Out.
  */
 function array_filter($input, $callback = null)
@@ -4900,8 +4900,8 @@ function array_filter($input, $callback = null)
 /**
  * Applies the callback to the elements of the given array.
  *
- * @param  mixed                        Callback map function.
- * @param  array                        In.
+ * @param  mixed                        $callback Callback map function.
+ * @param  array                        $array In.
  * @return array                        Out.
  */
 function array_map($callback, $array)
@@ -4912,7 +4912,7 @@ function array_map($callback, $array)
 /**
  * Add all the elements of an array.
  *
- * @param  array                        In.
+ * @param  array                        $array In.
  * @return mixed                        The sum (float or integer).
  */
 function array_sum($array)
@@ -4924,11 +4924,11 @@ function array_sum($array)
  * Merges the elements of one or more arrays together so that the values of one are appended to the end of the previous one. It returns the resulting array.
  * If the input arrays have the same string keys, then the values for these keys are merged together into an array, and this is done recursively, so that if one of the values is an array itself, the function will merge it with a corresponding entry in another array too. If, however, the arrays have the same numeric key, the later value will not overwrite the original value, but will be appended.
  *
- * @param  array                        First array to merge.
- * @param  array                        Second array to merge.
- * @param  ?array                       Third array to merge (null: not this one).
- * @param  ?array                       Fourth array to merge (null: not this one).
- * @param  ?array                       Fifth array to merge (null: not this one).
+ * @param  array                        $array1 First array to merge.
+ * @param  array                        $array2 Second array to merge.
+ * @param  ?array                       $array3 Third array to merge (null: not this one).
+ * @param  ?array                       $array4 Fourth array to merge (null: not this one).
+ * @param  ?array                       $array5 Fifth array to merge (null: not this one).
  * @return array                        Result.
  */
 function array_merge_recursive($array1, $array2, $array3 = null, $array4 = null, $array5 = null)
@@ -4939,8 +4939,8 @@ function array_merge_recursive($array1, $array2, $array3 = null, $array4 = null,
 /**
  * Sort multiple or multi-dimensional array.
  *
- * @param  array                        Array to sort.
- * @param  ?integer                     Argument code (null: none given).
+ * @param  array                        $array Array to sort.
+ * @param  ?integer                     $args Argument code (null: none given).
  * @return array                        Result.
  */
 function array_multisort($array, $args = null)
@@ -4951,9 +4951,9 @@ function array_multisort($array, $args = null)
 /**
  * Pad array to the specified length with a value.
  *
- * @param  array                        Input.
- * @param  integer                      Pad size.
- * @param  mixed                        Pad value.
+ * @param  array                        $input Input.
+ * @param  integer                      $pad_size Pad size.
+ * @param  mixed                        $pad_value Pad value.
  * @return array                        Output.
  */
 function array_pad($input, $pad_size, $pad_value)
@@ -4964,9 +4964,9 @@ function array_pad($input, $pad_size, $pad_value)
 /**
  * Iteratively reduce the array to a single value using a callback function.
  *
- * @param  array                        Input.
- * @param  mixed                        Process function.
- * @param  ?integer                     Initial value (null: no initial).
+ * @param  array                        $input Input.
+ * @param  mixed                        $callback Process function.
+ * @param  ?integer                     $initial Initial value (null: no initial).
  * @return ?integer                     Result (null: no initial given, and empty array given).
  */
 function array_reduce($input, $callback, $initial = null)
@@ -4977,7 +4977,7 @@ function array_reduce($input, $callback, $initial = null)
 /**
  * Apply a user function to every member of an array .
  *
- * @param  array                        Data.
+ * @param  array                        &$array Data.
  * @return boolean                      Success status.
  */
 function array_walk(&$array)
@@ -4988,8 +4988,8 @@ function array_walk(&$array)
 /**
  * Arc tangent of two variables.
  *
- * @param  float                        First.
- * @param  float                        Second.
+ * @param  float                        $x First.
+ * @param  float                        $y Second.
  * @return float                        Result.
  */
 function atan2($x, $y)
@@ -5000,7 +5000,7 @@ function atan2($x, $y)
 /**
  * Gets character from file pointer.
  *
- * @param  resource                     Handle.
+ * @param  resource                     $handle Handle.
  * @return ~string                      Character (false: error).
  */
 function fgetc($handle)
@@ -5011,9 +5011,9 @@ function fgetc($handle)
 /**
  * Gets line from file pointer and parse for CSV fields.
  *
- * @param  resource                     File handle.
- * @param  ?integer                     The maximum length of the line (null: no limit).
- * @param  string                       Delimiter.
+ * @param  resource                     $handle File handle.
+ * @param  ?integer                     $length The maximum length of the line (null: no limit).
+ * @param  string                       $delimiter Delimiter.
  * @return ~array                       Line (false: error).
  */
 function fgetcsv($handle, $length = null, $delimiter = ',')
@@ -5024,9 +5024,9 @@ function fgetcsv($handle, $length = null, $delimiter = ',')
 /**
  * Gets line from file pointer and strip HTML tags.
  *
- * @param  resource                     File handle.
- * @param  ?integer                     The maximum length of the line (null: no limit).
- * @param  string                       Allowable HTML tags separated by spaces.
+ * @param  resource                     $handle File handle.
+ * @param  ?integer                     $length The maximum length of the line (null: no limit).
+ * @param  string                       $allowable_tags Allowable HTML tags separated by spaces.
  * @return ~string                      Line (false: error).
  */
 function fgetss($handle, $length = null, $allowable_tags = '')
@@ -5037,7 +5037,7 @@ function fgetss($handle, $length = null, $allowable_tags = '')
 /**
  * Gets file type.
  *
- * @param  PATH                         Filename.
+ * @param  PATH                         $file Filename.
  * @return ~string                      Result (fifo, char, dir, block, link, file, and unknown) (false: error).
  */
 function filetype($file)
@@ -5048,8 +5048,8 @@ function filetype($file)
 /**
  * Parses input from a file according to a format.
  *
- * @param  resource                     File handle.
- * @param  string                       Formatting string.
+ * @param  resource                     $handle File handle.
+ * @param  string                       $format Formatting string.
  * @return array                        Data.
  */
 function fscanf($handle, $format)
@@ -5060,7 +5060,7 @@ function fscanf($handle, $format)
 /**
  * Gets information about a file.
  *
- * @param  PATH                         File.
+ * @param  PATH                         $path File.
  * @return array                        Map of status information.
  */
 function stat($path)
@@ -5071,7 +5071,7 @@ function stat($path)
 /**
  * Gets information about a file using an open file pointer.
  *
- * @param  resource                     File handle.
+ * @param  resource                     $handle File handle.
  * @return array                        Map of status information.
  */
 function fstat($handle)
@@ -5082,9 +5082,9 @@ function fstat($handle)
 /**
  * Set permissions on a file via FTP.
  *
- * @param  resource                     File handle.
- * @param  integer                      Requested file permissions.
- * @param  PATH                         Filepath.
+ * @param  resource                     $ftp_stream File handle.
+ * @param  integer                      $mode Requested file permissions.
+ * @param  PATH                         $filename Filepath.
  * @return ~integer                     New file permissions (false: error).
  */
 function ftp_chmod($ftp_stream, $mode, $filename)
@@ -5095,7 +5095,7 @@ function ftp_chmod($ftp_stream, $mode, $filename)
 /**
  * Changes to the parent directory.
  *
- * @param  resource                     FTP handle.
+ * @param  resource                     $ftp_stream FTP handle.
  * @return boolean                      Success status.
  */
 function ftp_cdup($ftp_stream)
@@ -5106,10 +5106,10 @@ function ftp_cdup($ftp_stream)
 /**
  * Downloads a file from the FTP server and saves to an open file.
  *
- * @param  resource                     FTP handle.
- * @param  resource                     File handle.
- * @param  PATH                         Remote file.
- * @param  integer                      Transfer mode (FTP_ASCII or FTP_BINARY).
+ * @param  resource                     $ftp_stream FTP handle.
+ * @param  resource                     $file_handle File handle.
+ * @param  PATH                         $remote_file Remote file.
+ * @param  integer                      $mode Transfer mode (FTP_ASCII or FTP_BINARY).
  * @return boolean                      Success status.
  */
 function ftp_fget($ftp_stream, $file_handle, $remote_file, $mode)
@@ -5120,10 +5120,10 @@ function ftp_fget($ftp_stream, $file_handle, $remote_file, $mode)
 /**
  * Downloads a file from the FTP server.
  *
- * @param  resource                     FTP handle.
- * @param  PATH                         Local file.
- * @param  PATH                         Remote file.
- * @param  integer                      Transfer mode (FTP_ASCII or FTP_BINARY).
+ * @param  resource                     $ftp_stream FTP handle.
+ * @param  PATH                         $local_file Local file.
+ * @param  PATH                         $remote_file Remote file.
+ * @param  integer                      $mode Transfer mode (FTP_ASCII or FTP_BINARY).
  * @return boolean                      Success status.
  */
 function ftp_get($ftp_stream, $local_file, $remote_file, $mode)
@@ -5134,8 +5134,8 @@ function ftp_get($ftp_stream, $local_file, $remote_file, $mode)
 /**
  * Turns passive mode on or off.
  *
- * @param  resource                     The link identifier of the FTP connection.
- * @param  boolean                      If TRUE, the passive mode is turned on, else it's turned off.
+ * @param  resource                     $ftp_stream The link identifier of the FTP connection.
+ * @param  boolean                      $pasv If TRUE, the passive mode is turned on, else it's turned off.
  * @return boolean                      Success status.
  */
 function ftp_pasv($ftp_stream, $pasv)
@@ -5146,7 +5146,7 @@ function ftp_pasv($ftp_stream, $pasv)
 /**
  * Returns the current directory name.
  *
- * @param  resource                     The link identifier of the FTP connection.
+ * @param  resource                     $ftp_stream The link identifier of the FTP connection.
  * @return ~string                      Current directory name (false: error).
  */
 function ftp_pwd($ftp_stream)
@@ -5157,8 +5157,8 @@ function ftp_pwd($ftp_stream)
 /**
  * Returns a detailed list of files in the given directory.
  *
- * @param  resource                     The link identifier of the FTP connection.
- * @param  PATH                         The directory path.
+ * @param  resource                     $ftp_stream The link identifier of the FTP connection.
+ * @param  PATH                         $directory The directory path.
  * @return ~array                       Each element corresponds to one line of text (false: error).
  */
 function ftp_rawlist($ftp_stream, $directory)
@@ -5169,7 +5169,7 @@ function ftp_rawlist($ftp_stream, $directory)
 /**
  * Returns the system type identifier of the remote FTP server.
  *
- * @param  resource                     The link identifier of the FTP connection.
+ * @param  resource                     $ftp_stream The link identifier of the FTP connection.
  * @return ~string                      System type (false: error).
  */
 function ftp_systype($ftp_stream)
@@ -5180,8 +5180,8 @@ function ftp_systype($ftp_stream)
 /**
  * Truncates a file to a given length.
  *
- * @param  resource                     File handle.
- * @param  integer                      Cut off size.
+ * @param  resource                     $file File handle.
+ * @param  integer                      $size Cut off size.
  * @return boolean                      Success status.
  */
 function ftruncate($file, $size)
@@ -5192,7 +5192,7 @@ function ftruncate($file, $size)
 /**
  * Return an item from the argument list.
  *
- * @param  integer                      Argument number.
+ * @param  integer                      $arg_num Argument number.
  * @return mixed                        Argument.
  */
 function func_get_arg($arg_num)
@@ -5223,8 +5223,8 @@ function func_num_args()
 /**
  * Parse a configuration file.
  *
- * @param  PATH                         The file path.
- * @param  boolean                      Whether to process sections.
+ * @param  PATH                         $filename The file path.
+ * @param  boolean                      $process_sections Whether to process sections.
  * @return ~array                       Map of Ini file data (2d if processed sections) (false: error).
  */
 function parse_ini_file($filename, $process_sections = false)
@@ -5235,8 +5235,8 @@ function parse_ini_file($filename, $process_sections = false)
 /**
  * Parses the string into variables.
  *
- * @param  string                       Query string to parse.
- * @param  array                        Target for variable mappings.
+ * @param  string                       $str Query string to parse.
+ * @param  array                         &$arr Target for variable mappings.
  */
 function parse_str($str, &$arr)
 {
@@ -5245,7 +5245,7 @@ function parse_str($str, &$arr)
 /**
  * Tells whether the filename is executable.
  *
- * @param  PATH                         Filename.
+ * @param  PATH                         $filename Filename.
  * @return boolean                      Whether it is.
  */
 function is_executable($filename)
@@ -5256,7 +5256,7 @@ function is_executable($filename)
 /**
  * Finds whether a variable is a scalar (integer, float, string or boolean).
  *
- * @param  mixed                        Variable.
+ * @param  mixed                        $var Variable.
  * @return boolean                      Whether it is.
  */
 function is_scalar($var)
@@ -5267,8 +5267,8 @@ function is_scalar($var)
 /**
  * Find whether the object has this class as one of its parents.
  *
- * @param  mixed                        Object to check whether is an instance.
- * @param  string                       Class name to check against.
+ * @param  mixed                        $object Object to check whether is an instance.
+ * @param  string                       $class_name Class name to check against.
  * @return boolean                      Whether it is.
  */
 function is_subclass_of($object, $class_name)
@@ -5279,8 +5279,8 @@ function is_subclass_of($object, $class_name)
 /**
  * Calculate the metaphone key of a string.
  *
- * @param  string                       String to do.
- * @param  integer                      Phones value.
+ * @param  string                       $string String to do.
+ * @param  integer                      $value Phones value.
  * @return string                       Metaphone key.
  */
 function metaphone($string, $value)
@@ -5291,7 +5291,7 @@ function metaphone($string, $value)
 /**
  * Sort an array using a case insensitive "natural order" algorithm .
  *
- * @param  array                        Array to sort.
+ * @param  array                        &$array Array to sort.
  * @return boolean                      Success status.
  */
 function natcasesort(&$array)
@@ -5302,7 +5302,7 @@ function natcasesort(&$array)
 /**
  * Sort an array using a "natural order" algorithm.
  *
- * @param  array                        Array to sort.
+ * @param  array                        &$array Array to sort.
  * @return boolean                      Success status.
  */
 function natsort(&$array)
@@ -5313,7 +5313,7 @@ function natsort(&$array)
 /**
  * Inserts HTML line breaks before all newlines in a string.
  *
- * @param  string                       In.
+ * @param  string                       $in In.
  * @return string                       Out.
  */
 function nl2br($in)
@@ -5324,7 +5324,7 @@ function nl2br($in)
 /**
  * Returns information about the operating system PHP is running on.
  *
- * @param  string                       Type of info to get.
+ * @param  string                       $mode Type of info to get.
  * @set    a s n r v m
  * @return string                       The info.
  */
@@ -5336,8 +5336,8 @@ function php_uname($mode = 'a')
 /**
  * Opens process file pointer.
  *
- * @param  string                       Command to execute.
- * @param  string                       Access mode.
+ * @param  string                       $command Command to execute.
+ * @param  string                       $mode Access mode.
  * @set    r r+ w w+ a a+
  * @return ~resource                    Socket (false: error).
  */
@@ -5349,12 +5349,12 @@ function popen($command, $mode)
 /**
  * Output a formatted string.
  *
- * @param  string                       Formatting string.
- * @param  ?mixed                       Argument (null: not given).
- * @param  ?mixed                       Argument (null: not given).
- * @param  ?mixed                       Argument (null: not given).
- * @param  ?mixed                       Argument (null: not given).
- * @param  ?mixed                       Argument (null: not given).
+ * @param  string                       $format Formatting string.
+ * @param  ?mixed                       $arg1 Argument (null: not given).
+ * @param  ?mixed                       $arg2 Argument (null: not given).
+ * @param  ?mixed                       $arg3 Argument (null: not given).
+ * @param  ?mixed                       $arg4 Argument (null: not given).
+ * @param  ?mixed                       $arg5 Argument (null: not given).
  * @return string                       Assembled string.
  */
 function printf($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
@@ -5365,9 +5365,9 @@ function printf($format, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null,
 /**
  * Convert from one Cyrillic character set to another.
  *
- * @param  string                       Input.
- * @param  string                       From.
- * @param  string                       To.
+ * @param  string                       $in Input.
+ * @param  string                       $from From.
+ * @param  string                       $to To.
  * @return string                       Output.
  */
 function convert_cyr_string($in, $from, $to)
@@ -5378,7 +5378,7 @@ function convert_cyr_string($in, $from, $to)
 /**
  * Hyperbolic cosine.
  *
- * @param  float                        Argument.
+ * @param  float                        $arg Argument.
  * @return float                        Result.
  */
 function cosh($arg)
@@ -5389,8 +5389,8 @@ function cosh($arg)
 /**
  * Return information about characters used in a string.
  *
- * @param  string                       The string which to work within.
- * @param  integer                      Operation mode.
+ * @param  string                       $string The string which to work within.
+ * @param  integer                      $mode Operation mode.
  * @set    0 1 2 3 4
  * @return mixed                        Result, depending on mode used.
  */
@@ -5402,8 +5402,8 @@ function count_chars($string, $mode = 0)
 /**
  * Create a function dynamically. Do not use unless absolutely needed.
  *
- * @param  string                       Arguments.
- * @param  string                       Code to run.
+ * @param  string                       $args Arguments.
+ * @param  string                       $code Code to run.
  * @return string                       Function reference.
  */
 function create_function($args, $code)
@@ -5414,7 +5414,7 @@ function create_function($args, $code)
 /**
  * Run some code. Do not use unless absolutely needed.
  *
- * @param  string                       Code to run.
+ * @param  string                       $code Code to run.
  * @return mixed                        Result.
  */
 function eval($code)
@@ -5425,7 +5425,7 @@ function eval($code)
 /**
  * Get a list of IP addresses corresponding to a given Internet host name.
  *
- * @param  string                       Hostname.
+ * @param  string                       $hostname Hostname.
  * @return ~array                       List of IP addresses (false: could not resolve).
  */
 function gethostbynamel($hostname)
@@ -5436,8 +5436,8 @@ function gethostbynamel($hostname)
 /**
  * Get the size of an image.
  *
- * @param  PATH                         Filename.
- * @param  ?array                       Extra details will be put here (null: return-only). Note that this is actually passed by reference, but is also optional.
+ * @param  PATH                         $filename Filename.
+ * @param  ?array                       $image_info Extra details will be put here (null: return-only). Note that this is actually passed by reference, but is also optional.
  * @return ~array                       List of details: $width, $height, $type, $attr (false: error).
  */
 function getimagesize($filename, $image_info = null)
@@ -5468,7 +5468,7 @@ function gettimeofday()
 /**
  * Gets the value of a PHP configuration option.
  *
- * @param  string                       Value name to get.
+ * @param  string                       $varname Value name to get.
  * @return ~string                      Value (false: error).
  */
 function get_cfg_var($varname)
@@ -5489,7 +5489,7 @@ function get_magic_quotes_runtime()
 /**
  * Extracts all meta tag content attributes from a file and returns an array.
  *
- * @param  PATH                         Filename.
+ * @param  PATH                         $filename Filename.
  * @return ~array                       Map of meta information (false: error).
  */
 function get_meta_tags($filename)
@@ -5500,7 +5500,7 @@ function get_meta_tags($filename)
 /**
  * Retrieves the parent class name for object or class.
  *
- * @param  object                       Object to check.
+ * @param  object                       $object Object to check.
  * @return string                       Classname.
  */
 function get_parent_class($object)
@@ -5521,7 +5521,7 @@ function get_included_files()
 /**
  * Returns the resource type.
  *
- * @param  resource                     Resource to check.
+ * @param  resource                     $handle Resource to check.
  * @return string                       The resource type.
  */
 function get_resource_type($handle)
@@ -5532,8 +5532,8 @@ function get_resource_type($handle)
 /**
  * Compress a string.
  *
- * @param  string                       Data to compress.
- * @param  integer                      Compression level.
+ * @param  string                       $data Data to compress.
+ * @param  integer                      $level Compression level.
  * @return string                       Compressed data.
  */
 function gzcompress($data, $level)
@@ -5544,8 +5544,8 @@ function gzcompress($data, $level)
 /**
  * Deflate a string.
  *
- * @param  string                       Compressed data.
- * @param  integer                      Compression level.
+ * @param  string                       $data Compressed data.
+ * @param  integer                      $level Compression level.
  * @return ~string                      Uncompressed data (false: error).
  */
 function gzdeflate($data, $level)
@@ -5556,8 +5556,8 @@ function gzdeflate($data, $level)
 /**
  * Create a gzip compressed string.
  *
- * @param  string                       In.
- * @param  integer                      How much compression.
+ * @param  string                       $data In.
+ * @param  integer                      $level How much compression.
  * @range  1 9
  * @return string                       Out.
  */
@@ -5569,7 +5569,7 @@ function gzencode($data, $level)
 /**
  * Read entire gz-file into an array.
  *
- * @param  PATH                         The filename.
+ * @param  PATH                         $filename The filename.
  * @return ~array                       An array containing the file, one line per cell (false: error).
  */
 function gzfile($filename)
@@ -5580,8 +5580,8 @@ function gzfile($filename)
 /**
  * Inflate a deflated string.
  *
- * @param  string                       The data compressed by gzdeflate().
- * @param  integer                      Maximum length to read in.
+ * @param  string                       $data The data compressed by gzdeflate().
+ * @param  integer                      $length Maximum length to read in.
  * @return string                       Inflated (uncompressed) data.
  */
 function gzinflate($data, $length)
@@ -5592,8 +5592,8 @@ function gzinflate($data, $length)
 /**
  * Uncompress a compressed string.
  *
- * @param  string                       The data compressed by gzcompress().
- * @param  integer                      Maximum length to read in.
+ * @param  string                       $data The data compressed by gzcompress().
+ * @param  integer                      $length Maximum length to read in.
  * @return string                       Uncompressed data.
  */
 function gzuncompress($data, $length)
@@ -5604,8 +5604,8 @@ function gzuncompress($data, $length)
 /**
  * Convert logical Hebrew text to visual text.
  *
- * @param  string                       In.
- * @param  ?integer                     Maximum number of characters per line (null: no limit).
+ * @param  string                       $hebrew_text In.
+ * @param  ?integer                     $max_chars_per_line Maximum number of characters per line (null: no limit).
  * @return string                       Out.
  */
 function hebrev($hebrew_text, $max_chars_per_line = null)
@@ -5616,8 +5616,8 @@ function hebrev($hebrew_text, $max_chars_per_line = null)
 /**
  * Convert logical Hebrew text to visual text with newline conversion.
  *
- * @param  string                       In.
- * @param  ?integer                     Maximum number of characters per line (null: no limit).
+ * @param  string                       $hebrew_text In.
+ * @param  ?integer                     $max_chars_per_line Maximum number of characters per line (null: no limit).
  * @return string                       Out.
  */
 function hebrevc($hebrew_text, $max_chars_per_line = null)
@@ -5628,8 +5628,8 @@ function hebrevc($hebrew_text, $max_chars_per_line = null)
 /**
  * Calculate the length of the hypotenuse of a right-angle triangle.
  *
- * @param  float                        X.
- * @param  float                        Y.
+ * @param  float                        $x X.
+ * @param  float                        $y Y.
  * @return float                        Result.
  */
 function hypot($x, $y)
@@ -5640,7 +5640,7 @@ function hypot($x, $y)
 /**
  * Set whether a client disconnect should abort script execution.
  *
- * @param  boolean                      Setting.
+ * @param  boolean                      $setting Setting.
  * @return boolean                      Previous setting.
  */
 function ignore_user_abort($setting)
@@ -5651,7 +5651,7 @@ function ignore_user_abort($setting)
 /**
  * XSS detection helper function.
  *
- * @param  string                       String to mark as escaped.
+ * @param  string                       &$var String to mark as escaped.
  */
 function ocp_mark_as_escaped(&$var)
 {
@@ -5660,7 +5660,7 @@ function ocp_mark_as_escaped(&$var)
 /**
  * XSS detection helper function.
  *
- * @param  string                       String to test for being escaped.
+ * @param  string                       $var String to test for being escaped.
  * @return boolean                      Whether string is escaped.
  */
 function ocp_is_escaped($var)
@@ -5671,9 +5671,9 @@ function ocp_is_escaped($var)
 /**
  * Get the contents of a file.
  *
- * @param  SHORT_TEXT                   The file name.
- * @param  boolean                      Whether to search within the include path.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  SHORT_TEXT                   $filename The file name.
+ * @param  boolean                      $use_include_path Whether to search within the include path.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return ~LONG_TEXT                   The file contents (false: error).
  */
 function file_get_contents($filename, $use_include_path = false, $context = null)
@@ -5684,8 +5684,8 @@ function file_get_contents($filename, $use_include_path = false, $context = null
 /**
  * Isolate the words in the input string.
  *
- * @param  string                       String to count words in.
- * @param  integer                      The format.
+ * @param  string                       $input String to count words in.
+ * @param  integer                      $format The format.
  * @set    0 1 2
  * @return mixed                        Typically a list - the words of the input string.
  */
@@ -5697,9 +5697,9 @@ function str_word_count($input, $format = 0)
 /**
  * Decode the HTML entitity encoded input string.
  *
- * @param  string                       The text to decode.
- * @param  integer                      The quote style code.
- * @param  ?string                      Character set to decode to (null: default).
+ * @param  string                       $input The text to decode.
+ * @param  integer                      $quote_style The quote style code.
+ * @param  ?string                      $charset Character set to decode to (null: default).
  * @return string                       The decoded text.
  */
 function html_entity_decode($input, $quote_style, $charset = null)
@@ -5710,8 +5710,8 @@ function html_entity_decode($input, $quote_style, $charset = null)
 /**
  * Creates an array by using one array for keys and another for its values.
  *
- * @param  array                        Keys.
- * @param  array                        Values.
+ * @param  array                        $keys Keys.
+ * @param  array                        $values Values.
  * @return array                        Combined.
  */
 function array_combine($keys, $values)
@@ -5722,8 +5722,8 @@ function array_combine($keys, $values)
 /**
  * Computes the difference of arrays with additional index check which is performed by a user supplied callback function.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $a Array 1.
+ * @param  array                        $b Array 2.
  * @return array                        Result.
  */
 function array_diff_uassoc($a, $b)
@@ -5734,8 +5734,8 @@ function array_diff_uassoc($a, $b)
 /**
  * Computes the difference of arrays by using a callback function for data comparison.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $a Array 1.
+ * @param  array                        $b Array 2.
  * @return array                        Result.
  */
 function array_udiff($a, $b)
@@ -5746,8 +5746,8 @@ function array_udiff($a, $b)
 /**
  * Computes the difference of arrays with additional index check. The data is compared by using a callback function.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $a Array 1.
+ * @param  array                        $b Array 2.
  * @return array                        Result.
  */
 function array_udiff_assoc($a, $b)
@@ -5758,8 +5758,8 @@ function array_udiff_assoc($a, $b)
 /**
  * Computes the difference of arrays with additional index check. The data is compared by using a callback function. The index check is done by a callback function also.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $a Array 1.
+ * @param  array                        $b Array 2.
  * @return array                        Result.
  */
 function array_udiff_uassoc($a, $b)
@@ -5770,9 +5770,9 @@ function array_udiff_uassoc($a, $b)
 /**
  * Apply a user function recursively to every member of an array.
  *
- * @param  array                        The input array.
- * @param  mixed                        Callback.
- * @param  ?mixed                       If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (null: no user data).
+ * @param  array                        $input The input array.
+ * @param  mixed                        $funcname Callback.
+ * @param  ?mixed                       $userdata If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (null: no user data).
  * @return boolean                      Result.
  */
 function array_walk_recursive($input, $funcname, $userdata = null)
@@ -5783,8 +5783,8 @@ function array_walk_recursive($input, $funcname, $userdata = null)
 /**
  * Computes the intersection of arrays with additional index check. The data is compared by using a callback function.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $a Array 1.
+ * @param  array                        $b Array 2.
  * @return array                        Result.
  */
 function array_uintersect_assoc($a, $b)
@@ -5795,8 +5795,8 @@ function array_uintersect_assoc($a, $b)
 /**
  * Computes the intersection of arrays with additional index check. Both the data and the indexes are compared by using separate callback functions.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $a Array 1.
+ * @param  array                        $b Array 2.
  * @return array                        Result.
  */
 function array_uintersect_uassoc($a, $b)
@@ -5807,8 +5807,8 @@ function array_uintersect_uassoc($a, $b)
 /**
  * Computes the intersection of arrays. The data is compared by using a callback function.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $a Array 1.
+ * @param  array                        $b Array 2.
  * @return array                        Result.
  */
 function array_uintersect($a, $b)
@@ -5819,8 +5819,8 @@ function array_uintersect($a, $b)
 /**
  * Convert a string to an array.
  *
- * @param  string                       The input string.
- * @param  integer                      Maximum length of the chunk.
+ * @param  string                       $str The input string.
+ * @param  integer                      $split_length Maximum length of the chunk.
  * @return array                        Result.
  */
 function str_split($str, $split_length = 1)
@@ -5831,8 +5831,8 @@ function str_split($str, $split_length = 1)
 /**
  * Search a string for any of a set of characters.
  *
- * @param  string                       The string where char_list is looked for.
- * @param  string                       The character list.
+ * @param  string                       $haystack The string where char_list is looked for.
+ * @param  string                       $char_list The character list.
  * @return ~string                      String starting from the character found, or FALSE if it is not found (false: not found).
  */
 function strpbrk($haystack, $char_list)
@@ -5843,11 +5843,11 @@ function strpbrk($haystack, $char_list)
 /**
  * Binary safe optionally case insensitive comparison of two strings from an offset, up to length characters.
  *
- * @param  string                       The main string being compared.
- * @param  string                       The secondary string being compared.
- * @param  integer                      The start position for the comparison. If negative, it starts counting from the end of the string.
- * @param  ?integer                     The length of the comparison (null: the largest of the length of the str compared to the length of main_str less the offset).
- * @param  boolean                      Whether to compare as case insensitive.
+ * @param  string                       $main_str The main string being compared.
+ * @param  string                       $str The secondary string being compared.
+ * @param  integer                      $offset The start position for the comparison. If negative, it starts counting from the end of the string.
+ * @param  ?integer                     $length The length of the comparison (null: the largest of the length of the str compared to the length of main_str less the offset).
+ * @param  boolean                      $case_insensitivity Whether to compare as case insensitive.
  * @return ~integer                     Returns < 0 if main_str from position offset is less than str, > 0 if it is greater than str, and 0 if they are equal (false: out of bounds).
  */
 function substr_compare($main_str, $str, $offset, $length = null, $case_insensitivity = false)
@@ -5858,10 +5858,10 @@ function substr_compare($main_str, $str, $offset, $length = null, $case_insensit
 /**
  * Write a string to a file.
  *
- * @param  PATH                         Path to the file where to write the data.
- * @param  string                       The data to write.
- * @param  integer                      Supported flags.
- * @param  ?resource                    A stream context to attach to (null: no special context).
+ * @param  PATH                         $filename Path to the file where to write the data.
+ * @param  string                       $data The data to write.
+ * @param  integer                      $flags Supported flags.
+ * @param  ?resource                    $context A stream context to attach to (null: no special context).
  * @return ~integer                     Bytes written (false: error).
  */
 function file_put_contents($filename, $data, $flags = 0, $context = null)
@@ -5872,8 +5872,8 @@ function file_put_contents($filename, $data, $flags = 0, $context = null)
 /**
  * Fetches all the headers sent by the server in response to a HTTP request.
  *
- * @param  URLPATH                      The target URL.
- * @param  BINARY                       Whether to parse into a map.
+ * @param  URLPATH                      $url The target URL.
+ * @param  BINARY                       $parse Whether to parse into a map.
  * @return array                        Result.
  */
 function get_headers($url, $parse = 0)
@@ -5894,7 +5894,7 @@ function headers_list()
 /**
  * Generate URL-encoded query string.
  *
- * @param  array                        URL parameters.
+ * @param  array                        $query_data URL parameters.
  * @return string                       URL.
  */
 function http_build_query($query_data)
@@ -5905,8 +5905,8 @@ function http_build_query($query_data)
 /**
  * Get file extension for image-type returned by .
  *
- * @param  integer                      One of the IMAGETYPE_XXX constants.
- * @param  boolean                      Whether to prepend a dot to the extension or not.
+ * @param  integer                      $imagetype One of the IMAGETYPE_XXX constants.
+ * @param  boolean                      $include_dot Whether to prepend a dot to the extension or not.
  * @return string                       A string with the extension corresponding to the given image type.
  */
 function image_type_to_extension($imagetype, $include_dot = true)
@@ -5917,12 +5917,12 @@ function image_type_to_extension($imagetype, $include_dot = true)
 /**
  * Applies a filter to an image using custom arguments.
  *
- * @param  resource                     Image.
- * @param  integer                      A constant indicating the filter type.
- * @param  ?mixed                       Parameter (null: don't read).
- * @param  ?mixed                       Parameter (null: don't read).
- * @param  ?mixed                       Parameter (null: don't read).
- * @param  ?mixed                       Parameter (null: don't read).
+ * @param  resource                     $image Image.
+ * @param  integer                      $filtertype A constant indicating the filter type.
+ * @param  ?mixed                       $arg1 Parameter (null: don't read).
+ * @param  ?mixed                       $arg2 Parameter (null: don't read).
+ * @param  ?mixed                       $arg3 Parameter (null: don't read).
+ * @param  ?mixed                       $arg4 Parameter (null: don't read).
  * @return boolean                      Success status.
  */
 function imagefilter($image, $filtertype, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null)
@@ -5933,7 +5933,7 @@ function imagefilter($image, $filtertype, $arg1 = null, $arg2 = null, $arg3 = nu
 /**
  * List files and directories inside the specified path.
  *
- * @param  PATH                         Directory.
+ * @param  PATH                         $directory Directory.
  * @return ~array                       Files (false: error).
  */
 function scandir($directory)
@@ -5944,7 +5944,7 @@ function scandir($directory)
 /**
  * Randomly shuffles a string.
  *
- * @param  string                       In.
+ * @param  string                       $in In.
  * @return string                       Out.
  */
 function str_shuffle($in)
@@ -5955,7 +5955,7 @@ function str_shuffle($in)
 /**
  * Get Mime-Type for image-type returned by getimagesize, exif_read_data, exif_thumbnail, exif_imagetype.
  *
- * @param  integer                      Image type.
+ * @param  integer                      $image_type Image type.
  * @return string                       Mime type.
  */
 function image_type_to_mime_type($image_type)
@@ -5966,7 +5966,7 @@ function image_type_to_mime_type($image_type)
 /**
  * Determine the type of an image.
  *
- * @param  PATH                         Image path.
+ * @param  PATH                         $filename Image path.
  * @return integer                      Image type.
  */
 function exif_imagetype($filename)
@@ -5977,8 +5977,8 @@ function exif_imagetype($filename)
 /**
  * Find pathnames matching a pattern.
  *
- * @param  string                       Pattern according to the rules used by the libc glob.
- * @param  integer                      Flags.
+ * @param  string                       $pattern Pattern according to the rules used by the libc glob.
+ * @param  integer                      $flags Flags.
  * @return ~array                       Files found (false: error).
  */
 function glob($pattern, $flags = 0)
@@ -6006,7 +6006,7 @@ function debug_print_backtrace()
 /**
  * Sets the default timezone used by all date/time functions in a script.
  *
- * @param  string                       Timezone identifier.
+ * @param  string                       $timezone_identifier Timezone identifier.
  * @return boolean                      Success status.
  */
 function date_default_timezone_set($timezone_identifier)
@@ -6027,8 +6027,8 @@ function date_default_timezone_get()
 /**
  * Computes the difference of arrays using keys for comparison.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
+ * @param  array                        $array1 Array 1.
+ * @param  array                        $array2 Array 2.
  * @return array                        Result.
  */
 function array_diff_key($array1, $array2)
@@ -6039,7 +6039,7 @@ function array_diff_key($array1, $array2)
 /**
  * Converts a human readable IP address to its packed in_addr representation.
  *
- * @param  string                       A human readable IPv4 or IPv6 address.
+ * @param  string                       $address A human readable IPv4 or IPv6 address.
  * @return ~string                      The in_addr representation of the given address (false: error).
  */
 function inet_pton($address)
@@ -6050,7 +6050,7 @@ function inet_pton($address)
 /**
  * Calculate the product of values in an array.
  *
- * @param  array                        Input.
+ * @param  array                        $array Input.
  * @return float                        Result.
  */
 function array_product($array)
@@ -6061,9 +6061,9 @@ function array_product($array)
 /**
  * Computes the difference of arrays using a callback function on the keys for comparison.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
- * @param  mixed                        Callback.
+ * @param  array                        $array1 Array 1.
+ * @param  array                        $array2 Array 2.
+ * @param  mixed                        $callback Callback.
  * @return array                        Result.
  */
 function array_diff_ukey($array1, $array2, $callback)
@@ -6074,9 +6074,9 @@ function array_diff_ukey($array1, $array2, $callback)
 /**
  * Computes the intersection of arrays using a callback function on the keys for comparison.
  *
- * @param  array                        Array 1.
- * @param  array                        Array 2.
- * @param  mixed                        Callback.
+ * @param  array                        $array1 Array 1.
+ * @param  array                        $array2 Array 2.
+ * @param  mixed                        $callback Callback.
  * @return array                        Result.
  */
 function array_intersect_ukey($array1, $array2, $callback)
@@ -6097,7 +6097,7 @@ function libxml_get_errors()
 /**
  * Converts a packed internet address to a human readable representation.
  *
- * @param  string                       Converts a packed internet address to a human readable representation.
+ * @param  string                       $in_addr Converts a packed internet address to a human readable representation.
  * @return string                       A string representation of the address (false: error).
  */
 function inet_ntop($in_addr)
@@ -6108,10 +6108,10 @@ function inet_ntop($in_addr)
 /**
  * Format line as CSV and write to file pointer.
  *
- * @param  resource                     File pointer.
- * @param  array                        An array of values.
- * @param  string                       The optional delimiter parameter sets the field delimiter (one character only).
- * @param  string                       The optional enclosure parameter sets the field enclosure (one character only).
+ * @param  resource                     $handle File pointer.
+ * @param  array                        $fields An array of values.
+ * @param  string                       $delimiter The optional delimiter parameter sets the field delimiter (one character only).
+ * @param  string                       ' The optional enclosure parameter sets the field enclosure (one character only).
  * @return ~integer                     The length of the written string (false: error).
  */
 function fputcsv($handle, $fields, $delimiter = ',', $enclosure = '"')
@@ -6122,7 +6122,7 @@ function fputcsv($handle, $fields, $delimiter = ',', $enclosure = '"')
 /**
  * Finds whether a value is not a number.
  *
- * @param  float                        The value to check.
+ * @param  float                        $val The value to check.
  * @return boolean                      Answer.
  */
 function is_nan($val)
@@ -6133,7 +6133,7 @@ function is_nan($val)
 /**
  * Finds whether a value is a legal finite number.
  *
- * @param  float                        The value to check.
+ * @param  float                        $val The value to check.
  * @return boolean                      Answer.
  */
 function is_finite($val)
@@ -6144,7 +6144,7 @@ function is_finite($val)
 /**
  * Finds whether a value is infinite.
  *
- * @param  float                        The value to check.
+ * @param  float                        $val The value to check.
  * @return boolean                      Answer.
  */
 function is_infinite($val)
@@ -6155,9 +6155,9 @@ function is_infinite($val)
 /**
  * Split an array into chunks.
  *
- * @param  array                        The array to work on.
- * @param  integer                      The size of each chunk.
- * @param  boolean                      When set to TRUE keys will be preserved. Default is FALSE which will reindex the chunk numerically.
+ * @param  array                        $input The array to work on.
+ * @param  integer                      $size The size of each chunk.
+ * @param  boolean                      $preserve_keys When set to TRUE keys will be preserved. Default is FALSE which will reindex the chunk numerically.
  * @return array                        A multidimensional numerically indexed array, starting with zero, with each dimension containing size elements.
  */
 function array_chunk($input, $size, $preserve_keys = false)
@@ -6168,9 +6168,9 @@ function array_chunk($input, $size, $preserve_keys = false)
 /**
  * Fill an array with values.
  *
- * @param  integer                      The first index of the returned array. If start_index is negative, the first index of the returned array will be start_index and the following indices will start from zero.
- * @param  integer                      Number of elements to insert. Must be greater than zero.
- * @param  mixed                        Value to use for filling.
+ * @param  integer                      $start_index The first index of the returned array. If start_index is negative, the first index of the returned array will be start_index and the following indices will start from zero.
+ * @param  integer                      $num Number of elements to insert. Must be greater than zero.
+ * @param  mixed                        $value Value to use for filling.
  * @return array                        The filled array.
  */
 function array_fill($start_index, $num, $value)
@@ -6181,8 +6181,8 @@ function array_fill($start_index, $num, $value)
 /**
  * Changes all keys in an array.
  *
- * @param  array                        The array to work on.
- * @param  integer                      Either CASE_UPPER or CASE_LOWER.
+ * @param  array                        $input The array to work on.
+ * @param  integer                      $case Either CASE_UPPER or CASE_LOWER.
  * @return array                        An array with its keys lower or uppercased.
  */
 function array_change_key_case($input, $case)
@@ -6193,10 +6193,10 @@ function array_change_key_case($input, $case)
 /**
  * Reads the EXIF headers from JPEG or TIFF.
  *
- * @param  PATH                         The name of the image file being read. This cannot be an URL.
- * @param  ?string                      Is a comma separated list of sections that need to be present in file to produce a result array (null: no filter).
- * @param  boolean                      Specifies whether or not each section becomes an array.
- * @param  boolean                      When set to TRUE the thumbnail itself is read. Otherwise, only the tagged data is read.
+ * @param  PATH                         $filename The name of the image file being read. This cannot be an URL.
+ * @param  ?string                      $sections Is a comma separated list of sections that need to be present in file to produce a result array (null: no filter).
+ * @param  boolean                      $arrays Specifies whether or not each section becomes an array.
+ * @param  boolean                      $thumbnail When set to TRUE the thumbnail itself is read. Otherwise, only the tagged data is read.
  * @return ~array                       An associative array where the array indexes are the header names and the array values are the values associated with those headers (false: error).
  */
 function exif_read_data($filename, $sections = null, $arrays = false, $thumbnail = false)
@@ -6207,8 +6207,8 @@ function exif_read_data($filename, $sections = null, $arrays = false, $thumbnail
 /**
  * Outputs or returns a parsable string representation of a variable.
  *
- * @param  mixed                        The variable you want to export.
- * @param  boolean                      If used and set to TRUE, var_export() will return the variable representation instead of outputting it.
+ * @param  mixed                        $expression The variable you want to export.
+ * @param  boolean                      $return If used and set to TRUE, var_export() will return the variable representation instead of outputting it.
  * @return ?string                      Variable representation (null: asked to not return a value).
  */
 function var_export($expression, $return = false)
@@ -6219,8 +6219,8 @@ function var_export($expression, $return = false)
 /**
  * Creates a stream context.
  *
- * @param  ?array                       Options (null: none).
- * @param  ?array                       Parameters (null: none). Usually options is used, parameters not needed and refers to standard parameters for all context types.
+ * @param  ?array                       $options Options (null: none).
+ * @param  ?array                       $params Parameters (null: none). Usually options is used, parameters not needed and refers to standard parameters for all context types.
  * @return resource                     Stream context.
  */
 function stream_context_create($options = null, $params = null)

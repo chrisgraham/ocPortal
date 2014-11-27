@@ -38,7 +38,7 @@ class Hook_ipb_base
     /**
      * Decode an IPB post to be plain-text (ala comcode).
      *
-     * @param  LONG_TEXT                IPB post
+     * @param  LONG_TEXT                $post IPB post
      * @return LONG_TEXT                The cleaned post
      */
     public function clean_ipb_post($post)
@@ -51,7 +51,7 @@ class Hook_ipb_base
     /**
      * Fix non-XHTML parts of IPB posts.
      *
-     * @param  LONG_TEXT                IPB post
+     * @param  LONG_TEXT                $post IPB post
      * @return LONG_TEXT                The cleaned post
      */
     public function clean_ipb_post_2($post)
@@ -63,7 +63,7 @@ class Hook_ipb_base
     /**
      * Probe a file path for DB access details.
      *
-     * @param  string                   The probe path
+     * @param  string                   $file_base The probe path
      * @return array                    A quartet of the details (db_name, db_user, db_pass, table_prefix)
      */
     public function probe_db_access($file_base)
@@ -81,9 +81,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_groups($db, $table_prefix, $file_base)
     {
@@ -174,9 +174,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_calendar($db, $table_prefix, $file_base)
     {
@@ -276,9 +276,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_members($db, $table_prefix, $file_base)
     {
@@ -386,9 +386,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_member_files($db, $table_prefix, $file_base)
     {
@@ -502,9 +502,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_custom_profile_fields($db, $table_prefix, $file_base)
     {
@@ -542,9 +542,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_topics($db, $table_prefix, $file_base)
     {
@@ -622,9 +622,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_posts($db, $table_prefix, $file_base)
     {
@@ -713,9 +713,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_post_files($db, $table_prefix, $file_base)
     {
@@ -823,9 +823,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_polls_and_votes($db, $table_prefix, $file_base)
     {
@@ -885,9 +885,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_multi_moderations($db, $table_prefix, $file_base)
     {
@@ -923,9 +923,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_notifications($db, $table_prefix, $file_base)
     {
@@ -978,9 +978,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_ocf_warnings($db, $table_prefix, $file_base)
     {
@@ -1008,9 +1008,9 @@ class Hook_ipb_base
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_wordfilter($db, $table_prefix, $file_base)
     {

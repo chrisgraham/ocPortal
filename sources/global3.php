@@ -145,7 +145,7 @@ function init__global3()
 /**
  * Get the file extension of the specified file. It returns without a dot.
  *
- * @param  string                       The filename
+ * @param  string                       $name The filename
  * @return string                       The filename extension (no dot)
  */
 function get_file_extension($name)
@@ -179,8 +179,8 @@ function is_suexec_like()
 /**
  * Ensure that the specified file/folder is writeable for the FTP user (so that it can be deleted by the system), and should be called whenever a file is uploaded/created, or a folder is made. We call this function assuming we are giving world permissions
  *
- * @param  PATH                         The full pathname to the file/directory
- * @param  integer                      The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
+ * @param  PATH                         $url The full pathname to the file/directory
+ * @param  integer                      $byte_limit The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
  */
 function fix_permissions($path, $perms = 0666) // We call this function assuming we are giving world permissions
 {
@@ -210,26 +210,26 @@ function fix_permissions($path, $perms = 0666) // We call this function assuming
 /**
  * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
  *
- * @param  URLPATH                      The URL to download
- * @param  ?integer                     The number of bytes to download. This is not a guarantee, it is a minimum (null: all bytes)
+ * @param  URLPATH                      $url The URL to download
+ * @param  ?integer                     $byte_limit The number of bytes to download. This is not a guarantee, it is a minimum (null: all bytes)
  * @range  1 max
- * @param  boolean                      Whether to throw an ocPortal error, on error
- * @param  boolean                      Whether to block redirects (returns NULL when found)
- * @param  string                       The user-agent to identify as
- * @param  ?array                       An optional array of POST parameters to send; if this is NULL, a GET request is used (null: none)
- * @param  ?array                       An optional array of cookies to send (null: none)
- * @param  ?string                      'accept' header value (null: don't pass one)
- * @param  ?string                      'accept-charset' header value (null: don't pass one)
- * @param  ?string                      'accept-language' header value (null: don't pass one)
- * @param  ?resource                    File handle to write to (null: do not do that)
- * @param  ?string                      The HTTP referer (null: none)
- * @param  ?array                       A pair: authentication username and password (null: none)
- * @param  float                        The timeout
- * @param  boolean                      Whether to treat the POST parameters as a raw POST (rather than using MIME)
- * @param  ?array                       Files to send. Map between field to file path (null: none)
- * @param  ?array                       Extra headers to send (null: none)
- * @param  ?string                      HTTP verb (null: auto-decide based on other parameters)
- * @param  string                       The content type to use if a raw HTTP post
+ * @param  boolean                      $trigger_error Whether to throw an ocPortal error, on error
+ * @param  boolean                      $no_redirect Whether to block redirects (returns NULL when found)
+ * @param  string                       $ua The user-agent to identify as
+ * @param  ?array                       $post_params An optional array of POST parameters to send; if this is NULL, a GET request is used (null: none)
+ * @param  ?array                       $cookies An optional array of cookies to send (null: none)
+ * @param  ?string                      $accept 'accept' header value (null: don't pass one)
+ * @param  ?string                      $accept_charset 'accept-charset' header value (null: don't pass one)
+ * @param  ?string                      $accept_language 'accept-language' header value (null: don't pass one)
+ * @param  ?resource                    $write_to_file File handle to write to (null: do not do that)
+ * @param  ?string                      $referer The HTTP referer (null: none)
+ * @param  ?array                       $auth A pair: authentication username and password (null: none)
+ * @param  float                        $timeout The timeout
+ * @param  boolean                      $raw_post Whether to treat the POST parameters as a raw POST (rather than using MIME)
+ * @param  ?array                       $files Files to send. Map between field to file path (null: none)
+ * @param  ?array                       $extra_headers Extra headers to send (null: none)
+ * @param  ?string                      $http_verb HTTP verb (null: auto-decide based on other parameters)
+ * @param  string                       $raw_content_type The content type to use if a raw HTTP post
  * @return ?string                      The data downloaded (null: error)
  */
 function http_download_file($url, $byte_limit = null, $trigger_error = true, $no_redirect = false, $ua = 'ocPortal', $post_params = null, $cookies = null, $accept = null, $accept_charset = null, $accept_language = null, $write_to_file = null, $referer = null, $auth = null, $timeout = 6.0, $raw_post = false, $files = null, $extra_headers = null, $http_verb = null, $raw_content_type = 'application/xml')
@@ -246,8 +246,8 @@ function http_download_file($url, $byte_limit = null, $trigger_error = true, $no
  *
  * @sets_output_state
  *
- * @param  boolean                      Whether to only restore the Tempcode execution part of the state.
- * @param  boolean                      Whether to go for a completely blank state (no defaults!), not just a default fresh state.
+ * @param  boolean                      $just_tempcode Whether to only restore the Tempcode execution part of the state.
+ * @param  boolean                      $true_blank Whether to go for a completely blank state (no defaults!), not just a default fresh state.
  */
 function _load_blank_output_state($just_tempcode = false, $true_blank = false)
 {
@@ -344,8 +344,8 @@ function _load_blank_output_state($just_tempcode = false, $true_blank = false)
  *
  * @sets_output_state
  *
- * @param  boolean                      Whether to only restore the Tempcode execution part of the state.
- * @param  boolean                      Whether to go for a completely blank state (no defaults!), not just a default fresh state.
+ * @param  boolean                      $just_tempcode Whether to only restore the Tempcode execution part of the state.
+ * @param  boolean                      $true_blank Whether to go for a completely blank state (no defaults!), not just a default fresh state.
  */
 function push_output_state($just_tempcode = false, $true_blank = false)
 {
@@ -363,9 +363,9 @@ function push_output_state($just_tempcode = false, $true_blank = false)
  *
  * @sets_output_state
  *
- * @param  boolean                      Whether to only restore the Tempcode execution part of the state.
- * @param  boolean                      Whether to merge the current output state in.
- * @param  ?array                       Settings to keep / merge if possible (null: none).
+ * @param  boolean                      $just_tempcode Whether to only restore the Tempcode execution part of the state.
+ * @param  boolean                      $merge_current Whether to merge the current output state in.
+ * @param  ?array                       $keep Settings to keep / merge if possible (null: none).
  */
 function restore_output_state($just_tempcode = false, $merge_current = false, $keep = null)
 {
@@ -410,11 +410,11 @@ function restore_output_state($just_tempcode = false, $merge_current = false, $k
 /**
  * Turn the tempcode lump into a standalone page.
  *
- * @param  ?tempcode                    The tempcode to put into a nice frame (null: support output streaming mode)
- * @param  ?mixed                       'Additional' message (null: none)
- * @param  string                       The type of special message
+ * @param  ?tempcode                    $middle The tempcode to put into a nice frame (null: support output streaming mode)
+ * @param  ?mixed                       $message 'Additional' message (null: none)
+ * @param  string                       $type The type of special message
  * @set    inform warn ""
- * @param  boolean                      Whether to include the header/footer/panels
+ * @param  boolean                      $include_header_and_footer Whether to include the header/footer/panels
  * @return tempcode                     Standalone page
  */
 function globalise($middle, $message = null, $type = '', $include_header_and_footer = false)
@@ -479,7 +479,7 @@ function globalise($middle, $message = null, $type = '', $include_header_and_foo
  *
  * @sets_output_state
  *
- * @param  mixed                        XHTML to attach (Tempcode or string)
+ * @param  mixed                        $data XHTML to attach (Tempcode or string)
  */
 function attach_to_screen_footer($data)
 {
@@ -495,7 +495,7 @@ function attach_to_screen_footer($data)
  *
  * @sets_output_state
  *
- * @param  array                        Extra meta-data
+ * @param  array                        $meta_data Extra meta-data
  */
 function set_extra_request_metadata($meta_data)
 {
@@ -508,7 +508,7 @@ function set_extra_request_metadata($meta_data)
  *
  * @sets_output_state
  *
- * @param  string                       The HTTP status code (should be numeric)
+ * @param  string                       $code The HTTP status code (should be numeric)
  */
 function set_http_status_code($code)
 {
@@ -542,13 +542,13 @@ function set_http_status_code($code)
 /**
  * Search for a template.
  *
- * @param  ID_TEXT                      The codename of the template being loaded
- * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (null: users own language)
- * @param  ID_TEXT                      The theme to use
- * @param  string                       File type suffix of template file (e.g. .tpl)
- * @param  string                       Subdirectory type to look in
+ * @param  ID_TEXT                      $codename The codename of the template being loaded
+ * @param  ?LANGUAGE_NAME               $lang The language to load the template in (templates can embed language references) (null: users own language)
+ * @param  ID_TEXT                      $theme The theme to use
+ * @param  string                       $suffix File type suffix of template file (e.g. .tpl)
+ * @param  string                       $directory Subdirectory type to look in
  * @set    templates css
- * @param  boolean                      Whether to only search in the default templates
+ * @param  boolean                      $non_custom_only Whether to only search in the default templates
  * @return ?array                       List of parameters needed for the _do_template function to be able to load the template (null: could not find the template)
  */
 function find_template_place($codename, $lang, $theme, $suffix, $directory, $non_custom_only = false)
@@ -660,7 +660,7 @@ function is_wide()
  * The fix is imperfect, it will actually treat the input as ISO-8859-1 if not valid utf-8, then reconvert. Some limited scrambling is considered better than a stack trace.
  * This function does nothing if we are not using utf-8.
  *
- * @param  string                       Input string
+ * @param  string                       $input Input string
  * @return string                       Guaranteed valid utf-8, if we're using it, otherwise the same as the input string
  */
 function fix_bad_unicode($input)
@@ -686,7 +686,7 @@ function fix_bad_unicode($input)
 /**
  * Get string length, with utf-8 awareness where possible/required.
  *
- * @param  string                       The string to get the length of.
+ * @param  string                       $in The string to get the length of.
  * @return integer                      The string length.
  */
 function ocp_mb_strlen($in)
@@ -706,10 +706,10 @@ function ocp_mb_strlen($in)
 /**
  * Return part of a string, with utf-8 awareness where possible/required.
  *
- * @param  string                       The subject.
- * @param  integer                      The start position.
- * @param  ?integer                     The length to extract (null: all remaining).
- * @param  boolean                      Whether to force unicode as on.
+ * @param  string                       $in The subject.
+ * @param  integer                      $from The start position.
+ * @param  ?integer                     $amount The length to extract (null: all remaining).
+ * @param  boolean                      $force Whether to force unicode as on.
  * @return ~string                      String part (false: $start was over the end of the string).
  */
 function ocp_mb_substr($in, $from, $amount = null, $force = false)
@@ -746,7 +746,7 @@ function ocp_mb_substr($in, $from, $amount = null, $force = false)
 /**
  * Make a string title-case, with utf-8 awareness where possible/required.
  *
- * @param  string                       Subject.
+ * @param  string                       $in Subject.
  * @return string                       Result.
  */
 function ocp_mb_ucwords($in)
@@ -765,7 +765,7 @@ function ocp_mb_ucwords($in)
 /**
  * Make a string lowercase, with utf-8 awareness where possible/required.
  *
- * @param  string                       Subject.
+ * @param  string                       $in Subject.
  * @return string                       Result.
  */
 function ocp_mb_strtolower($in)
@@ -784,7 +784,7 @@ function ocp_mb_strtolower($in)
 /**
  * Make a string uppercase, with utf-8 awareness where possible/required.
  *
- * @param  string                       Subject.
+ * @param  string                       $in Subject.
  * @return string                       Result.
  */
 function ocp_mb_strtoupper($in)
@@ -803,7 +803,7 @@ function ocp_mb_strtoupper($in)
 /**
  * Trim white-space.
  *
- * @param  string                       Subject.
+ * @param  string                       $in Subject.
  * @return string                       Result.
  */
 function ocp_mb_trim($in)
@@ -818,7 +818,7 @@ function ocp_mb_trim($in)
 /**
  * Find if we a string is ASCII, and hence we can use non-UTF-safe functions on it.
  *
- * @param  string                       String to test
+ * @param  string                       $x String to test
  * @return boolean                      Whether it is ASCII
  */
 function is_ascii_string($x)
@@ -835,7 +835,7 @@ function is_ascii_string($x)
 /**
  * Find whether a file/directory is writeable. This function is designed to get past that the PHP is_writable function does not work properly on Windows.
  *
- * @param  PATH                         The file path
+ * @param  PATH                         $path The file path
  * @return boolean                      Whether the file is writeable
  */
 function is_writable_wrap($path)
@@ -873,7 +873,7 @@ function is_writable_wrap($path)
 /**
  * Discern the cause of a file-write error, and show an appropriate error message.
  *
- * @param PATH       File path that could not be written (full path, not relative)
+ * @param PATH       $path File path that could not be written (full path, not relative)
  */
 function intelligent_write_error($path)
 {
@@ -884,7 +884,7 @@ function intelligent_write_error($path)
 /**
  * Discern the cause of a file-write error, and return an appropriate error message.
  *
- * @param  PATH                         File path that could not be written
+ * @param  PATH                         $path File path that could not be written
  * @return tempcode                     Message
  */
 function intelligent_write_error_inline($path)
@@ -922,8 +922,8 @@ function has_no_forum()
 /**
  * Check to see if an addon is installed.
  *
- * @param  ID_TEXT                      The module name
- * @param  boolean                      Whether to check non-bundled addons (ones without an addon_registry hook)
+ * @param  ID_TEXT                      $addon The module name
+ * @param  boolean                      $non_bundled_too Whether to check non-bundled addons (ones without an addon_registry hook)
  * @return boolean                      Whether it is
  */
 function addon_installed($addon, $non_bundled_too = false)
@@ -956,9 +956,9 @@ function addon_installed($addon, $non_bundled_too = false)
 /**
  * Convert a float to a "technical string representation of a float".
  *
- * @param  float                        The number
- * @param  integer                      The number of decimals to keep
- * @param  boolean                      Whether to trim trailing zeros
+ * @param  float                        $num The number
+ * @param  integer                      $decs_wanted The number of decimals to keep
+ * @param  boolean                      $only_needed_decs Whether to trim trailing zeros
  * @return string                       The string converted
  */
 function float_to_raw_string($num, $decs_wanted = 2, $only_needed_decs = false)
@@ -984,9 +984,9 @@ function float_to_raw_string($num, $decs_wanted = 2, $only_needed_decs = false)
 /**
  * Format the given float number as a nicely formatted string.
  *
- * @param  float                        The value to format
- * @param  integer                      The number of fractional digits
- * @param  boolean                      Whether to trim trailing zeros
+ * @param  float                        $val The value to format
+ * @param  integer                      $decs_wanted The number of fractional digits
+ * @param  boolean                      $only_needed_decs Whether to trim trailing zeros
  * @return string                       Nicely formatted string
  */
 function float_format($val, $decs_wanted = 2, $only_needed_decs = false)
@@ -1016,7 +1016,7 @@ function float_format($val, $decs_wanted = 2, $only_needed_decs = false)
 /**
  * Format the given integer number as a nicely formatted string.
  *
- * @param  integer                      The value to format
+ * @param  integer                      $val The value to format
  * @return string                       Nicely formatted string
  */
 function integer_format($val)
@@ -1034,8 +1034,8 @@ function integer_format($val)
 /**
  * Sort a list of maps by the string length of a particular key ID in the maps.
  *
- * @param  array                        List of maps to sort
- * @param  mixed                        Either an integer sort key (to sort by integer key ID of contained arrays) or a String sort key (to sort by string key ID of contained arrays).
+ * @param  array                        $rows List of maps to sort
+ * @param  mixed                        $sort_key Either an integer sort key (to sort by integer key ID of contained arrays) or a String sort key (to sort by string key ID of contained arrays).
  */
 function sort_maps_by__strlen($rows, $sort_key)
 {
@@ -1047,8 +1047,8 @@ function sort_maps_by__strlen($rows, $sort_key)
 /**
  * Helper function for usort to sort a list by string length.
  *
- * @param  string                       The first string to compare
- * @param  string                       The second string to compare
+ * @param  string                       $a The first string to compare
+ * @param  string                       $b The second string to compare
  * @return integer                      The comparison result (0 for equal, -1 for less, 1 for more)
  */
 function _strlen_sort($a, $b)
@@ -1072,8 +1072,8 @@ function _strlen_sort($a, $b)
 /**
  * Sort a list of maps by a particular key ID in the maps.
  *
- * @param  array                        List of maps to sort
- * @param  mixed                        Either an integer sort key (to sort by integer key ID of contained arrays) or a Comma-separated list of sort keys (to sort by string key ID of contained arrays; prefix '!' a key to reverse the sort order for it).
+ * @param  array                        &$rows List of maps to sort
+ * @param  mixed                        $sort_keys Either an integer sort key (to sort by integer key ID of contained arrays) or a Comma-separated list of sort keys (to sort by string key ID of contained arrays; prefix '!' a key to reverse the sort order for it).
  */
 function sort_maps_by(&$rows, $sort_keys)
 {
@@ -1085,8 +1085,8 @@ function sort_maps_by(&$rows, $sort_keys)
 /**
  * Do a user sort, preserving order where reordering not needed. Based on a PHP manual comment at http://php.net/manual/en/function.usort.php
  *
- * @param  array                        Sort array
- * @param  mixed                        Comparison function
+ * @param  array                        &$array Sort array
+ * @param  mixed                        $cmp_function Comparison function
  */
 function merge_sort(&$array, $cmp_function = 'strcmp')
 {
@@ -1166,8 +1166,8 @@ function merge_sort(&$array, $cmp_function = 'strcmp')
 /**
  * Helper function to sort a list of maps by the value at $key in each of those maps.
  *
- * @param  array                        The first to compare
- * @param  array                        The second to compare
+ * @param  array                        $a The first to compare
+ * @param  array                        $b The second to compare
  * @return integer                      The comparison result (0 for equal, -1 for less, 1 for more)
  */
 function _multi_sort($a, $b)
@@ -1243,7 +1243,7 @@ function ocf_require_all_forum_stuff()
 /**
  * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
  *
- * @param  string                       The prefix of the temporary file name.
+ * @param  string                       $prefix The prefix of the temporary file name.
  * @return ~string                      The name of the temporary file (false: error).
  */
 function ocp_tempnam($prefix)
@@ -1255,8 +1255,8 @@ function ocp_tempnam($prefix)
 /**
  * Peek at a stack element.
  *
- * @param  array                        The stack to peek in
- * @param  integer                      The depth into the stack we are peaking
+ * @param  array                        $array The stack to peek in
+ * @param  integer                      $depth_down The depth into the stack we are peaking
  * @return mixed                        The result of the peeking
  */
 function array_peek($array, $depth_down = 1)
@@ -1271,7 +1271,7 @@ function array_peek($array, $depth_down = 1)
 /**
  * Make a value suitable for use in an XML ID.
  *
- * @param  string                       The value to escape
+ * @param  string                       $param The value to escape
  * @return string                       The escaped value
  */
 function fix_id($param)
@@ -1332,11 +1332,11 @@ function fix_id($param)
 /**
  * See if the current URL matches the given ocPortal match-keys.
  *
- * @param  string                       Match keys
- * @param  boolean                      Check against POSTed data too
- * @param  ?array                       Parameters to check against (null: get from environment GET/POST) - if set, $support_post is ignored)
- * @param  ?ID_TEXT                     Current zone name (null: get from environment)
- * @param  ?ID_TEXT                     Current page name (null: get from environment)
+ * @param  string                       $match_key Match keys
+ * @param  boolean                      $support_post Check against POSTed data too
+ * @param  ?array                       $current_params Parameters to check against (null: get from environment GET/POST) - if set, $support_post is ignored)
+ * @param  ?ID_TEXT                     $current_zone_name Current zone name (null: get from environment)
+ * @param  ?ID_TEXT                     $current_page_name Current page name (null: get from environment)
  * @return boolean                      Whether there is a match
  */
 function match_key_match($match_key, $support_post = false, $current_params = null, $current_zone_name = null, $current_page_name = null)
@@ -1440,8 +1440,8 @@ function get_page_name()
 /**
  * Take a list of maps, and make one of the values of each array the index of a map to the map
  *
- * @param  string                       The key key of our maps that reside in our map
- * @param  array                        The list of maps
+ * @param  string                       $map_value The key key of our maps that reside in our map
+ * @param  array                        $list The list of maps
  * @return array                        The collapsed map
  */
 function list_to_map($map_value, $list)
@@ -1466,9 +1466,9 @@ function list_to_map($map_value, $list)
 /**
  * Take a list of maps of just two elements, and make it into a single map
  *
- * @param  string                       The key key of our maps that reside in our map
- * @param  string                       The value key of our maps that reside in our map
- * @param  array                        The map of maps
+ * @param  string                       $key The key key of our maps that reside in our map
+ * @param  string                       $value The value key of our maps that reside in our map
+ * @param  array                        $list The map of maps
  * @return array                        The collapsed map
  */
 function collapse_2d_complexity($key, $value, $list)
@@ -1484,8 +1484,8 @@ function collapse_2d_complexity($key, $value, $list)
 /**
  * Take a list of maps of just one element, and make it into a single map
  *
- * @param  string                       The key of our maps that reside in our map
- * @param  array                        The map of maps
+ * @param  string                       $key The key of our maps that reside in our map
+ * @param  array                        $list The map of maps
  * @return array                        The collapsed map
  */
 function collapse_1d_complexity($key, $list)
@@ -1501,7 +1501,7 @@ function collapse_1d_complexity($key, $list)
 /**
  * Get server environment variables.
  *
- * @param  string                       The variable name
+ * @param  string                       $key The variable name
  * @return string                       The variable value ('' means unknown)
  */
 function ocp_srv($key)
@@ -1550,7 +1550,7 @@ function ocp_srv($key)
 /**
  * Find whether an IP address is valid
  *
- * @param  IP                           IP address to check.
+ * @param  IP                           $ip IP address to check.
  * @return boolean                      Whether the IP address is valid.
  */
 function is_valid_ip($ip)
@@ -1583,9 +1583,9 @@ function is_valid_ip($ip)
 /**
  * Attempt to get the clean IP address of the current user
  *
- * @param  integer                      The number of groups to include in the IP address (rest will be replaced with *'s). For IP6, this is doubled.
+ * @param  integer                      $amount The number of groups to include in the IP address (rest will be replaced with *'s). For IP6, this is doubled.
  * @set    1 2 3 4
- * @param  ?IP                          IP address to use, normally left NULL (null: current user's)
+ * @param  ?IP                          $ip IP address to use, normally left NULL (null: current user's)
  * @return IP                           The users IP address (blank: could not find a valid one)
  */
 function get_ip_address($amount = 4, $ip = null)
@@ -1662,8 +1662,8 @@ function get_ip_address($amount = 4, $ip = null)
 /**
  * Exit with debug data, only for a specific IP address.
  *
- * @param  IP                           IP address of tester
- * @param  mixed                        Data to display
+ * @param  IP                           $ip IP address of tester
+ * @param  mixed                        $data Data to display
  */
 function me_debug($ip, $data)
 {
@@ -1726,8 +1726,8 @@ function cron_installed()
 /**
  * Compare two IP addresses for potential correlation. Not as simple as equality due to '*' syntax.
  *
- * @param  string                       The general IP address that is potentially wildcarded
- * @param  IP                           The specific IP address we are checking
+ * @param  string                       $wild The general IP address that is potentially wildcarded
+ * @param  IP                           $full The specific IP address we are checking
  * @return boolean                      Whether the IP addresses correlate
  */
 function compare_ip_address($wild, $full)
@@ -1745,8 +1745,8 @@ function compare_ip_address($wild, $full)
 /**
  * Compare two IP addresses for potential correlation. Not as simple as equality due to '*' syntax. IP4-only variant
  *
- * @param  string                       The general IP address that is potentially wildcarded
- * @param  array                        The exploded parts of the specific IP address we are checking
+ * @param  string                       $wild The general IP address that is potentially wildcarded
+ * @param  array                        $full_parts The exploded parts of the specific IP address we are checking
  * @return boolean                      Whether the IP addresses correlate
  */
 function compare_ip_address_ip4($wild, $full_parts)
@@ -1763,8 +1763,8 @@ function compare_ip_address_ip4($wild, $full_parts)
 /**
  * Compare two IP addresses for potential correlation. Not as simple as equality due to '*' syntax. IP6-only variant
  *
- * @param  string                       The general IP address that is potentially wildcarded
- * @param  array                        The exploded parts of the specific IP address we are checking
+ * @param  string                       $wild The general IP address that is potentially wildcarded
+ * @param  array                        $full_parts The exploded parts of the specific IP address we are checking
  * @return boolean                      Whether the IP addresses correlate
  */
 function compare_ip_address_ip6($wild, $full_parts)
@@ -1781,9 +1781,9 @@ function compare_ip_address_ip6($wild, $full_parts)
 /**
  * Check to see if an IP address is banned.
  *
- * @param  string                       The IP address to check for banning (potentially encoded with *'s)
- * @param  boolean                      Force check via database
- * @param  boolean                      Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
+ * @param  string                       $type The IP address to check for banning (potentially encoded with *'s)
+ * @param  boolean                      $a Force check via database
+ * @param  boolean                      $b Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
  * @return ?boolean                     Whether the IP address is banned (null: unknown)
  */
 function ip_banned($ip, $force_db = false, $handle_uncertainties = false) // This is the very first query called, so we will be a bit smarter, checking for errors
@@ -1899,9 +1899,9 @@ function ip_banned($ip, $force_db = false, $handle_uncertainties = false) // Thi
 /**
  * Log an action
  *
- * @param  ID_TEXT                      The type of activity just carried out (a lang string)
- * @param  ?SHORT_TEXT                  The most important parameter of the activity (e.g. id) (null: none)
- * @param  ?SHORT_TEXT                  A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none)
+ * @param  ID_TEXT                      $type The type of activity just carried out (a lang string)
+ * @param  ?SHORT_TEXT                  $a The most important parameter of the activity (e.g. id) (null: none)
+ * @param  ?SHORT_TEXT                  $b A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (null: none)
  */
 function log_it($type, $a = null, $b = null)
 {
@@ -1912,7 +1912,7 @@ function log_it($type, $a = null, $b = null)
 /**
  * Escape a string to fit within PHP double quotes.
  *
- * @param  string                       String in
+ * @param  string                       $in String in
  * @return string                       Resultant string
  */
 function php_addslashes($in)
@@ -1925,8 +1925,8 @@ function php_addslashes($in)
 /**
  * Remove any duplication inside the list of rows (each row being a map). Duplication is defined by rows with correspinding IDs.
  *
- * @param  array                        The rows to remove duplication of
- * @param  string                       The ID field
+ * @param  array                        $rows The rows to remove duplication of
+ * @param  string                       $id_field The ID field
  * @return array                        The filtered rows
  */
 function remove_duplicate_rows($rows, $id_field = 'id')
@@ -1947,9 +1947,9 @@ function remove_duplicate_rows($rows, $id_field = 'id')
 /**
  * Update the member tracker for the currently viewing user.
  *
- * @param  ID_TEXT                      The page
- * @param  ID_TEXT                      The type
- * @param  ID_TEXT                      The ID
+ * @param  ID_TEXT                      $page The page
+ * @param  ID_TEXT                      $type The type
+ * @param  ID_TEXT                      $id The ID
  */
 function member_tracking_update($page, $type, $id)
 {
@@ -2064,7 +2064,7 @@ function get_num_users_peak()
 /**
  * Get the specified string, but with all characters escaped.
  *
- * @param  mixed                        The input string
+ * @param  mixed                        $string The input string
  * @return string                       The escaped string
  */
 function escape_html($string)
@@ -2101,7 +2101,7 @@ function escape_html($string)
 /**
  * See's if the current browser matches some special property code. Assumes users are keeping up on newish browsers (except for IE users, who are 6+)
  *
- * @param  string                       The property code
+ * @param  string                       $code The property code
  * @set    android ios wysiwyg windows mac linux odd_os mobile opera ie ie8 ie8+ ie9 ie9+ gecko konqueror safari odd_browser chrome bot
  * @return boolean                      Whether there is a match
  */
@@ -2202,8 +2202,8 @@ function browser_matches($code)
 /**
  * Look at the user's browser, and decide if they are viewing on a mobile device or not.
  *
- * @param  ?string                      The user agent (null: get from environment, current user's browser)
- * @param  boolean                      Whether to always tell the truth (even if the current page does not have mobile support)
+ * @param  ?string                      $user_agent The user agent (null: get from environment, current user's browser)
+ * @param  boolean                      $truth Whether to always tell the truth (even if the current page does not have mobile support)
  * @return boolean                      Whether the user is using a mobile device
  */
 function is_mobile($user_agent = null, $truth = false)
@@ -2434,8 +2434,8 @@ function has_js()
 /**
  * Turn an array into a humanely readable string.
  *
- * @param  array                        Array to convert
- * @param  boolean                      Whether PHP magic-quotes have already been cleaned out for the array
+ * @param  array                        $array Array to convert
+ * @param  boolean                      $already_stripped Whether PHP magic-quotes have already been cleaned out for the array
  * @return string                       A humanely readable version of the array.
  */
 function flatten_slashed_array($array, $already_stripped = false)
@@ -2458,7 +2458,7 @@ function flatten_slashed_array($array, $already_stripped = false)
 /**
  * Get a word-filtered version of the specified text.
  *
- * @param  string                       Text to filter
+ * @param  string                       $text Text to filter
  * @return string                       Filtered version of the input text
  */
 function wordfilter_text($text)
@@ -2484,8 +2484,8 @@ function mixed()
 /**
  * Get meta information for specified resource
  *
- * @param  ID_TEXT                      The type of resource (e.g. download)
- * @param  ID_TEXT                      The ID of the resource
+ * @param  ID_TEXT                      $type The type of resource (e.g. download)
+ * @param  ID_TEXT                      $id The ID of the resource
  * @return array                        A pair: The first element is the meta keyword string for the specified resource, and the other is the meta description string.
  */
 function seo_meta_get_for($type, $id)
@@ -2511,9 +2511,9 @@ function seo_meta_get_for($type, $id)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT                      The type of resource (e.g. download)
- * @param  ID_TEXT                      The ID of the resource
- * @param  ?string                      The page-specific title to use, in Comcode or plain-text format with possible HTML entities included [Comcode will later be stripped] (null: none)
+ * @param  ID_TEXT                      $type The type of resource (e.g. download)
+ * @param  ID_TEXT                      $id The ID of the resource
+ * @param  ?string                      $title The page-specific title to use, in Comcode or plain-text format with possible HTML entities included [Comcode will later be stripped] (null: none)
  */
 function seo_meta_load_for($type, $id, $title = null)
 {
@@ -2535,8 +2535,8 @@ function seo_meta_load_for($type, $id, $title = null)
 /**
  * Get Tempcode for tags, based on loaded up from SEO keywords (seo_meta_load_for).
  *
- * @param  ?ID_TEXT                     The search code for this tag content (e.g. downloads) (null: there is none)
- * @param  ?array                       Explicitly pass a list of tags instead (null: use loaded ones)
+ * @param  ?ID_TEXT                     $limit_to The search code for this tag content (e.g. downloads) (null: there is none)
+ * @param  ?array                       $the_tags Explicitly pass a list of tags instead (null: use loaded ones)
  * @return tempcode                     Loaded tag output (or blank if there are none)
  */
 function get_loaded_tags($limit_to = null, $the_tags = null)
@@ -2587,7 +2587,7 @@ function get_loaded_tags($limit_to = null, $the_tags = null)
 /**
  * Get the default page for a zone.
  *
- * @param  ID_TEXT                      Zone name
+ * @param  ID_TEXT                      $zone_name Zone name
  * @return ID_TEXT                      Default page
  */
 function get_zone_default_page($zone_name)
@@ -2635,7 +2635,7 @@ function get_zone_default_page($zone_name)
 /**
  * Turn a boring codename, into a "pretty" title.
  *
- * @param  ID_TEXT                      The codename
+ * @param  ID_TEXT                      $boring The codename
  * @return string                       The title
  */
 function titleify($boring)
@@ -2675,7 +2675,7 @@ function titleify($boring)
 /**
  * Propagate ocSelect through links.
  *
- * @param  ID_TEXT                      Prefix for main filter environment variable
+ * @param  ID_TEXT                      $prefix Prefix for main filter environment variable
  * @return array                        Extra URL mappings
  */
 function propagate_ocselect($prefix = '')
@@ -2711,9 +2711,9 @@ function propagate_ocselect_page_link()
 /**
  * Make some text fractionably editable (i.e. inline editable).
  *
- * @param  ID_TEXT                      Content type
- * @param  mixed                        Content ID
- * @param  mixed                        Content title (either unescaped string, or Compiled Comcode [i.e. Tempcode])
+ * @param  ID_TEXT                      $content_type Content type
+ * @param  mixed                        $id Content ID
+ * @param  mixed                        $title Content title (either unescaped string, or Compiled Comcode [i.e. Tempcode])
  * @return tempcode                     Inline editable HTML to put into output
  */
 function make_fractionable_editable($content_type, $id, $title)
@@ -2734,7 +2734,7 @@ function make_fractionable_editable($content_type, $id, $title)
 /**
  * Convert some HTML to plain text.
  *
- * @param  string                       HTML
+ * @param  string                       $in HTML
  * @return string                       Plain text
  */
 function strip_html($in)
@@ -2771,7 +2771,7 @@ function get_brand_base_url()
 /**
  * Get a URL to an ocPortal tutorial.
  *
- * @param  ID_TEXT                      Name of a tutorial
+ * @param  ID_TEXT                      $tutorial Name of a tutorial
  * @return URLPATH                      URL to a tutorial
  */
 function get_tutorial_url($tutorial)
@@ -2782,8 +2782,8 @@ function get_tutorial_url($tutorial)
 /**
  * Get a URL to an ocPortal.com page.
  *
- * @param  array                        URL map
- * @param  ID_TEXT                      Zone
+ * @param  array                        $params URL map
+ * @param  ID_TEXT                      $zone Zone
  * @return URLPATH                      URL to page
  */
 function get_brand_page_url($params, $zone)
@@ -2822,7 +2822,7 @@ function is_ocf_satellite_site()
 /**
  * Convert GUIDs to IDs in some text.
  *
- * @param  string                       Input text
+ * @param  string                       $text Input text
  * @return string                       Output text
  */
 function convert_guids_to_ids($text)
@@ -2846,7 +2846,7 @@ function convert_guids_to_ids($text)
 /**
  * Set if a mass-import is in progress.
  *
- * @param  boolean                      If it is
+ * @param  boolean                      $doing_mass_import If it is
  */
 function set_mass_import_mode($doing_mass_import = true)
 {
@@ -2868,7 +2868,7 @@ function get_mass_import_mode()
 /**
  * Prepare an argument for use literally in a command. Works around common PHP restrictions.
  *
- * @param  string                       The argument.
+ * @param  string                       $arg The argument.
  * @return string                       Escaped.
  */
 function escapeshellarg_wrap($arg)
@@ -2915,8 +2915,8 @@ function appengine_live_guard()
 /**
  * Check serialized data for objects, as a security measure.
  *
- * @param string     Serialized data
- * @param ?mixed     What to substitute if objects are contained (null: substitute null)
+ * @param string     &$data Serialized data
+ * @param ?mixed     $safe_replacement What to substitute if objects are contained (null: substitute null)
  */
 function secure_serialized_data(&$data, $safe_replacement = null)
 {
@@ -2962,9 +2962,9 @@ function secure_serialized_data(&$data, $safe_replacement = null)
 /**
  * Update a catalogue content field reference, to a new value.
  *
- * @param ID_TEXT    Content type
- * @param ID_TEXT    Old value
- * @param ID_TEXT    New value
+ * @param ID_TEXT    $type Content type
+ * @param ID_TEXT    $from Old value
+ * @param ID_TEXT    $to New value
  */
 function update_catalogue_content_ref($type, $from, $to)
 {
@@ -2981,7 +2981,7 @@ function update_catalogue_content_ref($type, $from, $to)
 /**
  * Start a profiling block, for a specified identifier (of your own choosing).
  *
- * @param  ID_TEXT                      Identifier
+ * @param  ID_TEXT                      $identifier Identifier
  */
 function ocp_profile_start_for($identifier)
 {
@@ -2992,8 +2992,8 @@ function ocp_profile_start_for($identifier)
 /**
  * End a profiling block, for a specified identifier (of your own choosing - but you must have started it with ocp_profile_start_for).
  *
- * @param  ID_TEXT                      Identifier
- * @param  ?string                      Longer details of what happened (e.g. a specific SQL query that ran) (null: none provided)
+ * @param  ID_TEXT                      $identifier Identifier
+ * @param  ?string                      $specifics Longer details of what happened (e.g. a specific SQL query that ran) (null: none provided)
  */
 function ocp_profile_end_for($identifier, $specifics = null)
 {

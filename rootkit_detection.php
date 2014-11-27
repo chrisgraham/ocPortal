@@ -216,7 +216,7 @@ rd_do_footer();
 /**
  * Search inside a directory for files.
  *
- * @param  SHORT_TEXT    The directory path to search.
+ * @param  SHORT_TEXT    $dir The directory path to search.
  * @return array            The HTML for the list box selection.
  */
 function rd_do_dir($dir)
@@ -282,7 +282,7 @@ END;
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT    Given master password
+ * @param  SHORT_TEXT    $password_given Given master password
  * @return boolean        Whether it is valid
  */
 function rk_check_master_password($password_given)

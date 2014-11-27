@@ -21,7 +21,7 @@
 /**
  * Special code to render Admin Zone Comcode pages with special significances.
  *
- * @param  ID_TEXT                      The page being loaded
+ * @param  ID_TEXT                      $codename The page being loaded
  */
 function adminzone_special_cases($codename)
 {
@@ -60,7 +60,7 @@ function adminzone_special_cases($codename)
 /**
  * Extend breadcrumbs for the Admin Zone (called by breadcrumbs_get_default_stub).
  *
- * @param  tempcode                     Reference to the breadcrumbs stub we're assembling
+ * @param  tempcode                     &$stub Reference to the breadcrumbs stub we're assembling
  */
 function adminzone_extend_breadcrumbs(&$stub)
 {

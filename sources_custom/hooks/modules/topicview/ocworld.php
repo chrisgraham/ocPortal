@@ -21,7 +21,7 @@ class Hook_topicview_ocworld
     /**
      * Execute the module.
      *
-     * @param  MEMBER                   The ID of the member we are getting detail hooks for
+     * @param  MEMBER                   $member_id The ID of the member we are getting detail hooks for
      * @return ?tempcode                Results (null: no action)
      */
     public function run($member_id)

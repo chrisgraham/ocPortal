@@ -90,8 +90,8 @@ function realtime_rain_script()
 /**
  * Get all the events within a timestamp range.
  *
- * @param  TIME                         From time (inclusive).
- * @param  TIME                         To time (inclusive).
+ * @param  TIME                         $from From time (inclusive).
+ * @param  TIME                         $to To time (inclusive).
  * @return array                        List of template parameter sets (perfect for use in a Tempcode LOOP).
  */
 function get_realtime_events($from, $to)
@@ -113,7 +113,7 @@ function get_realtime_events($from, $to)
 /**
  * Make a realtime event bubble's title fit in the available space.
  *
- * @param  string                       Idealised title.
+ * @param  string                       $text Idealised title.
  * @return string                       Cropped title, with tooltip for full title.
  */
 function rain_truncate_for_title($text)
@@ -124,7 +124,7 @@ function rain_truncate_for_title($text)
 /**
  * Get a country flag image for an IP address.
  *
- * @param  IP                           An IP address.
+ * @param  IP                           $ip_address An IP address.
  * @return URLPATH                      Country flag image (blank: could not find one).
  */
 function rain_get_country_image($ip_address)
@@ -145,10 +145,10 @@ function rain_get_country_image($ip_address)
 /**
  * Returns a map with an icon and multiplicity parameter (that may be NULL).
  *
- * @param  ?IP                          An IP address (used to check against bots) (null: no IP).
- * @param  TIME                         A timestamp (used to check for logged sent emails).
- * @param  ?string                      A user agent (used to check against phones) (null: no user agent).
- * @param  ?string                      News ticker news (null: no news ticker news).
+ * @param  ?IP                          $ip_address An IP address (used to check against bots) (null: no IP).
+ * @param  TIME                         $timestamp A timestamp (used to check for logged sent emails).
+ * @param  ?string                      $user_agent A user agent (used to check against phones) (null: no user agent).
+ * @param  ?string                      $news News ticker news (null: no news ticker news).
  * @return array                        Map with an icon and multiplicity parameter.
  */
 function rain_get_special_icons($ip_address, $timestamp, $user_agent = null, $news = null)

@@ -48,7 +48,7 @@ function bump_password_times_forward()
 /**
  * Find if a member's account has expired, due to inactivity.
  *
- * @param  MEMBER                       The member this is for
+ * @param  MEMBER                       $member_id The member this is for
  * @return boolean                      Whether it is
  */
 function member_password_expired($member_id)
@@ -68,7 +68,7 @@ function member_password_expired($member_id)
 /**
  * Find if a member's password is too old.
  *
- * @param  MEMBER                       The member this is for
+ * @param  MEMBER                       $member_id The member this is for
  * @return boolean                      Whether it is
  */
 function member_password_too_old($member_id)
@@ -93,9 +93,9 @@ function member_password_too_old($member_id)
 /**
  * Check the complexity of a password.
  *
- * @param  ID_TEXT                      The username this is for
- * @param  string                       New password
- * @param  boolean                      Whether to return errors instead of dieing on them.
+ * @param  ID_TEXT                      $username The username this is for
+ * @param  string                       $password New password
+ * @param  boolean                      $return_errors Whether to return errors instead of dieing on them.
  * @return ?tempcode                    Error (null: none).
  */
 function check_password_complexity($username, $password, $return_errors = false)
@@ -138,12 +138,12 @@ function check_password_complexity($username, $password, $return_errors = false)
 /**
  * Store (a hash of) and validate a new password.
  *
- * @param  MEMBER                       The member this is for
- * @param  string                       New password
- * @param  string                       Hashed password
- * @param  string                       Password salt
- * @param  boolean                      Whether to skip enforcement checks
- * @param  ?TIME                        The time this is logged to be happening at (null: now)
+ * @param  MEMBER                       $member_id The member this is for
+ * @param  string                       $password New password
+ * @param  string                       $password_salted Hashed password
+ * @param  string                       $salt Password salt
+ * @param  boolean                      $skip_checks Whether to skip enforcement checks
+ * @param  ?TIME                        $time The time this is logged to be happening at (null: now)
  */
 function bump_password_change_date($member_id, $password, $password_salted, $salt, $skip_checks = false, $time = null)
 {

@@ -21,7 +21,7 @@ class Hook_symbol_POINTS_FROM_USERGROUPS
     /**
      * Run function for symbol hooks. Searches for tasks to perform.
      *
-     * @param  array                     Symbol parameters
+     * @param  array                     $param Symbol parameters
      * @return string                    Result
      */
     public function run($param)

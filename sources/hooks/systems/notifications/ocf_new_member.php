@@ -26,8 +26,8 @@ class Hook_notification_ocf_new_member extends Hook_Notification
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return integer                  Initial setting
      */
     public function get_initial_setting($notification_code, $category = null)
@@ -51,11 +51,11 @@ class Hook_notification_ocf_new_member extends Hook_Notification
     /**
      * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)

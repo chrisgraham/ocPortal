@@ -58,7 +58,7 @@ function init__notifications()
 /**
  * Find the notification object for a particular notification code.
  *
- * @param  ID_TEXT                      The notification code to use
+ * @param  ID_TEXT                      $notification_code The notification code to use
  * @return ?object                      Notification object (null: could not find)
  */
 function _get_notification_ob_for_code($notification_code)
@@ -88,24 +88,24 @@ function _get_notification_ob_for_code($notification_code)
 /**
  * Send out a notification to members enabled.
  *
- * @param  ID_TEXT                      The notification code to use
- * @param  ?SHORT_TEXT                  The category within the notification code (null: none)
- * @param  SHORT_TEXT                   Message subject (in Comcode)
- * @param  LONG_TEXT                    Message body (in Comcode)
- * @param  ?array                       List of enabled members to limit sending to (null: everyone)
- * @param  ?integer                     The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (null: current member)
- * @param  integer                      The message priority (1=urgent, 3=normal, 5=low)
+ * @param  ID_TEXT                      $notification_code The notification code to use
+ * @param  ?SHORT_TEXT                  $code_category The category within the notification code (null: none)
+ * @param  SHORT_TEXT                   $subject Message subject (in Comcode)
+ * @param  LONG_TEXT                    $message Message body (in Comcode)
+ * @param  ?array                       $to_member_ids List of enabled members to limit sending to (null: everyone)
+ * @param  ?integer                     $from_member_id The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (null: current member)
+ * @param  integer                      $priority The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
- * @param  boolean                      Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
- * @param  boolean                      Whether to NOT CC to the CC address
- * @param  ?ID_TEXT                     DO NOT send notifications to: The notification code (null: no restriction)
- * @param  ?SHORT_TEXT                  DO NOT send notifications to: The category within the notification code (null: none / no restriction)
- * @param  string                       Only relevant if $store_in_staff_messaging_system is true: subject prefix for storage
- * @param  string                       Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
- * @param  string                       Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
- * @param  string                       Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
- * @param  ?array                       A list of attachments (each attachment being a map, path=>filename) (null: none)
- * @param  boolean                      Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
+ * @param  boolean                      $store_in_staff_messaging_system Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
+ * @param  boolean                      $no_cc Whether to NOT CC to the CC address
+ * @param  ?ID_TEXT                     $no_notify_for__notification_code DO NOT send notifications to: The notification code (null: no restriction)
+ * @param  ?SHORT_TEXT                  $no_notify_for__code_category DO NOT send notifications to: The category within the notification code (null: none / no restriction)
+ * @param  string                       $subject_prefix Only relevant if $store_in_staff_messaging_system is true: subject prefix for storage
+ * @param  string                       $subject_suffix Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
+ * @param  string                       $body_prefix Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
+ * @param  string                       $body_suffix Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
+ * @param  ?array                       $attachments A list of attachments (each attachment being a map, path=>filename) (null: none)
+ * @param  boolean                      $use_real_from Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
  */
 function dispatch_notification($notification_code, $code_category, $subject, $message, $to_member_ids = null, $from_member_id = null, $priority = 3, $store_in_staff_messaging_system = false, $no_cc = false, $no_notify_for__notification_code = null, $no_notify_for__code_category = null, $subject_prefix = '', $subject_suffix = '', $body_prefix = '', $body_suffix = '', $attachments = null, $use_real_from = false)
 {
@@ -161,24 +161,24 @@ class Notification_dispatcher
     /**
      * Construct notification dispatcher.
      *
-     * @param  ID_TEXT                  The notification code to use
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none). If it is to have $store_in_staff_messaging_system, it must have the format <type>_<id>
-     * @param  SHORT_TEXT               Message subject (in Comcode)
-     * @param  LONG_TEXT                Message body (in Comcode)
-     * @param  ?array                   List of enabled members to limit sending to (null: everyone)
-     * @param  ?integer                 The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (null: current member)
-     * @param  integer                  The message priority (1=urgent, 3=normal, 5=low)
+     * @param  ID_TEXT                  $notification_code The notification code to use
+     * @param  ?SHORT_TEXT              $code_category The category within the notification code (null: none). If it is to have $store_in_staff_messaging_system, it must have the format <type>_<id>
+     * @param  SHORT_TEXT               $subject Message subject (in Comcode)
+     * @param  LONG_TEXT                $message Message body (in Comcode)
+     * @param  ?array                   $to_member_ids List of enabled members to limit sending to (null: everyone)
+     * @param  ?integer                 $from_member_id The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (null: current member)
+     * @param  integer                  $priority The message priority (1=urgent, 3=normal, 5=low)
      * @range  1 5
-     * @param  boolean                  Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
-     * @param  boolean                  Whether to NOT CC to the CC address
-     * @param  ?ID_TEXT                 DO NOT send notifications to: The notification code (null: no restriction)
-     * @param  ?SHORT_TEXT              DO NOT send notifications to: The category within the notification code (null: none / no restriction)
-     * @param  string                   Only relevant if $store_in_staff_messaging_system is true: subject prefix for storage
-     * @param  string                   Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
-     * @param  string                   Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
-     * @param  string                   Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
-     * @param  ?array                   A list of attachments (each attachment being a map, path=>filename) (null: none)
-     * @param  boolean                  Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
+     * @param  boolean                  $store_in_staff_messaging_system Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
+     * @param  boolean                  $no_cc Whether to NOT CC to the CC address
+     * @param  ?ID_TEXT                 $no_notify_for__notification_code DO NOT send notifications to: The notification code (null: no restriction)
+     * @param  ?SHORT_TEXT              $no_notify_for__code_category DO NOT send notifications to: The category within the notification code (null: none / no restriction)
+     * @param  string                   $subject_prefix Only relevant if $store_in_staff_messaging_system is true: subject prefix for storage
+     * @param  string                   $subject_suffix Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
+     * @param  string                   $body_prefix Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
+     * @param  string                   $body_suffix Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
+     * @param  ?array                   $attachments A list of attachments (each attachment being a map, path=>filename) (null: none)
+     * @param  boolean                  $use_real_from Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
      */
     public function Notification_dispatcher($notification_code, $code_category, $subject, $message, $to_member_ids, $from_member_id, $priority, $store_in_staff_messaging_system, $no_cc, $no_notify_for__notification_code, $no_notify_for__code_category, $subject_prefix = '', $subject_suffix = '', $body_prefix = '', $body_suffix = '', $attachments = null, $use_real_from = false)
     {
@@ -282,8 +282,8 @@ class Notification_dispatcher
 /**
  * Find whether a particular kind of notification is available.
  *
- * @param  integer                      The notification setting
- * @param  ?MEMBER                      Member to check for (null: just check globally)
+ * @param  integer                      $setting The notification setting
+ * @param  ?MEMBER                      $member_id Member to check for (null: just check globally)
  * @return boolean                      Whether it is available
  */
 function _notification_setting_available($setting, $member_id = null)
@@ -347,7 +347,7 @@ function _notification_setting_available($setting, $member_id = null)
 /**
  * Find what a member usually receives notifications on.
  *
- * @param  MEMBER                       Member to send to
+ * @param  MEMBER                       $to_member_id Member to send to
  * @return integer                      Normal setting
  */
 function _find_member_statistical_notification_type($to_member_id)
@@ -391,18 +391,18 @@ function _find_member_statistical_notification_type($to_member_id)
 /**
  * Send out a notification to a member.
  *
- * @param  MEMBER                       Member to send to
- * @param  integer                      Listening setting
- * @param  ID_TEXT                      The notification code to use
- * @param  ?SHORT_TEXT                  The category within the notification code (null: none)
- * @param  SHORT_TEXT                   Message subject (in Comcode)
- * @param  LONG_TEXT                    Message body (in Comcode)
- * @param  integer                      The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED)
- * @param  integer                      The message priority (1=urgent, 3=normal, 5=low)
+ * @param  MEMBER                       $to_member_id Member to send to
+ * @param  integer                      $setting Listening setting
+ * @param  ID_TEXT                      $notification_code The notification code to use
+ * @param  ?SHORT_TEXT                  $code_category The category within the notification code (null: none)
+ * @param  SHORT_TEXT                   $subject Message subject (in Comcode)
+ * @param  LONG_TEXT                    $message Message body (in Comcode)
+ * @param  integer                      $from_member_id The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED)
+ * @param  integer                      $priority The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
- * @param  boolean                      Whether to NOT CC to the CC address
- * @param  ?array                       An list of attachments (each attachment being a map, path=>filename) (null: none)
- * @param  boolean                      Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
+ * @param  boolean                      $no_cc Whether to NOT CC to the CC address
+ * @param  ?array                       $attachments An list of attachments (each attachment being a map, path=>filename) (null: none)
+ * @param  boolean                      $use_real_from Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
  * @return boolean                      New $no_cc setting
  */
 function _dispatch_notification_to_member($to_member_id, $setting, $notification_code, $code_category, $subject, $message, $from_member_id, $priority, $no_cc, $attachments, $use_real_from)
@@ -583,10 +583,10 @@ function _dispatch_notification_to_member($to_member_id, $setting, $notification
 /**
  * Enable notifications for a member on a notification type+category.
  *
- * @param  ID_TEXT                      The notification code to use
- * @param  ?SHORT_TEXT                  The category within the notification code (null: none)
- * @param  ?MEMBER                      The member being signed up (null: current member)
- * @param  ?integer                     Setting to use (null: default)
+ * @param  ID_TEXT                      $notification_code The notification code to use
+ * @param  ?SHORT_TEXT                  $notification_category The category within the notification code (null: none)
+ * @param  ?MEMBER                      $member_id The member being signed up (null: current member)
+ * @param  ?integer                     $setting Setting to use (null: default)
  */
 function enable_notifications($notification_code, $notification_category, $member_id = null, $setting = null)
 {
@@ -633,9 +633,9 @@ function enable_notifications($notification_code, $notification_category, $membe
 /**
  * Disable notifications for a member on a notification type+category. Chances are you don't want to call this, you want to call enable_notifications with $setting=A_NA. That'll stop the default coming back.
  *
- * @param  ID_TEXT                      The notification code to use
- * @param  ?SHORT_TEXT                  The category within the notification code (null: none)
- * @param  ?MEMBER                      The member being de-signed up (null: current member)
+ * @param  ID_TEXT                      $notification_code The notification code to use
+ * @param  ?SHORT_TEXT                  $notification_category The category within the notification code (null: none)
+ * @param  ?MEMBER                      $member_id The member being de-signed up (null: current member)
  */
 function disable_notifications($notification_code, $notification_category, $member_id = null)
 {
@@ -668,9 +668,9 @@ function disable_notifications($notification_code, $notification_category, $memb
 /**
  * Find whether notifications are enabled for a member on a notification type+category. Does not check security (must go through notification object for that).
  *
- * @param  ID_TEXT                      The notification code to check
- * @param  ?SHORT_TEXT                  The category within the notification code (null: none)
- * @param  ?MEMBER                      The member being de-signed up (null: current member)
+ * @param  ID_TEXT                      $notification_code The notification code to check
+ * @param  ?SHORT_TEXT                  $notification_category The category within the notification code (null: none)
+ * @param  ?MEMBER                      $member_id The member being de-signed up (null: current member)
  * @return boolean                      Whether they are
  */
 function notifications_enabled($notification_code, $notification_category, $member_id = null)
@@ -681,9 +681,9 @@ function notifications_enabled($notification_code, $notification_category, $memb
 /**
  * Find how notifications are enabled for a member on a notification type+category. Does not check security (must go through notification object for that).
  *
- * @param  ID_TEXT                      The notification code to check
- * @param  ?SHORT_TEXT                  The category within the notification code (null: none)
- * @param  ?MEMBER                      The member being de-signed up (null: current member)
+ * @param  ID_TEXT                      $notification_code The notification code to check
+ * @param  ?SHORT_TEXT                  $notification_category The category within the notification code (null: none)
+ * @param  ?MEMBER                      $member_id The member being de-signed up (null: current member)
  * @return integer                      How they are
  */
 function notifications_setting($notification_code, $notification_category, $member_id = null)
@@ -735,8 +735,8 @@ function notifications_setting($notification_code, $notification_category, $memb
 /**
  * Disable notifications for all members on a certain notification type+category.
  *
- * @param  ID_TEXT                      The notification code
- * @param  ?SHORT_TEXT                  The category within the notification code (null: none)
+ * @param  ID_TEXT                      $notification_code The notification code
+ * @param  ?SHORT_TEXT                  $notification_category The category within the notification code (null: none)
  */
 function delete_all_notifications_on($notification_code, $notification_category)
 {
@@ -777,7 +777,7 @@ class Hook_Notification
      * Find whether a handled notification code supports categories.
      * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
      *
-     * @param  ID_TEXT                  Notification code
+     * @param  ID_TEXT                  $notification_code Notification code
      * @return boolean                  Whether it does
      */
     public function supports_categories($notification_code)
@@ -788,8 +788,8 @@ class Hook_Notification
     /**
      * Standard function to create the standardised category tree. This base version will do it based on seeing what is already being monitored, i.e. so you can unmonitor them. It assumes monitoring is initially set from the frontend via the monitor button.
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?ID_TEXT                 The ID of where we're looking under (null: N/A)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?ID_TEXT                 $id The ID of where we're looking under (null: N/A)
      * @return array                    Tree structure
      */
     public function create_category_tree($notification_code, $id)
@@ -846,7 +846,7 @@ class Hook_Notification
     /**
      * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
      *
-     * @param  ID_TEXT                  Notification code
+     * @param  ID_TEXT                  $notification_code Notification code
      * @return integer                  Allowed settings
      */
     public function allowed_settings($notification_code)
@@ -857,8 +857,8 @@ class Hook_Notification
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return integer                  Initial setting
      */
     public function get_initial_setting($notification_code, $category = null)
@@ -869,8 +869,8 @@ class Hook_Notification
     /**
      * Find the setting that members have for a notification code if they have done some action triggering automatic setting (e.g. posted within a topic).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return integer                  Automatic setting
      */
     public function get_default_auto_setting($notification_code, $category = null)
@@ -881,11 +881,11 @@ class Hook_Notification
     /**
      * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
@@ -993,9 +993,9 @@ class Hook_Notification
     /**
      * Find whether a member could enable this notification (i.e. have permission to).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  MEMBER                   Member to check against
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  MEMBER                   $member_id Member to check against
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return boolean                  Whether they could
      */
     public function member_could_potentially_enable($notification_code, $member_id, $category = null)
@@ -1007,9 +1007,9 @@ class Hook_Notification
      * Find whether a member has enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      * (Separate implementation to list_members_who_have_enabled, for performance reasons.)
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  MEMBER                   Member to check against
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  MEMBER                   $member_id Member to check against
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return boolean                  Whether they have
      */
     public function member_has_enabled($notification_code, $member_id, $category = null)
@@ -1138,11 +1138,11 @@ class Hook_notification__Staff extends Hook_Notification
     /**
      * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
@@ -1153,9 +1153,9 @@ class Hook_notification__Staff extends Hook_Notification
     /**
      * Find whether a member could enable this notification (i.e. have permission to).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  MEMBER                   Member to check against
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  MEMBER                   $member_id Member to check against
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return boolean                  Whether they could
      */
     public function member_could_potentially_enable($notification_code, $member_id, $category = null)
@@ -1167,9 +1167,9 @@ class Hook_notification__Staff extends Hook_Notification
      * Find whether a member has enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      * (Separate implementation to list_members_who_have_enabled, for performance reasons.)
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  MEMBER                   Member to check against
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  MEMBER                   $member_id Member to check against
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return boolean                  Whether they are
      */
     public function member_has_enabled($notification_code, $member_id, $category = null)

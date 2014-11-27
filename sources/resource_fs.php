@@ -49,7 +49,7 @@ function init__resource_fs()
 /**
  * Disengage logging.
  *
- * @param  string                       The minimum logging level
+ * @param  string                       $level The minimum logging level
  * @set inform notice warn
  */
 function resourcefs_logging__start($level = 'notice')
@@ -65,8 +65,8 @@ function resourcefs_logging__start($level = 'notice')
 /**
  * Log a message.
  *
- * @param  string                       The message
- * @param  ID_TEXT                      The template to use
+ * @param  string                       $message The message
+ * @param  ID_TEXT                      $type The template to use
  * @set    inform notice warn
  */
 function resourcefs_logging($message, $type = 'warn')
@@ -108,7 +108,7 @@ function resourcefs_logging__end()
 /**
  * Get the OccLE-fs object for a resource type.
  *
- * @param  ID_TEXT                      The resource type
+ * @param  ID_TEXT                      $resource_type The resource type
  * @return ?object                      The object (null: could not get one)
  */
 function get_resource_occlefs_object($resource_type)
@@ -141,12 +141,12 @@ ACTUAL FILESYSTEM INTERACTION IS DONE VIA A RESOURCE-FS OBJECT (fetch that via t
 /**
  * Generate, and save, a resource-fs moniker.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
- * @param  ?LONG_TEXT                   The (new) label (null: lookup for specified resource)
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
+ * @param  ?LONG_TEXT                   $label The (new) label (null: lookup for specified resource)
  * @return array                        A triple: The moniker (may be new, or the prior one if the moniker did not need to change), the GUID, the label
- * @param  ?ID_TEXT                     GUID to forcibly assign (null: don't force)
- * @param  boolean                      If we know this is new, i.e. has no existing moniker
+ * @param  ?ID_TEXT                     $new_guid GUID to forcibly assign (null: don't force)
+ * @param  boolean                      $definitely_new If we know this is new, i.e. has no existing moniker
  */
 function generate_resourcefs_moniker($resource_type, $resource_id, $label = null, $new_guid = null, $definitely_new = false)
 {
@@ -241,8 +241,8 @@ function generate_resourcefs_moniker($resource_type, $resource_id, $label = null
 /**
  * Generate, and save, a resource-fs moniker.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
  */
 function expunge_resourcefs_moniker($resource_type, $resource_id)
 {
@@ -252,8 +252,8 @@ function expunge_resourcefs_moniker($resource_type, $resource_id)
 /**
  * Find the resource GUID from the resource ID.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
  * @return ?ID_TEXT                     The GUID (null: no match)
  */
 function find_guid_via_id($resource_type, $resource_id)
@@ -265,9 +265,9 @@ function find_guid_via_id($resource_type, $resource_id)
 /**
  * Find the OcCLE-fs (repository) filename from the resource ID.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
- * @param  boolean                      Whether to include the subpath
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
+ * @param  boolean                      $include_subpath Whether to include the subpath
  * @return ?ID_TEXT                     The filename (null: no match)
  */
 function find_occlefs_filename_via_id($resource_type, $resource_id, $include_subpath = false)
@@ -291,8 +291,8 @@ function find_occlefs_filename_via_id($resource_type, $resource_id, $include_sub
 /**
  * Find the resource moniker from the resource ID.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
  * @return ?ID_TEXT                     The moniker (null: no match)
  */
 function find_moniker_via_id($resource_type, $resource_id)
@@ -304,8 +304,8 @@ function find_moniker_via_id($resource_type, $resource_id)
 /**
  * Find the resource label from the resource ID.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
  * @return ?SHORT_TEXT                  The label (null: no match)
  */
 function find_label_via_id($resource_type, $resource_id)
@@ -317,8 +317,8 @@ function find_label_via_id($resource_type, $resource_id)
 /**
  * Find the resource ID from the resource moniker.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The moniker
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_moniker The moniker
  * @return ?ID_TEXT                     The ID (null: no match)
  */
 function find_id_via_moniker($resource_type, $resource_moniker)
@@ -341,9 +341,9 @@ function find_id_via_moniker($resource_type, $resource_moniker)
 /**
  * Find the resource ID from the resource label.
  *
- * @param  ID_TEXT                      The resource type
- * @param  LONG_TEXT                    The label
- * @param  ?string                      The subpath (null: don't care). It may end in "/*" if you want to look for a match under a certain directory
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  LONG_TEXT                    $_resource_label The label
+ * @param  ?string                      $subpath The subpath (null: don't care). It may end in "/*" if you want to look for a match under a certain directory
  * @return ?ID_TEXT                     The ID (null: no match)
  */
 function find_id_via_label($resource_type, $_resource_label, $subpath = null)
@@ -388,10 +388,10 @@ function find_id_via_label($resource_type, $_resource_label, $subpath = null)
 /**
  * Find if a resource matches search parameters.
  *
- * @param  object                       OcCLE-fs/Resource-fs object
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
- * @param  ?string                      The subpath (null: don't care). It may end in "/*" if you want to look for a match under a certain directory
+ * @param  object                       $occlefs_ob OcCLE-fs/Resource-fs object
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
+ * @param  ?string                      $subpath The subpath (null: don't care). It may end in "/*" if you want to look for a match under a certain directory
  * @return boolean                      Whether it matches
  */
 function _check_id_match($occlefs_ob, $resource_type, $resource_id, $subpath)
@@ -416,7 +416,7 @@ function _check_id_match($occlefs_ob, $resource_type, $resource_id, $subpath)
 /**
  * Find the resource ID from the resource GUID. It is assumed you as the programmer already know the resource-type.
  *
- * @param  ID_TEXT                      The GUID
+ * @param  ID_TEXT                      $resource_guid The GUID
  * @return ?ID_TEXT                     The ID (null: no match)
  */
 function find_id_via_guid($resource_guid)
@@ -436,7 +436,7 @@ function find_id_via_guid($resource_guid)
 /**
  * Find the resource IDs from the resource GUIDs. This is useful if you need to resolve many GUIDs at once during performant-critical code.
  *
- * @param  array                        The GUIDs
+ * @param  array                        $guids The GUIDs
  * @return array                        Mapping between GUIDs and IDs (anything where there's no match will result in no array entry being present for that GUID)
  */
 function find_ids_via_guids($guids)
@@ -456,8 +456,8 @@ function find_ids_via_guids($guids)
 /**
  * Find the resource ID from the OcCLE-fs (repository) filename.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The filename
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $filename The filename
  * @return ?ID_TEXT                     The ID (null: no match)
  */
 function find_id_via_occlefs_filename($resource_type, $filename)
@@ -474,8 +474,8 @@ function find_id_via_occlefs_filename($resource_type, $filename)
 /**
  * Convert a local ID to something portable.
  *
- * @param  ID_TEXT                      The resource type
- * @param  ID_TEXT                      The resource ID
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  ID_TEXT                      $resource_id The resource ID
  * @return array                        Portable ID details
  */
 function remap_resource_id_as_portable($resource_type, $resource_id)
@@ -500,8 +500,8 @@ function remap_resource_id_as_portable($resource_type, $resource_id)
 /**
  * Convert a portable ID to something local.
  *
- * @param  ID_TEXT                      The resource type
- * @param  array                        Portable ID details
+ * @param  ID_TEXT                      $resource_type The resource type
+ * @param  array                        $portable Portable ID details
  * @return ID_TEXT                      The resource ID
  */
 function remap_portable_as_resource_id($resource_type, $portable)
@@ -553,7 +553,7 @@ class Resource_fs_base
     /**
      * Find whether a resource type is of a folder-type.
      *
-     * @param  ID_TEXT                  The resource type
+     * @param  ID_TEXT                  $resource_type The resource type
      * @return boolean                  Whether it is
      */
     public function is_folder_type($resource_type)
@@ -565,7 +565,7 @@ class Resource_fs_base
     /**
      * Find whether a resource type is of a file-type.
      *
-     * @param  ID_TEXT                  The resource type
+     * @param  ID_TEXT                  $resource_type The resource type
      * @return boolean                  Whether it is
      */
     public function is_file_type($resource_type)
@@ -591,7 +591,7 @@ class Resource_fs_base
     /**
      * Whether the filesystem hook can handle a particular file type.
      *
-     * @param  string                   The file type (no file extension)
+     * @param  string                   $filetype The file type (no file extension)
      * @return array                    List of our resource types that can
      */
     public function can_accept_filetype($filetype)
@@ -670,8 +670,8 @@ class Resource_fs_base
     /**
      * Load function for resource-fs (for files). Finds the data for some resource from a resource-fs file.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return ~string                  Resource data (false: error)
      */
     public function file_load__flat($filename, $path)
@@ -685,8 +685,8 @@ class Resource_fs_base
     /**
      * Load function for resource-fs (for folders). Finds the data for some resource from a resource-fs folder.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return ~string                  Resource data (false: error)
      */
     public function folder_load__flat($filename, $path)
@@ -703,9 +703,9 @@ class Resource_fs_base
     /**
      * Save function for resource-fs (for files). Parses the data for some resource to a resource-fs file.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  string                   Resource data
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  string                   $data Resource data
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function file_save__flat($filename, $path, $data)
@@ -735,9 +735,9 @@ class Resource_fs_base
     /**
      * Save function for resource-fs (for folders). Parses the data for some resource to a resource-fs folder.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  string                   Resource data
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  string                   $data Resource data
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function folder_save__flat($filename, $path, $data)
@@ -784,8 +784,8 @@ class Resource_fs_base
     /**
      * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  ID_TEXT                  The resource ID
+     * @param  ID_TEXT                  $resource_type The resource type
+     * @param  ID_TEXT                  $resource_id The resource ID
      * @return ?ID_TEXT                 The filename (null: could not find)
      */
     public function file_convert_id_to_filename($resource_type, $resource_id)
@@ -800,8 +800,8 @@ class Resource_fs_base
     /**
      * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  ID_TEXT                  The resource ID
+     * @param  ID_TEXT                  $resource_type The resource type
+     * @param  ID_TEXT                  $resource_id The resource ID
      * @return ?ID_TEXT                 The filename (null: could not find)
      */
     public function folder_convert_id_to_filename($resource_type, $resource_id)
@@ -812,8 +812,8 @@ class Resource_fs_base
     /**
      * Get the resource ID for a filename (of file). Note that filenames are unique across all folders in a filesystem.
      *
-     * @param  ID_TEXT                  The filename, or filepath
-     * @param  ?ID_TEXT                 The resource type (null: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+     * @param  ID_TEXT                  $filename The filename, or filepath
+     * @param  ?ID_TEXT                 $resource_type The resource type (null: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
      * @return ?array                   A pair: The resource type, the resource ID (null: could not find)
      */
     public function file_convert_filename_to_id($filename, $resource_type = null)
@@ -832,8 +832,8 @@ class Resource_fs_base
     /**
      * Get the resource ID for a filename (of folder). Note that filenames are unique across all folders in a filesystem.
      *
-     * @param  ID_TEXT                  The filename, or filepath
-     * @param  ?ID_TEXT                 The resource type (null: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+     * @param  ID_TEXT                  $filename The filename, or filepath
+     * @param  ?ID_TEXT                 $resource_type The resource type (null: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
      * @return array                    A pair: The resource type, the resource ID
      */
     public function folder_convert_filename_to_id($filename, $resource_type = null)
@@ -1063,9 +1063,9 @@ class Resource_fs_base
     /**
      * Find the foldername/subpath to a resource.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  ID_TEXT                  The resource ID
-     * @param  boolean                  Whether to include the full subpath
+     * @param  ID_TEXT                  $resource_type The resource type
+     * @param  ID_TEXT                  $resource_id The resource ID
+     * @param  boolean                  $full_subpath Whether to include the full subpath
      * @return ?string                  The foldername/subpath (null: not found)
      */
     public function search($resource_type, $resource_id, $full_subpath = false)
@@ -1133,11 +1133,11 @@ class Resource_fs_base
     /**
      * Convert a label to a filename, possibly with auto-creating if needed. This is useful for the ocPortal-side resource-agnostic API.
      *
-     * @param  LONG_TEXT                Resource label
-     * @param  string                   The path (blank: root / not applicable). It may end in "/*" if you want to look for a match under a certain directory
-     * @param  ID_TEXT                  Resource type
-     * @param  boolean                  Whether the content must already exist
-     * @param  ?ID_TEXT                 GUID to auto-create with (null: either not auto-creating, or not specifying the GUID if we are)
+     * @param  LONG_TEXT                $label Resource label
+     * @param  string                   $subpath The path (blank: root / not applicable). It may end in "/*" if you want to look for a match under a certain directory
+     * @param  ID_TEXT                  $resource_type Resource type
+     * @param  boolean                  $must_already_exist Whether the content must already exist
+     * @param  ?ID_TEXT                 $use_guid_for_new GUID to auto-create with (null: either not auto-creating, or not specifying the GUID if we are)
      * @return ?ID_TEXT                 The filename (null: not found)
      */
     public function convert_label_to_filename($label, $subpath, $resource_type, $must_already_exist = false, $use_guid_for_new = null)
@@ -1153,11 +1153,11 @@ class Resource_fs_base
     /**
      * Convert a label to an ID, possibly with auto-creating if needed. This is useful for the ocPortal-side resource-agnostic API.
      *
-     * @param  SHORT_TEXT               Resource label
-     * @param  string                   The path (blank: root / not applicable). It may end in "/*" if you want to look for a match under a certain directory
-     * @param  ID_TEXT                  Resource type
-     * @param  boolean                  Whether the content must already exist
-     * @param  ?ID_TEXT                 GUID to auto-create with (null: either not auto-creating, or not specifying the GUID if we are)
+     * @param  SHORT_TEXT               $_label Resource label
+     * @param  string                   $subpath The path (blank: root / not applicable). It may end in "/*" if you want to look for a match under a certain directory
+     * @param  ID_TEXT                  $resource_type Resource type
+     * @param  boolean                  $must_already_exist Whether the content must already exist
+     * @param  ?ID_TEXT                 $use_guid_for_new GUID to auto-create with (null: either not auto-creating, or not specifying the GUID if we are)
      * @return ?ID_TEXT                 The ID (null: not found)
      */
     public function convert_label_to_id($_label, $subpath, $resource_type, $must_already_exist = false, $use_guid_for_new = null)
@@ -1227,8 +1227,8 @@ class Resource_fs_base
     /**
      * Get the filename for a resource ID (of file or folder). Note that filenames are unique across all folders in a filesystem.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  ID_TEXT                  The resource ID
+     * @param  ID_TEXT                  $resource_type The resource type
+     * @param  ID_TEXT                  $resource_id The resource ID
      * @return ?ID_TEXT                 The filename (null: not found)
      */
     public function convert_id_to_filename($resource_type, $resource_id)
@@ -1245,8 +1245,8 @@ class Resource_fs_base
     /**
      * Get the resource ID for a filename (of file or folder). Note that filenames are unique across all folders in a filesystem.
      *
-     * @param  ID_TEXT                  The filename, or filepath
-     * @param  ID_TEXT                  The resource type
+     * @param  ID_TEXT                  $filename The filename, or filepath
+     * @param  ID_TEXT                  $resource_type The resource type
      * @return ?array                   A pair: The resource type, the resource ID (null: could not find)
      */
     public function convert_filename_to_id($filename, $resource_type)
@@ -1263,12 +1263,12 @@ class Resource_fs_base
     /**
      * Save function for resource-fs. Parses the data for some resource to a resource-fs XML file. Wraps file_save/folder_save.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  ID_TEXT                  Filename OR Resource label
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  ?array                   Properties (null: none)
-     * @param  ?ID_TEXT                 Whether to look for existing records using $filename as a label and this resource type (null: $filename is a strict file name)
-     * @param  ?ID_TEXT                 Search path (null: the same as the path saving at)
+     * @param  ID_TEXT                  $resource_type The resource type
+     * @param  ID_TEXT                  $label Filename OR Resource label
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  ?array                   $properties Properties (null: none)
+     * @param  ?ID_TEXT                 $search_label_as Whether to look for existing records using $filename as a label and this resource type (null: $filename is a strict file name)
+     * @param  ?ID_TEXT                 $search_path Search path (null: the same as the path saving at)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function resource_save($resource_type, $label, $path, $properties = null, $search_label_as = null, $search_path = null)
@@ -1288,10 +1288,10 @@ class Resource_fs_base
     /**
      * Adds some resource with the given label and properties. Wraps file_add/folder_add.
      *
-     * @param  ID_TEXT                  Resource type
-     * @param  LONG_TEXT                Filename OR Resource label
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  ?array                   Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields) (null: none)
+     * @param  ID_TEXT                  $resource_type Resource type
+     * @param  LONG_TEXT                $label Filename OR Resource label
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  ?array                   $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields) (null: none)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function resource_add($resource_type, $label, $path, $properties = null)
@@ -1313,9 +1313,9 @@ class Resource_fs_base
     /**
      * Finds the properties for some resource. Wraps file_load/folder_load.
      *
-     * @param  ID_TEXT                  Resource type
-     * @param  SHORT_TEXT               Filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $resource_type Resource type
+     * @param  SHORT_TEXT               $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return ~array                   Details of the resource (false: error)
      */
     public function resource_load($resource_type, $filename, $path)
@@ -1331,11 +1331,11 @@ class Resource_fs_base
     /**
      * Edits the resource to the given properties. Wraps file_edit/folder_edit.
      *
-     * @param  ID_TEXT                  Resource type
-     * @param  ID_TEXT                  The filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-     * @param  boolean                  Whether we are definitely moving (as opposed to possible having it in multiple positions)
+     * @param  ID_TEXT                  $resource_type Resource type
+     * @param  ID_TEXT                  $filename The filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  boolean                  $explicit_move Whether we are definitely moving (as opposed to possible having it in multiple positions)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function resource_edit($resource_type, $filename, $path, $properties, $explicit_move = false)
@@ -1353,9 +1353,9 @@ class Resource_fs_base
     /**
      * Deletes the resource. Wraps file_delete/folder_delete.
      *
-     * @param  ID_TEXT                  Resource type
-     * @param  ID_TEXT                  The filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $resource_type Resource type
+     * @param  ID_TEXT                  $filename The filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
     public function resource_delete($resource_type, $filename, $path)
@@ -1375,7 +1375,7 @@ class Resource_fs_base
     /**
      * Reset resource privileges on the resource for all usergroups.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
      */
     public function reset_resource_access($filename)
     {
@@ -1405,8 +1405,8 @@ class Resource_fs_base
     /**
      * Set resource view access on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
-     * @param  array                    A mapping from group ID to view access
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
+     * @param  array                    $groups A mapping from group ID to view access
      */
     public function set_resource_access($filename, $groups)
     {
@@ -1462,7 +1462,7 @@ class Resource_fs_base
     /**
      * Get resource view access on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
      * @return array                    A mapping from group ID to view access
      */
     public function get_resource_access($filename)
@@ -1504,8 +1504,8 @@ class Resource_fs_base
     /**
      * Set resource view access on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
-     * @param  array                    A mapping from member ID to view access
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
+     * @param  array                    $members A mapping from member ID to view access
      */
     public function set_resource_access__members($filename, $members)
     {
@@ -1555,7 +1555,7 @@ class Resource_fs_base
     /**
      * Get resource view access on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
      * @return array                    A mapping from member ID to view access
      */
     public function get_resource_access__members($filename)
@@ -1588,7 +1588,7 @@ class Resource_fs_base
     /**
      * Reset resource privileges on the resource for all usergroups.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
      */
     public function reset_resource_privileges($filename)
     {
@@ -1652,8 +1652,8 @@ class Resource_fs_base
     /**
      * Set resource privileges from a preset on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
-     * @param  array                    A mapping from group ID to preset value. Preset values are 0 (read only) to 3 (moderation)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
+     * @param  array                    $group_presets A mapping from group ID to preset value. Preset values are 0 (read only) to 3 (moderation)
      */
     public function set_resource_privileges_from_preset($filename, $group_presets)
     {
@@ -1677,8 +1677,8 @@ class Resource_fs_base
     /**
      * Set resource privileges on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
-     * @param  array                    A map between group ID, and a map of privilege to setting
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
+     * @param  array                    $group_settings A map between group ID, and a map of privilege to setting
      */
     public function set_resource_privileges($filename, $group_settings)
     {
@@ -1712,7 +1712,7 @@ class Resource_fs_base
     /**
      * Get the resource privileges for the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
      * @return array                    A map between group ID, and a map of privilege to setting
      */
     public function get_resource_privileges($filename)
@@ -1762,8 +1762,8 @@ class Resource_fs_base
     /**
      * Set resource privileges from a preset so that a member has custom privileges on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
-     * @param  array                    A mapping from member ID to preset value. Preset values are 0 (read only) to 3 (moderation)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
+     * @param  array                    $member_presets A mapping from member ID to preset value. Preset values are 0 (read only) to 3 (moderation)
      */
     public function set_resource_privileges_from_preset__members($filename, $member_presets)
     {
@@ -1787,8 +1787,8 @@ class Resource_fs_base
     /**
      * Set a resource privilege so that a member has a custom privilege on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
-     * @param  array                    A map between member ID, and a map of privilege to setting
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
+     * @param  array                    $member_settings A map between member ID, and a map of privilege to setting
      */
     public function set_resource_privileges__members($filename, $member_settings)
     {
@@ -1815,7 +1815,7 @@ class Resource_fs_base
     /**
      * Get the resource privileges for all members that have custom privileges on the resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
      * @return array                    A map between member ID, and a map of privilege to setting
      */
     public function get_resource_privileges__members($filename)
@@ -1862,8 +1862,8 @@ class Resource_fs_base
     /**
      * Load function for resource-fs (for files). Finds the data for some resource from a resource-fs XML file.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return ~string                  Resource data (false: error)
      */
     public function file_load_xml($filename, $path)
@@ -1878,8 +1878,8 @@ class Resource_fs_base
     /**
      * Load function for resource-fs (for folders). Finds the data for some resource from a resource-fs XML folder.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
      * @return ~string                  Resource data (false: error)
      */
     public function folder_load_xml($filename, $path)
@@ -1894,9 +1894,9 @@ class Resource_fs_base
     /**
      * Save function for resource-fs (for files). Parses the data for some resource to a resource-fs XML file.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  string                   Resource data
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  string                   $data Resource data
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function file_save_xml($filename, $path, $data)
@@ -1911,11 +1911,11 @@ class Resource_fs_base
     /**
      * Save function for resource-fs (for files).
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path to save at (blank: root / not applicable)
-     * @param  array                    Properties
-     * @param  ?ID_TEXT                 Whether to look for existing records using $filename as a label and this resource type (null: $filename is a strict file name)
-     * @param  ?ID_TEXT                 Search path (null: the same as the path saving at)
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path to save at (blank: root / not applicable)
+     * @param  array                    $properties Properties
+     * @param  ?ID_TEXT                 $search_label_as Whether to look for existing records using $filename as a label and this resource type (null: $filename is a strict file name)
+     * @param  ?ID_TEXT                 $search_path Search path (null: the same as the path saving at)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function file_save($filename, $path, $properties, $search_label_as = null, $search_path = null)
@@ -1954,9 +1954,9 @@ class Resource_fs_base
     /**
      * Save function for resource-fs (for folders). Parses the data for some resource to a resource-fs XML folder.
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  string                   Resource data
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  string                   $data Resource data
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function folder_save_xml($filename, $path, $data)
@@ -1971,11 +1971,11 @@ class Resource_fs_base
     /**
      * Save function for resource-fs (for folders).
      *
-     * @param  ID_TEXT                  Filename
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties
-     * @param  ?ID_TEXT                 Whether to look for existing records using $filename as a label and this resource type (null: $filename is a strict file name)
-     * @param  ?ID_TEXT                 Search path (null: the same as the path saving at)
+     * @param  ID_TEXT                  $filename Filename
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties
+     * @param  ?ID_TEXT                 $search_label_as Whether to look for existing records using $filename as a label and this resource type (null: $filename is a strict file name)
+     * @param  ?ID_TEXT                 $search_path Search path (null: the same as the path saving at)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
     public function folder_save($filename, $path, $properties, $search_label_as = null, $search_path = null)
@@ -2170,9 +2170,9 @@ class Resource_fs_base
     /**
      * Standard occle_fs listing function for OcCLE-fs hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return ~array                   The final directory listing (false: failure)
      */
     public function listing($meta_dir, $meta_root_node, &$occle_fs)
@@ -2356,10 +2356,10 @@ class Resource_fs_base
     /**
      * Standard occle_fs directory creation function for OcCLE-fs hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  string                   The new directory name
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  string                   $new_dir_name The new directory name
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
     public function make_directory($meta_dir, $meta_root_node, $new_dir_name, &$occle_fs)
@@ -2373,10 +2373,10 @@ class Resource_fs_base
     /**
      * Standard occle_fs directory removal function for OcCLE-fs hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  string                   The directory name
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  string                   $dir_name The directory name
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
     public function remove_directory($meta_dir, $meta_root_node, $dir_name, &$occle_fs)
@@ -2390,10 +2390,10 @@ class Resource_fs_base
     /**
      * Standard occle_fs file reading function for OcCLE-fs hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  string                   The file name
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  string                   $file_name The file name
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
     public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
@@ -2407,11 +2407,11 @@ class Resource_fs_base
     /**
      * Standard occle_fs file writing function for OcCLE-fs hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  string                   The file name
-     * @param  string                   The new file contents
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  string                   $file_name The file name
+     * @param  string                   $contents The new file contents
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
     public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
@@ -2425,10 +2425,10 @@ class Resource_fs_base
     /**
      * Standard occle_fs file removal function for OcCLE-fs hooks.
      *
-     * @param  array                    The current meta-directory path
-     * @param  string                   The root node of the current meta-directory
-     * @param  string                   The file name
-     * @param  object                   A reference to the OcCLE filesystem object
+     * @param  array                    $meta_dir The current meta-directory path
+     * @param  string                   $meta_root_node The root node of the current meta-directory
+     * @param  string                   $file_name The file name
+     * @param  object                    &$occle_fs A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
     public function remove_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)

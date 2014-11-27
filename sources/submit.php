@@ -21,8 +21,8 @@
 /**
  * Find whether some content is validated.
  *
- * @param  ID_TEXT                      Content type
- * @param  ID_TEXT                      Content ID
+ * @param  ID_TEXT                      $content_type Content type
+ * @param  ID_TEXT                      $content_id Content ID
  * @return boolean                      Whether it is validated
  */
 function content_validated($content_type, $content_id)
@@ -42,8 +42,8 @@ function content_validated($content_type, $content_id)
 /**
  * Send a "your content has been validated" notification out to the submitter of some content. Only call if this is true ;).
  *
- * @param  ID_TEXT                      Content type
- * @param  ID_TEXT                      Content ID
+ * @param  ID_TEXT                      $content_type Content type
+ * @param  ID_TEXT                      $content_id Content ID
  */
 function send_content_validated_notification($content_type, $content_id)
 {
@@ -62,12 +62,12 @@ function send_content_validated_notification($content_type, $content_id)
 /**
  * Send (by e-mail) a validation request for a submitted item to the admin.
  *
- * @param  ID_TEXT                      The validation request will say one of this type has been submitted. By convention it is the language code of what was done, e.g. ADD_DOWNLOAD
- * @param  ?ID_TEXT                     The table saved into (null: unknown)
- * @param  boolean                      Whether the ID field is not an integer
- * @param  ID_TEXT                      The validation request will say this ID has been submitted
- * @param  tempcode                     The validation request will link to this URL
- * @param  ?MEMBER                      Member doing the submitting (null: current member)
+ * @param  ID_TEXT                      $type The validation request will say one of this type has been submitted. By convention it is the language code of what was done, e.g. ADD_DOWNLOAD
+ * @param  ?ID_TEXT                     $table The table saved into (null: unknown)
+ * @param  boolean                      $non_integer_id Whether the ID field is not an integer
+ * @param  ID_TEXT                      $id The validation request will say this ID has been submitted
+ * @param  tempcode                     $url The validation request will link to this URL
+ * @param  ?MEMBER                      $member_id Member doing the submitting (null: current member)
  */
 function send_validation_request($type, $table, $non_integer_id, $id, $url, $member_id = null)
 {
@@ -136,8 +136,8 @@ function send_validation_request($type, $table, $non_integer_id, $id, $url, $mem
 /**
  * Give points to a member for submitting something, then returns the XHTML page to say so.
  *
- * @param  ID_TEXT                      One of this type has been submitted. By convention it is the language code of what was done, e.g. ADD_DOWNLOAD
- * @param  ?MEMBER                      The member to give the points to (null: give to current member)
+ * @param  ID_TEXT                      $type One of this type has been submitted. By convention it is the language code of what was done, e.g. ADD_DOWNLOAD
+ * @param  ?MEMBER                      $member The member to give the points to (null: give to current member)
  * @return ?string                      A message about the member being given these submit points (null: no message)
  */
 function give_submit_points($type, $member = null)
@@ -160,7 +160,7 @@ function give_submit_points($type, $member = null)
 /**
  * Find a member from their IP address. Unlike plain $GLOBALS['FORUM_DRIVER']->probe_ip, it has the benefit of looking in the adminlogs table also.
  *
- * @param  IP                           The IP address to probe
+ * @param  IP                           $ip The IP address to probe
  * @return array                        The members found
  */
 function wrap_probe_ip($ip)
@@ -189,8 +189,8 @@ function wrap_probe_ip($ip)
 /**
  * Ban the specified IP address.
  *
- * @param  IP                           The IP address to ban
- * @param  LONG_TEXT                    Explanation for ban
+ * @param  IP                           $ip The IP address to ban
+ * @param  LONG_TEXT                    $descrip Explanation for ban
  */
 function ban_ip($ip, $descrip = '')
 {
@@ -206,7 +206,7 @@ function ban_ip($ip, $descrip = '')
 /**
  * Unban the specified IP address.
  *
- * @param  IP                           The IP address to unban
+ * @param  IP                           $ip The IP address to unban
  */
 function unban_ip($ip)
 {

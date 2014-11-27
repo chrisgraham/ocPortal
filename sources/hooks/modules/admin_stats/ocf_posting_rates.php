@@ -46,8 +46,8 @@ class Hook_admin_stats_ocf_posting_rates
     /**
      * The UI to show OCF posting rates.
      *
-     * @param  object                   The stats module object
-     * @param  string                   The screen type
+     * @param  object                   $ob The stats module object
+     * @param  string                   $type The screen type
      * @return tempcode                 The UI
      */
     public function posting_rates($ob, $type)

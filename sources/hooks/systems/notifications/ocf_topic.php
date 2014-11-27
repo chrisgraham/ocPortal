@@ -27,7 +27,7 @@ class Hook_notification_ocf_topic extends Hook_Notification
      * Find whether a handled notification code supports categories.
      * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
      *
-     * @param  ID_TEXT                  Notification code
+     * @param  ID_TEXT                  $notification_code Notification code
      * @return boolean                  Whether it does
      */
     public function supports_categories($notification_code)
@@ -38,8 +38,8 @@ class Hook_notification_ocf_topic extends Hook_Notification
     /**
      * Standard function to create the standardised category tree
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?ID_TEXT                 The ID of where we're looking under (null: N/A)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?ID_TEXT                 $id The ID of where we're looking under (null: N/A)
      * @return array                    Tree structure
      */
     public function create_category_tree($notification_code, $id)
@@ -124,7 +124,7 @@ class Hook_notification_ocf_topic extends Hook_Notification
     /**
      * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
      *
-     * @param  ID_TEXT                  Notification code
+     * @param  ID_TEXT                  $notification_code Notification code
      * @return integer                  Allowed settings
      */
     public function allowed_settings($notification_code)
@@ -135,8 +135,8 @@ class Hook_notification_ocf_topic extends Hook_Notification
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return integer                  Initial setting
      */
     public function get_initial_setting($notification_code, $category = null)
@@ -147,8 +147,8 @@ class Hook_notification_ocf_topic extends Hook_Notification
     /**
      * Find the setting that members have for a notification code if they have done some action triggering automatic setting (e.g. posted within a topic).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
      * @return integer                  Automatic setting
      */
     public function get_default_auto_setting($notification_code, $category = null)
@@ -201,11 +201,11 @@ class Hook_notification_ocf_topic extends Hook_Notification
     /**
      * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?SHORT_TEXT              $category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)

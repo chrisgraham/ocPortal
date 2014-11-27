@@ -56,10 +56,10 @@ class Database_super_mysql
     /**
      * Create a table index.
      *
-     * @param  ID_TEXT                  The name of the table to create the index on
-     * @param  ID_TEXT                  The index name (not really important at all)
-     * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
-     * @param  array                    The DB connection to make on
+     * @param  ID_TEXT                  $table_name The name of the table to create the index on
+     * @param  ID_TEXT                  $index_name The index name (not really important at all)
+     * @param  string                   $_fields Part of the SQL query: a comma-separated list of fields to use on the index
+     * @param  array                    $db The DB connection to make on
      */
     public function db_create_index($table_name, $index_name, $_fields, $db)
     {
@@ -78,9 +78,9 @@ class Database_super_mysql
     /**
      * Change the primary key of a table.
      *
-     * @param  ID_TEXT                  The name of the table to create the index on
-     * @param  array                    A list of fields to put in the new key
-     * @param  array                    The DB connection to make on
+     * @param  ID_TEXT                  $table_name The name of the table to create the index on
+     * @param  array                    $new_key A list of fields to put in the new key
+     * @param  array                    $db The DB connection to make on
      */
     public function db_change_primary_key($table_name, $new_key, $db)
     {
@@ -91,8 +91,8 @@ class Database_super_mysql
     /**
      * Assemble part of a WHERE clause for doing full-text search
      *
-     * @param  string                   Our match string (assumes "?" has been stripped already)
-     * @param  boolean                  Whether to do a boolean full text search
+     * @param  string                   $content Our match string (assumes "?" has been stripped already)
+     * @param  boolean                  $boolean Whether to do a boolean full text search
      * @return string                   Part of a WHERE clause for doing full-text search
      */
     public function db_full_text_assemble($content, $boolean)
@@ -165,10 +165,10 @@ class Database_super_mysql
     /**
      * Create a new table.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
-     * @param  array                    The DB connection to make on
-     * @param  ID_TEXT                  The table name with no table prefix
+     * @param  ID_TEXT                  $table_name The table name
+     * @param  array                    $fields A map of field names to ocPortal field types (with *#? encodings)
+     * @param  array                    $db The DB connection to make on
+     * @param  ID_TEXT                  $raw_table_name The table name with no table prefix
      */
     public function db_create_table($table_name, $fields, $db, $raw_table_name)
     {
@@ -223,8 +223,8 @@ class Database_super_mysql
     /**
      * Encode an SQL statement fragment for a conditional to see if two strings are equal.
      *
-     * @param  ID_TEXT                  The attribute
-     * @param  string                   The comparison
+     * @param  ID_TEXT                  $attribute The attribute
+     * @param  string                   $compare The comparison
      * @return string                   The SQL
      */
     public function db_string_equal_to($attribute, $compare)
@@ -235,8 +235,8 @@ class Database_super_mysql
     /**
      * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
      *
-     * @param  ID_TEXT                  The attribute
-     * @param  string                   The comparison
+     * @param  ID_TEXT                  $attribute The attribute
+     * @param  string                   $compare The comparison
      * @return string                   The SQL
      */
     public function db_string_not_equal_to($attribute, $compare)
@@ -247,7 +247,7 @@ class Database_super_mysql
     /**
      * Find whether expression ordering support is present
      *
-     * @param  array                    A DB connection
+     * @param  array                    $db A DB connection
      * @return boolean                  Whether it is
      */
     public function db_has_expression_ordering($db)
@@ -268,8 +268,8 @@ class Database_super_mysql
     /**
      * Delete a table.
      *
-     * @param  ID_TEXT                  The table name
-     * @param  array                    The DB connection to delete on
+     * @param  ID_TEXT                  $table The table name
+     * @param  array                    $db The DB connection to delete on
      */
     public function db_drop_table_if_exists($table, $db)
     {
@@ -289,7 +289,7 @@ class Database_super_mysql
     /**
      * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
      *
-     * @param  string                   The pattern
+     * @param  string                   $pattern The pattern
      * @return string                   The encoded pattern
      */
     public function db_encode_like($pattern)

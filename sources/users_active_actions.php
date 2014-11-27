@@ -75,7 +75,7 @@ function get_first_admin_user()
 /**
  * Process a login.
  *
- * @param  ID_TEXT                      Username
+ * @param  ID_TEXT                      $username Username
  */
 function handle_active_login($username)
 {
@@ -223,7 +223,7 @@ function handle_active_logout()
 /**
  * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
  *
- * @param  MEMBER                       The current member
+ * @param  MEMBER                       $member The current member
  */
 function _enforce_temporary_passwords($member)
 {
@@ -284,7 +284,7 @@ function _enforce_temporary_passwords($member)
 /**
  * Delete a session.
  *
- * @param  ID_TEXT                      The new session
+ * @param  ID_TEXT                      $session The new session
  */
 function delete_session($session)
 {
@@ -303,7 +303,7 @@ function delete_session($session)
 /**
  * Deletes a cookie (if it exists), from within ocPortal's cookie environment.
  *
- * @param  string                       The name of the cookie
+ * @param  string                       $name The name of the cookie
  * @return boolean                      The result of the PHP setcookie command
  */
 function ocp_eatcookie($name)
@@ -325,11 +325,11 @@ function ocp_eatcookie($name)
 /**
  * Create a cookie, inside ocPortal's cookie environment.
  *
- * @param  string                       The name of the cookie
- * @param  string                       The value to store in the cookie
- * @param  boolean                      Whether it is a session cookie (gets removed once the browser window closes)
- * @param  boolean                      Whether the cookie should not be readable by JavaScript
- * @param  ?integer                     Days to store (null: default)
+ * @param  string                       $name The name of the cookie
+ * @param  string                       $value The value to store in the cookie
+ * @param  boolean                      $session Whether it is a session cookie (gets removed once the browser window closes)
+ * @param  boolean                      $http_only Whether the cookie should not be readable by JavaScript
+ * @param  ?integer                     $days Days to store (null: default)
  * @return boolean                      The result of the PHP setcookie command
  */
 function ocp_setcookie($name, $value, $session = false, $http_only = false, $days = null)

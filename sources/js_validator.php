@@ -186,8 +186,8 @@ function reset_js_global_variables()
 /**
  * Check some JS code for validity.
  *
- * @param  string                       Code
- * @param  boolean                      Whether to return raw-errors
+ * @param  string                       $data Code
+ * @param  boolean                      $raw_errors Whether to return raw-errors
  * @return array                        Standard validator report output
  */
 function check_js($data, $raw_errors = false)
@@ -230,7 +230,7 @@ function check_js($data, $raw_errors = false)
 /**
  * Do the actual code check on the parse structure.
  *
- * @param  map                          Parse structure
+ * @param  map                          $structure Parse structure
  */
 function _check_js($structure)
 {
@@ -263,7 +263,7 @@ function _check_js($structure)
 /**
  * Check a function declaration.
  *
- * @param  map                          The function details
+ * @param  map                          $function The function details
  */
 function js_check_function($function)
 {
@@ -297,7 +297,7 @@ function js_check_function($function)
 /**
  * Check a variable list for consistency.
  *
- * @param  list                         The variable list
+ * @param  list                         $JS_LOCAL_VARIABLES The variable list
  */
 function js_check_variable_list($JS_LOCAL_VARIABLES)
 {
@@ -363,8 +363,8 @@ function js_check_variable_list($JS_LOCAL_VARIABLES)
 /**
  * Check a parsed command.
  *
- * @param  list                         The command
- * @param  integer                      The block depth we are searching at
+ * @param  list                         $command The command
+ * @param  integer                      $depth The block depth we are searching at
  */
 function js_check_command($command, $depth)
 {
@@ -509,8 +509,8 @@ function js_check_command($command, $depth)
 /**
  * Check an assignment statement.
  *
- * @param  list                         The complex assignment details
- * @param  integer                      The position this is at in the parse
+ * @param  list                         $c The complex assignment details
+ * @param  integer                      $c_pos The position this is at in the parse
  * @return string                       The assigned type
  */
 function js_check_assignment($c, $c_pos)
@@ -556,9 +556,9 @@ function js_check_assignment($c, $c_pos)
 /**
  * Check an expression.
  *
- * @param  list                         The complex expression
- * @param  boolean                      Whether the expression is being used as a command (i.e. whether the expression is not used for the result, but rather, the secondary consequences of calculating it)
- * @param  boolean                      Whether the expression is being guarded and hence is not a proper reference
+ * @param  list                         $e The complex expression
+ * @param  boolean                      $secondary Whether the expression is being used as a command (i.e. whether the expression is not used for the result, but rather, the secondary consequences of calculating it)
+ * @param  boolean                      $is_guarded Whether the expression is being guarded and hence is not a proper reference
  * @return string                       The type
  */
 function js_check_expression($e, $secondary = false, $is_guarded = false)
@@ -747,9 +747,9 @@ function js_check_expression($e, $secondary = false, $is_guarded = false)
 /**
  * Check a function call.
  *
- * @param  list                         The (possibly complex) variable that is the function identifier
- * @param  integer                      The position this is at in the parse
- * @param  ?string                      The class the given variable is in (null: global/as-specified-internally-in-c)
+ * @param  list                         $c The (possibly complex) variable that is the function identifier
+ * @param  integer                      $c_pos The position this is at in the parse
+ * @param  ?string                      $class The class the given variable is in (null: global/as-specified-internally-in-c)
  * @return ?string                      The return type (null: nothing returned)
  */
 function js_check_call($c, $c_pos, $class = null)
@@ -771,12 +771,12 @@ function js_check_call($c, $c_pos, $class = null)
 /**
  * Check a variable.
  *
- * @param  list                         The (possibly complex) variable
- * @param  boolean                      Whether the variable is being used referentially (i.e. not being set)
- * @param  boolean                      Whether to return the type and function-return-type pair, rather than just the type
- * @param  ?string                      The class the variable is referencing within (null: global)
- * @param  boolean                      Whether the given class is being referenced directly in static form
- * @param  boolean                      Whether this is for a function call
+ * @param  list                         $variable The (possibly complex) variable
+ * @param  boolean                      $reference Whether the variable is being used referentially (i.e. not being set)
+ * @param  boolean                      $function_duality Whether to return the type and function-return-type pair, rather than just the type
+ * @param  ?string                      $class The class the variable is referencing within (null: global)
+ * @param  boolean                      $allow_static Whether the given class is being referenced directly in static form
+ * @param  boolean                      $is_call Whether this is for a function call
  * @return mixed                        The return type and possibly function return type (if requested)
  */
 function js_check_variable($variable, $reference = false, $function_duality = false, $class = null, $allow_static = false, $is_call = false)
@@ -917,7 +917,7 @@ function js_check_variable($variable, $reference = false, $function_duality = fa
 /**
  * Scan through a complex variable, checking any expressions embedded in it.
  *
- * @param  list                         The complex variable
+ * @param  list                         $variable The complex variable
  */
 function js_scan_extractive_expressions($variable)
 {
@@ -933,7 +933,7 @@ function js_scan_extractive_expressions($variable)
 /**
  * Get the type of a variable.
  *
- * @param  list                         The variable
+ * @param  list                         $variable The variable
  * @return string                       The type
  */
 function js_get_variable_type($variable)
@@ -964,8 +964,8 @@ function js_get_variable_type($variable)
 /**
  * Add a type to the list of used types for a variable.
  *
- * @param  string                       The variable name
- * @param  string                       The type
+ * @param  string                       $identifier The variable name
+ * @param  string                       $type The type
  */
 function js_set_ocportal_type($identifier, $type)
 {
@@ -976,12 +976,12 @@ function js_set_ocportal_type($identifier, $type)
 /**
  * Add a reference to a named variable.
  *
- * @param  string                       The variable name
- * @param  integer                      Where the first mention of the variable is
- * @param  boolean                      Whether this is an instantiation reference
- * @param  boolean                      Whether this is a reference (as opposed to instantiation/setting)
- * @param  ?string                      The result-type (null: not a function)
- * @param  boolean                      Whether this is a function call
+ * @param  string                       $identifier The variable name
+ * @param  integer                      $first_mention Where the first mention of the variable is
+ * @param  boolean                      $instantiation Whether this is an instantiation reference
+ * @param  boolean                      $reference Whether this is a reference (as opposed to instantiation/setting)
+ * @param  ?string                      $function_return The result-type (null: not a function)
+ * @param  boolean                      $is_call Whether this is a function call
  */
 function js_add_variable_reference($identifier, $first_mention, $instantiation = true, $reference = false, $function_return = null, $is_call = false)
 {
@@ -1000,8 +1000,8 @@ function js_add_variable_reference($identifier, $first_mention, $instantiation =
 /**
  * If the given expression is a direct variable expression, this function will infer the type as the given type. This therefore allows type inferring on usage as well as on assignment.
  *
- * @param  string                       The type
- * @param  list                         The expression
+ * @param  string                       $type The type
+ * @param  list                         $expr The expression
  */
 function js_infer_expression_type_to_variable_type($type, $expr)
 {
@@ -1015,10 +1015,10 @@ function js_infer_expression_type_to_variable_type($type, $expr)
 /**
  * Do type checking for something specific.
  *
- * @param  list                         List of allowed types
- * @param  string                       Actual type involved
- * @param  integer                      Current parse position
- * @param  ?string                      Specific error message to give (null: use default)
+ * @param  list                         $_allowed_types List of allowed types
+ * @param  string                       $actual_type Actual type involved
+ * @param  integer                      $pos Current parse position
+ * @param  ?string                      $alt_error Specific error message to give (null: use default)
  * @return boolean                      Whether it type-checks
  */
 function js_ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null)

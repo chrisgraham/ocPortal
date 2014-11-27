@@ -318,7 +318,7 @@ function do_lang_tempcode($x, $a = null, $b = null, $c = null)
 {
     global $PARSED;
     if (!isset($PARSED)) {
-        $temp = file_get_contents(dirname(__FILE__) . '/../../lang/EN/phpdoc.ini') . file_get_contents(dirname(__FILE__) . '/../../lang/EN/validation.ini');
+        $temp = file_get_contents(dirname(__FILE__) . '/../../lang_custom/EN/phpdoc.ini') . file_get_contents(dirname(__FILE__) . '/../../lang/EN/validation.ini');
         $temp_2 = explode("\n", $temp);
         $PARSED = array();
         foreach ($temp_2 as $p) {
@@ -357,8 +357,8 @@ if (!function_exists('is_alphanumeric')) {
     /**
      * Find whether the specified string is alphanumeric or not.
      *
-     * @param  string                   The string to test
-     * @param  boolean                  Whether to check stricter identifier-validity
+     * @param  string                   $string The string to test
+     * @param  boolean                  $strict Whether to check stricter identifier-validity
      * @return boolean                  Whether the string is alphanumeric or not
      */
     function is_alphanumeric($string, $strict = false)

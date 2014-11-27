@@ -44,11 +44,11 @@ function check_joining_allowed()
 /**
  * Get the join form.
  *
- * @param  tempcode                     URL to direct to
- * @param  boolean                      Whether to handle CAPTCHA (if enabled at all)
- * @param  boolean                      Whether to ask for intro messages (if enabled at all)
- * @param  boolean                      Whether to check for invites (if enabled at all)
- * @param  boolean                      Whether to check email-address restrictions (if enabled at all)
+ * @param  tempcode                     $url URL to direct to
+ * @param  boolean                      $captcha_if_enabled Whether to handle CAPTCHA (if enabled at all)
+ * @param  boolean                      $intro_message_if_enabled Whether to ask for intro messages (if enabled at all)
+ * @param  boolean                      $invites_if_enabled Whether to check for invites (if enabled at all)
+ * @param  boolean                      $one_per_email_address_if_enabled Whether to check email-address restrictions (if enabled at all)
  * @return array                        A tuple: Necessary JavaScript code, the form
  */
 function ocf_join_form($url, $captcha_if_enabled = true, $intro_message_if_enabled = true, $invites_if_enabled = true, $one_per_email_address_if_enabled = true)
@@ -195,14 +195,14 @@ function ocf_join_form($url, $captcha_if_enabled = true, $intro_message_if_enabl
 /**
  * Actualise the join form.
  *
- * @param  boolean                      Whether to handle CAPTCHA (if enabled at all)
- * @param  boolean                      Whether to ask for intro messages (if enabled at all)
- * @param  boolean                      Whether to check for invites (if enabled at all)
- * @param  boolean                      Whether to check email-address restrictions (if enabled at all)
- * @param  boolean                      Whether to require staff confirmation (if enabled at all)
- * @param  boolean                      Whether to force email address validation (if enabled at all)
- * @param  boolean                      Whether to do COPPA checks (if enabled at all)
- * @param  boolean                      Whether to instantly log the user in
+ * @param  boolean                      $captcha_if_enabled Whether to handle CAPTCHA (if enabled at all)
+ * @param  boolean                      $intro_message_if_enabled Whether to ask for intro messages (if enabled at all)
+ * @param  boolean                      $invites_if_enabled Whether to check for invites (if enabled at all)
+ * @param  boolean                      $one_per_email_address_if_enabled Whether to check email-address restrictions (if enabled at all)
+ * @param  boolean                      $confirm_if_enabled Whether to require staff confirmation (if enabled at all)
+ * @param  boolean                      $validate_if_enabled Whether to force email address validation (if enabled at all)
+ * @param  boolean                      $coppa_if_enabled Whether to do COPPA checks (if enabled at all)
+ * @param  boolean                      $instant_login Whether to instantly log the user in
  * @return array                        A tuple: Messages to show (currently nothing else in tuple)
  */
 function ocf_join_actual($captcha_if_enabled = true, $intro_message_if_enabled = true, $invites_if_enabled = true, $one_per_email_address_if_enabled = true, $confirm_if_enabled = true, $validate_if_enabled = true, $coppa_if_enabled = true, $instant_login = true)

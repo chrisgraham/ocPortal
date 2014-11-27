@@ -425,7 +425,7 @@ class Hook_addon_registry_calendar
      * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
      * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
      *
-     * @param  string                   View type.
+     * @param  string                   $view View type.
      * @return tempcode                 Preview.
      */
     public function calendar_main_screen($view)

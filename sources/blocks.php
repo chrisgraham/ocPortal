@@ -29,7 +29,7 @@ Post-AJAX the functions are used to confirm these permissions (the permission ID
 /**
  * Convert the parameters for a block, to a regexp pattern.
  *
- * @param  array                        The parameters
+ * @param  array                        $map The parameters
  * @return array                        The parameters, as a pattern
  */
 function block_params_to_block_signature($map)
@@ -43,8 +43,8 @@ function block_params_to_block_signature($map)
 /**
  * Check whether some block parameters are acceptable.
  *
- * @param  array                        The acceptable parameter pattern
- * @param  array                        The given parameters
+ * @param  array                        $allowed The acceptable parameter pattern
+ * @param  array                        $used The given parameters
  * @return boolean                      Answer
  */
 function block_signature_check($allowed, $used)

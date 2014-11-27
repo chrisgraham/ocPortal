@@ -46,8 +46,8 @@ class Hook_admin_stats_downloads
     /**
      * The UI to show download statistics.
      *
-     * @param  object                   The stats module object
-     * @param  string                   The screen type
+     * @param  object                   $ob The stats module object
+     * @param  string                   $type The screen type
      * @return tempcode                 The UI
      */
     public function downloads($ob, $type)

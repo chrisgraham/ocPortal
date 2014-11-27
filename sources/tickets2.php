@@ -21,8 +21,8 @@
 /**
  * Get ticket details.
  *
- * @param  string                       The ticket ID
- * @param  boolean                      Exit with an error message if it cannot find the ticket
+ * @param  string                       $ticket_id The ticket ID
+ * @param  boolean                      $hard_error Exit with an error message if it cannot find the ticket
  * @return ?array                       A tuple: The ticket title, the topic ID, the ticket type ID, the ticket owner (null: not found)
  */
 function get_ticket_details($ticket_id, $hard_error = true)
@@ -49,9 +49,9 @@ function get_ticket_details($ticket_id, $hard_error = true)
 /**
  * Add a ticket type.
  *
- * @param  SHORT_TEXT                   The ticket type name
- * @param  BINARY                       Whether guest e-mail addresses are mandatory for new tickets
- * @param  BINARY                       Whether the FAQ should be searched before submitting a new ticket
+ * @param  SHORT_TEXT                   $ticket_type_name The ticket type name
+ * @param  BINARY                       $guest_emails_mandatory Whether guest e-mail addresses are mandatory for new tickets
+ * @param  BINARY                       $search_faq Whether the FAQ should be searched before submitting a new ticket
  * @return AUTO_LINK                    The ticket type ID
  */
 function add_ticket_type($ticket_type_name, $guest_emails_mandatory = 0, $search_faq = 0)
@@ -80,10 +80,10 @@ function add_ticket_type($ticket_type_name, $guest_emails_mandatory = 0, $search
 /**
  * Edit a ticket type, keeping the integer ID the same.
  *
- * @param  AUTO_LINK                    The ticket type ID
- * @param  ?SHORT_TEXT                  The new ticket type text (null: do not change)
- * @param  BINARY                       Whether guest e-mail addresses are mandatory for new tickets
- * @param  BINARY                       Whether the FAQ should be searched before submitting a new ticket
+ * @param  AUTO_LINK                    $ticket_type_id The ticket type ID
+ * @param  ?SHORT_TEXT                  $ticket_type_name The new ticket type text (null: do not change)
+ * @param  BINARY                       $guest_emails_mandatory Whether guest e-mail addresses are mandatory for new tickets
+ * @param  BINARY                       $search_faq Whether the FAQ should be searched before submitting a new ticket
  */
 function edit_ticket_type($ticket_type_id, $ticket_type_name, $guest_emails_mandatory, $search_faq)
 {
@@ -107,7 +107,7 @@ function edit_ticket_type($ticket_type_id, $ticket_type_name, $guest_emails_mand
 /**
  * Delete a ticket type.
  *
- * @param  AUTO_LINK                    The ticket type ID
+ * @param  AUTO_LINK                    $ticket_type_id The ticket type ID
  */
 function delete_ticket_type($ticket_type_id)
 {
@@ -132,7 +132,7 @@ function delete_ticket_type($ticket_type_id)
 /**
  * Get a map of properties for the given ticket type.
  *
- * @param  ?AUTO_LINK                   The ticket type (null: fallback for old tickets)
+ * @param  ?AUTO_LINK                   $ticket_type_id The ticket type (null: fallback for old tickets)
  * @return ?array                       Array of properties (null: ticket type not found)
  */
 function get_ticket_type($ticket_type_id)
@@ -211,10 +211,10 @@ function update_ticket_type_lead_times()
  * Get an array of tickets for the given member and ticket type. If the member has permission to see others' tickets, it will be a list of all tickets
  * in the system, restricted by ticket type as appropriate. Otherwise, it will be a list of that member's tickets, as restricted by ticket type.
  *
- * @param  AUTO_LINK                    The member ID
- * @param  ?AUTO_LINK                   The ticket type (null: all ticket types)
- * @param  boolean                      Don't view others' tickets, even if the member has permission to
- * @param  boolean                      Whether to skip showing errors, returning NULL instead
+ * @param  AUTO_LINK                    $member The member ID
+ * @param  ?AUTO_LINK                   $ticket_type_id The ticket type (null: all ticket types)
+ * @param  boolean                      $override_view_others_tickets Don't view others' tickets, even if the member has permission to
+ * @param  boolean                      $silent_error_handling Whether to skip showing errors, returning NULL instead
  * @return array                        Array of tickets, empty on failure
  */
 function get_tickets($member, $ticket_type_id = null, $override_view_others_tickets = false, $silent_error_handling = false)
@@ -287,12 +287,12 @@ function get_tickets($member, $ticket_type_id = null, $override_view_others_tick
  * Get the posts from a given ticket, and also return the IDs of the forum and topic containing it. The return value is the same as
  * that of get_forum_topic_posts(), except in error conditions
  *
- * @param  string                       The ticket ID
- * @param  AUTO_LINK                    Return location for the forum ID
- * @param  AUTO_LINK                    Return location for the topic ID
- * @param  AUTO_LINK                    Return location for the ticket type
- * @param  integer                      Start offset in pagination
- * @param  ?integer                     Max per page in pagination (null: no limit)
+ * @param  string                       $ticket_id The ticket ID
+ * @param  AUTO_LINK                     &$forum Return location for the forum ID
+ * @param  AUTO_LINK                     &$topic_id Return location for the topic ID
+ * @param  AUTO_LINK                     &$ticket_type Return location for the ticket type
+ * @param  integer                      $start Start offset in pagination
+ * @param  ?integer                     $max Max per page in pagination (null: no limit)
  * @return mixed                        The array of maps (Each map is: title, message, member, date) (null: no such ticket)
  */
 function get_ticket_posts($ticket_id, &$forum, &$topic_id, &$ticket_type, $start = 0, $max = null)
@@ -324,7 +324,7 @@ function get_ticket_posts($ticket_id, &$forum, &$topic_id, &$ticket_type, $start
 /**
  * Remove a ticket from the database. This does not remove the associated forum topic.
  *
- * @param  AUTO_LINK                    The associated topic ID
+ * @param  AUTO_LINK                    $topic_id The associated topic ID
  */
 function delete_ticket_by_topic_id($topic_id)
 {
@@ -335,14 +335,14 @@ function delete_ticket_by_topic_id($topic_id)
  * Add a new post to a ticket, or create a new ticket if a ticket with the given ID doesn't exist.
  * It has the same return value as make_post_forum_topic().
  *
- * @param  AUTO_LINK                    The member ID
- * @param  string                       The ticket ID (doesn't have to exist)
- * @param  AUTO_LINK                    The ticket type
- * @param  LONG_TEXT                    The post title
- * @param  LONG_TEXT                    The post content in Comcode format
- * @param  string                       The home URL
- * @param  boolean                      Whether the reply is staff only (invisible to ticket owner, only on OCF)
- * @param  ?TIME                        The post time (null: use current time)
+ * @param  AUTO_LINK                    $member The member ID
+ * @param  string                       $ticket_id The ticket ID (doesn't have to exist)
+ * @param  AUTO_LINK                    $ticket_type_id The ticket type
+ * @param  LONG_TEXT                    $title The post title
+ * @param  LONG_TEXT                    $post The post content in Comcode format
+ * @param  string                       $ticket_url The home URL
+ * @param  boolean                      $staff_only Whether the reply is staff only (invisible to ticket owner, only on OCF)
+ * @param  ?TIME                        $time_post The post time (null: use current time)
  */
 function ticket_add_post($member, $ticket_id, $ticket_type_id, $title, $post, $ticket_url, $staff_only = false, $time_post = null)
 {
@@ -383,14 +383,14 @@ function ticket_add_post($member, $ticket_id, $ticket_type_id, $title, $post, $t
 /**
  * Send an e-mail notification for a new post in a support ticket, either to the staff or to the ticket's owner.
  *
- * @param  string                       The ticket ID
- * @param  LONG_TEXT                    The ticket title
- * @param  LONG_TEXT                    The ticket post's content
- * @param  mixed                        The home URL (to view the ticket) (URLPATH or Tempcode URL)
- * @param  EMAIL                        Ticket owner's e-mail address, in the case of a new ticket
- * @param  integer                      The new ticket type, or -1 if it is a reply to an existing ticket
- * @param  ?MEMBER                      Posting member (null: current member)
- * @param  boolean                      Whether the ticket was auto-created
+ * @param  string                       $ticket_id The ticket ID
+ * @param  LONG_TEXT                    $title The ticket title
+ * @param  LONG_TEXT                    $post The ticket post's content
+ * @param  mixed                        $ticket_url The home URL (to view the ticket) (URLPATH or Tempcode URL)
+ * @param  EMAIL                        $uid_email Ticket owner's e-mail address, in the case of a new ticket
+ * @param  integer                      $ticket_type_id_if_new The new ticket type, or -1 if it is a reply to an existing ticket
+ * @param  ?MEMBER                      $new_poster Posting member (null: current member)
+ * @param  boolean                      $auto_created Whether the ticket was auto-created
  */
 function send_ticket_email($ticket_id, $title, $post, $ticket_url, $uid_email, $ticket_type_id_if_new, $new_poster = null, $auto_created = false)
 {
@@ -561,7 +561,7 @@ function send_ticket_email($ticket_id, $title, $post, $ticket_url, $uid_email, $
 /**
  * Is the given ticket post intended for staff only? Works only on OCF.
  *
- * @param  array                        Array of data for the post
+ * @param  array                        $post Array of data for the post
  * @return boolean                      Whether the post's staff only
  */
 function is_ticket_post_staff_only($post)

@@ -26,7 +26,7 @@ class Hook_whatsnew_news
     /**
      * Find selectable (filterable) categories.
      *
-     * @param  TIME                     The time that there must be entries found newer than
+     * @param  TIME                     $updated_since The time that there must be entries found newer than
      * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (null: disabled)
      */
     public function choose_categories($updated_since)
@@ -45,10 +45,10 @@ class Hook_whatsnew_news
     /**
      * Run function for newsletter hooks.
      *
-     * @param  TIME                     The time that the entries found must be newer than
-     * @param  LANGUAGE_NAME            The language the entries found must be in
-     * @param  string                   Category filter to apply
-     * @param  BINARY                   Whether to use full article instead of summary
+     * @param  TIME                     $cutoff_time The time that the entries found must be newer than
+     * @param  LANGUAGE_NAME            $lang The language the entries found must be in
+     * @param  string                   $filter Category filter to apply
+     * @param  BINARY                   $in_full Whether to use full article instead of summary
      * @return array                    Tuple of result details
      */
     public function run($cutoff_time, $lang, $filter, $in_full = 1)

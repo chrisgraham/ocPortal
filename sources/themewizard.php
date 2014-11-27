@@ -55,8 +55,8 @@ function init__themewizard()
 /**
  * Given a source theme name, configure the theme wizard for theme generation from it.
  *
- * @param  ID_TEXT                      The theme name
- * @param  boolean                      Whether we suspect the theme might not be well defined
+ * @param  ID_TEXT                      $theme The theme name
+ * @param  boolean                      $guess_images_if_needed Whether we suspect the theme might not be well defined
  */
 function load_themewizard_params_from_theme($theme, $guess_images_if_needed = false)
 {
@@ -140,8 +140,8 @@ function load_themewizard_params_from_theme($theme, $guess_images_if_needed = fa
 /**
  * Find the seed of a theme.
  *
- * @param  ID_TEXT                      The theme name
- * @param  boolean                      Whether we can't assume the theme has any ocPortal default colour information defined, if not in theme.ini
+ * @param  ID_TEXT                      $theme The theme name
+ * @param  boolean                      $no_easy_anchor Whether we can't assume the theme has any ocPortal default colour information defined, if not in theme.ini
  * @return ID_TEXT                      The seed colour
  */
 function find_theme_seed($theme, $no_easy_anchor = false)
@@ -189,7 +189,7 @@ function find_theme_seed($theme, $no_easy_anchor = false)
 /**
  * Find whether a theme is dark.
  *
- * @param  ID_TEXT                      The theme name
+ * @param  ID_TEXT                      $theme The theme name
  * @return boolean                      Whether the theme is dark
  */
 function find_theme_dark($theme)
@@ -220,7 +220,7 @@ function find_theme_dark($theme)
 /**
  * Called by find_theme_image to allow on-the-fly previewing of what theme wizard output would look like.
  *
- * @param  ID_TEXT                      The theme image ID
+ * @param  ID_TEXT                      $id The theme image ID
  * @return ?URLPATH                     URL to image (null: use standard one, this one is not theme wizard influenced).
  */
 function find_theme_image_themewizard_preview($id)
@@ -258,13 +258,13 @@ function find_theme_image_themewizard_preview($id)
 /**
  * Generate a logo from the template.
  *
- * @param  string                       The site name.
- * @param  string                       The font name (in data/fonts).
- * @param  string                       The logo theme image.
- * @param  string                       The background theme image.
- * @param  boolean                      Whether to output the logo to the browser, destroy then image, and exit the script (i.e. never returns)
- * @param  ?string                      The theme to use the logo template from (null: default root zone theme).
- * @param  boolean                      Whether we are generating the standalone version (smaller, used in e-mails etc).
+ * @param  string                       $name The site name.
+ * @param  string                       $font_choice The font name (in data/fonts).
+ * @param  string                       $logo_theme_image The logo theme image.
+ * @param  string                       $background_theme_image The background theme image.
+ * @param  boolean                      $raw Whether to output the logo to the browser, destroy then image, and exit the script (i.e. never returns)
+ * @param  ?string                      $theme The theme to use the logo template from (null: default root zone theme).
+ * @param  boolean                      $standalone_version Whether we are generating the standalone version (smaller, used in e-mails etc).
  * @return resource                     The image resource.
  */
 function generate_logo($name, $font_choice = 'Vera', $logo_theme_image = 'logo/default_logos/1', $background_theme_image = 'logo/default_backgrounds/banner1', $raw = false, $theme = null, $standalone_version = false)
@@ -412,14 +412,14 @@ function generate_logo($name, $font_choice = 'Vera', $logo_theme_image = 'logo/d
 /**
  * Make a theme. Note that this will trigger the AFM.
  *
- * @param  string                       Name of the theme.
- * @param  ID_TEXT                      The theme it's being generated from
- * @param  ID_TEXT                      The algorithm to use
+ * @param  string                       $themename Name of the theme.
+ * @param  ID_TEXT                      $source_theme The theme it's being generated from
+ * @param  ID_TEXT                      $algorithm The algorithm to use
  * @set equations hsv
- * @param  string                       Seed colour to use.
- * @param  boolean                      Whether to use the theme immediately.
- * @param  ?boolean                     Whether it will be a dark theme (null: autodetect).
- * @param  boolean                      Whether to inherit the CSS, for easier theme upgrading.
+ * @param  string                       $seed Seed colour to use.
+ * @param  boolean                      $use Whether to use the theme immediately.
+ * @param  ?boolean                     $dark Whether it will be a dark theme (null: autodetect).
+ * @param  boolean                      $inherit_css Whether to inherit the CSS, for easier theme upgrading.
  */
 function make_theme($themename, $source_theme, $algorithm, $seed, $use, $dark = false, $inherit_css = false)
 {
@@ -628,15 +628,15 @@ function themewizard_script()
 /**
  * Calculate some component relating to a theme from a colour seed.
  *
- * @param  string                       Colour seed.
- * @param  ID_TEXT                      The theme it's being generated from
- * @param  ID_TEXT                      The algorithm to use
+ * @param  string                       $seed Colour seed.
+ * @param  ID_TEXT                      $source_theme The theme it's being generated from
+ * @param  ID_TEXT                      $algorithm The algorithm to use
  * @set equations hsv
- * @param  ID_TEXT                      What to generate ('colours', or the name of a theme image).
- * @param  ?boolean                     Whether it will be a dark theme (null: autodetect).
- * @param  ?array                       The colour map to use (null: compute).
- * @param  ?array                       The computed colour landscape to use (null: compute).
- * @param  ?LANGUAGE_NAME               The language to work in (null: default).
+ * @param  ID_TEXT                      $show What to generate ('colours', or the name of a theme image).
+ * @param  ?boolean                     $dark Whether it will be a dark theme (null: autodetect).
+ * @param  ?array                       $colours The colour map to use (null: compute).
+ * @param  ?array                       $landscape The computed colour landscape to use (null: compute).
+ * @param  ?LANGUAGE_NAME               $lang The language to work in (null: default).
  * @return mixed                        Image resource OR A pair: extended map of colours, colour expression landscape
  */
 function calculate_theme($seed, $source_theme, $algorithm, $show = 'colours', $dark = null, $colours = null, $landscape = null, $lang = null)
@@ -795,8 +795,8 @@ function calculate_theme($seed, $source_theme, $algorithm, $show = 'colours', $d
 /**
  * Augment an array of CSS colours with colours that are derived actually inside the CSS-sheets.
  *
- * @param  array                        Map of colours.
- * @param  ID_TEXT                      The theme it's being generated from
+ * @param  array                        $colours Map of colours.
+ * @param  ID_TEXT                      $source_theme The theme it's being generated from
  * @return array                        A pair: extended map of colours, colour expression landscape
  */
 function calculate_dynamic_css_colours($colours, $source_theme)
@@ -867,7 +867,7 @@ function calculate_dynamic_css_colours($colours, $source_theme)
 /**
  * Convert a textual CSS colour expression into an expression tree.
  *
- * @param  string                       Textual expression.
+ * @param  string                       $textual Textual expression.
  * @return ?array                       Expression tree (null: not real).
  */
 function parse_css_colour_expression($textual)
@@ -888,7 +888,7 @@ function parse_css_colour_expression($textual)
 /**
  * Convert CSS colour tokens into an expression tree.
  *
- * @param  array                        Tokens.
+ * @param  array                        $tokens Tokens.
  * @return ?array                       Expression tree (null: error).
  */
 function _parse_css_colour_expression($tokens)
@@ -944,8 +944,8 @@ function _parse_css_colour_expression($tokens)
 /**
  * Execute CSS colour expression.
  *
- * @param  mixed                        Expression tree (array) OR leaf (string).
- * @param  array                        Known colours at this point.
+ * @param  mixed                        $expression Expression tree (array) OR leaf (string).
+ * @param  array                        $colours Known colours at this point.
  * @return ?string                      RRGGBB colour or possibly just a number (null: answer cannot be computed).
  */
 function execute_css_colour_expression($expression, $colours)
@@ -1090,8 +1090,8 @@ function execute_css_colour_expression($expression, $colours)
 /**
  * Make sure a colour component fits within the necessary range (0<=x<256).
  *
- * @param  mixed                        Colour component (float or integer).
- * @param  boolean                      Whether this is hue (meaning it cycles around)
+ * @param  mixed                        $x Colour component (float or integer).
+ * @param  boolean                      $hue Whether this is hue (meaning it cycles around)
  * @return integer                      Constrained colour component.
  */
 function fix_colour($x, $hue = false)
@@ -1122,7 +1122,7 @@ function fix_colour($x, $hue = false)
 /**
  * Convert an RGB colour to HSV colour components. Based on publicly distributed code fragments which were themselves based on others: reasonably assumed as public domain.
  *
- * @param  string                       RRGGBB colour.
+ * @param  string                       $rgb RRGGBB colour.
  * @return array                        Triplet of (0-255) components: H, S, V
  */
 function rgb_to_hsv($rgb)
@@ -1174,9 +1174,9 @@ function rgb_to_hsv($rgb)
 /**
  * Convert HSV colour components to an RGB colour. Based on publicly distributed code fragments which were themselves based on others: reasonably assumed as public domain.
  *
- * @param  float                        H component
- * @param  float                        S component
- * @param  float                        V component
+ * @param  float                        $h H component
+ * @param  float                        $s S component
+ * @param  float                        $v V component
  * @return string                       RGB colour.
  */
 function hsv_to_rgb($h, $s, $v)
@@ -1238,12 +1238,12 @@ function hsv_to_rgb($h, $s, $v)
 /**
  * Rewrite some CSS code according to a CSS landscape.
  *
- * @param  ID_TEXT                      CSS filename of source file.
- * @param  array                        The colour expression landscape which we'll make substitutions using.
- * @param  ID_TEXT                      The theme this is being generated from
- * @param  ID_TEXT                      The algorithm to use
+ * @param  ID_TEXT                      $sheet CSS filename of source file.
+ * @param  array                        $landscape The colour expression landscape which we'll make substitutions using.
+ * @param  ID_TEXT                      $source_theme The theme this is being generated from
+ * @param  ID_TEXT                      $algorithm The algorithm to use
  * @set equations hsv
- * @param  ID_TEXT                      The seed colour
+ * @param  ID_TEXT                      $seed The seed colour
  * @return string                       The sheet
  */
 function theme_wizard_colours_to_sheet($sheet, $landscape, $source_theme, $algorithm, $seed)
@@ -1266,12 +1266,12 @@ function theme_wizard_colours_to_sheet($sheet, $landscape, $source_theme, $algor
 /**
  * Rewrite some CSS code according to a CSS landscape.
  *
- * @param  string                       CSS to apply to.
- * @param  array                        The colour expression landscape which we'll make substitutions using.
- * @param  ID_TEXT                      The theme this is being generated from
- * @param  ID_TEXT                      The algorithm to use
+ * @param  string                       $contents CSS to apply to.
+ * @param  array                        $landscape The colour expression landscape which we'll make substitutions using.
+ * @param  ID_TEXT                      $source_theme The theme this is being generated from
+ * @param  ID_TEXT                      $algorithm The algorithm to use
  * @set equations hsv
- * @param  ID_TEXT                      The seed colour
+ * @param  ID_TEXT                      $seed The seed colour
  * @return string                       The sheet
  */
 function theme_wizard_colours_to_css($contents, $landscape, $source_theme, $algorithm, $seed)
@@ -1306,11 +1306,11 @@ function theme_wizard_colours_to_css($contents, $landscape, $source_theme, $algo
 /**
  * Generate a theme image by converting an existing one to a new colour scheme via re-hueing.
  *
- * @param  mixed                        The image path OR a preloaded GD image resource
- * @param  string                       The colour code of our hue
- * @param  ID_TEXT                      The theme this is being generated from
- * @param  boolean                      Whether to also adjust the S and V components
- * @param  boolean                      Whether to invert the colours
+ * @param  mixed                        $path The image path OR a preloaded GD image resource
+ * @param  string                       $seed The colour code of our hue
+ * @param  ID_TEXT                      $source_theme The theme this is being generated from
+ * @param  boolean                      $also_s_and_v Whether to also adjust the S and V components
+ * @param  boolean                      $invert Whether to invert the colours
  * @return resource                     The image
  */
 function re_hue_image($path, $seed, $source_theme, $also_s_and_v = false, $invert = false)
@@ -1408,8 +1408,8 @@ function re_hue_image($path, $seed, $source_theme, $also_s_and_v = false, $inver
 /**
  * Generate a gradient for a theme.
  *
- * @param  string                       Colour for the top.
- * @param  string                       Colour for the bottom.
+ * @param  string                       $top Colour for the top.
+ * @param  string                       $bottom Colour for the bottom.
  * @return resource                     The image
  */
 function generate_gradient($top, $bottom)
@@ -1440,18 +1440,18 @@ function generate_gradient($top, $bottom)
 /**
  * Generate a theme image by converting an existing one to a new colour scheme via intelligent blending correlation.
  *
- * @param  mixed                        The image path OR a preloaded GD image resource
- * @param  string                       The colour code of what we have as our "minor" colour (often a border colour)
- * @param  string                       The colour code of what we want as our "minor" colour (often a border colour)
- * @param  string                       The colour code of what we have as our first major colour (often the only major colour)
- * @param  string                       The colour code of what we want as our first major colour (often the only major colour)
- * @param  ?string                      The colour code of what we have as our second major colour (the gradient target, at the bottom/right of the image) (null: not gradiented)
- * @param  ?string                      The colour code of what we want as our second major colour (the gradient target, at the bottom/right of the image) (null: not gradiented)
- * @param  string                       The directional code for the gradient
+ * @param  mixed                        $path The image path OR a preloaded GD image resource
+ * @param  string                       $colour_a_orig The colour code of what we have as our "minor" colour (often a border colour)
+ * @param  string                       $colour_a_new The colour code of what we want as our "minor" colour (often a border colour)
+ * @param  string                       $colour_b1_orig The colour code of what we have as our first major colour (often the only major colour)
+ * @param  string                       $colour_b1_new The colour code of what we want as our first major colour (often the only major colour)
+ * @param  ?string                      $colour_b2_orig The colour code of what we have as our second major colour (the gradient target, at the bottom/right of the image) (null: not gradiented)
+ * @param  ?string                      $colour_b2_new The colour code of what we want as our second major colour (the gradient target, at the bottom/right of the image) (null: not gradiented)
+ * @param  string                       $gradient_direction The directional code for the gradient
  * @set    vertical horizontal
- * @param  ?array                       An array that is used to limit where we do our conversion on. It specifies, for each y-offset, the x-offset we start from (null: no such limitation)
- * @param  integer                      What the gradient assumed start-position will be offset by (in the gradient direction).
- * @param  boolean                      Whether the pixel_x_start array is actually an end array.
+ * @param  ?array                       $pixel_x_start_array An array that is used to limit where we do our conversion on. It specifies, for each y-offset, the x-offset we start from (null: no such limitation)
+ * @param  integer                      $gradient_offset What the gradient assumed start-position will be offset by (in the gradient direction).
+ * @param  boolean                      $end_array Whether the pixel_x_start array is actually an end array.
  * @return resource                     The image
  */
 function generate_recoloured_image($path, $colour_a_orig, $colour_a_new, $colour_b1_orig, $colour_b1_new, $colour_b2_orig = null, $colour_b2_new = null, $gradient_direction = 'vertical', $pixel_x_start_array = null, $gradient_offset = 0, $end_array = false)

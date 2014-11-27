@@ -21,16 +21,16 @@
 /**
  * Edit a zone.
  *
- * @param  ID_TEXT                      The current name of the zone
- * @param  SHORT_TEXT                   The zone title
- * @param  ID_TEXT                      The zones default page
- * @param  SHORT_TEXT                   The header text
- * @param  ID_TEXT                      The theme
- * @param  BINARY                       Whether the zone requires a session for pages to be used
- * @param  ID_TEXT                      The new name of the zone
- * @param  boolean                      Whether to force the name as unique, if there's a conflict
- * @param  boolean                      Whether to skip the AFM because we know it's not needed (or can't be loaded)
- * @param  string                       The base URL (blank: natural)
+ * @param  ID_TEXT                      $zone The current name of the zone
+ * @param  SHORT_TEXT                   $title The zone title
+ * @param  ID_TEXT                      $default_page The zones default page
+ * @param  SHORT_TEXT                   $header_text The header text
+ * @param  ID_TEXT                      $theme The theme
+ * @param  BINARY                       $require_session Whether the zone requires a session for pages to be used
+ * @param  ID_TEXT                      $new_zone The new name of the zone
+ * @param  boolean                      $uniqify Whether to force the name as unique, if there's a conflict
+ * @param  boolean                      $skip_afm Whether to skip the AFM because we know it's not needed (or can't be loaded)
+ * @param  string                       $base_url The base URL (blank: natural)
  * @return ID_TEXT                      The name
  */
 function actual_edit_zone($zone, $title, $default_page, $header_text, $theme, $require_session, $new_zone, $uniqify = false, $skip_afm = false, $base_url = '')
@@ -107,9 +107,9 @@ function actual_edit_zone($zone, $title, $default_page, $header_text, $theme, $r
 /**
  * Rename a zone in the database.
  *
- * @param  ID_TEXT                      The old name of the zone
- * @param  ID_TEXT                      The new name of the zone
- * @param  boolean                      Whether to assume the main zone row has already been renamed as part of a wider editing operation
+ * @param  ID_TEXT                      $zone The old name of the zone
+ * @param  ID_TEXT                      $new_zone The new name of the zone
+ * @param  boolean                      $dont_bother_with_main_row Whether to assume the main zone row has already been renamed as part of a wider editing operation
  */
 function actual_rename_zone_lite($zone, $new_zone, $dont_bother_with_main_row = false)
 {
@@ -150,9 +150,9 @@ function actual_rename_zone_lite($zone, $new_zone, $dont_bother_with_main_row = 
 /**
  * Delete a zone.
  *
- * @param  ID_TEXT                      The name of the zone
- * @param  boolean                      Force, even if it contains pages
- * @param  boolean                      Whether to skip the AFM because we know it's not needed (or can't be loaded)
+ * @param  ID_TEXT                      $zone The name of the zone
+ * @param  boolean                      $force Force, even if it contains pages
+ * @param  boolean                      $skip_afm Whether to skip the AFM because we know it's not needed (or can't be loaded)
  */
 function actual_delete_zone($zone, $force = false, $skip_afm = false)
 {
@@ -194,7 +194,7 @@ function actual_delete_zone($zone, $force = false, $skip_afm = false)
 /**
  * Delete a zones database stuff.
  *
- * @param  ID_TEXT                      The name of the zone
+ * @param  ID_TEXT                      $zone The name of the zone
  */
 function actual_delete_zone_lite($zone)
 {
@@ -238,10 +238,10 @@ function actual_delete_zone_lite($zone)
 /**
  * The do-next manager for after content management.
  *
- * @param  tempcode                     The title (output of get_screen_title)
- * @param  ?ID_TEXT                     The name of the page just handled (null: none)
- * @param  ID_TEXT                      The name of the zone just handled (blank: none/welcome-zone)
- * @param  tempcode                     The text to show (blank: default)
+ * @param  tempcode                     $title The title (output of get_screen_title)
+ * @param  ?ID_TEXT                     $page The name of the page just handled (null: none)
+ * @param  ID_TEXT                      $zone The name of the zone just handled (blank: none/welcome-zone)
+ * @param  tempcode                     $completion_text The text to show (blank: default)
  * @return tempcode                     The UI
  */
 function sitemap_do_next_manager($title, $page, $zone, $completion_text)
@@ -289,10 +289,10 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
 /**
  * Get a list of zones.
  *
- * @param  ?ID_TEXT                     The zone in the list to select by default (null: use first)
- * @param  ?array                       A list of zone to not put into the list (null: none to skip)
- * @param  ?array                       A reordering (null: no reordering)
- * @param  ?TIME                        Time from which content must be updated (null: no limit).
+ * @param  ?ID_TEXT                     $sel The zone in the list to select by default (null: use first)
+ * @param  ?array                       $no_go A list of zone to not put into the list (null: none to skip)
+ * @param  ?array                       $reorder A reordering (null: no reordering)
+ * @param  ?TIME                        $updated_since Time from which content must be updated (null: no limit).
  * @return tempcode                     The list
  */
 function create_selection_list_zones($sel = null, $no_go = null, $reorder = null, $updated_since = null)
@@ -340,9 +340,9 @@ function create_selection_list_zones($sel = null, $no_go = null, $reorder = null
 /**
  * Get a zone chooser interface.
  *
- * @param  boolean                      Whether the zone chooser will be shown inline to something else (as opposed to providing it's own borderings)
- * @param  ?array                       A list of zone to not put into the list (null: none to skip)
- * @param  ?array                       A reordering (null: no reordering)
+ * @param  boolean                      $inline Whether the zone chooser will be shown inline to something else (as opposed to providing it's own borderings)
+ * @param  ?array                       $no_go A list of zone to not put into the list (null: none to skip)
+ * @param  ?array                       $reorder A reordering (null: no reordering)
  * @return tempcode                     The zone chooser
  */
 function get_zone_chooser($inline = false, $no_go = null, $reorder = null)
@@ -356,19 +356,19 @@ function get_zone_chooser($inline = false, $no_go = null, $reorder = null)
 /**
  * Save a Comcode page.
  *
- * @param  ID_TEXT                      The zone
- * @param  ID_TEXT                      The page
- * @param  LANGUAGE_NAME                The language
- * @param  ID_TEXT                      The page text
- * @param  BINARY                       The validated status
- * @param  ?ID_TEXT                     The page parent (null: none)
- * @param  ?TIME                        Add time (null: now)
- * @param  ?TIME                        Edit time (null: not edited)
- * @param  BINARY                       Whether to show as edited
- * @param  ?MEMBER                      The submitter (null: current member)
- * @param  ?ID_TEXT                     The old page name (null: not being renamed)
- * @param  SHORT_TEXT                   Meta keywords for this resource (blank: implicit)
- * @param  LONG_TEXT                    Meta description for this resource (blank: implicit)
+ * @param  ID_TEXT                      $zone The zone
+ * @param  ID_TEXT                      $new_file The page
+ * @param  LANGUAGE_NAME                $lang The language
+ * @param  ID_TEXT                      $text The page text
+ * @param  BINARY                       $validated The validated status
+ * @param  ?ID_TEXT                     $parent_page The page parent (null: none)
+ * @param  ?TIME                        $add_time Add time (null: now)
+ * @param  ?TIME                        $edit_time Edit time (null: not edited)
+ * @param  BINARY                       $show_as_edit Whether to show as edited
+ * @param  ?MEMBER                      $submitter The submitter (null: current member)
+ * @param  ?ID_TEXT                     $file The old page name (null: not being renamed)
+ * @param  SHORT_TEXT                   $meta_keywords Meta keywords for this resource (blank: implicit)
+ * @param  LONG_TEXT                    $meta_description Meta description for this resource (blank: implicit)
  * @return PATH                         The save path
  */
 function save_comcode_page($zone, $new_file, $lang, $text, $validated, $parent_page = null, $add_time = null, $edit_time = null, $show_as_edit = 0, $submitter = null, $file = null, $meta_keywords = '', $meta_description = '')
@@ -523,10 +523,10 @@ function save_comcode_page($zone, $new_file, $lang, $text, $validated, $parent_p
 /**
  * Delete an ocPortal page.
  *
- * @param  ID_TEXT                      The zone
- * @param  ID_TEXT                      The page
- * @param  ?ID_TEXT                     The page type (null: Comcode page in ocPortal's fallback language) [NB: page is deleted in all languages regardless of which is given]
- * @param  boolean                      Whether to use the AFM
+ * @param  ID_TEXT                      $zone The zone
+ * @param  ID_TEXT                      $page The page
+ * @param  ?ID_TEXT                     $type The page type (null: Comcode page in ocPortal's fallback language) [NB: page is deleted in all languages regardless of which is given]
+ * @param  boolean                      $use_afm Whether to use the AFM
  */
 function delete_ocp_page($zone, $page, $type = null, $use_afm = false)
 {

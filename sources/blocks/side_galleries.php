@@ -57,7 +57,7 @@ class Block_side_galleries
     /**
      * Execute the block.
      *
-     * @param  array                    A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @return tempcode                 The result of execution.
      */
     public function run($map)
@@ -105,10 +105,10 @@ class Block_side_galleries
     /**
      * Show a group of subgalleries for use in a compact tree structure.
      *
-     * @param  ID_TEXT                  The zone our gallery module is in
-     * @param  array                    A list of gallery rows
-     * @param  ID_TEXT                  The template to use to show each subgallery
-     * @param  boolean                  Whether to show empty galleries
+     * @param  ID_TEXT                  $zone The zone our gallery module is in
+     * @param  array                    $galleries A list of gallery rows
+     * @param  ID_TEXT                  $tpl The template to use to show each subgallery
+     * @param  boolean                  $show_empty Whether to show empty galleries
      * @return tempcode                 The shown galleries
      */
     public function inside($zone, $galleries, $tpl, $show_empty)

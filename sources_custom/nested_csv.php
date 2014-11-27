@@ -170,10 +170,10 @@ function get_nested_csv_structure()
 /**
  * Query the CSV files.
  *
- * @param  ID_TEXT                      Filename
- * @param  ?ID_TEXT                     Name of field we know (null: we know nothing special - i.e. no filtering)
- * @param  ?ID_TEXT                     Value of field we know (null: we know nothing special - i.e. no filtering)
- * @param  ?ID_TEXT                     Name of field we want (null: all fields in an array)
+ * @param  ID_TEXT                      $csv_file Filename
+ * @param  ?ID_TEXT                     $known_field_key Name of field we know (null: we know nothing special - i.e. no filtering)
+ * @param  ?ID_TEXT                     $known_field_value Value of field we know (null: we know nothing special - i.e. no filtering)
+ * @param  ?ID_TEXT                     $desired_field Name of field we want (null: all fields in an array)
  * @return array                        List of possibilities
  */
 function get_csv_data_values($csv_file, $known_field_key = null, $known_field_value = null, $desired_field = null)
@@ -188,9 +188,9 @@ function get_csv_data_values($csv_file, $known_field_key = null, $known_field_va
 /**
  * Query the CSV files for multiple matching constraints at once.
  *
- * @param  ID_TEXT                      Filename
- * @param  array                        Map of ANDd constraints
- * @param  ?ID_TEXT                     Name of field we want (null: all fields in an array)
+ * @param  ID_TEXT                      $csv_file Filename
+ * @param  array                        $map Map of ANDd constraints
+ * @param  ?ID_TEXT                     $desired_field Name of field we want (null: all fields in an array)
  * @return array                        List of possibilities
  */
 function get_csv_data_values__and($csv_file, $map, $desired_field = null)
@@ -215,7 +215,7 @@ function get_csv_data_values__and($csv_file, $map, $desired_field = null)
 /**
  * Get member CPFs against CSV headings.
  *
- * @param  MEMBER                       Member ID
+ * @param  MEMBER                       $member_id Member ID
  * @return array                        Map of settings
  */
 function get_members_csv_data_values($member_id)

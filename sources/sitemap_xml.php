@@ -88,7 +88,7 @@ function sitemap_xml_build()
 /**
  * Ping search engines with an updated sitemap.
  *
- * @param  URLPATH                      Sitemap URL.
+ * @param  URLPATH                      $url Sitemap URL.
  * @return string                       HTTP result output
  */
 function ping_sitemap_xml($url)
@@ -118,7 +118,7 @@ function ping_sitemap_xml($url)
 /**
  * Initialise the writing to a Sitemap XML file. You can only call one of these functions per time as it uses global variables for tracking.
  *
- * @param  PATH                         Where we will save to.
+ * @param  PATH                         $file_path Where we will save to.
  */
 function _sitemap_xml_initialise($file_path)
 {
@@ -176,7 +176,7 @@ function _sitemap_xml_finished()
 /**
  * Callback for writing a Sitemap node into the Sitemap XML file.
  *
- * @param  array                        The Sitemap node.
+ * @param  array                        $node The Sitemap node.
  */
 function _sitemap_xml_serialize_sitemap_node($node)
 {

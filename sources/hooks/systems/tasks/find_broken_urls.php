@@ -160,14 +160,14 @@ class Hook_task_find_broken_urls
     /**
      * Check to see if a URL is broken.
      *
-     * @param  URLPATH                  URL to check
-     * @param  ID_TEXT                  Table name
-     * @param  ID_TEXT                  Field name
-     * @param  ID_TEXT                  ID
-     * @param  array                    Place to record what we've already checked
-     * @param  array                    Place to put 404 errors
-     * @param  array                    Place to put file-not-found errors
-     * @param  string                   A textual identifier to where the content can be seen
+     * @param  URLPATH                  $url URL to check
+     * @param  ID_TEXT                  $table Table name
+     * @param  ID_TEXT                  $field Field name
+     * @param  $id ID_TEXT                  $id ID
+     * @param  array                     &$checked_already Place to record what we've already checked
+     * @param  array                     &$found_404 Place to put 404 errors
+     * @param  array                     &$found Place to put file-not-found errors
+     * @param  string                   $spot A textual identifier to where the content can be seen
      */
     public function check_url($url, $table, $field, $id, &$checked_already, &$found_404, &$found, $spot = '')
     {

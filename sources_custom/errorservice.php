@@ -48,7 +48,7 @@ function get_problem_match()
 /**
  * Find a match for a problem in the database.
  *
- * @param  string                       The error that occurred
+ * @param  string                       $error_message The error that occurred
  * @return ?array                       A tuple: the post ID, the full Comcode, the Tempcode, the language string ID  (probably caller will only use post ID and Tempcode - but all available)
  */
 function get_problem_match_worker($error_message)

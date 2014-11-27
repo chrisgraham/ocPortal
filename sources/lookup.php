@@ -29,10 +29,10 @@ function init__lookup()
 /**
  * Get information about the specified member.
  *
- * @param  mixed                        The member for whom we are getting the page
- * @param  ?string                      The member's name (by reference) (null: unknown)
- * @param  ?AUTO_LINK                   The member's ID (by reference) (null: unknown)
- * @param  ?string                      The member's IP (by reference) (null: unknown)
+ * @param  mixed                        $member The member for whom we are getting the page
+ * @param  ?string                       &$name The member's name (by reference) (null: unknown)
+ * @param  ?AUTO_LINK                    &$id The member's ID (by reference) (null: unknown)
+ * @param  ?string                       &$ip The member's IP (by reference) (null: unknown)
  * @return array                        The member's stats rows
  */
 function lookup_member_page($member, &$name, &$id, &$ip)
@@ -99,12 +99,12 @@ function lookup_member_page($member, &$name, &$id, &$ip)
 /**
  * Get a results table showing info about the member's travels around the site.
  *
- * @param  MEMBER                       The member we are getting travel stats for
- * @param  IP                           The IP address of the member
- * @param  integer                      The current position in the browser
- * @param  integer                      The maximum number of rows to show per browser page
- * @param  ?ID_TEXT                     The current sortable (null: none)
- * @param  ?ID_TEXT                     The order we are sorting in (null: none)
+ * @param  MEMBER                       $member The member we are getting travel stats for
+ * @param  IP                           $ip The IP address of the member
+ * @param  integer                      $start The current position in the browser
+ * @param  integer                      $max The maximum number of rows to show per browser page
+ * @param  ?ID_TEXT                     $sortable The current sortable (null: none)
+ * @param  ?ID_TEXT                     $sort_order The order we are sorting in (null: none)
  * @set    ASC DESC
  * @return tempcode                     The results table
  */
@@ -166,7 +166,7 @@ function get_stats_track($member, $ip, $start = 0, $max = 50, $sortable = 'date_
 /**
  * Get a results table showing security alerts matching WHERE constraints.
  *
- * @param  ?array                       WHERE constraints (null: none)
+ * @param  ?array                       $where WHERE constraints (null: none)
  * @return array                        A pair: The results table, The number
  */
 function find_security_alerts($where)

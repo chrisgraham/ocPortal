@@ -17,8 +17,8 @@
 /**
  * Calculate Levenshtein distance between two strings, but work past the PHP function's character limit.
  *
- * @param  string                       First string.
- * @param  string                       Second string.
+ * @param  string                       $a First string.
+ * @param  string                       $b Second string.
  * @return integer                      Distance.
  */
 function fake_levenshtein($a, $b)
@@ -66,7 +66,7 @@ class Hook_html_site
     /**
      * Probe a file path for DB access details.
      *
-     * @param  string                   The probe path
+     * @param  string                   $file_base The probe path
      * @return array                    A quartet of the details (db_name, db_user, db_pass, table_prefix)
      */
     public function probe_db_access($file_base)
@@ -111,9 +111,9 @@ class Hook_html_site
     /**
      * Standard import function.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  PATH                     The base directory we are importing from
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  PATH                     $file_base The base directory we are importing from
      */
     public function import_pages($db, $table_prefix, $file_base)
     {

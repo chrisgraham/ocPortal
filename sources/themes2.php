@@ -101,12 +101,12 @@ function autoprobe_cdns()
 /**
  * Edit a theme image.
  *
- * @param  SHORT_TEXT                   The current theme image ID
- * @param  ID_TEXT                      The theme the theme image is in
- * @param  LANGUAGE_NAME                The language the theme image is for (blank: all languages)
- * @param  SHORT_TEXT                   The new theme image ID
- * @param  URLPATH                      The URL to the theme image
- * @param  boolean                      Whether to avoid cleanup, etc
+ * @param  SHORT_TEXT                   $old_id The current theme image ID
+ * @param  ID_TEXT                      $theme The theme the theme image is in
+ * @param  LANGUAGE_NAME                $lang The language the theme image is for (blank: all languages)
+ * @param  SHORT_TEXT                   $id The new theme image ID
+ * @param  URLPATH                      $path The URL to the theme image
+ * @param  boolean                      $quick Whether to avoid cleanup, etc
  */
 function actual_edit_theme_image($old_id, $theme, $lang, $id, $path, $quick = false)
 {
@@ -167,7 +167,7 @@ function actual_edit_theme_image($old_id, $theme, $lang, $id, $path, $quick = fa
 /**
  * Replace colour codes with references (helper callback function)
  *
- * @param  array                        List of found regular expression matches (only index 0 relevant).
+ * @param  array                        $matches List of found regular expression matches (only index 0 relevant).
  * @return string                       Replacement.
  */
 function css_preg($matches)
@@ -182,7 +182,7 @@ function css_preg($matches)
 /**
  * Add a theme.
  *
- * @param  ID_TEXT                      The theme name
+ * @param  ID_TEXT                      $name The theme name
  */
 function actual_add_theme($name)
 {
@@ -252,11 +252,11 @@ function actual_add_theme($name)
 /**
  * Add a theme image.
  *
- * @param  ID_TEXT                      The theme the theme image is in
- * @param  LANGUAGE_NAME                The language the theme image is for
- * @param  SHORT_TEXT                   The theme image ID
- * @param  URLPATH                      The URL to the theme image
- * @param  boolean                      Whether to allow failure without bombing out
+ * @param  ID_TEXT                      $theme The theme the theme image is in
+ * @param  LANGUAGE_NAME                $lang The language the theme image is for
+ * @param  SHORT_TEXT                   $id The theme image ID
+ * @param  URLPATH                      $path The URL to the theme image
+ * @param  boolean                      $fail_ok Whether to allow failure without bombing out
  */
 function actual_add_theme_image($theme, $lang, $id, $path, $fail_ok = false)
 {
@@ -283,11 +283,11 @@ function actual_add_theme_image($theme, $lang, $id, $path, $fail_ok = false)
 /**
  * A theme image has been passed through by POST, either as a file (a new theme image), or as a reference to an existing one. Get the image code from the POST data.
  *
- * @param  ID_TEXT                      The type of theme image
- * @param  boolean                      Allow no code to be given
- * @param  ID_TEXT                      Form field for uploading
- * @param  ID_TEXT                      Form field for choosing
- * @param  ?object                      Database connection (null: site database)
+ * @param  ID_TEXT                      $type The type of theme image
+ * @param  boolean                      $allow_skip Allow no code to be given
+ * @param  ID_TEXT                      $field_file Form field for uploading
+ * @param  ID_TEXT                      $field_choose Form field for choosing
+ * @param  ?object                      $db Database connection (null: site database)
  * @return ID_TEXT                      The (possibly randomised) theme image code
  */
 function get_theme_img_code($type, $allow_skip = false, $field_file = 'file', $field_choose = 'theme_img_code', $db = null)
@@ -325,9 +325,9 @@ function get_theme_img_code($type, $allow_skip = false, $field_file = 'file', $f
 /**
  * Recursively find theme images under the specified details. Does not find custom theme images, as it doesn't check the DB.
  *
- * @param  ID_TEXT                      The theme
- * @param  string                       The subdirectory to search under
- * @param  array                        A map (lang=>1) of the languages in the system, so the codes may be filtered out of the image codes in our result list
+ * @param  ID_TEXT                      $theme The theme
+ * @param  string                       $subdir The subdirectory to search under
+ * @param  array                        $langs A map (lang=>1) of the languages in the system, so the codes may be filtered out of the image codes in our result list
  * @return array                        A map, theme-image-code=>URL
  */
 function find_images_do_dir($theme, $subdir, $langs)
@@ -365,13 +365,13 @@ function find_images_do_dir($theme, $subdir, $langs)
 /**
  * Get all the image IDs (both already known, and those uncached) of a certain type (i.e. under a subdirectory).
  *
- * @param  ID_TEXT                      The type of image (e.g. 'ocf_emoticons')
- * @param  boolean                      Whether to search recursively; i.e. in subdirectories of the type subdirectory
- * @param  ?object                      The database connection to work over (null: site db)
- * @param  ?ID_TEXT                     The theme to search in, in addition to the default theme (null: current theme)
- * @param  boolean                      Whether to only return directories (advanced option, rarely used)
- * @param  boolean                      Whether to only return from the database (advanced option, rarely used)
- * @param  ?array                       The list of files/directories to skip (null: none)
+ * @param  ID_TEXT                      $type The type of image (e.g. 'ocf_emoticons')
+ * @param  boolean                      $recurse Whether to search recursively; i.e. in subdirectories of the type subdirectory
+ * @param  ?object                      $db The database connection to work over (null: site db)
+ * @param  ?ID_TEXT                     $theme The theme to search in, in addition to the default theme (null: current theme)
+ * @param  boolean                      $dirs_only Whether to only return directories (advanced option, rarely used)
+ * @param  boolean                      $db_only Whether to only return from the database (advanced option, rarely used)
+ * @param  ?array                       $skip The list of files/directories to skip (null: none)
  * @return array                        The list of image IDs
  */
 function get_all_image_ids_type($type, $recurse = false, $db = null, $theme = null, $dirs_only = false, $db_only = false, $skip = null)
@@ -450,12 +450,12 @@ function get_all_image_ids_type($type, $recurse = false, $db = null, $theme = nu
 /**
  * Get all the image IDs (both already known, and those uncached) of a certain type (i.e. under a subdirectory).
  *
- * @param  array                        The list of image IDs found so far. This list will be appended as we proceed
- * @param  ID_TEXT                      The specific theme image subdirectory we are currently looking under
- * @param  ID_TEXT                      The type of image (e.g. 'ocf_emoticons')
- * @param  boolean                      Whether to search recursively; i.e. in subdirectories of the type subdirectory
- * @param  boolean                      Whether to only return directories (advanced option, rarely used)
- * @param  array                        The list of files/directories to skip
+ * @param  array                        &$ids The list of image IDs found so far. This list will be appended as we proceed
+ * @param  ID_TEXT                      $dir The specific theme image subdirectory we are currently looking under
+ * @param  ID_TEXT                      $type The type of image (e.g. 'ocf_emoticons')
+ * @param  boolean                      $recurse Whether to search recursively; i.e. in subdirectories of the type subdirectory
+ * @param  boolean                      $dirs_only Whether to only return directories (advanced option, rarely used)
+ * @param  array                        $skip The list of files/directories to skip
  */
 function _get_all_image_ids_type(&$ids, $dir, $type, $recurse, $dirs_only, $skip)
 {
@@ -498,9 +498,9 @@ function _get_all_image_ids_type(&$ids, $dir, $type, $recurse, $dirs_only, $skip
 /**
  * Get tempcode for a radio list to choose an image from the image FILES in the theme.
  *
- * @param  string                       The currently selected image path (blank for none)
- * @param  URLPATH                      The base-URL to where we are searching for images
- * @param  PATH                         The base-path to where we are searching for images
+ * @param  string                       $selected_path The currently selected image path (blank for none)
+ * @param  URLPATH                      $base_url The base-URL to where we are searching for images
+ * @param  PATH                         $base_path The base-path to where we are searching for images
  * @return tempcode                     The generated tempcode
  */
 function combo_get_image_paths($selected_path, $base_url, $base_path)
@@ -521,8 +521,8 @@ function combo_get_image_paths($selected_path, $base_url, $base_path)
 /**
  * Search under a base path for image FILE URLs (not actually paths as function name would suggest).
  *
- * @param  URLPATH                      The base-URL to where we are searching for images
- * @param  PATH                         The base-path to where we are searching for images
+ * @param  URLPATH                      $base_url The base-URL to where we are searching for images
+ * @param  PATH                         $base_path The base-path to where we are searching for images
  * @return array                        path->url map of found images
  */
 function get_image_paths($base_url, $base_path)
@@ -556,9 +556,9 @@ function get_image_paths($base_url, $base_path)
 /**
  * Get all the themes image codes. THIS DOES NOT SEARCH THE DB - DO NOT USE UNLESS IT'S ON A PURE PACKAGED THEME
  *
- * @param  PATH                         The base-path to where we are searching for images
- * @param  PATH                         The path to search under, relative to the base-path. This is not the same as the base-path, as we are cropping paths to the base-path
- * @param  boolean                      Whether to search recursively from the given directory
+ * @param  PATH                         $base_path The base-path to where we are searching for images
+ * @param  PATH                         $search_under The path to search under, relative to the base-path. This is not the same as the base-path, as we are cropping paths to the base-path
+ * @param  boolean                      $recurse Whether to search recursively from the given directory
  * @return array                        A list of image codes
  */
 function get_all_image_codes($base_path, $search_under, $recurse = true)
@@ -602,12 +602,12 @@ function get_all_image_codes($base_path, $search_under, $recurse = true)
 /**
  * Get tempcode for a dropdown to choose a theme from the themes present.
  *
- * @param  ?ID_TEXT                     The currently selected image ID (null: none selected)
- * @param  ?string                      An SQL where clause (including the WHERE), that filters the query somehow (null: none)
- * @param  boolean                      Whether to show IDs as the list entry captions, rather than paths
- * @param  boolean                      Whether to include images not yet used (i.e not in theme_images map yet)
+ * @param  ?ID_TEXT                     $it The currently selected image ID (null: none selected)
+ * @param  ?string                      $filter An SQL where clause (including the WHERE), that filters the query somehow (null: none)
+ * @param  boolean                      $do_id Whether to show IDs as the list entry captions, rather than paths
+ * @param  boolean                      $include_all Whether to include images not yet used (i.e not in theme_images map yet)
  * @return tempcode                     Tempcode for a list selection of theme images
- * @param  string                       Only include images under this path. Including a trailing slash unless you specifically want to filter allowing filename stubs as well as paths (blank: no limitation)
+ * @param  string                       $under Only include images under this path. Including a trailing slash unless you specifically want to filter allowing filename stubs as well as paths (blank: no limitation)
  */
 function create_selection_list_theme_images($it = null, $filter = null, $do_id = false, $include_all = false, $under = '')
 {
@@ -644,10 +644,10 @@ function create_selection_list_theme_images($it = null, $filter = null, $do_id =
 /**
  * Get a UI list for choosing a theme.
  *
- * @param  ?ID_TEXT                     The theme to select by default (null: no specific default)
- * @param  boolean                      Whether to skip the 'rely on forums' entry
- * @param  boolean                      Whether to forget about permissions for this list
- * @param  ID_TEXT                      The language string to use for the default answer
+ * @param  ?ID_TEXT                     $theme The theme to select by default (null: no specific default)
+ * @param  boolean                      $no_rely Whether to skip the 'rely on forums' entry
+ * @param  boolean                      $show_everything Whether to forget about permissions for this list
+ * @param  ID_TEXT                      $default_message_string The language string to use for the default answer
  * @return tempcode                     The list
  */
 function create_selection_list_themes($theme = null, $no_rely = false, $show_everything = false, $default_message_string = 'RELY_FORUMS')
@@ -673,7 +673,7 @@ function create_selection_list_themes($theme = null, $no_rely = false, $show_eve
 /**
  * Get an array listing all the themes present.
  *
- * @param  boolean                      Whether to gather full details for each theme
+ * @param  boolean                      $full_details Whether to gather full details for each theme
  * @return array                        A map of all themes (name=>title) OR if requested a map of theme name to full theme details
  */
 function find_all_themes($full_details = false)
@@ -749,11 +749,11 @@ function find_all_themes($full_details = false)
 /**
  * Delete a theme image used for a resource that was added, but only if the theme image is now unused.
  *
- * @param  ?ID_TEXT                     The new theme image (null: no new one)
- * @param  ID_TEXT                      The old theme image we might be tidying up
- * @param  ID_TEXT                      Table to check against
- * @param  ID_TEXT                      Field in table
- * @param  ?object                      Database connection to check against (null: site database)
+ * @param  ?ID_TEXT                     $new The new theme image (null: no new one)
+ * @param  ID_TEXT                      $old The old theme image we might be tidying up
+ * @param  ID_TEXT                      $table Table to check against
+ * @param  ID_TEXT                      $field Field in table
+ * @param  ?object                      $db Database connection to check against (null: site database)
  */
 function tidy_theme_img_code($new, $old, $table, $field, $db = null)
 {

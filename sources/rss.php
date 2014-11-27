@@ -21,7 +21,7 @@
 /**
  * Used to turn plain-text links into real links.
  *
- * @param  array                        The matches
+ * @param  array                        $matches The matches
  * @return string                       The replacement
  */
 function extract_plain_links($matches)
@@ -46,8 +46,8 @@ class OCP_RSS
     /**
      * Constructs the RSS reader: downloads the URL and parses it. Check $error after constructing.
      *
-     * @param  URLPATH                  The URL to the RSS we will be reading
-     * @param  boolean                  Whether the 'url' is actually a filesystem path
+     * @param  URLPATH                  $url The URL to the RSS we will be reading
+     * @param  boolean                  $is_filesystem_path Whether the 'url' is actually a filesystem path
      */
     public function __construct($url, $is_filesystem_path = false)
     {
@@ -195,9 +195,9 @@ class OCP_RSS
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   N/A
-     * @param  ?URLPATH                 The URI of the name space we are entering (null: not given)
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $prefix N/A
+     * @param  ?URLPATH                 $uri The URI of the name space we are entering (null: not given)
      */
     public function startNameSpace($parser, $prefix, $uri = null)
     {
@@ -212,7 +212,7 @@ class OCP_RSS
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
+     * @param  object                   $parser The parser object (same as 'this')
      */
     public function endNameSpace($parser)
     {
@@ -222,9 +222,9 @@ class OCP_RSS
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The name of the element found
-     * @param  array                    Array of attributes of the element
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $name The name of the element found
+     * @param  array                    $attributes Array of attributes of the element
      */
     public function startElement($parser, $name, $attributes)
     {
@@ -268,7 +268,7 @@ class OCP_RSS
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
+     * @param  object                   $parser The parser object (same as 'this')
      */
     public function endElement($parser)
     {
@@ -281,8 +281,8 @@ class OCP_RSS
     /**
      * Standard PHP XML parser function.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The text
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $data The text
      */
     public function startText($parser, $data)
     {
@@ -292,8 +292,8 @@ class OCP_RSS
     /**
      * Parse the complete text of the inside of the tag.
      *
-     * @param  object                   The parser object (same as 'this')
-     * @param  string                   The text
+     * @param  object                   $parser The parser object (same as 'this')
+     * @param  string                   $data The text
      */
     public function trueStartText($parser, $data)
     {
@@ -711,7 +711,7 @@ class OCP_RSS
 /**
  * Convert an ISO date into a timestamp.
  *
- * @param  string                       The ISO date
+ * @param  string                       $date The ISO date
  * @return array                        If only one element, it contains the timestamp. Otherwise it is a pair: (string format, timestamp)
  */
 function cleanup_date($date)

@@ -145,9 +145,9 @@ class Virtual_shell
     /**
      * Constructor function. Starts command parsing on the supplied command.
      *
-     * @param  string                   The inputted command, unparsed
-     * @param  ?array                   An array of prior output to be prepended (null: none)
-     * @param  ?array                   An array of prior parameters (null: none)
+     * @param  string                   $inputted_command The inputted command, unparsed
+     * @param  ?array                   $prior_output An array of prior output to be prepended (null: none)
+     * @param  ?array                   $parameters An array of prior parameters (null: none)
      */
     public function __construct($inputted_command, $prior_output = null, $parameters = null)
     {
@@ -286,7 +286,7 @@ class Virtual_shell
     /**
      * Return the HTML rendering of the parsed command's output.
      *
-     * @param  boolean                  Whether it is okay to have blank output
+     * @param  boolean                  $blank_ok Whether it is okay to have blank output
      * @return ~tempcode                The HTML (false: error)
      */
     public function output_html($blank_ok = false)
@@ -1289,7 +1289,7 @@ class Virtual_shell
 /**
  * Returns a string containing the XML for any messages queued to be sent to the client.
  *
- * @param  boolean                      Output as XML or tempcode?
+ * @param  boolean                      $xml Output as XML or tempcode?
  * @return string                       The queued message XML
  */
 function get_queued_messages($xml = true)
@@ -1333,9 +1333,9 @@ function get_queued_messages($xml = true)
 /**
  * Template for a command's help.
  *
- * @param  string                       Command name
- * @param  array                        Options
- * @param  array                        Parameters (keys are the parameters, values are always set to true, i.e. it is an array of as many trues as there are parameters)
+ * @param  string                       $command Command name
+ * @param  array                        $options Options
+ * @param  array                        $parameters Parameters (keys are the parameters, values are always set to true, i.e. it is an array of as many trues as there are parameters)
  * @return tempcode                     Help template
  */
 function do_command_help($command, $options, $parameters)
@@ -1377,7 +1377,7 @@ function do_command_help($command, $options, $parameters)
 /**
  * Put something non-OcCLE in a standard box so it looks OK.
  *
- * @param  mixed                        HTML (string or Tempcode)
+ * @param  mixed                        $html HTML (string or Tempcode)
  * @return tempcode                     Boxed HTML
  */
 function occle_make_normal_html_visible($html)

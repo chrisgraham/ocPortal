@@ -44,10 +44,10 @@ class Module_admin_sitemap
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -193,10 +193,10 @@ class Module_admin_sitemap
     /**
      * The do-next manager for after content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  ?ID_TEXT                 The name of the page just handled (null: none)
-     * @param  ID_TEXT                  The name of the zone just handled (blank: none/welcome-zone)
-     * @param  tempcode                 The text to show (blank: default)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  ?ID_TEXT                 $page The name of the page just handled (null: none)
+     * @param  ID_TEXT                  $zone The name of the zone just handled (blank: none/welcome-zone)
+     * @param  tempcode                 $completion_text The text to show (blank: default)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $page, $zone, $completion_text)
@@ -238,8 +238,8 @@ class Module_admin_sitemap
     /**
      * The UI to choose a zone.
      *
-     * @param  tempcode                 The title for the "choose a zone" page
-     * @param  ?string                  Zone to not allow the selection of (null: none to filter out)
+     * @param  tempcode                 $title The title for the "choose a zone" page
+     * @param  ?string                  $no_go Zone to not allow the selection of (null: none to filter out)
      * @return tempcode                 The UI
      */
     public function _choose_zone($title, $no_go = null)

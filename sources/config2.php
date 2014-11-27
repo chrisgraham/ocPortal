@@ -89,7 +89,7 @@ function _multi_lang()
 /**
  * Get the default value of a config option.
  *
- * @param  ID_TEXT                      The name of the option
+ * @param  ID_TEXT                      $name The name of the option
  * @return ?SHORT_TEXT                  The value (null: disabled)
  */
 function get_default_option($name)
@@ -108,9 +108,9 @@ function get_default_option($name)
 /**
  * Set a configuration option with the specified values.
  *
- * @param  ID_TEXT                      The name of the value
- * @param  LONG_TEXT                    The value
- * @param  BINARY                       Whether this was a human-set value
+ * @param  ID_TEXT                      $name The name of the value
+ * @param  LONG_TEXT                    $value The value
+ * @param  BINARY                       $will_be_formally_set Whether this was a human-set value
  */
 function set_option($name, $value, $will_be_formally_set = 1)
 {
@@ -185,9 +185,9 @@ function set_option($name, $value, $will_be_formally_set = 1)
 /**
  * Update a reference stored in a config option.
  *
- * @param  SHORT_TEXT                   The old value
- * @param  SHORT_TEXT                   The name value
- * @param  ID_TEXT                      The type
+ * @param  SHORT_TEXT                   $old_setting The old value
+ * @param  SHORT_TEXT                   $setting The name value
+ * @param  ID_TEXT                      $type The type
  */
 function config_update_value_ref($old_setting, $setting, $type)
 {
@@ -206,7 +206,7 @@ function config_update_value_ref($old_setting, $setting, $type)
 /**
  * Update a reference stored in a config option.
  *
- * @param  ID_TEXT                      The config option name
+ * @param  ID_TEXT                      $name The config option name
  * @return ?URLPATH                     URL to set the config option (null: no such option exists)
  */
 function config_option_url($name)
@@ -230,7 +230,7 @@ function config_option_url($name)
 /**
  * Deletes a specified config option permanently from the database.
  *
- * @param  ID_TEXT                      The codename of the config option
+ * @param  ID_TEXT                      $name The codename of the config option
  */
 function delete_config_option($name)
 {
@@ -252,8 +252,8 @@ function delete_config_option($name)
 /**
  * Rename a config option.
  *
- * @param  ID_TEXT                      The old name
- * @param  ID_TEXT                      The new name
+ * @param  ID_TEXT                      $old The old name
+ * @param  ID_TEXT                      $new The new name
  */
 function rename_config_option($old, $new)
 {

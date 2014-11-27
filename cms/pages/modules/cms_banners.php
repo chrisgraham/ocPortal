@@ -45,8 +45,8 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
-     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
-     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (null: read from environment).
+     * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
     public function pre_run($top_level = true, $type = null)
@@ -78,7 +78,7 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Standard crud_module run_start.
      *
-     * @param  ID_TEXT                  The type of module execution
+     * @param  ID_TEXT                  $type The type of module execution
      * @return tempcode                 The output of the run
      */
     public function run_start($type)
@@ -159,10 +159,10 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Find entry-points available within this module.
      *
-     * @param  boolean                  Whether to check permissions.
-     * @param  ?MEMBER                  The member to check permissions as (null: current user).
-     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @param  boolean                  $check_perms Whether to check permissions.
+     * @param  ?MEMBER                  $member_id The member to check permissions as (null: current user).
+     * @param  boolean                  $support_crosslinks Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  $be_deferential Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "browse" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (null: disabled).
      */
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
@@ -205,7 +205,7 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
      */
     public function create_selection_list_choose_table($url_map)
@@ -318,23 +318,23 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Get the tempcode for the form to add a banner, with the information passed along to it via the parameters already added in.
      *
-     * @param  ID_TEXT                  The name of the banner (blank: new)
-     * @param  URLPATH                  The URL to the banner image
-     * @param  URLPATH                  The URL to the site the banner leads to
-     * @param  SHORT_TEXT               The caption of the banner
-     * @param  LONG_TEXT                Complete HTML/PHP for the banner
-     * @param  LONG_TEXT                Any notes associated with the banner
-     * @param  integer                  The banners "importance modulus"
+     * @param  ID_TEXT                  $name The name of the banner (blank: new)
+     * @param  URLPATH                  $image_url The URL to the banner image
+     * @param  URLPATH                  $site_url The URL to the site the banner leads to
+     * @param  SHORT_TEXT               $caption The caption of the banner
+     * @param  LONG_TEXT                $direct_code Complete HTML/PHP for the banner
+     * @param  LONG_TEXT                $notes Any notes associated with the banner
+     * @param  integer                  $importancemodulus The banners "importance modulus"
      * @range  1 max
-     * @param  ?integer                 The number of hits the banner may have (null: not applicable for this banner type)
+     * @param  ?integer                 $campaignremaining The number of hits the banner may have (null: not applicable for this banner type)
      * @range  0 max
-     * @param  SHORT_INTEGER            The type of banner (0=permanent, 1=campaign, 2=default)
+     * @param  SHORT_INTEGER            $the_type The type of banner (0=permanent, 1=campaign, 2=default)
      * @set    0 1 2
-     * @param  ?TIME                    The banner expiry date (null: never expires)
-     * @param  ?MEMBER                  The banners submitter (null: current member)
-     * @param  BINARY                   Whether the banner has been validated
-     * @param  ID_TEXT                  The banner type (can be anything, where blank means 'normal')
-     * @param  SHORT_TEXT               The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
+     * @param  ?TIME                    $expiry_date The banner expiry date (null: never expires)
+     * @param  ?MEMBER                  $submitter The banners submitter (null: current member)
+     * @param  BINARY                   $validated Whether the banner has been validated
+     * @param  ID_TEXT                  $b_type The banner type (can be anything, where blank means 'normal')
+     * @param  SHORT_TEXT               $title_text The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
      * @return array                    Bits
      */
     public function get_form_fields($name = '', $image_url = '', $site_url = '', $caption = '', $direct_code = '', $notes = '', $importancemodulus = 3, $campaignremaining = 50, $the_type = 0, $expiry_date = null, $submitter = null, $validated = 1, $b_type = '', $title_text = '')
@@ -368,7 +368,7 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Standard crud_module submitter getter.
      *
-     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @param  ID_TEXT                  $id The entry for which the submitter is sought
      * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
      */
     public function get_submitter($id)
@@ -383,7 +383,7 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    Bits
      */
     public function fill_in_edit_form($id)
@@ -450,7 +450,7 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      */
     public function edit_actualisation($id)
     {
@@ -490,7 +490,7 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {
@@ -503,9 +503,9 @@ class Module_cms_banners extends Standard_crud_module
     /**
      * The do-next manager for after banner content management (banners only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -535,7 +535,7 @@ class Module_cms_banners_cat extends Standard_crud_module
     /**
      * Standard crud_module table function.
      *
-     * @param  array                    Details to go to build_url for link to the next screen.
+     * @param  array                    $url_map Details to go to build_url for link to the next screen.
      * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
      */
     public function create_selection_list_choose_table($url_map)
@@ -589,12 +589,12 @@ class Module_cms_banners_cat extends Standard_crud_module
     /**
      * Get tempcode for a post template adding/editing form.
      *
-     * @param  ID_TEXT                  The ID of the banner type (blank: new)
-     * @param  BINARY                   Whether this is a textual banner
-     * @param  integer                  The image width (ignored for textual banners)
-     * @param  integer                  The image height (ignored for textual banners)
-     * @param  integer                  The maximum file size for the banners (this is a string length for textual banners)
-     * @param  BINARY                   Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
+     * @param  ID_TEXT                  $id The ID of the banner type (blank: new)
+     * @param  BINARY                   $is_textual Whether this is a textual banner
+     * @param  integer                  $image_width The image width (ignored for textual banners)
+     * @param  integer                  $image_height The image height (ignored for textual banners)
+     * @param  integer                  $max_file_size The maximum file size for the banners (this is a string length for textual banners)
+     * @param  BINARY                   $comcode_inline Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function get_form_fields($id = '', $is_textual = 0, $image_width = 160, $image_height = 600, $max_file_size = 250, $comcode_inline = 0)
@@ -624,7 +624,7 @@ class Module_cms_banners_cat extends Standard_crud_module
     /**
      * Standard crud_module edit form filler.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
     public function fill_in_edit_form($id)
@@ -668,7 +668,7 @@ class Module_cms_banners_cat extends Standard_crud_module
     /**
      * Standard crud_module edit actualiser.
      *
-     * @param  ID_TEXT                  The entry being edited
+     * @param  ID_TEXT                  $id The entry being edited
      * @return tempcode                 Description about usage
      */
     public function edit_actualisation($id)
@@ -697,7 +697,7 @@ class Module_cms_banners_cat extends Standard_crud_module
     /**
      * Standard crud_module delete actualiser.
      *
-     * @param  ID_TEXT                  The entry being deleted
+     * @param  ID_TEXT                  $id The entry being deleted
      */
     public function delete_actualisation($id)
     {
@@ -707,9 +707,9 @@ class Module_cms_banners_cat extends Standard_crud_module
     /**
      * The do-next manager for after download content management (event types only).
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
      * @return tempcode                 The UI
      */
     public function do_next_manager($title, $description, $id)
@@ -720,10 +720,10 @@ class Module_cms_banners_cat extends Standard_crud_module
     /**
      * The do-next manager for after banner content management.
      *
-     * @param  tempcode                 The title (output of get_screen_title)
-     * @param  tempcode                 Some description to show, saying what happened
-     * @param  ?AUTO_LINK               The ID of whatever was just handled (null: N/A)
-     * @param  ID_TEXT                  The type ID we were working in (null: N/A)
+     * @param  tempcode                 $title The title (output of get_screen_title)
+     * @param  tempcode                 $description Some description to show, saying what happened
+     * @param  ?AUTO_LINK               $id The ID of whatever was just handled (null: N/A)
+     * @param  ID_TEXT                  $type The type ID we were working in (null: N/A)
      * @return tempcode                 The UI
      */
     public function _do_next_manager($title, $description, $id, $type)

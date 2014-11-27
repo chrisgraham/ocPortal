@@ -237,9 +237,9 @@ class JabberAuth
     /**
      * Verify a password is correct by comparison of the hashed version.
      *
-     * @param  SHORT_TEXT               The password in plain text
-     * @param  SHORT_TEXT               The salt
-     * @param  SHORT_TEXT               The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
+     * @param  SHORT_TEXT               $password The password in plain text
+     * @param  SHORT_TEXT               $salt The salt
+     * @param  SHORT_TEXT               $pass_hash_salted The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
      * @return boolean                  Whether the password if verified
      */
     public function ratchet_hash_verify($password, $salt, $pass_hash_salted)
