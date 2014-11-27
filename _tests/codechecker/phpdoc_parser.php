@@ -19,6 +19,7 @@ Parse PHPdoc in all scripts under project directory
 
 global $OCPORTAL_PATH;
 
+chdir(dirname(__FILE__));
 require(dirname(__FILE__) . '/lib.php');
 
 if (isset($_SERVER['argv'])) {

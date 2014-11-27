@@ -59,6 +59,9 @@ function get_php_file_api($filename, $include_code = true)
     $class_has_comments = array();
 
     $make_alterations = false;
+    if ((isset($_GET['allow_write'])) && ($_GET['allow_write'] == '1')) {
+        $make_alterations = true;
+    }
 
     // Open up PHP file
     if ($filename == 'phpstub.php') {
@@ -205,16 +208,20 @@ function get_php_file_api($filename, $include_code = true)
                         $_description = trim(implode(' ', $parts));
                         if (substr($_description, 0, 1) != '$') {
                             if ($make_alterations) {
+                                $found = false;
                                 for ($k = $i + 1; $k < count($lines) ; $k++) {
                                     $matches = array();
                                     if (preg_match('#^\s*((public|protected|private) )?function \w+\((.*)\)\n?$#', $lines[$k], $matches) != 0) {
                                         $params = explode(',', $matches[3]);
                                         $_description = /*str_pad(*/preg_replace('#^\s*(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;
+                                        $found = true;
                                         break;
                                     }
                                 }
-                                $lines[$i] = str_replace(trim(implode(' ', $parts)), $_description, $lines[$i]);
-                                file_put_contents($full_path, implode('', $lines));
+                                if ($found) {
+                                    $lines[$i] = str_replace(trim(implode(' ', $parts)), $_description, $lines[$i]);
+                                    file_put_contents($full_path, implode('', $lines));
+                                }
                             }
                         }
                         $_description = preg_replace('#^\$\w+ #', '', $_description);
