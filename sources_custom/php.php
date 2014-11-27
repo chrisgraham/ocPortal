@@ -58,6 +58,8 @@ function get_php_file_api($filename, $include_code = true)
     $classes = array();
     $class_has_comments = array();
 
+    $make_alterations = false;
+
     // Open up PHP file
     if ($filename == 'phpstub.php') {
         $full_path = $filename;
@@ -65,8 +67,10 @@ function get_php_file_api($filename, $include_code = true)
         $full_path = ((get_file_base() != '') ? (get_file_base() . '/') : '') . filter_naughty($filename);
     }
     $lines = file($full_path);
-    foreach ($lines as $i => $line) {
-        $lines[$i] = str_replace("\t", ' ', $line);
+    if (!$make_alterations) {
+        foreach ($lines as $i => $line) {
+            $lines[$i] = str_replace("\t", ' ', $line);
+        }
     }
 
     // Go through all lines, keeping record of what current class we are looking at
@@ -198,7 +202,23 @@ function get_php_file_api($filename, $include_code = true)
 
                         $parameters[$arg_counter]['type'] = $parts[0];
                         unset($parts[0]);
-                        $parameters[$arg_counter]['description'] = implode(' ', $parts);
+                        $_description = trim(implode(' ', $parts));
+                        if (substr($_description, 0, 1) != '$') {
+                            if ($make_alterations) {
+                                for ($k = $i + 1; $k < count($lines) ; $k++) {
+                                    $matches = array();
+                                    if (preg_match('#^\s*((public|protected|private) )?function \w+\((.*)\)\n?$#', $lines[$k], $matches) != 0) {
+                                        $params = explode(',', $matches[3]);
+                                        $_description = /*str_pad(*/preg_replace('#^\s*(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;
+                                        break;
+                                    }
+                                }
+                                $lines[$i] = str_replace(trim(implode(' ', $parts)), $_description, $lines[$i]);
+                                file_put_contents($full_path, implode('', $lines));
+                            }
+                        }
+                        $_description = preg_replace('#^\$\w+ #', '', $_description);
+                        $parameters[$arg_counter]['description'] = $_description;
                     } elseif (substr($ltrim, 0, 7) == '@return') {
                         $return = array();
 
