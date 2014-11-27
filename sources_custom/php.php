@@ -149,31 +149,10 @@ function get_php_file_api($filename, $include_code = true)
                 }
 
                 // Method
-                if (substr($line2, 0, $depth + 16) == $_depth . 'public function ') {
+                $matches = array();
+                if (preg_match('#^'.$_depth . '(public |private |protected |static )*function (.*)#', $line2, $matches) != 0) {
                     // Parse function line
-                    $_line = substr($line2, $depth + 16);
-                    list($function_name, $parameters) = _read_php_function_line($_line);
-
-                    if ($current_class == '__global') {
-                        attach_message($function_name . ' seems to be a method outside of a class', 'warn');
-                    }
-
-                    break;
-                }
-                if (substr($line2, 0, $depth + 17) == $_depth . 'private function ') {
-                    // Parse function line
-                    $_line = substr($line2, $depth + 17);
-                    list($function_name, $parameters) = _read_php_function_line($_line);
-
-                    if ($current_class == '__global') {
-                        attach_message($function_name . ' seems to be a method outside of a class', 'warn');
-                    }
-
-                    break;
-                }
-                if (substr($line2, 0, $depth + 19) == $_depth . 'protected function ') {
-                    // Parse function line
-                    $_line = substr($line2, $depth + 19);
+                    $_line = $matches[2];
                     list($function_name, $parameters) = _read_php_function_line($_line);
 
                     if ($current_class == '__global') {
