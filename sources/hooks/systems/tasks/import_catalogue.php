@@ -302,7 +302,7 @@ class Hook_task_import_catalogue
 
         if ($method == 'skip') {
             $matched_ids[$has_match] = true;
-            return;
+            return null;
         }
 
         if ($method == 'delete') {
@@ -371,5 +371,7 @@ class Hook_task_import_catalogue
 
             return null;
         }
+
+        return null;
     }
 }

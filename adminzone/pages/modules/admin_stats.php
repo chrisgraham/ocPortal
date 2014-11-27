@@ -224,7 +224,7 @@ class Module_admin_stats
 
         if ($type == '_page') {
             $page = get_param('iscreen');
-            $this->title = get_screen_title(do_lang_tempcode('PAGE_STATISTICS', escape_html($page)), false);
+            $this->title = get_screen_title(do_lang_tempcode('_PAGE_STATISTICS', escape_html($page)), false);
         }
 
         if ($type == 'clear') {

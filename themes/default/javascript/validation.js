@@ -46,7 +46,7 @@ function fix_form_enter_key(form)
 		if (((type=='text') || (type=='password') || (type=='color') || (type=='email') || (type=='number') || (type=='range') || (type=='search') || (type=='tel') || (type=='url'))
 		 && (typeof submit.onclick!='undefined') && (submit.onclick)
 		 && ((typeof inputs[i].onkeypress=='undefined') || (!inputs[i].onkeypress)))
-			inputs[i].onkeypress=function(event) { if (typeof event=='undefined') var event=window.event; if (enter_pressed(event)) submit.onclick(event); };
+			inputs[i].onkeypress=function(event) { if (typeof event=='undefined') event=window.event; if (enter_pressed(event)) submit.onclick(event); };
 	}
 }
 
@@ -245,7 +245,7 @@ function do_form_submit(form,event)
 
 function disable_buttons_just_clicked(inputs,permanent)
 {
-	if (typeof permanent=='undefined') var permanent=false;
+	if (typeof permanent=='undefined') permanent=false;
 
 	for (var i=0;i<inputs.length;i++)
 	{
@@ -603,7 +603,7 @@ function standard_alternate_fields_within(set_name,something_required)
 // Do dynamic set_locked/set_required such that one of these must be set, but only one may be
 function standard_alternate_fields(field_names,something_required,second_run)
 {
-	if (typeof second_run=='undefined') var second_run=false;
+	if (typeof second_run=='undefined') second_run=false;
 
 	// Look up field objects
 	var fields=[];
@@ -935,7 +935,7 @@ function toggle_subordinate_fields(pic,help_id)
 			count++;
 		}
 	}
-	if (typeof help_id=='undefined') var help_id=pic.parentNode.id+'_help';
+	if (typeof help_id=='undefined') help_id=pic.parentNode.id+'_help';
 	var help=document.getElementById(help_id);
 	while (help!==null)
 	{
@@ -994,7 +994,7 @@ function preview_mobile_button(ob)
 
 function disable_preview_scripts(under)
 {
-	if (typeof under=='undefined') var under=document;
+	if (typeof under=='undefined') under=document;
 
 	var elements,i;
 	var no_go=function() {

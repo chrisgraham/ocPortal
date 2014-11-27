@@ -587,7 +587,7 @@ header h1 {
 .global_breadcrumbs {
 	padding: 7px 0 7px 0;
 	/*{+START,IF,{$NOT,{$MOBILE}}}*/
-		{+START,IF,{$CONFIG_OPTION,fixed_width}}
+		/*{+START,IF,{$CONFIG_OPTION,fixed_width}}*/
 			text-align: {!en_right};
 		/*{+END}*/
 		/*{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}*/
@@ -1234,11 +1234,11 @@ div.red_alert, p.red_alert {
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	div.red_alert, p.red_alert {
-		background-size: url('{$IMG;,icons/48x48/status/notice}');
+		background-image: url('{$IMG;,icons/48x48/status/notice}');
 		background-size: 24px 24px;
 	}
 	.inline_wip_message {
-		background-size: url('{$IMG;,icons/48x48/status/notice}');
+		background-image: url('{$IMG;,icons/48x48/status/notice}');
 		background-size: 24px 24px;
 	}
 }
@@ -4177,7 +4177,7 @@ a[rel="lightbox"] {
 =========================
 */
 
-{+START,IF,{$CONFIG_OPTION,filetype_icons}}
+/*{+START,IF,{$CONFIG_OPTION,filetype_icons}}*/
 	a[href^="mailto:"] {
 		background: url('{$IMG;,icons/16x16/filetypes/email_link}') no-repeat right top !important; /* Important because the URL may contain arbitrary stuff, including ".php", due to embedded mail body */
 		padding: 0 22px 5px 0 !important;
@@ -4338,7 +4338,7 @@ a[rel="lightbox"] {
 	}
 /*{+END}*/
 
-{+START,IF,{$ADDON_INSTALLED,recommend}}
+/*{+START,IF,{$ADDON_INSTALLED,recommend}}*/
 	.print_icon {
 		background: url('{$IMG;,icons/24x24/links/print}') no-repeat left top !important;
 		padding: 0 0 5px 22px !important;

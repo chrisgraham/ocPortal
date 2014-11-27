@@ -157,12 +157,9 @@ class Module_admin
                 return do_next_manager_hooked('menus:TOOLS', 'menus:DOC_TOOLS', 'tools');
             case 'security':
                 return do_next_manager_hooked('SECURITY', 'menus:DOC_SECURITY', 'security');
-
-            default:
-                return do_next_manager_hooked('MENU', 'menus:DOC_FRONTEND_ICONS', $type);
         }
 
-        return new Tempcode();
+        return do_next_manager_hooked('MENU', 'menus:DOC_FRONTEND_ICONS', $type);
     }
 
     /**

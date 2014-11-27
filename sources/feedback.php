@@ -1036,7 +1036,7 @@ function get_trackbacks($content_type, $content_id, $allow_trackback, $type = ''
             $trackback_xml_error = do_template('TRACKBACK_XML_ERROR', array(
                 '_GUID' => '945e2fcb510816caf323ba3704209430',
                 'TRACKBACK_ERROR' => do_lang_tempcode('NO_TRACKBACKS'),
-            ));
+            ), null, false, null, '.xml', 'xml');
             $content->attach($trackback_xml_error);
         }
 
@@ -1054,7 +1054,7 @@ function get_trackbacks($content_type, $content_id, $allow_trackback, $type = ''
                 'ITEMS' => $items,
                 'LINK_PAGE' => $content_type,
                 'LINK_ID' => $content_id,
-            ));
+            ), null, false, null, '.xml', 'xml');
             $content->attach($trackback_xml);
             $output = $content;
         }

@@ -918,6 +918,7 @@ function ocselect_to_sql($db, $filters, $content_type = '', $context = '', $tabl
                         }
                         break;
                     }
+                    // intentionally rolls on...
 
                 case '#':
                     if ($filter_val != '') {

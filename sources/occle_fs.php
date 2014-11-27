@@ -178,7 +178,7 @@ class OcCLE_fs
      * @param  string                   Path
      * @return array                    Array-form path
      */
-    protected function _pwd_to_array($pwd)
+    public function _pwd_to_array($pwd)
     {
         // Convert a string-form pwd to an array-form pwd, and sanitise it
         if ($pwd == '') {
@@ -255,7 +255,7 @@ class OcCLE_fs
      * @param  ?array                   Path to check (null: current dir is used)
      * @return boolean                  Directory?
      */
-    protected function _is_dir($dir = null)
+    public function _is_dir($dir = null)
     {
         if (is_null($dir)) {
             $dir = $this->pwd;
@@ -286,7 +286,7 @@ class OcCLE_fs
      * @param  array                    Path (with filename) to use
      * @return boolean                  Directory?
      */
-    protected function _is_file($dir)
+    public function _is_file($dir)
     {
         $filename = array_pop($dir);
 

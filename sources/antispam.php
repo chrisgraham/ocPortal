@@ -222,7 +222,7 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
         }
 
         foreach ($refnet as $efcheck => $value) {
-            if (($rbl_response[3] == $value) && ($block[$njcheck])) {
+            if (($rbl_response[3] == $value) && ($block[$efcheck])) {
                 return array(ANTISPAM_RESPONSE_ACTIVE_UNKNOWN_STALE, null);
             }
         }

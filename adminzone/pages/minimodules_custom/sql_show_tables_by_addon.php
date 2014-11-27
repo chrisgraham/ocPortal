@@ -33,7 +33,7 @@ foreach ($tables_by as $t => $ts) {
                 $extra .= ' ( &rarr; <strong>' . escape_html($relation_map[$table . '.' . $field['m_name']]) . '</strong>)';
             }
             if (strpos($field['m_type'], '*') !== false) {
-                $extra .= ' (<u>Key field</u>)';
+                $extra .= ' (<span style="text-decoration: underline"">Key field</span>)';
             }
             if (strpos($field['m_type'], '?') !== false) {
                 $extra .= ' (<em>May be NULL</em>)';

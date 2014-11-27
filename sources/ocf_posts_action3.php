@@ -512,6 +512,4 @@ function ocf_move_posts($from_topic_id, $to_topic_id, $posts, $reason, $to_forum
 
         return false;
     }
-
-    return false; // should never get here
 }

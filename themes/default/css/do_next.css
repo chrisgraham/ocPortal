@@ -5,16 +5,16 @@
 
 .do_next_page_question {
 	font-size: 1em;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-bottom: 3em;
-	{+END}
+	/*{+END}*/
 }
 
 .do_next_section_wrap {
 	margin: 2em auto;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 606px;
-	{+END}
+	/*{+END}*/
 	text-align: center;
 	border: 1px dotted {$GET,standard_border};
 	{$BETA_CSS_PROPERTY,border-radius: 15px;}

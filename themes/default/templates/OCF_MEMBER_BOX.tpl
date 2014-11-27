@@ -20,7 +20,7 @@
 				<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$USERNAME*,{MEMBER_ID}}</a></td></tr>
 				<tr><th class="de_th">{!ocf:SPECIFIC_FORUM_POSTS}:</th><td>{POSTS*}</td></tr>
 				{+START,IF_NON_EMPTY,{POINTS}}
-					<tr><th class="de_th"><acronym title="{!LIFETIME_POINTS,{$NUMBER_FORMAT*,{$AVAILABLE_POINTS,{MEMBER_ID}}}}">{!POINTS}</acronym>:</th><td>{POINTS*}</td></tr>
+					<tr><th class="de_th"><abbr title="{!LIFETIME_POINTS,{$NUMBER_FORMAT*,{$AVAILABLE_POINTS,{MEMBER_ID}}}}">{!POINTS}</abbr>:</th><td>{POINTS*}</td></tr>
 				{+END}
 				<tr><th class="de_th">{!JOINED}:</th><td>{JOIN_DATE*}</td></tr>
 				{+START,IF,{$NOT,{$MATCH_KEY_MATCH,_WILD:galleries}}}

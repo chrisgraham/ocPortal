@@ -5,18 +5,18 @@
 
 .award_extra_details {
 	float: left;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 200px;
-	{+END}
+	/*{+END}*/
 }
 
 .award_main {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-left: 220px;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		float: left;
-	{+END}
+	/*{+END}*/
 	border-left: 1px solid {$GET,standard_border};
 	padding-left: 2em;
 }

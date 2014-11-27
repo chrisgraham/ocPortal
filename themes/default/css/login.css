@@ -8,12 +8,12 @@
 }
 
 .login_page {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		text-align: center;
 		width: 80%;
 		padding: 0.5em;
 		margin: 0 auto;
-	{+END}
+	/*{+END}*/
 	background: url('{$IMG;,background_image}') no-repeat 20px 44px;
 }
 
@@ -29,12 +29,12 @@
 	margin-top: 60px;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.login_page_form label {
 		width: 7em;
 		display: inline-block;
 	}
-{+END}
+/*{+END}*/
 
 table.login_page_form {
 	width: 45%;
@@ -57,10 +57,10 @@ table.login_page_form {
 
 .login_page_options {
 	text-align: left;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 285px;
 		float: left;
-	{+END}
+	/*{+END}*/
 	margin-top: 0.5em;
 }
 
@@ -69,9 +69,9 @@ table.login_page_form {
 }
 
 .login_page_options .associated_details {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		padding-left: 2em;
-	{+END}
+	/*{+END}*/
 	display: inline-block;
 }
 

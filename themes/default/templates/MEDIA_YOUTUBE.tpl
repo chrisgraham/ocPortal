@@ -6,7 +6,7 @@
 		data="http://www.youtube.com/v/{REMOTE_ID*}?enablejsapi=1"
 		wmode="transparent"
 		allowscriptaccess="always" allowfullscreen="true"
-	/>
+	></embed>
 </div>
 
 {+START,IF_NON_EMPTY,{DESCRIPTION}}

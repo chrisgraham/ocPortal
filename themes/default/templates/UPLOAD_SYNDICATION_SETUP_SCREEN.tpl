@@ -10,7 +10,7 @@
 		var ob=win_parent.document.getElementById('upload_syndicate__{HOOK;/}__{NAME;/}');
 		ob.checked=true;
 
-		win=window;
+		var win=window;
 		window.setTimeout(function() {
 			if (typeof win.faux_close!='undefined')
 				win.faux_close();

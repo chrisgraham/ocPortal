@@ -280,8 +280,6 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 		// Let the form be submitted the old-fashioned way.
 		return true;
 	}
-
-	return null;
 }
 
 // Check for new messages
@@ -320,8 +318,6 @@ function chat_check(backlog,message_id,event_id)
 		window.location.reload(true);
 		return true;
 	}
-
-	return null;
 }
 
 // Check to see if there's been a packet loss
@@ -338,7 +334,7 @@ function chat_check_timeout(backlog,message_id,event_id)
 // Deal with the new messages response. Wraps around process_chat_xml_messages as it also adds timers to ensure the message check continues to function even if background errors might have happened.
 function chat_check_response(ajax_result_frame,ajax_result,skip_incoming_sound)
 {
-	if (typeof skip_incoming_sound=='undefined') var skip_incoming_sound=false;
+	if (typeof skip_incoming_sound=='undefined') skip_incoming_sound=false;
 
 	var temp=process_chat_xml_messages(ajax_result,skip_incoming_sound);
 	if (temp==-2) return false;
@@ -356,7 +352,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 {
 	if (!ajax_result) return; // Some kind of error happened
 
-	if (typeof skip_incoming_sound=='undefined') var skip_incoming_sound=false;
+	if (typeof skip_incoming_sound=='undefined') skip_incoming_sound=false;
 
 	var messages=ajax_result.childNodes;
 	var message_container=document.getElementById('messages_window');
@@ -721,7 +717,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 
 function create_overlay_event(skip_incoming_sound,member_id,message,click_event,avatar_url,room_id)
 {
-	if (typeof room_id=='undefined') var room_id=null;
+	if (typeof room_id=='undefined') room_id=null;
 
 	if (window!=window.top_window) return; // Can't display in an autonomous popup
 
@@ -946,7 +942,7 @@ function find_im_convo_room_ids()
 function close_chat_conversation(room_id)
 {
 	var is_popup=(document.body.className.indexOf('sitewide_im_popup_body')!=-1);
-	{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}
+	/*{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}*/
 	generate_question_ui(
 		'{!WANT_TO_DOWNLOAD_LOGS*;^}',
 		{buttons__cancel: '{!INPUTSYSTEM_CANCEL*;^}',buttons__yes: '{!YES*;^}',buttons__no: '{!NO*;^}'},
@@ -962,13 +958,13 @@ function close_chat_conversation(room_id)
 					deinvolve_im(room_id,true,is_popup);
 					return;
 				}
-	{+END}
+	/*{+END}*/
 				deinvolve_im(room_id,false,is_popup);
-	{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}
+	/*{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}*/
 			}
 		}
 	);
-	{+END}
+	/*{+END}*/
 }
 
 function deinvolve_im(room_id,logs,is_popup) // is_popup means that we show a progress indicator over it, then kill the window after deinvolvement
@@ -1267,8 +1263,8 @@ function detect_if_chat_window_closed(die_on_lost,become_autonomous_on_lost)
 
 	if (lost_connection)
 	{
-		if (typeof die_on_lost=='undefined') var die_on_lost=false;
-		if (typeof become_autonomous_on_lost=='undefined') var become_autonomous_on_lost=false;
+		if (typeof die_on_lost=='undefined') die_on_lost=false;
+		if (typeof become_autonomous_on_lost=='undefined') become_autonomous_on_lost=false;
 
 		if (become_autonomous_on_lost) // Becoming autonomous means allowing to work with a master window
 		{

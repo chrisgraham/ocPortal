@@ -638,8 +638,6 @@ msgstr ""
 
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
         exit();
-
-        return new Tempcode(); // For code quality checker
     }
 
     /**

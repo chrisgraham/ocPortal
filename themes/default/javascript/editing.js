@@ -314,7 +314,6 @@ function load_html_edit(posting_form,ajax_copy)
 			}(e,id),1000);
 		}
 	}
-	if (count==0) return;
 }
 
 function wysiwyg_editor_init_for(element,id)
@@ -459,7 +458,7 @@ function find_tags_in_editor(editor,element)
 		{
 			comcodes[i].orig_title=comcodes[i].title;
 			comcodes[i].onmouseout=function(event) {
-				if (typeof event=='undefined') var event=editor.window.$.event;
+				if (typeof event=='undefined') event=editor.window.$.event;
 
 				var eventCopy={};
 				if (event)
@@ -473,7 +472,7 @@ function find_tags_in_editor(editor,element)
 				}
 			};
 			comcodes[i].onmousemove=function(event) {
-				if (typeof event=='undefined') var event=editor.window.$.event;
+				if (typeof event=='undefined') event=editor.window.$.event;
 
 				var eventCopy={};
 				if (event)
@@ -491,7 +490,7 @@ function find_tags_in_editor(editor,element)
 				}
 			};
 			comcodes[i].onmousedown=function(event) {
-				if (typeof event=='undefined') var event=editor.window.$.event;
+				if (typeof event=='undefined') event=editor.window.$.event;
 
 				if (event.altKey)
 				{
@@ -528,7 +527,7 @@ function find_tags_in_editor(editor,element)
 				}
 			}
 			comcodes[i].onmouseover=function(event) { // Shows preview
-				if (typeof event=='undefined') var event=editor.window.$.event;
+				if (typeof event=='undefined') event=editor.window.$.event;
 
 				cancel_bubbling(event);
 
@@ -624,7 +623,7 @@ function do_attachment(field_name,id,description)
 {
 	if (!get_main_ocp_window().wysiwyg_editors) return;
 
-	if (typeof description=='undefined') var description='';
+	if (typeof description=='undefined') description='';
 
 	var element=get_main_ocp_window().document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
@@ -669,7 +668,7 @@ function set_textbox(element,text,html)
 {
 	if (is_wysiwyg_field(element))
 	{
-		if (typeof html=='undefined') var html=escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />');
+		if (typeof html=='undefined') html=escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />');
 
 		window.wysiwyg_editors[element.id].setData(html);
 
@@ -759,7 +758,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 
 	element.focus();
 
-	if (typeof sel=='undefined') var sel=null;
+	if (typeof sel=='undefined') sel=null;
 	if (sel===null) sel=document.selection?document.selection:null;
 
 	if (typeof element.selectionEnd!='undefined') // Mozilla style
@@ -918,7 +917,7 @@ function set_selection_range(input,selectionStart,selectionEnd)
 
 function show_upload_syndication_options(name,syndication_json,no_quota)
 {
-	if (typeof no_quota=='undefined') var no_quota=false;
+	if (typeof no_quota=='undefined') no_quota=false;
 
 	var html_spot=document.getElementById(name+'_syndication_options');
 	var html='';

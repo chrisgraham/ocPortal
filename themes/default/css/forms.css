@@ -15,9 +15,9 @@
 	font-weight: bold;
 	font-size: 0.85em;
 	margin: 1.5em auto 1em auto;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 11em;
-	{+END}
+	/*{+END}*/
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
@@ -112,7 +112,7 @@ Curved borders would be cool, but it does not work well with the carefully defin
 	padding-top: 0.95em !important;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	th.form_table_field_name {
 		border-bottom: 0 !important;
 	}
@@ -127,7 +127,7 @@ Curved borders would be cool, but it does not work well with the carefully defin
 	.form_table_field_name .help_icon {
 		float: right;
 	}
-{+END}
+/*{+END}*/
 
 .form_table_field_name h3 {
 	border: 0;
@@ -280,11 +280,11 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	margin-top: 2px;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.input_upload, .input_upload_required {
 		max-width: 240px;
 	}
-{+END}
+/*{+END}*/
 
 
 .radio_description {
@@ -349,9 +349,9 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	float: {!en_left};
 	font-size: 0.9em;
 	vertical-align: middle;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		border-{!en_right}: 1px solid {$GET,pale_border};
-	{+END}
+	/*{+END}*/
 }
 
 .various_ticks .input_individual_tick {
@@ -496,7 +496,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	margin: 1em 0;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.preview_box {
 		padding: 209px 33px 159px 31px;
 		background: url('{$IMG;,iphone}') no-repeat;
@@ -507,7 +507,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 		width: 320px;
 		height: 355px;
 	}
-{+END}
+/*{+END}*/
 
 .preview_validation_box {
 	width: 34em;
@@ -674,11 +674,11 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	width: 6em;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.form_table input[type="file"] {
 		max-width: 6em;
 	}
-{+END}
+/*{+END}*/
 
 /* Extra stuff for CKEditor */
 

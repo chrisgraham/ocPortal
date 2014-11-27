@@ -117,6 +117,7 @@ class Module_admin_ocpusers
         if ($type == 'browse') {
             return $this->users();
         }
+        return new Tempcode();
     }
 
     /**

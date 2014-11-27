@@ -190,10 +190,10 @@ function internalise_infinite_scrolling_go(url_stem,wrapper,more_links)
 
 function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params,append,forms_too)
 {
-	if (typeof look_for=='undefined') var look_for=[];
-	if (typeof extra_params=='undefined') var extra_params=[];
-	if (typeof append=='undefined') var append=false;
-	if (typeof forms_too=='undefined') var forms_too=false;
+	if (typeof look_for=='undefined') look_for=[];
+	if (typeof extra_params=='undefined') extra_params=[];
+	if (typeof append=='undefined') append=false;
+	if (typeof forms_too=='undefined') forms_too=false;
 
 	var _link_wrappers=get_elements_by_class_name(block,'ajax_block_wrapper_links');
 	if (_link_wrappers.length==0) _link_wrappers=[block];
@@ -296,9 +296,9 @@ function guarded_form_submit(form)
 // This function will load a block, with options for parameter changes, and render the results in specified way - with optional callback support
 function call_block(url,new_block_params,target_div,append,callback,scroll_to_top_of_wrapper,post_params,inner)
 {
-	if (typeof scroll_to_top_of_wrapper=='undefined') var scroll_to_top_of_wrapper=false;
-	if (typeof post_params=='undefined') var post_params=null;
-	if (typeof inner=='undefined') var inner=false;
+	if (typeof scroll_to_top_of_wrapper=='undefined') scroll_to_top_of_wrapper=false;
+	if (typeof post_params=='undefined') post_params=null;
+	if (typeof inner=='undefined') inner=false;
 	if ((typeof block_data_cache[url]=='undefined') && (new_block_params!=''))
 		block_data_cache[url]=get_inner_html(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_block_params if returning to fresh state
 
@@ -420,7 +420,7 @@ function ajax_form_submit__admin__headless(event,form,block_name,map)
 	var post='';
 	if (typeof block_name!='undefined')
 	{
-		if (typeof map=='undefined') var map='';
+		if (typeof map=='undefined') map='';
 		var comcode='[block'+map+']'+block_name+'[/block]';
 		post+='data='+window.encodeURIComponent(comcode);
 	}

@@ -22,7 +22,7 @@
 			window.focused=true;
 			add_event_listener_abstract(window,"focus",function() { window.focused=true; });
 			add_event_listener_abstract(window,"blur",function() { window.focused=false; });
-			timer=window.setInterval(function() { ticker_tick(my_id,400); }, 50);
+			window.setInterval(function() { ticker_tick(my_id,400); }, 50);
 		} else
 		{
 			set_inner_html(ticktickticker,'<marquee style="display: block" class="ticker" onmouseover="this.setAttribute(\'scrolldelay\',\'10000\');" onmouseout="this.setAttribute(\'scrolldelay\',50);" scrollamount="2" scrolldelay="'+(50)+'" width="400">{$GET;~/,news_ticker_text}<\/marquee>');

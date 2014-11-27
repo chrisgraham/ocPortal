@@ -110,8 +110,6 @@ class Hook_implicit_usergroups_usergroup_field_match
 
             return count($out);
         }
-
-        return null; // Should not get here
     }
 
     /**

@@ -1,4 +1,4 @@
-{$,Parser hint: .innerHTML okay}
+/*{$,Parser hint: .innerHTML okay}*/
 
 /*! jQuery UI - v1.11.1 - 2014-10-12
 * http://jqueryui.com

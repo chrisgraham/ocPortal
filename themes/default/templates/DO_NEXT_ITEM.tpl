@@ -32,7 +32,7 @@
 						return function(event) {
 							if (typeof event.preventDefault!='undefined') event.preventDefault();
 							cancel_bubbling(event);
-							test=window.fauxmodal_confirm(
+							window.fauxmodal_confirm(
 								'{!KEEP_ADDING_QUESTION;}',
 								function(test)
 								{

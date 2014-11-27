@@ -747,8 +747,7 @@ class Module_admin_customers
             $cpf_id = get_credits_profile_field_id();
             if (is_null($cpf_id)) {
                 $msg_tpl = warn_screen($this->title, do_lang_tempcode('INVALID_FIELD_ID'));
-                $msg_tpl->evaluate_echo();
-                return;
+                return $msg_tpl;
             }
             $num_credits = 0;
             if (!is_null($cpf_id)) {
@@ -803,8 +802,7 @@ class Module_admin_customers
         $cpf_id = get_credits_profile_field_id();
         if (is_null($cpf_id)) {
             $msg_tpl = warn_screen($this->title, do_lang_tempcode('INVALID_FIELD_ID'));
-            $msg_tpl->evaluate_echo();
-            return;
+            return $msg_tpl;
         }
 
         // Increment the number of credits this customer has

@@ -32,12 +32,12 @@
 	margin-{!en_right}: 5px;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.main_search_form .search_content {
 		width: 300px;
 		max-width: 100%;
 	}
-{+END}
+/*{+END}*/
 
 .search_for_search_domain {
 	font-style: italic;
@@ -64,13 +64,13 @@
 	max-width: 40em;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.search_option label {
 		float: {!en_left};
 	}
-{+END}
+/*{+END}*/
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.search_option label {
 		float: {!en_left};
 		width: 350px;
@@ -82,7 +82,7 @@
 		max-width: 100%;
 		font-size: 1em; /* Makes em units consistent for both input types */
 	}
-{+END}
+/*{+END}*/
 
 .search_option * {
 	margin-left: 0;

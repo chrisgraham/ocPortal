@@ -18,6 +18,12 @@
  * @package    wiki
  */
 
+/**
+ * Inject workflow code into the wiki module.
+ *
+ * @param   string Original code
+ * @return  string Altered code
+ */
 function init__cms__pages__modules_custom__cms_wiki($code)
 {
     $code = str_replace(

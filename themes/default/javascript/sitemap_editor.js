@@ -43,9 +43,9 @@ function update_details_box(element)
 		case 'minimodule':
 		case 'minimodule_custom':
 			path=page_link_bits[0]+((page_link_bits[0]=='')?'':'/')+'pages/'+type+'/'+page_link_bits[1]+'.php';
-			{+START,IF,{$ADDON_INSTALLED,code_editor}}{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
+			/*{+START,IF,{$ADDON_INSTALLED,code_editor}}{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}*/
 			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!EDIT;^}').replace(/\[2\]/,'{$BASE_URL;,0}/code_editor.php?path='+window.encodeURIComponent(path));
-			{+END}{+END}
+			/*{+END}{+END}*/
 			switch (type)
 			{
 				case 'modules':
@@ -82,9 +82,9 @@ function update_details_box(element)
 	if (['modules','modules_custom','comcode','comcode_custom','html','html_custom'].indexOf(full_type)!=-1)
 	{
 		action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!DELETE;^}').replace(/\[2\]/,window.delete_url.replace(/%5B1%5D/,page_link_bits[0]).replace(/\[2\]/,page_link_bits[1]));
-		{+START,IF,{$ADDON_INSTALLED,stats}}
+		/*{+START,IF,{$ADDON_INSTALLED,stats}}*/
 			if (window.stats_url!='') action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!stats:PAGES_STATISTICS;^}').replace(/\[2\]/,window.stats_url.replace(/%21/,path));
-		{+END}
+		/*{+END}*/
 	}
 
 	// All

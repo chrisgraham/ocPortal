@@ -23,7 +23,7 @@ if (typeof window.overlay_zIndex=='undefined')
 
 function open_link_as_overlay(ob,width,height,target)
 {
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
+	/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 		if ((typeof width=='undefined') || (!width)) var width='800';
 		if ((typeof height=='undefined') || (!height)) var height='auto';
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
@@ -31,17 +31,17 @@ function open_link_as_overlay(ob,width,height,target)
 		if ((typeof target=='undefined') || (!target)) var target='_top';
 		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,target);
 		return false;
-	{+END}
+	/*{+END}*/
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}*/
 		return true;
-	{+END}
+	/*{+END}*/
 }
 
-{+START,IF,{$CONFIG_OPTION,js_overlays}}
+/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 	function open_images_into_lightbox(imgs,start)
 	{
-		if (typeof start=='undefined') var start=0;
+		if (typeof start=='undefined') start=0;
 
 		var modal=_open_image_into_lightbox(imgs[start][0],imgs[start][1],start+1,imgs.length,true,imgs[start][2]);
 		modal.positionInSet=start;
@@ -50,7 +50,7 @@ function open_link_as_overlay(ob,width,height,target)
 		previous_button.className='previous_button';
 		previous_button.src='{$IMG;,mediaset_previous}';
 		var previous=function(e) {
-			if (typeof e=='undefined') var e=window.event;
+			if (typeof e=='undefined') e=window.event;
 			cancel_bubbling(e);
 
 			var new_position=modal.positionInSet-1;
@@ -67,7 +67,7 @@ function open_link_as_overlay(ob,width,height,target)
 		next_button.className='next_button';
 		next_button.src='{$IMG;,mediaset_next}';
 		var next=function(e) {
-			if (typeof e=='undefined') var e=window.event;
+			if (typeof e=='undefined') e=window.event;
 			cancel_bubbling(e);
 
 			var new_position=modal.positionInSet+1;
@@ -83,14 +83,14 @@ function open_link_as_overlay(ob,width,height,target)
 
 	function open_image_into_lightbox(a,is_video)
 	{
-		if (typeof is_video=='undefined') var is_video=false;
+		if (typeof is_video=='undefined') is_video=false;
 		var has_full_button=(typeof a.childNodes[0]=='undefined') || (a.href!==a.childNodes[0].src);
 		_open_image_into_lightbox(a.href,a.title,null,null,has_full_button,is_video);
 	}
 
 	function _open_image_into_lightbox(initial_img_url,description,x,n,has_full_button,is_video)
 	{
-		if (typeof has_full_button=='undefined') var has_full_button=false;
+		if (typeof has_full_button=='undefined') has_full_button=false;
 
 		// Set up overlay for Lightbox
 		var lightbox_code=' \
@@ -247,13 +247,13 @@ function open_link_as_overlay(ob,width,height,target)
 		if (has_full_button) max_height-=120;
 		return [max_width,max_height];
 	}
-{+END}
+/*{+END}*/
 
 function fauxmodal_confirm(question,callback,title)
 {
-	if (typeof title=='undefined') var title='{!Q_SURE;}';
+	if (typeof title=='undefined') title='{!Q_SURE;}';
 
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
+	/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 		var my_confirm={
 			type: 'confirm',
 			text: escape_html(question).replace(/\n/g,'<br />'),
@@ -270,11 +270,11 @@ function fauxmodal_confirm(question,callback,title)
 			width: '450'
 		};
 		new ModalWindow().open(my_confirm);
-	{+END}
+	/*{+END}*/
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}*/
 		callback(window.confirm(question));
-	{+END}
+	/*{+END}*/
 }
 
 function fauxmodal_alert(notice,callback,title,unescaped)
@@ -282,9 +282,9 @@ function fauxmodal_alert(notice,callback,title,unescaped)
 	if ((typeof callback=='undefined') || (!callback)) var callback=function() {};
 
 	if (typeof title=='undefined' || title===null) var title='{!MESSAGE;}';
-	if (typeof unescaped=='undefined') var unescaped=false;
+	if (typeof unescaped=='undefined') unescaped=false;
 
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
+	/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 		var my_alert={
 			type: 'alert',
 			text: unescaped?notice:escape_html(notice).replace(/\n/g,'<br />'),
@@ -295,9 +295,9 @@ function fauxmodal_alert(notice,callback,title,unescaped)
 			cancel_button: null
 		};
 		new ModalWindow().open(my_alert);
-	{+END}
+	/*{+END}*/
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}*/
 		if ((typeof window.alert!='undefined') && (window.alert!=null))
 		{
 			window.alert(notice);
@@ -306,12 +306,12 @@ function fauxmodal_alert(notice,callback,title,unescaped)
 			console.log(notice);
 		}
 		callback();
-	{+END}
+	/*{+END}*/
 }
 
 function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 {
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
+	/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 		var my_prompt={
 			type: 'prompt',
 			text: escape_html(question).replace(/\n/g,'<br />'),
@@ -329,21 +329,21 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 		};
 		if (input_type) my_prompt.input_type=input_type;
 		new ModalWindow().open(my_prompt);
-	{+END}
+	/*{+END}*/
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}*/
 		callback(window.prompt(question,defaultValue));
-	{+END}
+	/*{+END}*/
 }
 
 function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 {
 	if ((typeof callback=='undefined') || (!callback)) var callback=function() {};
 
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
+	/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 		var width=null,height=null,scrollbars=null,unadorned=null;
 
-		if (typeof cancel_text=='undefined') var cancel_text='{!INPUTSYSTEM_CANCEL;^}';
+		if (typeof cancel_text=='undefined') cancel_text='{!INPUTSYSTEM_CANCEL;^}';
 
 		if (options)
 		{
@@ -391,9 +391,9 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 		my_frame.cancel_button=(unadorned!==true)?cancel_text:null;
 		if (target) my_frame.target=target;
 		new ModalWindow().open(my_frame);
-	{+END}
+	/*{+END}*/
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}*/
 		options=options.replace('height=auto','height=520');
 
 		var timer=new Date().getTime();
@@ -413,24 +413,24 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 				callback(result);
 			}
 		}
-	{+END}
+	/*{+END}*/
 }
 
 function faux_open(url,name,options,target,cancel_text)
 {
-	if (typeof cancel_text=='undefined') var cancel_text='{!INPUTSYSTEM_CANCEL;^}';
+	if (typeof cancel_text=='undefined') cancel_text='{!INPUTSYSTEM_CANCEL;^}';
 
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
+	/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 		faux_showModalDialog(url,name,options,null,target,cancel_text);
-	{+END}
+	/*{+END}*/
 
-	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
+	/*{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}*/
 		options=options.replace('height=auto','height=520');
 		window.open(url,name,options);
-	{+END}
+	/*{+END}*/
 }
 
-{+START,IF,{$CONFIG_OPTION,js_overlays}}
+/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
 /*
 Originally...
 
@@ -535,7 +535,7 @@ function ModalWindow()
 		},
 
 		reset_dimensions: function(width,height,init,force_height) {
-			if (typeof force_height=='undefined') var force_height=false;
+			if (typeof force_height=='undefined') force_height=false;
 
 			if (!this.box_wrapper) return;
 
@@ -1154,4 +1154,4 @@ function ModalWindow()
 		}
 	};
 }
-{+END}
+/*{+END}*/

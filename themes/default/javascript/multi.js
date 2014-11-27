@@ -14,7 +14,7 @@ function deselect_alt_url(form)
 
 function _ensure_next_field(event,ob)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if (enter_pressed(event)) goto_next_field(ob);
 	else if (!key_pressed(event,9)) ensure_next_field(ob);
 }
@@ -94,7 +94,7 @@ function ensure_next_field(this_field)
 
 function _ensure_next_field_upload(event)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if (!key_pressed(event,9)) ensure_next_field_upload(this);
 }
 

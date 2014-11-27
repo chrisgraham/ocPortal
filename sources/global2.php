@@ -2089,7 +2089,7 @@ function require_css($css)
 function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
 {
     if (!$minify) {
-        return; // Optimisation disabled if no minification. Turn off minificiation when debugging JavaScript/CSS, as smart caching won't work with the merge system.
+        return null; // Optimisation disabled if no minification. Turn off minificiation when debugging JavaScript/CSS, as smart caching won't work with the merge system.
     }
 
     $is_admin = $GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());

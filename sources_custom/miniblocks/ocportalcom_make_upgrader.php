@@ -61,7 +61,7 @@ if (!function_exists('mu_result')) {
 
         require_code('files');
 
-        echo '<label for="download_path">Upgrade file:</label> <input class="notranslate" size="45" readonly="readonly" type="text" value="' . escape_html($url) . '" />, or <a href="' . escape_html($url) . '">download upgrade directly</a> (' . escape_html(clean_file_size(filesize($path))) . ').';
+        echo '<label for="upgrade_file">Upgrade file:</label> <input id="upgrade_file" class="notranslate" size="45" readonly="readonly" type="text" value="' . escape_html($url) . '" />, or <a href="' . escape_html($url) . '">download upgrade directly</a> (' . escape_html(clean_file_size(filesize($path))) . ').';
     }
 }
 

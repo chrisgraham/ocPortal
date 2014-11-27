@@ -143,7 +143,7 @@ class Hook_occle_fs_members
                         $group_names[$group],
                         OCCLEFS_FILE,
                         0,
-                        $member_data['m_join_time'],
+                        null,
                     );
                 }
             }

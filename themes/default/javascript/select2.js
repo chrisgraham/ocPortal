@@ -1,4 +1,4 @@
-{$,Parser hint: .innerHTML okay}
+/*{$,Parser hint: .innerHTML okay}*/
 
 /*
 Copyright 2012 Igor Vaynberg

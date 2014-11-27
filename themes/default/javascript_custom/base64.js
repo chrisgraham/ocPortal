@@ -1,5 +1,5 @@
-{$,Parser hint: .innerHTML okay}
-{$,Parser hint: pure}
+/*{$,Parser hint: .innerHTML okay}*/
+/*{$,Parser hint: pure}*/
 
 // Simple Base64 encoder/decoder
 // Public Domain

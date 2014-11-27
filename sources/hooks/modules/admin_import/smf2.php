@@ -1490,6 +1490,7 @@ class Hook_smf2
             //No the Group ID wasn't set yet so we can set it with the Forum ID and Value
             $st[$gid] = array($pid => $v);
         }
+        return $st;
     }
 
     /**

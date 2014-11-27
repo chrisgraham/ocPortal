@@ -36,7 +36,7 @@
 				set_inner_html(st,new_value);
 			}
 
-			st2=document.getElementById('quiz_timer_minutes_and_seconds');
+			var st2=document.getElementById('quiz_timer_minutes_and_seconds');
 			if (st2)
 			{
 				if (new_value>=0)

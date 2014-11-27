@@ -1463,15 +1463,15 @@ function step_5_ftp()
                 @ftp_site($conn, 'CHMOD ' . decoct(0644 | $mask) . ' ' . $filename);
             }
         }
-    }
 
-    if (($max_time > 0) && ((time() - $time_start) >= $max_time)) {
-        break;
-    }
+        if (($max_time > 0) && ((time() - $time_start) >= $max_time)) {
+            break;
+        }
 
-    if ($i + 1 == $count) {
-        $done_all = true;
-        break; // That's them all
+        if ($i + 1 == $count) {
+            $done_all = true;
+            break; // That's them all
+        }
     }
 
     if (!is_suexec_like()) {

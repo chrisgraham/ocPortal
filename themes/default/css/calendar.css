@@ -3,11 +3,11 @@
  Copyright (c) ocProducts, 2004-2014
 */
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.calendar_week th a, .calendar_month th a, .calendar_day th a, .calendar_week th span, .calendar_month th span, .calendar_day th span {
 		writing-mode: tb-rl;
 	}
-{+END}
+/*{+END}*/
 
 abbr.dtstart, abbr.dtend {
 	border-bottom: 0;
@@ -23,7 +23,7 @@ abbr.dtstart, abbr.dtend {
 	border-collapse: collapse;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.calendar_year_wrap {
 		display: block;
 	}
@@ -37,13 +37,13 @@ abbr.dtstart, abbr.dtend {
 		padding: 3em;
 		overflow: hidden;
 	}
-{+END}
+/*{+END}*/
 
 .calendar_year_month {
 	height: 150px;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 33%;
-	{+END}
+	/*{+END}*/
 	vertical-align: top;
 	text-align: center;
 	padding: 0.5em;
@@ -233,13 +233,13 @@ abbr.dtstart, abbr.dtend {
 	margin-top: 2em;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.event_interest_box {
 		width: 50%;
 		padding: 0.5em;
 		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	}
-{+END}
+/*{+END}*/
 
 .calendar_main_page_hidden_data {
 	padding: 0.5em;
@@ -260,9 +260,9 @@ abbr.dtstart, abbr.dtend {
 .side_calendar .calendar_priority_free_time,
 .side_calendar .calendar_free_time,
 .side_calendar .calendar_active {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		font-size: 0.8em; /* On mobile we don't display in a side panel so actually there is more width - plus we want bigger cells for fat fingers */
-	{+END}
+	/*{+END}*/
 	padding: 0.5em 0.2em;
 }
 
@@ -350,7 +350,7 @@ td.day_spacer:hover {
 	overflow: hidden;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.event_right {
 		float: right;
 		width: 15em;
@@ -368,7 +368,7 @@ td.day_spacer:hover {
 		font-size: 0.9em;
 		vertical-align: middle;
 	}
-{+END}
+/*{+END}*/
 
 .event_left .box, .event_right .box {
 	margin-top: 0;
@@ -378,7 +378,7 @@ td.day_spacer:hover {
 	width: auto;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.event_right {
 		float: left;
 		width: 100%;
@@ -403,7 +403,7 @@ td.day_spacer:hover {
 		margin-{!en_right}: 6px;
 		float: {!en_left};
 	}
-{+END}
+/*{+END}*/
 
 .event_type_image {
 	float: {!en_left};

@@ -289,7 +289,7 @@ function _parse_command_actual($no_term_needed = false)
                     $command[0] = 'CALL_METHOD';
                     $command[1] = array('VARIABLE', 'this', array('DEREFERENCE', array('VARIABLE', $command[1], array(), $command[4]), array(), $command[4]), $command[4]);
                 } else {
-                    $expression = array('REFERENCE', $expression, $GLOBALS['I']);
+                    $expression = array('REFERENCE', $command, $GLOBALS['I']);
                 }
             } else {
                 pparse__parser_expect('BRACKET_OPEN');
@@ -938,7 +938,7 @@ function pparse__precedence_sort($op_list, $e_pos) // Oh my God, this is confusi
     }
 
     if (count($op_list) == 2) {
-        $_e_pos = $op_list[0][count($left[0]) - 1];
+        $_e_pos = $op_list[0][count($op_list[0]) - 1];
         $new = array($op_list[1], $op_list[0], $op_list[2], $_e_pos);
         return $new;
     }
@@ -964,6 +964,7 @@ function pparse__precedence_sort($op_list, $e_pos) // Oh my God, this is confusi
     // Should never get here
     echo '!';
     print_r($op_list);
+    return null;
 }
 
 function _parse_expression_inner()

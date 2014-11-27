@@ -466,7 +466,7 @@ class Module_admin_ip_ban
         $member = array_key_exists(1, $_ip) ? strrev($_ip[1]) : null;
 
         if (post_param_integer('confirm', 0) == 0) {
-            $preview = do_lang_tempcode('BAN_MEMBER_DESCRIPTION', is_null($member) ? do_lang_tempcode('NA_EM') : make_string_tempcode(strval($member)), make_string_tempcode(escape_html($ip)));
+            $preview = do_lang_tempcode('BAN_MEMBER_DOUBLE_DESCRIPTION', is_null($member) ? do_lang_tempcode('NA_EM') : make_string_tempcode(strval($member)), make_string_tempcode(escape_html($ip)));
             $url = get_self_url(false, false);
             return do_template('CONFIRM_SCREEN', array('_GUID' => '3840c52b23d9034cb6f9dd529b236c97', 'TITLE' => $this->title, 'PREVIEW' => $preview, 'FIELDS' => form_input_hidden('confirm', '1'), 'URL' => $url));
         }

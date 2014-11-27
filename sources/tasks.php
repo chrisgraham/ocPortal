@@ -243,8 +243,6 @@ function call_user_func_array__long_task($plain_title, $title, $hook, $args = nu
         }
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
         exit();
-
-        return new Tempcode(); // Will never get here
     }
 
     // Enqueue...

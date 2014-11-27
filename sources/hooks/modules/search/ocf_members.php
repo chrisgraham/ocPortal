@@ -136,6 +136,7 @@ class Hook_search_ocf_members
         if (has_privilege(get_member(), 'see_hidden_groups')) {
             return $fields;
         }
+        return array();
     }
 
     /**

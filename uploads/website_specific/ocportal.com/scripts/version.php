@@ -78,7 +78,8 @@ if (preg_match('#^[\d\.]+$#', $intended) != 0) { // If we understand the format
         );
     }
 } else {
-    return old_style();
+    old_style();
+    return;
 } // We can't do our clever stuff as we don't recognise the version number formatting. This should never happen, but better to allow it.
 
 // Possible next versions, in order of decreasing distance (i.e. we search from right to left until we find a match). Will never recommend a beta or RC unless you're already on the same track of them

@@ -914,8 +914,6 @@ class Forum_driver_mybb extends Forum_driver_base
         } else {
             return true; //the member is still banned (not permanently banned)
         }
-
-        return false; //not necessary, but it's better to be there
     }
 
     /**
@@ -1382,15 +1380,12 @@ class Forum_driver_mybb extends Forum_driver_base
                 //if it is correct then return the cookie member
                 return $cookie_member;
             } else {
-                //return the default guest id, because the login key is not correct
+                //return the default guest ID, because the login key is not correct
                 return $this->get_guest_id();
             }
         } else {
-            //return the default guest id, because there is no member cookie information
+            //return the default guest ID, because there is no member cookie information
             return $this->get_guest_id();
         }
-
-        //return the default guest ID
-        return $this->get_guest_id();
     }
 }

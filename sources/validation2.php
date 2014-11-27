@@ -738,7 +738,6 @@ function init__validation2()
         'video.src' => '.*',
         'video.width' => $enforce_length,
         'time.datetime' => '.*',
-        'time.pubdate' => '(pubdate)',
         'source.media' => '.*',
         'source.src' => '.*',
         'source.type' => '.*',
@@ -1047,6 +1046,7 @@ function __check_tag($tag, $attributes, $self_close, $close, $errors)
                 if (($GLOBALS['XHTML_FORM_ENCODING'] == 'multipart/form-data') && (array_key_exists('method', $attributes)) && ($attributes['method'] == 'get')) {
                     $errors[] = array('XHTML_FORM_ENCODING_2');
                 }
+                // intentionally rolls on...
 
             case 'map':
             case 'iframe':

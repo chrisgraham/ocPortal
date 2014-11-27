@@ -569,6 +569,7 @@ class OCP_RSS
                                 }
                                 break;
                         }
+                        break;
                     case $prefix . 'FEED':
                         switch ($last_tag) {
                             case $prefix . 'TITLE':

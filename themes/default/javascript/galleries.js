@@ -15,7 +15,7 @@ function initialise_slideshow()
 	add_event_listener_abstract(window,'keypress',toggle_slideshow_timer);
 
 	add_event_listener_abstract(document.getElementById('gallery_entry_screen'),'click',function(event) {
-		if (typeof event=='undefined') var event=window.event;
+		if (typeof event=='undefined') event=window.event;
 
 		if (event.altKey || event.metaKey)
 		{
@@ -82,7 +82,7 @@ function toggle_slideshow_timer()
 
 function stop_slideshow_timer(message)
 {
-	if (typeof message=='undefined') var message='{!galleries:STOPPED;}';
+	if (typeof message=='undefined') message='{!galleries:STOPPED;}';
 	var changer=document.getElementById('changer_wrap');
 	if (changer) set_inner_html(changer,message);
 	if (window.slideshow_timer) window.clearInterval(window.slideshow_timer);

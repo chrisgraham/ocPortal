@@ -1,4 +1,4 @@
-{$,Parser hint: .innerHTML okay}
+/*{$,Parser hint: .innerHTML okay}*/
 
 /*	Prototype JavaScript framework, version 1.5.1
  *	(c) 2005-2007 Sam Stephenson

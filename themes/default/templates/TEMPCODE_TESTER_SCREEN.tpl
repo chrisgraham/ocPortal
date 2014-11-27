@@ -35,9 +35,9 @@
 	<div class="comcode_code">
 		<h4>{!RAW_PREVIEW}</h4>
 
-		<div class="xhtml_validator_off"><code class="comcode_code_inner" id="preview_raw">
+		<div class="xhtml_validator_off"><span class="comcode_code_inner" id="preview_raw">
 			<p class="nothing_here">{!UNSET}</p>
-		</code></div>
+		</span></div>
 	</div>
 </div>
 
@@ -45,9 +45,9 @@
 	<div class="comcode_code">
 		<h4>{!HTML_PREVIEW}</h4>
 
-		<div class="xhtml_validator_off"><code class="comcode_code_inner" id="preview_html">
+		<div class="xhtml_validator_off"><span class="comcode_code_inner" id="preview_html">
 			<p class="nothing_here">{!UNSET}</p>
-		</code></div>
+		</span></div>
 	</div>
 </div>
 
@@ -55,9 +55,9 @@
 	<div class="comcode_code">
 		<h4>{!COMCODE_PREVIEW}</h4>
 
-		<div class="xhtml_validator_off"><code class="comcode_code_inner" id="preview_comcode">
+		<div class="xhtml_validator_off"><span class="comcode_code_inner" id="preview_comcode">
 			<p class="nothing_here">{!UNSET}</p>
-		</code></div>
+		</span></div>
 	</div>
 </div>
 

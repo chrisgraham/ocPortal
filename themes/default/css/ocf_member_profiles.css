@@ -17,7 +17,7 @@
 	width: 100%;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.ocf_profile_column {
 		padding: 0.5em;
 		font-size: 0.9em;
@@ -37,9 +37,9 @@
 		text-align: center;
 		margin-top: 1em;
 	}
-{+END}
+/*{+END}*/
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.ocf_profile_column {
 		float: right;
 		width: 14em;
@@ -62,7 +62,7 @@
 		text-align: center;
 		margin-top: 1.5em;
 	}
-{+END}
+/*{+END}*/
 
 .ocf_profile_column ul.nl li {
 	overflow: hidden;
@@ -128,19 +128,19 @@ table.ocf_profile_fields th {
 	vertical-align: middle;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	table.ocf_profile_fields th {
 		font-size: 1em;
 		padding: 0.5em 0.5em 0.5em 0;
 	}
-{+END}
+/*{+END}*/
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	table.ocf_profile_fields th {
 		font-size: 1.2em;
 		padding: 1em 1em 1em 0;
 	}
-{+END}
+/*{+END}*/
 
 table.ocf_profile_fields td {
 	padding: 1em 0 1em 1em;
@@ -160,7 +160,7 @@ table.ocf_profile_statistics th {
 	border-right: 1px solid {$GET,pale_border};
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	table.ocf_profile_statistics {
 		border-collapse: collapse;
 		font-size: 0.9em;
@@ -175,9 +175,9 @@ table.ocf_profile_statistics th {
 		padding: 0.5em 0 0.5em 0.5em;
 		min-width: 1em;
 	}
-{+END}
+/*{+END}*/
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	table.ocf_profile_statistics {
 		border-collapse: collapse;
 	}
@@ -190,7 +190,7 @@ table.ocf_profile_statistics th {
 	table.ocf_profile_statistics td {
 		padding: 0.5em 0 0.5em 1em;
 	}
-{+END}
+/*{+END}*/
 
 .ocf_profile_friends {
 	overflow: hidden;
@@ -209,10 +209,10 @@ table.ocf_profile_statistics th {
 */
 
 .ocf_sig_requirements {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 25em;
 		margin: 1em auto !important;
-	{+END}
+	/*{+END}*/
 }
 
 .ocf_avatar_page_old_avatar {

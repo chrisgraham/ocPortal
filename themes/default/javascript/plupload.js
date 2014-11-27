@@ -1,4 +1,4 @@
-{$,Parser hint: .innerHTML okay}
+/*{$,Parser hint: .innerHTML okay}*/
 
 /**
  * mOxie - multi-runtime File API & XMLHttpRequest L2 Polyfill
@@ -13060,20 +13060,20 @@ function plUploadLoaded(ob) {
 	var old_onclick=btnSubmit.onclick;
 	if (!old_onclick) old_onclick=function() {};
 	ob.originalClickHandler=old_onclick;
-	btnSubmit.onclick=function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler=old_onclick; return beginFormUploading(event,ob,recurse); };
+	btnSubmit.onclick=function(event,_ob,form,recurse) { if (typeof event=='undefined') event=window.event; ob.originalClickHandler=old_onclick; return beginFormUploading(event,ob,recurse); };
 
 	// Preview button too
 	var btnSubmit2=document.getElementById('preview_button');
 	if (btnSubmit2)
 	{
 		var old_onclick2=btnSubmit2.onclick;
-		btnSubmit2.onclick=function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler=old_onclick2; return beginFormUploading(event,ob,recurse); };
+		btnSubmit2.onclick=function(event,_ob,form,recurse) { if (typeof event=='undefined') event=window.event; ob.originalClickHandler=old_onclick2; return beginFormUploading(event,ob,recurse); };
 	}
 }
 
 // Called by the submit button to start the upload
 function beginFormUploading(e,ob,recurse) {
-	if (typeof recurse=='undefined') var recurse=false;
+	if (typeof recurse=='undefined') recurse=false;
 
 	window.just_checking_requirements=true;
 
@@ -13377,7 +13377,7 @@ function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,fil
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
 
-	if (typeof button_type=='undefined') var button_type='button_micro';
+	if (typeof button_type=='undefined') button_type='button_micro';
 
 	if (typeof window.no_java=='undefined') window.no_java=false;
 
@@ -13696,12 +13696,12 @@ function initialise_html5_dragdrop_upload(key,key2)
 	var ob=document.getElementById(key);
 
 	ob.ondragover=function(event) {
-		if (typeof event=='undefined') var event=window.event;
+		if (typeof event=='undefined') event=window.event;
 		html5_upload_event_drag_over(event,ob,key2);
 	};
 
 	ob.ondrop=function(event) {
-		if (typeof event=='undefined') var event=window.event;
+		if (typeof event=='undefined') event=window.event;
 		html5_upload_event_drop(event,ob,key2);
 	};
 }
@@ -13761,7 +13761,7 @@ function html5_upload(event,field_name,files)
 		}
 		if (!good_type)
 		{
-			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\{1\}/g,file_ext).replace(/\{2\}/g,valid_types.join(', ')));
 			continue;
 		}
 
@@ -13771,7 +13771,7 @@ function html5_upload(event,field_name,files)
 			name: file.name
 		};
 		file_upload.addEventListener('progress',function(e) {
-			if (typeof e=='undefined') var e=window.event;
+			if (typeof e=='undefined') e=window.event;
 			html5_upload_progress(e,field_name);
 		},false);
 

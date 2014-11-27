@@ -3,7 +3,7 @@
 window.tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_nodes_selectable,use_server_id)
 {
 	if (typeof window.do_ajax_request=='undefined') return;
-	if (typeof use_server_id=='undefined') var use_server_id=false;
+	if (typeof use_server_id=='undefined') use_server_id=false;
 
 	if ((typeof multi_selection=='undefined') || (!multi_selection)) var multi_selection=false;
 
@@ -252,7 +252,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			var a=node_self.getElementsByTagName('label')[0];
 			expand_button.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(expand_button) {
 				return function(event) {
-					if (typeof event=='undefined') var event=window.event;
+					if (typeof event=='undefined') event=window.event;
 					if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-','='].indexOf(String.fromCharCode(event.keyCode?event.keyCode:event.charCode))!=-1)
 						expand_button.onclick(event);
 				}
@@ -266,7 +266,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			a.childNodes[0].object=this;
 			a.object=this;
 			a.onmousedown=function(event) { // To disable selection of text when holding shift or control
-				if (typeof event=='undefined') var event=window.event;
+				if (typeof event=='undefined') event=window.event;
 				cancel_bubbling(event);
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
 			}
@@ -277,7 +277,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			new_html.role='treeitem';
 			new_html.id=this.name+'tree_list_c_'+node.getAttribute('id');
 			new_html.style.display=((!initially_expanded) || (node.getAttribute('has_children')!='true'))?'none':'block';
-			new_html.style.padding{$?,{$EQ,{!en_left},left},Left,Right}='15px';
+			new_html.style.padding/*{$?,{$EQ,{!en_left},left},Left,Right}*/='15px';
 			var selected=((this.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
 			if (selectable)
 			{
@@ -332,7 +332,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			a.childNodes[0].object=this;
 			a.object=this;
 			a.onmousedown=function(event) { // To disable selection of text when holding shift or control
-				if (typeof event=='undefined') var event=window.event;
+				if (typeof event=='undefined') event=window.event;
 				cancel_bubbling(event);
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
 			}
@@ -543,8 +543,8 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 
 tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called as a method
 {
-	if (typeof event=='undefined') var event=window.event;
-	if (typeof assume_ctrl=='undefined') var assume_ctrl=false;
+	if (typeof event=='undefined') event=window.event;
+	if (typeof assume_ctrl=='undefined') assume_ctrl=false;
 
 	var element=document.getElementById(this.object.name);
 	if (element.disabled) return;
@@ -653,8 +653,6 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	}
 
 	if (/*(!event.ctrlKey) && */(!assume_ctrl)) this.object.last_clicked=this;
-
-	return;
 }
 
 tree_list.prototype.make_element_look_selected=function(target,selected)

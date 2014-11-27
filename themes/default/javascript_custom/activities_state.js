@@ -1,6 +1,6 @@
 "use strict";
 
-{$,Parser hint: .innerHTML okay}
+/*{$,Parser hint: .innerHTML okay}*/
 
 /*
 This provides the JavaScript necessary for the "status" part of activities

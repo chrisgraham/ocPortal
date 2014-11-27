@@ -1168,8 +1168,6 @@ class Hook_mybb
             }
 
             $tag = $custom_tag;
-            $title = $title;
-            $description = $description;
             $replace = $tag_replace;
             $example = '';
             $parameters = '';

@@ -254,8 +254,6 @@ class Hook_occle_fs_database
         } else {
             return false; // Files shouldn't even exist anywhere else!
         }
-
-        return false;
     }
 
     /**

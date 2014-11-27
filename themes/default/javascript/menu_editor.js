@@ -112,7 +112,7 @@ function copy_fields_into_bottom(i,changed)
 
 function menu_editor_handle_keypress(e)
 {
-	if (typeof e=='undefined') var e=window.event;
+	if (typeof e=='undefined') e=window.event;
 	var t=e.srcElement?e.srcElement:e.target;
 
 	var up=(e.keyCode?e.keyCode:e.charCode)==38;
@@ -241,13 +241,12 @@ function handle_ordering(t,up,down)
 			}
 		}
 	}
-	return; // Ignore old code below
 }
 
 function swap_names(t,a,b,t2,values_also)
 {
-	if (typeof t2=='undefined') var t2='';
-	if (typeof values_also=='undefined') var values_also=false;
+	if (typeof t2=='undefined') t2='';
+	if (typeof values_also=='undefined') values_also=false;
 	var _a=document.getElementById(t+'_'+a+t2);
 	var _b=document.getElementById(t+'_'+b+t2);
 	_a.name=t+'_'+b+t2;

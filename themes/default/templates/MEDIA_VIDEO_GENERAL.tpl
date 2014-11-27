@@ -30,7 +30,7 @@
 	 		enabled="true"
 			ShowControls="1"
 			autostart="false"
-		/>
+		></embed>
 	</div>
 
 	{$,Tie into callback event to see when finished, for our slideshows}

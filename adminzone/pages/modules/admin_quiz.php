@@ -168,7 +168,7 @@ class Module_admin_quiz
             return $this->export_quiz();
         }
         if ($type == '_export') {
-            return $this->_export_quiz();
+            $this->_export_quiz(); // Does not return
         }
         if ($type == 'delete_quiz_results') {
             return $this->delete_quiz_results();

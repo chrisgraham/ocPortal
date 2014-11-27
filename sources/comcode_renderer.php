@@ -421,7 +421,6 @@ function comcode_parse_error($preparse_mode, $_message, $pos, $comcode, $check_o
     $echo->handle_symbol_preprocessing();
     $echo->evaluate_echo(null, true);
     exit();
-    return new Tempcode(); // to trick code checker
 }
 
 /**
@@ -809,6 +808,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
 
         case 'tab':
             $default = (array_key_exists('default', $attributes)) ? $attributes['default'] : '0';
+            $is_page_link = preg_match('#^\s*\w*(:[^\s\n]+)+\s*$#', $embed->evaluate()) != 0;
             $temp_tpl = do_template('COMCODE_TAB_BODY', array(
                 '_GUID' => '2d63ed21f8d8b939b8db21b20c147b41',
                 'DEFAULT' => $default == '1',

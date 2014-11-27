@@ -183,6 +183,7 @@ class Module_filedump
                     $GLOBALS['OUTPUT_STREAMING'] = false;
 
                     $this->title = get_screen_title('FILEDUMP_ZIP');
+                    break;
 
                 default:
                     $this->title = get_screen_title('FILEDUMP_MOVE');

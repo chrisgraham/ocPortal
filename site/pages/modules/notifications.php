@@ -58,7 +58,6 @@ class Module_notifications
             return array();
         }
         return array(
-            'browse' => array('NOTIFICATION_MANAGEMENT', 'tool_buttons/notifications2'),
             'browse' => array('NOTIFICATIONS', 'tool_buttons/notifications'),
         );
     }

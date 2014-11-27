@@ -36,14 +36,14 @@
 }
 
 .comcode_big_tab {
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		float: left;
 		margin: 1em 0;
-	{+END}
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+END}*/
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin-left: 186px; /* 2px gap to workaround IE lameness */
 		min-height: 190px;
-	{+END}
+	/*{+END}*/
 	padding: 1em;
 	border: 2px solid {$GET,pale_border};
 	background-color: {$GET,area_background};

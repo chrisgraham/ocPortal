@@ -27,6 +27,7 @@ Not doing (from CodeLobster Errors):
  - IF and ELSEIF have same conditions (theoretically the prior IF might have changed the state)
 Not doing (from PhpStorm Code Inspector):
  - Many (lots of false positives in here)
+ - "Missing return statement" (this is useful, but if we have like a warn_exit at the end of a function, this would trigger the error)
 
 Unsupported syntax:
  static $foo=1,$bar=2;
@@ -311,7 +312,6 @@ $FALSE_ERROR_FUNCS = array(
     'ftp_cdup' => 1,
     'ftp_pasv' => 1,
     'ftp_rawlist' => 1,
-    'ftp_cdup' => 1,
     'ftp_chdir' => 1,
     'ftp_pwd' => 1,
     'ftp_login' => 1,
@@ -362,7 +362,6 @@ $FALSE_ERROR_FUNCS = array(
     'mysql_field_table' => 1,
     'mysql_fetch_field' => 1,
     'mysql_fetch_object' => 1,
-    'mysql_field_seek' => 1,
     'mysql_list_dbs' => 1,
     'mysql_result' => 1,
     'mysql_unbuffered_query' => 1,
@@ -409,8 +408,6 @@ $FALSE_ERROR_FUNCS = array(
     'session_start' => 1,
     'imagepng' => 1,
     'imagejpeg' => 1,
-    'imagettfbbox' => 1,
-    'imagettftext' => 1,
     'gethostbyname' => 1,
     'imagecreatetruecolor' => 1,
     'imagetruecolortopalette' => 1,
@@ -442,7 +439,6 @@ $FALSE_ERROR_FUNCS = array(
     'fileowner' => 1,
     'fileperms' => 1,
     'filesize' => 1,
-    'opendir' => 1,
     'pathinfo' => 1,
     'fileatime' => 1,
     'md5_file' => 1,
@@ -482,7 +478,6 @@ $ERROR_FUNCS = array(
     'ftp_fput' => 1,
     'ftp_nlist' => 1,
     'ftp_size' => 1,
-    'ftp_cdup' => 1,
     'ftp_pasv' => 1,
     'ftp_rawlist' => 1,
     'ftp_cdup' => 1,
@@ -570,7 +565,6 @@ $ERROR_FUNCS = array(
     'fileowner' => 1,
     'fileperms' => 1,
     'filesize' => 1,
-    'opendir' => 1,
     'pathinfo' => 1,
     'fileatime' => 1,
     'md5_file' => 1,
@@ -1866,7 +1860,7 @@ function check_variable($variable, $reference = false)
 {
     $identifier = $variable[1];
     if (is_array($identifier)) {
-        return;
+        return null;
     }
 
     global $LOCAL_VARIABLES;

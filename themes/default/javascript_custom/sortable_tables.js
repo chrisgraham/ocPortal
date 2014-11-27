@@ -1,4 +1,4 @@
-{$,Parser hint: .innerHTML okay}
+/*{$,Parser hint: .innerHTML okay}*/
 
 /**
  * Table.js

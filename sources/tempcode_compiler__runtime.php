@@ -202,6 +202,7 @@ function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $them
                             $next = $text[$symbol_pos];
                             ++$symbol_pos;
                         }
+                        // intentionally rolls on...
                     default:
                         if (!$dirty_param) {
                             $param[$params - 1] .= $next;
@@ -516,7 +517,7 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
         fclose($tmp);
     }
 
-    if (strpos($html, '{$,Parser hint: pure}') !== false) {
+    if (strpos($html, '/*{$,Parser hint: pure}*/') !== false) {
         return make_string_tempcode(preg_replace('#\{\$,.*\}#U', '/*no minify*/', $html));
     }
 

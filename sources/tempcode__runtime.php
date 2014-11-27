@@ -311,7 +311,7 @@ function static_evaluate_tempcode($ob)
  * @param  ID_TEXT                      Theme to use
  * @return tempcode                     The tempcode for this template
  */
-function do_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $type = 'templates', $theme = null)
+function do_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $directory = 'templates', $theme = null)
 {
     if ((is_null($lang)) || ($lang == '')) {
         global $USER_LANG_CACHED;
@@ -410,27 +410,27 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             $prefix_default = get_file_base() . '/themes/';
             $prefix = ($theme == 'default') ? $prefix_default : (get_custom_file_base() . '/themes/');
 
-            if (file_exists($prefix . $theme . '/' . $type . '_custom/' . $_codename . $suffix)) {
-                $_data = _do_template($theme, '/' . $type . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
-            } elseif (file_exists($prefix . $theme . '/' . $type . '/' . $_codename . $suffix)) {
-                $_data = _do_template($theme, '/' . $type . '/', $_codename, $_codename, $lang, $suffix, $theme);
-            } elseif ((!is_null($GLOBALS['CURRENT_SHARE_USER'])) && ($theme != 'default') && (file_exists($prefix_default . $theme . '/' . $type . '_custom/' . $_codename . $suffix))) {
-                $_data = _do_template($theme, '/' . $type . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
-            } elseif ((!is_null($GLOBALS['CURRENT_SHARE_USER'])) && ($theme != 'default') && (file_exists($prefix_default . $theme . '/' . $type . '/' . $_codename . $suffix))) {
-                $_data = _do_template($theme, '/' . $type . '/', $_codename, $_codename, $lang, $suffix, $theme);
-            } elseif (file_exists($prefix_default . 'default' . '/' . $type . '_custom/' . $_codename . $suffix)) {
-                $_data = _do_template('default', '/' . $type . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
-            } elseif (file_exists($prefix_default . 'default' . '/' . $type . '/' . $_codename . $suffix)) {
-                $_data = _do_template('default', '/' . $type . '/', $_codename, $_codename, $lang, $suffix, $theme);
+            if (file_exists($prefix . $theme . '/' . $directory . '_custom/' . $_codename . $suffix)) {
+                $_data = _do_template($theme, '/' . $directory . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
+            } elseif (file_exists($prefix . $theme . '/' . $directory . '/' . $_codename . $suffix)) {
+                $_data = _do_template($theme, '/' . $directory . '/', $_codename, $_codename, $lang, $suffix, $theme);
+            } elseif ((!is_null($GLOBALS['CURRENT_SHARE_USER'])) && ($theme != 'default') && (file_exists($prefix_default . $theme . '/' . $directory . '_custom/' . $_codename . $suffix))) {
+                $_data = _do_template($theme, '/' . $directory . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
+            } elseif ((!is_null($GLOBALS['CURRENT_SHARE_USER'])) && ($theme != 'default') && (file_exists($prefix_default . $theme . '/' . $directory . '/' . $_codename . $suffix))) {
+                $_data = _do_template($theme, '/' . $directory . '/', $_codename, $_codename, $lang, $suffix, $theme);
+            } elseif (file_exists($prefix_default . 'default' . '/' . $directory . '_custom/' . $_codename . $suffix)) {
+                $_data = _do_template('default', '/' . $directory . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
+            } elseif (file_exists($prefix_default . 'default' . '/' . $directory . '/' . $_codename . $suffix)) {
+                $_data = _do_template('default', '/' . $directory . '/', $_codename, $_codename, $lang, $suffix, $theme);
             } elseif ($codename != $_codename) {
-                if (file_exists($prefix . $theme . '/' . $type . '_custom/' . $codename . $suffix)) {
-                    $_data = _do_template($theme, '/' . $type . '_custom/', $codename, $_codename, $lang, $suffix, $theme);
-                } elseif (file_exists($prefix . $theme . '/' . $type . '/' . $codename . $suffix)) {
-                    $_data = _do_template($theme, '/' . $type . '/', $codename, $_codename, $lang, $suffix, $theme);
-                } elseif (file_exists($prefix_default . 'default' . '/' . $type . '_custom/' . $codename . $suffix)) {
-                    $_data = _do_template('default', '/' . $type . '_custom/', $codename, $_codename, $lang, $suffix, $theme);
-                } elseif (file_exists($prefix_default . 'default' . '/' . $type . '/' . $codename . $suffix)) {
-                    $_data = _do_template('default', '/' . $type . '/', $codename, $_codename, $lang, $suffix, $theme);
+                if (file_exists($prefix . $theme . '/' . $directory . '_custom/' . $codename . $suffix)) {
+                    $_data = _do_template($theme, '/' . $directory . '_custom/', $codename, $_codename, $lang, $suffix, $theme);
+                } elseif (file_exists($prefix . $theme . '/' . $directory . '/' . $codename . $suffix)) {
+                    $_data = _do_template($theme, '/' . $directory . '/', $codename, $_codename, $lang, $suffix, $theme);
+                } elseif (file_exists($prefix_default . 'default' . '/' . $directory . '_custom/' . $codename . $suffix)) {
+                    $_data = _do_template('default', '/' . $directory . '_custom/', $codename, $_codename, $lang, $suffix, $theme);
+                } elseif (file_exists($prefix_default . 'default' . '/' . $directory . '/' . $codename . $suffix)) {
+                    $_data = _do_template('default', '/' . $directory . '/', $codename, $_codename, $lang, $suffix, $theme);
                 }
             }
             if (is_null($_data)) {
@@ -446,7 +446,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                 }
             }
         } else {
-            $_data = _do_template('default', '/' . $type . '/', $codename, $codename, $lang, $suffix, $theme);
+            $_data = _do_template('default', '/' . $directory . '/', $codename, $codename, $lang, $suffix, $theme);
         }
     }
 

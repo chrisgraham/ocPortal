@@ -19,7 +19,7 @@
 			overviewMapControlOptions:
 			{
 				opened: true
-			},
+			}
 		});
 
 		var info_window=new google.maps.InfoWindow();

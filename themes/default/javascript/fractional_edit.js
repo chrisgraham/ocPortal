@@ -2,9 +2,9 @@
 
 function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_click,control_button,type)
 {
-	if (typeof was_double_click=='undefined') var was_double_click=false;
-	if (typeof control_button=='undefined') var control_button=null;
-	if (typeof type=='undefined') var type='line';
+	if (typeof was_double_click=='undefined') was_double_click=false;
+	if (typeof control_button=='undefined') control_button=null;
+	if (typeof type=='undefined') type='line';
 
 	if (raw_text.length>255) return null; // Cannot process this
 
@@ -65,14 +65,14 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 				break;
 		}
 		input.style.position='absolute';
-		{+START,IF,{$MOBILE}}
+		/*{+START,IF,{$MOBILE}}*/
 			input.style.left='0px';
 			input.style.width=get_window_width()+'px';
-		{+END}
-		{+START,IF,{$NOT,{$MOBILE}}}
+		/*{+END}*/
+		/*{+START,IF,{$NOT,{$MOBILE}}}*/
 			input.style.left=(x)+'px';
 			input.style.width=width+'px';
-		{+END}
+		/*{+END}*/
 		input.style.top=(y+8)+'px';
 		input.style.margin=0;
 		var to_copy=['padding-top','padding-left','font-size','font-weight','font-style'];
@@ -169,7 +169,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 		// If we activate it again, we actually treat this as a cancellation
 		object.onclick=object.ondblclick=function(event)
 			{
-				if (typeof event=='undefined') var event=window.event;
+				if (typeof event=='undefined') event=window.event;
 
 				cancel_bubbling(event);
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
@@ -182,7 +182,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 		// Cancel or save actions
 		if (type=='line') input.onkeyup=function(event) // Not using onkeypress because that only works for actual represented characters in the input box
 			{
-				if (typeof event=='undefined') var event=window.event;
+				if (typeof event=='undefined') event=window.event;
 				if (key_pressed(event,[27],true)) // Cancel (escape key)
 				{
 					var tmp=input.onblur;

@@ -1107,7 +1107,7 @@ function get_translated_tempcode__and_simplify($table, $row, $field_name, $conne
     if (is_null($ret)) return $ret;
     $ret = make_string_tempcode($ret->evaluate());
     if (multi_lang_content()) {
-        $connection->query_update('translate', array('text_parsed' => $ret->to_assembly()), array('id' => $entry, 'language' => $lang), '', 1);
+        $connection->query_update('translate', array('text_parsed' => $ret->to_assembly()), array('id' => $row[$field_name], 'language' => $lang), '', 1);
     } else {
         $connection->query_update($table, array($field_name . '__text_parsed' => $ret->to_assembly()), $row, '', 1);
     }

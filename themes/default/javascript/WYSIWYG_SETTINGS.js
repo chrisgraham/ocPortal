@@ -48,9 +48,9 @@ var editor_settings={
 	resize_enabled : true,
 	width : (find_width(element)-15),
 	height : (window.location.href.indexOf('cms_comcode_pages')==-1)?250:500,
-	{+START,IF,{$NOT,{$VALUE_OPTION,commercial_spellchecker}}}
+	/*{+START,IF,{$NOT,{$VALUE_OPTION,commercial_spellchecker}}}*/
 		disableNativeSpellChecker : false,
-	{+END}
+	/*{+END}*/
 	toolbar : toolbar,
 	allowedContent: true
 };

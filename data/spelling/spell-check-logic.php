@@ -78,7 +78,6 @@ function sl_filter_naughty_harsh($in)
         return $in;
     }
     exit();
-    return ''; // trick to make Zend happy
 }
 
 /**
@@ -325,6 +324,8 @@ function utf8_ord($chr)
         default :
             trigger_error('Character not utf-8', E_USER_ERROR);
     }
+
+    return 0;
 }
 
 /**

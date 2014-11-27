@@ -1646,6 +1646,4 @@ function get_potential_gallery_title($cat)
         // Does exist
         return get_translated_text($test);
     }
-
-    return null; // Non-existent
 }

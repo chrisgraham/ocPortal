@@ -40,8 +40,8 @@ function notifications_mark_all_read(event)
 
 function poll_for_notifications(forced_update,delay)
 {
-	if (typeof forced_update=='undefined') var forced_update=false;
-	if (typeof delay=='undefined') var delay=false;
+	if (typeof forced_update=='undefined') forced_update=false;
+	if (typeof delay=='undefined') delay=false;
 
 	if (delay)
 	{
@@ -185,7 +185,7 @@ function explicit_notifications_enable_request()
 
 function toggle_top_personal_stats(event)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	_toggle_messaging_box(event,'pts',true);
 	_toggle_messaging_box(event,'web_notifications',true);
 	return _toggle_messaging_box(event,'top_personal_stats');
@@ -193,7 +193,7 @@ function toggle_top_personal_stats(event)
 
 function toggle_web_notifications(event)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	_toggle_messaging_box(event,'top_personal_stats',true);
 	_toggle_messaging_box(event,'pts',true);
 	return _toggle_messaging_box(event,'web_notifications');
@@ -201,7 +201,7 @@ function toggle_web_notifications(event)
 
 function toggle_pts(event)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	_toggle_messaging_box(event,'top_personal_stats',true);
 	_toggle_messaging_box(event,'web_notifications',true);
 	return _toggle_messaging_box(event,'pts');
@@ -209,7 +209,7 @@ function toggle_pts(event)
 
 function _toggle_messaging_box(event,name,hide)
 {
-	if (typeof hide=='undefined') var hide=false;
+	if (typeof hide=='undefined') hide=false;
 
 	var e=document.getElementById(name+'_rel');
 	if (!e) return;
@@ -223,8 +223,8 @@ function _toggle_messaging_box(event,name,hide)
 		e.parentNode.removeChild(e);
 		body.appendChild(e);
 
-		add_event_listener_abstract(e,'click',function(event) { if (typeof event=='undefined') var event=window.event; event.within_message_box=true; });
-		add_event_listener_abstract(body,'click',function(event) { if (typeof event=='undefined') var event=window.event; if (typeof event.within_message_box!='undefined') return; _toggle_messaging_box(event,'top_personal_stats',true); _toggle_messaging_box(event,'web_notifications',true); _toggle_messaging_box(event,'pts',true); });
+		add_event_listener_abstract(e,'click',function(event) { if (typeof event=='undefined') event=window.event; event.within_message_box=true; });
+		add_event_listener_abstract(body,'click',function(event) { if (typeof event=='undefined') event=window.event; if (typeof event.within_message_box!='undefined') return; _toggle_messaging_box(event,'top_personal_stats',true); _toggle_messaging_box(event,'web_notifications',true); _toggle_messaging_box(event,'pts',true); });
 	}
 
 	var button=document.getElementById(name+'_button');

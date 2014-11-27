@@ -236,6 +236,7 @@ class Block_main_members
                     $show_avatar = true;
                     break;
                 }
+                // intentionally rolls on...
 
             case 'avatars':
             default:

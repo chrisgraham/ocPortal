@@ -433,9 +433,6 @@ function referrer_is_qualified($scheme, $member_id)
     } else {
         return ($negative == 0);
     }
-
-    // Should not get here
-    return false;
 }
 
 function referrer_report_script($ret = false)

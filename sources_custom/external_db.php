@@ -67,6 +67,7 @@ function external_db()
  * THIS FUNCTION NEEDS CUSTOMISING. It is currently written for one particular ASP.net system.
  *
  * @param  ?array                       User record for session (null: none).
+ * @return ?MEMBER                      The member.
  */
 function external_db_user_from_session()
 {

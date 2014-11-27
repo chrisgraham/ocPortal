@@ -96,7 +96,7 @@ $featuretree = array(
                 array('Get your site up and running in just a few minutes'),
                 null, // divider
                 array('Keep your site closed to regular visitors until you\'re happy to open it'),
-                array('Configures server', 'Automatically generates a <tt>.htaccess</tt> file for you'),
+                array('Configures server', 'Automatically generates a <kbd>.htaccess</kbd> file for you'),
                 array('Auto-detection of forum settings for easy integration'),
             ),
         ),
@@ -326,7 +326,7 @@ $featuretree = array(
                 array('Slide-shows'),
                 array('Easily syndicate to Facebook'),
                 array('Automatic thumbnail generation'),
-                array('Import and export easily', 'With <tt>.zip</tt> and metadata support'),
+                array('Import and export easily', 'With <kbd>.zip</kbd> and metadata support'),
                 array('Optional watermarking', 'To guard against thieving swines ;)'),
             ),
         ),

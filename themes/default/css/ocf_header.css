@@ -30,22 +30,22 @@
 	padding: 0.8em;
 	vertical-align: top;
 	margin-{!en_left}: -1px;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		float: {!en_left};
 		border-{!en_left}: 1px solid {$GET,pale_border};
-	{+END}
+	/*{+END}*/
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.ocf_member_column {
 		height: 9em; /* 8em seems okay on Mac, 9em needed on Windows */
 	}
-{+END}
+/*{+END}*/
 
 .ocf_guest_column {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		height: 3em;
-	{+END}
+	/*{+END}*/
 }
 
 .ocf_guest_column_a * {
@@ -65,12 +65,12 @@
 	text-align: center;
 	vertical-align: middle;
 	border-{!en_left}: 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 112px;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		float: right;
-	{+END}
+	/*{+END}*/
 }
 
 .ocf_member_column_a img {
@@ -79,15 +79,15 @@
 
 .ocf_member_column_b {
 	border-{!en_left}: 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 20em;
-	{+END}
+	/*{+END}*/
 }
 
 .ocf_member_column_c {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		width: 25.3em; /* The extra 0.3em needed for iPad */
-	{+END}
+	/*{+END}*/
 }
 
 .ocf_member_column_d {
@@ -167,12 +167,12 @@
 
 .ocf_member_column_last_visit li {
 	white-space: nowrap;
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		margin: 0 0 0 1em;
-	{+END}
-	{+START,IF,{$MOBILE}}
+	/*{+END}*/
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 0.5em 0 0.5em 1em;
-	{+END}
+	/*{+END}*/
 	padding: 0;
 	list-style-type: none;
 }

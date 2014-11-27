@@ -691,6 +691,7 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
             foreach ($head_patterns as $pattern) {
                 $data = preg_replace($pattern, '', $data);
             }
+            // intentionally rolls on...
         case 'xml':
             $mash = str_replace('&apos;', '\'', str_replace(' false ', ' ', str_replace(' true ', ' ', @html_entity_decode(preg_replace('#\<[^\<\>]*\>#', ' ', $data), ENT_QUOTES, get_charset()))));
             $mash = preg_replace('#Error : Bad \w+#', '', $mash);

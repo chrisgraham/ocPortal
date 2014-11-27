@@ -91,7 +91,7 @@
 	margin-top: 0.5em;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.chat_room_options, .chat_room_actions {
 		float: {!en_left};
 		width: 50%;
@@ -118,7 +118,7 @@
 	.chat_colour_option {
 		padding-{!en_right}: 0.5em;
 	}
-{+END}
+/*{+END}*/
 
 .chat_colour_option label {
 	display: block;
@@ -133,7 +133,7 @@
 	margin-bottom: 0;
 }
 
-{+START,IF,{$MOBILE}}
+/*{+START,IF,{$MOBILE}}*/
 	.chat_room_options, .chat_room_actions {
 		padding: 0.5em;
 	}
@@ -145,7 +145,7 @@
 	.chat_room_options p:last-child {
 		margin: 0;
 	}
-{+END}
+/*{+END}*/
 
 /* Chat message stream */
 
@@ -243,10 +243,10 @@
 }
 
 .chat_lobby_friends {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		float: {!en_left};
 		width: 17em;
-	{+END}
+	/*{+END}*/
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
@@ -255,14 +255,14 @@
 }
 
 .chat_lobby_convos {
-	{+START,IF,{$NOT,{$MOBILE}}}
+	/*{+START,IF,{$NOT,{$MOBILE}}}*/
 		float: {!en_left};
 		width: 24em;
 		margin-{!en_right}: 1em;
 		border-{!en_right}: 1px solid {$GET,pale_border};
 		min-height: 29.5em;
 		padding-{!en_right}: 0.5em;
-	{+END}
+	/*{+END}*/
 	margin-top: 1em;
 	margin-{!en_left}: 0.75em;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
@@ -518,9 +518,9 @@ ul.icon_links_block_group {
 	margin: 0;
 	padding: 0;
 	float: right;
-	{+START,IF,{$MOBILE}}
+	/*{+START,IF,{$MOBILE}}*/
 		margin: 1em 0;
-	{+END}
+	/*{+END}*/
 }
 
 ul.icon_links_block_group>li {

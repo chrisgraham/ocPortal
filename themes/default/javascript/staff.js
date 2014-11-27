@@ -3,10 +3,10 @@
 function script_load_stuff_staff()
 {
 	// Navigation loading screen
-	{+START,IF,{$CONFIG_OPTION,enable_animations}}
+	/*{+START,IF,{$CONFIG_OPTION,enable_animations}}*/
 		if ((window.parent==window) && ((window.location+'').indexOf('js_cache=1')==-1) && (((window.location+'').indexOf('/cms/')!=-1) || ((window.location+'').indexOf('/adminzone/')!=-1)))
 			add_event_listener_abstract(window,'beforeunload',function() { staff_unload_action(); });
-	{+END}
+	/*{+END}*/
 
 	// Theme image editing hovers
 	var map,elements,i,j;
@@ -81,13 +81,13 @@ function script_load_stuff_staff()
 
 	// Thumbnail tooltips
 	var url_patterns=[
-		{+START,LOOP,URL_PATTERNS}
-			{+START,IF,{$NEQ,{_loop_key},0}},{+END}
+		/*{+START,LOOP,URL_PATTERNS}*/
+			/*{+START,IF,{$NEQ,{_loop_key},0}},{+END}*/
 			{
 				pattern: /^{$REPLACE,_WILD,([^&]*),{$REPLACE,_WILD\/,([^&]*)\/?,{$REPLACE,?,\?,{$REPLACE,/,\/,{PATTERN}}}}}/,
 				hook: '{HOOK}'
 			}
-		{+END}
+		/*{+END}*/
 	];
 	var cells=document.getElementsByTagName('td');
 	var links=[];
@@ -116,15 +116,15 @@ function script_load_stuff_staff()
 					var myfunc=function(hook,id,link)
 					{
 						add_event_listener_abstract(link,'mouseout',function(event) {
-							if (typeof event=='undefined') var event=window.event;
+							if (typeof event=='undefined') event=window.event;
 							if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(link,event);
 						});
 						add_event_listener_abstract(link,'mousemove',function(event) {
-							if (typeof event=='undefined') var event=window.event;
+							if (typeof event=='undefined') event=window.event;
 							if (typeof window.activate_tooltip!='undefined') reposition_tooltip(link,event,false,false,null,true);
 						});
 						add_event_listener_abstract(link,'mouseover',function(event) {
-							if (typeof event=='undefined') var event=window.event;
+							if (typeof event=='undefined') event=window.event;
 
 							if (typeof window.activate_tooltip!='undefined')
 							{
@@ -338,7 +338,7 @@ function handle_image_mouse_over(event)
 	if (src.indexOf('/themes/')==-1) return;
 	if (window.location.href.indexOf('admin_themes')!=-1) return;
 
-	{+START,IF,{$CONFIG_OPTION,enable_theme_img_buttons}}
+	/*{+START,IF,{$CONFIG_OPTION,enable_theme_img_buttons}}*/
 		// Remove other edit links
 		var old=get_elements_by_class_name(document,'magic_image_edit_link');
 		for (var i=old.length-1;i>=0;i--)
@@ -365,7 +365,7 @@ function handle_image_mouse_over(event)
 		target.mo_link=window.setTimeout(function() {
 			if (ml) ml.style.display='block';
 		} , 2000);
-	{+END}
+	/*{+END}*/
 
 	window.old_status_img=window.status;
 	window.status='{!SPECIAL_CLICK_TO_EDIT;}';
@@ -375,7 +375,7 @@ function handle_image_mouse_out(event)
 {
 	var target=event.target || event.srcElement;
 
-	{+START,IF,{$CONFIG_OPTION,enable_theme_img_buttons}}
+	/*{+START,IF,{$CONFIG_OPTION,enable_theme_img_buttons}}*/
 		if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && (typeof target.previousSibling.className.indexOf!='undefined') && (target.previousSibling.className.indexOf('magic_image_edit_link')!=-1))
 		{
 			if ((typeof target.mo_link!='undefined') && (target.mo_link)) // Clear timed display of new edit button
@@ -395,7 +395,7 @@ function handle_image_mouse_out(event)
 				}
 			} , 3000);
 		}
-	{+END}
+	/*{+END}*/
 
 	if (typeof window.old_status_img=='undefined') window.old_status_img='';
 	window.status=window.old_status_img;
@@ -403,7 +403,7 @@ function handle_image_mouse_out(event)
 
 function handle_image_click(event,ob,force)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if ((typeof ob=='undefined') || (!ob)) var ob=this;
 
 	var src=ob.origsrc?ob.origsrc:((typeof ob.src=='undefined')?abstract_get_computed_style(ob,'background-image').replace(/.*url\(['"]?(.*)['"]?\).*/,'$1'):ob.src);
@@ -435,7 +435,7 @@ function load_software_chat(event)
 			<ul class="spaced_list">{!SOFTWARE_CHAT_EXTRA;}</ul> \
 			<p class="associated_link associated_links_block_group"><a title="{!SOFTWARE_CHAT_STANDALONE} {!LINK_NEW_WINDOW}" target="_blank" href="http://chat.zoho.com/guest.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;participants=true">{!SOFTWARE_CHAT_STANDALONE}</a> <a href="#" onclick="return load_software_chat(event);">{!HIDE}</a></p> \
 		</div> \
-		<iframe class="software_chat_iframe" frameborder="0" border="0" src="http://chat.zoho.com/shout.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;chaturl=ocPortal%20chat&amp;V=000000-70a9e1-eff4f9-70a9e1-ocPortal%20chat&amp;user={$SITE_NAME.*}'+((typeof window.ocp_username!='undefined')?window.encodeURIComponent('/'+window.ocp_username):'')+'&amp;participants=true"></iframe> \
+		<iframe class="software_chat_iframe" frameborder="0" style="border: 0" src="http://chat.zoho.com/shout.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;chaturl=ocPortal%20chat&amp;V=000000-70a9e1-eff4f9-70a9e1-ocPortal%20chat&amp;user={$SITE_NAME.*}'+((typeof window.ocp_username!='undefined')?window.encodeURIComponent('/'+window.ocp_username):'')+'&amp;participants=true"></iframe> \
 	'.replace(/\\{1\\}/,escape_html((window.location+'').replace(get_base_url(),'http://baseurl')));
 
 	var box=document.getElementById('software_chat_box');

@@ -3,7 +3,7 @@
 function make_tooltip_func(op,directory)
 {
 	return function(event) {
-		if (typeof event=='undefined') var event=window.event;
+		if (typeof event=='undefined') event=window.event;
 		if (typeof window.tpl_descrips[op]=='undefined')
 		{
 			var get_descrip=function(callback) {
@@ -36,8 +36,8 @@ function load_template_previews(directory)
 	{
 		ob=elements[i];
 		if ((ob.value=='') || (ob.disabled)) continue;
-		ob.onmousemove=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event); };
-		ob.onmouseout=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(this,event); };
+		ob.onmousemove=function(event) { if (typeof event=='undefined') event=window.event; if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event); };
+		ob.onmouseout=function(event) { if (typeof event=='undefined') event=window.event; if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(this,event); };
 		var op=ob.value;
 		ob.onmouseover=make_tooltip_func(op,directory);
 	}
@@ -45,19 +45,19 @@ function load_template_previews(directory)
 
 function preview_generator_mouseover(event)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'<iframe frameBorder="0" title="{!PREVIEW*;^}" style="width: 800px; height: 400px" src="'+escape_html(this.href)+'">{!PREVIEW;^}</iframe>','800px');
 }
 
 function preview_generator_mousemove(event)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event);
 }
 
 function preview_generator_mouseout(event)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(this,event);
 }
 
@@ -91,7 +91,7 @@ function template_edit_page(name,id)
 
 	var ecw=document.getElementById('frame_'+box.name).contentWindow;
 
-	if ((value=='BLOCK'){+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}} && (typeof window.showModalDialog!='undefined'){+END})
+	if ((value=='BLOCK')/*{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}*/ && (typeof window.showModalDialog!='undefined')/*{+END}*/)
 	{
 		if (ecw) box.value=window.editAreaLoader.getValue(box.name);
 		var url='{$FIND_SCRIPT_NOHTTP;,block_helper}?field_name='+box.name+'&block_type=template'+keep_stub();
@@ -280,9 +280,9 @@ function set_up_parent_page_highlighting()
 		{
 			cssText=cssText.toLowerCase().replace(/; /,';<br />\n');
 		}
-		li.onmouseout=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(this,event); };
-		li.onmousemove=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event); };
-		li.onmouseover=function(cssText) { return function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,cssText,'auto'); } } (cssText);
+		li.onmouseout=function(event) { if (typeof event=='undefined') event=window.event; if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(this,event); };
+		li.onmousemove=function(event) { if (typeof event=='undefined') event=window.event; if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event); };
+		li.onmouseover=function(cssText) { return function(event) { if (typeof event=='undefined') event=window.event; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,cssText,'auto'); } } (cssText);
 
 		// Jump-to
 		a.onclick=function(selector) { return function(event) {
@@ -293,7 +293,7 @@ function set_up_parent_page_highlighting()
 
 		// Highlighting on parent page
 		a.onmouseover=function(selector) { return function(event) {
-			if (typeof event=='undefined') var event=window.event;
+			if (typeof event=='undefined') event=window.event;
 
 			if ((window.opener) && (!event.ctrlKey))
 			{
@@ -306,7 +306,7 @@ function set_up_parent_page_highlighting()
 			}
 		} }(selector);
 		a.onmouseout=function(selector) { return function(event) {
-			if (typeof event=='undefined') var event=window.event;
+			if (typeof event=='undefined') event=window.event;
 
 			if ((window.opener) && (!event.ctrlKey))
 			{
@@ -326,7 +326,7 @@ function set_up_parent_page_highlighting()
 			element=elements[j];
 
 			add_event_listener_abstract(element,'mouseover',function(a,element) { return function(event) {
-				if (typeof event=='undefined') var event=window.event;
+				if (typeof event=='undefined') event=window.event;
 
 				if ((window) && (typeof window.dec_to_hex!='undefined') && (!event.ctrlKey))
 				{
@@ -351,7 +351,7 @@ function set_up_parent_page_highlighting()
 				}
 			} }(a,element) );
 			add_event_listener_abstract(element,'mouseout',function(a) { return function(event) {
-				if (typeof event=='undefined') var event=window.event;
+				if (typeof event=='undefined') event=window.event;
 
 				if ((window) && (!event.ctrlKey))
 				{

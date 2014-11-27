@@ -116,10 +116,8 @@ function _intelligent_write_error_inline($path)
         return do_lang_tempcode('WRITE_ERROR', escape_html($path));
     } elseif (file_exists(dirname($path))) {
         return do_lang_tempcode('WRITE_ERROR_CREATE', escape_html($path), escape_html(dirname($path)));
-    } else {
-        return do_lang_tempcode('WRITE_ERROR_MISSING_DIRECTORY', escape_html(dirname($path)), escape_html(dirname(dirname($path))));
     }
-    return new Tempcode();
+    return do_lang_tempcode('WRITE_ERROR_MISSING_DIRECTORY', escape_html(dirname($path)), escape_html(dirname(dirname($path))));
 }
 
 /**

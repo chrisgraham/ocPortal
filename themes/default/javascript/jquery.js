@@ -1,6 +1,6 @@
-{$,Parser hint: .innerHTML okay}
+/*{$,Parser hint: .innerHTML okay}*/
 
-{$,NB: 1.8.3 is the latest before jQuery was heavily refactored, breaking support for common jQuery plugins}
+/*{$,NB: 1.8.3 is the latest before jQuery was heavily refactored, breaking support for common jQuery plugins}*/
 
 /*!
  * jQuery JavaScript Library v1.8.3

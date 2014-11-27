@@ -135,11 +135,11 @@ class Hook_addon_registry_core_feedback_features
             'themes/default/templates/RATING_FORM.tpl',
             'themes/default/templates/TRACKBACK.tpl',
             'themes/default/templates/TRACKBACK_WRAPPER.tpl',
-            'themes/default/templates/TRACKBACK_XML.tpl',
-            'themes/default/templates/TRACKBACK_XML_ERROR.tpl',
-            'themes/default/templates/TRACKBACK_XML_LISTING.tpl',
-            'themes/default/templates/TRACKBACK_XML_NO_ERROR.tpl',
-            'themes/default/templates/TRACKBACK_XML_WRAPPER.tpl',
+            'themes/default/xml/TRACKBACK_XML.xml',
+            'themes/default/xml/TRACKBACK_XML_ERROR.xml',
+            'themes/default/xml/TRACKBACK_XML_LISTING.xml',
+            'themes/default/xml/TRACKBACK_XML_NO_ERROR.xml',
+            'themes/default/xml/TRACKBACK_XML_WRAPPER.xml',
             'sources/feedback.php',
             'sources/feedback2.php',
             'pages/comcode/EN/feedback.txt',
@@ -175,17 +175,17 @@ class Hook_addon_registry_core_feedback_features
             'templates/COMMENTS_DEFAULT_TEXT.tpl' => 'comments_default_text',
             'templates/TRACKBACK.tpl' => 'administrative__trackback_delete_screen',
             'templates/TRACKBACK_DELETE_SCREEN.tpl' => 'administrative__trackback_delete_screen',
-            'templates/TRACKBACK_XML_NO_ERROR.tpl' => 'trackback_xml_wrapper',
-            'templates/TRACKBACK_XML_ERROR.tpl' => 'trackback_xml_error',
-            'templates/TRACKBACK_XML_WRAPPER.tpl' => 'trackback_xml_wrapper',
+            'xml/TRACKBACK_XML_NO_ERROR.xml' => 'trackback_xml_wrapper',
+            'xml/TRACKBACK_XML_ERROR.xml' => 'trackback_xml_error',
+            'xml/TRACKBACK_XML_WRAPPER.xml' => 'trackback_xml_wrapper',
             'templates/COMMENTS_POSTING_FORM.tpl' => 'comments',
             'templates/RATING_BOX.tpl' => 'rating',
             'templates/RATING_DISPLAY_SHARED.tpl' => 'rating_display_shared',
             'templates/RATINGS_SHOW.tpl' => 'ratings_show',
             'templates/COMMENTS_WRAPPER.tpl' => 'comments_wrapper',
-            'templates/TRACKBACK_XML.tpl' => 'trackback_xml_wrapper',
+            'xml/TRACKBACK_XML.xml' => 'trackback_xml_wrapper',
             'templates/TRACKBACK_WRAPPER.tpl' => 'trackback_wrapper',
-            'templates/TRACKBACK_XML_LISTING.tpl' => 'trackback_xml_listing',
+            'xml/TRACKBACK_XML_LISTING.xml' => 'trackback_xml_listing',
             'templates/RATING_FORM.tpl' => 'rating',
             'templates/RATING_INLINE_STATIC.tpl' => 'rating_inline_static',
             'templates/RATING_INLINE_DYNAMIC.tpl' => 'rating_inline_dynamic',
@@ -253,7 +253,7 @@ class Hook_addon_registry_core_feedback_features
         return array(
             lorem_globalise(do_lorem_template('TRACKBACK_XML_ERROR', array(
                 'TRACKBACK_ERROR' => lorem_phrase(),
-            )), null, '', true)
+            ), null, false, null, '.xml', 'xml'), null, '', true)
         );
     }
 
@@ -270,12 +270,12 @@ class Hook_addon_registry_core_feedback_features
             'TITLE' => lorem_phrase(),
             'LINK' => placeholder_url(),
             'EXCERPT' => lorem_phrase(),
-        ));
-        $xml->attach(do_lorem_template('TRACKBACK_XML_NO_ERROR', array()));
+        ), null, false, null, '.xml', 'xml');
+        $xml->attach(do_lorem_template('TRACKBACK_XML_NO_ERROR', array(), null, false, null, '.xml', 'xml'));
         return array(
             lorem_globalise(do_lorem_template('TRACKBACK_XML_WRAPPER', array(
                 'XML' => $xml,
-            )), null, '', true)
+            ), null, false, null, '.xml', 'xml'), null, '', true)
         );
     }
 
@@ -486,7 +486,7 @@ class Hook_addon_registry_core_feedback_features
             'ITEMS' => lorem_phrase(),
             'LINK_PAGE' => lorem_word(),
             'LINK_ID' => placeholder_id(),
-        ));
+        ), null, false, null, '.xml', 'xml');
 
         return array(
             lorem_globalise($content, null, '', true)

@@ -10,11 +10,11 @@
 	padding-{!en_left}: 1em;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.download_box_description.pic {
 		margin-right: 180px;
 	}
-{+END}
+/*{+END}*/
 
 .download_box_pic img {
 	width: 150px;
@@ -30,11 +30,11 @@
 	width: 55%;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.download_description {
 		margin-{!en_right}: 18em;
 	}
-{+END}
+/*{+END}*/
 
 .download_start_slideshow {
 	text-align: center;
@@ -56,12 +56,12 @@
 
 /* Floated Right */
 
-{+START,IF,{$NOT,{$MOBILE}}}
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	.download_meta_data {
 		float: {!en_right};
 		width: 17em;
 	}
-{+END}
+/*{+END}*/
 
 .download_meta_data .ratings, .download_meta_data .trackbacks {
 	width: 100%;

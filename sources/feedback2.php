@@ -127,14 +127,14 @@ function trackback_script()
         $output = actualise_post_trackback($allow_trackbacks, $page, strval($id));
 
         if ($output) {
-            $xml = do_template('TRACKBACK_XML_NO_ERROR', array());
+            $xml = do_template('TRACKBACK_XML_NO_ERROR', array(), null, false, null, '.xml', 'xml');
         } else {
-            $xml = do_template('TRACKBACK_XML_ERROR', array('_GUID' => 'ac5e34aeabf92712607e62e062407861', 'TRACKBACK_ERROR' => do_lang_tempcode('TRACKBACK_ERROR')));
+            $xml = do_template('TRACKBACK_XML_ERROR', array('_GUID' => 'ac5e34aeabf92712607e62e062407861', 'TRACKBACK_ERROR' => do_lang_tempcode('TRACKBACK_ERROR')), null, false, null, '.xml', 'xml');
         }
     }
 
 
-    $echo = do_template('TRACKBACK_XML_WRAPPER', array('_GUID' => 'cd8d057328569803a6cca9f8d37a0ac8', 'XML' => $xml));
+    $echo = do_template('TRACKBACK_XML_WRAPPER', array('_GUID' => 'cd8d057328569803a6cca9f8d37a0ac8', 'XML' => $xml), null, false, null, '.xml', 'xml');
     $echo->evaluate_echo();
 }
 

@@ -78,6 +78,7 @@ if (!function_exists('init__js_validator')) {
 }
 
 if (!$WITHIN_PHP) {
+    global $OCPORTAL_PATH;
     $full_path = (strpos($to_use, ':') === false) ? ($OCPORTAL_PATH . '/' . $to_use) : $to_use;
     $contents = file_get_contents($full_path);
     $contents = str_replace("\r", '', $contents);

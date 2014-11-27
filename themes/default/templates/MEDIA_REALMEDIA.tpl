@@ -18,7 +18,7 @@
 			pluginspage="http://www.real.com"
 			width="{WIDTH*}"
 			height="{HEIGHT*}"
-		/>
+		></embed>
 	</div>
 
 	{$,Tie into callback event to see when finished, for our slideshows}

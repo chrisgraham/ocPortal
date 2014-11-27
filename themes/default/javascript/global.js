@@ -356,7 +356,7 @@ function staff_unload_action()
 	div.style.position='fixed';
 	div.style.zIndex=10000;
 	div.style.textAlign='center';
-	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG_INLINE*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
+	set_inner_html(div,'<div aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG_INLINE*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></div>');
 	window.setTimeout( function() { if (document.getElementById('loading_image')) document.getElementById('loading_image').src+=''; } , 100); // Stupid workaround for Google Chrome not loading an image on unload even if in cache
 	document.body.appendChild(div);
 
@@ -458,7 +458,7 @@ function check_field_for_blankness(field,event)
 }
 function disable_button_just_clicked(input,permanent)
 {
-	if (typeof permanent=='undefined') var permanent=false;
+	if (typeof permanent=='undefined') permanent=false;
 
 	if (input.nodeName.toLowerCase()=='form')
 	{
@@ -567,7 +567,6 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 			},
 			window_title
 		);
-		return;
 	} else
 	if (button_set.length==2)
 	{
@@ -579,7 +578,6 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 			},
 			window_title
 		);
-		return;
 	} else
 	{
 		if (!fallback_message)
@@ -620,7 +618,6 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 
 				// unknown
 				callback(button_set[0]);
-				return;
 			},
 			window_title
 		);
@@ -630,7 +627,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 /* Find the main ocPortal window */
 function get_main_ocp_window(any_large_ok)
 {
-	if (typeof any_large_ok=='undefined') var any_large_ok=false;
+	if (typeof any_large_ok=='undefined') any_large_ok=false;
 
 	if (document.getElementById('main_website')) return window;
 
@@ -1089,7 +1086,7 @@ function require_javascript(script,lang)
 /* Tabs */
 function find_url_tab(hash)
 {
-	if (typeof hash=='undefined') var hash=window.location.hash;
+	if (typeof hash=='undefined') hash=window.location.hash;
 
 	if (hash.replace(/^#/,'')!='')
 	{
@@ -1106,7 +1103,7 @@ function find_url_tab(hash)
 }
 function select_tab(id,tab,from_url)
 {
-	if (typeof from_url=='undefined') var from_url=false;
+	if (typeof from_url=='undefined') from_url=false;
 
 	if (!from_url)
 	{
@@ -1396,7 +1393,7 @@ function handle_tray_cookie_setting(id)
 function animate_frame_load(pf,frame,leave_gap_top)
 {
 	if (!pf) return;
-	if (typeof leave_gap_top=='undefined') var leave_gap_top=0;
+	if (typeof leave_gap_top=='undefined') leave_gap_top=0;
 
 	pf.style.height=window.top.get_window_height()+'px'; // Enough to stop jumping around
 
@@ -1573,7 +1570,7 @@ function change_class(box,theId,to,from)
 /* Dimension functions */
 function get_mouse_xy(e,win)
 {
-	if (typeof win=='undefined') var win=window;
+	if (typeof win=='undefined') win=window;
 	win.mouse_x=get_mouse_x(e,win);
 	win.mouse_y=get_mouse_y(e,win);
 	win.ctrl_pressed=e.ctrlKey;
@@ -1584,7 +1581,7 @@ function get_mouse_xy(e,win)
 }
 function get_mouse_x(event,win)
 {
-	if (typeof win=='undefined') var win=window;
+	if (typeof win=='undefined') win=window;
 	try
 	{
 		if ((typeof event.pageX!='undefined') && (event.pageX))
@@ -1600,7 +1597,7 @@ function get_mouse_x(event,win)
 }
 function get_mouse_y(event,win)
 {
-	if (typeof win=='undefined') var win=window;
+	if (typeof win=='undefined') win=window;
 	try
 	{
 		if ((typeof event.pageY!='undefined') && (event.pageY))
@@ -1616,7 +1613,7 @@ function get_mouse_y(event,win)
 }
 function get_window_width(win)
 {
-	if (typeof win=='undefined') var win=window;
+	if (typeof win=='undefined') win=window;
 	if (typeof win.innerWidth!='undefined') return win.innerWidth-18;
 	if ((win.document.documentElement) && (win.document.documentElement.clientWidth)) return win.document.documentElement.clientWidth;
 	if ((win.document.body) && (win.document.body.clientWidth)) return win.document.body.clientWidth;
@@ -1624,7 +1621,7 @@ function get_window_width(win)
 }
 function get_window_height(win)
 {
-	if (typeof win=='undefined') var win=window;
+	if (typeof win=='undefined') win=window;
 	if (typeof win.innerHeight!='undefined') return win.innerHeight-18;
 	if ((win.document.documentElement) && (win.document.documentElement.clientHeight)) return win.document.documentElement.clientHeight;
 	if ((win.document.body) && (win.document.body.clientHeight)) return win.document.body.clientHeight;
@@ -1632,13 +1629,13 @@ function get_window_height(win)
 }
 function get_window_scroll_width(win)
 {
-	if (typeof win=='undefined') var win=window;
+	if (typeof win=='undefined') win=window;
 	return win.document.body.scrollWidth;
 }
 function get_window_scroll_height(win,dont_allow_iframe_size)
 {
-	if (typeof win=='undefined') var win=window;
-	if (typeof dont_allow_iframe_size=='undefined') var dont_allow_iframe_size=false;
+	if (typeof win=='undefined') win=window;
+	if (typeof dont_allow_iframe_size=='undefined') dont_allow_iframe_size=false;
 
 	var rect;
 	rect=win.document.body.parentNode.getBoundingClientRect();
@@ -1650,7 +1647,7 @@ function get_window_scroll_height(win,dont_allow_iframe_size)
 }
 function get_window_scroll_x(win)
 {
- 	if (typeof win=='undefined') var win=window;
+ 	if (typeof win=='undefined') win=window;
  	if (typeof win.pageXOffset!='undefined') return win.pageXOffset;
 
 	// LEGACY: IE8
@@ -1661,7 +1658,7 @@ function get_window_scroll_x(win)
 }
 function get_window_scroll_y(win)
 {
-	if (typeof win=='undefined') var win=window;
+	if (typeof win=='undefined') win=window;
   	if (typeof win.pageYOffset!='undefined') return win.pageYOffset;
 
 	// LEGACY: IE8
@@ -1680,9 +1677,9 @@ function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 }
 function find_width(obj,take_padding,take_margin,take_border)
 {
-	if (typeof take_padding=='undefined') var take_padding=false;
-	if (typeof take_margin=='undefined') var take_margin=false;
-	if (typeof take_border=='undefined') var take_border=false;
+	if (typeof take_padding=='undefined') take_padding=false;
+	if (typeof take_margin=='undefined') take_margin=false;
+	if (typeof take_border=='undefined') take_border=false;
 
 	if (!obj) return 0;
 
@@ -1706,9 +1703,9 @@ function find_width(obj,take_padding,take_margin,take_border)
 }
 function find_height(obj,take_padding,take_margin,take_border)
 {
-	if (typeof take_padding=='undefined') var take_padding=false;
-	if (typeof take_margin=='undefined') var take_margin=false;
-	if (typeof take_border=='undefined') var take_border=false;
+	if (typeof take_padding=='undefined') take_padding=false;
+	if (typeof take_margin=='undefined') take_margin=false;
+	if (typeof take_border=='undefined') take_border=false;
 
 	if (!obj) return 0;
 
@@ -1734,9 +1731,9 @@ function find_height(obj,take_padding,take_margin,take_border)
 /* See if a key event was an enter key being pressed */
 function enter_pressed(event,alt_char)
 {
-	if (typeof alt_char=='undefined') var alt_char=false;
+	if (typeof alt_char=='undefined') alt_char=false;
 
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if ((alt_char) && (((event.which) && (event.which==alt_char.charCodeAt(0))) || ((event.keyCode) && (event.keyCode==alt_char.charCodeAt(0))))) return true;
 	return (((event.which) && (event.which==13)) || ((event.keyCode) && (event.keyCode==13)));
 }
@@ -1744,7 +1741,7 @@ function enter_pressed(event,alt_char)
 /* Takes literal or list of unicode key character codes or case insensitive letters as characters or numbers as characters or supported lower case symbols */
 function key_pressed(event,key,no_error_if_bad)
 {
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 
 	if (typeof window.anykeyokay=='undefined') window.anykeyokay=false;
 
@@ -1878,13 +1875,13 @@ function activate_rich_semantic_tooltip(ob,event)
 function activate_tooltip(ac,event,tooltip,width,pic,height,bottom,no_delay,lights_off,force_width,win)
 {
 	if (typeof width=='undefined' || !width) var width='auto';
-	if (typeof pic=='undefined') var pic='';
+	if (typeof pic=='undefined') pic='';
 	if (typeof height=='undefined' || !height) var height='auto';
-	if (typeof bottom=='undefined') var bottom=false;
-	if (typeof no_delay=='undefined') var no_delay=false;
-	if (typeof lights_off=='undefined') var lights_off=false;
-	if (typeof force_width=='undefined') var force_width=false;
-	if (typeof win=='undefined') var win=window;
+	if (typeof bottom=='undefined') bottom=false;
+	if (typeof no_delay=='undefined') no_delay=false;
+	if (typeof lights_off=='undefined') lights_off=false;
+	if (typeof force_width=='undefined') force_width=false;
+	if (typeof win=='undefined') win=window;
 
 	if (!page_loaded) return;
 	if ((typeof tooltip!='function') && (tooltip=='')) return;
@@ -2097,7 +2094,7 @@ function deactivate_tooltip(ac,event)
 /* Automatic resizing to make frames seamless */
 function resize_frame(name,min_height)
 {
-	if (typeof min_height=='undefined') var min_height=0;
+	if (typeof min_height=='undefined') min_height=0;
 	var frame_element=document.getElementById(name);
 	var frame_window;
 	if (typeof window.frames[name]!='undefined') frame_window=window.frames[name]; else if (parent && parent.frames[name]) frame_window=parent.frames[name]; else return;
@@ -2116,7 +2113,7 @@ function resize_frame(name,min_height)
 				frame_element.style.height=((h>=min_height)?h:min_height)+'px';
 				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
 				frame_element.scrolling='no';
-				frame_window.onscroll=function(event) { if (typeof event=='undefined') var event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancel_bubbling(event); }; // Needed for Opera
+				frame_window.onscroll=function(event) { if (typeof event=='undefined') event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancel_bubbling(event); }; // Needed for Opera
 			}
 		}
 	}
@@ -2224,7 +2221,6 @@ function set_opacity(element,fraction)
 	{
 		element.style.opacity=fraction;
 		element.style.filter='alpha(opacity='+(fraction*100)+')';
-		return;
 	}
 }
 
@@ -2284,7 +2280,7 @@ function cancel_bubbling(event,for_element)
 {
 	if ((typeof for_element=='undefined') || (!for_element)) var for_element='';
 
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if (typeof event=='undefined' || !event) return false;
 
 	var src=(typeof event.srcElement!='undefined' && event.srcElement)?event.srcElement:event.target;
@@ -2354,7 +2350,7 @@ function get_outer_html(element)
 /* Get an element's HTML */
 function get_inner_html(element,outer_too)
 {
-	if (typeof outer_too=='undefined') var outer_too=false;
+	if (typeof outer_too=='undefined') outer_too=false;
 	if (typeof element.innerHTML!='undefined') return outer_too?element.outerHTML:element.innerHTML;
 
 	// recursively copy the DOM into a string
@@ -2810,7 +2806,7 @@ function careful_import_node(node)
 
 function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,id,type,rating,content_url,content_title,initialisation_phase,visual_only)
 {
-	if (typeof visual_only=='undefined') var visual_only=false;
+	if (typeof visual_only=='undefined') visual_only=false;
 
 	var i,bit;
 	for (i=1;i<=10;i++)
@@ -2839,7 +2835,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 
 			if (!visual_only) bit.onclick=function(i) {
 				return function(event)	{
-					if (typeof event=='undefined') var event=window.event;
+					if (typeof event=='undefined') event=window.event;
 					event.returnValue=false;
 					if (typeof event.preventDefault!='undefined') event.preventDefault();
 
@@ -2896,8 +2892,8 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 function ga_track(ob,category,action)
 {
 	/*{+START,IF_NON_EMPTY,{$CONFIG_OPTION,google_analytics}}{+START,IF,{$NOR,{$IS_STAFF},{$IS_ADMIN}}}*/
-		if (typeof category=='undefined') var category='{!URL;}';
-		if (typeof action=='undefined') var action=ob?ob.href:'{!UNKNOWN;}';
+		if (typeof category=='undefined') category='{!URL;}';
+		if (typeof action=='undefined') action=ob?ob.href:'{!UNKNOWN;}';
 
 		try
 		{ 
@@ -2930,7 +2926,7 @@ function click_link(link)
 
 	var backup=link.onclick;
 
-	link.onclick=function(e) { if (typeof e=='undefined') var e=window.event; cancel_bubbling(e); };
+	link.onclick=function(e) { if (typeof e=='undefined') e=window.event; cancel_bubbling(e); };
 
 	if ((typeof document.createEvent!='undefined') && (document.createEvent))
 	{
@@ -3031,7 +3027,7 @@ function replace_comments_form_with_ajax(options,hash,comments_form_id,comments_
 		comments_form.onsubmit=function(event) {
 
 			// Cancel the event from running
-			if (typeof event=='undefined') var event=window.event;
+			if (typeof event=='undefined') event=window.event;
 			event.returnValue=false;
 			if (typeof event.preventDefault!='undefined') event.preventDefault();
 
@@ -3137,7 +3133,7 @@ function force_reload_on_back()
 /* Reply to a topic using AJAX */
 function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,replying_to_post_plain,explicit_quote)
 {
-	if (typeof explicit_quote=='undefined') var explicit_quote=false;
+	if (typeof explicit_quote=='undefined') explicit_quote=false;
 
 	var form=document.getElementById('comments_form');
 
@@ -3301,7 +3297,7 @@ function prepare_mass_select_marker(set,type,id,checked)
 
 function confirm_delete(form,multi,callback)
 {
-	if (typeof multi=='undefined') var multi=false;
+	if (typeof multi=='undefined') multi=false;
 
 	window.fauxmodal_confirm(
 		multi?'{!_ARE_YOU_SURE_DELETE;^}':'{!ARE_YOU_SURE_DELETE;^}',

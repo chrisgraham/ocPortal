@@ -363,8 +363,6 @@ class Hook_occle_fs_catalogues extends Resource_fs_base
 
             return $name;
         }
-
-        return '';
     }
 
     /**

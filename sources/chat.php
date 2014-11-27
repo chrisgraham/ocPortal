@@ -1249,7 +1249,6 @@ function chat_get_room_content($room_id, $_rooms, $cutoff = null, $dereference =
     $deleted_message_list = array();
     foreach (array_keys($rows) as $i) {
         // Compose what we ultimately need to know about our message
-        $rows[$i]['member_id'] = $rows[$i]['member_id']; // unfortunately the table schema was designed before our coding standards solidified
         $rows[$i]['username'] = $GLOBALS['FORUM_DRIVER']->get_username($rows[$i]['member_id']);
         if (is_null($rows[$i]['username'])) {
             $rows[$i]['username'] = do_lang('UNKNOWN');

@@ -206,6 +206,7 @@ class Hook_media_rendering_oembed
                 if ((!array_key_exists('width', $data)) || (!array_key_exists('height', $data))) {
                     return null;
                 }
+                // intentionally rolls on...
             case 'rich':
                 if (!array_key_exists('html', $data)) {
                     return null;

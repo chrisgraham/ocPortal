@@ -66,7 +66,7 @@ function recreate_clean_timeout()
 function pop_up_menu(id,place,menu,event,outside_fixed_width)
 {
 	if ((typeof place=='undefined') || (!place)) var place='right';
-	if (typeof outside_fixed_width=='undefined') var outside_fixed_width=false;
+	if (typeof outside_fixed_width=='undefined') outside_fixed_width=false;
 
 	var e=document.getElementById(id);
 
@@ -122,13 +122,13 @@ function pop_up_menu(id,place,menu,event,outside_fixed_width)
 		fade_transition(e,100,30,8);
 	}
 	var full_width=(window.scrollX==0)?get_window_width():get_window_scroll_width();
-	{+START,IF,{$CONFIG_OPTION,fixed_width}}
+	/*{+START,IF,{$CONFIG_OPTION,fixed_width}}*/
 		if (!outside_fixed_width)
 		{
 			var main_website_inner=document.getElementById('main_website_inner');
 			if (main_website_inner) full_width=find_width(main_website_inner);
 		}
-	{+END}
+	/*{+END}*/
 	var e_parent_width=find_width(e.parentNode);
 	e.style.minWidth=e_parent_width+'px';
 	var e_parent_height=find_height(e.parentNode);

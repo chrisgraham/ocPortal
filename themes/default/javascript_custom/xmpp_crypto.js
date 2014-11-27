@@ -1,5 +1,5 @@
-{$,Parser hint: .innerHTML okay}
-{$,Parser hint: pure}
+/*{$,Parser hint: .innerHTML okay}*/
+/*{$,Parser hint: pure}*/
 
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message

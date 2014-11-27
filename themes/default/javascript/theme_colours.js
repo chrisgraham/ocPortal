@@ -153,7 +153,7 @@ function do_color_chooser_element(element)
 function do_color_change(e)
 {
 	// Find our colour element we clicked on
-	if (typeof e=='undefined') var e=window.event;
+	if (typeof e=='undefined') e=window.event;
 	var targ;
 	if (typeof e.target!='undefined') targ=e.target;
 	else if (typeof e.srcElement!='undefined') targ=e.srcElement;

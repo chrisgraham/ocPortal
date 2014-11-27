@@ -36,7 +36,7 @@ function attachment_present(post_value,number)
 
 function set_attachment(field_name,number,filename,multi)
 {
-	if (typeof multi=='undefined') var multi=false;
+	if (typeof multi=='undefined') multi=false;
 
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.num_attachments=='undefined') return;
@@ -326,7 +326,7 @@ function do_input_list(field_name,add)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 
-	if (typeof add=='undefined') var add=[];
+	if (typeof add=='undefined') add=[];
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
@@ -735,7 +735,7 @@ function init_form_saving(form_id)
 
 function handle_form_saving(event,target,force)
 {
-	if (typeof force=='undefined') var force=(event.type=='blur');
+	if (typeof force=='undefined') force=(event.type=='blur');
 
 	var this_date=new Date();
 	if (!force)
@@ -743,7 +743,7 @@ function handle_form_saving(event,target,force)
 		if ((this_date.getTime()-window.last_autosave.getTime())<20*1000) return; // Only save every 20 seconds
 	}
 
-	if (typeof event=='undefined') var event=window.event;
+	if (typeof event=='undefined') event=window.event;
 	if (!target)
 	{
 		target=(event.target)?event.target:event.srcElement;

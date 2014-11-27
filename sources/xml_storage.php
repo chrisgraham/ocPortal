@@ -500,6 +500,7 @@ function _import_xml_row($parsed, &$all_existing_data, $all_fields, $all_id_fiel
                     case 'SHORT_TRANS__COMCODE':
                         $data[$row_tag . '__text_parsed'] = '';
                         $data[$row_tag . '__source_user'] = isset($row_attributes['source_user']) ? $row_attributes['source_user'] : $GLOBALS['FORUM_DRIVER']->get_guest_id();
+                        // intentionally rolls on...
                     default:
                         $value = $row_value;
                         break;
