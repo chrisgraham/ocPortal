@@ -254,7 +254,7 @@ function check_banner($title_text = '', $direct_code = '', $b_type = '', $url_pa
  * @param  integer                      $hits_to The number of banner hits to this banners site
  * @param  integer                      $views_from The number of return views from this banners site
  * @param  integer                      $views_to The number of banner views to this banners site
- * @param  ?TIME                        The banner edit date  (null: never)
+ * @param  ?TIME                        $edit_date The banner edit date  (null: never)
  * @param  boolean                      $uniqify Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT                      The name
  */

@@ -424,7 +424,7 @@ abstract class Hook_sitemap_base
     /**
      * Find if a page-link will be covered by this node.
      *
-     * @param  ID_TEXT                  The page-link.
+     * @param  ID_TEXT                  $page_link The page-link.
      * @return integer                  A SITEMAP_NODE_* constant.
      */
     abstract public function handles_page_link($page_link);

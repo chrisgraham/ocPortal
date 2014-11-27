@@ -37,7 +37,7 @@
  * @param  integer                      $hits_to The number of banner hits to this banners site
  * @param  integer                      $views_from The number of return views from this banners site
  * @param  integer                      $views_to The number of banner views to this banners site
- * @param  ?TIME                        The banner edit date  (null: never)
+ * @param  ?TIME                        $edit_date The banner edit date (null: never)
  */
 function add_banner_quiet($name, $imgurl, $title_text, $caption, $campaign_remaining, $site_url, $importance_modulus, $notes, $the_type, $expiry_date, $submitter, $validated = 0, $b_type = '', $time = null, $hits_from = 0, $hits_to = 0, $views_from = 0, $views_to = 0, $edit_date = null)
 {

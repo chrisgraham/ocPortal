@@ -17,7 +17,7 @@
  * Get the total points in the specified member's account; some of these will probably have been spent already
  *
  * @param  MEMBER                       $member The member
- * @param  TIME                         Time to get for (null: now)
+ * @param  TIME                         $timestamp Time to get for (null: now)
  * @return integer                      The number of points the member has
  */
 function total_points($member, $timestamp = null)

@@ -577,7 +577,7 @@ function error_log($message, $message_type = 0, $destination = '')
 /**
  * Sets which PHP errors are reported.
  *
- * @param  ?integer                     OR'd combination of error type constants. (E_ERROR, E_WARNING,  E_PARSE, E_NOTICE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE, E_ALL) (null: find current level).
+ * @param  ?integer                     $level OR'd combination of error type constants. (E_ERROR, E_WARNING,  E_PARSE, E_NOTICE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE, E_ALL) (null: find current level).
  * @return integer                      Current error reporting level.
  */
 function error_reporting($level = null)
@@ -4749,11 +4749,11 @@ function soundex($input)
 /*!WEIRD*
  * Parses input from a string according to a format.
  *
- * @param  string                       Input string.
- * @param  string                       Formatting string.
+ * @param  string                       $string Input string.
+ * @param  string                       $format Formatting string.
  * @return array                        The values.
  */
-/*function sscanf($string,$format)
+/*function sscanf($string, $format)
 {
     return array();
 }*/

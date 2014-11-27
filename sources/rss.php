@@ -179,16 +179,16 @@ class OCP_RSS
     /* *
      * Standard PHP XML parser function.
      *
-     * @param  object                   A reference to the XML parser calling the handler.
-     * @param  string                   A space-separated list of the names of the entities that are open for the parse of this entity (including the name of the referenced entity).
-     * @param  string                   The base for resolving the system identifier (system_id) of the external entity. Currently this parameter will always be set to an empty string.
-     * @param  string                   The system identifier as specified in the entity declaration.
-     * @param  string                   The public identifier as specified in the entity declaration, or an empty string if none was specified; the whitespace in the public identifier will have been normalized as required by the XML spec.
+     * @param  object                   $parser A reference to the XML parser calling the handler.
+     * @param  string                   $open_entity_names A space-separated list of the names of the entities that are open for the parse of this entity (including the name of the referenced entity).
+     * @param  string                   $base The base for resolving the system identifier (system_id) of the external entity. Currently this parameter will always be set to an empty string.
+     * @param  string                   $system_id The system identifier as specified in the entity declaration.
+     * @param  string                   $public_id The public identifier as specified in the entity declaration, or an empty string if none was specified; the whitespace in the public identifier will have been normalized as required by the XML spec.
      * @param  integer                  ?
      */
-    /*function extEntity($parser,$open_entity_names,$base,$system_id,$public_id)
+    /*function extEntity($parser, $open_entity_names, $base, $system_id, $public_id)
     {
-        $_open_entity_names=explode(',',$open_entity_names);
+        $_open_entity_names=explode(',', $open_entity_names);
         return 1; // Kludge to skip dodgy entities
     }*/
 

@@ -89,7 +89,7 @@ class JSMin
 	/**
 	 * Constructor function
 	 *
-	 * @param 	string		Javascript to minimise
+	 * @param 	string		$input Javascript to minimise
 	 */
 	function __construct($input)
 	{
@@ -102,7 +102,7 @@ class JSMin
 	/**
 	 * Handle internal parse situation
 	 *
-	 * @param 	integer		Action type
+	 * @param 	integer		$d Action type
 	 * @return	?array		Error (null: no error)
 	 */
 	function action($d)
@@ -237,7 +237,7 @@ class JSMin
 	/**
 	 * Find whether a character is alphanumeric
 	 *
-	 * @param 	string		Character
+	 * @param 	string		$c Character
 	 * @return 	boolean		Whether it is
 	 */
 	function isAlphaNum($c)
@@ -364,7 +364,7 @@ class JSMin
 	/**
 	 * Get the next item in the stream (complex cases)
 	 *
-	 * @param 	string		Next item needing further processing
+	 * @param 	string		    $c Next item needing further processing
 	 * @return 	mixed			Next item or error (array)
 	 */
 	function next__bypass_comments($c)

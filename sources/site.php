@@ -1831,10 +1831,10 @@ function log_stats($string, $pg_time)
 /* *
  * Output filter to compress HTML.
  *
- * @param  string                       The HTML to filter
+ * @param  string                       $data The HTML to filter
  * @return string                       Compressed HTML
  */
 /*f unction _compress_html_output($data)
 {
-    return preg_replace(array('#>[ \t]+#','#[ \t]+<#','#\n[ \t]+\n#','#\n+#'),array('> ',' <',"\n","\n"),$data);
+    return preg_replace(array('#>[ \t]+#', '#[ \t]+<#', '#\n[ \t]+\n#', '#\n+#'), array('> ', ' <', "\n", "\n"), $data);
 }*/

@@ -31,7 +31,7 @@ define('VIDEO_BITRATE', 1500);
 /**
  * Find the mime type for the given file extension. It does not take into account whether the file type has been white-listed or not, and returns a binary download mime type for any unknown extensions.
  *
- * @param  string                       The file extension (no dot)
+ * @param  string                       $extension The file extension (no dot)
  * @return string                       The MIME type
  */
 function tr_get_mime_type($extension)
@@ -76,7 +76,7 @@ function tr_get_mime_type($extension)
 /**
  * Transcode a video.
  *
- * @param  PATH                         Video to transcoded
+ * @param  PATH                         $path Video to transcoded
  * @return PATH                         Transcoded file (or original URL if no change was made)
  */
 function transcode($path)

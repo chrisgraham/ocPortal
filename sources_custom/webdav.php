@@ -88,7 +88,7 @@ function webdav_script()
 /**
  * Log something to the WebDAV log.
  *
- * @param string  String to log
+ * @param string  $str String to log
  */
 function webdav_log($str)
 {
