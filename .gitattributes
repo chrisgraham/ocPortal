@@ -1,3 +1,6 @@
+# Autodetect most text files
+* text=auto
+
 # Definitively text files 
 *.TXT text
 *.bat text
@@ -52,6 +55,3 @@
 *.kbd binary
 *.aiml binary
 *.alias binary
-
-# Autodetect remaining text files
-* text=auto

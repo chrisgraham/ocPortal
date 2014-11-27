@@ -6111,7 +6111,7 @@ function inet_ntop($in_addr)
  * @param  resource                     $handle File pointer.
  * @param  array                        $fields An array of values.
  * @param  string                       $delimiter The optional delimiter parameter sets the field delimiter (one character only).
- * @param  string                       ' The optional enclosure parameter sets the field enclosure (one character only).
+ * @param  string                       $enclosure The optional enclosure parameter sets the field enclosure (one character only).
  * @return ~integer                     The length of the written string (false: error).
  */
 function fputcsv($handle, $fields, $delimiter = ',', $enclosure = '"')
