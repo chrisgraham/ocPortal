@@ -586,7 +586,7 @@ function ocf_ldap_guess_email($cn)
 /**
  * (LDAP helper for ocf_get_group_members_raw) Get a list of members in a group (or more full details if $non_validated is true).
  *
- * @param  array                        &$members The list is written into this.
+ * @param  array                        $members The list is written into this.
  * @param  GROUP                        $group_id The ID of the usergroup.
  * @param  boolean                      $include_primaries Whether to include those in the usergroup as a primary member.
  * @param  boolean                      $non_validated Whether to include those applied to join the usergroup, but not validated in.

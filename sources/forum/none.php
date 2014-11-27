@@ -518,7 +518,7 @@ class Forum_driver_none extends Forum_driver_base
      * @param  SHORT_TEXT               $name The forum name
      * @param  integer                  $limit The limit
      * @param  integer                  $start The start position
-     * @param  integer                   &$max_rows The total rows (not a parameter: returns by reference)
+     * @param  integer                  $max_rows The total rows (not a parameter: returns by reference)
      * @param  SHORT_TEXT               $filter_topic_title The topic title filter
      * @param  boolean                  $show_first_posts Whether to show the first posts
      * @param  string                   $date_key The date key to sort by

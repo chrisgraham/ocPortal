@@ -176,7 +176,7 @@ function attach_wysiwyg()
 /**
  * Insert hidden data for the maximum file size of form fields.
  *
- * @param  tempcode                     &$hidden Hidden fields
+ * @param  tempcode                     $hidden Hidden fields
  * @param  ID_TEXT                      $regular_max_size_type Code representing the media types we are using limits for
  * @set image file
  */

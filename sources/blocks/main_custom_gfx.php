@@ -68,7 +68,7 @@ class Block_main_custom_gfx
      * Utility method for writing text onto images.
      *
      * @param  ID_TEXT                  $cache_id ID.
-     * @param  array                     &$map A map of parameters.
+     * @param  array                    $map A map of parameters.
      * @param  URLPATH                  $img_path The image path.
      * @return mixed                    URL of completed image OR tempcode error.
      */

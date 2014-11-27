@@ -336,7 +336,7 @@ class Module_admin_menus
      *
      * @param  AUTO_LINK                $id The ID of the branch we are displaying items for
      * @param  integer                  $branch The parent branch holding the branch
-     * @param  integer                   &$order The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
+     * @param  integer                  $order The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
      * @param  boolean                  $clickable_sections Whether childed branches themselves can have URLs (etc)
      * @param  array                    $menu_items All rows on the menu
      * @return tempcode                 The part of the UI
@@ -461,10 +461,10 @@ class Module_admin_menus
      *
      * @param  ID_TEXT                  $menu The name of the menu the item is on
      * @param  integer                  $id The ID of the menu item (i.e. what it is referenced as in POST)
-     * @param  array                     &$ids The map of IDs on the menu (ID=>parent)
+     * @param  array                    $ids The map of IDs on the menu (ID=>parent)
      * @param  ?integer                 $parent The ID of the parent branch (null: no parent)
-     * @param  array                     &$old_menu_bits The map of menu id=>string language IDs employed by items before the edit
-     * @param  integer                   &$order The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
+     * @param  array                    $old_menu_bits The map of menu id=>string language IDs employed by items before the edit
+     * @param  integer                  $order The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
      */
     public function add_menu_item($menu, $id, &$ids, $parent, &$old_menu_bits, &$order)
     {

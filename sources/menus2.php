@@ -366,7 +366,7 @@ function copy_from_sitemap_to_new_menu($target_menu, $source)
  *
  * @param  ID_TEXT                      $target_menu The ID of the menu to save into.
  * @param  array                        $node Sitemap node, containing children.
- * @param  integer                       &$order Sequence order to save with.
+ * @param  integer                      $order Sequence order to save with.
  * @param  ?AUTO_LINK                   $parent Menu parent ID (null: root).
  */
 function _copy_from_sitemap_to_new_menu($target_menu, $node, &$order, $parent = null)

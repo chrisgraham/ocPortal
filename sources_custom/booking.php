@@ -53,7 +53,7 @@ function booking_price_ajax_script()
 /**
  * See if a booking is possible.
  *
- * @param  array                        &$request Booking details structure to check, passed by reference as statuses get added.
+ * @param  array                        $request Booking details structure to check, passed by reference as statuses get added.
  * @param  array                        $ignore_bookings Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
  * @return ?tempcode                    Error message (null: no issue).
  */

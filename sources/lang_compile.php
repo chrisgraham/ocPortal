@@ -227,7 +227,7 @@ function get_lang_file_map($lang, $file, $non_custom = false)
  * Extend a language map from strings in a given language file.
  *
  * @param  PATH                         $b The path to the language file
- * @param  array                         &$entries The currently loaded language map
+ * @param  array                        $entries The currently loaded language map
  * @param  ?boolean                     $descriptions Whether to get descriptions rather than strings (null: no, but we might pick up some descriptions accidently)
  * @param  boolean                      $given_whole_file Whether $b is infact not a path, but the actual file contents
  */

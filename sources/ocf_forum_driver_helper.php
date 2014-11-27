@@ -221,7 +221,7 @@ function _helper_make_post_forum_topic($this_ref, $forum_name, $topic_identifier
  * @param  mixed                        $name The forum name or an array of forum IDs
  * @param  integer                      $limit The limit
  * @param  integer                      $start The start position
- * @param  integer                       &$max_rows The total rows (not a parameter: returns by reference)
+ * @param  integer                      $max_rows The total rows (not a parameter: returns by reference)
  * @param  SHORT_TEXT                   $filter_topic_title The topic title filter
  * @param  SHORT_TEXT                   $filter_topic_description The topic description filter
  * @param  boolean                      $show_first_posts Whether to show the first posts

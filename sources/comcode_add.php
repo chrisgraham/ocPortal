@@ -594,13 +594,13 @@ function _find_comcode_tag_embed_required($tag)
  *
  * @param  ID_TEXT                      $tag Tag being read.
  * @param  ID_TEXT                      $actual_tag Actual tag being read.
- * @param  tempcode                      &$fields UI fields.
- * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $fields UI fields.
+ * @param  tempcode                     $fields_advanced Advanced UI fields.
  * @param  tempcode                     $hidden Hidden fields.
- * @param  boolean                       &$done_tag_contents Whether the tag contents input has also been handled here.
+ * @param  boolean                      $done_tag_contents Whether the tag contents input has also been handled here.
  * @param  array                        $defaults Default parameter values.
  * @param  array                        $params List of tag parameters.
- * @param  string                        &$javascript JavaScript to deploy.
+ * @param  string                       $javascript JavaScript to deploy.
  * @param  boolean                      $preview Whether previewing will be allowed.
  * @return boolean                      Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
  */
@@ -690,8 +690,8 @@ function _try_for_special_comcode_tag_all_params_ui($tag, $actual_tag, &$fields,
  * @param  ID_TEXT                      $param The parameter.
  * @param  string                       $parameter_name Default human-readable name of the parameter.
  * @param  string                       $descriptiont Default description of the parameter.
- * @param  tempcode                      &$fields UI fields.
- * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $fields UI fields.
+ * @param  tempcode                     $fields_advanced Advanced UI fields.
  * @param  tempcode                     $hidden Hidden fields.
  * @param  string                       $default Default parameter value.
  * @return boolean                      Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
@@ -746,8 +746,8 @@ function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $para
  *
  * @param  ID_TEXT                      $tag Tag being read.
  * @param  ID_TEXT                      $actual_tag Actual tag being read.
- * @param  tempcode                      &$fields UI fields.
- * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $fields UI fields.
+ * @param  tempcode                     $fields_advanced Advanced UI fields.
  * @param  tempcode                     $hidden Hidden fields.
  * @param  array                        $defaults Default parameter values.
  */
@@ -768,12 +768,12 @@ function _try_for_special_comcode_tag_extra_param_ui($tag, $actual_tag, &$fields
  *
  * @param  ID_TEXT                      $tag Tag being read.
  * @param  ID_TEXT                      $actual_tag Actual tag being read.
- * @param  tempcode                      &$fields UI fields.
- * @param  tempcode                      &$fields_advanced Advanced UI fields.
+ * @param  tempcode                     $fields UI fields.
+ * @param  tempcode                     $fields_advanced Advanced UI fields.
  * @param  tempcode                     $hidden Hidden fields.
  * @param  string                       $default_embed Default embed contents.
- * @param  string                        &$javascript JavaScript to deploy.
- * @param  boolean                       &$preview Whether previewing will be allowed.
+ * @param  string                       $javascript JavaScript to deploy.
+ * @param  boolean                      $preview Whether previewing will be allowed.
  * @return boolean                      Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
  */
 function _try_for_special_comcode_tag_specific_contents_ui($tag, $actual_tag, &$fields, &$fields_advanced, $hidden, $default_embed, &$javascript, &$preview)

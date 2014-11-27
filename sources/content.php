@@ -358,7 +358,7 @@ function get_content_where_for_str_id($str_id, $cma_info, $table_alias = null)
 /**
  * Given the string content ID get a mapping we could use as a WHERE map.
  *
- * @param  array                        &$select The ID
+ * @param  array                        $select The ID
  * @param  array                        $cma_info The info array for the content type
  * @param  ?string                      $table_alias The table alias (null: none)
  */

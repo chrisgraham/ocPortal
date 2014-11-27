@@ -1811,8 +1811,8 @@ function in_tag_stack($tag_stack, $tags)
  * @param  boolean                      $in_html Whether the parser is/was in an HTML region
  * @param  boolean                      $in_semihtml Whether the parser is/was in a Semi-HTML region
  * @param  boolean                      $close Whether the tag is a closing tag
- * @param  integer                       &$len The length of the Comcode
- * @param  LONG_TEXT                     &$comcode The Comcode being parsed
+ * @param  integer                      $len The length of the Comcode
+ * @param  LONG_TEXT                    $comcode The Comcode being parsed
  * @return array                        A tuple of new parser settings.
  */
 function _opened_tag($mindless_mode, $as_admin, $source_member, $attribute_map, $current_tag, $pos, $comcode_dangerous, $comcode_dangerous_html, $in_separate_parse_section, $in_html, $in_semihtml, $close, &$len, &$comcode)
@@ -1878,8 +1878,8 @@ function _opened_tag($mindless_mode, $as_admin, $source_member, $attribute_map, 
  * @param  boolean                      $as_admin Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
  * @param  MEMBER                       $source_member The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
  * @param  integer                      $pos The offset of the tag in the Comcode
- * @param  integer                       &$len The length of the Comcode
- * @param  LONG_TEXT                     &$comcode The Comcode being parsed
+ * @param  integer                      $len The length of the Comcode
+ * @param  LONG_TEXT                    $comcode The Comcode being parsed
  * @param  boolean                      $in_html Whether the parser is/was in an HTML region
  * @param  boolean                      $in_semihtml Whether the parser is/was in a Semi-HTML region
  */

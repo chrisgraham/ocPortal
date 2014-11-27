@@ -1767,7 +1767,7 @@ function javascript_tempcode($position = null)
  * Get tempcode to tie in (to the HTML, in <head>) for an individual CSS file.
  *
  * @param  ID_TEXT                      $j The javascript file required
- * @param  tempcode                      &$js Tempcode object (will be written into if appropriate)
+ * @param  tempcode                     $js Tempcode object (will be written into if appropriate)
  * @param  ?boolean                     $_minify Whether minifying (null: from what is cached)
  * @param  ?boolean                     $_https Whether doing HTTPS (null: from what is cached)
  * @param  ?boolean                     $_mobile Whether operating in mobile mode (null: from what is cached)
@@ -1970,8 +1970,8 @@ function css_tempcode($inline = false, $only_global = false, $context = null, $t
  * Get tempcode to tie in (to the HTML, in <head>) for an individual CSS file.
  *
  * @param  ID_TEXT                      $c The CSS file required
- * @param  tempcode                      &$css Main tempcode object (will be written into if appropriate)
- * @param  tempcode                      &$css_need_inline Inline tempcode object (will be written into if appropriate)
+ * @param  tempcode                     $css Main tempcode object (will be written into if appropriate)
+ * @param  tempcode                     $css_need_inline Inline tempcode object (will be written into if appropriate)
  * @param  boolean                      $inline Only do global CSS
  * @param  ?string                      $context HTML context for which we filter (minimise) any CSS we spit out as inline (null: none)
  * @param  ?ID_TEXT                     $theme The name of the theme (null: current theme) (null: from what is cached)
@@ -2080,7 +2080,7 @@ function require_css($css)
  *
  * @param  ID_TEXT                      $type Resource type
  * @set .css .js
- * @param  array                         &$arr Resources (map of keys to 1), passed by reference as we alter it
+ * @param  array                        $arr Resources (map of keys to 1), passed by reference as we alter it
  * @param  boolean                      $minify If we are minifying
  * @param  boolean                      $https If we are using HTTPs
  * @param  boolean                      $mobile If we are using mobile

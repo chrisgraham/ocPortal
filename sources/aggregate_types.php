@@ -209,7 +209,7 @@ function find_aggregate_type_parameters($aggregate_type)
  * Scan some aggregate type XML text for referenced parameters.
  *
  * @param  string                       $src_text Text
- * @param  array                         &$parameters Reference to our parameter list
+ * @param  array                        $parameters Reference to our parameter list
  */
 function _find_parameters_in($src_text, &$parameters)
 {

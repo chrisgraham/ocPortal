@@ -58,7 +58,7 @@ function initialise_special_page_types($special_page_type)
  *
  * @param  ID_TEXT                      $special_page_type The special page type.
  * @set    query templates tree lang
- * @param  tempcode                      &$out The normal script tempcode output
+ * @param  tempcode                     $out The normal script tempcode output
  * @param  string                       $out_evaluated The normal script evaluated output
  */
 function special_page_types($special_page_type, &$out, $out_evaluated)
@@ -708,7 +708,7 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
 /**
  * Attach a message showing memory usage.
  *
- * @param  tempcode                     &$messages_bottom Where to place the message.
+ * @param  tempcode                    $messages_bottom Where to place the message.
  */
 function attach_message_memory_usage(&$messages_bottom)
 {

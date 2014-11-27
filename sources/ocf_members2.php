@@ -24,8 +24,8 @@
  * @param  object                       $db Database connection
  * @param  array                        $info Content type info
  * @param  ID_TEXT                      $context Context (unused)
- * @param  array                         &$extra_join List of joins (passed as reference)
- * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  array                        $extra_join List of joins (passed as reference)
+ * @param  array                        $extra_select List of selects (passed as reference)
  * @param  ID_TEXT                      $filter_key The field to get
  * @param  string                       $field_val The field value for this
  * @param  array                        $db_fields Database field data

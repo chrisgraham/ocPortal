@@ -336,7 +336,7 @@ function _build_stored_menu_branch($item, $items)
 /**
  * Append to all page-links in a branch structure.
  *
- * @param  array                        &$branches Branches
+ * @param  array                        $branches Branches
  * @param  string                       $page_link_append What to append to the page-links
  */
 function _append_to_page_links(&$branches, $page_link_append)

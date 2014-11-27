@@ -153,7 +153,7 @@ function array_merge($array1, $array2, $array3 = null, $array4 = null, $array5 =
 /**
  * Pop the element off the end of array.
  *
- * @param  array                        &$array The array.
+ * @param  array                        $array The array.
  * @return ?mixed                       The value (null: no value).
  */
 function array_pop(&$array)
@@ -164,7 +164,7 @@ function array_pop(&$array)
 /**
  * Push one or more elements onto the end of array.
  *
- * @param  array                        &$array The array.
+ * @param  array                        $array The array.
  * @param  mixed                        $var The value.
  * @return integer                      The new number of elements in the array.
  */
@@ -200,7 +200,7 @@ function array_search($needle, $haystack)
 /**
  * Shift an element off the beginning of array.
  *
- * @param  array                        &$array The array.
+ * @param  array                        $array The array.
  * @return ?mixed                       Shifted element (null: empty array given).
  */
 function array_shift(&$array)
@@ -260,7 +260,7 @@ function array_values($array)
 /**
  * Sort an array in reverse order and maintain index association.
  *
- * @param  array                        &$array Array.
+ * @param  array                        $array Array.
  * @param  integer                      $sort_flags Sort flags.
  */
 function arsort(&$array, $sort_flags = 0)
@@ -270,7 +270,7 @@ function arsort(&$array, $sort_flags = 0)
 /**
  * Sort an array and maintain index association.
  *
- * @param  array                        &$array Array.
+ * @param  array                        $array Array.
  * @param  integer                      $sort_flags Sort flags.
  */
 function asort(&$array, $sort_flags = 0)
@@ -2353,7 +2353,7 @@ function is_writable($path)
 /**
  * Finds whether a variable exists / is not null / is an actually derefereable array element. Do not use this for the null case, and otherwise ONLY when for efficiency reasons.
  *
- * @param  mixed                        &$path The variable.
+ * @param  mixed                        $path The variable.
  * @return boolean                      Whether it is set.
  */
 function isset(&$path)
@@ -2364,7 +2364,7 @@ function isset(&$path)
 /**
  * Sort an array by key in reverse order.
  *
- * @param  array                        &$array The array to sort.
+ * @param  array                        $array The array to sort.
  */
 function krsort(&$array)
 {
@@ -2373,7 +2373,7 @@ function krsort(&$array)
 /**
  * Sort an array by key.
  *
- * @param  array                        &$array The array to sort.
+ * @param  array                        $array The array to sort.
  */
 function ksort(&$array)
 {
@@ -2845,7 +2845,7 @@ function preg_grep($pattern, $subject, $flags = 0)
  *
  * @param  string                       $pattern The pattern.
  * @param  string                       $subject The subject string.
- * @param  array                         &$matches Where matches will be put (note that it is a list of maps, except the arrays are turned inside out). Note that this is actually passed by reference, but is also optional.
+ * @param  array                        $matches Where matches will be put (note that it is a list of maps, except the arrays are turned inside out). Note that this is actually passed by reference, but is also optional.
  * @param  integer                      $flags Either 0, or PREG_OFFSET_CAPTURE.
  * @return ~integer                     The number of matches (false: error).
  */
@@ -3059,7 +3059,7 @@ function round($val, $precision = 0)
 /**
  * Sort an array in reverse order.
  *
- * @param  array                        &$array The array to sort.
+ * @param  array                        $array The array to sort.
  */
 function rsort(&$array)
 {
@@ -3154,7 +3154,7 @@ function sin($arg)
 /**
  * Sort an array.
  *
- * @param  array                        &$array The array.
+ * @param  array                        $array The array.
  */
 function sort(&$array)
 {
@@ -3485,7 +3485,7 @@ function trigger_error($error_msg, $error_type)
 /**
  * Sort an array with a user-defined comparison function and maintain index association.
  *
- * @param  array                        &$array The array.
+ * @param  array                        $array The array.
  * @param  mixed                        $cmp_function Comparison function.
  */
 function uasort(&$array, $cmp_function)
@@ -3517,7 +3517,7 @@ function ucwords($str)
 /**
  * Sort an array by keys using a user-defined comparison function.
  *
- * @param  array                        &$array The array.
+ * @param  array                        $array The array.
  * @param  mixed                        $cmp_function Comparison function.
  */
 function uksort(&$array, $cmp_function)
@@ -3562,7 +3562,7 @@ function unserialize($str)
 /**
  * Unset a given variable.
  *
- * @param  mixed                        &$var Unset this.
+ * @param  mixed                        $var Unset this.
  */
 function unset(&$var)
 {
@@ -3593,7 +3593,7 @@ function urlencode($str)
 /**
  * Sort an array by values using a user-defined comparison function.
  *
- * @param  array                        &$array The array.
+ * @param  array                        $array The array.
  * @param  mixed                        $cmp_function Comparison function.
  */
 function usort(&$array, $cmp_function)
@@ -3825,7 +3825,7 @@ function array_rand($input, $num_req = 1)
 /**
  * Prepend one or more elements to the beginning of array.
  *
- * @param  array                        &$array Array to prepend to.
+ * @param  array                        $array Array to prepend to.
  * @param  mixed                        $var Element to prepend.
  */
 function array_unshift(&$array, $var)
@@ -4580,7 +4580,7 @@ function xml_parser_get_option($parser, $option)
  *
  * @param  resource                     $parser The parser.
  * @param  string                       $data The XML.
- * @param  array                         &$values Where to put the values.
+ * @param  array                        $values Where to put the values.
  * @param  ?array                       $index Where to put the indices into the XML for where the values are at (null: don't collect). Note that this is actually passed by reference, but is also optional.
  * @return BINARY                       0 is failure, 1=pass.
  */
@@ -4977,7 +4977,7 @@ function array_reduce($input, $callback, $initial = null)
 /**
  * Apply a user function to every member of an array .
  *
- * @param  array                        &$array Data.
+ * @param  array                        $array Data.
  * @return boolean                      Success status.
  */
 function array_walk(&$array)
@@ -5236,7 +5236,7 @@ function parse_ini_file($filename, $process_sections = false)
  * Parses the string into variables.
  *
  * @param  string                       $str Query string to parse.
- * @param  array                         &$arr Target for variable mappings.
+ * @param  array                        $arr Target for variable mappings.
  */
 function parse_str($str, &$arr)
 {
@@ -5291,7 +5291,7 @@ function metaphone($string, $value)
 /**
  * Sort an array using a case insensitive "natural order" algorithm .
  *
- * @param  array                        &$array Array to sort.
+ * @param  array                        $array Array to sort.
  * @return boolean                      Success status.
  */
 function natcasesort(&$array)
@@ -5302,7 +5302,7 @@ function natcasesort(&$array)
 /**
  * Sort an array using a "natural order" algorithm.
  *
- * @param  array                        &$array Array to sort.
+ * @param  array                        $array Array to sort.
  * @return boolean                      Success status.
  */
 function natsort(&$array)
@@ -5651,7 +5651,7 @@ function ignore_user_abort($setting)
 /**
  * XSS detection helper function.
  *
- * @param  string                       &$var String to mark as escaped.
+ * @param  string                       $var String to mark as escaped.
  */
 function ocp_mark_as_escaped(&$var)
 {

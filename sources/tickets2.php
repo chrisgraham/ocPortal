@@ -288,9 +288,9 @@ function get_tickets($member, $ticket_type_id = null, $override_view_others_tick
  * that of get_forum_topic_posts(), except in error conditions
  *
  * @param  string                       $ticket_id The ticket ID
- * @param  AUTO_LINK                     &$forum Return location for the forum ID
- * @param  AUTO_LINK                     &$topic_id Return location for the topic ID
- * @param  AUTO_LINK                     &$ticket_type Return location for the ticket type
+ * @param  AUTO_LINK                    $forum Return location for the forum ID
+ * @param  AUTO_LINK                    $topic_id Return location for the topic ID
+ * @param  AUTO_LINK                    $ticket_type Return location for the ticket type
  * @param  integer                      $start Start offset in pagination
  * @param  ?integer                     $max Max per page in pagination (null: no limit)
  * @return mixed                        The array of maps (Each map is: title, message, member, date) (null: no such ticket)

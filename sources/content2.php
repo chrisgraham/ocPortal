@@ -404,7 +404,7 @@ function actual_meta_data_get_fields($content_type, $content_id, $fields_to_skip
 /**
  * Read in an additional meta data field, specific to a resource type.
  *
- * @param  array                        &$meta_data Meta data already collected
+ * @param  array                        $meta_data Meta data already collected
  * @param  ID_TEXT                      $key The parameter name
  * @param  mixed                        $default The default if it was not set
  */

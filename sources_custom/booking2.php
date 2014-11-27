@@ -100,7 +100,7 @@ function get_booking_request_from_db($booking_ids)
 /**
  * From single booking details, convert it into a reconstituted structure.
  *
- * @param  array                        &$request Booking details structure to check.
+ * @param  array                        $request Booking details structure to check.
  * @return boolean                      Whether any changes happened.
  */
 function reconstitute_booking_requests(&$request)

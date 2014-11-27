@@ -1261,7 +1261,7 @@ function create_selection_list($root_page_link, $under_only = false, $default = 
 /**
  * Recurse function for create_selection_list.
  *
- * @param  tempcode                     &$out Output Tempcode.
+ * @param  tempcode                     $out Output Tempcode.
  * @param  array                        $node Node being recursed.
  * @param  ?ID_TEXT                     $default Default selection (null: none).
  * @param  ?array                       $valid_selectable_content_types List of node types we will allow to be selectable (null: no limit)

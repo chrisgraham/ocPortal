@@ -70,7 +70,7 @@ class Hook_fields_upload
     /**
      * Convert a field value to something renderable.
      *
-     * @param  array                    &$field The field details
+     * @param  array                    $field The field details
      * @param  mixed                    $ev The raw value
      * @param  integer                  $i Position in fieldset
      * @param  ?array                   $only_fields List of fields the output is being limited to (null: N/A)

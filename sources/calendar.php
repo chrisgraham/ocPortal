@@ -402,8 +402,8 @@ function find_periods_recurrence($timezone, $do_timezone_conv, $start_year, $sta
 /**
  * We have just jumped a UTC-based date (i.e. timezoneless) forward by calendar units, compensate for any DST ramifications in the target timezone.
  *
- * @param  integer                      &$hour Current hour
- * @param  integer                       &$minute Current minute
+ * @param  integer                      $hour Current hour
+ * @param  integer                      $minute Current minute
  * @param  integer                      $day_of_month Current day
  * @param  integer                      $month Current month
  * @param  integer                      $year Current year

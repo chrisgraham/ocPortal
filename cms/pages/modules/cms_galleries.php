@@ -593,7 +593,7 @@ class Module_cms_galleries extends Standard_crud_module
     /**
      * Sort a directory of gallery media being imported.
      *
-     * @param  array                    &$directory The unsorted media, will be saved by reference
+     * @param  array                   $directory The unsorted media, will be saved by reference
      */
     public function _sort_media(&$directory)
     {
@@ -718,7 +718,7 @@ class Module_cms_galleries extends Standard_crud_module
      * Take some data and write it to be a file in the gallery uploads directory, and add it to a gallery.
      *
      * @param  string                   $file The filename
-     * @param  PATH                      &$in Path to data file (will be copied from)
+     * @param  PATH                     $in Path to data file (will be copied from)
      * @param  ID_TEXT                  $cat The gallery to add to
      * @param  ?TIME                    $time Timestamp to use (null: now)
      * @return ?array                   A pair: The media type, The media ID (null: error)

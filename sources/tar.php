@@ -64,7 +64,7 @@ function tar_open($path, $mode)
 /**
  * Return the root directory from the specified TAR file. Note that there are folders in here, and they will end '/'.
  *
- * @param  array                        &$resource The TAR file handle
+ * @param  array                        $resource The TAR file handle
  * @param  boolean                      $tolerate_errors Whether to tolerate errors (returns NULL if error)
  * @return ?array                       A list of maps that stores 'path', 'mode', 'size' and 'mtime', for each file in the archive (null: error)
  */
@@ -169,7 +169,7 @@ function file_size_to_tar_block_size($size)
 /**
  * Add a folder to the TAR archive, however only store files modifed after a threshold time. It is incremental (incremental backup), by comparing against a threshold before adding a file (threshold being time of last backup)
  *
- * @param  array                        &$resource The TAR file handle
+ * @param  array                        $resource The TAR file handle
  * @param  ?resource                    $logfile The logfile to write to (null: no logging)
  * @param  PATH                         $path The full path to the folder to add
  * @param  TIME                         $threshold The threshold time
@@ -232,15 +232,15 @@ function tar_add_folder_incremental(&$resource, $logfile, $path, $threshold, $ma
 /**
  * Add a folder to the TAR archive
  *
- * @param  array                        &$resource The TAR file handle
- * @param  ?resource                    $path The logfile to write to (null: no logging)
- * @param  PATH                         $use_afm The full path to the folder to add
- * @param  ?integer                     $files The maximum file size to add (null: no limit)
- * @param  PATH                         $comcode_backups The subpath relative to the path (should be left as the default '', as this is used for the recursion to distinguish the adding base path from where it's currently looking)
- * @param  ?array                        A map (filename=>1) of files to not back up (null: none)
- * @param  ?array                        A list of directories ONLY to back up from the root (null: no restriction)
- * @param  boolean                       Whether to output spaces as we go to keep the connection alive
- * @param  boolean                       Whether to not skip "special files" (ones not normally archive)
+ * @param  array                        $resource The TAR file handle
+ * @param  ?resource                    $logfile The logfile to write to (null: no logging)
+ * @param  PATH                         $path The full path to the folder to add
+ * @param  ?integer                     $max_size The maximum file size to add (null: no limit)
+ * @param  PATH                         $subpath The subpath relative to the path (should be left as the default '', as this is used for the recursion to distinguish the adding base path from where it's currently looking)
+ * @param  ?array                       $avoid_backing_up A map (filename=>1) of files to not back up (null: none)
+ * @param  ?array                       $root_only_dirs A list of directories ONLY to back up from the root (null: no restriction)
+ * @param  boolean                      $tick Whether to output spaces as we go to keep the connection alive
+ * @param  boolean                      Whether to not skip "special files" (ones not normally archive)
  */
 function tar_add_folder(&$resource, $logfile, $path, $max_size = null, $subpath = '', $avoid_backing_up = null, $root_only_dirs = null, $tick = false, $all_files = false) // Note we cannot modify $resource unless we pass it by reference
 {
@@ -288,7 +288,7 @@ function tar_add_folder(&$resource, $logfile, $path, $max_size = null, $subpath 
 /**
  * Extract all the files in the specified TAR file to the specified path.
  *
- * @param  array                        &$resource The TAR file handle
+ * @param  array                        $resource The TAR file handle
  * @param  PATH                         $path The path to the folder to extract to, relative to the base directory
  * @param  boolean                      $use_afm Whether to extract via the AFM (assumes AFM has been set up prior to this function call)
  * @param  ?array                       $files The files to extract (null: all)
@@ -404,7 +404,7 @@ function tar_extract_to_folder(&$resource, $path, $use_afm = false, $files = nul
 /**
  * Get the contents of the specified file in the specified TAR.
  *
- * @param  array                        &$resource The TAR file handle
+ * @param  array                        $resource The TAR file handle
  * @param  PATH                         $path The full path to the file we want to get
  * @param  boolean                      $tolerate_errors Whether to tolerate errors (returns NULL if error)
  * @param  ?PATH                        $write_data_to Write data to here (null: return within array)
@@ -468,7 +468,7 @@ function tar_get_file(&$resource, $path, $tolerate_errors = false, $write_data_t
 /**
  * Add a file to the specified TAR file.
  *
- * @param  array                        &$resource The TAR file handle
+ * @param  array                        $resource The TAR file handle
  * @param  PATH                         $target_path The relative path to where we wish to add the file to the archive (including filename)
  * @param  string                       $data The data of the file to add
  * @param  integer                      $_mode The file mode (permissions)

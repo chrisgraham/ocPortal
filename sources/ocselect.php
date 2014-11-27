@@ -458,8 +458,8 @@ function unparse_ocselect($parsed)
  * @param  object                       $db Database connection
  * @param  array                        $info Content type info
  * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
- * @param  array                         &$extra_join List of joins (passed as reference)
- * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  array                        $extra_join List of joins (passed as reference)
+ * @param  array                        $extra_select List of selects (passed as reference)
  * @param  ID_TEXT                      $filter_key The field to get
  * @param  string                       $filter_val The field value for this
  * @param  array                        $db_fields Database field data
@@ -505,8 +505,8 @@ function _fields_api_ocselect_named($db, $info, $catalogue_name, &$extra_join, &
  * @param  object                       $db Database connection
  * @param  array                        $info Content type info
  * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
- * @param  array                         &$extra_join List of joins (passed as reference)
- * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  array                        $extra_join List of joins (passed as reference)
+ * @param  array                        $extra_select List of selects (passed as reference)
  * @param  ID_TEXT                      $filter_key The field to get
  * @param  string                       $filter_val The field value for this
  * @param  array                        $db_fields Database field data
@@ -575,8 +575,8 @@ function generate_ocselect_join_key_from_string($str)
  * @param  object                       $db Database connection
  * @param  array                        $info Content type info
  * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
- * @param  array                         &$extra_join List of joins (passed as reference)
- * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  array                        $extra_join List of joins (passed as reference)
+ * @param  array                        $extra_select List of selects (passed as reference)
  * @param  ID_TEXT                      $filter_key The field to get
  * @param  string                       $filter_val The field value for this
  * @param  array                        $db_fields Database field data

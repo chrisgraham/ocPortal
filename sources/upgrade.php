@@ -1221,8 +1221,8 @@ function run_integrity_check($basic = false, $allow_merging = true, $unix_help =
  *
  * @param  SHORT_TEXT                   $dir The directory we are scanning relative to
  * @param  SHORT_TEXT                   $rela The directory (relative) we are scanning
- * @param  array                         &$master_data Unserialised data/files.dat
- * @param  array                         &$hook_files A list of the contents of our addon registry hook files
+ * @param  array                        $master_data Unserialised data/files.dat
+ * @param  array                        $hook_files A list of the contents of our addon registry hook files
  * @param  boolean                      $allow_merging Whether merging of CSS changes is allowed
  * @return array                        Tuple of various kinds of outdated/missing files
  */

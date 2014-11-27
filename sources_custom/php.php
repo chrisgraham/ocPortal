@@ -214,7 +214,7 @@ function get_php_file_api($filename, $include_code = true)
                                     if (preg_match('#^\s*((public|protected|private) )?function \w+\((.*)\)\n?$#', $lines[$k], $matches) != 0) {
                                         $params = explode(',', $matches[3]);
                                         if (isset($params[$arg_counter])) {
-                                            $_description = /*str_pad(*/preg_replace('#^\s*(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;
+                                            $_description = /*str_pad(*/preg_replace('#^\s*&?(\$\w+).*$#', '$1', $params[$arg_counter])/*, 20, ' ')*/ . ' ' . $_description;
                                             $found = true;
                                         }
                                         break;
@@ -226,8 +226,8 @@ function get_php_file_api($filename, $include_code = true)
                                 }
                             }
                         }
-                        $_description = preg_replace('#^\$\w+ #', '', $_description);
-                        $parameters[$arg_counter]['description'] = $_description;
+                        $parameters[$arg_counter]['description'] = preg_replace('#^\$\w+ #', '', $_description);
+                        $parameters[$arg_counter]['phpdoc_name'] = preg_replace('#^(\$\w+).* #', '$1', $_description);
                     } elseif (substr($ltrim, 0, 7) == '@return') {
                         $return = array();
 
@@ -284,6 +284,10 @@ function get_php_file_api($filename, $include_code = true)
                     }
                 } else {
                     $default = null;
+                }
+
+                if ($parameter['name'] == $parameter['phpdoc_name']) {
+                    attach_message(do_lang_tempcode('NAME_MISMATCH', escape_html($parameter['name']), escape_html($parameter['phpdoc_name']), array(escape_html($function_name))), 'warn');
                 }
 
                 check_function_type($parameter['type'], $function_name, $parameter['name'], $default, array_key_exists('range', $parameter) ? $parameter['range'] : null, array_key_exists('set', $parameter) ? $parameter['set'] : null);

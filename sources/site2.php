@@ -456,7 +456,7 @@ function _load_comcode_page_not_cached($string, $zone, $codename, $file_base, $c
 /**
  * If any Comcode substitutions are configured, apply them.
  *
- * @param  string                       &$comcode The Comcode page contents
+ * @param  string                       $comcode The Comcode page contents
  */
 function apply_comcode_page_substitutions(&$comcode)
 {

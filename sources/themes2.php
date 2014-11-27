@@ -450,7 +450,7 @@ function get_all_image_ids_type($type, $recurse = false, $db = null, $theme = nu
 /**
  * Get all the image IDs (both already known, and those uncached) of a certain type (i.e. under a subdirectory).
  *
- * @param  array                        &$ids The list of image IDs found so far. This list will be appended as we proceed
+ * @param  array                        $ids The list of image IDs found so far. This list will be appended as we proceed
  * @param  ID_TEXT                      $dir The specific theme image subdirectory we are currently looking under
  * @param  ID_TEXT                      $type The type of image (e.g. 'ocf_emoticons')
  * @param  boolean                      $recurse Whether to search recursively; i.e. in subdirectories of the type subdirectory

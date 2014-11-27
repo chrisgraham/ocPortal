@@ -586,8 +586,8 @@ function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $ca
  * @param  object                       $db Database connection
  * @param  array                        $info Content type info
  * @param  ?ID_TEXT                     $catalogue_name Name of the catalogue (null: unknown; reduces performance)
- * @param  array                         &$extra_join List of joins (passed as reference)
- * @param  array                         &$extra_select List of selects (passed as reference)
+ * @param  array                        $extra_join List of joins (passed as reference)
+ * @param  array                        $extra_select List of selects (passed as reference)
  * @param  ID_TEXT                      $filter_key The field to get
  * @param  string                       $filter_val The field value for this
  * @param  array                        $db_fields Database field data
@@ -755,7 +755,7 @@ function get_catalogue_entries($catalogue_name, $category_id, $max, $start, $fil
  * Manually sort some catalogue entries.
  *
  * @param  array                        $fields Fields array for catalogue
- * @param  array                         &$entries Entries to sort (by reference)
+ * @param  array                        $entries Entries to sort (by reference)
  * @param  ID_TEXT                      $order_by What to sort by
  * @param  ID_TEXT                      $direction Sort direction
  * @return array                        Entries
@@ -1137,7 +1137,7 @@ function get_catalogue_entry_field_values($catalogue_name, $entry_id, $only_fiel
  * @param  array                        $field The field row
  * @param  mixed                        $entry_id The ID of the entry we are getting OR the row
  * @param  ?array                       $only_field_ids A list of field IDs that we are limiting ourselves to (null: get ALL fields)
- * @param  array                         &$target Save the result into here
+ * @param  array                        $target Save the result into here
  */
 function _resolve_catalogue_entry_field($field, $entry_id, $only_field_ids, &$target)
 {

@@ -142,7 +142,7 @@ function get_forum_access_sql($field)
 /**
  * Organise a list of forum rows into a tree structure.
  *
- * @param  array                        &$all_forums The list of all forum rows (be aware that this will get modified for performance reasons).
+ * @param  array                        $all_forums The list of all forum rows (be aware that this will get modified for performance reasons).
  * @param  AUTO_LINK                    $forum_id The forum row that we are taking as the root of our current recursion.
  * @return array                        The child list of $forum_id.
  */

@@ -181,8 +181,8 @@ function get_bound_content_entry($content_type, $id)
  *
  * @param  ID_TEXT                      $content_type Content type hook codename
  * @param  ?ID_TEXT                     $id Content entry ID (null: new entry)
- * @param  tempcode                      &$fields Fields (passed by reference)
- * @param  tempcode                      &$hidden Hidden Fields (passed by reference)
+ * @param  tempcode                     $fields Fields (passed by reference)
+ * @param  tempcode                     $hidden Hidden Fields (passed by reference)
  * @param  ?array                       $field_filter Limit fields to a set (null: no limit)
  * @param  boolean                      $field_filter_whitelist Whether $field_filter is a whitelist (if false, it is a blacklist)
  */

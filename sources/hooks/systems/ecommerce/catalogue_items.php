@@ -407,7 +407,7 @@ class Hook_ecommerce_catalogue_items
     /**
      * Show shopping cart entries.
      *
-     * @param  tempcode                 &$shopping_cart Tempcode object of shopping cart result table.
+     * @param  tempcode                 $shopping_cart Tempcode object of shopping cart result table.
      * @param  array                    $entry Details of new entry to the shopping cart.
      * @return tempcode                 Tempcode object of shopping cart result table.
      */
@@ -677,7 +677,7 @@ class Hook_ecommerce_catalogue_items
      * Get custom fields for ecommerce product.
      *
      * @param  AUTO_LINK                $id Product entry ID.
-     * @param  array                     &$map Map where product details are placed.
+     * @param  array                    $map Map where product details are placed.
      */
     public function get_custom_product_map_fields($id, &$map)
     {

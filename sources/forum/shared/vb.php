@@ -401,7 +401,7 @@ class Forum_driver_vb_shared extends Forum_driver_base
      * Get an array of maps for the topic in the given forum.
      *
      * @param  integer                  $topic_id The topic ID
-     * @param  integer                   &$count The comment count will be returned here by reference
+     * @param  integer                  $count The comment count will be returned here by reference
      * @param  integer                  $max Maximum comments to returned
      * @param  integer                  $start Comment to start at
      * @param  boolean                  $mark_read Whether to mark the topic read (ignored for this forum driver)
@@ -471,7 +471,7 @@ class Forum_driver_vb_shared extends Forum_driver_base
      * @param  mixed                    $name The forum name or an array of forum IDs
      * @param  integer                  $limit The limit
      * @param  integer                  $start The start position
-     * @param  integer                   &$max_rows The total rows (not a parameter: returns by reference)
+     * @param  integer                  $max_rows The total rows (not a parameter: returns by reference)
      * @param  SHORT_TEXT               $filter_topic_title The topic title filter
      * @param  boolean                  $show_first_posts Whether to show the first posts
      * @param  string                   $date_key The date key to sort by

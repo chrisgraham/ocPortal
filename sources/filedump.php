@@ -162,7 +162,7 @@ function find_filedump_links($focus = '')
  * @param  string                       $comcode Comcode to scan
  * @param  mixed                        $identifier An identifier for where this Comcode was from
  * @param  string                       $focus Focus on a particular filedump file (give a path relative to uploads/filedump), with leading slash (blank: no filter)
- * @param  array                         &$paths_used Paths found (passed by reference)
+ * @param  array                        $paths_used Paths found (passed by reference)
  */
 function extract_filedump_links($comcode, $identifier, $focus, &$paths_used)
 {

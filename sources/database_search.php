@@ -1103,7 +1103,7 @@ function is_under_radar($test)
  *
  * @param  string                       $content The search content
  * @param  boolean                      $boolean_search Whether it's a boolean search
- * @param  string                        &$boolean_operator Boolean operation to use
+ * @param  string                       $boolean_operator Boolean operation to use
  * @set    AND OR
  * @param  boolean                      $full_coverage Whether we can assume we require full coverage (i.e. not substring matches)
  * @return array                        A tuple (any SQL component may be blank): The combined where clause SQL, the boolean operator, body where clause SQL, positive where clause SQL, negative where clause SQL

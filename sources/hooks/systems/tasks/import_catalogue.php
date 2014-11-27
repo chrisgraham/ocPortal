@@ -162,13 +162,13 @@ class Hook_task_import_catalogue
      * @param  array                    $csv_data Data array of CSV imported file's lines
      * @param  ?AUTO_LINK               $catalog_root Catalogue root ID (null: Not a tree catalogue)
      * @param  array                    $fields Array of catalogue fields
-     * @param  array                     &$categories Array of categories
+     * @param  array                    $categories Array of categories
      * @param  array                    $csv_field_titles Array of csv field titles
      * @param  ID_TEXT                  $key_field Key field
      * @param  ID_TEXT                  $new_handling New handling method
      * @param  ID_TEXT                  $delete_handling Delete handling method
      * @param  ID_TEXT                  $update_handling Update handling method
-     * @param  array                     &$matched_ids IDs that are matched are collected here
+     * @param  array                    $matched_ids IDs that are matched are collected here
      * @param  ID_TEXT                  $notes_field Notes field
      * @param  ID_TEXT                  $meta_keywords_field Meta keywords field
      * @param  ID_TEXT                  $meta_description_field Meta description field

@@ -41,7 +41,7 @@ function member_is_online($member_id)
  *
  * @param  boolean                      $longer_time Whether to use a longer online-time -- the session expiry-time
  * @param  ?MEMBER                      $filter We really only need to make sure we get the status for this user, although at this functions discretion more may be returned and the row won't be there if the user is not online (null: no filter). May not be the guest ID
- * @param  integer                       &$count The total online members, returned by reference
+ * @param  integer                      $count The total online members, returned by reference
  * @return ?array                       Database rows (null: too many)
  */
 function get_users_online($longer_time, $filter, &$count)

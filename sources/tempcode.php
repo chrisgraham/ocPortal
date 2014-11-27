@@ -475,7 +475,7 @@ function make_string_tempcode($string)
  * Apply whatever escaping is requested to the given value.
  *
  * @param  array                        $escaped A list of escaping to do
- * @param  string                        &$value The string to apply the escapings to
+ * @param  string                       $value The string to apply the escapings to
  * @return string                       Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
  */
 function apply_tempcode_escaping($escaped, &$value)
@@ -603,7 +603,7 @@ function do_lang_tempcode($lang_string, $token1 = null, $token2 = null, $token3 
 /**
  * Provide automatic escaping for a template call.
  *
- * @param  array                        &$parameters Template parameters
+ * @param  array                        $parameters Template parameters
  */
 function kid_gloves_html_escaping(&$parameters)
 {
@@ -622,7 +622,7 @@ function kid_gloves_html_escaping(&$parameters)
 /**
  * Provide automatic escaping for a particular parameter.
  *
- * @param  string                       &$param Parameter
+ * @param  string                       $param Parameter
  */
 function kid_gloves_html_escaping_singular(&$param)
 {
@@ -837,7 +837,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
  * Certain symbols need preprocessing, before the output stream is made.
  *
  * @param  array                        $seq_part Symbol details
- * @param  array                         &$children Where we store children stuff
+ * @param  array                        $children Where we store children stuff
  */
 function handle_symbol_preprocessing($seq_part, &$children)
 {
@@ -1282,9 +1282,9 @@ class Tempcode
     /**
      * Parse a single symbol from an input stream and append it.
      *
-     * @param  string                   &$code Code string (input stream)
-     * @param  integer                   &$pos Start position of input string
-     * @param  integer                   &$len End position of input string
+     * @param  string                   $code Code string (input stream)
+     * @param  integer                  $pos Start position of input string
+     * @param  integer                  $len End position of input string
      */
     public function parse_from(&$code, &$pos, &$len)
     {
@@ -1463,7 +1463,7 @@ class Tempcode
     /**
      * The opposite of to_assembly - it decodes a Tempcode storage representation and turns it into a proper Tempcode object.
      *
-     * @param  string                   &$raw_data The assembled Tempcode
+     * @param  string                   $raw_data The assembled Tempcode
      * @param  boolean                  $allow_failure Return error code on failure, rather than exiting
      * @return boolean                  Success status (it can fail, if the compiled cache file is corrupt)
      */
@@ -1519,7 +1519,7 @@ class Tempcode
     /**
      * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound Tempcode object)
      *
-     * @param  array                    &$parameters Map of parameters to bind parameter bits to
+     * @param  array                    $parameters Map of parameters to bind parameter bits to
      * @param  ID_TEXT                  $codename The codename of the template this Tempcode is from
      * @return tempcode                 The new bound Tempcode object
      */

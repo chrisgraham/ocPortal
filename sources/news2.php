@@ -832,7 +832,7 @@ function import_foreign_news_html($html, $force_linebreaks = false)
  * Download remote images in some HTML and replace with local references under uploads/website_specific AND fix any links to other articles being imported to make them local links.
  *
  * @param  boolean                      $download_images Whether to download images to local
- * @param  string                        &$data HTML (passed by reference)
+ * @param  string                       $data HTML (passed by reference)
  * @param  array                        $imported_news Imported items, in ocPortal's RSS-parsed format [list of maps containing full_url and import_id] (used to fix links)
  */
 function _news_import_grab_images_and_fix_links($download_images, &$data, $imported_news)
@@ -872,7 +872,7 @@ function _news_import_grab_images_and_fix_links($download_images, &$data, $impor
 /**
  * Download a specific remote image and sub in the new URL.
  *
- * @param  string                       &$data HTML (passed by reference)
+ * @param  string                       $data HTML (passed by reference)
  * @param  $url URLPATH                      $url URL
  */
 function _news_import_grab_image(&$data, $url)

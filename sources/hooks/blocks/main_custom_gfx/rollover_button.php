@@ -27,7 +27,7 @@ class Hook_main_custom_gfx_rollover_button
      * Standard graphic generator function. Creates custom graphics from parameters.
      *
      * @param  array                    $map Map of hook parameters (relayed from block parameters map).
-     * @param  object                    &$block The block itself (contains utility methods).
+     * @param  object                   $block The block itself (contains utility methods).
      * @return tempcode                 HTML to output.
      */
     public function run($map, &$block)

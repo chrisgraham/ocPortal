@@ -23,7 +23,7 @@
  *
  * @param  string                       $input To encode
  * @param  integer                      $count How many chars to encode
- * @param  string                        &$itoa64 Lookup table used internally
+ * @param  string                       $itoa64 Lookup table used internally
  * @return string                       The encoded output
  */
 function _hash_encode64($input, $count, &$itoa64)
@@ -73,7 +73,7 @@ function _hash_encode64($input, $count, &$itoa64)
  *
  * @param  string                       $password To encode
  * @param  string                       $setting Encode settings in special format
- * @param  string                        &$itoa64 Lookup table used internally
+ * @param  string                       $itoa64 Lookup table used internally
  * @return string                       The encoded output
  */
 function _hash_crypt_private($password, $setting, &$itoa64)
@@ -662,7 +662,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
      * Get an array of maps for the topic in the given forum.
      *
      * @param  integer                  $topic_id The topic ID
-     * @param  integer                   &$count The comment count will be returned here by reference
+     * @param  integer                  $count The comment count will be returned here by reference
      * @param  integer                  $max Maximum comments to returned
      * @param  integer                  $start Comment to start at
      * @param  boolean                  $mark_read Whether to mark the topic read (ignored for this forum driver)
@@ -757,7 +757,7 @@ class Forum_driver_phpbb3 extends Forum_driver_base
      * @param  mixed                    $name The forum name or an array of forum IDs
      * @param  integer                  $limit The limit
      * @param  integer                  $start The start position
-     * @param  integer                   &$max_rows The total rows (not a parameter: returns by reference)
+     * @param  integer                  $max_rows The total rows (not a parameter: returns by reference)
      * @param  SHORT_TEXT               $filter_topic_title The topic title filter
      * @param  boolean                  $show_first_posts Whether to show the first posts
      * @param  string                   $date_key The date key to sort by

@@ -436,7 +436,7 @@ function _lang_remap($field_name, $id, $text, $connection = null, $comcode = fal
  * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
  *
  * @param  ID_TEXT                      $table The table name
- * @param  array                         &$row The database row
+ * @param  array                        $row The database row
  * @param  ID_TEXT                      $field_name The field name
  * @param  ?object                      $connection The database connection to use (null: standard site connection)
  * @param  ?LANGUAGE_NAME               $lang The language (null: uses the current language)

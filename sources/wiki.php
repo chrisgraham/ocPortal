@@ -727,7 +727,7 @@ function create_selection_list_wiki_page_tree($select = null, $id = null, $bread
 /**
  * Helper function. Get a nice formatted XHTML list of all the children beneath the specified Wiki+ page. This function is recursive.
  *
- * @param  array                        &$wiki_seen A list of pages we've already seen (we don't repeat them in multiple list positions)
+ * @param  array                        $wiki_seen A list of pages we've already seen (we don't repeat them in multiple list positions)
  * @param  ?AUTO_LINK                   $select The Wiki+ page to select by default (null: none)
  * @param  AUTO_LINK                    $id The Wiki+ page to look beneath
  * @param  string                       $breadcrumbs Breadcrumbs built up so far, in recursion (blank: starting recursion)
@@ -782,7 +782,7 @@ function _create_selection_list_wiki_page_tree(&$wiki_seen, $select, $id, $bread
 /**
  * Get a list of maps containing all the subpages, and path information, of the specified page - and those beneath it, recursively.
  *
- * @param  array                        &$wiki_seen A list of pages we've already seen (we don't repeat them in multiple list positions)
+ * @param  array                        $wiki_seen A list of pages we've already seen (we don't repeat them in multiple list positions)
  * @param  ?AUTO_LINK                   $page_id The page being at the root of our recursion (null: true root page)
  * @param  ?string                      $breadcrumbs The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
  * @param  ?array                       $page_details The details of the $page_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title

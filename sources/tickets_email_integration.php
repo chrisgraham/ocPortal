@@ -345,8 +345,8 @@ function _imap_get_mime_type($structure)
  * @param  resource                     $stream IMAP connection object
  * @param  integer                      $msg_number Message number
  * @param  string                       $mime_type Mime type (in upper case)
- * @param  array                         &$attachments Map of attachments (name to file data); only populated if $mime_type is APPLICATION/OCTET-STREAM
- * @param  integer                       &$attachment_size_total Total size of attachments in bytes
+ * @param  array                        $attachments Map of attachments (name to file data); only populated if $mime_type is APPLICATION/OCTET-STREAM
+ * @param  integer                      $attachment_size_total Total size of attachments in bytes
  * @param  ?object                      $structure IMAP message structure (null: look up)
  * @param  string                       $part_number Message part number (blank: root)
  * @return ?string                      The message part (null: could not find one)

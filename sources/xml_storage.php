@@ -392,11 +392,11 @@ function import_from_xml($xml_data, $delete_missing_rows = false)
  * Import to ocPortal database table from an XML row (possibly having descendant rows, via tree structure).
  *
  * @param  object                       $parsed The XML parser object
- * @param  array                         &$all_existing_data Existing data in table
+ * @param  array                        $all_existing_data Existing data in table
  * @param  array                        $all_fields Field meta data for all fields
  * @param  array                        $all_id_fields Meta data about table IDs
  * @param  array                        $table The record details being imported
- * @param  array                         &$insert_ids The insert IDs thus far
+ * @param  array                        $insert_ids The insert IDs thus far
  * @param  ?AUTO_LINK                   $last_parent_id The ID of the auto-inserted parent to this row (null: N/A)
  * @return array                        List of operations performed
  */

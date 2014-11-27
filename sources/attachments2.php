@@ -170,7 +170,7 @@ function do_comcode_attachments($comcode, $type, $id, $previewing_only = false, 
 /**
  * Convert attachments embedded as data URLs (usually the result of pasting in) to real attachment Comcode.
  *
- * @param  string                       &$comcode Our Comcode
+ * @param  string                       $comcode Our Comcode
  * @param  ID_TEXT                      $type The type the attachment will be used for (e.g. download)
  * @param  ID_TEXT                      $id The ID the attachment will be used for
  * @param  object                       $connection The database connection to use
@@ -227,7 +227,7 @@ function _handle_data_url_attachments(&$comcode, $type, $id, $connection)
 /**
  * Convert attachments marked for 'extraction' to real attachment Comcode.
  *
- * @param  string                       &$comcode Our Comcode
+ * @param  string                       $comcode Our Comcode
  * @param  string                       $key The attachment file key
  * @param  ID_TEXT                      $type The type the attachment will be used for (e.g. download)
  * @param  ID_TEXT                      $id The ID the attachment will be used for

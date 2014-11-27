@@ -1072,7 +1072,7 @@ function _strlen_sort($a, $b)
 /**
  * Sort a list of maps by a particular key ID in the maps.
  *
- * @param  array                        &$rows List of maps to sort
+ * @param  array                        $rows List of maps to sort
  * @param  mixed                        $sort_keys Either an integer sort key (to sort by integer key ID of contained arrays) or a Comma-separated list of sort keys (to sort by string key ID of contained arrays; prefix '!' a key to reverse the sort order for it).
  */
 function sort_maps_by(&$rows, $sort_keys)
@@ -1085,7 +1085,7 @@ function sort_maps_by(&$rows, $sort_keys)
 /**
  * Do a user sort, preserving order where reordering not needed. Based on a PHP manual comment at http://php.net/manual/en/function.usort.php
  *
- * @param  array                        &$array Sort array
+ * @param  array                        $array Sort array
  * @param  mixed                        $cmp_function Comparison function
  */
 function merge_sort(&$array, $cmp_function = 'strcmp')
