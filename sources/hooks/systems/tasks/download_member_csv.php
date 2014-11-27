@@ -153,13 +153,13 @@ class Hook_task_download_member_csv
     /**
      * Get a CSV-outputtable row for a member.
      *
-     * @param  array                    A map of member CPF maps
-     * @param  array                    Member row
-     * @param  array                    Map of usergroup details
-     * @param  array                    List of headings to pull from the member row
-     * @param  array                    List of CPFS to pull
-     * @param  array                    List of member group membership records
-     * @param  array                    List of subscription types
+     * @param  array                    $member_cpfs A map of member CPF maps
+     * @param  array                    $m Member row
+     * @param  array                    $groups Map of usergroup details
+     * @param  array                    $headings List of headings to pull from the member row
+     * @param  array                    $cpfs List of CPFS to pull
+     * @param  array                    $member_groups List of member group membership records
+     * @param  array                    $subscription_types List of subscription types
      * @return array                    The row
      */
     protected function _get_csv_member_record($member_cpfs, $m, $groups, $headings, $cpfs, $member_groups, $subscription_types)

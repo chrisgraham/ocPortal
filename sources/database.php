@@ -675,10 +675,10 @@ class Database_driver
     /**
      * Create a SELECT query from some abstract data.
      *
-     * @param  string                   The table to select from
-     * @param  ?array                   List of field selections (null: all fields)
-     * @param  ?array                   Map of conditions to enforce (null: no conditions)
-     * @param  string                   Additional stuff to tack onto the query
+     * @param  string                   $table The table to select from
+     * @param  ?array                   $select_map List of field selections (null: all fields)
+     * @param  ?array                   $where_map Map of conditions to enforce (null: no conditions)
+     * @param  string                   $end Additional stuff to tack onto the query
      * @return string                   SQL query
      */
     protected function _get_where_expand($table, $select_map = null, $where_map = null, $end = '')
@@ -764,7 +764,7 @@ class Database_driver
     /**
      * Extract the first of the first of the list of maps.
      *
-     * @param  array                    The list of maps
+     * @param  array                    $values The list of maps
      * @return mixed                    The first value of the first row in the list
      */
     protected function _query_select_value($values)
@@ -877,12 +877,12 @@ class Database_driver
     /**
      * Work out $lang_fields from analysing the table, if needed.
      *
-     * @param  string                   The table name
-     * @param  string                   The table name, with prefix too
-     * @param  array                    The SELECT map
-     * @param  ?array                   The WHERE map [will all be AND'd together] (null: no conditions)
-     * @param  string                   Something to tack onto the end of the SQL query
-     * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
+     * @param  string                   $table The table name
+     * @param  string                   $full_table The table name, with prefix too
+     * @param  array                    $select The SELECT map
+     * @param  ?array                   $where_map The WHERE map [will all be AND'd together] (null: no conditions)
+     * @param  string                   $end Something to tack onto the end of the SQL query
+     * @param  ?array                   $lang_fields Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (null: none)
      */
     protected function _automatic_lang_fields(&$table, &$full_table, &$select, &$where_map, &$end, &$lang_fields)
     {

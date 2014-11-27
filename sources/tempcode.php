@@ -1427,7 +1427,7 @@ class Tempcode
     /**
      * Recursively mark all parameters in this Tempcode as escaped. This is needed when loading from cache, as escape tainting data would have been lost.
      *
-     * @param  boolean                  Whether this is the top-level call
+     * @param  boolean                  $top_level Whether this is the top-level call
      */
     protected function _mark_all_as_escaped($top_level = true)
     {

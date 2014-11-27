@@ -366,7 +366,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Get a URL to the specified member's profile.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $id The member ID
      * @return URLPATH                  The URL to the member profile
      */
     protected function _member_profile_url($id)
@@ -397,7 +397,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Get a URL to send a private/personal message to the given member.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $id The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
     protected function _member_pm_url($id)
@@ -408,7 +408,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Get a URL to the specified forum.
      *
-     * @param  integer                  The forum ID
+     * @param  integer                  $id The forum ID
      * @return URLPATH                  The URL to the specified forum
      */
     protected function _forum_url($id)
@@ -430,7 +430,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Convert an IP address into phpBB hexadecimal string format.
      *
-     * @param  IP                       The normal IP address
+     * @param  IP                       $ip The normal IP address
      * @return string                   The phpBB IP address
      */
     protected function _phpbb_ip($ip)
@@ -443,7 +443,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Convert an IP address from phpBB hexadecimal string format.
      *
-     * @param  string                   The phpBB IP address
+     * @param  string                   $ip The phpBB IP address
      * @return IP                       The normal IP address
      */
     protected function _un_phpbb_ip($ip)
@@ -808,7 +808,7 @@ class Forum_driver_mybb extends Forum_driver_base
      * Get the name relating to the specified member ID.
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
@@ -822,7 +822,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Get the e-mail address for the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return SHORT_TEXT               The e-mail address
      */
     protected function _get_member_email_address($member)
@@ -1016,7 +1016,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Find if the specified member ID is marked as staff or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is staff
      */
     protected function _is_staff($member)
@@ -1032,7 +1032,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Find if the specified member ID is marked as a super admin or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is a super admin
      */
     protected function _is_super_admin($member)
@@ -1172,7 +1172,7 @@ class Forum_driver_mybb extends Forum_driver_base
     /**
      * Get the forum usergroup relating to the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return array                    The array of forum usergroups
      */
     protected function _get_members_groups($member)

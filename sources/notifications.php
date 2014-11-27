@@ -800,9 +800,9 @@ class Hook_Notification
     /**
      * Standard function to create the standardised category tree. This base version will do it based on seeing what is already being monitored, i.e. so you can unmonitor them. It assumes monitoring is initially set from the frontend via the monitor button.
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?ID_TEXT                 The ID of where we're looking under (null: N/A)
-     * @param  boolean                  Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
+     * @param  ID_TEXT                  $notification_code Notification code
+     * @param  ?ID_TEXT                 $id The ID of where we're looking under (null: N/A)
+     * @param  boolean                  $for_any_member Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
      * @return array                    Tree structure
      */
     protected function _create_category_tree($notification_code, $id, $for_any_member = false)
@@ -896,13 +896,13 @@ class Hook_Notification
     /**
      * Further filter results from _all_members_who_have_enabled.
      *
-     * @param  array                    Members from main query (we'll filter them)
-     * @param  ID_TEXT                  The privilege
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  array                    $to_filter Members from main query (we'll filter them)
+     * @param  ID_TEXT                  $privilege The privilege
+     * @param  ID_TEXT                  $only_if_enabled_on__notification_code Notification code
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     protected function _all_members_who_have_enabled_with_privilege($to_filter, $privilege, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
@@ -921,13 +921,13 @@ class Hook_Notification
     /**
      * Further filter results from _all_members_who_have_enabled.
      *
-     * @param  array                    Members from main query (we'll filter them)
-     * @param  ID_TEXT                  The zone
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  array                    $to_filter Members from main query (we'll filter them)
+     * @param  ID_TEXT                  $zone The zone
+     * @param  ID_TEXT                  $only_if_enabled_on__notification_code Notification code
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     protected function _all_members_who_have_enabled_with_zone_access($to_filter, $zone, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
@@ -945,13 +945,13 @@ class Hook_Notification
     /**
      * Further filter results from _all_members_who_have_enabled.
      *
-     * @param  array                    Members from main query (we'll filter them)
-     * @param  ID_TEXT                  The page
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  array                    $to_filter Members from main query (we'll filter them)
+     * @param  ID_TEXT                  $page The page
+     * @param  ID_TEXT                  $only_if_enabled_on__notification_code Notification code
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     protected function _all_members_who_have_enabled_with_page_access($to_filter, $page, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
@@ -969,13 +969,13 @@ class Hook_Notification
     /**
      * Further filter results from _all_members_who_have_enabled.
      *
-     * @param  array                    Members from main query (we'll filter them)
-     * @param  ID_TEXT                  The category permission type
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  array                    $to_filter Members from main query (we'll filter them)
+     * @param  ID_TEXT                  $category The category permission type
+     * @param  ID_TEXT                  $only_if_enabled_on__notification_code Notification code
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     protected function _all_members_who_have_enabled_with_category_access($to_filter, $category, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
@@ -1021,12 +1021,12 @@ class Hook_Notification
      * Get a list of members who have enabled this notification (i.e. have chosen to or are defaulted to).
      * (No pagination supported, as assumed there are only a small set of members here.)
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
-     * @param  boolean                  Whether to find members who are subscribed regardless of notification code
+     * @param  ID_TEXT                  $only_if_enabled_on__notification_code Notification code
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
+     * @param  boolean                  $catch_all_too Whether to find members who are subscribed regardless of notification code
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     protected function _all_members_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max, $catch_all_too = true)
@@ -1095,9 +1095,9 @@ class Hook_Notification
     /**
      * Find whether someone has permission to view any notifications (yes) and possibly if they actually are.
      *
-     * @param  ?ID_TEXT                 Notification code (null: don't check if they are)
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  MEMBER                   Member to check against
+     * @param  ?ID_TEXT                 $only_if_enabled_on__notification_code Notification code (null: don't check if they are)
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  MEMBER                   $member_id Member to check against
      * @return boolean                  Whether they do
      */
     protected function _is_member($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
@@ -1180,11 +1180,11 @@ class Hook_notification__Staff extends Hook_Notification
     /**
      * Get a list of staff members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
      *
-     * @param  ID_TEXT                  Notification code
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  ?array                   List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
-     * @param  integer                  Start position (for pagination)
-     * @param  integer                  Maximum (for pagination)
+     * @param  ID_TEXT                  $only_if_enabled_on__notification_code Notification code
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  ?array                   $to_member_ids List of member IDs we are restricting to (null: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  $start Start position (for pagination)
+     * @param  integer                  $max Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
     protected function _all_staff_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
@@ -1220,9 +1220,9 @@ class Hook_notification__Staff extends Hook_Notification
     /**
      * Find whether someone has permission to view staff notifications and possibly if they actually are.
      *
-     * @param  ?ID_TEXT                 Notification code (null: don't check if they are)
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  MEMBER                   Member to check against
+     * @param  ?ID_TEXT                 $only_if_enabled_on__notification_code Notification code (null: don't check if they are)
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  MEMBER                   $member_id Member to check against
      * @return boolean                  Whether they do
      */
     protected function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)

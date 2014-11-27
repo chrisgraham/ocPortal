@@ -509,11 +509,11 @@ class Hook_html_site
     /**
      * Filter HTML that has been read, to make it more compatible with ocPortal.
      *
-     * @param  string                   The HTML
-     * @param  BINARY                   Whether to fix XHTML errors
-     * @param  PATH                     The base URL of the old site
-     * @param  array                    A list of all files on the site
-     * @param  PATH                     The base directory we are importing from
+     * @param  string                   $file_contents The HTML
+     * @param  BINARY                   $fix_html Whether to fix XHTML errors
+     * @param  PATH                     $base_url The base URL of the old site
+     * @param  array                    $files A list of all files on the site
+     * @param  PATH                     $file_base The base directory we are importing from
      * @return string                   Filtered HTML
      */
     protected function _html_filter($file_contents, $fix_html, $base_url, $files, $file_base)

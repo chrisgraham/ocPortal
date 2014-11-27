@@ -92,7 +92,7 @@ class Hook_occle_fs_news extends Resource_fs_base
     /**
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
-     * @param  array                    Resource row (not full, but does contain the ID)
+     * @param  array                    $row Resource row (not full, but does contain the ID)
      * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_folder_edit_date($row)
@@ -221,7 +221,7 @@ class Hook_occle_fs_news extends Resource_fs_base
     /**
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
-     * @param  array                    Resource row (not full, but does contain the ID)
+     * @param  array                    $row Resource row (not full, but does contain the ID)
      * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_file_edit_date($row)

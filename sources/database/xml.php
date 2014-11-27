@@ -686,9 +686,9 @@ class Database_Static_xml
     /**
      * Find the schema for a table.
      *
-     * @param  array                    The database
-     * @param  string                   The table name
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $db The database
+     * @param  string                   $table_name The table name
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   The schema map (null: not found)
      */
     protected function _read_schema($db, $table_name, $fail_ok = false)
@@ -764,9 +764,9 @@ class Database_Static_xml
     /**
      * Type check some data destined to go into a table.
      *
-     * @param  array                    The schema
-     * @param  array                    The data
-     * @param  string                   Query that was executed
+     * @param  array                    $schema The schema
+     * @param  array                    $record The data
+     * @param  string                   $query Query that was executed
      */
     protected function _type_check($schema, $record, $query)
     {
@@ -823,14 +823,14 @@ class Database_Static_xml
     /**
      * Read in all the records from a table.
      *
-     * @param  array                    Database connection
-     * @param  string                   The table name
-     * @param  string                   What the table will be renamed to (blank: N/A)
-     * @param  ?array                   Schema to type-set against (null: do not do type-setting)
-     * @param  ?array                   Expression filtering results (used for optimisation, seeing if we can get a quick key match) (null: no data to filter with)
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  string                   Query that was executed
-     * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
+     * @param  array                    $db Database connection
+     * @param  string                   $table_name The table name
+     * @param  string                   $table_as What the table will be renamed to (blank: N/A)
+     * @param  ?array                   $schema Schema to type-set against (null: do not do type-setting)
+     * @param  ?array                   $where_expr Expression filtering results (used for optimisation, seeing if we can get a quick key match) (null: no data to filter with)
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  string                   $query Query that was executed
+     * @param  boolean                  $include_unused_fields Whether to include fields that are present in the actual records but not in our schema
      * @return ?array                   The collected records (null: error)
      */
     protected function _read_all_records($db, $table_name, $table_as, $schema, $where_expr, $fail_ok, $query, $include_unused_fields = false)
@@ -1022,10 +1022,10 @@ class Database_Static_xml
     /**
      * Take an expression and do our best to collapse it into a fixed mapping of stuff we know we are going to AND.
      *
-     * @param  array                    The expression parse tree
-     * @param  string                   What the table will be renamed to (blank: N/A)
-     * @param  ?array                   Schema to type-set against (null: do not do type-setting)
-     * @param  boolean                  Whether to do a not-full-accurate search
+     * @param  array                    $where_expr The expression parse tree
+     * @param  string                   $table_as What the table will be renamed to (blank: N/A)
+     * @param  ?array                   $schema Schema to type-set against (null: do not do type-setting)
+     * @param  boolean                  $not_full_accuracy Whether to do a not-full-accurate search
      * @return array                    AND map
      */
     protected function _turn_where_expr_to_map($where_expr, $table_as, $schema = null, $not_full_accuracy = false)
@@ -1093,10 +1093,10 @@ class Database_Static_xml
     /**
      * Read a record from an XML file.
      *
-     * @param  PATH                     The file path
-     * @param  ?array                   Schema to type-set against (null: do not do type-setting)
-     * @param  ?array                   Substrings to check it is in, used for performance (null: none)
-     * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
+     * @param  PATH                     $path The file path
+     * @param  ?array                   $schema Schema to type-set against (null: do not do type-setting)
+     * @param  ?array                   $must_contain_strings Substrings to check it is in, used for performance (null: none)
+     * @param  boolean                  $include_unused_fields Whether to include fields that are present in the actual records but not in our schema
      * @return ?array                   The record map (null: does not contain requested substrings)
      */
     protected function _read_record($path, $schema = null, $must_contain_strings = null, $include_unused_fields = false)
@@ -1230,10 +1230,10 @@ class Database_Static_xml
     /**
      * Write in all the records to a table.
      *
-     * @param  array                    Database connection
-     * @param  string                   The table name
-     * @param  array                    The list of record maps
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $db Database connection
+     * @param  string                   $table_name The table name
+     * @param  array                    $records The list of record maps
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      */
     protected function _write_records($db, $table_name, $records, $fail_ok = false)
     {
@@ -1248,12 +1248,12 @@ class Database_Static_xml
     /**
      * Write a record to an XML file.
      *
-     * @param  array                    Database connection
-     * @param  string                   The table name
-     * @param  string                   The GUID
-     * @param  array                    The record map
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  boolean                  Whether we are saving as a 'volatile' file extension
+     * @param  array                    $db Database connection
+     * @param  string                   $table_name The table name
+     * @param  string                   $guid The GUID
+     * @param  array                    $record The record map
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  boolean                  $save_as_volatile Whether we are saving as a 'volatile' file extension
      */
     protected function _write_record($db, $table_name, $guid, $record, $fail_ok = false, $save_as_volatile = false)
     {
@@ -1338,8 +1338,8 @@ class Database_Static_xml
     /**
      * Write a record to an XML file.
      *
-     * @param  PATH                     The file path
-     * @param  array                    Database connection
+     * @param  PATH                     $path The file path
+     * @param  array                    $db Database connection
      */
     protected function _delete_record($path, $db)
     {
@@ -1382,13 +1382,13 @@ class Database_Static_xml
     /**
      * Check to see if there is a key conflict problem.
      *
-     * @param  array                    Database connection
-     * @param  string                   The table name
-     * @param  array                    The schema
-     * @param  array                    The record
-     * @param  string                   Query that was executed
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  ?string                  The GUID representing what we have now (so we don't think we're conflicting with ourself) (null: not yet added)
+     * @param  array                    $db Database connection
+     * @param  string                   $table_name The table name
+     * @param  array                    $schema The schema
+     * @param  array                    $record The record
+     * @param  string                   $query Query that was executed
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  ?string                  $existing_identity The GUID representing what we have now (so we don't think we're conflicting with ourself) (null: not yet added)
      * @return boolean                  Whether there was a conflict
      */
     protected function _key_conflict_check($db, $table_name, $schema, $record, $query, $fail_ok, $existing_identity = null)
@@ -1434,10 +1434,10 @@ class Database_Static_xml
     /**
      * Execute a DROP query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (null: no results)
      */
     protected function _do_query_drop($tokens, $query, $db, $fail_ok)
@@ -1477,10 +1477,10 @@ class Database_Static_xml
     /**
      * Execute an ALTER query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (null: no results)
      */
     protected function _do_query_alter($tokens, $query, $db, $fail_ok)
@@ -1624,10 +1624,10 @@ class Database_Static_xml
     /**
      * Execute a CREATE query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (null: no results)
      */
     protected function _do_query_create($tokens, $query, $db, $fail_ok)
@@ -1715,13 +1715,13 @@ class Database_Static_xml
     /**
      * Wrapper to execute an INSERT query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
-     * @param  ?integer                 The random key that we would use (null: not generated yet)
-     * @param  boolean                  Whether we are saving as a 'volatile' file extension
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  boolean                  $get_insert_id Whether to get the autoincrement ID created for an insert query
+     * @param  ?integer                 $random_key The random key that we would use (null: not generated yet)
+     * @param  boolean                  $save_as_volatile Whether we are saving as a 'volatile' file extension
      * @return ?mixed                   The insert ID (null: not requested / error)
      */
     protected function _do_query_insert($tokens, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
@@ -1737,10 +1737,10 @@ class Database_Static_xml
     /**
      * Parse an INSERT query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   A pair: the table, and the rows to insert (null: error)
      */
     protected function _do_query_insert__parse($tokens, $query, $db, $fail_ok)
@@ -1814,14 +1814,14 @@ class Database_Static_xml
     /**
      * Execute an INSERT query.
      *
-     * @param  array                    Rows being inserted
-     * @param  ID_TEXT                  Table name we're inserting into
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
-     * @param  ?integer                 The random key that we would use (null: not generated yet)
-     * @param  boolean                  Whether we are saving as a 'volatile' file extension
+     * @param  array                    $inserts Rows being inserted
+     * @param  ID_TEXT                  $table_name Table name we're inserting into
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  boolean                  $get_insert_id Whether to get the autoincrement ID created for an insert query
+     * @param  ?integer                 $random_key The random key that we would use (null: not generated yet)
+     * @param  boolean                  $save_as_volatile Whether we are saving as a 'volatile' file extension
      * @return ?mixed                   The insert ID (null: not requested / error)
      */
     protected function _do_query_insert__execute($inserts, $table_name, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
@@ -1880,13 +1880,13 @@ class Database_Static_xml
     /**
      * Parse an SQL expression.
      *
-     * @param  integer                  Our offset counter
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to work as a connection point to seek out logic connection expression parts
-     * @param  boolean                  Whether to work as a connection point to seek out arithmetic connection expression parts
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  integer                  $at Our offset counter
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $look_for_connectives Whether to work as a connection point to seek out logic connection expression parts
+     * @param  boolean                  $look_for_any_connectives Whether to work as a connection point to seek out arithmetic connection expression parts
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   The expression (null: error)
      */
     protected function _parsing_read_expression(&$at, $tokens, $query, $db, $look_for_connectives = true, $look_for_any_connectives = true, $fail_ok = false)
@@ -2121,9 +2121,9 @@ class Database_Static_xml
     /**
      * Execute an expression.
      *
-     * @param  array                    The expression
-     * @param  array                    Bindings available in the execution scope
-     * @param  string                   Query that was executed
+     * @param  array                    $expr The expression
+     * @param  array                    $bindings Bindings available in the execution scope
+     * @param  string                   $query Query that was executed
      * @return ?mixed                   The result (null: error/NULL)
      */
     protected function _execute_expression($expr, $bindings, $query)
@@ -2234,12 +2234,12 @@ class Database_Static_xml
     /**
      * Execute an UPDATE query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
-     * @param  ?integer                 The start row to affect (null: no specification)
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  ?integer                 $max The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 $start The start row to affect (null: no specification)
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (null: no results)
      */
     protected function _do_query_update($tokens, $query, $db, $max, $start, $fail_ok)
@@ -2329,12 +2329,12 @@ class Database_Static_xml
     /**
      * Execute a DELETE query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
-     * @param  ?integer                 The start row to affect (null: no specification)
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  ?integer                 $max The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 $start The start row to affect (null: no specification)
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (null: no results)
      */
     protected function _do_query_delete($tokens, $query, $db, $max, $start, $fail_ok)
@@ -2399,14 +2399,14 @@ class Database_Static_xml
     /**
      * Execute a SELECT query.
      *
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  ?integer                 The maximum number of rows to affect (null: no limit)
-     * @param  ?integer                 The start row to affect (null: no specification)
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  integer                  Our offset counter
-     * @param  boolean                  Whether to not do the check to make sure we've parsed everything
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  ?integer                 $max The maximum number of rows to affect (null: no limit)
+     * @param  ?integer                 $start The start row to affect (null: no specification)
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  integer                  $at Our offset counter
+     * @param  boolean                  $do_end_check Whether to not do the check to make sure we've parsed everything
      * @return ?mixed                   The results (null: no results)
      */
     protected function _do_query_select($tokens, $query, $db, $max, $start, $fail_ok, &$at, $do_end_check = true)
@@ -2939,10 +2939,10 @@ class Database_Static_xml
     /**
      * Run SQL data filter functions over a result set.
      *
-     * @param  array                    The set of results we are operating on
-     * @param  array                    Parse tree of what we are selecting
-     * @param  array                    Record we are copying the function results into
-     * @param  string                   Query that was executed
+     * @param  array                    $set The set of results we are operating on
+     * @param  array                    $select Parse tree of what we are selecting
+     * @param  array                    $rep Record we are copying the function results into
+     * @param  string                   $query Query that was executed
      * @return array                    The result row based on the set
      */
     protected function _function_set_scoping($set, $select, $rep, $query)
@@ -3036,12 +3036,12 @@ class Database_Static_xml
     /**
      * Read in a table specifier clause for a WHERE query.
      *
-     * @param  integer                  Our offset counter
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  array                    Database connection
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  integer                  How many closing brackets we expect
+     * @param  integer                  $at Our offset counter
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  array                    $db Database connection
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  integer                  $closing_brackets_needed How many closing brackets we expect
      * @return ?array                   Join condition (null: no join here)
      */
     protected function _read_join(&$at, $tokens, $query, $db, $fail_ok, &$closing_brackets_needed)
@@ -3125,10 +3125,10 @@ class Database_Static_xml
     /**
      * Optimize a join condition into a join scope set, if possible.
      *
-     * @param  array                    Join condition (parsed WHERE-style clause)
-     * @param  array                    Schema so far
-     * @param  array                    Records so far
-     * @param  string                   The renaming of our table, so we can recognise it in the join condition
+     * @param  array                    $join_condition Join condition (parsed WHERE-style clause)
+     * @param  array                    $schema Schema so far
+     * @param  array                    $records Records so far
+     * @param  string                   $joined_as The renaming of our table, so we can recognise it in the join condition
      * @return array                    Altered join condition
      */
     protected function _setify_join_condition_for_optimisation($join_condition, $schema, $records, $joined_as)
@@ -3161,14 +3161,14 @@ class Database_Static_xml
     /**
      * Get results from a JOIN.
      *
-     * @param  array                    Database connection
-     * @param  string                   The renaming of our table, so we can recognise it in the join condition
-     * @param  array                    Join op-tree
-     * @param  string                   Query that was executed
-     * @param  array                    Records so far
-     * @param  array                    Schema so far
-     * @param  array                    Expression filtering results (used for optimisation, seeing if we can get a quick key match)
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  array                    $db Database connection
+     * @param  string                   $joined_as_prior The renaming of our table, so we can recognise it in the join condition
+     * @param  array                    $join Join op-tree
+     * @param  string                   $query Query that was executed
+     * @param  array                    $records Records so far
+     * @param  array                    $schema Schema so far
+     * @param  array                    $where_expr Expression filtering results (used for optimisation, seeing if we can get a quick key match)
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   A pair: an array of results, an array of the schema for what has been joined (null: error)
      */
     protected function _execute_join($db, $joined_as_prior, $join, $query, $records, $schema, $where_expr, $fail_ok = false)
@@ -3296,10 +3296,10 @@ class Database_Static_xml
     /**
      * Reads the next token.
      *
-     * @param  integer                  Our offset counter
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  boolean                  Whether it can return NULL if we're out of output (otherwise fails)
+     * @param  integer                  $at Our offset counter
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  boolean                  $fail_ok Whether it can return NULL if we're out of output (otherwise fails)
      * @return ?string                  Token read (null: error, read too far)
      */
     protected function _parsing_read(&$at, $tokens, $query, $fail_ok = false)
@@ -3319,11 +3319,11 @@ class Database_Static_xml
     /**
      * Expect a certain token next.
      *
-     * @param  integer                  Our offset counter
-     * @param  array                    Tokens
-     * @param  string                   Token expected
-     * @param  string                   Query that was executed
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  integer                  $at Our offset counter
+     * @param  array                    $tokens Tokens
+     * @param  string                   $token Token expected
+     * @param  string                   $query Query that was executed
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return boolean                  Success status
      */
     protected function _parsing_expects(&$at, $tokens, $token, $query, $fail_ok = false)
@@ -3339,10 +3339,10 @@ class Database_Static_xml
     /**
      * Check we've consumed all our tokens.
      *
-     * @param  integer                  Our offset counter
-     * @param  array                    Tokens
-     * @param  string                   Query that was executed
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  integer                  $at Our offset counter
+     * @param  array                    $tokens Tokens
+     * @param  string                   $query Query that was executed
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return boolean                  Success status
      */
     protected function _parsing_check_ended($at, $tokens, $query, $fail_ok = false)
@@ -3361,9 +3361,9 @@ class Database_Static_xml
     /**
      * Give out an error message and die, when a query fails.
      *
-     * @param  string                   The query that failed
-     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-     * @param  ?string                  Error message (null: none)
+     * @param  string                   $query The query that failed
+     * @param  boolean                  $fail_ok Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  ?string                  $error Error message (null: none)
      * @return ?mixed                   Always returns null (null: error)
      */
     protected function _bad_query($query, $fail_ok = false, $error = null)
@@ -3381,8 +3381,8 @@ class Database_Static_xml
     /**
      * Generate a GUID for a record, preferably from the key, but doesn't have to be.
      *
-     * @param  ?array                   The schema (null: don't have/use)
-     * @param  ?array                   The record (null: don't have/use)
+     * @param  ?array                   $schema The schema (null: don't have/use)
+     * @param  ?array                   $record The record (null: don't have/use)
      * @return string                   The GUID
      */
     protected function _guid($schema = null, $record = null)
@@ -3440,7 +3440,7 @@ class Database_Static_xml
     /**
      * Escape a value for use in a filesystem path.
      *
-     * @param  string                   Value to escape (original value)
+     * @param  string                   $in Value to escape (original value)
      * @return string                   Escaped value
      */
     protected function _escape_name($in)
@@ -3451,7 +3451,7 @@ class Database_Static_xml
     /**
      * Unescape a value from a filesystem path back to the original.
      *
-     * @param  string                   Escaped value
+     * @param  string                   $in Escaped value
      * @return string                   Original value
      */
     protected function _unescape_name($in)

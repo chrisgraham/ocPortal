@@ -1259,8 +1259,8 @@ class Module_admin_themes
     /**
      * Get all the revisions for a CSS file in a certain theme.
      *
-     * @param  ID_TEXT                  The theme to find for
-     * @param  string                   The file to find revisions of
+     * @param  ID_TEXT                  $theme The theme to find for
+     * @param  string                   $find_for The file to find revisions of
      * @return array                    A map of the revisions (file=>timestamp)
      */
     private function get_css_revisions($theme, $find_for)
@@ -1287,13 +1287,13 @@ class Module_admin_themes
     /**
      * Get all the templates for a theme (optionally, revisions of a single template).
      *
-     * @param  ID_TEXT                  The theme to search for
-     * @param  string                   Subdirectory type to look in
+     * @param  ID_TEXT                  $theme The theme to search for
+     * @param  string                   $directory Subdirectory type to look in
      * @set    templates javascript xml text css
-     * @param  string                   File type suffix of template file (e.g. .tpl)
+     * @param  string                   $suffix File type suffix of template file (e.g. .tpl)
      * @set    .tpl .js .xml .txt .css
-     * @param  string                   The file to find revisions of (blank: we're not looking for revisions)
-     * @param  boolean                  Just for this theme
+     * @param  string                   $find_for The file to find revisions of (blank: we're not looking for revisions)
+     * @param  boolean                  $this_theme_only Just for this theme
      * @return array                    A map of the files (for revisions, file=>timestamp, generally, file=>path)
      */
     private function get_template_files_array($theme, $directory, $suffix, $find_for = '', $this_theme_only = false)
@@ -1319,10 +1319,10 @@ class Module_admin_themes
     /**
      * Get all the template files / revisions for a template file, in a certain directory.
      *
-     * @param  PATH                     The path to search relative to
-     * @param  PATH                     The subdirectory to search
-     * @param  string                   The file to find revisions of
-     * @param  string                   File type suffix of template file (e.g. .tpl)
+     * @param  PATH                     $base_dir The path to search relative to
+     * @param  PATH                     $subdir The subdirectory to search
+     * @param  string                   $suffix The file to find revisions of
+     * @param  string                   $find_for File type suffix of template file (e.g. .tpl)
      * @set    .tpl .js .xml .txt .css
      * @return array                    A map of the revisions (file=>timestamp)
      */

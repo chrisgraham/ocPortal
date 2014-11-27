@@ -99,8 +99,8 @@ class Hook_occle_fs_forums extends Resource_fs_base
     /**
      * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
      *
-     * @param  ?ID_TEXT                 Folder resource type (null: root)
-     * @param  ID_TEXT                  Resource type (may be file or folder)
+     * @param  ?ID_TEXT                 $above Folder resource type (null: root)
+     * @param  ID_TEXT                  $under Resource type (may be file or folder)
      * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (null: cannot be under)
      */
     protected function _has_parent_child_relationship($above, $under)
@@ -154,7 +154,7 @@ class Hook_occle_fs_forums extends Resource_fs_base
     /**
      * Standard occle_fs introspection function.
      *
-     * @param  ID_TEXT                  Parent category (blank: root / not applicable)
+     * @param  ID_TEXT                  $category Parent category (blank: root / not applicable)
      * @return array                    The properties available for the resource type
      */
     protected function _enumerate_folder_properties($category)
@@ -193,8 +193,8 @@ class Hook_occle_fs_forums extends Resource_fs_base
     /**
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
-     * @param  array                    Resource row (not full, but does contain the ID)
-     * @param  ID_TEXT                  Parent category (blank: root / not applicable)
+     * @param  array                    $row Resource row (not full, but does contain the ID)
+     * @param  ID_TEXT                  $category Parent category (blank: root / not applicable)
      * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_folder_edit_date($row, $category)
@@ -252,8 +252,8 @@ class Hook_occle_fs_forums extends Resource_fs_base
     /**
      * Convert properties to variables for adding/editing forums.
      *
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
     protected function __folder_read_in_properties_forum($path, $properties)
@@ -288,8 +288,8 @@ class Hook_occle_fs_forums extends Resource_fs_base
     /**
      * Convert properties to variables for adding/editing topics.
      *
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
     protected function __folder_read_in_properties_topic($path, $properties)

@@ -137,7 +137,7 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
      *
-     * @param  string                   The name of the new custom field
+     * @param  string                   $name The name of the new custom field
      */
     protected function _install_delete_custom_field($name)
     {
@@ -550,8 +550,8 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get a URL to the specified member's profile.
      *
-     * @param  MEMBER                   The member ID
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
+     * @param  MEMBER                   $id The member ID
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
      * @return mixed                    The URL to the member profile
      */
     protected function _member_profile_url($id, $tempcode_okay = false)
@@ -607,7 +607,7 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get a URL to the members-online page.
      *
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the members-online page
      */
     protected function _users_online_url($tempcode_okay = false)
@@ -626,8 +626,8 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get a URL to send a private/personal message to the given member.
      *
-     * @param  MEMBER                   The member ID
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @param  MEMBER                   $id The member ID
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the private/personal message page
      */
     protected function _member_pm_url($id, $tempcode_okay = false)
@@ -646,8 +646,8 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get a URL to the specified forum.
      *
-     * @param  integer                  The forum ID
-     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @param  integer                  $id The forum ID
+     * @param  boolean                  $tempcode_okay Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the specified forum
      */
     protected function _forum_url($id, $tempcode_okay = false)
@@ -909,7 +909,7 @@ class Forum_driver_ocf extends Forum_driver_base
      * Get the name relating to the specified member ID.
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
@@ -967,7 +967,7 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get the e-mail address for the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return SHORT_TEXT               The e-mail address
      */
     protected function _get_member_email_address($member)
@@ -1160,7 +1160,7 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Find if the specified member ID is marked as staff or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is staff
      */
     protected function _is_staff($member)
@@ -1175,7 +1175,7 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Find if the specified member ID is marked as a super admin or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is a super admin
      */
     protected function _is_super_admin($member)
@@ -1335,12 +1335,12 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get the forum usergroup list. This is useful to enumerate usergroups, or to find usergroup names.
      *
-     * @param  boolean                  Whether to obscure the name of hidden usergroups
-     * @param  boolean                  Whether to only grab permissive usergroups
-     * @param  boolean                  Do not limit things even if there are huge numbers of usergroups
-     * @param  ?array                   Usergroups that must be included in the results (null: no extras must be)
-     * @param  ?MEMBER                  Always return usergroups of this member (null: current member)
-     * @param  boolean                  Whether to completely skip hidden usergroups
+     * @param  boolean                  $hide_hidden Whether to obscure the name of hidden usergroups
+     * @param  boolean                  $only_permissive Whether to only grab permissive usergroups
+     * @param  boolean                  $force_show_all Do not limit things even if there are huge numbers of usergroups
+     * @param  ?array                   $force_find Usergroups that must be included in the results (null: no extras must be)
+     * @param  ?MEMBER                  $for_member Always return usergroups of this member (null: current member)
+     * @param  boolean                  $skip_hidden Whether to completely skip hidden usergroups
      * @return array                    The usergroup list, a map of usergroup ID to usergroup name
      */
     protected function _get_usergroup_list($hide_hidden = false, $only_permissive = false, $force_show_all = false, $force_find = null, $for_member = null, $skip_hidden = false)
@@ -1426,9 +1426,9 @@ class Forum_driver_ocf extends Forum_driver_base
     /**
      * Get the forum usergroup relating to the specified member ID.
      *
-     * @param  MEMBER                   The member ID
-     * @param  boolean                  Whether to skip looking at secret usergroups.
-     * @param  boolean                  Whether to take probation into account
+     * @param  MEMBER                   $member The member ID
+     * @param  boolean                  $skip_secret Whether to skip looking at secret usergroups.
+     * @param  boolean                  $handle_probation Whether to take probation into account
      * @return array                    The array of forum usergroups
      */
     protected function _get_members_groups($member, $skip_secret = false, $handle_probation = true)

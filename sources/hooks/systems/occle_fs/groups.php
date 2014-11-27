@@ -120,7 +120,7 @@ class Hook_occle_fs_groups extends Resource_fs_base
     /**
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
-     * @param  array                    Resource row (not full, but does contain the ID)
+     * @param  array                    $row Resource row (not full, but does contain the ID)
      * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_folder_edit_date($row)
@@ -132,8 +132,8 @@ class Hook_occle_fs_groups extends Resource_fs_base
     /**
      * Convert properties to variables for adding/editing members.
      *
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
     protected function __folder_read_in_properties($path, $properties)
@@ -367,7 +367,7 @@ class Hook_occle_fs_groups extends Resource_fs_base
     /**
      * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
      *
-     * @param  array                    Resource row (not full, but does contain the ID)
+     * @param  array                    $row Resource row (not full, but does contain the ID)
      * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
     protected function _get_file_edit_date($row)
@@ -381,8 +381,8 @@ class Hook_occle_fs_groups extends Resource_fs_base
     /**
      * Convert properties to variables for adding/editing members.
      *
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
     protected function __file_read_in_properties($path, $properties)

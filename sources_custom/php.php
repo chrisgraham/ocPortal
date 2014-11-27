@@ -160,6 +160,28 @@ function get_php_file_api($filename, $include_code = true)
 
                     break;
                 }
+                if (substr($line2, 0, $depth + 17) == $_depth . 'private function ') {
+                    // Parse function line
+                    $_line = substr($line2, $depth + 17);
+                    list($function_name, $parameters) = _read_php_function_line($_line);
+
+                    if ($current_class == '__global') {
+                        attach_message($function_name . ' seems to be a method outside of a class', 'warn');
+                    }
+
+                    break;
+                }
+                if (substr($line2, 0, $depth + 19) == $_depth . 'protected function ') {
+                    // Parse function line
+                    $_line = substr($line2, $depth + 19);
+                    list($function_name, $parameters) = _read_php_function_line($_line);
+
+                    if ($current_class == '__global') {
+                        attach_message($function_name . ' seems to be a method outside of a class', 'warn');
+                    }
+
+                    break;
+                }
 
                 // Irrelevant line, don't let it confuse us
                 if ((substr(trim($line2), 0, 3) == '/**') || ((strpos($line2, '*/') !== false) && (array_key_exists($j + 1, $lines)) && (strpos($lines[$j + 1], 'function ') === false) && (strpos($lines[$j + 1], 'class ') === false))) { // Probably just skipped past a top header

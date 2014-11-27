@@ -113,8 +113,8 @@ class OcCLE_fs
     /**
      * Return the contents of the given directory in $this->occle_fs (i.e. ls without the fancy bits).
      *
-     * @param  ?array                   Directory (null: current directory is used)
-     * @param  boolean                  Whether to use full paths
+     * @param  ?array                   $dir Directory (null: current directory is used)
+     * @param  boolean                  $full_paths Whether to use full paths
      * @return ~array                   Directory contents (false: failure)
      */
     protected function _get_current_dir_contents($dir = null, $full_paths = false)
@@ -197,8 +197,8 @@ class OcCLE_fs
     /**
      * Merge an absolute array-form path with a non-absolute array-form path, with support for "."/".." resolution.
      *
-     * @param  array                    Absolute path
-     * @param  array                    Non-absolute path
+     * @param  array                    $pwd1 Absolute path
+     * @param  array                    $pwd2 Non-absolute path
      * @return array                    Merged path
      */
     protected function _merge_pwds($pwd1, $pwd2)
@@ -218,7 +218,7 @@ class OcCLE_fs
     /**
      * Convert an array-form path to a string.
      *
-     * @param  ?array                   Path (null: use $this->pwd)
+     * @param  ?array                   $pwd Path (null: use $this->pwd)
      * @return string                   String-form path
      */
     protected function _pwd_to_string($pwd = null)
@@ -239,7 +239,7 @@ class OcCLE_fs
     /**
      * Return filename from a path.
      *
-     * @param  string                   Path
+     * @param  string                   $filename Path
      * @return string                   Filename
      */
     protected function _get_filename($filename)
@@ -307,10 +307,10 @@ class OcCLE_fs
     /**
      * Get details of the current meta directory.
      *
-     * @param  array                    Meta directory result: returned by reference
-     * @param  string                   Meta root node result: returned by reference
-     * @param  string                   Meta root node type result: returned by reference
-     * @param  ?array                   Directory (null: current directory is used)
+     * @param  array                    $meta_dir Meta directory result: returned by reference
+     * @param  string                   $meta_root_node Meta root node result: returned by reference
+     * @param  string                   $meta_root_node_type Meta root node type result: returned by reference
+     * @param  ?array                   $target_dir Directory (null: current directory is used)
      * @return ~array                   Current directory contents (false: error)
      */
     protected function _discern_meta_dir(&$meta_dir, &$meta_root_node, &$meta_root_node_type, $target_dir = null)
@@ -349,7 +349,7 @@ class OcCLE_fs
     /**
      * Fill out a hardcoded meta-dir to use our more detailed internal format.
      *
-     * @param  array                    Simple list of directories under here
+     * @param  array                    $_inspected_dir Simple list of directories under here
      * @return array                    Full detailed directory contents
      */
     protected function _convert_meta_dir_to_detailed_dir($_inspected_dir)

@@ -526,7 +526,7 @@ class Hook_wowbb
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string     The substitution string
      */
     protected function _fix_links_callback_topic($m)
@@ -537,7 +537,7 @@ class Hook_wowbb
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string     The substitution string
      */
     protected function _fix_links_callback_forum($m)
@@ -548,7 +548,7 @@ class Hook_wowbb
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string     The substitution string
      */
     protected function _fix_links_callback_member($m)

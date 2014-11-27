@@ -1025,8 +1025,8 @@ class Virtual_shell
     /**
      * Combine two streams regardless of their format.
      *
-     * @param  array                    Stream 1
-     * @param  array                    Stream 2
+     * @param  array                    $stream1 Stream 1
+     * @param  array                    $stream2 Stream 2
      * @return array                    Combined streams
      */
     protected function _combine_streams($stream1, $stream2)
@@ -1075,7 +1075,7 @@ class Virtual_shell
     /**
      * Convert an array to tempcode for display.
      *
-     * @param  array                    Array to display
+     * @param  array                    $array Array to display
      * @return tempcode                 Tempcode for array
      */
     protected function _array_to_html($array)
@@ -1095,8 +1095,8 @@ class Virtual_shell
     /**
      * Convert an array to text for display.
      *
-     * @param  array                    Array to display
-     * @param  integer                  Global indentation
+     * @param  array                    $array Array to display
+     * @param  integer                  $indentation Global indentation
      * @return string                   Text representation of array
      */
     protected function _array_to_text($array, $indentation = 0)
@@ -1117,7 +1117,7 @@ class Virtual_shell
     /**
      * Return a specified number of tabs.
      *
-     * @param  integer                  Number of tabs to return
+     * @param  integer                  $indentation Number of tabs to return
      * @return string                   Tabs
      */
     protected function _do_indentation($indentation)
@@ -1256,8 +1256,8 @@ class Virtual_shell
     /**
      * Find a script file.
      *
-     * @param  string                   Script name
-     * @param  ?string                  Directory (null: OcCLE module data dir)
+     * @param  string                   $script_name Script name
+     * @param  ?string                  $dir Directory (null: OcCLE module data dir)
      * @return ~string                  Path or failure (false: failure)
      */
     protected function _find_script_file($script_name, $dir = null)

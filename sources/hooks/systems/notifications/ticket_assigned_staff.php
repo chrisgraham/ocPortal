@@ -171,9 +171,9 @@ class Hook_notification_ticket_assigned_staff extends Hook_Notification
     /**
      * Find whether someone has permission to view staff notifications and possibly if they actually are.
      *
-     * @param  ?ID_TEXT                 Notification code (null: don't check if they are)
-     * @param  ?SHORT_TEXT              The category within the notification code (null: none)
-     * @param  MEMBER                   Member to check against
+     * @param  ?ID_TEXT                 $only_if_enabled_on__notification_code Notification code (null: don't check if they are)
+     * @param  ?SHORT_TEXT              $only_if_enabled_on__category The category within the notification code (null: none)
+     * @param  MEMBER                   $member_id Member to check against
      * @return boolean                  Whether they do
      */
     protected function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)

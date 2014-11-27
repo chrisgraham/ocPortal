@@ -555,7 +555,7 @@ class Hook_mybb
     /**
      * Convert an IP address from phpBB hexadecimal string format.
      *
-     * @param  string                   The phpBB IP address
+     * @param  string                   $ip The phpBB IP address
      * @return IP                       The normal IP address
      */
     protected function _un_phpbb_ip($ip)
@@ -751,7 +751,7 @@ class Hook_mybb
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string        The substitution string
      */
     protected function _fix_links_callback_topic($m)
@@ -762,7 +762,7 @@ class Hook_mybb
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return string                   The substitution string
      */
     protected function _fix_links_callback_post($m)
@@ -773,7 +773,7 @@ class Hook_mybb
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string        The substitution string
      */
     protected function _fix_links_callback_forum($m)
@@ -784,7 +784,7 @@ class Hook_mybb
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string        The substitution string
      */
     protected function _fix_links_callback_member($m)

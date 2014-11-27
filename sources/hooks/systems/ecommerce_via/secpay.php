@@ -99,8 +99,8 @@ class Hook_secpay
     /**
      * Find details for a subscription in secpay format.
      *
-     * @param  integer                  The subscription length in the units.
-     * @param  ID_TEXT                  The length units.
+     * @param  integer                  $length The subscription length in the units.
+     * @param  ID_TEXT                  $length_units The length units.
      * @set    d w m y
      * @return array                    A tuple: the period in secpay units, the date of the first repeat.
      */

@@ -64,7 +64,7 @@ class Forum_driver_ipb1 extends forum_driver_ipb_shared
      * Get the name relating to the specified member ID.
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
@@ -510,7 +510,7 @@ class Forum_driver_ipb1 extends forum_driver_ipb_shared
     /**
      * Get an IPB statistic.
      *
-     * @param  string                   The name of the statistic
+     * @param  string                   $stat The name of the statistic
      * @return mixed                    The value of the statistic
      */
     protected function _get_stat($stat)
@@ -559,7 +559,7 @@ class Forum_driver_ipb1 extends forum_driver_ipb_shared
     /**
      * Get the forum usergroup relating to the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return array                    The array of forum usergroups
      */
     protected function _get_members_groups($member)

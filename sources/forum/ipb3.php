@@ -55,7 +55,7 @@ class Forum_driver_ipb3 extends forum_driver_ipb_shared
      * Get the name relating to the specified member ID.
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
@@ -775,7 +775,7 @@ class Forum_driver_ipb3 extends forum_driver_ipb_shared
     /**
      * Get a URL to send a private/personal message to the given member.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $id The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
     protected function _member_pm_url($id)
@@ -817,7 +817,7 @@ class Forum_driver_ipb3 extends forum_driver_ipb_shared
     /**
      * Get the forum usergroup relating to the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return array                    The array of forum usergroups
      */
     protected function _get_members_groups($member)
@@ -854,7 +854,7 @@ class Forum_driver_ipb3 extends forum_driver_ipb_shared
     /**
      * Find if the specified member ID is marked as staff or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is staff
      */
     protected function _is_staff($member)
@@ -869,7 +869,7 @@ class Forum_driver_ipb3 extends forum_driver_ipb_shared
     /**
      * Find if the specified member ID is marked as a super admin or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is a super admin
      */
     protected function _is_super_admin($member)
@@ -1012,8 +1012,8 @@ class Forum_driver_ipb3 extends forum_driver_ipb_shared
     /**
      * Do converge authentication.
      *
-     * @param  MEMBER                   The member ID
-     * @param  string                   The password
+     * @param  MEMBER                   $id The member ID
+     * @param  string                   $password The password
      * @return boolean                  Whether authentication succeeded
      */
     protected function _auth_hashed($id, $password)

@@ -306,11 +306,11 @@ class Hook_phpbb3
     /**
      * Helper function to import a global permission to a usergroup, from a specific phpBB option row.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  integer                  Option row ID
-     * @param  GROUP                    Group it applies to
-     * @param  BINARY                   Setting
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  integer                  $option_id Option row ID
+     * @param  GROUP                    $group_id Group it applies to
+     * @param  BINARY                   $auth_setting Setting
      */
     protected function _import_permg($db, $table_prefix, $option_id, $group_id, $auth_setting)
     {
@@ -552,7 +552,7 @@ class Hook_phpbb3
     /**
      * Convert an IP address from phpBB hexadecimal string format.
      *
-     * @param  string                   The phpBB IP address
+     * @param  string                   $ip The phpBB IP address
      * @return IP                       The normal IP address
      */
     protected function _un_phpbb_ip($ip)
@@ -645,8 +645,8 @@ class Hook_phpbb3
     /**
      * Helper function to locate parent forum and category of a forum. Has to be clever to locate both, by tree traversal.
      *
-     * @param  array                    Rows of forums/categories
-     * @param  integer                  Key for the 'parent' (which may be for cat or may be for real parent)
+     * @param  array                    $rows Rows of forums/categories
+     * @param  integer                  $parent_forum Key for the 'parent' (which may be for cat or may be for real parent)
      * @return array                    A pair: the category ID, the forum ID
      */
     protected function _find_parent_forum_and_category($rows, $parent_forum)
@@ -684,12 +684,12 @@ class Hook_phpbb3
     /**
      * Helper function to import a permission to a usergroup, from a specific phpBB option row.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  integer                  Option row ID
-     * @param  GROUP                    Group it applies to
-     * @param  AUTO_LINK                Forum it applies to
-     * @param  BINARY                   Setting
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  integer                  $option_id Option row ID
+     * @param  GROUP                    $group_id Group it applies to
+     * @param  AUTO_LINK                $forum_id Forum it applies to
+     * @param  BINARY                   $auth_setting Setting
      */
     protected function _import_perm($db, $table_prefix, $option_id, $group_id, $forum_id, $auth_setting)
     {
@@ -715,7 +715,7 @@ class Hook_phpbb3
     /**
      * Helper function to translate phpBB permissions to ocPortal permissions.
      *
-     * @param  string                   Old perm
+     * @param  string                   $perm Old perm
      * @return ?string                  New perm (null: could not convert)
      */
     protected function _translate_permission($perm)
@@ -874,7 +874,7 @@ class Hook_phpbb3
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string        The substitution string
      */
     protected function _fix_links_callback_topic($m)
@@ -885,7 +885,7 @@ class Hook_phpbb3
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string        The substitution string
      */
     protected function _fix_links_callback_forum($m)
@@ -896,7 +896,7 @@ class Hook_phpbb3
     /**
      * Substitution callback for 'fix_links'.
      *
-     * @param  array                    The match
+     * @param  array                    $m The match
      * @return  string        The substitution string
      */
     protected function _fix_links_callback_member($m)

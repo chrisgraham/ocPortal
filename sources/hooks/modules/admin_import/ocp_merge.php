@@ -1831,8 +1831,8 @@ class Hook_ocp_merge
     /**
      * Import ticket extra access.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     protected function _import_ticket_extra_access($db, $table_prefix)
     {
@@ -1855,8 +1855,8 @@ class Hook_ocp_merge
     /**
      * Imports ticket known emailers.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     protected function _import_ticket_known_emailers($db, $table_prefix)
     {
@@ -2842,8 +2842,8 @@ class Hook_ocp_merge
     /**
      * Import cpf premissions.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     protected function _import_f_member_cpf_perms($db, $table_prefix)
     {
@@ -3390,10 +3390,10 @@ class Hook_ocp_merge
     /**
      * Import privacy for a particular record.
      *
-     * @param  object                   The DB connection to import from
-     * @param  ID_TEXT                  The content type
-     * @param  ID_TEXT                  The old ID
-     * @param  ID_TEXT                  The new ID
+     * @param  object                   $db The DB connection to import from
+     * @param  ID_TEXT                  $content_type The content type
+     * @param  ID_TEXT                  $old_id The old ID
+     * @param  ID_TEXT                  $id_new The new ID
      */
     protected function _import_content_privacy($db, $content_type, $old_id, $id_new)
     {
@@ -3505,8 +3505,8 @@ class Hook_ocp_merge
     /**
      * Imports custom products.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     protected function _import_pstore_customs($db, $table_prefix)
     {
@@ -3527,8 +3527,8 @@ class Hook_ocp_merge
     /**
      * Imports product store permissions.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
      */
     protected function _import_pstore_permissions($db, $table_prefix)
     {
@@ -3614,10 +3614,10 @@ class Hook_ocp_merge
     /**
      * Import reviews.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  ID_TEXT                  The rating type.
-     * @param  ?ID_TEXT                 The import type to get remapping from (null: no remapping).
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  ID_TEXT                  $rating_type The rating type.
+     * @param  ?ID_TEXT                 $import_type The import type to get remapping from (null: no remapping).
      */
     protected function _import_review_supplement($db, $table_prefix, $rating_type, $import_type)
     {
@@ -3650,10 +3650,10 @@ class Hook_ocp_merge
     /**
      * Import content review schedules.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  ID_TEXT                  The content type.
-     * @param  ?ID_TEXT                 The import type to get remapping from (null: no remapping).
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  ID_TEXT                  $content_type The content type.
+     * @param  ?ID_TEXT                 $import_type The import type to get remapping from (null: no remapping).
      */
     protected function _import_content_reviews($db, $table_prefix, $content_type, $import_type)
     {
@@ -3677,10 +3677,10 @@ class Hook_ocp_merge
     /**
      * Import custom fields for a particular record.
      *
-     * @param  object                   The DB connection to import from
-     * @param  string                   The table prefix the target prefix is using
-     * @param  ID_TEXT                  The content type.
-     * @param  ?ID_TEXT                 The import type to get remapping from (null: no remapping).
+     * @param  object                   $db The DB connection to import from
+     * @param  string                   $table_prefix The table prefix the target prefix is using
+     * @param  ID_TEXT                  $content_type The content type.
+     * @param  ?ID_TEXT                 $import_type The import type to get remapping from (null: no remapping).
      */
     protected function _import_catalogue_entry_linkage($db, $table_prefix, $content_type, $import_type)
     {
@@ -3709,7 +3709,7 @@ class Hook_ocp_merge
     /**
      * Re-map any Comcode ownership fields.
      *
-     * @param  array                    Rows with potential fields to fix
+     * @param  array                    $rows Rows with potential fields to fix
      */
     protected function _fix_comcode_ownership(&$rows)
     {

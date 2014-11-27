@@ -311,8 +311,8 @@ abstract class Hook_sitemap_base
     /**
      * Take the specified parameters, and try to find the corresponding page.
      *
-     * @param  ID_TEXT                  The codename of the page to load
-     * @param  ID_TEXT                  The zone the page is being loaded in
+     * @param  ID_TEXT                  $page The codename of the page to load
+     * @param  ID_TEXT                  $zone The zone the page is being loaded in
      * @return ~array                   A list of details (false: page not found)
      */
     protected function _request_page_details($page, $zone)
@@ -334,6 +334,8 @@ abstract class Hook_sitemap_base
     /**
      * Find whether a page should be omitted from the sitemap.
      *
+     * @param  ID_TEXT                  $zone The zone the page is being loaded in
+     * @param  ID_TEXT                  $page The codename of the page to load
      * @return boolean                  Whether the page should be omitted.
      */
     protected function _is_page_omitted_from_sitemap($zone, $page)
@@ -386,8 +388,8 @@ abstract class Hook_sitemap_base
     /**
      * Remap '_SEARCH' zones if we can derive the zone from the page-link / or fix _SEARCH in the page-link if there's a known zone.
      *
-     * @param  ID_TEXT                  The zone in the recurse tree (replaced by reference).
-     * @param  ID_TEXT                  The page-link (replaced by reference).
+     * @param  ID_TEXT                  $zone The zone in the recurse tree (replaced by reference).
+     * @param  ID_TEXT                  $page_link The page-link (replaced by reference).
      * @return ID_TEXT                  The page name (only returned because it could also be useful, saves some code).
      */
     protected function _make_zone_concrete(&$zone, &$page_link)
@@ -430,7 +432,7 @@ abstract class Hook_sitemap_base
     /**
      * Get a particular Sitemap object. Used for easily tying in a different kind of child node.
      *
-     * @param  ID_TEXT                  The hook, i.e. the Sitemap object type. Usually the same as a content type.
+     * @param  ID_TEXT                  $hook The hook, i.e. the Sitemap object type. Usually the same as a content type.
      * @return object                   The Sitemap object.
      */
     protected function _get_sitemap_object($hook)
@@ -488,7 +490,7 @@ abstract class Hook_sitemap_base
     /**
      * Check the permissions of the node structure, returning false if they fail for the current user.
      *
-     * @param  array                    Node structure
+     * @param  array                    $struct Node structure
      * @return boolean                  Whether the permissions pass
      */
     protected function _check_node_permissions($struct)
@@ -589,11 +591,11 @@ abstract class Hook_sitemap_base
     /**
      * Find details for this node.
      *
-     * @param  ?array                   Faked database row (null: derive).
-     * @param  ID_TEXT                  The zone.
-     * @param  ID_TEXT                  The page.
-     * @param  ID_TEXT                  The type.
-     * @param  ?ID_TEXT                 The ID (null: unknown).
+     * @param  ?array                   $row Faked database row (null: derive).
+     * @param  ID_TEXT                  $zone The zone.
+     * @param  ID_TEXT                  $page The page.
+     * @param  ID_TEXT                  $type The type.
+     * @param  ?ID_TEXT                 $id The ID (null: unknown).
      * @return ?array                   Faked database row (null: derive).
      */
     protected function _load_row_from_page_groupings($row, $zone, $page, $type = 'browse', $id = null)
@@ -661,9 +663,9 @@ abstract class Hook_sitemap_base
     /**
      * Extend the node structure with added details from our row data (if we have it).
      *
-     * @param  ?array                   Structure.
-     * @param  ?array                   Faked database row (null: we don't have row data).
-     * @param  integer                  A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+     * @param  array                    $struct Structure.
+     * @param  ?array                   $row Faked database row (null: we don't have row data).
+     * @param  integer                  $meta_gather A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
      */
     protected function _ameliorate_with_row(&$struct, $row, $meta_gather)
     {
@@ -749,7 +751,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     /**
      * Get a content ID via a page-link.
      *
-     * @param  ID_TEXT                  The page-link.
+     * @param  ID_TEXT                  $page_link The page-link.
      * @return ID_TEXT                  The ID.
      */
     protected function _get_page_link_id($page_link)
@@ -777,7 +779,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     /**
      * Get the database row for some content.
      *
-     * @param  ID_TEXT                  The content ID.
+     * @param  ID_TEXT                  $content_id The content ID.
      * @return array                    The content row.
      */
     protected function _get_row($content_id)
@@ -789,19 +791,19 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     /**
      * Pre-fill part of the node structure, from what we know from the CMA hook.
      *
-     * @param  ID_TEXT                  The page-link we are finding.
-     * @param  ?string                  Callback function to send discovered page-links to (null: return).
-     * @param  ?array                   List of node types we will return/recurse-through (null: no limit)
-     * @param  ?integer                 Maximum number of children before we cut off all children (null: no limit).
-     * @param  ?integer                 How deep to go from the Sitemap root (null: no limit).
-     * @param  integer                  Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
-     * @param  boolean                  Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
-     * @param  ID_TEXT                  The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
-     * @param  boolean                  Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
-     * @param  boolean                  Whether to consider secondary categorisations for content that primarily exists elsewhere.
-     * @param  boolean                  Whether to filter out non-validated content.
-     * @param  integer                  A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-     * @param  ?array                   Database row (null: lookup).
+     * @param  ID_TEXT                  $page_link The page-link we are finding.
+     * @param  ?string                  $callback Callback function to send discovered page-links to (null: return).
+     * @param  ?array                   $valid_node_types List of node types we will return/recurse-through (null: no limit)
+     * @param  ?integer                 $child_cutoff Maximum number of children before we cut off all children (null: no limit).
+     * @param  ?integer                 $max_recurse_depth How deep to go from the Sitemap root (null: no limit).
+     * @param  integer                  $recurse_level Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
+     * @param  boolean                  $require_permission_support Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
+     * @param  ID_TEXT                  $zone The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+     * @param  boolean                  $use_page_groupings Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
+     * @param  boolean                  $consider_secondary_categories Whether to consider secondary categorisations for content that primarily exists elsewhere.
+     * @param  boolean                  $consider_validation Whether to filter out non-validated content.
+     * @param  integer                  $meta_gather A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+     * @param  ?array                   $row Database row (null: lookup).
      * @return ?array                   A tuple: content ID, row, partial node structure (null: filtered).
      */
     protected function _create_partial_node_structure($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row)
@@ -988,23 +990,23 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
     /**
      * Get a list of child nodes, from what we know from the CMA hook.
      *
-     * @param  ID_TEXT                  The content ID.
-     * @param  ID_TEXT                  The page-link we are finding.
-     * @param  ?string                  Callback function to send discovered page-links to (null: return).
-     * @param  ?array                   List of node types we will return/recurse-through (null: no limit)
-     * @param  ?integer                 Maximum number of children before we cut off all children (null: no limit).
-     * @param  ?integer                 How deep to go from the Sitemap root (null: no limit).
-     * @param  integer                  Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
-     * @param  boolean                  Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
-     * @param  ID_TEXT                  The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
-     * @param  boolean                  Whether to consider secondary categorisations for content that primarily exists elsewhere.
-     * @param  boolean                  Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
-     * @param  boolean                  Whether to filter out non-validated content.
-     * @param  integer                  A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-     * @param  ?array                   Database row (null: lookup).
-     * @param  string                   Extra SQL piece for considering which entries to load.
-     * @param  ?string                  Order by for entries (null: alphabetical title).
-     * @param  ?string                  Order by for categories (null: alphabetical title).
+     * @param  ID_TEXT                  $content_id The content ID.
+     * @param  ID_TEXT                  $page_link The page-link we are finding.
+     * @param  ?string                  $callback Callback function to send discovered page-links to (null: return).
+     * @param  ?array                   $valid_node_types List of node types we will return/recurse-through (null: no limit)
+     * @param  ?integer                 $child_cutoff Maximum number of children before we cut off all children (null: no limit).
+     * @param  ?integer                 $max_recurse_depth How deep to go from the Sitemap root (null: no limit).
+     * @param  integer                  $recurse_level Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
+     * @param  boolean                  $require_permission_support Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
+     * @param  ID_TEXT                  $zone The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+     * @param  boolean                  $use_page_groupings Whether to consider secondary categorisations for content that primarily exists elsewhere.
+     * @param  boolean                  $consider_secondary_categories Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
+     * @param  boolean                  $consider_validation Whether to filter out non-validated content.
+     * @param  integer                  $meta_gather A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+     * @param  ?array                   $row Database row (null: lookup).
+     * @param  string                   $extra_where_entries Extra SQL piece for considering which entries to load.
+     * @param  ?string                  $explicit_order_by_entries Order by for entries (null: alphabetical title).
+     * @param  ?string                  $explicit_order_by_subcategories Order by for categories (null: alphabetical title).
      * @return ?array                   Child nodes (null: not retrieved yet).
      */
     protected function _get_children_nodes($content_id, $page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row, $extra_where_entries = '', $explicit_order_by_entries = null, $explicit_order_by_subcategories = null)

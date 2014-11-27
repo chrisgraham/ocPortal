@@ -55,7 +55,7 @@ class Forum_driver_ipb2 extends forum_driver_ipb_shared
      * Get the name relating to the specified member ID.
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
@@ -665,7 +665,7 @@ class Forum_driver_ipb2 extends forum_driver_ipb_shared
     /**
      * Get the forum usergroup relating to the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return array                    The array of forum usergroups
      */
     protected function _get_members_groups($member)
@@ -799,8 +799,8 @@ class Forum_driver_ipb2 extends forum_driver_ipb_shared
     /**
      * Do converge authentication.
      *
-     * @param  MEMBER                   The member ID
-     * @param  string                   The password
+     * @param  MEMBER                   $id The member ID
+     * @param  string                   $password The password
      * @return boolean                  Whether authentication succeeded
      */
     protected function _auth_hashed($id, $password)

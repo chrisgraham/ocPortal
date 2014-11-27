@@ -562,8 +562,8 @@ abstract class Standard_crud_module
     /**
      * Work out a screen type code.
      *
-     * @param  string                   General-purpose screen type code (e.g. 'add')
-     * @param  string                   Type code for current flow (e.g. '' or 'category')
+     * @param  string                   $type_code General-purpose screen type code (e.g. 'add')
+     * @param  string                   $stub Type code for current flow (e.g. '' or 'category')
      * @return string                   Complete screen type code
      */
     private function get_screen_type_for($type_code, $stub)

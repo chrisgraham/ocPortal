@@ -538,7 +538,7 @@ class Resource_fs_base
     /**
      * Get the file resource info for this OcCLE-fs resource hook.
      *
-     * @param  ID_TEXT                  The resource type
+     * @param  ID_TEXT                  $resource_type The resource type
      * @return object                   The object
      */
     protected function _get_cma_info($resource_type)
@@ -613,8 +613,8 @@ class Resource_fs_base
     /**
      * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
      *
-     * @param  ?ID_TEXT                 Folder resource type (null: root)
-     * @param  ID_TEXT                  Resource type (may be file or folder)
+     * @param  ?ID_TEXT                 $above Folder resource type (null: root)
+     * @param  ID_TEXT                  $under Resource type (may be file or folder)
      * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (null: cannot be under)
      */
     protected function _has_parent_child_relationship($above, $under)
@@ -754,9 +754,9 @@ class Resource_fs_base
     /**
      * Reinterpret the input of a file, into a way we can understand it to add/edit. Hooks may override this with special import code.
      *
-     * @param  LONG_TEXT                Filename OR Resource label
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties
+     * @param  LONG_TEXT                $filename Filename OR Resource label
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties
      * @return array                    A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      */
     protected function _file_magic_filter($filename, $path, $properties)
@@ -771,9 +771,9 @@ class Resource_fs_base
     /**
      * Reinterpret the input of a folder, into a way we can understand it to add/edit. Hooks may override this with special import code.
      *
-     * @param  LONG_TEXT                Filename OR Resource label
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties
+     * @param  LONG_TEXT                $filename Filename OR Resource label
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties
      * @return array                    A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      */
     protected function _folder_magic_filter($filename, $path, $properties)
@@ -855,8 +855,8 @@ class Resource_fs_base
     /**
      * Find a default property, defaulting to blank.
      *
-     * @param  array                    The properties
-     * @param  ID_TEXT                  The property
+     * @param  array                    $properties The properties
+     * @param  ID_TEXT                  $property The property
      * @return ?string                  The value (null: NULL value)
      */
     protected function _default_property_str($properties, $property)
@@ -871,8 +871,8 @@ class Resource_fs_base
     /**
      * Find a default property, defaulting to NULL.
      *
-     * @param  array                    The properties
-     * @param  ID_TEXT                  The property
+     * @param  array                    $properties The properties
+     * @param  ID_TEXT                  $property The property
      * @return ?string                  The value (null: NULL value)
      */
     protected function _default_property_str_null($properties, $property)
@@ -887,8 +887,8 @@ class Resource_fs_base
     /**
      * Find an integer default property, defaulting to NULL.
      *
-     * @param  array                    The properties
-     * @param  ID_TEXT                  The property
+     * @param  array                    $properties The properties
+     * @param  ID_TEXT                  $property The property
      * @return ?integer                 The value (null: NULL value)
      */
     protected function _default_property_int($properties, $property)
@@ -908,7 +908,7 @@ class Resource_fs_base
     /**
      * Convert a category to an integer, defaulting to NULL if it is blank.
      *
-     * @param  ?ID_TEXT                 The category value (blank: root) (null: root)
+     * @param  ?ID_TEXT                 $category The category value (blank: root) (null: root)
      * @return ?integer                 The category (null: root)
      */
     protected function _integer_category($category)
@@ -922,8 +922,8 @@ class Resource_fs_base
     /**
      * Find a default property, defaulting to blank.
      *
-     * @param  array                    The properties
-     * @param  ID_TEXT                  The property
+     * @param  array                    $properties The properties
+     * @param  ID_TEXT                  $property The property
      * @return ?integer                 The value (null: NULL value)
      */
     protected function _default_property_int_null($properties, $property)
@@ -943,11 +943,11 @@ class Resource_fs_base
     /**
      * Find a default property, defaulting to the average of what is there already, or the given default if really necessary.
      *
-     * @param  array                    The properties
-     * @param  ID_TEXT                  The property
-     * @param  ID_TEXT                  The table to average within
-     * @param  integer                  The last-resort default
-     * @param  ?ID_TEXT                 The database property (null: same as $property)
+     * @param  array                    $properties The properties
+     * @param  ID_TEXT                  $property The property
+     * @param  ID_TEXT                  $table The table to average within
+     * @param  integer                  $default The last-resort default
+     * @param  ?ID_TEXT                 $db_property The database property (null: same as $property)
      * @return integer                  The value
      */
     protected function _default_property_int_modeavg($properties, $property, $table, $default, $db_property = null)
@@ -983,7 +983,7 @@ class Resource_fs_base
     /**
      * Turn a label into a name.
      *
-     * @param  LONG_TEXT                The label
+     * @param  LONG_TEXT                $label The label
      * @return ID_TEXT                  The name
      */
     protected function _create_name_from_label($label)
@@ -1002,10 +1002,10 @@ class Resource_fs_base
     /**
      * Helper function: detect if a resource did not save all the properties it was given.
      *
-     * @param  ?ID_TEXT                 The resource type (null: unknown)
-     * @param  ~ID_TEXT                 The resource ID (false: was not added/edited)
-     * @param  string                   The path (blank: root / not applicable)
-     * @param  array                    Properties
+     * @param  ?ID_TEXT                 $resource_type The resource type (null: unknown)
+     * @param  ~ID_TEXT                 $resource_id The resource ID (false: was not added/edited)
+     * @param  string                   $path The path (blank: root / not applicable)
+     * @param  array                    $properties Properties
      */
     protected function _log_if_save_matchup($resource_type, $resource_id, $path, $properties)
     {
@@ -1609,7 +1609,7 @@ class Resource_fs_base
     /**
      * Work out what a privilege preset means for a kind of resource.
      *
-     * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
+     * @param  ID_TEXT                  $filename Resource filename (assumed to be of a folder type)
      * @return ?array                   A mapping from privilege to minimum preset level required for privilege activation (null: unworkable)
      */
     protected function _compute_privilege_preset_scheme($filename)
@@ -1845,8 +1845,8 @@ class Resource_fs_base
     /**
      * Find all translated strings for a language ID. This is used as an intermediate step in creating multi-language serialisations.
      *
-     * @param  AUTO_LINK                Language ID
-     * @param  object                   Database connection to look up from
+     * @param  AUTO_LINK                $lang_id Language ID
+     * @param  object                   $db Database connection to look up from
      * @return array                    A map of language to the text in that language
      */
     protected function _get_translated_text($lang_id, $db)
@@ -2018,7 +2018,7 @@ class Resource_fs_base
     /**
      * Find details of custom properties.
      *
-     * @param  ID_TEXT                  The resource type
+     * @param  ID_TEXT                  $type The resource type
      * @return array                    Details of properties
      */
     protected function _custom_fields_enumerate_properties($type)
@@ -2077,8 +2077,8 @@ class Resource_fs_base
     /**
      * Load custom properties.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  ID_TEXT                  The content ID
+     * @param  ID_TEXT                  $type The resource type
+     * @param  ID_TEXT                  $id The content ID
      * @return array                    Loaded properties
      */
     protected function _custom_fields_load($type, $id)
@@ -2118,9 +2118,9 @@ class Resource_fs_base
     /**
      * Save custom properties.
      *
-     * @param  ID_TEXT                  The resource type
-     * @param  ID_TEXT                  The content ID
-     * @param  array                    Properties to save
+     * @param  ID_TEXT                  $type The resource type
+     * @param  ID_TEXT                  $id The content ID
+     * @param  array                    $properties Properties to save
      */
     protected function _custom_fields_save($type, $id, $properties)
     {

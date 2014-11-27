@@ -190,8 +190,8 @@ class Hook_occle_fs_root
     /**
      * Customise a directory path, adding _custom to appropriate entries.
      *
-     * @param  array                    Path to customise
-     * @param  boolean                  Whether to rewrite to be the alternative override directory
+     * @param  array                    $directory Path to customise
+     * @param  boolean                  $change_to_override Whether to rewrite to be the alternative override directory
      * @return string                   Customised path
      */
     protected function _customise_directory($directory, $change_to_override = true)

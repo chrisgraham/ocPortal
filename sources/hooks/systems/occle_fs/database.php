@@ -306,8 +306,8 @@ class Hook_occle_fs_database
     /**
      * Take a provided key-value map from the path and generate a DB query WHERE map array.
      *
-     * @param  string                   Database table name
-     * @param  string                   Key-value map ("key:value,key2:value2")
+     * @param  string                   $table_name Database table name
+     * @param  string                   $keys Key-value map ("key:value,key2:value2")
      * @return ~array                   WHERE map array (false: if an invalid key was referenced)
      */
     protected function _do_where($table_name, $keys)

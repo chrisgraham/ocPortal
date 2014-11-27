@@ -294,7 +294,7 @@ class OCP_Topic
     /**
      * Get the sort order.
      *
-     * @param  ?boolean                 Whether to show in reverse date order (affects default search order only) (null: read config)
+     * @param  ?boolean                 $reverse Whether to show in reverse date order (affects default search order only) (null: read config)
      * @return ID_TEXT                  Sort order
      * @set relevance rating newest oldest
      */
@@ -534,8 +534,8 @@ class OCP_Topic
     /**
      * Filter posts, deciding what to render.
      *
-     * @param  integer                  Number of posts to show initially
-     * @param  array                    Posts to choose from, in preference order
+     * @param  integer                  $num_to_show_limit Number of posts to show initially
+     * @param  array                    $queue Posts to choose from, in preference order
      * @return array                    Chosen posts
      */
     protected function _decide_what_to_render($num_to_show_limit, &$queue)
@@ -581,9 +581,9 @@ class OCP_Topic
     /**
      * Grab posts at or above a reference post and remove from queue.
      *
-     * @param  AUTO_LINK                Reference post in thread
-     * @param  array                    Posts to choose from (the queue)
-     * @param  array                    Posts picked out (passed by reference)
+     * @param  AUTO_LINK                $post_id Reference post in thread
+     * @param  array                    $queue Posts to choose from (the queue)
+     * @param  array                    $posts Posts picked out (passed by reference)
      */
     protected function _grab_at_and_above_and_remove($post_id, &$queue, &$posts)
     {
@@ -608,8 +608,8 @@ class OCP_Topic
     /**
      * Grab posts at or underneath a reference post.
      *
-     * @param  ?AUTO_LINK               Reference post in thread (null: root)
-     * @param  array                    Posts to choose from
+     * @param  ?AUTO_LINK               $parent_post_id Reference post in thread (null: root)
+     * @param  array                    $posts_in Posts to choose from
      * @return array                    Relevant posts
      */
     protected function _grab_at_and_underneath($parent_post_id, $posts_in)
@@ -639,7 +639,7 @@ class OCP_Topic
     /**
      * Load full details for posts (we had not done so far to preserve memory).
      *
-     * @param  array                    Posts to load
+     * @param  array                    $posts Posts to load
      * @return array                    Upgraded posts
      */
     protected function _grab_full_post_details($posts)
@@ -662,11 +662,11 @@ class OCP_Topic
     /**
      * Arrange posts underneath a post in the thread (not including the post itself).
      *
-     * @param  ?AUTO_LINK               Reference post in thread (null: root)
-     * @param  array                    Posts we will be rendering and have not arranged yet (only some of which will be underneath $post_id)
-     * @param  array                    Posts we won't be rendering
-     * @param  integer                  Maximum depth to render to
-     * @param  integer                  Current depth in recursion
+     * @param  ?AUTO_LINK               $post_id Reference post in thread (null: root)
+     * @param  array                    $posts Posts we will be rendering and have not arranged yet (only some of which will be underneath $post_id)
+     * @param  array                    $queue Posts we won't be rendering
+     * @param  integer                  $max_thread_depth Maximum depth to render to
+     * @param  integer                  $depth Current depth in recursion
      * @return array                    Array structure of rendered posts
      */
     protected function _arrange_posts_in_tree($post_id, &$posts, $queue, $max_thread_depth, $depth = 0)
@@ -712,14 +712,14 @@ class OCP_Topic
     /**
      * Render posts.
      *
-     * @param  integer                  Maximum to load
-     * @param  array                    Tree structure of posts
-     * @param  boolean                  Whether the current user may reply to the topic (influences what buttons show)
-     * @param  ?AUTO_LINK               Only show posts under here (null: show posts from root)
-     * @param  array                    Review ratings rows
-     * @param  AUTO_LINK                ID of forum this topic in in
-     * @param  ?array                   The topic row (null: not running OCF).
-     * @param  integer                  The recursion depth
+     * @param  integer                  $num_to_show_limit Maximum to load
+     * @param  array                    $tree Tree structure of posts
+     * @param  boolean                  $may_reply Whether the current user may reply to the topic (influences what buttons show)
+     * @param  ?AUTO_LINK               $highlight_by_member Only show posts under here (null: show posts from root)
+     * @param  array                    $all_individual_review_ratings Review ratings rows
+     * @param  AUTO_LINK                $forum_id ID of forum this topic in in
+     * @param  ?array                   $topic_info The topic row (null: not running OCF).
+     * @param  integer                  $depth The recursion depth
      * @return tempcode                 Rendered tree structure
      */
     protected function _render_post_tree($num_to_show_limit, $tree, $may_reply, $highlight_by_member, $all_individual_review_ratings, $forum_id, $topic_info, $depth = 0)

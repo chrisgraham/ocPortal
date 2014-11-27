@@ -257,7 +257,7 @@ class Forum_driver_vb_shared extends Forum_driver_base
     /**
      * Get a URL to the specified member's profile.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $id The member ID
      * @return URLPATH                  The URL to the member profile
      */
     protected function _member_profile_url($id)
@@ -288,7 +288,7 @@ class Forum_driver_vb_shared extends Forum_driver_base
     /**
      * Get a URL to send a private/personal message to the given member.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $id The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
     protected function _member_pm_url($id)
@@ -299,7 +299,7 @@ class Forum_driver_vb_shared extends Forum_driver_base
     /**
      * Get a URL to the specified forum.
      *
-     * @param  integer                  The forum ID
+     * @param  integer                  $id The forum ID
      * @return URLPATH                  The URL to the specified forum
      */
     protected function _forum_url($id)
@@ -603,7 +603,7 @@ class Forum_driver_vb_shared extends Forum_driver_base
      * Get the name relating to the specified member ID.
      * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return ?SHORT_TEXT              The member name (null: member deleted)
      */
     protected function _get_username($member)
@@ -617,7 +617,7 @@ class Forum_driver_vb_shared extends Forum_driver_base
     /**
      * Get the e-mail address for the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return SHORT_TEXT               The e-mail address
      */
     protected function _get_member_email_address($member)

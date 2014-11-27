@@ -179,7 +179,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
     /**
      * Find if the specified member ID is marked as staff or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is staff
      */
     protected function _is_staff($member)
@@ -194,7 +194,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
     /**
      * Find if the specified member ID is marked as a super admin or not.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return boolean                  Whether the member is a super admin
      */
     protected function _is_super_admin($member)
@@ -244,7 +244,7 @@ class Forum_driver_vb3 extends forum_driver_vb_shared
     /**
      * Get the forum usergroup relating to the specified member ID.
      *
-     * @param  MEMBER                   The member ID
+     * @param  MEMBER                   $member The member ID
      * @return array                    The array of forum usergroups
      */
     protected function _get_members_groups($member)
