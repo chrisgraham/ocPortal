@@ -563,7 +563,7 @@ class Hook_members_calendar
     /**
      * Execute the module.
      *
-     * @param  MEMBER		The ID of the member we are getting link hooks for
+     * @param  MEMBER		$member_id The ID of the member we are getting link hooks for
      * @return array		List of tuples for results. Each tuple is: type,title,url
      */
     public function run($member_id)
@@ -701,7 +701,7 @@ The syntax is as follows:
 /**
 * Enter description here...
 *
-* @param type Description
+* @param type $param_name Description
 * @range from to
 * @set a b c
 * @return type Description

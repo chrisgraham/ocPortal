@@ -324,8 +324,8 @@ In ocPortal, all functions should contain a header that identifies them and defi
 /**
  * Output a string.
  *
- * @param  string         The string to output
- * @return  integer       The integer to return (always 1)
+ * @param  string         $text The string to output
+ * @return integer        The integer to return (always 1)
  */
 function write($text='no parameters were given')
 {
@@ -344,13 +344,13 @@ When a function is given parameters that come from variables, these variables ar
 /**
  * Output a string.
  *
- * @param  string         The string to output
- * @return  integer       The integer to return (always 1)
+ * @param  string         $text The string to output
+ * @return integer        The integer to return (always 1)
  */
 function write(&$text)
 {
    echo $text;
-   $text='Destroying the input parameter - ha ha, they might not expect this!';
+   $text = 'Destroying the input parameter - ha ha, they might not expect this!';
    return 1;
 }
 [/code]

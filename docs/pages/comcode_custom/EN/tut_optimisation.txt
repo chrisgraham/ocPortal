@@ -296,7 +296,7 @@ In order to implement file change synchronisation, you need to create a simple P
 /**
  * Provides a hook for file synchronisation between mirrored servers. Called after any file creation, deletion or edit.
  *
- * @param  PATH             File/directory name to sync on (may be full or relative path)
+ * @param  PATH             $filename File/directory name to sync on (may be full or relative path)
  */
 function master__sync_file($filename)
 {
@@ -306,10 +306,10 @@ function master__sync_file($filename)
 /**
  * Provides a hook for file-move synchronisation between mirrored servers. Called after any rename or move action.
  *
- * @param  PATH             File/directory name to move from (may be full or relative path)
- * @param  PATH             File/directory name to move to (may be full or relative path)
+ * @param  PATH             $old File/directory name to move from (may be full or relative path)
+ * @param  PATH             $new File/directory name to move to (may be full or relative path)
  */
-function master__sync_file_move($old,$new)
+function master__sync_file_move($old, $new)
 {
    // Implementation details up to the network administrators; might work via NFS, FTP, etc
 }
