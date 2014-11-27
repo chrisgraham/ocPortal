@@ -95,7 +95,7 @@ function init__tempcode__runtime()
 /**
  * Escape a string to fit within PHP double quotes TWICE. Needed sometimes when generating code. This function exists for performance reasons.
  *
- * @param  string                       String in
+ * @param  string                       $in String in
  * @return string                       Resultant string
  */
 function php_addslashes_twice($in)
@@ -111,7 +111,7 @@ function php_addslashes_twice($in)
 /**
  * Convert a string to tempcode.
  *
- * @param  string                       String
+ * @param  string                       $string String
  * @return tempcode                     Tempcode
  */
 function make_string_tempcode($string)
@@ -125,8 +125,8 @@ function make_string_tempcode($string)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array                        A list of escaping to do
- * @param  string                       The string to apply the escapings to
+ * @param  array                        $escaped A list of escaping to do
+ * @param  string                       $value The string to apply the escapings to
  * @return string                       Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
  */
 function apply_tempcode_escaping($escaped, &$value)
@@ -173,8 +173,8 @@ function apply_tempcode_escaping($escaped, &$value)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array                        A list of escaping to do
- * @param  string                       The string to apply the escapings to
+ * @param  array                        $escaped A list of escaping to do
+ * @param  string                       $value The string to apply the escapings to
  * @return string                       Output string
  */
 function apply_tempcode_escaping_inline($escaped, $value)
@@ -221,10 +221,10 @@ function apply_tempcode_escaping_inline($escaped, $value)
 /**
  * This will create a new tempcode object that is containing a single specifed language code
  *
- * @param  ID_TEXT                      The ID of the symbol to use
- * @param  ?mixed                       The first token [string or tempcode] (replaces {1}) (null: none)
- * @param  ?mixed                       The second token [string or tempcode] (replaces {2}) (null: none)
- * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (null: none)
+ * @param  ID_TEXT                      $symbol The ID of the symbol to use
+ * @param  ?mixed                       $token1 The first token [string or tempcode] (replaces {1}) (null: none)
+ * @param  ?mixed                       $token2 The second token [string or tempcode] (replaces {2}) (null: none)
+ * @param  ?mixed                       $token3 The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (null: none)
  * @return tempcode                     A language tempcode object
  */
 function do_lang_tempcode($symbol, $token1 = null, $token2 = null, $token3 = null)
@@ -252,9 +252,9 @@ function do_lang_tempcode($symbol, $token1 = null, $token2 = null, $token3 = nul
 /**
  * This will create a new tempcode object that is containing a single specifed symbol
  *
- * @param  ID_TEXT                      The ID of the symbol to use
- * @param  ?array                       Symbol parameters (null: none)
- * @param  ?array                       Escaping (null: none)
+ * @param  ID_TEXT                      $symbol The ID of the symbol to use
+ * @param  ?array                       $parameters Symbol parameters (null: none)
+ * @param  ?array                       $escape Escaping (null: none)
  * @return tempcode                     A symbol tempcode object
  */
 function symbol_tempcode($symbol, $parameters = null, $escape = null)
@@ -270,9 +270,9 @@ function symbol_tempcode($symbol, $parameters = null, $escape = null)
 /**
  * This will create a new tempcode object that is containing a single specifed directive
  *
- * @param  ID_TEXT                      The ID of the symbol to use
- * @param  tempcode                     The contents
- * @param  ?array                       Directive parameters (null: none)
+ * @param  ID_TEXT                      $directive The ID of the symbol to use
+ * @param  tempcode                     $content The contents
+ * @param  ?array                       $parameters Directive parameters (null: none)
  * @return tempcode                     A directive tempcode object
  */
 function directive_tempcode($directive, $content, $parameters = null)
@@ -289,7 +289,7 @@ function directive_tempcode($directive, $content, $parameters = null)
 /**
  * Simple function to evaluate some Tempcode. Very rarely to be used, only if you can't call a method (e.g. you are copying direct into an array, such as in block cacheing).
  *
- * @param  tempcode                     Tempcode object
+ * @param  tempcode                     $ob Tempcode object
  * @return string                       Evaluated string
  */
 function static_evaluate_tempcode($ob)
@@ -300,15 +300,15 @@ function static_evaluate_tempcode($ob)
 /**
  * Get a tempcoded version of a normal XHTML template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the tempcode attach method.
  *
- * @param  ID_TEXT                      The codename of the template being loaded
- * @param  ?array                       A map of parameters for the template (key to value) (null: no parameters)
- * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (null: users own language)
- * @param  boolean                      Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (null: none)
- * @param  string                       File type suffix of template file (e.g. .tpl)
- * @param  string                       Subdirectory type to look in
+ * @param  ID_TEXT                      $codename The codename of the template being loaded
+ * @param  ?array                       $parameters A map of parameters for the template (key to value) (null: no parameters)
+ * @param  ?LANGUAGE_NAME               $lang The language to load the template in (templates can embed language references) (null: users own language)
+ * @param  boolean                      $light_error Whether to not produce a stack dump if the template is missing
+ * @param  ?ID_TEXT                     $fallback Alternate template to use if the primary one does not exist (null: none)
+ * @param  string                       $suffix File type suffix of template file (e.g. .tpl)
+ * @param  string                       $directory Subdirectory type to look in
  * @set    templates css javascript xml text
- * @param  ID_TEXT                      Theme to use
+ * @param  ID_TEXT                      $theme Theme to use
  * @return tempcode                     The tempcode for this template
  */
 function do_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $directory = 'templates', $theme = null)
@@ -478,8 +478,8 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
 /**
  * Certain symbols need preprocessing, before the output stream is made.
  *
- * @param  array                        Symbol details
- * @param  array                        Where we store children stuff
+ * @param  array                        $bit Symbol details
+ * @param  array                        $children Where we store children stuff
  */
 function handle_symbol_preprocessing($bit, &$children)
 {
@@ -795,7 +795,7 @@ class Tempcode
     /**
      * Constructor of tempcode
      *
-     * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (null: start as empty)
+     * @param  ?array                   $details Pair: Code to preexecute, Initialisation seq-parts (null: start as empty)
      */
     public function __construct($details = null)
     {
@@ -840,9 +840,9 @@ class Tempcode
     /**
      * Parse a single symbol from an input stream and append it.
      *
-     * @param  string                   Code string (input stream)
-     * @param  integer                  Read position
-     * @param  integer                  Length of input string
+     * @param  string                   $code Code string (input stream)
+     * @param  integer                  $pos Read position
+     * @param  integer                  $len Length of input string
      */
     public function parse_from(&$code, &$pos, &$len)
     {
@@ -879,7 +879,7 @@ class Tempcode
     /**
      * Find whether a variable within this Tempcode is parameterless.
      *
-     * @param  integer                  Offset to the variable
+     * @param  integer                  $at Offset to the variable
      * @return boolean                  Whether it is parameterless
      */
     public function parameterless($at)
@@ -890,9 +890,9 @@ class Tempcode
     /**
      * Attach the specified tempcode to the right of the current tempcode object.
      *
-     * @param  mixed                    The tempcode/string to attach
-     * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
-     * @param  ?array                   Extra escaping (null: none)
+     * @param  mixed                    $attach The tempcode/string to attach
+     * @param  boolean                  $avoid_children_merge If we've already merged the children from what we're attaching into the child tree (at bind stage)
+     * @param  ?array                   $escape Extra escaping (null: none)
      */
     public function attach($attach, $avoid_children_merge = false, $escape = null)
     {
@@ -955,8 +955,8 @@ class Tempcode
     /**
      * Replace the named parameter with a specific value. Hardly used, but still important.
      *
-     * @param  string                   Named parameter
-     * @param  object                   Specific value
+     * @param  string                   $parameter Named parameter
+     * @param  object                   $value Specific value
      */
     public function singular_bind($parameter, $value)
     {
@@ -984,7 +984,7 @@ class Tempcode
     /**
      * Assemble the current tempcode object into a single serialised (compiled) tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current users language)
+     * @param  ?LANGUAGE_NAME           $lang The language to evaluate with (null: current users language)
      * @return string                   The assembly result
      */
     public function to_assembly($lang = null)
@@ -1031,8 +1031,8 @@ class Tempcode
     /**
      * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object.
      *
-     * @param  string                   The assembled tempcode
-     * @param  boolean                  Return error code on failure, rather than exiting
+     * @param  string                   $raw_data The assembled tempcode
+     * @param  boolean                  $allow_failure Return error code on failure, rather than exiting
      * @return boolean                  Success status (it can fail, if the compiled cache file is corrupt)
      */
     public function from_assembly(&$raw_data, $allow_failure = false)
@@ -1058,9 +1058,9 @@ class Tempcode
     /**
      * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound tempcode object)
      *
-     * @param  array                    Map of parameters to bind parameter bits to
-     * @param  ID_TEXT                  The codename of the template this tempcode is from
-     * @param  boolean                  Whether we are looking under a loop
+     * @param  array                    $parameters Map of parameters to bind parameter bits to
+     * @param  ID_TEXT                  $codename The codename of the template this tempcode is from
+     * @param  boolean                  $under_loop Whether we are looking under a loop
      * @return tempcode                 The new bound tempcode object
      */
     public function bind(&$parameters, $codename, $under_loop = false)
@@ -1190,7 +1190,7 @@ class Tempcode
     /**
      * Parse the current tempcode object, then echo it to the browser.
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current users language)
+     * @param  ?LANGUAGE_NAME           $lang The language to evaluate with (null: current users language)
      * @return string                   Blank string. Allows chaining within echo statements
      */
     public function evaluate_echo($lang = null)
@@ -1291,7 +1291,7 @@ class Tempcode
     /**
      * Parses the current tempcode object, then return the parsed string
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current user's language)
+     * @param  ?LANGUAGE_NAME           $lang The language to evaluate with (null: current user's language)
      * @return string                   The evaluated thing. Voila, it's all over!
      */
     public function evaluate($lang = null)

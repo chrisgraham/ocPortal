@@ -2280,7 +2280,7 @@ function step_10_forum_stuff()
  * You should remember this function, and not substitute anything else for it, as that will likely make your code unstable.
  * It is key to source code modularity in ocPortal.
  *
- * @param  string                       The codename for the source module to load
+ * @param  string                       $codename The codename for the source module to load
  */
 function require_code($codename)
 {
@@ -2338,7 +2338,7 @@ function require_code($codename)
 /**
  * Make an object of the given class
  *
- * @param  string                       The class name
+ * @param  string                       $class The class name
  * @return object                       The object
  */
 function object_factory($class)
@@ -2531,12 +2531,12 @@ function handle_self_referencing_embedment()
 /**
  * Make the UI for an installer textual option.
  *
- * @param  tempcode                     The human readable name for the option
- * @param  tempcode                     A description of the option
- * @param  ID_TEXT                      The name of the option
- * @param  string                       The default/current value of the option
- * @param  boolean                      Whether the options value should be kept star'red out (e.g. it is a password)
- * @param  boolean                      Whether the option is required
+ * @param  tempcode                     $nice_name The human readable name for the option
+ * @param  tempcode                     $description A description of the option
+ * @param  ID_TEXT                      $name The name of the option
+ * @param  string                       $value The default/current value of the option
+ * @param  boolean                      $hidden Whether the options value should be kept star'red out (e.g. it is a password)
+ * @param  boolean                      $required Whether the option is required
  * @return tempcode                     The option
  */
 function make_option($nice_name, $description, $name, $value, $hidden = false, $required = false)
@@ -2565,10 +2565,10 @@ function make_option($nice_name, $description, $name, $value, $hidden = false, $
 /**
  * Make the UI for an installer tick option.
  *
- * @param  tempcode                     The human readable name for the option
- * @param  tempcode                     A description of the option
- * @param  ID_TEXT                      The name of the option
- * @param  BINARY                       The default/current value of the option
+ * @param  tempcode                     $nice_name The human readable name for the option
+ * @param  tempcode                     $description A description of the option
+ * @param  ID_TEXT                      $name The name of the option
+ * @param  BINARY                       $value The default/current value of the option
  * @return tempcode                     The list of usergroups
  */
 function make_tick($nice_name, $description, $name, $value)
@@ -2580,8 +2580,8 @@ function make_tick($nice_name, $description, $name, $value)
 /**
  * Get an example string for the installer UI (abstraction).
  *
- * @param  string                       The name of the example text language string (blank: none)
- * @param  string                       The name of the example description language string (blank: none)
+ * @param  string                       $example The name of the example text language string (blank: none)
+ * @param  string                       $description The name of the example description language string (blank: none)
  * @return tempcode                     The text
  */
 function example($example, $description = '')
@@ -2601,7 +2601,7 @@ function example($example, $description = '')
 /**
  * Test whether a file exists and is writable.
  *
- * @param  PATH                         The file path
+ * @param  PATH                         $file The file path
  */
 function test_writable($file)
 {
@@ -2613,7 +2613,7 @@ function test_writable($file)
 /**
  * Using the current forum driver, find the forum path.
  *
- * @param  string                       What the user manually gave as the forum path (may be blank)
+ * @param  string                       $given What the user manually gave as the forum path (may be blank)
  * @return ?URLPATH                     The answer (null: could not find the forum)
  */
 function find_forum_path($given)
@@ -2634,8 +2634,8 @@ function find_forum_path($given)
 /**
  * Get the contents of a directory, with support for searching the installation archive.
  *
- * @param  PATH                         The directory to get the contents of
- * @param  boolean                      Whether just to get .php files
+ * @param  PATH                         $dir The directory to get the contents of
+ * @param  boolean                      $php Whether just to get .php files
  * @return array                        A map of the contents (file=>dir)
  */
 function get_dir_contents($dir, $php = false)
@@ -2730,7 +2730,7 @@ function get_default_table_prefix()
 /**
  * Return decompressed version of the input (at time of writing, no compression being used for quick installer archiving).
  *
- * @param  string                       The file in raw compressed form
+ * @param  string                       $input The file in raw compressed form
  * @return string                       The decompressed file
  */
 function compress_filter($input)
@@ -2742,7 +2742,7 @@ function compress_filter($input)
 /**
  * Try and get a good .htaccess file built.
  *
- * @param  resource                     FTP connection to server
+ * @param  resource                     $conn FTP connection to server
  */
 function test_htaccess($conn)
 {

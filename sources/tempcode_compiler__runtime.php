@@ -32,12 +32,12 @@ function init__tempcode_compiler__runtime()
 /**
  * Convert template text into tempcode format.
  *
- * @param  string                       The template text
- * @param  integer                      The position we are looking at in the text
- * @param  boolean                      Whether this text is infact a directive, about to be put in the context of a wider template
- * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ?ID_TEXT                     The theme it is for (null: current theme)
- * @param  ?ID_TEXT                     The language it is for (null: current language)
+ * @param  string                       $text The template text
+ * @param  integer                      $symbol_pos The position we are looking at in the text
+ * @param  boolean                      $inside_directive Whether this text is infact a directive, about to be put in the context of a wider template
+ * @param  ID_TEXT                      $codename The codename of the template (e.g. foo)
+ * @param  ?ID_TEXT                     $theme The theme it is for (null: current theme)
+ * @param  ?ID_TEXT                     $lang The language it is for (null: current language)
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
 function template_to_tempcode_static($text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null)
@@ -128,10 +128,10 @@ function template_to_tempcode_static($text, $symbol_pos = 0, $inside_directive =
 /**
  * Convert and return an uncompiled textual variable (as used in templates, and Comcode) into tempcode (these pieces are attached to other pieces, in a certain way, forming a tempcode tree for a template or a variable-in-Comcode).
  *
- * @param  string                       The full text that is being parsed (we only look into this - the whole thing will be passed into PHP by reference, hence avoiding us a memory block copy)
- * @param  integer                      The position we are looking at in the text
- * @param  integer                      The length of our variable
- * @param  ?ID_TEXT                     The theme it is for (null: current theme)
+ * @param  string                       $text The full text that is being parsed (we only look into this - the whole thing will be passed into PHP by reference, hence avoiding us a memory block copy)
+ * @param  integer                      $symbol_pos The position we are looking at in the text
+ * @param  integer                      $symbol_len The length of our variable
+ * @param  ?ID_TEXT                     $theme The theme it is for (null: current theme)
  * @return array                        The tempcode variable array that our variable gets represented of
  */
 function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $theme = null)
@@ -346,7 +346,7 @@ class Tempcode_static
     /**
      * Find whether a variable within this Tempcode is parameterless.
      *
-     * @param  integer                  Offset to the variable
+     * @param  integer                  $at Offset to the variable
      * @return boolean                  Whether it is parameterless
      */
     public function parameterless($at)
@@ -357,9 +357,9 @@ class Tempcode_static
     /**
      * Parse a single symbol from an input stream and append it.
      *
-     * @param  string                   Code string (input stream)
-     * @param  integer                  Read position
-     * @param  integer                  Length of input string
+     * @param  string                   $code Code string (input stream)
+     * @param  integer                  $pos Read position
+     * @param  integer                  $len Length of input string
      */
     public function parse_from(&$code, &$pos, &$len)
     {
@@ -369,8 +369,8 @@ class Tempcode_static
     /**
      * Set the embedment of a directive within this Tempcode.
      *
-     * @param  integer                  Offset to directive
-     * @param  tempcode                 New embedment
+     * @param  integer                  $at Offset to directive
+     * @param  tempcode                 $set New embedment
      */
     public function set_directive_embedment($at, $set)
     {
@@ -380,7 +380,7 @@ class Tempcode_static
     /**
      * Find the identifier component of a variable within this Tempcode.
      *
-     * @param  integer                  Offset to the variable
+     * @param  integer                  $at Offset to the variable
      * @return string                   Variable component
      */
     public function extract_identifier_at($at)
@@ -391,9 +391,9 @@ class Tempcode_static
     /**
      * Attach the specified tempcode to the right of the current tempcode object.
      *
-     * @param  mixed                    The tempcode/string to attach
-     * @param  ?array                   Extra escaping (null: none)
-     * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
+     * @param  mixed                    $attach The tempcode/string to attach
+     * @param  ?array                   $escape Extra escaping (null: none)
+     * @param  boolean                  $avoid_children_merge If we've already merged the children from what we're attaching into the child tree (at bind stage)
      */
     public function attach($attach, $escape = null, $avoid_children_merge = false)
     {
@@ -448,8 +448,8 @@ class Tempcode_static
     /**
      * Parses the current tempcode object, then return the parsed string
      *
-     * @param  ?LANGUAGE_NAME           The language to evaluate with (null: current user's language)
-     * @param  mixed                    Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
+     * @param  ?LANGUAGE_NAME           $lang The language to evaluate with (null: current user's language)
+     * @param  mixed                    $_escape Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
      * @return string                   The evaluated thing. Voila, it's all over!
      */
     public function evaluate($lang = null, $_escape = false)
@@ -487,13 +487,13 @@ class Tempcode_static
 /**
  * A template has not been structurally cached, so compile it and store in the cache.
  *
- * @param  ID_TEXT                      The theme the template is in the context of
- * @param  PATH                         The path to the template file
- * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ID_TEXT                      The actual codename to use for the template (e.g. thin_foo)
- * @param  LANGUAGE_NAME                The language the template is in the context of
- * @param  string                       File type suffix of template file
- * @param  ?ID_TEXT                     The theme to cache in (null: main theme)
+ * @param  ID_TEXT                      $theme The theme the template is in the context of
+ * @param  PATH                         $path The path to the template file
+ * @param  ID_TEXT                      $codename The codename of the template (e.g. foo)
+ * @param  ID_TEXT                      $_codename The actual codename to use for the template (e.g. thin_foo)
+ * @param  LANGUAGE_NAME                $lang The language the template is in the context of
+ * @param  string                       $suffix File type suffix of template file
+ * @param  ?ID_TEXT                     $theme_orig The theme to cache in (null: main theme)
  * @return tempcode                     The compiled tempcode
  */
 function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $theme_orig = null)
@@ -578,13 +578,13 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
 /**
  * Convert template text into tempcode format.
  *
- * @param  string                       The template text
- * @param  integer                      The position we are looking at in the text
- * @param  boolean                      Whether this text is infact a directive, about to be put in the context of a wider template
- * @param  ID_TEXT                      The codename of the template (e.g. foo)
- * @param  ?ID_TEXT                     The theme it is for (null: current theme)
- * @param  ?ID_TEXT                     The language it is for (null: current language)
- * @param  boolean                      Whether to tolerate errors
+ * @param  string                       $text The template text
+ * @param  integer                      $symbol_pos The position we are looking at in the text
+ * @param  boolean                      $inside_directive Whether this text is infact a directive, about to be put in the context of a wider template
+ * @param  ID_TEXT                      $codename The codename of the template (e.g. foo)
+ * @param  ?ID_TEXT                     $theme The theme it is for (null: current theme)
+ * @param  ?ID_TEXT                     $lang The language it is for (null: current language)
+ * @param  boolean                      $tolerate_errors Whether to tolerate errors
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
 function template_to_tempcode($text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null, $tolerate_errors = false)
