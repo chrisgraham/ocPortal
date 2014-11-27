@@ -7,6 +7,10 @@ This guide is not a substitute for learning PHP, HTML, CSS, or other languages. 
 
 To learn ocPortal's API, see the phpdoc comments in the source files. The source files are logically named, so it should be relatively easy to get a handle on it all. Alternatively, view the [url="auto-generated documentation"]{$BRAND_BASE_URL}/docs/api/[/url].
 
+Our official IDE is PhpStorm:
+[url="https://www.jetbrains.com/phpstorm/"][img]https://www.jetbrains.com/phpstorm/documentation/docs/logo_phpstorm.png[/img][/url]
+Major core contributors to ocPortal can get a free license to aid development.
+
 [contents][/contents]
 
 [title="2"]Technology overview[/title]
