@@ -228,7 +228,7 @@ function get_php_file_api($filename, $include_code = true)
                             }
                         }
                         $parameters[$arg_counter]['description'] = preg_replace('#^\$\w+ #', '', $_description);
-                        $parameters[$arg_counter]['phpdoc_name'] = preg_replace('#^(\$\w+).* #', '$1', $_description);
+                        $parameters[$arg_counter]['phpdoc_name'] = ltrim(preg_replace('#^(\$\w+) .*#', '$1', $_description), '$');
                     } elseif (substr($ltrim, 0, 7) == '@return') {
                         $return = array();
 
@@ -290,7 +290,7 @@ function get_php_file_api($filename, $include_code = true)
                 if ($parameters[$arg_counter]['phpdoc_name'] == '') {
                     attach_message(do_lang_tempcode('MISSING_PARAMETER_NAME', escape_html($function_name)), 'warn');
                 } else {
-                    if ($parameter['name'] == $parameter['phpdoc_name']) {
+                    if ($parameter['name'] != $parameter['phpdoc_name']) {
                         attach_message(do_lang_tempcode('NAME_MISMATCH', escape_html($parameter['name']), escape_html($parameter['phpdoc_name']), array(escape_html($function_name))), 'warn');
                     }
                 }

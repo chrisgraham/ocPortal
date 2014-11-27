@@ -287,10 +287,10 @@ function ocf_delete_topic($topic_id, $reason = '', $post_target_topic_id = null,
 /**
  * Move some topics.
  *
- * @param  AUTO_LINK                    $member_id The forum the topics are currently in.
- * @param  AUTO_LINK                    $topic_id The forum the topics are being moved to.
- * @param  ?array                        $topics A list of the topic IDs to move (null: move all topics from source forum).
- * @param  boolean                       $check_perms Whether to check permissions.
+ * @param  AUTO_LINK                    $from The forum the topics are currently in.
+ * @param  AUTO_LINK                    $to The forum the topics are being moved to.
+ * @param  ?array                       $topics A list of the topic IDs to move (null: move all topics from source forum).
+ * @param  boolean                      $check_perms Whether to check permissions.
  */
 function ocf_move_topics($from, $to, $topics = null, $check_perms = true) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
 {

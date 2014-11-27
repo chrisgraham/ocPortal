@@ -400,11 +400,11 @@ function get_lang($member = null)
  * Includes a language file for use in the script.
  * If $type is not null, then this specifies whether to use 'lang_custom' or 'custom' (otherwise, normal priorities occur).
  *
- * @param  ID_TEXT                      $lang The language file name
- * @param  ?LANGUAGE_NAME               $only_if_for_lang The language (null: uses the current language)
- * @param  ?string                       $type The language type (lang_custom, or custom) (null: normal priorities are used)
+ * @param  ID_TEXT                      $codename The language file name
+ * @param  ?LANGUAGE_NAME               $lang The language (null: uses the current language)
+ * @param  ?string                      $type The language type (lang_custom, or custom) (null: normal priorities are used)
  * @set    lang_custom custom
- * @param  boolean                       $ignore_errors Whether to just return if there was a loading error
+ * @param  boolean                      $ignore_errors Whether to just return if there was a loading error
  */
 function require_lang($codename, $lang = null, $type = null, $ignore_errors = false) // $type is for efficiency only - to avoid needing to doubly-search when requiring all
 {

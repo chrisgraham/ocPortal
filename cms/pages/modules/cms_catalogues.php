@@ -1206,7 +1206,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
     /**
      * Get tempcode for a catalogue category adding/editing form.
      *
-     * @param  ?ID_TEXT                 $id The name of the catalogue the category is in (null: detect)
+     * @param  ?ID_TEXT                  $catalogue_name The name of the catalogue the category is in (null: detect)
      * @param  SHORT_TEXT                $title The title of the category
      * @param  LONG_TEXT                 $description Description for the category
      * @param  LONG_TEXT                 $notes Admin notes
@@ -1216,9 +1216,9 @@ class Module_cms_catalogues_cat extends Standard_crud_module
      * @param  integer                   $move_days_lower The number of days before expiry (lower limit)
      * @param  integer                   $move_days_higher The number of days before expiry (higher limit)
      * @param  ?AUTO_LINK                $move_target The expiry category (null: do not expire)
-     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     * @return array                     A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
-    public function get_form_fields($catalogue_name = null, $title = '', $description = '', $notes = '', $parent_id = -1, $id = null, $rep_image = '', $move_days_lower = 30, $move_days_higher = 60, $move_target = null) // Not the fields in a category (no such thing: fields are in catalogues) - the HTML form fields to input the details for a category
+    public function get_form_fields($catalogue_name = null, $title = '', $description = '', $notes = '', $parent_id = -1, $id = null, $rep_image = '', $move_days_lower = 30, $move_days_higher = 60, $move_target = null)
     {
         if (is_null($catalogue_name)) {
             $catalogue_name = get_param('catalogue_name', is_null($id) ? false : $GLOBALS['SITE_DB']->query_select_value('catalogues_categories', 'c_name', array('id' => $id)));
@@ -1228,7 +1228,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
             $parent_id = get_param_integer('parent_id', -1);
         }
 
-        $fields = new Tempcode();
+        $fields = new Tempcode(); // Not the fields in a category (no such thing: fields are in catalogues) - the HTML form fields to input the details for a category
         require_code('form_templates');
         $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('catalogue_name', $catalogue_name));

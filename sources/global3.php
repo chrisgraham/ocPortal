@@ -177,12 +177,12 @@ function is_suexec_like()
 }
 
 /**
- * Ensure that the specified file/folder is writeable for the FTP user (so that it can be deleted by the system), and should be called whenever a file is uploaded/created, or a folder is made. We call this function assuming we are giving world permissions
+ * Ensure that the specified file/folder is writeable for the FTP user (so that it can be deleted by the system), and should be called whenever a file is uploaded/created, or a folder is made. We call this function assuming we are giving world permissions.
  *
- * @param  PATH                         $url The full pathname to the file/directory
- * @param  integer                      $byte_limit The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
+ * @param  PATH                         $path The full pathname to the file/directory
+ * @param  integer                      $perms The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
  */
-function fix_permissions($path, $perms = 0666) // We call this function assuming we are giving world permissions
+function fix_permissions($path, $perms = 0666)
 {
     // If the file user is different to the FTP user, we need to make it world writeable
     if ((!is_suexec_like()) || (ocp_srv('REQUEST_METHOD') == '')) {
@@ -1781,13 +1781,15 @@ function compare_ip_address_ip6($wild, $full_parts)
 /**
  * Check to see if an IP address is banned.
  *
- * @param  string                       $type The IP address to check for banning (potentially encoded with *'s)
- * @param  boolean                      $a Force check via database
- * @param  boolean                      $b Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
+ * @param  string                       $ip The IP address to check for banning (potentially encoded with *'s)
+ * @param  boolean                      $force_db Force check via database
+ * @param  boolean                      $handle_uncertainties Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
  * @return ?boolean                     Whether the IP address is banned (null: unknown)
  */
-function ip_banned($ip, $force_db = false, $handle_uncertainties = false) // This is the very first query called, so we will be a bit smarter, checking for errors
+function ip_banned($ip, $force_db = false, $handle_uncertainties = false)
 {
+    // NB: This function will make the first query called, so we will be a bit smarter, checking for errors
+
     static $cache = array();
     if ($handle_uncertainties) {
         if (array_key_exists($ip, $cache)) {

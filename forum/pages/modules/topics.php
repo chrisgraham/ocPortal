@@ -1462,13 +1462,13 @@ class Module_topics
     /**
      * The UI to create a new topic.
      *
-     * @param  boolean                  $forum_id Whether a new Private Topic is being created
-     * @param  ?MEMBER                  $topic_id The member ID being whispered too (null: N/A)
-     * @param  string                   $topic_title Theme image code
-     * @param  ?tempcode                $doing Text of screen (null: none)
+     * @param  boolean                  $private_topic Whether a new Private Topic is being created
+     * @param  ?MEMBER                  $member_id The member ID being whispered too (null: N/A)
+     * @param  string                   $img_path Theme image code
+     * @param  ?tempcode                $text Text of screen (null: none)
      * @return tempcode                 The UI
      */
-    public function new_topic($private_topic = false, $member_id = null, $img_path = '', $text = null) // Type
+    public function new_topic($private_topic = false, $member_id = null, $img_path = '', $text = null)
     {
         if (!$private_topic) {
             $forum_id = get_param_integer('id');
