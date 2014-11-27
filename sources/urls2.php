@@ -214,10 +214,16 @@ function _url_to_filename($url_full)
         }
         $new_name = str_replace($bad_char, $good_char, $new_name);
     }
-    if (strlen($new_name) <= 255) {
+
+    if (strlen($new_name)<=200/*technically 256 but something may get put on the start, so be cautious*/) {
         return $new_name;
     }
-    return md5($new_name); // Non correspondance, but at least we have something
+
+    // Non correspondance, but at least we have something
+    if (strpos($new_name, '.') === false) {
+        return md5($new_name);
+    }
+    return md5($new_name) . '.' . get_file_extension($new_name);
 }
 
 /**

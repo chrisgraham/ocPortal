@@ -31,7 +31,7 @@ function init__captcha()
  */
 function captcha_script()
 {
-    if (!function_exists('imagecreatefromstring')) {
+    if (!function_exists('imagepng')) {
         warn_exit(do_lang_tempcode('GD_NEEDED'));
     }
 

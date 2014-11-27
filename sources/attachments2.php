@@ -177,7 +177,7 @@ function do_comcode_attachments($comcode, $type, $id, $previewing_only = false, 
  */
 function _handle_data_url_attachments(&$comcode, $type, $id, $connection)
 {
-    if (function_exists('imagecreatefromstring')) {
+    if (function_exists('imagepng')) {
         $matches = array();
         $matches2 = array();
         $num_matches = preg_match_all('#<img (alt="" )?src="data:image/\w+;base64,([^"]*)" (title="" )?/?' . '>#', $comcode, $matches);

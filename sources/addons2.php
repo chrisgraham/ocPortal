@@ -996,7 +996,7 @@ function has_feature($dependency)
     if (($dependency == 'ocf') && (get_forum_type() == 'ocf')) {
         return true;
     }
-    if ((strtolower($dependency) == 'gd') && (function_exists('imagecreatefromstring'))) {
+    if ((strtolower($dependency) == 'gd') && (function_exists('imagepng'))) {
         return true;
     }
     if ($dependency == 'adobeflash') {

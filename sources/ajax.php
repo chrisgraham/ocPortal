@@ -81,7 +81,7 @@ function username_check_script()
 {
     prepare_for_known_ajax_response();
 
-    header('Content-Type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
 
     require_code('ocf_members_action');
     require_code('ocf_members_action2');
@@ -242,7 +242,7 @@ function find_permissions_script()
 {
     prepare_for_known_ajax_response();
 
-    header('Content-Type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
 
     require_code('permissions2');
 
@@ -299,7 +299,7 @@ function retrieve_autosave()
 {
     prepare_for_known_ajax_response();
 
-    header('Content-Type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
 
     $member_id = get_member();
     $key = post_param('key');
@@ -518,7 +518,7 @@ function ajax_tree_script()
     // Closed site
     $site_closed = get_option('site_closed');
     if (($site_closed == '1') && (!has_privilege(get_member(), 'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
-        header('Content-Type: text/plain');
+        header('Content-type: text/plain; charset=' . get_charset());
         @exit(get_option('closed'));
     }
 
@@ -562,7 +562,7 @@ function confirm_session_script()
 {
     prepare_for_known_ajax_response();
 
-    header('Content-Type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
     global $SESSION_CONFIRMED_CACHE;
     if ($SESSION_CONFIRMED_CACHE == 0) {
         echo $GLOBALS['FORUM_DRIVER']->get_username(get_member());

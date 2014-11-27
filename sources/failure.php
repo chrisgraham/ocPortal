@@ -342,7 +342,7 @@ function _generic_exit($text, $template, $support_match_key_messages = false)
 
     global $WANT_TEXT_ERRORS;
     if ($WANT_TEXT_ERRORS) {
-        header('Content-Type: text/plain');
+        header('Content-type: text/plain; charset=' . get_charset());
         set_http_status_code('500');
         @ini_set('ocproducts.xss_detect', '0');
         exit(is_object($text) ? strip_html($text->evaluate()) : $text);
@@ -895,7 +895,7 @@ function _fatal_exit($text, $return = false)
 
     global $WANT_TEXT_ERRORS;
     if ($WANT_TEXT_ERRORS) {
-        header('Content-Type: text/plain');
+        header('Content-type: text/plain; charset=' . get_charset());
         set_http_status_code('500');
         @ini_set('ocproducts.xss_detect', '0');
         exit(is_object($text) ? strip_html($text->evaluate()) : $text);

@@ -144,7 +144,7 @@ function _symbol_thumbnail($param)
         // Only bother calculating the image if we've not already
         // made one with these options
         if ((!is_file($save_path)) && (!is_file($save_path . '.png'))) {
-            if (!function_exists('imagecreatefromstring')) {
+            if (!function_exists('imagepng')) {
                 return $param[0];
             }
 

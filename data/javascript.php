@@ -42,7 +42,7 @@ require($FILE_BASE . '/sources/global.php');
 
 prepare_for_known_ajax_response();
 
-header('Content-Type: text/javascript');
+header('Content-type: text/javascript; charset=' . get_charset());
 $lang = get_param('lang', '');
 if ($lang != '') {
     require_lang($lang);

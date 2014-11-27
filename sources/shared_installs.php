@@ -66,7 +66,7 @@ function current_share_user()
         return null;
     }
 
-    header('Content-type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
     if (array_key_exists('no_website_redirect', $SITE_INFO)) {
         header('Location: ' . $SITE_INFO['no_website_redirect']);
     }

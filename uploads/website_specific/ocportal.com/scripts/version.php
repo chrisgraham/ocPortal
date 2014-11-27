@@ -41,7 +41,7 @@ require_lang('ocportalcom');
 
 //if (get_ip_address()!='86.141.238.33') return old_style();
 
-header('Content-type: text/plain');
+header('Content-type: text/plain; charset=' . get_charset());
 if (get_param_integer('html', 0) == 1) {
     header('Content-type: text/html');
     echo '<script src="/themes/default/templates_cached/EN/javascript.js"></script>';

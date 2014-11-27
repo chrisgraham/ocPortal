@@ -414,6 +414,11 @@ This can be very difficult to debug, but is unlikely to be the fault of ocPortal
 
 Permissions are usually the tool to use to customise things for different users, but sometimes the actual message is what you need to customise rather than just limiting access. In this case, use the Comcode [tt]if_in_group[/tt] tag in your Comcode pages to deliver targetted portions of Comcode to limited sets of usergroups.
 
+[title="3"]I turned off WYSIWYG for a page, and now I can't get it back on, how do I?[/title]
+
+In order to stop other potentially authors accidentally corrupting the hand-crafted page while using WYSIWYG, WYSIWYG will have been locked off for the page when you originally disabled it.
+Simply remove [tt]{$,page hint: no_wysiwyg}[/tt] from the bottom of the page's Comcode (it will have been added there automatically), re-save, then go back in to edit.
+
 [title="3"]Various blocks require ID codes for what content to include. Where do I find these?[/title]
 
 Look at the URL you see in the web browser address bar when you have clicked through to edit that piece of content. It'll include the ID (usually a number) near the end. If the ID is not a number, it will have been manually chosen.

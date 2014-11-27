@@ -47,7 +47,7 @@ function occle_script()
 
         $site_closed = get_option('site_closed');
         if (($site_closed == '1') && (!has_privilege(get_member(), 'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
-            header('Content-Type: text/plain');
+            header('Content-type: text/plain; charset=' . get_charset());
             @exit(get_option('closed'));
         }
 
@@ -1141,7 +1141,10 @@ class Virtual_shell
                 if (get_magic_quotes_gpc()) {
                     $_COOKIE['occle_state'] = stripslashes($_COOKIE['occle_state']);
                 }
-                $occle_state_diff = unserialize($_COOKIE['occle_state']);
+                $occle_state_diff = @unserialize($_COOKIE['occle_state']);
+                if (!is_array($occle_state_diff)) {
+                    $occle_state_diff = array();
+                }
             } else {
                 $occle_state_diff = array();
             }
@@ -1150,7 +1153,10 @@ class Virtual_shell
                 if (get_magic_quotes_gpc()) {
                     $_COOKIE['occle_state_lang'] = stripslashes($_COOKIE['occle_state_lang']);
                 }
-                $occle_state_lang_diff = unserialize($_COOKIE['occle_state_lang']);
+                $occle_state_lang_diff = @unserialize($_COOKIE['occle_state_lang']);
+                if (!is_array($occle_state_lang_diff)) {
+                    $occle_state_lang_diff = array();
+                }
             } else {
                 $occle_state_lang_diff = array();
             }
@@ -1159,7 +1165,10 @@ class Virtual_shell
                 if (get_magic_quotes_gpc()) {
                     $_COOKIE['occle_state_code'] = stripslashes($_COOKIE['occle_state_code']);
                 }
-                $occle_state_code_diff = unserialize($_COOKIE['occle_state_code']);
+                $occle_state_code_diff = @unserialize($_COOKIE['occle_state_code']);
+                if (!is_array($occle_state_code_diff)) {
+                    $occle_state_code_diff = array();
+                }
             } else {
                 $occle_state_code_diff = array();
             }

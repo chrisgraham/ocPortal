@@ -233,7 +233,7 @@ function ocf_make_post($topic_id, $title, $post, $skip_sig = 0, $is_starter = fa
         $validated = 1;
     }
     $map = array(
-        'p_title' => $title,
+        'p_title' => substr($title,0,255),
         'p_ip_address' => $ip_address,
         'p_time' => $time,
         'p_poster' => $anonymous ? db_get_first_id() : $poster,

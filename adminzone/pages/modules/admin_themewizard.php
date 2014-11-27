@@ -168,6 +168,10 @@ class Module_admin_themewizard
      */
     public function step1()
     {
+        if (!function_exists('imagepng')) {
+            warn_exit(do_lang_tempcode('GD_NEEDED'));
+        }
+
         $post_url = build_url(array('page' => '_SELF', 'type' => 'step2'), '_SELF', array('keep_theme_seed', 'keep_theme_dark', 'keep_theme_source', 'keep_theme_algorithm'), false, true);
         $text = do_lang_tempcode('THEMEWIZARD_1_DESCRIBE');
         $submit_name = do_lang_tempcode('PROCEED');

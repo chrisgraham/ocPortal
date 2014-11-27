@@ -51,7 +51,7 @@ function do_user_export($to_file = true)
             access_denied('ADMIN_ONLY');
         }
 
-        header('Content-type: text/plain');
+        header('Content-type: text/plain; charset=' . get_charset());
         $outfile = @fopen('php://output', 'wb');
     }
 

@@ -128,7 +128,7 @@ while (($r = fgetcsv($csvfile, 1024000)) !== false) {
 }
 fclose($csvfile);
 
-@header('Content-type: text/plain');
+@header('Content-type: text/plain; charset=' . get_charset());
 echo 'Imported ' . integer_format($done) . ' news articles.';
 
 function parse_ezinearticles($r)

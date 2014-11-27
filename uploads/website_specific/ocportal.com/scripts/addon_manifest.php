@@ -48,7 +48,7 @@ do {
 } while ((is_null($_id)) && ($id_float != 0.0));
 
 if (is_null($_id)) {
-    header('Content-type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
     exit();
 }
 
@@ -85,5 +85,5 @@ foreach (array_keys($_GET) as $x) {
     }
 }
 
-header('Content-type: text/plain');
+header('Content-type: text/plain; charset=' . get_charset());
 echo serialize($addon_times);

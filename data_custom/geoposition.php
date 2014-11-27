@@ -39,7 +39,7 @@ require_code('locations_geopositioning');
 
 prepare_for_known_ajax_response();
 
-header('Content-type: text/plain');
+header('Content-type: text/plain; charset=' . get_charset());
 
 @ini_set('ocproducts.xss_detect', '0');
 

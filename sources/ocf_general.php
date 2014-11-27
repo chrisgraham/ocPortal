@@ -55,8 +55,13 @@ function ocf_get_forums_stats()
     }
     if (is_null($out['newest_member_username'])) {
         $newest_member = $GLOBALS['FORUM_DB']->query('SELECT m_username,id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE m_validated=1 AND id<>' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' ORDER BY m_join_time DESC', 1); // Only ordered by m_join_time and not double ordered with ID to make much faster in MySQL
-        $out['newest_member_id'] = $newest_member[0]['id'];
-        $out['newest_member_username'] = $newest_member[0]['m_username'];
+        if (array_key_exists(0,$newest_member)) {
+            $out['newest_member_id'] = $newest_member[0]['id'];
+            $out['newest_member_username'] = $newest_member[0]['m_username'];
+        } else {
+            $out['newest_member_id'] = $GLOBALS['FORUM_DRIVER']->get_guest_id();
+            $out['newest_member_username'] = do_lang('GUEST');
+        }
         if (get_db_type() != 'xml') {
             if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
                 set_value('ocf_newest_member_id', strval($out['newest_member_id']));

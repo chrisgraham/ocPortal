@@ -327,7 +327,7 @@ class Module_cms_galleries extends Standard_crud_module
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_GALLERY_IMPORT_TITLE'), 'set_title', '', get_option('gallery_media_title_required') == '1'));
         $hidden = new Tempcode();
         handle_max_file_size($hidden);
-        if (function_exists('imagecreatefromstring')) {
+        if (function_exists('imagepng')) {
             if ($this->has_at_least_one_watermark($cat)) {
                 $fields->attach(form_input_tick(do_lang_tempcode('WATERMARK'), do_lang_tempcode('DESCRIPTION_WATERMARK'), 'watermark', true));
             }
@@ -675,7 +675,7 @@ class Module_cms_galleries extends Standard_crud_module
                     }
                 } else {
                     $ok = true;
-                    if (function_exists('imagecreatefromstring')) {
+                    if (function_exists('imagepng')) {
                         $path = dirname(get_custom_file_base() . '/' . rawurldecode($thumb_url));
                         if (!file_exists($path)) {
                             require_code('files2');
@@ -889,14 +889,14 @@ class Module_cms_galleries extends Standard_crud_module
             }
         } else {
             $ok = true;
-            if (function_exists('imagecreatefromstring')) {
+            if (function_exists('imagepng')) {
                 require_code('images');
                 $ok = convert_image(get_custom_base_url() . '/' . $url, get_custom_file_base() . '/' . rawurldecode($thumb_url), -1, -1, intval(get_option('thumb_width')), true);
             }
             if ($ok) {
                 $exif = get_exif_data(get_custom_file_base() . '/' . rawurldecode($url), $file);
 
-                if (function_exists('imagecreatefromstring')) {
+                if (function_exists('imagepng')) {
                     // See if we need to resize the image
                     constrain_gallery_image_to_max_size(get_custom_file_base() . '/' . rawurldecode($url), $file, intval(get_option('maximum_image_size')));
 
@@ -2296,7 +2296,7 @@ class Module_cms_galleries_cat extends Standard_crud_module
         $flow_mode_interface = post_param_integer('flow_mode_interface', 0);
         $urls = get_url('image_url', 'rep_image', 'uploads/repimages', 0, OCP_UPLOAD_IMAGE);
         $url = $urls[0];
-        if (($url != '') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images') !== '0')) {
+        if (($url != '') && (function_exists('imagepng')) && (get_value('resize_rep_images') !== '0')) {
             convert_image(get_custom_base_url() . '/' . $url, get_custom_file_base() . '/uploads/repimages/' . basename(rawurldecode($url)), -1, -1, intval(get_option('thumb_width')), true, null, false, true);
         }
         $watermark_top_left = get_url('', 'watermark_top_left', 'uploads/watermarks', 0, OCP_UPLOAD_IMAGE);
@@ -2340,7 +2340,7 @@ class Module_cms_galleries_cat extends Standard_crud_module
         if (!fractional_edit()) {
             $urls = get_url('image_url', 'rep_image', 'uploads/repimages', 0, OCP_UPLOAD_IMAGE);
             $url = $urls[0];
-            if (($url != '') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images') !== '0')) {
+            if (($url != '') && (function_exists('imagepng')) && (get_value('resize_rep_images') !== '0')) {
                 convert_image(get_custom_base_url() . '/' . $url, get_custom_file_base() . '/uploads/repimages/' . basename(rawurldecode($url)), -1, -1, intval(get_option('thumb_width')), true, null, false, true);
             }
             if (($url == '') && (post_param_integer('rep_image_unlink', 0) != 1)) {

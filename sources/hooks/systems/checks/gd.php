@@ -34,6 +34,9 @@ class Hook_check_gd
         if (!function_exists('imagecreatefromstring')) {
             $warning[] = do_lang_tempcode('NO_GD_ON_SERVER');
         }
+        if (!function_exists('imagepng')) {
+            $warning[] = do_lang_tempcode('NO_GD_ON_SERVER_PNG');
+        }
         return $warning;
     }
 }

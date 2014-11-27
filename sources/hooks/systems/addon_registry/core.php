@@ -873,7 +873,7 @@ class Hook_addon_registry_core
             'themes/default/images/na.png',
             'themes/default/images/poll/index.html',
             'themes/default/images/poll/poll_l.png',
-            'themes/default/images/poll/poll_m.gif',
+            'themes/default/images/poll/poll_m.png',
             'themes/default/images/poll/poll_r.png',
             'themes/default/images/1x/box_arrow.png',
             'themes/default/images/2x/box_arrow.png',

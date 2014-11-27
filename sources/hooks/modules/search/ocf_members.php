@@ -215,7 +215,7 @@ class Hook_search_ocf_members
                 $non_trans_fields++;
             }
         }
-        $index_issue = ($non_trans_fields > 16);
+        $index_issue = (get_param_integer('force_like', 0) == 0) && ($non_trans_fields > 16);
         foreach ($rows as $i => $row) {
             if (!array_key_exists('field_' . strval($row['id']), $indexes)) {
                 continue;

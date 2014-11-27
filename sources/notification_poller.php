@@ -62,7 +62,7 @@ function notification_display_script()
 {
     header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-    header('Content-Type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
 
     $max = post_param_integer('max', null);
 

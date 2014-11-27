@@ -38,8 +38,9 @@ class Hook_occle_command_clear_caches
         } else {
             require_code('caches3');
 
-            $_caches = array();
+            $_caches = mixed();
             if (array_key_exists(0, $parameters)) {
+                $_caches = array();
                 $caches = explode(',', $parameters[0]);
                 foreach ($caches as $cache) {
                     $_caches[] = trim($cache);

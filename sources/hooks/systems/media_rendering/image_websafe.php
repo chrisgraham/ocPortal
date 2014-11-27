@@ -126,7 +126,7 @@ class Hook_media_rendering_image_websafe
                     $new_name .= '.png';
                 }
                 $file_thumb = get_custom_file_base() . '/uploads/auto_thumbs/' . $new_name;
-                if (function_exists('imagecreatefromstring')) {
+                if (function_exists('imagepng')) {
                     if (!file_exists($file_thumb)) {
                         convert_image($url_direct_filesystem, $file_thumb, -1, -1, intval($attributes['width']), false);
                     }

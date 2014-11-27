@@ -712,7 +712,7 @@ class Module_admin_setupwizard
      */
     public function step7()
     {
-        $post_url = build_url(array('page' => '_SELF', 'type' => (addon_installed('themewizard') && (function_exists('imagecreatefromstring'))) ? 'step8' : 'step9'), '_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => (addon_installed('themewizard') && (function_exists('imagepng'))) ? 'step8' : 'step9'), '_SELF');
         $text = do_lang_tempcode('SETUPWIZARD_7_DESCRIBE');
         $submit_name = do_lang_tempcode('PROCEED');
 
@@ -859,7 +859,7 @@ class Module_admin_setupwizard
             $installprofileblocks = array();
         }
 
-        if ((post_param_integer('skip_8', 0) == 0) && (function_exists('imagecreatefromstring')) && (addon_installed('themewizard'))) {
+        if ((post_param_integer('skip_8', 0) == 0) && (function_exists('imagepng')) && (addon_installed('themewizard'))) {
             require_code('themewizard');
 
             // Make theme
@@ -905,6 +905,7 @@ class Module_admin_setupwizard
         // Set options
         if (post_param_integer('skip_3', 0) == 0) {
             set_option('site_name', $name);
+            set_option('copyright', 'Copyright &copy; ' . $name . ' ' . date('Y'));
             set_option('description', post_param('description'));
             set_option('site_scope', post_param('site_scope'));
             set_option('copyright', post_param('copyright'));

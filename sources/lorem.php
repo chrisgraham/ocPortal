@@ -879,7 +879,7 @@ function render_screen_preview($template, $hook, $function)
         $complete_html = false;
     }
     if (is_plain_text_template($template)) {
-        //@header('Content-type: text/plain');     Let it show with WITH_WHITESPACE
+        //@header('Content-type: text/plain; charset=' . get_charset());     Let it show with WITH_WHITESPACE
         $text = true;
     } else {
         $text = false;

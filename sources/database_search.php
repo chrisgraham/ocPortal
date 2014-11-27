@@ -1129,7 +1129,7 @@ function build_content_where($content, $boolean_search, &$boolean_operator, $ful
             $include_where = array();
             $disclude_where = '';
         } else {
-            if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob, 'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!$under_radar)) {
+            if ((get_param_integer('force_like', 0) == 0) && (db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob, 'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!$under_radar)) {
                 $content_where = db_full_text_assemble($content, true);
                 $body_where = array($content_where);
                 $include_where = array();

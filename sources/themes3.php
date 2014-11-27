@@ -25,7 +25,7 @@ function tempcode_tester_script()
 {
     prepare_for_known_ajax_response();
 
-    header('Content-Type: text/plain');
+    header('Content-type: text/plain; charset=' . get_charset());
 
     $tempcode = post_param('tempcode');
 

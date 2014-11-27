@@ -698,7 +698,7 @@ class Module_admin_newsletter extends Standard_crud_module
         if ($csv == 1) {
             $filename = 'subscribers_' . $id . '.csv';
 
-            header('Content-type: text/csv');
+            header('Content-type: text/csv; charset=' . get_charset());
             header('Content-Disposition: attachment; filename="' . str_replace("\r", '', str_replace("\n", '', addslashes($filename))) . '"');
 
             if (ocp_srv('REQUEST_METHOD') == 'HEAD') {

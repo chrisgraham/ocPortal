@@ -26,7 +26,7 @@ function backend_cloud_script()
     // Closed site
     $site_closed = get_option('site_closed');
     if (($site_closed == '1') && (!has_privilege(get_member(), 'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
-        header('Content-Type: text/plain');
+        header('Content-type: text/plain; charset=' . get_charset());
         @exit(get_option('closed'));
     }
 
@@ -79,7 +79,7 @@ function rss_backend_script()
     // Closed site
     $site_closed = get_option('site_closed');
     if (($site_closed == '1') && (!has_privilege(get_member(), 'access_closed_site')) && (get_ip_address() != ocp_srv('SERVER_ADDR')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
-        header('Content-Type: text/plain');
+        header('Content-type: text/plain; charset=' . get_charset());
         @exit(get_option('closed'));
     }
 

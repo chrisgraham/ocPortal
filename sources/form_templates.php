@@ -389,7 +389,7 @@ function get_comcode_editor($field_name = 'post', $cut_down = false)
 
     // Non-wrappers
     if (!$cut_down) {
-        $_buttons[] = (function_exists('imagecreatefromstring') ? 'thumb' : 'img');
+        $_buttons[] = (function_exists('imagepng') ? 'thumb' : 'img');
     }
     if (has_privilege(get_member(), 'comcode_dangerous')) {
         $_buttons[] = 'block';

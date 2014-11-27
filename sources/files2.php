@@ -263,7 +263,7 @@ function _deldir_contents($dir, $default_preserve = false, $just_files = false)
 function make_csv($data, $filename = 'data.csv', $headers = true, $output_and_exit = true, $outfile_path = null)
 {
     if ($headers) {
-        header('Content-type: text/csv');
+        header('Content-type: text/csv; charset=' . get_charset());
         header('Content-Disposition: attachment; filename="' . str_replace("\r", '', str_replace("\n", '', addslashes($filename))) . '"');
 
         if (ocp_srv('REQUEST_METHOD') == 'HEAD') {

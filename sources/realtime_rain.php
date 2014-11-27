@@ -23,6 +23,10 @@
  */
 function realtime_rain_script()
 {
+    if (!has_actual_page_access(get_member(), 'admin_realtime_rain')) {
+        access_denied('I_ERROR');
+    }
+
     prepare_for_known_ajax_response();
 
     @ini_set('ocproducts.xss_detect', '0');

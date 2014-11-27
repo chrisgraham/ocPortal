@@ -1344,7 +1344,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
         }
         $urls = get_url('image_url', 'rep_image', 'uploads/repimages', 0, OCP_UPLOAD_IMAGE);
         $rep_image = $urls[0];
-        if (($rep_image != '') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images') !== '0')) {
+        if (($rep_image != '') && (function_exists('imagepng')) && (get_value('resize_rep_images') !== '0')) {
             convert_image(get_custom_base_url() . '/' . $rep_image, get_custom_file_base() . '/uploads/repimages/' . basename(rawurldecode($rep_image)), -1, -1, intval(get_option('thumb_width')), true, null, false, true);
         }
 
@@ -1413,7 +1413,7 @@ class Module_cms_catalogues_cat extends Standard_crud_module
         if (!fractional_edit()) {
             $urls = get_url('image_url', 'rep_image', 'uploads/repimages', 0, OCP_UPLOAD_IMAGE);
             $rep_image = $urls[0];
-            if (($rep_image != '') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images') !== '0')) {
+            if (($rep_image != '') && (function_exists('imagepng')) && (get_value('resize_rep_images') !== '0')) {
                 convert_image(get_custom_base_url() . '/' . $rep_image, get_custom_file_base() . '/uploads/repimages/' . basename(rawurldecode($rep_image)), -1, -1, intval(get_option('thumb_width')), true, null, false, true);
             }
             if (($rep_image == '') && (post_param_integer('rep_image_unlink', 0) != 1)) {

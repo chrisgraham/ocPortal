@@ -118,7 +118,10 @@ function set_option($name, $value, $will_be_formally_set = 1)
 
     if (!isset($CONFIG_OPTIONS_CACHE[$name])) { // Not installed with a DB setting row, so install it; even if it's just the default, we need it for performance
         require_code('hooks/systems/config/' . filter_naughty($name));
-        $ob = object_factory('Hook_config_' . $name);
+        $ob = object_factory('Hook_config_' . $name, true);
+        if (is_null($ob)) {
+            return;
+        }
         $option = $ob->get_details();
 
         $needs_dereference = ($option['type'] == 'transtext' || $option['type'] == 'transline' || $option['type'] == 'comcodetext' || $option['type'] == 'comcodeline') ? 1 : 0;

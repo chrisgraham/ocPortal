@@ -747,7 +747,7 @@ function create_video_thumb($src_url, $expected_output_path = null)
 
                 if (file_exists($expected_output_path)) {
                     require_code('images');
-                    if (function_exists('imagecreatefromstring')) {
+                    if (function_exists('imagepng')) {
                         convert_image($expected_output_path, $expected_output_path, -1, -1, intval(get_option('thumb_width')), true, null, true);
                     }
 
@@ -789,7 +789,7 @@ function create_video_thumb($src_url, $expected_output_path = null)
 
             if (file_exists(str_replace('%d', '1', $dest_file))) {
                 require_code('images');
-                if (function_exists('imagecreatefromstring')) {
+                if (function_exists('imagepng')) {
                     convert_image(str_replace('%d', '1', $dest_file), $expected_output_path, -1, -1, intval(get_option('thumb_width')), true, null, true);
                 } else {
                     copy(str_replace('%d', '1', $dest_file), $expected_output_path);
@@ -1130,7 +1130,7 @@ function watermark_gallery_image($gallery, $file_path, $filename)
 {
     // We can't watermark an image we can't save
     require_code('images');
-    if (!function_exists('imagecreatefromstring')) {
+    if (!function_exists('imagepng')) {
         return;
     }
     if (!is_saveable_image($filename)) {
@@ -1229,7 +1229,7 @@ function constrain_gallery_image_to_max_size($file_path, $filename, $box_width)
         return;
     }
 
-    if (function_exists('imagecreatefromstring')) {
+    if (function_exists('imagepng')) {
         convert_image($file_path, $file_path, -1, -1, $box_width, false, get_file_extension($filename), true, true);
     }
 }

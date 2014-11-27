@@ -37,7 +37,7 @@ require($FILE_BASE . '/sources/global.php');
 
 require_code('ocportalcom');
 
-header('Content-type: text/plain');
+header('Content-type: text/plain; charset=' . get_charset());
 
 $parameters = isset($_POST['parameters']) ? $_POST['parameters'] : array();
 if (get_magic_quotes_gpc()) {
