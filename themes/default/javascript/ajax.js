@@ -385,7 +385,7 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 		{
 			window.scrollTo(0,find_pos_y(target_div));
 		}
-		catch (e) {};
+		catch (e) {}
 	}
 
 	// Defined callback

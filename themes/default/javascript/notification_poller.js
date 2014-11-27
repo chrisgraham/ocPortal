@@ -164,7 +164,7 @@ function display_alert(notification)
 					{
 						window.focus();
 					}
-					catch (ex) {};
+					catch (ex) {}
 				};
 			}
 		} else
@@ -245,7 +245,7 @@ function _toggle_messaging_box(event,name,hide)
 		{
 			e.style.opacity='1.0';
 		}
-		catch (ex) {};
+		catch (ex) {}
 	};
 	window.setTimeout(set_position,0);
 
@@ -264,7 +264,7 @@ function _toggle_messaging_box(event,name,hide)
 	{
 		e.style.opacity='0.0'; // Render, but invisibly, until we've positioned it
 	}
-	catch (ex) {};
+	catch (ex) {}
 
 	return false;
 }
@@ -371,7 +371,7 @@ function _toggle_messaging_box(event,name,hide)
 				try {
 					win.focus();
 				}
-				catch (e) {};
+				catch (e) {}
 			}
 		}
 		return notification;

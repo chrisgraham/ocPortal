@@ -33,7 +33,7 @@
 							map.setCenter(google.maps.LatLng(position.coords.latitude,position.coords.longitude));
 						});
 					}
-					catch (e) {};
+					catch (e) {}
 				}
 			}
 		{+END}
@@ -79,7 +79,7 @@
 							add_data_point(['{$USERNAME;,{$MEMBER},1}',position.coords.latitude,position.coords.longitude,''],bounds,markers,info_window,map);
 						});
 					}
-					catch (e) {};
+					catch (e) {}
 				}
 			{+END}
 		{+END}

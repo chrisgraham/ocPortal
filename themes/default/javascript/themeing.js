@@ -396,7 +396,7 @@ function do_editarea_search(regexp)
 	{
 		window.scrollTo(0,find_pos_y(document.getElementById('css').parentNode));
 	}
-	catch (e) {};
+	catch (e) {}
 
 	// Force scroll to bottom, so scrolls up when searching and shows result without scrolling back down
 	ecw.document.getElementById('result').scrollTop=ecw.document.getElementById('result').scrollHeight;

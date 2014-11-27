@@ -124,6 +124,7 @@ class Module_tester
     public $id;
     public $test_row;
     public $test;
+    public $self_title;
 
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.

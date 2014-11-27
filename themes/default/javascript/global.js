@@ -254,7 +254,7 @@ function new_html__initialise(element)
 
 			// Remove tooltips from forms for mouse users as they are for screenreader accessibility only
 			if (element.getAttribute('target')!='_blank')
-				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ });
+				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){}/*IE6 does not like*/ });
 
 			// Convert a/img title attributes into ocPortal tooltips
 			/*{+START,IF,{$CONFIG_OPTION,js_overlays}}*/
@@ -637,12 +637,12 @@ function get_main_ocp_window(any_large_ok)
 	{
 		if ((window.parent) && (window.parent!=window) && (typeof window.parent.get_main_ocp_window!='undefined')) return window.parent.get_main_ocp_window();
 	}
-	catch (e) {};
+	catch (e) {}
 	try
 	{
 		if ((window.opener) && (typeof window.opener.get_main_ocp_window!='undefined')) return window.opener.get_main_ocp_window();
 	}
-	catch (e) {};
+	catch (e) {}
 	return window;
 }
 
@@ -1424,7 +1424,7 @@ function illustrate_frame_load(pf,frame)
 					{
 						var rules=[];
 						try { rules=document.styleSheets[i].cssRules?document.styleSheets[i].cssRules:document.styleSheets[i].rules; }
-						catch (e) {};
+						catch (e) {}
 						if (rules)
 						{
 							for (var j=0;j<rules.length;j++)
@@ -1437,7 +1437,7 @@ function illustrate_frame_load(pf,frame)
 						}
 					}
 				}
-				catch (e){};
+				catch (e){}
 			}
 		}
 		head+=cssText+'<\/style>';
@@ -1499,7 +1499,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 		{
 			window.scrollTo(0,dest_y);
 		}
-		catch (e) {};
+		catch (e) {}
 		return;
 	/*{+END}*/
 
@@ -1520,7 +1520,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 		{
 			window.scrollTo(0,dest_y);
 		}
-		catch (e) {};
+		catch (e) {}
 		if (event_after) event_after();
 		return;
 	}
@@ -1528,7 +1528,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	{
 		window.scrollBy(0,dist);
 	}
-	catch (e) { return; }; // May be stopped by popup blocker
+	catch (e) { return; } // May be stopped by popup blocker
 
 	window.setTimeout(function() { smooth_scroll(dest_y,scroll_y+dist,dir,event_after); } , 30);
 }
@@ -2015,7 +2015,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 	}
 
 	if (!page_loaded) return;
-	if (!ac.tooltip_id) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  // Should not happen but written as a fail-safe
+	if (!ac.tooltip_id) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; }  // Should not happen but written as a fail-safe
 
 	if ((typeof tooltip_element=='undefined') || (!tooltip_element)) var tooltip_element=document.getElementById(ac.tooltip_id);
 	if (tooltip_element)
@@ -2039,7 +2039,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 				y=(event.type=='focus')?(get_window_scroll_y(win)+get_window_height(win)/2-40):(get_mouse_y(event,win)+style__offset_y);
 			}
 		}
-		catch(ignore) {};
+		catch(ignore) {}
 		// Maybe mouse position actually needs to be in parent document?
 		try
 		{
@@ -2052,7 +2052,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 				}
 			}
 		}
-		catch(ignore) {};
+		catch(ignore) {}
 
 		// Work out which direction to render in
 		var width=find_width(tooltip_element);
@@ -2113,7 +2113,7 @@ function resize_frame(name,min_height)
 				frame_element.style.height=((h>=min_height)?h:min_height)+'px';
 				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
 				frame_element.scrolling='no';
-				frame_window.onscroll=function(event) { if (typeof event=='undefined') event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancel_bubbling(event); }; // Needed for Opera
+				frame_window.onscroll=function(event) { if (typeof event=='undefined') event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {} return cancel_bubbling(event); }; // Needed for Opera
 			}
 		}
 	}
@@ -2213,7 +2213,7 @@ function set_opacity(element,fraction)
 		{
 			window.clearTimeout(window.fade_transition_timers[element.fader_key]);
 		}
-		catch (e) {};
+		catch (e) {}
 		window.fade_transition_timers[element.fader_key]=null;
 	}
 
@@ -2502,7 +2502,7 @@ function inner_html_load(xml_string) {
 		{
 			xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
 		}
-		catch (e) { xml=null; };
+		catch (e) { xml=null; }
 
 		if ((xml===null) || ((typeof xml.documentElement!='undefined') && (typeof xml.documentElement.childNodes[0]!='undefined') && (xml.documentElement.childNodes[0].nodeName=='parsererror'))) // HTML method then
 		{
@@ -2624,7 +2624,7 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 						{
 							new_html__initialise(this_node);
 						}
-						catch (e) {}; // Could be some kind of access error (been seen in IE)
+						catch (e) {} // Could be some kind of access error (been seen in IE)
 					}
 					else
 						window.setTimeout(_new_html__initialise,0); // Can't do it yet
@@ -2767,7 +2767,7 @@ function set_inner_html(element,target_html,append,force_dom)
 
 			return;
 		}
-		catch(ignore) {};
+		catch(ignore) {}
 	}
 
 	target_html=entities_to_unicode(target_html);
@@ -2799,7 +2799,7 @@ function set_inner_html(element,target_html,append,force_dom)
 function careful_import_node(node)
 {
 	var imported;
-	try {	imported=(document.importNode)?document.importNode(node,true):null; } catch (e) {};
+	try {	imported=(document.importNode)?document.importNode(node,true):null; } catch (e) {}
 	if (!imported) imported=node;
 	return imported;
 }
@@ -3233,7 +3233,7 @@ function setup_word_counter(post,count_element)
 				if(matches) count=matches.length/2;
 				set_inner_html(count_element,'{!WORDS;}'.replace('\{1\}',count));
 			}
-			catch (e) {};
+			catch (e) {}
 		}
 	}, 1000);
 }

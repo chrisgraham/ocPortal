@@ -76,7 +76,6 @@ function init__validation2()
         'summary' => 1,
         'section' => 1,
         'nav' => 1,
-        'hgroup' => 1,
         'header' => 1,
         'footer' => 1,
         'figure' => 1,

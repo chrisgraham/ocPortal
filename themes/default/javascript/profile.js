@@ -16,7 +16,7 @@ function decrypt_data(encrypted_data)
 	{
 		window.scrollTo(0,0);
 	}
-	catch (e) {};
+	catch (e) {}
 
 	var title=document.createElement('h2');
 	title.appendChild(document.createTextNode('{!encryption:DECRYPT_TITLE;^}'));
@@ -76,6 +76,6 @@ function decrypt_data(encrypted_data)
 		{
 			input.focus();
 		}
-		catch (e) {};
+		catch (e) {}
 	},0);
 }

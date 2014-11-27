@@ -183,7 +183,7 @@ q:after {
 }
 
 /* Re-apply default styles non-HTML5-aware browsers */
-details, aside, header, footer, nav, hgroup, article, section, figure, figcaption {
+details, aside, header, footer, nav, article, section, figure, figcaption {
 	display: block;
 }
 

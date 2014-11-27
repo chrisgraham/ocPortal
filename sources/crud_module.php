@@ -99,6 +99,7 @@ abstract class Standard_crud_module
     public $privilege_page_name = null;
     public $edit_keep_validation = false;
     public $supports_mass_delete = false;
+    public $title;
 
     // These only needed if we are generate create_selection_list_entries automatically
     public $table_prefix = '';

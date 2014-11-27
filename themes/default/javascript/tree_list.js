@@ -48,7 +48,7 @@ tree_list.prototype.getElementByIdHack=function(id,type,ob,serverid)
 			done=true;
 		}
 	}
-	catch (e) {};
+	catch (e) {}
 	if (!done)
 	{
 		for (i=0;i<ob.childNodes.length;i++)

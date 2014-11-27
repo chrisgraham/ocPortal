@@ -180,7 +180,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 				{
 					window.wysiwyg_editors[id].destroy();
 				}
-				catch (e) {};
+				catch (e) {}
 				delete window.wysiwyg_editors[id];
 
 				// Comcode conversion
@@ -211,7 +211,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 				{
 					window.wysiwyg_editors[id].destroy();
 				}
-				catch (e) {};
+				catch (e) {}
 			}
 		}
 	}
@@ -820,7 +820,7 @@ function get_selected_html(editor)
 			{
 				selected_text=get_inner_html(my_selection.getNative().getRangeAt(0).cloneContents());
 			}
-			catch (e) {};
+			catch (e) {}
 		}
 	}
 	return selected_text;

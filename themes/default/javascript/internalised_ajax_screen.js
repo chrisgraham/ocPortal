@@ -9,12 +9,12 @@ function detect_change(change_detection_url,refresh_if_changed)
 		{
 			window.getAttention();
 		}
-		catch (e) {};
+		catch (e) {}
 		try
 		{
 			window.focus();
 		}
-		catch (e) {};
+		catch (e) {}
 
 		if (typeof window.soundManager!='undefined')
 		{

@@ -28,7 +28,7 @@
 			{
 				e.focus();
 			}
-			catch (e) {};
+			catch (e) {}
 			e.select();
 		});
 	//]]></script>

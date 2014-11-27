@@ -33,7 +33,8 @@ class TestOfsample extends UnitTestCase
 		$expectations=array(" - foo"=>"<ul><li>foo</li></ul>");
 		foreach ($expectations as $comcode=>$html)
 		{
-			$actual=comcode_to_tempcode($comcode); assertTrue(preg_replace('#\s#','',$html)==preg_replace('#\s#','',$actual->evaluate()));
+			$actual=comcode_to_tempcode($comcode);
+            $this->assertTrue(preg_replace('#\s#','',$html)==preg_replace('#\s#','',$actual->evaluate()));
 		}
 	}
 }

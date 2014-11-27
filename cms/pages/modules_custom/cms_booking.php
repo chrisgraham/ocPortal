@@ -30,6 +30,7 @@ class Module_cms_booking extends Standard_crud_module
     public $orderer_is_multi_lang = false;
     public $title_is_multi_lang = true;
     public $table = 'bookable';
+    public $bookings_crud_module;
 
     public $donext_type = null;
 

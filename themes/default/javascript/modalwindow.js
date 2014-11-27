@@ -401,7 +401,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 		{
 			var result=window.showModalDialog(url,name,options);
 		}
-		catch (e) {}; // IE gives "Access is denied" if popup was blocked, due to var result assignment to non-real window
+		catch (e) {} // IE gives "Access is denied" if popup was blocked, due to var result assignment to non-real window
 		var timer_now=new Date().getTime();
 		if (timer_now-100>timer) // Not popup blocked
 		{
@@ -669,7 +669,7 @@ function ModalWindow()
 						do_scroll=true;
 					}
 				}
-				catch (e) {};
+				catch (e) {}
 			} else // Fixed positioning, with scrolling turned off until the overlay is closed
 			{
 				this.box_wrapper.style.position='fixed';
@@ -685,7 +685,7 @@ function ModalWindow()
 					if (typeof iframe[0]!='undefined')
 						iframe[0].contentWindow.scrolled_up_for=true;
 				}
-				catch (e) {};
+				catch (e) {}
 			}
 		},
 
@@ -809,7 +809,7 @@ function ModalWindow()
 				}
 			};
 
-			this.add_event(this.box_wrapper.childNodes[0],'click',function(e) { try { _this.top_window.cancel_bubbling(e); } catch (e) {}; });
+			this.add_event(this.box_wrapper.childNodes[0],'click',function(e) { try { _this.top_window.cancel_bubbling(e); } catch (e) {} });
 
 			switch (this.type)
 			{
@@ -1140,7 +1140,7 @@ function ModalWindow()
 				{
 					e.style[p]=v;
 				}
-				catch (e){};
+				catch (e){}
 			}
 		},
 

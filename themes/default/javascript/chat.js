@@ -69,7 +69,7 @@ function chat_load(room_id)
 	{
 		document.getElementById('post').focus();
 	}
-	catch (e) {};
+	catch (e) {}
 
 	if (window.location.href.indexOf('keep_chattest')==-1) begin_chatting(room_id);
 
@@ -270,7 +270,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 			{
 				element.focus();
 			}
-			catch (e) {};
+			catch (e) {}
 		}
 
 		return false;
@@ -672,7 +672,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				{
 					opened_popups['room_'+room_id].focus();
 				}
-				catch (e) {};
+				catch (e) {}
 			}
 			if (opened_popups['room_'+room_id].document)
 			{
@@ -683,7 +683,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 					{
 						post.focus();
 					}
-					catch (e) {};
+					catch (e) {}
 				}
 			}
 		} else
@@ -695,7 +695,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				{
 					window.focus();
 				}
-				catch (e) {};
+				catch (e) {}
 			}
 			var post=document.getElementById('post');
 			if (post)
@@ -704,7 +704,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				{
 					post.focus();
 				}
-				catch (e) {};
+				catch (e) {}
 			}
 		}
 	}
@@ -1125,7 +1125,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 					{
 						new_window.focus();
 					}
-					catch (e) {};
+					catch (e) {}
 
 					// Tell server we have joined
 					do_ajax_request(url,function(ajax_result_frame,ajax_result) { process_chat_xml_messages(ajax_result,true); },false);
@@ -1212,7 +1212,7 @@ function chat_select_tab(element)
 	{
 		document.getElementById('post_'+element.id.substr(4)).focus();
 	}
-	catch (e) {};
+	catch (e) {}
 	element.className=((element.className.indexOf('chat_lobby_convos_tab_first')!=-1)?'chat_lobby_convos_tab_first ':'')+'chat_lobby_convos_tab_uptodate chat_lobby_convos_current_tab';
 }
 

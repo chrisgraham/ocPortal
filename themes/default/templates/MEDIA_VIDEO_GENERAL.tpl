@@ -51,8 +51,8 @@
 					{$,Quicktime}
 					add_event_listener_abstract(player,'qt_ended',function() { player_stopped(); });
 
-					try { player.Play(); } catch (e) {};
-					try { player.controls.play(); } catch (e) {};
+					try { player.Play(); } catch (e) {}
+					try { player.controls.play(); } catch (e) {}
 				}, 1000);
 			}
 		});

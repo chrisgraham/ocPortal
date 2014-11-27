@@ -450,6 +450,7 @@ class Module_catalogues
     }
 
     public $title;
+    public $_title;
     public $catalogue_name;
     public $id;
     public $screen;
@@ -459,7 +460,7 @@ class Module_catalogues
     public $title_to_use_2;
     public $category;
     public $root;
-    public $ecommerce;
+    public $is_ecommerce;
 
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.

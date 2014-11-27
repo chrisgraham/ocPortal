@@ -338,7 +338,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
     // Is it already loaded?
     if ($RECORD_TEMPLATES_USED) {
         global $RECORDED_TEMPLATES_USED;
-        $RECORDED_TEMPLATES_USED[] = $directory '.' . $codename . $suffix;
+        $RECORDED_TEMPLATES_USED[] = $directory . '/' . $codename . $suffix;
     }
 
     // Variables we'll need

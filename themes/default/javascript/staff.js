@@ -61,7 +61,7 @@ function script_load_stuff_staff()
 	{
 		has_local_storage=(typeof window.localStorage!='undefined');
 	}
-	catch (e) { };
+	catch (e) { }
 	if ((has_local_storage) && ('{$VALUE_OPTION;,advanced_admin_cache}'=='1') && (!window.unloaded) && (!browser_matches('gecko')/*Far too slow*/) && (!browser_matches('ie')/*Big problems loading script with sanity in document.write*/))
 	{
 		var html=get_inner_html(document.documentElement,true);
@@ -188,7 +188,7 @@ function local_page_caching(html)
 						best_date_so_far=parsed[2];
 						best_id=keyat;
 					}
-				} catch (e) {}; // Maybe not JSON
+				} catch (e) {} // Maybe not JSON
 			}
 
 			if (best_id)
@@ -199,7 +199,7 @@ function local_page_caching(html)
 				local_page_caching(html);
 			}
 		}
-	};
+	}
 }
 
 function contextual_css_edit()
@@ -295,10 +295,10 @@ function find_active_selectors(match,win)
 					}
 				}
 			}
-			catch (e) { };
+			catch (e) { }
 		}
 	}
-	catch (e) { };
+	catch (e) { }
 
 	for (i=0;i<win.frames.length;i++)
 	{

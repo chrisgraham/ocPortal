@@ -759,7 +759,7 @@ function add_content_to_workflow($content_type = '', $content_id = '', $workflow
     $id = $GLOBALS['SITE_DB']->query_insert('workflow_content', $map, true);
 
     // Set the workflow status to 0 for each point
-    foreach (array_keys(get_approval_points_for_workflow($workflow_id)) as $approval_point_id) {
+    foreach (array_keys(get_all_approval_points($workflow_id)) as $approval_point_id) {
         $GLOBALS['SITE_DB']->query_insert('workflow_content_status', array('workflow_content_id' => $id, 'workflow_approval_point_id' => $approval_point_id, 'status_code' => 0, 'approved_by' => get_member()));
     }
 

@@ -24,14 +24,14 @@
 						<script>// <![CDATA[
 							function load_tab__{TAB_CODE%}()
 							{
-								try { window.scrollTo(0,0); } catch (e) {};
+								try { window.scrollTo(0,0); } catch (e) {}
 
 								load_snippet('profile_tab&tab={TAB_CODE%}&member_id={MEMBER_ID%}'+window.location.search.replace('?','&'),null,function(result) {
 									set_inner_html(document.getElementById('g_{TAB_CODE*}'),result.responseText);
 								});
 
 								// Self destruct loader after this first run
-								try { delete window['load_tab__{TAB_CODE*}']; } catch (e) {};
+								try { delete window['load_tab__{TAB_CODE*}']; } catch (e) {}
 							}
 						//]]></script>
 					{+END}

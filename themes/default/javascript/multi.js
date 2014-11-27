@@ -34,7 +34,7 @@ function goto_next_field(this_field)
 		{
 			next_field.focus();
 		}
-		catch (e) {};
+		catch (e) {}
 	}
 }
 
