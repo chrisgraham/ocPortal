@@ -1522,8 +1522,8 @@ function ocp_srv($key)
         if (!empty($_ENV['HTTP_HOST'])) {
             return $_ENV['HTTP_HOST'];
         }
-        if (function_exists('get_hostname')) {
-            return get_hostname();
+        if (function_exists('gethostname')) {
+            return gethostname();
         }
         if (!empty($_SERVER['SERVER_ADDR'])) {
             return $_SERVER['SERVER_ADDR'];

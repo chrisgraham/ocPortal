@@ -1,6 +1,6 @@
 <?php
 
-/*EXTRA FUNCTIONS: shell_exec|get_hostname|escapeshellarg|escapeshellcmd*/
+/*EXTRA FUNCTIONS: shell_exec|gethostname|escapeshellarg|escapeshellcmd*/
 
 if (function_exists('set_time_limit')) {
     @set_time_limit(0);
@@ -10,7 +10,7 @@ ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
 // This may want hard-coding if it does not detect correctly
-$transcoder_server = 'http://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (function_exists('gethostname') ? get_hostname() : 'localhost')) . dirname($_SERVER['SCRIPT_NAME']);
+$transcoder_server = 'http://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (function_exists('gethostname') ? gethostname() : 'localhost')) . dirname($_SERVER['SCRIPT_NAME']);
 $liveserver = str_replace('/transcoder', '', $transcoder_server);
 
 //mencoder path
