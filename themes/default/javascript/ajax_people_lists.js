@@ -212,20 +212,20 @@ function update_ajax_member_list_response(result,list_contents)
 			return cancel_bubbling(event);
 		}
 		return null;
-	}
+	};
 	window.current_list_for.onkeyup=function(event)
 	{
 		if (typeof event=='undefined') event=window.event;
 		var ret=handle_arrow_usage(event);
 		if (ret!=null) return ret;
 		return update_ajax_member_list(current_list_for_copy,current_list_for_copy.special,false,event);
-	}
+	};
 	window.current_list_for.onchange=function(event)
 	{
 		current_list_for_copy.onkeyup=current_list_for_copy.old_onkeyup;
 		current_list_for_copy.onchange=current_list_for_copy.old_onchange;
 		if (current_list_for_copy.onchange) current_list_for_copy.onchange(event);
-	}
+	};
 	list.onkeyup=function(event)
 	{
 		if (typeof event=='undefined') event=window.event;
@@ -246,7 +246,7 @@ function update_ajax_member_list_response(result,list_contents)
 			return cancel_bubbling(event);
 		}
 		return null;
-	}
+	};
 	window.current_list_for.onkeypress=function(event)
 	{
 		if (typeof event=='undefined') event=window.event;
@@ -257,7 +257,7 @@ function update_ajax_member_list_response(result,list_contents)
 			return cancel_bubbling(event);
 		}
 		return null;
-	}
+	};
 	list.onkeypress=function(event)
 	{
 		if (typeof event=='undefined') event=window.event;
@@ -268,7 +268,7 @@ function update_ajax_member_list_response(result,list_contents)
 			return cancel_bubbling(event);
 		}
 		return null;
-	}
+	};
 
 	add_event_listener_abstract(list,browser_matches('ios')?'change':'click',make_selection,false);
 

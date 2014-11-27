@@ -177,7 +177,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 				if (magic_keypress(event)) cleanup_function();
 
 				return false;
-			}
+			};
 
 		// Cancel or save actions
 		if (type=='line') input.onkeyup=function(event) // Not using onkeypress because that only works for actual represented characters in the input box
@@ -206,11 +206,11 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 				}
 
 				return null;
-			}
+			};
 		input.onblur=function(event)
 			{
 				if (this.value!='' || raw_text=='') save_function(); else cancel_function();
-			}
+			};
 
 		// Add in form
 		form.appendChild(input);

@@ -344,7 +344,7 @@ function do_input_list(field_name,add)
 			if (add.length==0) return;
 			var i;
 			if (post.value.indexOf('[semihtml')!=-1)
-				insert_textbox(post,'[list]\n')
+				insert_textbox(post,'[list]\n');
 			for (i=0;i<add.length;i++)
 			{
 				if (post.value.indexOf('[semihtml')!=-1)

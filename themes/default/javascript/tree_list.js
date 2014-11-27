@@ -66,7 +66,7 @@ tree_list.prototype.getElementByIdHack=function(id,type,ob,serverid)
 		}
 	}
 	return null;
-}
+};
 
 tree_list.prototype.response=function(ajax_result_frame,ajax_result,expanding_id)
 {
@@ -108,7 +108,7 @@ tree_list.prototype.response=function(ajax_result_frame,ajax_result,expanding_id
 	var name=this.name;
 	fixup_node_positions(name);
 	//window.setTimeout(function() { fixup_node_positions(name); },500);
-}
+};
 
 function attributes_full_fixup(xml)
 {
@@ -269,7 +269,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				if (typeof event=='undefined') event=window.event;
 				cancel_bubbling(event);
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
-			}
+			};
 			html.appendChild(node_self_wrap);
 
 			// Do any children
@@ -335,7 +335,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				if (typeof event=='undefined') event=window.event;
 				cancel_bubbling(event);
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
-			}
+			};
 			html.appendChild(node_self_wrap);
 			var selected=((this.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
 			if ((this.multi_selection) && (!selected))
@@ -387,10 +387,10 @@ tree_list.prototype.render_tree=function(xml,html,element)
 					}
 
 					fix_up_node_position(this);
-				}
+				};
 			node_self.onDragStart=function(x,y)
 				{
-				}
+				};
 			node_self.onDrag=function(x,y)
 				{
 					this.className+=' being_dragged';
@@ -401,7 +401,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 					{
 						this.lastHit=hit;
 					}
-				}
+				};
 		}
 
 		if (initially_expanded)
@@ -416,7 +416,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 	trigger_resize();
 
 	return a;
-}
+};
 
 function fixup_node_positions(name)
 {
@@ -539,7 +539,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 	this.object.busy=false;
 
 	return true;
-}
+};
 
 tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called as a method
 {
@@ -653,7 +653,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	}
 
 	if (/*(!event.ctrlKey) && */(!assume_ctrl)) this.object.last_clicked=this;
-}
+};
 
 tree_list.prototype.make_element_look_selected=function(target,selected)
 {
@@ -666,6 +666,6 @@ tree_list.prototype.make_element_look_selected=function(target,selected)
 		target.className+=' native_ui_selected';
 	}
 	target.style.cursor='pointer';
-}
+};
 
 

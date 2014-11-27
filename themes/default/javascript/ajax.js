@@ -264,7 +264,7 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 
 				// Make AJAX block call
 				return call_block(url_stem+url_stub,'',block,append,null,false,post_params);
-			}
+			};
 			if (links[i].nodeName.toLowerCase()=='a')
 			{
 				if (links[i].onclick)

@@ -1105,7 +1105,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 			{
 				new_window.document.open();
 				new_window.document.write(new_one); // This causes a blocking on Firefox while files download/parse. It's annoying, you'll see the popup freezes. But it works after a few seconds.
-				new_window.document.close()
+				new_window.document.close();
 				new_window.top_window=window;
 				new_window.room_id=room_id;
 				new_window.load_from_room_id=-1;

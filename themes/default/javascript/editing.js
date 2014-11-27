@@ -498,10 +498,10 @@ function find_tags_in_editor(editor,element)
 					var range=document.selection.getRanges()[0];
 					range.startOffset=0;
 					range.endOffset=0;
-					range.select()
+					range.select();
 					document.selection.selectRanges([range]);
 				}
-			}
+			};
 			if (comcodes[i].nodeName.toLowerCase()=='input')
 			{
 				comcodes[i].readOnly=true;
@@ -923,7 +923,7 @@ function show_upload_syndication_options(name,syndication_json,no_quota)
 	var html='';
 	var num_checked=0;
 	var file_ob=document.getElementById(name);
-	var pre_disabled=file_ob.disabled
+	var pre_disabled=file_ob.disabled;
 
 	var syndication=JSON.parse(syndication_json),id,authorised,label,checked;
 	var num=0;

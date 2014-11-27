@@ -74,7 +74,7 @@ function set_field_error(the_element,error_msg)
 	if (typeof the_element.name!='undefined')
 	{
 		var id=the_element.name;
-		var errormsg_element=get_errormsg_element(id)
+		var errormsg_element=get_errormsg_element(id);
 		if ((error_msg=='') && (id.indexOf('_hour')!=-1) || (id.indexOf('_minute')!=-1)) return; // Do not blank out as day/month/year (which comes first) would have already done it
 		if (errormsg_element)
 		{
@@ -181,7 +181,7 @@ function try_to_simplify_iframe_form()
 			_simplified_form_continue_submit(iframe,form_cat_selector);
 
 			return null;
-		}
+		};
 		if ((found.getAttribute('size')>1) || (found.multiple)) found.onclick=found.onchange;
 		if (iframe)
 		{

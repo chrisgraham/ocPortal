@@ -807,7 +807,7 @@ function ModalWindow()
 						}
 					},2000);
 				}
-			}
+			};
 
 			this.add_event(this.box_wrapper.childNodes[0],'click',function(e) { try { _this.top_window.cancel_bubbling(e); } catch (e) {}; });
 

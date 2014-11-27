@@ -685,7 +685,7 @@ if (!Array.prototype.filter) {
         a.call(b, c[e], +e, c) && // pass the current value into the expression and if truthy,
         d.push(c[e]); // add it to the new array
       
-      return d // give back the new array
+      return d; // give back the new array
   };
 }
 

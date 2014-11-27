@@ -443,7 +443,7 @@ function update_permission_box(setting)
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='none';
-					var button=document.getElementById('access_'+known_groups[k]+'_privilege_container').getElementsByTagName('button')[0]
+					var button=document.getElementById('access_'+known_groups[k]+'_privilege_container').getElementsByTagName('button')[0];
 					if (typeof button!='undefined') button.disabled=true;
 				}
 			} else
@@ -452,7 +452,7 @@ function update_permission_box(setting)
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='block';
-					var button=document.getElementById('access_'+known_groups[k]+'_privilege_container').getElementsByTagName('button')[0]
+					var button=document.getElementById('access_'+known_groups[k]+'_privilege_container').getElementsByTagName('button')[0];
 					if (typeof button!='undefined') button.disabled=false;
 				}
 			}
