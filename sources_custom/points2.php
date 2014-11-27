@@ -16,9 +16,9 @@ if (!function_exists('system_gift_transfer')) {
     /**
      * Transfer gift-points into the specified member's account, courtesy of the system.
      *
-     * @param  SHORT_TEXT               The reason for the transfer
-     * @param  integer                  The size of the transfer
-     * @param  MEMBER                   The member the transfer is to
+     * @param  SHORT_TEXT               $reason The reason for the transfer
+     * @param  integer                  $amount The size of the transfer
+     * @param  MEMBER                   $member_id The member the transfer is to
      */
     function system_gift_transfer($reason, $amount, $member_id)
     {

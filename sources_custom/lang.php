@@ -11,12 +11,12 @@ if (!function_exists('_do_lang')) {
     /**
      * Get the human-readable form of a language ID, or a language entry from a language INI file.
      *
-     * @param  ID_TEXT                  The language ID
-     * @param  ?mixed                   The first token [string or tempcode] (replaces {1}) (null: none)
-     * @param  ?mixed                   The second token [string or tempcode] (replaces {2}) (null: none)
-     * @param  ?mixed                   The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (null: none)
-     * @param  ?LANGUAGE_NAME           The language to use (null: users language)
-     * @param  boolean                  Whether to cause ocPortal to exit if the lookup does not succeed
+     * @param  ID_TEXT                  $codename The language ID
+     * @param  ?mixed                   $token1 The first token [string or tempcode] (replaces {1}) (null: none)
+     * @param  ?mixed                   $token2 The second token [string or tempcode] (replaces {2}) (null: none)
+     * @param  ?mixed                   $token3 The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (null: none)
+     * @param  ?LANGUAGE_NAME           $lang The language to use (null: users language)
+     * @param  boolean                  $require_result Whether to cause ocPortal to exit if the lookup does not succeed
      * @return ?mixed                   The human-readable content (null: not found). String normally. Tempcode if tempcode parameters.
      */
     function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
@@ -285,9 +285,9 @@ if (!function_exists('get_translated_text')) {
     /**
      * Try to return the human-readable version of the language ID, passed in as $entry.
      *
-     * @param  mixed                    The ID (if multi-lang-content on), or the string itself
-     * @param  ?object                  The database connection to use (null: standard site connection)
-     * @param  ?LANGUAGE_NAME           The language (null: uses the current language)
+     * @param  mixed                    $entry The ID (if multi-lang-content on), or the string itself
+     * @param  ?object                  $connection The database connection to use (null: standard site connection)
+     * @param  ?LANGUAGE_NAME           $lang The language (null: uses the current language)
      * @return string                   The human-readable version
      */
     function get_translated_text($entry, $connection = null, $lang = null)
@@ -360,8 +360,8 @@ if (!function_exists('get_translated_text')) {
 /**
  * Convert a language string into another language string.
  *
- * @param  mixed                        The string to convert
- * @param  LONG_TEXT                    The language to convert to
+ * @param  mixed                        $str_in The string to convert
+ * @param  LONG_TEXT                    $lang The language to convert to
  * @return LONG_TEXT                    The converted string
  */
 function google_translate($str_in, $lang)
@@ -496,8 +496,8 @@ function google_translate($str_in, $lang)
 /**
  * Check google cache.
  *
- * @param  STRING                       The string TO CONVERT
- * @param  STRING                       The lANGUAGE STRING
+ * @param  STRING                       $str The string TO CONVERT
+ * @param  STRING                       $lang The lANGUAGE STRING
  * @return ARRAY                        array of data
  */
 function check_google_cache($str, $lang)
@@ -521,9 +521,9 @@ function check_google_cache($str, $lang)
 /**
  * Save successful google response of gtranslate table.
  *
- * @param  STRING                       The string TO CONVERT
- * @param  STRING                       The lANGUAGE STRING
- * @param  STRING                       result of request
+ * @param  STRING                       $str The string TO CONVERT
+ * @param  STRING                       $lang The lANGUAGE STRING
+ * @param  STRING                       $result result of request
  * @return BINARY                       If success return true
  */
 function save_google_cache($str, $lang, $result)

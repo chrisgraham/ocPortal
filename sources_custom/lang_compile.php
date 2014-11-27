@@ -28,12 +28,12 @@ if (!function_exists('require_lang_compile')) {
     /**
      * Load up a language file, compiling it (it's not cached yet).
      *
-     * @param  ID_TEXT                  The language file name
-     * @param  ?LANGUAGE_NAME           The language (null: uses the current language)
-     * @param  ?string                  The language type (lang_custom, or custom) (null: normal priorities are used)
+     * @param  ID_TEXT                  $codename The language file name
+     * @param  ?LANGUAGE_NAME           $lang The language (null: uses the current language)
+     * @param  ?string                  $type The language type (lang_custom, or custom) (null: normal priorities are used)
      * @set    lang_custom custom
-     * @param  PATH                     Where we are cacheing too
-     * @param  boolean                  Whether to just return if there was a loading error
+     * @param  PATH                     $cache_path Where we are cacheing too
+     * @param  boolean                  $ignore_errors Whether to just return if there was a loading error
      * @return boolean                  Whether we FAILED to load
      */
     function require_lang_compile($codename, $lang, $type, $cache_path, $ignore_errors = false)
