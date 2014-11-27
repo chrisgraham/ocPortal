@@ -473,10 +473,10 @@ abstract class Hook_sitemap_base
      * @param  ID_TEXT                  $page_link The page-link we are finding.
      * @param  ?string                  $callback Callback function to send discovered page-links to (null: return).
      * @param  ?array                   $valid_node_types List of node types we will return/recurse-through (null: no limit)
-     * @param  ?integer                 $child_cutoff How deep to go from the Sitemap root (null: no limit).
-     * @param  integer                  $max_recurse_depth Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
-     * @param  boolean                  $recurse_level Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
-     * @param  ID_TEXT                  $require_permission_support The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+     * @param  ?integer                 $child_cutoff Maximum number of children before we cut off all children (null: no limit).
+     * @param  ?integer                 $max_recurse_depth How deep to go from the Sitemap root (null: no limit).
+     * @param  integer                  $recurse_level Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
+     * @param  boolean                  $require_permission_support Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
      * @param  ID_TEXT                  $zone The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
      * @param  boolean                  $use_page_groupings Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
      * @param  boolean                  $consider_secondary_categories Whether to consider secondary categorisations for content that primarily exists elsewhere.

@@ -287,8 +287,12 @@ function get_php_file_api($filename, $include_code = true)
                     $default = null;
                 }
 
-                if ($parameter['name'] == $parameter['phpdoc_name']) {
-                    attach_message(do_lang_tempcode('NAME_MISMATCH', escape_html($parameter['name']), escape_html($parameter['phpdoc_name']), array(escape_html($function_name))), 'warn');
+                if ($parameters[$arg_counter]['phpdoc_name'] == '') {
+                    attach_message(do_lang_tempcode('MISSING_PARAMETER_NAME', escape_html($function_name)), 'warn');
+                } else {
+                    if ($parameter['name'] == $parameter['phpdoc_name']) {
+                        attach_message(do_lang_tempcode('NAME_MISMATCH', escape_html($parameter['name']), escape_html($parameter['phpdoc_name']), array(escape_html($function_name))), 'warn');
+                    }
                 }
 
                 check_function_type($parameter['type'], $function_name, $parameter['name'], $default, array_key_exists('range', $parameter) ? $parameter['range'] : null, array_key_exists('set', $parameter) ? $parameter['set'] : null);
