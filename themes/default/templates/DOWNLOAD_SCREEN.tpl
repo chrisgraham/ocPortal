@@ -49,7 +49,7 @@
 						<tr>
 							<th class="de_th meta_data_title">{!ADDED}</th>
 							<td>
-								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{DATE*}</time>
+								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{DATE_RAW}}" itemprop="datePublished">{DATE*}</time>
 							</td>
 						</tr>
 

@@ -1002,7 +1002,7 @@ class Module_admin_stats
 	{
 		$page=get_param('iscreen');
 
-		$title=get_screen_title(do_lang_tempcode('PAGE_STATISTICS',escape_html($page)),false);
+		$title=get_screen_title(do_lang_tempcode('_PAGE_STATISTICS',escape_html($page)),false);
 
 		//************************************************************************************************
 		// Views per hour/day/week/month

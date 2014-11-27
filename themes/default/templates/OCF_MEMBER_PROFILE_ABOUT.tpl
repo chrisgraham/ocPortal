@@ -181,7 +181,7 @@
 							<tr>
 								<th class="de_th">{!JOIN_DATE}:</th>
 								<td>
-									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{JOIN_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{JOIN_DATE*}</time>
+									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{JOIN_DATE_RAW}}" itemprop="datePublished">{JOIN_DATE*}</time>
 								</td>
 							</tr>
 						{+END}

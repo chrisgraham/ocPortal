@@ -26,7 +26,7 @@
 					{+START,IF_EMPTY,{POSTER_URL}}{!BY_SIMPLE,{POSTER_NAME*}},{+END}
 
 					<span class="post_time">
-						{!POSTED_TIME_SIMPLE_LOWER,<time itemprop="datePublished" datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{TIME_RAW}}" pubdate="pubdate">{TIME*}</time>}
+						{!POSTED_TIME_SIMPLE_LOWER,<time itemprop="datePublished" datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{TIME_RAW}}">{TIME*}</time>}
 					</span>
 
 					{+START,IF_NON_EMPTY,{EMPHASIS}}

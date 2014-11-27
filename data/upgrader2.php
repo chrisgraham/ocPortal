@@ -172,7 +172,7 @@ foreach ($todo as $i=>$target_file)
 {
 	echo '<li>';
 	echo '<input id="file_'.strval($i).'" name="file_'.strval($i).'" type="checkbox" value="1" disabled="disabled"'.(($i<$file_offset+20)?' checked="checked"':'').' /> <label for="file_'.strval($i).'">'.htmlentities($target_file[0]).'</label>';
-	if ($i==$file_offset) echo '<a name="progress" id="progress"></a>';
+	if ($i==$file_offset) echo '<a id="progress"></a>';
 	echo '</li>';
 }
 echo '</ol>';

@@ -197,7 +197,7 @@ q:after {
 }
 
 /* Re-apply default styles non-HTML5-aware browsers */
-aside, header, footer, nav, hgroup, article, section, figure {
+aside, header, footer, nav, article, section, figure {
 	display: block;
 }
 

@@ -28,6 +28,7 @@
  * @param  ?MEMBER		Member being written for (NULL: current member)
  * @param  boolean		Whether to push this out as a site event if user requested
  * @param  ?MEMBER		Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
+ * @return ?AUTO_LINK   The activity ID.
  */
 function activities_addon_syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=1,$a_member_id=NULL,$sitewide_too=false,$a_also_involving=NULL)
 {
