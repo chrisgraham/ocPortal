@@ -106,7 +106,7 @@ function download_gallery_script()
 		$array[]=array('name'=>preg_replace('#^uploads/(galleries|grepimages)/#','',$name),'time'=>$time,'data'=>$data);
 	}
 
-	@ini_set('zlib.output_compression','Off');
+	safe_ini_set('zlib.output_compression','Off');
 
 	//$zip_file=create_zip_file($array);
 	//header('Content-Length: '.strval(strlen($zip_file)));

@@ -62,7 +62,7 @@ class Hook_cron_calendar
 							// Backwards-compatibility for pure PHP code (if its creation date was before the time of writing this comment [Wednesday 22nd Match, 14:58])
 							if (($job['e_add_date']<1143046670) && (!defined('HIPHOP_PHP')))
 							{
-								@ini_set('ocproducts.xss_detect','0');
+								safe_ini_set('ocproducts.xss_detect','0');
 								$to_echo=eval($job_text);
 								if ($to_echo===false) fatal_exit(@strval($php_errormsg));
 							} else

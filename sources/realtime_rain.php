@@ -31,7 +31,7 @@ function realtime_rain_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	header('Content-Type: text/xml; charset='.get_charset());
 	echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';

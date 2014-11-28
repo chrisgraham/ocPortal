@@ -66,8 +66,8 @@ class JabberAuth {
 
 		if($this->debug) {
 			@error_reporting(E_ALL);
-			@ini_set("log_errors", "1");
-			@ini_set("error_log", $this->debugfile);
+			safe_ini_set("log_errors", "1");
+			safe_ini_set("error_log", $this->debugfile);
 		}
 		$this->logg("Starting pipe-auth ..."); // We notice that it's starting ...
 		$this->openstd();

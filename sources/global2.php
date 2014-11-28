@@ -201,12 +201,12 @@ function init__global2()
 	$WHAT_IS_RUNNING=current_script();
 
 	error_reporting(E_ALL);
-	@ini_set('html_errors','1');
-	@ini_set('docref_root','http://www.php.net/manual/en/');
-	@ini_set('docref_ext','.php');
+	safe_ini_set('html_errors','1');
+	safe_ini_set('docref_root','http://www.php.net/manual/en/');
+	safe_ini_set('docref_ext','.php');
 
 	$SERVER_TIMEZONE=function_exists('date_default_timezone_get')?@date_default_timezone_get():ini_get('date.timezone');
-	@ini_set('date.timezone','UTC');
+	safe_ini_set('date.timezone','UTC');
 	if (function_exists('date_default_timezone_set')) date_default_timezone_set('UTC'); else putenv('TZ=UTC');
 
 	$HAS_SET_ERROR_HANDLER=false;
@@ -221,8 +221,8 @@ function init__global2()
 	if ($GLOBALS['DEV_MODE'])
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(10);
-		@ini_set('ocproducts.type_strictness','1');
-		@ini_set('ocproducts.xss_detect','1');
+		safe_ini_set('ocproducts.type_strictness','1');
+		safe_ini_set('ocproducts.xss_detect','1');
 	}
 	if ($GLOBALS['DEV_MODE'])
 	{
@@ -236,16 +236,16 @@ function init__global2()
 	// Try and make the PHP environment as we need it
 	if (function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0); // @'d because it's deprecated and PHP 5.3 may give an error
 
-	@ini_set('auto_detect_line_endings','0');
-	@ini_set('include_path','');
-	@ini_set('default_socket_timeout','60');
+	safe_ini_set('auto_detect_line_endings','0');
+	safe_ini_set('include_path','');
+	safe_ini_set('default_socket_timeout','60');
 
-	@ini_set('allow_url_fopen','0');
-	@ini_set('suhosin.executor.disable_emodifier','1'); // Extra security if suhosin is available
-	@ini_set('suhosin.executor.multiheader','1'); // Extra security if suhosin is available
-	@ini_set('suhosin.executor.disable_eval','0');
-	@ini_set('suhosin.executor.eval.whitelist','');
-	@ini_set('suhosin.executor.func.whitelist','');
+	safe_ini_set('allow_url_fopen','0');
+	safe_ini_set('suhosin.executor.disable_emodifier','1'); // Extra security if suhosin is available
+	safe_ini_set('suhosin.executor.multiheader','1'); // Extra security if suhosin is available
+	safe_ini_set('suhosin.executor.disable_eval','0');
+	safe_ini_set('suhosin.executor.eval.whitelist','');
+	safe_ini_set('suhosin.executor.func.whitelist','');
 
 	// Load most basic config
 	$IN_MINIKERNEL_VERSION=0;
@@ -416,17 +416,17 @@ function init__global2()
 	// Our logging (change false to true for temporarily changing it so staff get logging)
 	if (get_option('log_php_errors')=='1')
 	{
-		@ini_set('log_errors','1');
+		safe_ini_set('log_errors','1');
 		if (addon_installed('errorlog'))
-			@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
+			safe_ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
 	}
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_specific_permission(get_member(),'see_php_errors'))))
 	{
-		@ini_set('display_errors','1');
-	} elseif (!$GLOBALS['DEV_MODE']) @ini_set('display_errors','0');
+		safe_ini_set('display_errors','1');
+	} elseif (!$GLOBALS['DEV_MODE']) safe_ini_set('display_errors','0');
 
 	// G-zip?
-	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
+	safe_ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
 
 	if ((function_exists('setlocale')) && ($MICRO_AJAX_BOOTUP==0))
 	{
@@ -552,7 +552,7 @@ function init__global2()
 		if (substr($default_memory_limit,-2)=='MB') $default_memory_limit=substr($default_memory_limit,0,strlen($default_memory_limit)-1);
 		if ((is_numeric($default_memory_limit)) && (intval($default_memory_limit)<1024*1024*16)) $default_memory_limit.='M';
 	}
-	@ini_set('memory_limit',$default_memory_limit);
+	safe_ini_set('memory_limit',$default_memory_limit);
 	memory_limit_for_max_param('max');
 	if ((isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
@@ -564,7 +564,7 @@ function init__global2()
 			$memory_test=get_param_integer('keep_memory_limit_test',0);
 			if (($memory_test!=0) && ($memory_test<=32))
 			{
-				@ini_set('memory_limit',strval($memory_test).'M');
+				safe_ini_set('memory_limit',strval($memory_test).'M');
 			}
 		}
 	}
@@ -666,9 +666,9 @@ function fast_spider_cache($bot=true)
 				}
 			}
 
-			if (function_exists('gzencode'))
+			if ((function_exists('gzencode')) && (php_function_allowed('ini_set')))
 			{
-				ini_set('zlib.output_compression','Off');
+				safe_ini_set('zlib.output_compression','Off');
 				header('Content-Encoding: gzip');
 			}
 
@@ -698,7 +698,7 @@ function memory_limit_for_max_param($max_param)
 			$shl=@ini_get('suhosin.memory_limit');
 			if (($shl===false) || ($shl=='') || ($shl=='0'))
 			{
-				@ini_set('memory_limit','128M');
+				safe_ini_set('memory_limit','128M');
 			}
 		}
 	}
@@ -712,12 +712,12 @@ function disable_php_memory_limit()
 	$shl=@ini_get('suhosin.memory_limit');
 	if (($shl===false) || ($shl=='') || ($shl=='0'))
 	{
-		@ini_set('memory_limit','64M');
-		@ini_set('memory_limit','-1');
+		safe_ini_set('memory_limit','64M');
+		safe_ini_set('memory_limit','-1');
 	} else
 	{
 		if (is_numeric($shl)) $shl.='M'; // Units are in MB for this, while PHP's memory limit setting has it in bytes
-		@ini_set('memory_limit',$shl);
+		safe_ini_set('memory_limit',$shl);
 	}
 }
 
@@ -2114,10 +2114,10 @@ function convert_data_encodings($known_utf8=false)
 	//  If we don't have any PHP extensions (mbstring etc) that can perform the detection/conversion, our code will take this into account and use utf8_decode at points where it knows that it's being communicated with by Javascript.
 	if (@strlen(ini_get('unicode.runtime_encoding'))>0)
 	{
-		@ini_set('default_charset',$charset);
-		@ini_set('unicode.runtime_encoding',$charset);
-		@ini_set('unicode.output_encoding',$charset);
-		@ini_set('unicode.semantics','1');
+		safe_ini_set('default_charset',$charset);
+		safe_ini_set('unicode.runtime_encoding',$charset);
+		safe_ini_set('unicode.output_encoding',$charset);
+		safe_ini_set('unicode.semantics','1');
 
 		$done_something=true;
 	}

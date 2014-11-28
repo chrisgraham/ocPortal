@@ -113,7 +113,7 @@ function retrieve_autosave()
 	$member_id=get_member();
 	$key=post_param('key');
 
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	echo $GLOBALS['SITE_DB']->query_value_null_ok('autosave','a_value',array('a_member_id'=>$member_id,'a_key'=>$key),'ORDER BY a_time DESC');
 }
@@ -152,7 +152,7 @@ function fractional_edit_script()
 		$_edited=comcode_to_tempcode($edited,get_member());
 		$edited=$_edited->evaluate();
 	}
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 	echo $edited;
 }
 
@@ -300,7 +300,7 @@ function comcode_convert_script()
 	}
 	if (either_param_integer('keep_skip_rubbish',0)==0)
 	{
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 
 		$box_title=get_param('box_title','');
 		if (is_object($out)) $out=$out->evaluate();
@@ -313,7 +313,7 @@ function comcode_convert_script()
 		echo '</result></request>';
 	} else
 	{
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 
 		header('Content-type: text/plain; charset='.get_charset());
 		echo $out;
@@ -431,7 +431,7 @@ function namelike_script()
 		$names=array_unique($names);
 	}
 
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	header('Content-Type: text/xml; charset='.get_charset());
 	echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
@@ -466,7 +466,7 @@ function ajax_tree_script()
 	convert_data_encodings(true);
 	$id=get_param('id','',true);
 	if ($id=='') $id=NULL;
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 	$html_mask=get_param_integer('html_mask',0)==1;
 	if (!$html_mask) echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 	echo ($html_mask?'<html>':'<request>');
@@ -504,7 +504,7 @@ function load_template_script()
 
 	if (!has_actual_page_access(get_member(),'admin_themes','adminzone')) exit();
 
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	$theme=filter_naughty(get_param('theme'));
 	$id=filter_naughty(get_param('id'));
@@ -556,7 +556,7 @@ function snippet_script()
 
 	// End early execution listening (this means register_shutdown_function will run after connection closed - faster)
 	if (function_exists('apache_setenv')) @apache_setenv('no-gzip','1');
-	@ini_set('zlib.output_compression','Off');
+	safe_ini_set('zlib.output_compression','Off');
 	$size=strlen($out);
 	header('Connection: close');
 	@ignore_user_abort(true);

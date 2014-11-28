@@ -37,7 +37,7 @@ function ical_escape($in)
  */
 function output_ical()
 {	
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	header('Content-Type: text/calendar; charset='.get_charset());
 	header('Content-Disposition: inline; filename="export.ics"');

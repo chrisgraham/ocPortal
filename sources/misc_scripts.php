@@ -160,7 +160,7 @@ function cron_bridge_script($caller)
 	if (get_param_integer('querymode',0)==1)
 	{
 		header('Content-Type: text/plain; charset='.get_charset());
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 		require_code('files2');
 		$php_path=find_php_path();
 		echo $php_path.' -C -q --no-header '.$caller;
@@ -1022,7 +1022,7 @@ function thumb_script()
  */
 function question_ui_script()
 {
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 	$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
 	$title=get_param('window_title',false,true);

@@ -76,12 +76,12 @@ function init__minikernel()
 
 	set_error_handler('ocportal_error_handler');
 	if (function_exists('error_get_last')) register_shutdown_function('catch_fatal_errors');
-	@ini_set('track_errors','1');
+	safe_ini_set('track_errors','1');
 	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 
-	@ini_set('ocproducts.type_strictness','1');
+	safe_ini_set('ocproducts.type_strictness','1');
 
-	@ini_set('date.timezone','Greenwich');
+	safe_ini_set('date.timezone','UTC');
 
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 	@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');

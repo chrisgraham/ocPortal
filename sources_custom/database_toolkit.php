@@ -34,7 +34,7 @@ function xml_dump_script()
 	$GLOBALS['DEV_MODE']=false;
 	$GLOBALS['SEMI_DEV_MODE']=false;
 
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	if (strtolower(ocp_srv('REQUEST_METHOD'))=='get') // Interface
 	{

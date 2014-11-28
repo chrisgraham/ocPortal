@@ -896,7 +896,7 @@ class Module_cms_catalogues extends standard_aed_module
 		}
 
 		// Open CSV file
-		@ini_set('auto_detect_line_endings','1');
+		safe_ini_set('auto_detect_line_endings','1');
 		$handle=fopen($csv_name,'rt');
 
 		// Read column names
@@ -1249,7 +1249,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		if (ocp_srv('REQUEST_METHOD')=='HEAD') exit();
 
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 
 		$catalogue_row=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',NULL,NULL,true);
 		if (is_null($catalogue_row)) $catalogue_row=array();

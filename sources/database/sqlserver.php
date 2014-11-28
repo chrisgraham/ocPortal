@@ -35,8 +35,8 @@ function init__database__sqlserver()
 	global $CACHE_DB;
 	$CACHE_DB=array();
 
-	@ini_set('mssql.textlimit','300000');
-	@ini_set('mssql.textsize','300000');
+	safe_ini_set('mssql.textlimit','300000');
+	safe_ini_set('mssql.textsize','300000');
 }
 
 /**

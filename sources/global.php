@@ -21,7 +21,7 @@
 // Quick JS loader
 if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 {
-	@ini_set('zlib.output_compression','On');
+	safe_ini_set('zlib.output_compression','On');
 
 	header("Pragma: public");
 	$time=400*60*60*24;
@@ -58,7 +58,7 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 	}
 
 	header('Content-type: text/html');
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 	exit(str_replace(array('{$BASE_URL}'),array($base_url),file_get_contents($FILE_BASE.'/themes/default/templates/QUICK_JS_LOADER.tpl')));
 }
 
@@ -220,7 +220,7 @@ function require_code($codename,$light_exit=false)
 
 				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 				{
-					@ini_set('display_errors','0');
+					safe_ini_set('display_errors','0');
 					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_b)));
 					if (eval($orig)===false)
 					{
@@ -233,7 +233,7 @@ function require_code($codename,$light_exit=false)
 				}
 				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 				{
-					@ini_set('display_errors','0');
+					safe_ini_set('display_errors','0');
 					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
 					if (eval($orig)===false)
 					{
@@ -249,7 +249,7 @@ function require_code($codename,$light_exit=false)
 		{
 			if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 			{
-				@ini_set('display_errors','0');
+				safe_ini_set('display_errors','0');
 				$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
 				if (eval($orig)===false)
 				{
@@ -282,7 +282,7 @@ function require_code($codename,$light_exit=false)
 			$contents=@file_get_contents($path_b);
 			if ($contents!==false)
 			{
-				@ini_set('display_errors','0');
+				safe_ini_set('display_errors','0');
 				$orig=str_replace(array('?'.'>','<'.'?php'),array('',''),$contents);
 
 				if (eval($orig)===false)
@@ -362,6 +362,34 @@ function object_factory($class,$null_ok=false)
 		fatal_exit(escape_html('Missing class: '.$class));
 	}
 	return new $class;
+}
+
+/**
+ * Find whether a particular PHP function is blocked.
+ *
+ * @param  string		Function name.
+ * @return boolean	Whether it is.
+ */
+function php_function_allowed($function)
+{
+	return (@preg_match('#(\s|,|^)'.str_replace('#','\#',preg_quote($function)).'(\s|$|,)#',strtolower(@ini_get('disable_functions').','.ini_get('suhosin.executor.func.blacklist').','.ini_get('suhosin.executor.include.blacklist').','.ini_get('suhosin.executor.eval.blacklist')))==0);
+}
+
+/**
+ * Sets the value of a configuration option, if the PHP environment allows it.
+ *
+ * @param  string		Config option.
+ * @param  string		New value of option.
+ * @return ~string	Old value of option (false: error).
+ */
+function safe_ini_set($var,$value)
+{
+	if (!php_function_allowed('ini_set'))
+	{
+		return false;
+	}
+
+	return @ini_set($var,$value);
 }
 
 /**
@@ -502,7 +530,7 @@ if ((!isset($CURRENT_SHARE_USER)) || (isset($_SERVER['REQUEST_METHOD'])))
 
 global $FILE_BASE;
 
-@ini_set('track_errors','1'); // so $php_errormsg is available
+safe_ini_set('track_errors','1'); // so $php_errormsg is available
 
 if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 {
@@ -532,7 +560,7 @@ if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_EN
 
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 
-@ini_set('allow_url_fopen','0');
+safe_ini_set('allow_url_fopen','0');
 
 //require_code('critical_errors');
 $GLOBALS['PURE_POST']=$_POST;

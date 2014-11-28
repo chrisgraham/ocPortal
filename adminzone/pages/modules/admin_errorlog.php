@@ -66,6 +66,11 @@ class Module_admin_errorlog
 
 		$title=get_screen_title('ERROR_LOG');
 
+		if (!php_function_allowed('ini_set'))
+		{
+			attach_message(do_lang_tempcode('ERROR_LOGGING_PROBABLY_BROKEN'),'warn');
+		}
+
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);
 		if (is_object($test_tpl)) return $test_tpl;

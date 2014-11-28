@@ -15,16 +15,16 @@
 
 function unit_testing_run()
 {
-	@ini_set('ocproducts.xss_detect','0');
-	@ini_set('ocproducts.type_strictness','0'); // TODO: Fix simpletest to be type strict, then remove this line
+	safe_ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.type_strictness','0'); // TODO: Fix simpletest to be type strict, then remove this line
 
 	global $SCREEN_TEMPLATE_CALLED;
 	$SCREEN_TEMPLATE_CALLED='';
 
 	header('Content-Type: text/html');
 
-	@ini_set('ocproducts.type_strictness','0');
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.type_strictness','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	require_code('_tests/simpletest/unit_tester.php');
 	require_code('_tests/simpletest/web_tester.php');

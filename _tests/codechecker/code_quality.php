@@ -33,7 +33,7 @@ Unsupported syntax:
   Not documented in PHP manual, so may be unreliable.
 */
 
-@ini_set('memory_limit','-1');
+safe_ini_set('memory_limit','-1');
 
 $extra=array();
 if (isset($_SERVER['argv']))

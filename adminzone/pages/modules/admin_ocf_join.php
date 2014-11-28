@@ -582,7 +582,7 @@ class Module_admin_ocf_join
 
 		if (ocp_srv('REQUEST_METHOD')=='HEAD') exit();
 
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 
 		$fields=array('id','m_username','m_email_address','m_last_visit_time','m_cache_num_posts','m_pass_hash_salted','m_pass_salt','m_password_compat_scheme','m_signature','m_validated','m_join_time','m_primary_group','m_is_perm_banned','m_dob_day','m_dob_month','m_dob_year','m_reveal_age','m_language','m_allow_emails','m_allow_emails_from_staff','m_notes');
 		if (addon_installed('ocf_member_avatars')) $fields[]='m_avatar_url';
@@ -846,7 +846,7 @@ class Module_admin_ocf_join
 				}
 			}
 
-			@ini_set('auto_detect_line_endings','1');
+			safe_ini_set('auto_detect_line_endings','1');
 			$myfile=fopen($_FILES['file']['tmp_name'],'rt');
 			$del=',';
 			$csv_header=fgetcsv($myfile,102400,$del);

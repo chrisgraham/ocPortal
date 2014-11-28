@@ -24,7 +24,7 @@
  */
 function upgrade_script()
 {
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	require_lang('upgrade');
 	require_code('database_action');

@@ -12,7 +12,7 @@ header('Content-Disposition: attachment; filename="bookmarks.html"');
 
 $site_name=escape_html(get_site_name());
 
-@ini_set('ocproducts.xss_detect','0');
+safe_ini_set('ocproducts.xss_detect','0');
 
 echo <<<END
 <!DOCTYPE NETSCAPE-Bookmark-file-1>

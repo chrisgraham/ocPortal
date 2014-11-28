@@ -222,7 +222,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 
 	if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) // Don't display - die as normal
 	{
-		@ini_set('display_errors','0');
+		safe_ini_set('display_errors','0');
 		fatal_exit('PHP '.strtoupper($type).' ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline));
 		relay_error_notification($out);
 		exit();

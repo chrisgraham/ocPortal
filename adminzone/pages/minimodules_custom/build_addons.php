@@ -8,7 +8,7 @@
 */
 
 restrictify();
-@ini_set('ocproducts.xss_detect','0');
+safe_ini_set('ocproducts.xss_detect','0');
 
 $_title=get_screen_title('ocPortal addon building tool',false);
 $_title->evaluate_echo();

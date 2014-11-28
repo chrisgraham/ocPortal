@@ -1154,7 +1154,7 @@ class ocp_tempcode
 		$empty_array=array();
 
 		$before=@ini_get('ocproducts.xss_detect');
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 
 		foreach ($this->bits as $bit)
 		{
@@ -1196,7 +1196,7 @@ class ocp_tempcode
 			}
 		}
 
-		@ini_set('ocproducts.xss_detect',$before);
+		safe_ini_set('ocproducts.xss_detect',$before);
 
 		return '';
 	}

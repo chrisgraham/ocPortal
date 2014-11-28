@@ -218,7 +218,7 @@ function opensearch_script()
 
 			require_lang('search');
 
-			@ini_set('ocproducts.xss_detect','0');
+			safe_ini_set('ocproducts.xss_detect','0');
 
 			// JSON format
 			echo '['.chr(10);
@@ -734,7 +734,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 		if (get_param_integer('keep_just_show_query',0)==1)
 		{
-			@ini_set('ocproducts.xss_detect','0');
+			safe_ini_set('ocproducts.xss_detect','0');
 			header('Content-type: text/plain; charset='.get_charset());
 			exit($query);
 		}

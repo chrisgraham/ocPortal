@@ -13,7 +13,7 @@
  * @package		code_quality
  */
 
-@ini_set('memory_limit','-1');
+safe_ini_set('memory_limit','-1');
 error_reporting (E_ALL);
 set_time_limit(1000);
 global $OCPORTAL_PATH;

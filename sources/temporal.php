@@ -402,7 +402,7 @@ function tz_time($time,$zone)
 		@date_default_timezone_set($zone); // @'d because invalid data would otherwise cause a PHP notice
 	} else
 	{
-		@ini_set('date.timezone',$zone);
+		safe_ini_set('date.timezone',$zone);
 	}
 	$ret=$time+intval(60.0*60.0*floatval(date('O',$time))/100.0);
 	if (function_exists('date_default_timezone_set'))
@@ -410,7 +410,7 @@ function tz_time($time,$zone)
 		date_default_timezone_set('UTC');
 	} else
 	{
-		@ini_set('date.timezone','UTC');
+		safe_ini_set('date.timezone','UTC');
 	}
 	return $ret;
 }

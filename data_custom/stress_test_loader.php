@@ -32,7 +32,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'
 require($FILE_BASE.'/sources/global.php');
 
 set_time_limit(0);
-@ini_set('ocproducts.xss_detect','0');
+safe_ini_set('ocproducts.xss_detect','0');
 @header('Content-type: text/plain; charset='.get_charset());
 disable_php_memory_limit();
 if (function_exists('gc_enable')) gc_enable();

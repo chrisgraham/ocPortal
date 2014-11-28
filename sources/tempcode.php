@@ -1201,7 +1201,7 @@ class ocp_tempcode
 		if ($XSS_DETECT)
 		{
 			$before=@ini_get('ocproducts.xss_detect');
-			@ini_set('ocproducts.xss_detect','0');
+			safe_ini_set('ocproducts.xss_detect','0');
 		}
 
 		$no_eval_cache_before=$NO_EVAL_CACHE;
@@ -1253,7 +1253,7 @@ class ocp_tempcode
 				if (!$no_eval_cache_before)
 					$NO_EVAL_CACHE=$no_eval_cache_before;
 				if ($XSS_DETECT)
-					@ini_set('ocproducts.xss_detect',$before);
+					safe_ini_set('ocproducts.xss_detect',$before);
 				$this->is_really_empty=false;
 				return false;
 			}
@@ -1275,7 +1275,7 @@ class ocp_tempcode
 				@ob_end_clean();
 			}
 			if ($XSS_DETECT)
-				@ini_set('ocproducts.xss_detect',$before);
+				safe_ini_set('ocproducts.xss_detect',$before);
 			if (!$no_eval_cache_before)
 				$NO_EVAL_CACHE=$no_eval_cache_before;
 			$ret=($tmp=='');
@@ -1294,7 +1294,7 @@ class ocp_tempcode
 		if (!$no_eval_cache_before)
 			$NO_EVAL_CACHE=$no_eval_cache_before;
 		if ($XSS_DETECT)
-			@ini_set('ocproducts.xss_detect',$before);
+			safe_ini_set('ocproducts.xss_detect',$before);
 		$ret=($this->cached_output=='');
 		$this->is_really_empty=$ret;
 		return $ret;
@@ -1622,7 +1622,7 @@ class ocp_tempcode
 		if ($XSS_DETECT)
 		{
 			$before=@ini_get('ocproducts.xss_detect');
-			@ini_set('ocproducts.xss_detect','0');
+			safe_ini_set('ocproducts.xss_detect','0');
 		}
 
 		if ($current_lang===NULL)
@@ -1660,7 +1660,7 @@ class ocp_tempcode
 				}
 
 				if ($XSS_DETECT)
-					@ini_set('ocproducts.xss_detect',$before);
+					safe_ini_set('ocproducts.xss_detect',$before);
 				return $ret;
 			}
 
@@ -1703,7 +1703,7 @@ class ocp_tempcode
 		}
 
 		if ($XSS_DETECT)
-			@ini_set('ocproducts.xss_detect',$before);
+			safe_ini_set('ocproducts.xss_detect',$before);
 
 		//$tempcode_profile_log_end=microtime();
 		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);

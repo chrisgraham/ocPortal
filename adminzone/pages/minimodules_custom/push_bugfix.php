@@ -8,7 +8,7 @@
 */
 
 restrictify();
-@ini_set('ocproducts.xss_detect','0');
+safe_ini_set('ocproducts.xss_detect','0');
 
 define('SOLUTION_FORUM',283); // The forum ID on ocPortal.com for problem solution posts
 

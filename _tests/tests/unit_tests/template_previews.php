@@ -29,7 +29,7 @@ class template_previews_test_set extends ocp_test_case
 		$_GET['keep_has_js']='0';
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 		$_GET['keep_no_query_limit']='1';
-		@ini_set('memory_limit','-1');
+		safe_ini_set('memory_limit','-1');
 		$_GET['wide']='1';
 		$_GET['keep_devtest']='1';
 		$_GET['keep_has_js']='0';
@@ -52,8 +52,8 @@ class template_previews_test_set extends ocp_test_case
 			$this->assertFalse(((!array_key_exists($t,$all_previews)) && (substr($t,0,11)!='JAVASCRIPT_') && ($t!='JAVASCRIPT.tpl')),'Missing preview for: '.$t);
 		}
 
-		@ini_set('ocproducts.type_strictness','0');
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.type_strictness','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testScreenPreview()
@@ -134,8 +134,8 @@ class template_previews_test_set extends ocp_test_case
 			}
 		}
 
-		@ini_set('ocproducts.type_strictness','0');
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.type_strictness','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testRepeatConsistency()
@@ -200,8 +200,8 @@ class template_previews_test_set extends ocp_test_case
 			unset($out2);
 		}
 
-		@ini_set('ocproducts.type_strictness','0');
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.type_strictness','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testNoMissingParams()
@@ -234,8 +234,8 @@ class template_previews_test_set extends ocp_test_case
 			unset($out1);
 		}
 
-		@ini_set('ocproducts.type_strictness','0');
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.type_strictness','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testNoRedundantFunctions()
@@ -259,8 +259,8 @@ class template_previews_test_set extends ocp_test_case
 			}
 		}
 
-		@ini_set('ocproducts.type_strictness','0');
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.type_strictness','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testNoDoublePreviews()
@@ -282,8 +282,8 @@ class template_previews_test_set extends ocp_test_case
 			$all_used+=$used;
 		}
 
-		@ini_set('ocproducts.type_strictness','0');
-		@ini_set('ocproducts.xss_detect','0');
+		safe_ini_set('ocproducts.type_strictness','0');
+		safe_ini_set('ocproducts.xss_detect','0');
 	}
 
 

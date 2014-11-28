@@ -1151,7 +1151,7 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$
 				date_default_timezone_set($timezone);
 			} else
 			{
-				@ini_set('date.timezone',$timezone);
+				safe_ini_set('date.timezone',$timezone);
 			}
 			$timestamp=strtotime('+'.strval($nth).' '.($days[$day%7]),$month_start);
 			if (function_exists('date_default_timezone_set'))
@@ -1159,7 +1159,7 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$
 				date_default_timezone_set('UTC');
 			} else
 			{
-				@ini_set('date.timezone','UTC');
+				safe_ini_set('date.timezone','UTC');
 			}
 			// Load these up in UTC (where we want them, where $hour and $minute already are)
 			$day_of_month=intval(date('d',$timestamp));
@@ -1179,7 +1179,7 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$
 				date_default_timezone_set($timezone);
 			} else
 			{
-				@ini_set('date.timezone',$timezone);
+				safe_ini_set('date.timezone',$timezone);
 			}
 			$timestamp=strtotime('-'.strval($nth).' '.($days[$day%7]),$month_end+1);
 			if (function_exists('date_default_timezone_set'))
@@ -1187,7 +1187,7 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$
 				date_default_timezone_set('UTC');
 			} else
 			{
-				@ini_set('date.timezone','UTC');
+				safe_ini_set('date.timezone','UTC');
 			}
 			// Load these up in UTC (where we want them, where $hour and $minute already are)
 			$day_of_month=intval(date('d',$timestamp));

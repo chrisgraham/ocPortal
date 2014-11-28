@@ -214,7 +214,7 @@ function site_tree_script()
 
 	header('Content-Type: text/xml; charset='.get_charset());
 	$permissions_needed=(get_param_integer('get_perms',0)==1); // Whether we are limiting our tree to permission-supporting
-	@ini_set('ocproducts.xss_detect','0');
+	safe_ini_set('ocproducts.xss_detect','0');
 
 	echo '<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 	echo '<request><result>';

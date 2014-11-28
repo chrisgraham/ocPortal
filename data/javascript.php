@@ -40,7 +40,7 @@ header('Content-Type: text/javascript; charset='.get_charset());
 $lang=get_param('lang','');
 if ($lang!='') require_lang($lang);
 $script=get_param('script');
-@ini_set('ocproducts.xss_detect','0');
+safe_ini_set('ocproducts.xss_detect','0');
 if ($script!='') echo file_get_contents(javascript_enforce(strtoupper(filter_naughty_harsh($script))));
 
 

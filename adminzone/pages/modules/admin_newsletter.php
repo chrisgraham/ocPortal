@@ -215,7 +215,7 @@ class Module_admin_newsletter extends standard_aed_module
 				}
 			}
 
-			@ini_set('auto_detect_line_endings','1');
+			safe_ini_set('auto_detect_line_endings','1');
 			$myfile=fopen($_FILES['file']['tmp_name'],'rt');
 			$del=',';
 			$csv_test_line=fgetcsv($myfile,4096,$del);
@@ -598,7 +598,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 			if (ocp_srv('REQUEST_METHOD')=='HEAD') exit();
 
-			@ini_set('ocproducts.xss_detect','0');
+			safe_ini_set('ocproducts.xss_detect','0');
 		}
 
 		// Show subscribers
@@ -1396,7 +1396,7 @@ class Module_admin_newsletter extends standard_aed_module
 			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
 				$__csv_data=array();
-				@ini_set('auto_detect_line_endings','1');
+				safe_ini_set('auto_detect_line_endings','1');
 				$myfile=fopen($_FILES['file']['tmp_name'],'rt');
 				$del=',';
 				$csv_test_line=fgetcsv($myfile,4096,$del);

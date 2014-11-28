@@ -1257,7 +1257,7 @@ class virtual_bash
 
 			$this->output[STREAM_STDERR]='';
 
-			@ini_set('ocproducts.xss_detect','0');
+			safe_ini_set('ocproducts.xss_detect','0');
 			ob_start();
 			if ((!defined('HIPHOP_PHP')) || (@eval('return 1;')===1))
 			{
