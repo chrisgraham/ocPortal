@@ -30,8 +30,8 @@ You need to go into your server properties and turn the security to "SQL Server 
  */
 function init__database__sqlserver()
 {
-    @ini_set('mssql.textlimit', '300000');
-    @ini_set('mssql.textsize', '300000');
+    safe_ini_set('mssql.textlimit', '300000');
+    safe_ini_set('mssql.textsize', '300000');
 }
 
 /**

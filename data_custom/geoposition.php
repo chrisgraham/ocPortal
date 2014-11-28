@@ -41,7 +41,7 @@ prepare_for_known_ajax_response();
 
 header('Content-type: text/plain; charset=' . get_charset());
 
-@ini_set('ocproducts.xss_detect', '0');
+safe_ini_set('ocproducts.xss_detect', '0');
 
 $lstring = get_param('lstring', null);
 if (!is_null($lstring)) {

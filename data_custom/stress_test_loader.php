@@ -41,7 +41,7 @@ require($FILE_BASE . '/sources/global.php');
 if (function_exists('set_time_limit')) {
     set_time_limit(0);
 }
-@ini_set('ocproducts.xss_detect', '0');
+safe_ini_set('ocproducts.xss_detect', '0');
 @header('Content-type: text/plain; charset=' . get_charset());
 disable_php_memory_limit();
 if (function_exists('gc_enable')) {

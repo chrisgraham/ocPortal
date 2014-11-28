@@ -173,7 +173,7 @@ function require_code($codename, $light_exit = false)
                 // Note we load the original and then the override. This is so function_exists can be used in the overrides (as we can't support the re-definition) OR in the case of Mx_ class derivation, so that the base class is loaded first.
 
                 if (isset($_GET['keep_show_parse_errors'])) {
-                    @ini_set('display_errors', '0');
+                    safe_ini_set('display_errors', '0');
                     $orig = str_replace('?' . '>', '', str_replace('<' . '?php', '', file_get_contents($path_b)));
                     if (eval($orig) === false) {
                         if ((!function_exists('fatal_exit')) || ($codename == 'failure')) {
@@ -189,7 +189,7 @@ function require_code($codename, $light_exit = false)
                     }
                 }
                 if (isset($_GET['keep_show_parse_errors'])) {
-                    @ini_set('display_errors', '0');
+                    safe_ini_set('display_errors', '0');
                     $orig = str_replace('?' . '>', '', str_replace('<' . '?php', '', file_get_contents($path_a)));
                     if (eval($orig) === false) {
                         if ((!function_exists('fatal_exit')) || ($codename == 'failure')) {
@@ -207,7 +207,7 @@ function require_code($codename, $light_exit = false)
             }
         } else {
             if (isset($_GET['keep_show_parse_errors'])) {
-                @ini_set('display_errors', '0');
+                safe_ini_set('display_errors', '0');
                 $orig = str_replace('?' . '>', '', str_replace('<' . '?php', '', file_get_contents($path_a)));
                 if (eval($orig) === false) {
                     if ((!function_exists('fatal_exit')) || ($codename == 'failure')) {
@@ -242,7 +242,7 @@ function require_code($codename, $light_exit = false)
         if (isset($_GET['keep_show_parse_errors'])) {
             $contents = @file_get_contents($path_b);
             if ($contents !== false) {
-                @ini_set('display_errors', '0');
+                safe_ini_set('display_errors', '0');
                 $orig = str_replace(array('?' . '>', '<' . '?php'), array('', ''), $contents);
 
                 if (eval($orig) === false) {
@@ -353,6 +353,33 @@ function object_factory($class, $failure_ok = false)
         fatal_exit(escape_html('Missing class: ' . $class));
     }
     return new $class;
+}
+
+/**
+ * Find whether a particular PHP function is blocked.
+ *
+ * @param  string                       $function Function name.
+ * @return boolean                      Whether it is.
+ */
+function php_function_allowed($function)
+{
+    return (@preg_match('#(\s|,|^)' . str_replace('#', '\#', preg_quote($function)) . '(\s|$|,)#', strtolower(@ini_get('disable_functions') . ',' . ini_get('suhosin.executor.func.blacklist') . ',' . ini_get('suhosin.executor.include.blacklist') . ',' . ini_get('suhosin.executor.eval.blacklist'))) == 0);
+}
+
+/**
+ * Sets the value of a configuration option, if the PHP environment allows it.
+ *
+ * @param  string                       $var Config option.
+ * @param  string                       $value New value of option.
+ * @return ~string                      Old value of option (false: error).
+ */
+function safe_ini_set($var,$value)
+{
+    if (!php_function_allowed('ini_set')) {
+        return false;
+    }
+
+    return safe_ini_set($var, $value);
 }
 
 /**
@@ -484,24 +511,24 @@ define('HHVM', strpos(PHP_VERSION, 'hiphop') !== false);
 define('GOOGLE_APPENGINE', isset($_SERVER['APPLICATION_ID']));
 
 // Sanitise the PHP environment some more
-@ini_set('track_errors', '1'); // so $php_errormsg is available
+safe_ini_set('track_errors', '1'); // so $php_errormsg is available
 if (!GOOGLE_APPENGINE) {
-    @ini_set('include_path', '');
-    @ini_set('allow_url_fopen', '0');
+    safe_ini_set('include_path', '');
+    safe_ini_set('allow_url_fopen', '0');
 }
-@ini_set('suhosin.executor.disable_emodifier', '1'); // Extra security if suhosin is available
-@ini_set('suhosin.executor.multiheader', '1'); // Extra security if suhosin is available
-@ini_set('suhosin.executor.disable_eval', '0');
-@ini_set('suhosin.executor.eval.whitelist', '');
-@ini_set('suhosin.executor.func.whitelist', '');
-@ini_set('auto_detect_line_endings', '0');
-@ini_set('default_socket_timeout', '60');
+safe_ini_set('suhosin.executor.disable_emodifier', '1'); // Extra security if suhosin is available
+safe_ini_set('suhosin.executor.multiheader', '1'); // Extra security if suhosin is available
+safe_ini_set('suhosin.executor.disable_eval', '0');
+safe_ini_set('suhosin.executor.eval.whitelist', '');
+safe_ini_set('suhosin.executor.func.whitelist', '');
+safe_ini_set('auto_detect_line_endings', '0');
+safe_ini_set('default_socket_timeout', '60');
 if (function_exists('set_magic_quotes_runtime')) {
     @set_magic_quotes_runtime(0); // @'d because it's deprecated and PHP 5.3 may give an error
 }
-@ini_set('html_errors', '1');
-@ini_set('docref_root', 'http://www.php.net/manual/en/');
-@ini_set('docref_ext', '.php');
+safe_ini_set('html_errors', '1');
+safe_ini_set('docref_root', 'http://www.php.net/manual/en/');
+safe_ini_set('docref_ext', '.php');
 
 // Get ready for some global variables
 global $REQUIRED_CODE, $CURRENT_SHARE_USER, $PURE_POST, $NO_QUERY_LIMIT, $NO_QUERY_LIMIT, $IN_MINIKERNEL_VERSION;

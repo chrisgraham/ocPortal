@@ -1203,7 +1203,7 @@ class Tempcode
         $empty_array = array();
 
         $before = @ini_get('ocproducts.xss_detect');
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
 
         foreach ($this->bits as $bit) {
             $bit_0 = $bit[0];
@@ -1242,7 +1242,7 @@ class Tempcode
             }
         }
 
-        @ini_set('ocproducts.xss_detect', $before);
+        safe_ini_set('ocproducts.xss_detect', $before);
 
         return '';
     }

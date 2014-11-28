@@ -36,7 +36,7 @@ class Hook_upload_syndication_photobucket
     protected function _get_api()
     {
         if (is_null($this->_api)) {
-            @ini_set('ocproducts.type_strictness', '0');
+            safe_ini_set('ocproducts.type_strictness', '0');
             require_code('photobucket/PBAPI');
             $api = new PBAPI(get_option('photobucket_client_id'), get_option('photobucket_client_secret'));
             $api->setResponseParser('phpserialize');

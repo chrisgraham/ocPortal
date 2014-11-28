@@ -38,7 +38,7 @@ function do_user_import()
 
     if (!USER_IMPORT_TEST_MODE) {
         require_code('files');
-        @ini_set('auto_detect_line_endings', '1');
+        safe_ini_set('auto_detect_line_endings', '1');
         $infile = fopen(get_custom_file_base() . '/' . USER_IMPORT_TEMP_PATH, 'wb');
         $test = http_download_file(USER_IMPORT_URL, null, false, false, 'ocPortal', null, null, null, null, null, $infile);
         fclose($infile);
@@ -47,7 +47,7 @@ function do_user_import()
         }
         $infile = fopen(get_custom_file_base() . '/' . USER_IMPORT_TEMP_PATH, 'rb');
     } else {
-        @ini_set('auto_detect_line_endings', '1');
+        safe_ini_set('auto_detect_line_endings', '1');
         $infile = fopen(get_custom_file_base() . '/' . USER_IMPORT_TEMP_PATH, 'rt');
     }
 

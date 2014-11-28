@@ -29,7 +29,7 @@ function realtime_rain_script()
 
     prepare_for_known_ajax_response();
 
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
 
     header('Content-Type: text/xml');
     echo '<?xml version="1.0" encoding="' . get_charset() . '"?' . '>';

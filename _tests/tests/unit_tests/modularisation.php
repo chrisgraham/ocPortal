@@ -59,7 +59,7 @@ class modularisation_test_set extends ocp_test_case
             }
         }
 
-        ini_set('memory_limit', '500M');
+        safe_ini_set('memory_limit', '500M');
 
         $GFILE_ARRAY = array();
         $this->do_dir();

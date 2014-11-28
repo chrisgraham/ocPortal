@@ -17,7 +17,7 @@
 This file contains compatibility code to be able to load parts of ocPortal, as well as some custom functions needed by the CQC.
 */
 
-@ini_set('memory_limit', '-1');
+safe_ini_set('memory_limit', '-1');
 error_reporting(E_ALL);
 if (function_exists('set_time_limit')) {
     @set_time_limit(1000);

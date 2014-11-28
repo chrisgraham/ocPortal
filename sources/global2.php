@@ -43,11 +43,11 @@ function init__global2()
         }
     }
 
-    @ini_set('log_errors', '1');
+    safe_ini_set('log_errors', '1');
     if ((GOOGLE_APPENGINE) && (!appengine_is_live())) {
         @mkdir(get_custom_file_base() . '/data_custom', 0755);
     }
-    @ini_set('error_log', get_custom_file_base() . '/data_custom/errorlog.php');
+    safe_ini_set('error_log', get_custom_file_base() . '/data_custom/errorlog.php');
 
     if ((running_script('messages')) && (get_param('action', 'new') == 'new') && (get_param_integer('routine_refresh', 0) == 0)) { // Architecturally hackerish chat message precheck (for extra efficiency)
         require_code('chat_poller');
@@ -141,7 +141,7 @@ function init__global2()
     if ($SERVER_TIMEZONE_CACHE != 'UTC') {
         date_default_timezone_set('UTC');
     }
-    ini_set('date.timezone', 'UTC'); // In case PHP does not have it configured, would produce a warning
+    safe_ini_set('date.timezone', 'UTC'); // In case PHP does not have it configured, would produce a warning
 
     // Initialise some error handling
     error_reporting(E_ALL);
@@ -171,8 +171,8 @@ function init__global2()
         if (function_exists('set_time_limit')) {
             @set_time_limit(10);
         }
-        @ini_set('ocproducts.type_strictness', '1');
-        @ini_set('ocproducts.xss_detect', '1');
+        safe_ini_set('ocproducts.type_strictness', '1');
+        safe_ini_set('ocproducts.xss_detect', '1');
     }
     if ($DEV_MODE || $SEMI_DEV_MODE) {
         require_code('developer_tools');
@@ -329,17 +329,17 @@ function init__global2()
 
     // Our logging
     if (get_option('log_php_errors') == '0') {
-        @ini_set('log_errors', '0');
+        safe_ini_set('log_errors', '0');
     }
     if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP) && ((get_option('display_php_errors') == '1') || (running_script('upgrader')) || (has_privilege(get_member(), 'see_php_errors')))) {
-        @ini_set('display_errors', '1');
+        safe_ini_set('display_errors', '1');
     } elseif (!$DEV_MODE) {
-        @ini_set('display_errors', '0');
+        safe_ini_set('display_errors', '0');
     }
 
     // G-zip?
-    @ini_set('zlib.output_compression', (get_option('gzip_output') == '1') ? '2048' : 'Off'); // 2KB buffer is based on capturing repetition while not breaking output streaming
-    @ini_set('zlib.output_compression_level', '2'); // Compression doesn't get much better after this, but performance drop
+    safe_ini_set('zlib.output_compression', (get_option('gzip_output') == '1') ? '2048' : 'Off'); // 2KB buffer is based on capturing repetition while not breaking output streaming
+    safe_ini_set('zlib.output_compression_level', '2'); // Compression doesn't get much better after this, but performance drop
 
     // Check installer not left behind
     if ((!$MICRO_AJAX_BOOTUP) && (!$MICRO_BOOTUP) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks'] != '1'))) {
@@ -397,7 +397,7 @@ function init__global2()
             $default_memory_limit .= 'M';
         }
     }
-    @ini_set('memory_limit', $default_memory_limit);
+    safe_ini_set('memory_limit', $default_memory_limit);
     memory_limit_for_max_param('max');
     if ((isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) {
         if (get_param_integer('keep_avoid_memory_limit', 0) == 1) {
@@ -405,7 +405,7 @@ function init__global2()
         } else {
             $memory_test = get_param_integer('keep_memory_limit_test', 0);
             if (($memory_test != 0) && ($memory_test <= 32)) {
-                @ini_set('memory_limit', strval($memory_test) . 'M');
+                safe_ini_set('memory_limit', strval($memory_test) . 'M');
             }
         }
     }
@@ -553,8 +553,8 @@ function fast_spider_cache($bot = true)
                 }
             }
 
-            if (function_exists('gzencode')) {
-                ini_set('zlib.output_compression', 'Off');
+            if ((function_exists('gzencode')) && (php_function_allowed('ini_set'))) {
+                safe_ini_set('zlib.output_compression', 'Off');
                 header('Content-Encoding: gzip');
             }
 
@@ -582,7 +582,7 @@ function memory_limit_for_max_param($max_param)
         if (has_privilege(get_member(), 'remove_page_split')) {
             $shl = @ini_get('suhosin.memory_limit');
             if (($shl === false) || ($shl == '') || ($shl == '0')) {
-                @ini_set('memory_limit', '128M');
+                safe_ini_set('memory_limit', '128M');
             }
         }
     }
@@ -595,13 +595,13 @@ function disable_php_memory_limit()
 {
     $shl = @ini_get('suhosin.memory_limit');
     if (($shl === false) || ($shl == '') || ($shl == '0')) {
-        @ini_set('memory_limit', '64M');
-        @ini_set('memory_limit', '-1');
+        safe_ini_set('memory_limit', '64M');
+        safe_ini_set('memory_limit', '-1');
     } else {
         if (is_numeric($shl)) {
             $shl .= 'M'; // Units are in MB for this, while PHP's memory limit setting has it in bytes
         }
-        @ini_set('memory_limit', $shl);
+        safe_ini_set('memory_limit', $shl);
     }
 }
 

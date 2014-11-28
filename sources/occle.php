@@ -1205,7 +1205,7 @@ class Virtual_shell
 
             $this->output[STREAM_STDERR] = '';
 
-            @ini_set('ocproducts.xss_detect', '0');
+            safe_ini_set('ocproducts.xss_detect', '0');
             ob_start();
             $occle_eval_output = eval($this->parsed_input[SECTION_COMMAND]);
             $occle_output = ob_get_contents();

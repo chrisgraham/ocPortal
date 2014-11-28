@@ -444,11 +444,11 @@ class PHP_Crossword
 	 */
 	function __getMatchRegexp($str)
 	{
-		@ini_set('suhosin.executor.disable_emodifier','0');
+		safe_ini_set('suhosin.executor.disable_emodifier','0');
 		$str = preg_replace("/^_*/e", "'^.{0,'.strlen('\\0').'}'", $str, 1);
 		$str = preg_replace("/_*$/e", "'.{0,'.strlen('\\0').'}$'", $str, 1);
 		$str = preg_replace("/_+/e", "'.{'.strlen('\\0').'}'", $str);
-		@ini_set('suhosin.executor.disable_emodifier','1');
+		safe_ini_set('suhosin.executor.disable_emodifier','1');
 		return $str;
 	}
 

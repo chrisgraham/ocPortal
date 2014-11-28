@@ -23,7 +23,7 @@ class clean_reinstall_test_set extends ocp_test_case
         require_code('files2');
         $files = get_directory_contents(get_file_base());
 
-        @ini_set('memory_limit', '-1');
+        safe_ini_set('memory_limit', '-1');
 
         foreach ($files as $i => $file) {
             if (substr($file, -4) == '.php') {

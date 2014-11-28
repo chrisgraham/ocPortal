@@ -179,7 +179,7 @@ function dload_script()
     $from = 0;
     $new_length = $size;
 
-    @ini_set('zlib.output_compression', 'Off');
+    safe_ini_set('zlib.output_compression', 'Off');
 
     // They're trying to resume (so update our range)
     $httprange = ocp_srv('HTTP_RANGE');

@@ -260,7 +260,7 @@ function attachments_script()
     $from = 0;
     $new_length = $size;
 
-    @ini_set('zlib.output_compression', 'Off');
+    safe_ini_set('zlib.output_compression', 'Off');
 
     // They're trying to resume (so update our range)
     $httprange = ocp_srv('HTTP_RANGE');
@@ -301,7 +301,7 @@ function attachments_script()
         $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'values SET the_value=(the_value+' . strval($size) . ') WHERE the_name=\'download_bandwidth\'', 1);
     }
 
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
 
     if (ocp_srv('REQUEST_METHOD') == 'HEAD') {
         return;

@@ -73,6 +73,10 @@ class Module_admin_errorlog
 
         $this->title = get_screen_title('ERROR_LOG');
 
+        if (!php_function_allowed('ini_set')) {
+            attach_message(do_lang_tempcode('ERROR_LOGGING_PROBABLY_BROKEN'), 'warn');
+        }
+
         return null;
     }
 

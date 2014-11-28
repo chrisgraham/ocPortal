@@ -42,8 +42,8 @@ $RELATIVE_PATH = '';
 
 error_reporting(E_ALL);
 
-@ini_set('display_errors', '1');
-@ini_set('assert.active', '0');
+safe_ini_set('display_errors', '1');
+safe_ini_set('assert.active', '0');
 
 global $DEFAULT_FORUM;
 $DEFAULT_FORUM = 'ocf';
@@ -82,12 +82,12 @@ if (!array_key_exists('type', $_GET)) {
 
 $shl = @ini_get('suhosin.memory_limit');
 if (($shl === false) || ($shl == '') || ($shl == '0')) {
-    @ini_set('memory_limit', '-1');
+    safe_ini_set('memory_limit', '-1');
 } else {
     if (is_numeric($shl)) {
         $shl .= 'M'; // Units are in MB for this, while PHP's memory limit setting has it in bytes
     }
-    @ini_set('memory_limit', $shl);
+    safe_ini_set('memory_limit', $shl);
 }
 
 // Tunnel into some ocPortal code we can use
@@ -2344,6 +2344,22 @@ function require_code($codename)
 function object_factory($class)
 {
     return new $class;
+}
+
+/**
+ * Sets the value of a configuration option, if the PHP environment allows it.
+ *
+ * @param  string                       $var Config option.
+ * @param  string                       $value New value of option.
+ * @return ~string                      Old value of option (false: error).
+ */
+function safe_ini_set($var,$value)
+{
+    if (@preg_match('#(\s|,|^)' . str_replace('#', '\#', preg_quote('ini_set')) . '(\s|$|,)#', strtolower(@ini_get('disable_functions') . ',' . ini_get('suhosin.executor.func.blacklist') . ',' . ini_get('suhosin.executor.include.blacklist') . ',' . ini_get('suhosin.executor.eval.blacklist'))) != 0) {
+        return false;
+    }
+
+    return safe_ini_set($var, $value);
 }
 
 /**

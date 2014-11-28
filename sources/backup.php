@@ -132,8 +132,8 @@ function make_backup_2($file, $b_type, $max_size) // This is called as a shutdow
     }
     $logfile_path = get_custom_file_base() . '/exports/backups/' . $file . '.txt';
     $logfile = @fopen($logfile_path, GOOGLE_APPENGINE ? 'wb' : 'wt') or intelligent_write_error($logfile_path); // .txt file because IIS doesn't allow .log download
-    @ini_set('log_errors', '1');
-    @ini_set('error_log', $logfile_path);
+    safe_ini_set('log_errors', '1');
+    safe_ini_set('error_log', $logfile_path);
     fwrite($logfile, 'This is a log file for an ocPortal backup. The backup is not complete unless this log terminates with a completion message.' . "\n\n");
 
     require_code('tar');

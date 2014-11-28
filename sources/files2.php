@@ -313,7 +313,7 @@ function make_csv($data, $filename = 'data.csv', $headers = true, $output_and_ex
     if ($output_and_exit) {
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
 
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
 
         if (!is_null($outfile)) {
             rewind($outfile);
@@ -1602,11 +1602,11 @@ function _http_download_file($url, $byte_limit = null, $trigger_error = true, $n
         return _detect_character_encoding($input);
     } else {
         // PHP streams method
-        if (($errno != 110) && (($errno != 10060) || (@ini_get('default_socket_timeout') == '1')) && (is_null($post_params))) {
+        if (($errno != 110) && (($errno != 10060) || (@ini_get('default_socket_timeout') == '1')) && (is_null($post_params)) && ((@ini_get('allow_url_fopen')) || (php_function_allowed('ini_set')))) {
             // Perhaps fsockopen is restricted... try fread/file_get_contents
-            @ini_set('allow_url_fopen', '1');
+            safe_ini_set('allow_url_fopen', '1');
             $timeout_before = @ini_get('default_socket_timeout');
-            @ini_set('default_socket_timeout', strval(intval($timeout)));
+            safe_ini_set('default_socket_timeout', strval(intval($timeout)));
             if ($put !== null) {
                 $raw_payload .= file_get_contents($put_path);
             }
@@ -1650,8 +1650,8 @@ function _http_download_file($url, $byte_limit = null, $trigger_error = true, $n
             if ((!is_null($byte_limit)) && ($read_file !== false)) {
                 $read_file = substr($read_file, 0, $byte_limit);
             }
-            @ini_set('allow_url_fopen', '0');
-            @ini_set('default_socket_timeout', $timeout_before);
+            safe_ini_set('allow_url_fopen', '0');
+            safe_ini_set('default_socket_timeout', $timeout_before);
             if ($read_file !== false) {
                 $DOWNLOAD_LEVEL--;
                 if ($put !== null) {

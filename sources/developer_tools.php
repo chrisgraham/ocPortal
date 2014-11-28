@@ -111,8 +111,8 @@ function destrictify($change_content_type = true, $mysql_too = false)
     if ((get_forum_type() == 'ocf') && ($mysql_too)) {
         $GLOBALS['SITE_DB']->query('SET sql_mode=\'\'', null, null, true);
     }
-    @ini_set('ocproducts.type_strictness', '0');
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.type_strictness', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
     $include_path = ini_get('include_path');
     $include_path .= PATH_SEPARATOR . './';
     $include_path .= PATH_SEPARATOR . get_file_base() . '/';
@@ -122,11 +122,11 @@ function destrictify($change_content_type = true, $mysql_too = false)
         if (get_zone_name() != '') {
             $include_path .= PATH_SEPARATOR . get_file_base() . '/' . get_zone_name() . '/';
         }
-        @ini_set('include_path', $include_path);
+        safe_ini_set('include_path', $include_path);
     }
     //disable_php_memory_limit();   Don't do this, recipe for disaster
-    @ini_set('suhosin.executor.disable_emodifier', '0');
-    @ini_set('suhosin.executor.multiheader', '0');
+    safe_ini_set('suhosin.executor.disable_emodifier', '0');
+    safe_ini_set('suhosin.executor.multiheader', '0');
     $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
     $GLOBALS['NO_QUERY_LIMIT'] = true;
 }
@@ -155,14 +155,14 @@ function restrictify()
         $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES', null, null, true);
     }
     if (($GLOBALS['DEV_MODE']) && (strpos(ocp_srv('SCRIPT_NAME'), '_tests') === false)) {
-        @ini_set('ocproducts.type_strictness', '1');
-        @ini_set('ocproducts.xss_detect', '1');
+        safe_ini_set('ocproducts.type_strictness', '1');
+        safe_ini_set('ocproducts.xss_detect', '1');
     }
     if (!GOOGLE_APPENGINE) {
-        @ini_set('include_path', '');
+        safe_ini_set('include_path', '');
     }
-    @ini_set('suhosin.executor.disable_emodifier', '1');
-    @ini_set('suhosin.executor.multiheader', '1');
+    safe_ini_set('suhosin.executor.disable_emodifier', '1');
+    safe_ini_set('suhosin.executor.multiheader', '1');
     $GLOBALS['NO_DB_SCOPE_CHECK'] = false;
     //$GLOBALS['NO_QUERY_LIMIT']=false;   Leave off, may have been set elsewhere than destrictify();
 }
@@ -198,7 +198,7 @@ function _inspect($args, $force_plain = false)
     $plain = headers_sent() || $force_plain || !running_script('index');
 
     if ($plain) {
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
 
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
 
@@ -265,7 +265,7 @@ function show_memory_points()
 {
     @header('Content-type: text/plain; charset=' . get_charset());
 
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
 
     $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
 

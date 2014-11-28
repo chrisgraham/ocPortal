@@ -127,7 +127,7 @@ function namelike_script()
     $id = str_replace('*', '%', get_param('id', false, true));
     $special = get_param('special', '');
 
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
 
     header('Content-Type: text/xml');
     echo '<?xml version="1.0" encoding="' . get_charset() . '"?' . '>';
@@ -304,7 +304,7 @@ function retrieve_autosave()
     $member_id = get_member();
     $key = post_param('key');
 
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
 
     echo $GLOBALS['SITE_DB']->query_select_value_if_there('autosave', 'a_value', array('a_member_id' => $member_id, 'a_key' => $key), 'ORDER BY a_time DESC');
 }
@@ -352,7 +352,7 @@ function fractional_edit_script()
             $edited = escape_html($edited);
         }
     }
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
     echo $edited;
 }
 
@@ -487,7 +487,7 @@ function comcode_convert_script()
     if (either_param_integer('keep_skip_rubbish', 0) == 0) {
         require_code('xml');
 
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
 
         $box_title = get_param('box_title', '');
         if (is_object($out)) {
@@ -503,7 +503,7 @@ function comcode_convert_script()
         echo xmlentities($out);
         echo '</result></request>';
     } else {
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
 
         header('Content-type: text/plain; charset=' . get_charset());
         echo $out;
@@ -535,7 +535,7 @@ function ajax_tree_script()
     if ($id == '') {
         $id = null;
     }
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
     $html_mask = get_param_integer('html_mask', 0) == 1;
     if (!$html_mask) {
         echo '<?xml version="1.0" encoding="' . get_charset() . '"?' . '>';
@@ -581,7 +581,7 @@ function load_template_script()
         exit();
     }
 
-    @ini_set('ocproducts.xss_detect', '0');
+    safe_ini_set('ocproducts.xss_detect', '0');
 
     $theme = filter_naughty(get_param('theme'));
     $id = filter_naughty(get_param('id'));
@@ -642,7 +642,7 @@ function snippet_script()
     if (function_exists('apache_setenv')) {
         @apache_setenv('no-gzip', '1');
     }
-    @ini_set('zlib.output_compression', 'Off');
+    safe_ini_set('zlib.output_compression', 'Off');
     $size = strlen($out);
     header('Connection: close');
     @ignore_user_abort(true);

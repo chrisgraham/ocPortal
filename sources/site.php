@@ -883,7 +883,7 @@ function do_site()
             if (!GOOGLE_APPENGINE) {
                 ftruncate($myfile, 0);
             }
-            if (function_exists('gzencode')) {
+            if ((function_exists('gzencode')) && (php_function_allowed('ini_set'))) {
                 fwrite($myfile, gzencode($out_evaluated, 9));
             } else {
                 fwrite($myfile, $out_evaluated);
@@ -942,10 +942,10 @@ function do_site()
         // Track very basic details of what sites use ocPortal. You can remove if you like.
         if ((!running_locally()) && (get_option('call_home') == '1')) {
             $timeout_before = @ini_get('default_socket_timeout');
-            @ini_set('default_socket_timeout', '3');
+            safe_ini_set('default_socket_timeout', '3');
             require_code('version2');
             http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/user.php?url=' . urlencode(get_base_url()) . '&name=' . urlencode(get_site_name()) . '&version=' . urlencode(get_version_dotted()), null, false);
-            @ini_set('default_socket_timeout', $timeout_before);
+            safe_ini_set('default_socket_timeout', $timeout_before);
         }
     }
 

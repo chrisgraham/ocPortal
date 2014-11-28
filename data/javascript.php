@@ -48,7 +48,7 @@ if ($lang != '') {
     require_lang($lang);
 }
 $script = get_param('script');
-@ini_set('ocproducts.xss_detect', '0');
+safe_ini_set('ocproducts.xss_detect', '0');
 if ($script != '') {
     echo file_get_contents(javascript_enforce(filter_naughty_harsh($script)));
 }

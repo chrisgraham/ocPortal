@@ -107,7 +107,7 @@ function create_zip_file($file_array, $stream = false, $get_offsets = false, $ou
     }
 
     if ($stream) {
-        ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
 
         flush(); // Works around weird PHP bug that sends data before headers, on some PHP versions
     }

@@ -333,7 +333,7 @@ function semihtml_to_comcode($semihtml, $force = false)
         return '';
     }
 
-    @ini_set('pcre.backtrack_limit', '10000000');
+    safe_ini_set('pcre.backtrack_limit', '10000000');
 
     $semihtml = preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?' . '>#siU', 'debuttonise', $semihtml);
     $array_html_preg_replace = array();

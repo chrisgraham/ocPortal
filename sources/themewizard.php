@@ -605,7 +605,7 @@ function themewizard_script()
         $tpl->evaluate_echo();
     }
     if ($type == 'css') {
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
         list($colours, $landscape) = calculate_theme($seed, $source_theme, $algorithm, 'colours', $dark);
         $css = theme_wizard_colours_to_sheet($show, $landscape, $source_theme, $algorithm, $seed);
         header('Content-type: text/css');

@@ -251,7 +251,7 @@ function _ocportal_error_handler($type, $errno, $errstr, $errfile, $errline, $sy
             critical_error('EMERGENCY', escape_html($error_str));
         }
 
-        @ini_set('display_errors', '0');
+        safe_ini_set('display_errors', '0');
         fatal_exit($error_str);
     } else {
         require_code('site');
@@ -345,7 +345,7 @@ function _generic_exit($text, $template, $support_match_key_messages = false)
     if ($WANT_TEXT_ERRORS) {
         header('Content-type: text/plain; charset=' . get_charset());
         set_http_status_code('500');
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
         exit(is_object($text) ? strip_html($text->evaluate()) : $text);
     }
 
@@ -900,7 +900,7 @@ function _fatal_exit($text, $return = false)
     if ($WANT_TEXT_ERRORS) {
         header('Content-type: text/plain; charset=' . get_charset());
         set_http_status_code('500');
-        @ini_set('ocproducts.xss_detect', '0');
+        safe_ini_set('ocproducts.xss_detect', '0');
         exit(is_object($text) ? strip_html($text->evaluate()) : $text);
     }
 
