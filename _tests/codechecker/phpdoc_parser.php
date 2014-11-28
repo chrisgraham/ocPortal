@@ -45,6 +45,9 @@ if ((isset($_GET['allow_custom'])) && ($_GET['allow_custom'] == '1')) {
     $no_custom = false;
 }
 $files = do_dir($OCPORTAL_PATH, $no_custom, true);
+if ($no_custom) {
+    $files[] = $OCPORTAL_PATH . '/sources_custom/phpstub.php';
+}
 
 @ini_set('memory_limit', '-1');
 

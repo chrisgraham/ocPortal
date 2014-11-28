@@ -141,7 +141,7 @@ function init__global2()
     if ($SERVER_TIMEZONE_CACHE != 'UTC') {
         date_default_timezone_set('UTC');
     }
-    ini_set('date.timezone','UTC'); // In case PHP does not have it configured, would produce a warning
+    ini_set('date.timezone', 'UTC'); // In case PHP does not have it configured, would produce a warning
 
     // Initialise some error handling
     error_reporting(E_ALL);
@@ -896,6 +896,7 @@ function running_script($is_this_running)
  *
  * @param  mixed                        $text The error message (string or tempcode)
  * @param  ?boolean                     $support_match_key_messages Whether match key messages / redirects should be supported (null: detect)
+ * @return mixed                        Never returns (i.e. exits)
  */
 function inform_exit($text, $support_match_key_messages = null)
 {
@@ -908,6 +909,7 @@ function inform_exit($text, $support_match_key_messages = null)
  *
  * @param  mixed                        $text The error message (string or tempcode)
  * @param  boolean                      $support_match_key_messages Whether match key messages / redirects should be supported
+ * @return mixed                        Never returns (i.e. exits)
  */
 function warn_exit($text, $support_match_key_messages = false)
 {
@@ -924,6 +926,7 @@ function warn_exit($text, $support_match_key_messages = false)
  * It also adds an entry to the error log, for reference.
  *
  * @param  mixed                        $text The error message (string or tempcode)
+ * @return mixed                        Never returns (i.e. exits)
  */
 function fatal_exit($text)
 {
@@ -939,6 +942,7 @@ function fatal_exit($text)
  * @param  SHORT_TEXT                   $reason_param_b A more illustrative parameter, which may be anything (e.g. a title)
  * @param  boolean                      $silent Whether to silently log the hack rather than also exiting
  * @param  boolean                      $instant_ban Whether a ban should be immediate
+ * @return mixed                        Never returns (i.e. exits)
  */
 function log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_b = '', $silent = false, $instant_ban = false)
 {

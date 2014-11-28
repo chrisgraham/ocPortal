@@ -309,6 +309,7 @@ function _sanitise_error_msg($text)
  * @param  mixed                        $text The error message (string or tempcode)
  * @param  ID_TEXT                      $template Name of the terminal page template
  * @param  boolean $support_match_key_messages ?Whether match key messages / redirects should be supported (null: detect)
+ * @return mixed                        Never returns (i.e. exits)
  */
 function _generic_exit($text, $template, $support_match_key_messages = false)
 {
@@ -487,6 +488,7 @@ function ip_cidr_check($ip, $cidr)
  * @param  SHORT_TEXT                   $reason_param_b A more illustrative parameter, which may be anything (e.g. a title)
  * @param  boolean                      $silent Whether to silently log the hack rather than also exiting
  * @param  boolean                      $instant_ban Whether a ban should be immediate
+ * @return mixed                        Never returns (i.e. exits)
  */
 function _log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_b = '', $silent = false, $instant_ban = false)
 {
@@ -875,6 +877,7 @@ function get_webservice_result($error_message)
  *
  * @param  mixed                        $text The error message (string or tempcode)
  * @param  boolean                      $return Whether to return
+ * @return mixed                        Never returns (i.e. exits)
  */
 function _fatal_exit($text, $return = false)
 {

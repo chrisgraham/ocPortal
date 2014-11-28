@@ -184,6 +184,7 @@ function get_html_trace()
  * It also adds an entry to the error log, for reference.
  *
  * @param  mixed                        $text The error message
+ * @return mixed                        Never returns (i.e. exits)
  */
 function fatal_exit($text)
 {
@@ -392,6 +393,7 @@ function die_html_trace($message)
  * This is a less-revealing alternative to fatal_exit, that is used for user-errors/common-corruption-scenarios
  *
  * @param  mixed                        $text The error message
+ * @return mixed                        Never returns (i.e. exits)
  */
 function inform_exit($text)
 {
@@ -402,6 +404,7 @@ function inform_exit($text)
  * This is a less-revealing alternative to fatal_exit, that is used for user-errors/common-corruption-scenarios
  *
  * @param  mixed                        $text The error message
+ * @return mixed                        Never returns (i.e. exits)
  */
 function warn_exit($text)
 {
@@ -560,6 +563,7 @@ function get_custom_base_url($https = null)
  * @param  ID_TEXT                      $reason The reason for the hack attack. This has to be a language string codename
  * @param  SHORT_TEXT                   $reason_param_a A parameter for the hack attack language string (this should be based on a unique ID, preferably)
  * @param  SHORT_TEXT                   $reason_param_b A more illustrative parameter, which may be anything (e.g. a title)
+ * @return mixed                        Never returns (i.e. exits)
  */
 function log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_b = '')
 {

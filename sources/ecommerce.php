@@ -629,6 +629,7 @@ function handle_confirmed_transaction($purchase_id, $item_name, $payment_status,
  *
  * @param  string                       $error The message.
  * @param  boolean                      $dont_trigger Dont trigger an error
+ * @return mixed                        Never returns (i.e. exits)
  */
 function fatal_ipn_exit($error, $dont_trigger = false)
 {
