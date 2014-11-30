@@ -1565,6 +1565,8 @@ class Module_admin_newsletter extends Standard_crud_module
 
         require_code('mail');
 
+		require_code('media_renderer');
+    	push_media_mode(peek_media_mode() | MEDIA_LOWFI);
         require_code('tempcode_compiler');
         $in_html = false;
         if (strpos($message, '<html') !== false) {
@@ -1600,6 +1602,7 @@ class Module_admin_newsletter extends Standard_crud_module
         $preview_subject = do_lang('NEWSLETTER_PREVIEW_SUBJECT', $preview_subject);
         require_code('comcode_compiler');
         $preview = do_template('NEWSLETTER_CONFIRM_WRAP', array('_GUID' => '02bd5a782620141f8589e647e2c6d90b', 'TEXT_PREVIEW' => $text_preview, 'PREVIEW' => $_preview, 'SUBJECT' => $subject));
+    	pop_media_mode(peek_media_mode() | MEDIA_LOWFI);
 
         mail_wrap($preview_subject, ($html_only == 1) ? $_preview->evaluate() : $message, array($address), $username/*do_lang('NEWSLETTER_SUBSCRIBER',get_site_name())*/, $from_email, $from_name, 3, null, true, null, true, $in_html);
 

@@ -26,7 +26,7 @@ Notes...
 /**
  * Hook class.
  */
-class Hook_media_rendering_oembed
+class Hook_media_rendering_oembed extends Media_renderer_with_fallback
 {
     /**
      * Get the label for this media rendering type.

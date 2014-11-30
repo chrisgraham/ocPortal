@@ -766,6 +766,8 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                         $differented = true;
                                         if (($pos <= $len) || (!$lax)) {
                                             $tag_output->attach($ret);
+
+											$ret->handle_symbol_preprocessing(); // In case there is a 'SET' in there that was intended for being known by PHP code
                                         }
                                     }
                                 } else {

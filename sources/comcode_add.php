@@ -754,11 +754,9 @@ function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $para
 function _try_for_special_comcode_tag_extra_param_ui($tag, $actual_tag, &$fields, &$fields_advanced, $hidden, $defaults)
 {
     if (($tag == 'attachment') && (get_param_integer('multi', 0) == 0)) {
-        if (get_option('eager_wysiwyg') == '0') {
-            if ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg'] != '0')) {
-                $field = form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'), do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'), '_safe', $actual_tag == 'attachment_safe');
-                $fields->attach($field);
-            }
+        if ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg'] != '0')) {
+            $field = form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'), do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'), '_safe', $actual_tag == 'attachment_safe');
+            $fields->attach($field);
         }
     }
 }
@@ -842,10 +840,8 @@ function comcode_helper_script_step3()
     $tag = post_param('tag');
     $title = get_screen_title('_COMCODE_HELPER', true, array($tag));
 
-    if (get_option('eager_wysiwyg') == '0') {
-        if (($tag == 'attachment') && (post_param_integer('_safe', 0) == 1) && ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg'] != '0'))) {
-            $tag = 'attachment_safe';
-        }
+    if (($tag == 'attachment') && (post_param_integer('_safe', 0) == 1) && ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg'] != '0'))) {
+        $tag = 'attachment_safe';
     }
 
     $comcode = _get_preview_environment_comcode($tag);
