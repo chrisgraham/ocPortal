@@ -64,7 +64,7 @@ function render_forum_box($row, $zone = '_SEARCH', $give_context = true, $includ
 
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = ocf_forum_breadcrumbs($row['id'], null, null, true, is_null($root) ? get_param_integer('keep_forum_root', null) : $root);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(ocf_forum_breadcrumbs($row['id'], null, null, true, is_null($root) ? get_param_integer('keep_forum_root', null) : $root));
     }
 
     $just_forum_row = db_map_restrict($row, array('id', 'f_description'));
@@ -297,33 +297,36 @@ function ocf_get_forum_parent_or_list($forum_id, $parent_id = -1)
  * @param  boolean                      $start Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
  * @param  ?AUTO_LINK                   $root Virtual root (null: none).
  * @return tempcode                     The breadcrumbs.
+ * @return array                        The breadcrumbs.
  */
 function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_forum = null, $start = true, $root = null)
 {
+    if (is_null($end_point_forum)) {
+        return array();
+    }
+
     if (is_null($root)) {
         $root = get_param_integer('keep_forum_root', db_get_first_id());
     }
 
-    if (is_null($end_point_forum)) {
-        return new Tempcode();
-    }
-
     static $cache = array();
     if (isset($cache[$end_point_forum])) {
-        return clone $cache[$end_point_forum];
+        return $cache[$end_point_forum];
     }
 
     if (is_null($this_name)) {
         $_forum_details = $GLOBALS['FORUM_DB']->query_select('f_forums', array('f_name', 'f_parent_forum'), array('id' => $end_point_forum), '', 1);
         if (!array_key_exists(0, $_forum_details)) {
-            return new Tempcode();
-        }//warn_exit(do_lang_tempcode('_MISSING_RESOURCE','forum#'.strval($end_point_forum)));
+            //warn_exit(do_lang_tempcode('_MISSING_RESOURCE','forum#'.strval($end_point_forum)));
+            return array();
+        }
         $forum_details = $_forum_details[0];
-        $this_name = escape_html($forum_details['f_name']);
+        $this_name = $forum_details['f_name'];
         $parent_forum = $forum_details['f_parent_forum'];
-    } elseif (is_string($this_name)) {
-        $this_name = escape_html($this_name);
     }
+
+    $segments = array();
+
     if (((!$start) || (has_privilege(get_member(), 'open_virtual_roots'))) && (is_integer($end_point_forum))) {
         $map = array('page' => 'forumview');
         if ($end_point_forum != db_get_first_id()) {
@@ -336,25 +339,20 @@ function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_foru
         if ($start) {
             $map['keep_forum_root'] = $end_point_forum;
         }
-        $_this_name = hyperlink(build_url($map, get_module_zone('forumview')), $this_name, false, false, $start ? do_lang_tempcode('VIRTUAL_ROOT') : do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode($this_name, ENT_QUOTES, get_charset())), null, null, 'up');
+        $page_link = build_page_link($map, get_module_zone('forumview'));
+        $segments[] = array($page_link, $this_name, $start ? do_lang_tempcode('VIRTUAL_ROOT') : new Tempcode());
     } else {
-        $_this_name = new Tempcode();
-        $_this_name->attach('<span>');
-        $_this_name->attach($this_name);
-        $_this_name->attach('</span>');
+        $segments[] = array('', $this_name);
     }
+
     if ($end_point_forum !== $root) {
         $out = ocf_forum_breadcrumbs($parent_forum, null, null, false, $root);
-        if (!$out->is_empty()) {
-            $out->attach(do_template('BREADCRUMB_SEPARATOR'));
-        }
-    } else {
-        $out = new Tempcode();
     }
-    $out->attach($_this_name);
+
+    $out = array_merge($out, $segments);
 
     if ($start) {
-        $cache[$end_point_forum] = clone $out;
+        $cache[$end_point_forum] = $out;
     }
 
     return $out;

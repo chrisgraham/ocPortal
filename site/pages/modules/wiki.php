@@ -233,7 +233,7 @@ class Module_wiki
     public $current_title;
     public $title_to_use;
     public $title_to_use_2;
-    public $dbposts;
+    public $db_posts;
     public $num_posts;
 
     /**
@@ -297,8 +297,8 @@ class Module_wiki
             if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
                 $where_map['validated'] = 1;
             }
-            $dbposts = $GLOBALS['SITE_DB']->query_select('wiki_posts', array('*'), $where_map, 'ORDER BY date_and_time', 300);
-            $num_posts = count($dbposts);
+            $db_posts = $GLOBALS['SITE_DB']->query_select('wiki_posts', array('*'), $where_map, 'ORDER BY date_and_time', 300);
+            $num_posts = count($db_posts);
 
             set_extra_request_metadata(array(
                 'created' => date('Y-m-d', $page['add_date']),
@@ -314,7 +314,7 @@ class Module_wiki
                 //'category'=>???,
             ));
 
-            breadcrumb_add_segment($breadcrumbs);
+            breadcrumb_set_parents($breadcrumbs);
 
             // Re-defined canonical URL
             global $CANONICAL_URL, $NON_CANONICAL_PARAMS;
@@ -332,7 +332,7 @@ class Module_wiki
             $this->current_title = $current_title;
             $this->title_to_use = $title_to_use;
             $this->title_to_use_2 = $title_to_use_2;
-            $this->dbposts = $dbposts;
+            $this->db_posts = $db_posts;
             $this->num_posts = $num_posts;
         }
 
@@ -349,7 +349,8 @@ class Module_wiki
             $posting = is_null(get_param_integer('post_id', null));
 
             $breadcrumbs = wiki_breadcrumbs($chain, null, true, true);
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang($posting ? 'MAKE_POST' : 'SAVE') . '</span>'));
+            $breadcrumbs[] = array('', do_lang_tempcode($posting ? 'MAKE_POST' : 'SAVE'));
+            breadcrumb_set_parents($breadcrumbs);
 
             if ($posting) {
                 $this->title = get_screen_title('WIKI_MAKE_POST');
@@ -465,7 +466,7 @@ class Module_wiki
         $current_title = $this->current_title;
         $title_to_use = $this->title_to_use;
         $title_to_use_2 = $this->title_to_use_2;
-        $dbposts = $this->dbposts;
+        $db_posts = $this->db_posts;
         $num_posts = $this->num_posts;
 
         require_code('feedback');
@@ -529,7 +530,7 @@ class Module_wiki
         // Main text (posts)
         $posts = new Tempcode();
         $include_expansion = (strpos($description_comcode, '[attachment') !== false);
-        foreach ($dbposts as $myrow) {
+        foreach ($db_posts as $myrow) {
             // Work out posters details
             $poster = $myrow['member_id'];
             $username = $GLOBALS['FORUM_DRIVER']->get_username($poster);
@@ -696,7 +697,7 @@ class Module_wiki
             $l = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages', 'title', array('id' => $myrow['the_page']));
             if (!is_null($l)) {
                 $chain = is_null($id) ? wiki_derive_chain($myrow['the_page']) : $_id;
-                $l = wiki_breadcrumbs($chain, get_translated_text($l), true);
+                $l = breadcrumb_segments_to_tempcode(wiki_breadcrumbs($chain, get_translated_text($l), true));
 
                 $_date_and_time = get_timezoned_date($myrow['date_and_time']);
                 $ml = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
@@ -1039,7 +1040,7 @@ class Module_wiki
 
         $chain = $this->chain;
 
-        $breadcrumbs = wiki_breadcrumbs($chain, null, true, true);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(wiki_breadcrumbs($chain, null, true, true));
 
         $_redir_url = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => get_param('id', strval($id), true)), '_SELF');
         $redir_url = $_redir_url->evaluate();

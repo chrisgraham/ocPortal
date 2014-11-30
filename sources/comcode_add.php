@@ -606,9 +606,9 @@ function _find_comcode_tag_embed_required($tag)
  */
 function _try_for_special_comcode_tag_all_params_ui($tag, $actual_tag, &$fields, &$fields_advanced, $hidden, &$done_tag_contents, $defaults, $params, &$javascript, $preview)
 {
-    if ($tag=='currency') {
+    if ($tag == 'currency') {
         $default = array_key_exists('param', $defaults) ? $defaults['param'] : get_param('default_param', get_option('currency'));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         require_code('currency');
         foreach (array_keys(get_currency_map()) as $currency) {
             $list->attach(form_input_list_entry($currency, $currency == $default));
@@ -619,8 +619,7 @@ function _try_for_special_comcode_tag_all_params_ui($tag, $actual_tag, &$fields,
         $default = array_key_exists('bracket', $defaults) ? $defaults['bracket'] : get_param('default_bracket', '');
         $fields->attach(form_input_tick(titleify('bracket'), protect_from_escaping(ucfirst(substr(do_lang('COMCODE_TAG_currency_PARAM_bracket'), 12))), 'bracket', $default == '1'));
         $done_tag_contents = true;
-	}
-    elseif ($tag == 'include') {
+    } elseif ($tag == 'include') {
         $default_embed = array_key_exists('', $defaults) ? ($defaults['']) : get_param('default', '');
         if (strpos($default_embed, ':') === false) {
             $default_embed = ':' . $default_embed;

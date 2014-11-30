@@ -507,11 +507,11 @@ function placeholder_blank()
  */
 function placeholder_breadcrumbs()
 {
-    $tpl_url = new Tempcode();
-    $tpl_url->attach(hyperlink(placeholder_url(), escape_html(lorem_phrase()), false, false, do_lang_tempcode('GO_BACKWARDS_TO', lorem_phrase()), null, null, 'up'));
-    $tpl_url->attach(do_lorem_template('BREADCRUMB_SEPARATOR'));
-    $tpl_url->attach(hyperlink(placeholder_url(), escape_html(lorem_phrase()), false, false, do_lang_tempcode('GO_BACKWARDS_TO', lorem_phrase()), null, null, 'up'));
-    return $tpl_url;
+    $out = new Tempcode();
+    $out->attach(do_lorem_template('BREADCRUMB_LINK_WRAP', array('URL' => placeholder_url(), 'TOOLTIP' => '', 'LABEL' => lorem_phrase())));
+    $out->attach(do_lorem_template('BREADCRUMB_SEPARATOR', array()));
+    $out->attach(do_lorem_template('BREADCRUMB_LONE_WRAP', array('LABEL' => lorem_phrase())));
+    return $out;
 }
 
 /**

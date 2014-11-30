@@ -319,7 +319,7 @@ class Hook_search_comcode_pages
             $title = do_lang_tempcode('_SEARCH_RESULT_COMCODE_PAGE_NICE', $LAST_COMCODE_PARSED_TITLE);
         }
 
-        $breadcrumbs = comcode_breadcrumbs($page, $zone);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(comcode_breadcrumbs($page, $zone));
 
         return do_template('COMCODE_PAGE_BOX', array(
             '_GUID' => '79cd9e7d0b63ee916c4cd74b26c2f652',

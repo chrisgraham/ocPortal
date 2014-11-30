@@ -138,13 +138,12 @@ class Hook_search_filedump
                 $dirs = explode('/', dirname($_path));
 
                 $pre = '';
-                $file_breadcrumbs = new Tempcode();
-                $breadcrumbs_url = build_url(array('page' => 'filedump', 'place' => $pre . '/'), get_module_zone('filedump'));
-                $file_breadcrumbs->attach(hyperlink($breadcrumbs_url, do_lang('ROOT')));
+                $file_breadcrumbs = array();
+                $breadcrumbs_page_link = build_page_link(array('page' => 'filedump', 'place' => $pre . '/'), get_module_zone('filedump'));
+                $file_breadcrumbs[] = array($breadcrumbs_page_link, do_lang_tempcode('ROOT'));
                 foreach ($dirs as $dir) {
-                    $file_breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR', array('_GUID' => '7ee62e230d53344a7d9667dc59be21c4')));
-                    $breadcrumbs_url = build_url(array('page' => 'filedump', 'place' => $pre . $dir . '/'), get_module_zone('filedump'));
-                    $file_breadcrumbs->attach(hyperlink($breadcrumbs_url, $dir));
+                    $breadcrumbs_page_link = build_page_link(array('page' => 'filedump', 'place' => $pre . $dir . '/'), get_module_zone('filedump'));
+                    $file_breadcrumbs[] = array($breadcrumbs_page_link, $dir);
 
                     $pre .= $dir . '/';
                 }
@@ -154,8 +153,8 @@ class Hook_search_filedump
                 require_code('images');
                 if (!is_image($url)) {
                     $tpl = paragraph(hyperlink($url, escape_html($caption), true), 'dfdsfu09wl;f');
-                    if (!$file_breadcrumbs->is_empty()) {
-                        $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN', $file_breadcrumbs)));
+                    if ($file_breadcrumbs != array()) {
+                        $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN', breadcrumb_segments_to_tempcode($file_breadcrumbs))));
                     }
 
                     $out[$i]['template'] = do_template('SIMPLE_PREVIEW_BOX', array(

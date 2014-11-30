@@ -569,7 +569,7 @@ abstract class Standard_crud_module
     private function get_screen_type_for($type_code, $stub)
     {
     	if ($stub != '') {
-    		return $stub . '_' . $type_code;
+            return $type_code . '_' . $stub;
     	}
     	return $type_code;
     }

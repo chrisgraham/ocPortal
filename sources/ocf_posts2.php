@@ -137,7 +137,7 @@ function render_post_box($row, $use_post_title = false, $give_context = true, $i
     // Breadcrumbs
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = ocf_forum_breadcrumbs($row['p_cache_forum_id'], null, null, false, is_null($root) ? get_param_integer('keep_forum_root', null) : $root);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(ocf_forum_breadcrumbs($row['p_cache_forum_id'], null, null, false, is_null($root) ? get_param_integer('keep_forum_root', null) : $root));
     }
 
     // Misc stuff

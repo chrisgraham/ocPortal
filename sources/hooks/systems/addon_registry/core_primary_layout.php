@@ -112,6 +112,8 @@ class Hook_addon_registry_core_primary_layout
             'themes/default/templates/MAIL.tpl',
             'themes/default/text/MAIL_SUBJECT.txt',
             'themes/default/templates/BREADCRUMB_SEPARATOR.tpl',
+            'themes/default/templates/BREADCRUMB_LONE_WRAP.tpl',
+            'themes/default/templates/BREADCRUMB_LINK_WRAP.tpl',
             'themes/default/templates/CSS_NEED_FULL.tpl',
         );
     }
@@ -126,6 +128,8 @@ class Hook_addon_registry_core_primary_layout
     {
         return array(
             'templates/BREADCRUMB_SEPARATOR.tpl' => 'breadcrumb',
+            'templates/BREADCRUMB_LONE_WRAP.tpl' => 'breadcrumb',
+            'templates/BREADCRUMB_LINK_WRAP.tpl' => 'breadcrumb',
             'templates/CLOSED_SITE.tpl' => 'closed_site',
             'templates/CSS_NEED_FULL.tpl' => 'css_need_full',
             'templates/MESSAGE.tpl' => 'message',
@@ -150,9 +154,9 @@ class Hook_addon_registry_core_primary_layout
     public function tpl_preview__breadcrumb()
     {
         $out = new Tempcode();
-        $out->attach(lorem_phrase());
+        $out->attach(do_lorem_template('BREADCRUMB_LINK_WRAP', array('URL' => placeholder_url(), 'TOOLTIP' => '', 'LABEL' => lorem_phrase())));
         $out->attach(do_lorem_template('BREADCRUMB_SEPARATOR', array()));
-        $out->attach(lorem_phrase());
+        $out->attach(do_lorem_template('BREADCRUMB_LONE_WRAP', array('LABEL' => lorem_phrase())));
         return array(
             lorem_globalise($out, null, '', true)
         );

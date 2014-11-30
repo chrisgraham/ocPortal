@@ -85,7 +85,7 @@ function render_download_box($row, $pic = true, $include_breadcrumbs = true, $zo
     $date = get_timezoned_date($row['add_date'], false);
     $date_raw = $row['add_date'];
 
-    $breadcrumbs = $include_breadcrumbs ? download_breadcrumbs($row['category_id'], is_null($root) ? get_param_integer('keep_download_root', null) : $root, false, $zone) : new Tempcode();
+    $breadcrumbs = $include_breadcrumbs ? breadcrumb_segments_to_tempcode(download_breadcrumbs($row['category_id'], is_null($root) ? get_param_integer('keep_download_root', null) : $root, false, $zone)) : new Tempcode();
 
     // Download has image?
     $pic_suffix = '';
@@ -198,7 +198,7 @@ function render_download_category_box($row, $zone = '_SEARCH', $give_context = t
 
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = download_breadcrumbs($row['parent_id'], is_null($root) ? get_param_integer('keep_download_root', null) : $root, false, $zone, $attach_to_url_filter);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(download_breadcrumbs($row['parent_id'], is_null($root) ? get_param_integer('keep_download_root', null) : $root, false, $zone, $attach_to_url_filter));
     }
 
     $just_download_category_row = db_map_restrict($row, array('id', 'description'));
@@ -498,6 +498,7 @@ function create_selection_list_download_licences($it = null, $allow_na = false)
  * @param  ?ID_TEXT                     $zone The zone the download module we're using is in (null: find it)
  * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode                     The breadcrumbs
+ * @return array                        The breadcrumb segments
  */
 function download_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = true, $zone = null, $attach_to_url_filter = false)
 {
@@ -512,14 +513,14 @@ function download_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = 
     if (get_page_name() == 'catalogues') {
         $map += propagate_ocselect();
     }
-    $url = build_url($map, $zone);
+    $page_link = build_page_link($map, $zone);
 
     if (($category_id == $root) || ($category_id == db_get_first_id())) {
         if ($no_link_for_me_sir) {
-            return new Tempcode();
+            return array();
         }
         $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('download_categories', 'category', array('id' => $category_id)));
-        return hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up');
+        return array(array($page_link, $title));
     }
 
     global $PT_PAIR_CACHE_D;
@@ -532,20 +533,18 @@ function download_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = 
     }
 
     $title = get_translated_text($PT_PAIR_CACHE_D[$category_id]['category']);
+    $segments = array();
     if (!$no_link_for_me_sir) {
-        $tpl_url = do_template('BREADCRUMB_SEPARATOR');
-        $tpl_url->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
-    } else {
-        $tpl_url = new Tempcode();
+        $segments[] = array($page_link, $title);
     }
 
     if ($PT_PAIR_CACHE_D[$category_id]['parent_id'] == $category_id) {
         fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN', strval($category_id)));
     }
+
     $below = download_breadcrumbs($PT_PAIR_CACHE_D[$category_id]['parent_id'], $root, false, $zone, $attach_to_url_filter);
 
-    $below->attach($tpl_url);
-    return $below;
+    return array_merge($below, $segments);
 }
 
 /**

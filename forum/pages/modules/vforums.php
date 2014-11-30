@@ -258,8 +258,9 @@ class Module_vforums
      */
     public function _vforum($title, $condition, $order, $no_pin = false, $extra_tpl_map = null, $initial_table = null)
     {
-        $breadcrumbs = ocf_forum_breadcrumbs(db_get_first_id(), $title, get_param_integer('keep_forum_root', db_get_first_id()));
-        breadcrumb_add_segment($breadcrumbs);
+        $_breadcrumbs = ocf_forum_breadcrumbs(db_get_first_id(), $title, get_param_integer('keep_forum_root', db_get_first_id()));
+        breadcrumb_set_parents($_breadcrumbs);
+        $breadcrumbs = breadcrumb_segments_to_tempcode($_breadcrumbs);
 
         $max = get_param_integer('forum_max', intval(get_option('forum_topics_per_page')));
         $start = get_param_integer('forum_start', 0);

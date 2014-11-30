@@ -48,7 +48,7 @@ function render_wiki_post_box($row, $zone = '_SEARCH', $give_context = true, $in
 
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = wiki_breadcrumbs(wiki_derive_chain($row['page_id'], $root), null, true);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(wiki_breadcrumbs(wiki_derive_chain($row['page_id'], $root), null, true));
     }
 
     $title = mixed();
@@ -99,7 +99,7 @@ function render_wiki_page_box($row, $zone = '_SEARCH', $give_context = true, $in
         $chain = wiki_derive_chain($row['id'], $root);
         $chain = preg_replace('#/[^/]+#', '', $chain);
         if ($chain != '') {
-            $breadcrumbs = wiki_breadcrumbs($chain, null, true);
+            $breadcrumbs = breadcrumb_segments_to_tempcode(wiki_breadcrumbs($chain, null, true));
         }
     }
 
@@ -548,11 +548,11 @@ function get_param_wiki_chain($parameter_name, $default_value = null)
  * @param  boolean                      $final_link Whether to show the final breadcrumbs element with a link to it (all others will always have links if $links is true)
  * @param  boolean                      $links Whether to show links to pages in the breadcrumbs
  * @param  boolean                      $this_link_virtual_root Whether to make the link as a virtual-root link (only applies if $final_link is true)
- * @return tempcode                     Tempcode of the breadcrumb XHTML
+ * @return array                        Breadcrumbs
  */
 function wiki_breadcrumbs($chain, $current_title = null, $final_link = false, $links = true, $this_link_virtual_root = false)
 {
-    $insbreadcrumbs = new Tempcode();
+    $segments = array();
     $token = strtok($chain, '/');
     $rebuild_chain = '';
     while ($token !== false) {
@@ -572,7 +572,7 @@ function wiki_breadcrumbs($chain, $current_title = null, $final_link = false, $l
             $id = intval($GLOBALS['SITE_DB']->query_select_value('url_id_monikers', 'm_resource_id', $url_moniker_where));
         }
 
-        $url = build_url(array('page' => 'wiki', 'type' => 'browse', 'id' => $link_id) + (($this_link_virtual_root && ($next_token === false)) ? array('keep_wiki_root' => $id) : array()), get_module_zone('wiki'));
+        $page_link = build_page_link(array('page' => 'wiki', 'type' => 'browse', 'id' => $link_id) + (($this_link_virtual_root && ($next_token === false)) ? array('keep_wiki_root' => $id) : array()), get_module_zone('wiki'));
 
         if ($next_token !== false) { // If not the last token (i.e. not the current page)
             $title = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages', 'title', array('id' => $id));
@@ -580,32 +580,23 @@ function wiki_breadcrumbs($chain, $current_title = null, $final_link = false, $l
                 continue;
             }
             $token_title = get_translated_text($title);
-            $content = ($links) ? hyperlink($url, escape_html($token_title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $token_title), null, null, 'up') : make_string_tempcode(escape_html($token_title));
-            if ($insbreadcrumbs->is_empty()) {
-                $insbreadcrumbs->attach($content);
-            } else {
-                $insbreadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                $insbreadcrumbs->attach($content);
-            }
+            $segments[] = $links ? array($page_link, escape_html($token_title)) : array('', make_string_tempcode(escape_html($token_title)));
         } else {
-            if (!$insbreadcrumbs->is_empty()) {
-                $insbreadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-            }
             if (is_null($current_title)) {
                 $_current_title = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages', 'title', array('id' => $id));
                 $current_title = is_null($_current_title) ? do_lang('MISSING_RESOURCE') : get_translated_text($_current_title);
             }
             if ($final_link) {
-                $insbreadcrumbs->attach(hyperlink($url, escape_html($current_title), false, false, $this_link_virtual_root ? do_lang_tempcode('VIRTUAL_ROOT') : do_lang_tempcode('GO_BACKWARDS_TO', $current_title), null, null, 'up'));
+                $segments[] = array($page_link, $current_title);
             } else {
-                $insbreadcrumbs->attach(protect_from_escaping('<span>' . escape_html($current_title) . '</span>'));
+                $segments [] = array('', $current_title);
             }
         }
 
         $token = $next_token;
     }
 
-    return $insbreadcrumbs;
+    return $segments;
 }
 
 /**

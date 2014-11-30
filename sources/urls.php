@@ -319,6 +319,37 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
         return make_string_tempcode(_build_url($vars, $zone_name, $skip, $keep_all, $avoid_remap, true, $hash));
     }
 
+    $page_link = build_page_link($vars, $zone_name, $skip, $hash);
+
+    $arr = array(
+        $page_link,
+        $avoid_remap ? '1' : '0',
+        $skip_keep ? '1' : '0',
+        $keep_all ? '1' : '0'
+    );
+    if ($skip !== null) {
+        $arr[] = implode('|', array_keys($skip));
+    }
+
+    $ret = symbol_tempcode('PAGE_LINK', $arr);
+
+    return $ret;
+}
+
+/**
+ * Build and return a proper page-link, from the $vars array.
+ * Note: URL parameters should always be in lower case (one of the coding standards)
+ *
+ * @param  array                        $vars A map of parameter names to parameter values. E.g. array('page'=>'example','type'=>'foo','id'=>2). Values may be strings or integers, or Tempcode, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
+ * @param  ID_TEXT                      $zone_name The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
+ * @param  ?array                       $skip Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (null: don't skip any)
+ * @param  string                       $hash Hash portion of the URL (blank: none). May or may not start '#' - code will put it on if needed
+ * @return string                       The page-link.
+ */
+function build_page_link($vars, $zone_name = '', $skip = null, $hash = '')
+{
+    $id = isset($vars['id']) ? $vars['id'] : null;
+
     $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/
         ($vars['page']);
     if ((isset($vars['type'])) || (array_key_exists('type', $vars))) {
@@ -373,19 +404,7 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
 
     $page_link .= $hash;
 
-    $arr = array(
-        $page_link,
-        $avoid_remap ? '1' : '0',
-        $skip_keep ? '1' : '0',
-        $keep_all ? '1' : '0'
-    );
-    if ($skip !== null) {
-        $arr[] = implode('|', array_keys($skip));
-    }
-
-    $ret = symbol_tempcode('PAGE_LINK', $arr);
-
-    return $ret;
+    return $page_link;
 }
 
 /**

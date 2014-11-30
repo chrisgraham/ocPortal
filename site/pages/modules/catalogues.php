@@ -511,7 +511,7 @@ class Module_catalogues
 
             // Breadcrumbs
             breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . (($catalogue['c_ecommerce'] == 1) ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
-            breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($catalogue['c_title']))));
+            breadcrumb_set_self(get_translated_text($catalogue['c_title']));
 
             // Meta data
             set_extra_request_metadata(array(
@@ -592,26 +592,23 @@ class Module_catalogues
             // Breadcrumbs
             if ($catalogue['c_is_tree'] == 1) {
                 $breadcrumbs = catalogue_category_breadcrumbs($id, $root, true, true);
-                if (!$breadcrumbs->is_empty()) {
-                    $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                }
                 if ((has_privilege(get_member(), 'open_virtual_roots')) && ($id != $root)) {
-                    $url = get_self_url();
-                    $breadcrumbs->attach(hyperlink($url, escape_html($_title), false, false, do_lang_tempcode('VIRTUAL_ROOT')));
+                    $page_link = build_page_link(array('page' => '_SELF', 'type' => 'category', 'id' => $id, 'keep_catalogue_' . $catalogue_name . '_root' => $id), '_SELF');
+                    $breadcrumbs[] = array($page_link, $_title, do_lang_tempcode('VIRTUAL_ROOT'));
                 } else {
-                    $breadcrumbs->attach('<span>' . escape_html($_title) . '</span>');
+                    $breadcrumbs[] = array('', $_title);
                 }
+                breadcrumb_set_parents($breadcrumbs);
             } else {
-                $breadcrumbs = new Tempcode();
-                $url = build_url(array('page' => '_SELF', 'type' => 'index', 'id' => $catalogue_name), '_SELF');
+                $breadcrumbs = array();
+                $page_link = build_page_link(array('page' => '_SELF', 'type' => 'index', 'id' => $catalogue_name), '_SELF');
                 $catalogue_title = get_translated_text($catalogue['c_title']);
-                $breadcrumbs->attach(hyperlink($url, escape_html($catalogue_title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', escape_html($catalogue_name))));
-                $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-                $breadcrumbs->attach('<span>' . escape_html($_title) . '</span>');
+                $breadcrumbs[] = array($page_link, $catalogue_title);
+                $breadcrumbs[] = array('', $_title);
+                breadcrumb_set_parents($breadcrumbs);
             }
-            breadcrumb_add_segment($breadcrumbs);
             if (is_null($root)) {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . ($is_ecommerce ? ':ecommerce=1' : ''), do_lang('CATALOGUES'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . ($is_ecommerce ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'))));
             }
 
             // Meta data

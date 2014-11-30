@@ -98,7 +98,6 @@ function init__global3()
         'SHORT_TITLE',
         'BREADCRUMBS',
         'BREADCRUMB_SET_PARENTS',
-        'BREADCRUMB_EXTRA_SEGMENTS',
         'DISPLAYED_TITLE',
         'BREADCRUMB_SET_SELF',
         'FEED_URL',
@@ -278,10 +277,9 @@ function _load_blank_output_state($just_tempcode = false, $true_blank = false)
         $SEO_DESCRIPTION = null;
         $SHORT_TITLE = null;
 
-        global $BREADCRUMBS, $BREADCRUMB_SET_PARENTS, $BREADCRUMB_EXTRA_SEGMENTS, $DISPLAYED_TITLE, $BREADCRUMB_SET_SELF;
+        global $BREADCRUMBS, $BREADCRUMB_SET_PARENTS, $DISPLAYED_TITLE, $BREADCRUMB_SET_SELF;
         $BREADCRUMBS = null;
         $BREADCRUMB_SET_PARENTS = array();
-        $BREADCRUMB_EXTRA_SEGMENTS = null;
         $DISPLAYED_TITLE = null;
         $BREADCRUMB_SET_SELF = null;
 
@@ -1332,14 +1330,14 @@ function fix_id($param)
 /**
  * See if the current URL matches the given ocPortal match-keys.
  *
- * @param  string                       $match_key Match keys
+ * @param  mixed                        $match_keys Match keys (comma-separated list of match-keys, or array of)
  * @param  boolean                      $support_post Check against POSTed data too
  * @param  ?array                       $current_params Parameters to check against (null: get from environment GET/POST) - if set, $support_post is ignored)
  * @param  ?ID_TEXT                     $current_zone_name Current zone name (null: get from environment)
  * @param  ?ID_TEXT                     $current_page_name Current page name (null: get from environment)
  * @return boolean                      Whether there is a match
  */
-function match_key_match($match_key, $support_post = false, $current_params = null, $current_zone_name = null, $current_page_name = null)
+function match_key_match($match_keys, $support_post = false, $current_params = null, $current_zone_name = null, $current_page_name = null)
 {
     $req_func = $support_post ? 'either_param' : 'get_param';
 
@@ -1350,13 +1348,13 @@ function match_key_match($match_key, $support_post = false, $current_params = nu
         $current_page_name = get_page_name();
     }
 
-    $potentials = explode(',', $match_key);
+    $potentials = is_array($match_keys) ? $match_keys : explode(',', $match_keys);
     foreach ($potentials as $potential) {
-        $parts = explode(':', $potential);
+        $parts = is_array($potential) ? $potential : explode(':', $potential);
         if (($parts[0] == '_WILD') || ($parts[0] == '_SEARCH')) {
             $parts[0] = $current_zone_name;
         }
-        if ((!isset($parts[1])) || ($parts[1] == '_WILD')) {
+        if ((!isset($parts[1])) || ($parts[1] == '_WILD') || (($parts[1] == '_WILD_NOT_START') && ($current_page_name != get_zone_default_page($parts[0])))) {
             $parts[1] = $current_page_name;
         }
         if (($parts[0] == 'site') && (get_option('collapse_user_zones') == '1')) {

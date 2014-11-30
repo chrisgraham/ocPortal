@@ -169,9 +169,8 @@ class Module_topicview
         if (!is_null($topic_info['forum_id'])) {
             $breadcrumbs = ocf_forum_breadcrumbs($topic_info['forum_id'], null, null, false);
         } else {
-            $breadcrumbs = new Tempcode();
-            $breadcrumbs->attach(hyperlink(build_url(array('page' => 'members'), get_module_zone('members')), do_lang_tempcode('MEMBERS'), false, false, do_lang_tempcode('GO_BACKWARDS_TO', do_lang_tempcode('MEMBERS')), null, null, 'up'));
-            $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+            $breadcrumbs = array();
+            $breadcrumbs[] = array(build_page_link(array('page' => 'members'), get_module_zone('members')), do_lang_tempcode('MEMBERS'));
             if (has_privilege(get_member(), 'view_other_pt')) {
                 $of_member = ($topic_info['pt_from'] == get_member()) ? $topic_info['pt_from'] : $topic_info['pt_to'];
             } else {
@@ -181,18 +180,21 @@ class Module_topicview
             if (is_null($of_username)) {
                 $of_username = do_lang('UNKNOWN');
             }
-            $private_topic_url = build_url(array('page' => 'members', 'type' => 'view', 'id' => $of_member), get_module_zone('members'), null, true, false, false, 'tab__pts');
-            $breadcrumbs->attach(hyperlink($private_topic_url, do_lang_tempcode('MEMBER_PROFILE', escape_html($of_username)), false, false, do_lang_tempcode('GO_BACKWARDS_TO', do_lang_tempcode('MEMBERS')), null, null, 'up'));
+            $private_topic_page_link = build_page_link(array('page' => 'members', 'type' => 'view', 'id' => $of_member), get_module_zone('members'), null, 'tab__pts');
+            $breadcrumbs[] = array($private_topic_page_link, do_lang_tempcode('MEMBER_PROFILE', escape_html($of_username)));
         }
 
         if (!is_null($id)) {
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang(is_null($topic_info['forum_id']) ? 'VIEW_PRIVATE_TOPIC' : 'VIEW_TOPIC') . '</span>'));
+            $breadcrumbs[] =  array('', do_lang_tempcode(is_null($topic_info['forum_id']) ? 'VIEW_PRIVATE_TOPIC' : 'VIEW_TOPIC'));
+            breadcrumb_set_parents($breadcrumbs);
         }
 
         if (is_null($id)) { // Just inline personal posts
             $root_forum_name = $GLOBALS['FORUM_DB']->query_select_value('f_forums', 'f_name', array('id' => db_get_first_id()));
-            $breadcrumbs = hyperlink(build_url(array('page' => 'forumview', 'id' => db_get_first_id()), get_module_zone('forumview')), escape_html($root_forum_name), false, false, do_lang('GO_BACKWARDS_TO'));
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang('INLINE_PERSONAL_POSTS') . '</span>'));
+            $breadcrumbs = array();
+            $breadcrumbs[] = array(build_page_link(array('page' => 'forumview', 'id' => db_get_first_id()), get_module_zone('forumview')), $root_forum_name);
+            $breadcrumbs[] = array('', do_lang_tempcode('INLINE_PERSONAL_POSTS'));
+            breadcrumb_set_parents($breadcrumbs);
         }
 
         $threaded = ($topic_info['is_threaded'] == 1);

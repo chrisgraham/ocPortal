@@ -47,7 +47,7 @@ function render_topic_box($row, $zone = '_SEARCH', $give_context = true, $includ
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
         require_code('ocf_forums');
-        $breadcrumbs = ocf_forum_breadcrumbs($row['t_forum_id'], null, null, false, is_null($root) ? get_param_integer('keep_forum_root', null) : $root);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(ocf_forum_breadcrumbs($row['t_forum_id'], null, null, false, is_null($root) ? get_param_integer('keep_forum_root', null) : $root));
     }
 
     $num_posts = $row['t_cache_num_posts'];

@@ -105,17 +105,12 @@ class Block_main_image_fader_news
             $q_filter .= $privacy_where;
         }
 
-        $query = 'SELECT r.id,news_image,title,news,news_article,date_and_time,submitter,author FROM ' . get_table_prefix() . 'news r' . $join . ' WHERE ' . $ocfilter . $q_filter . ' AND validated=1 ORDER BY date_and_time DESC';
+        $query = 'SELECT r.* FROM ' . get_table_prefix() . 'news r' . $join . ' WHERE ' . $ocfilter . $q_filter . ' AND validated=1 ORDER BY date_and_time DESC';
         $all_rows = $GLOBALS['SITE_DB']->query($query, 100/*reasonable amount*/);
         $news = array();
         require_code('images');
         foreach ($all_rows as $row) {
-            $just_news_row = array(
-                'id' => $row['id'],
-                'title' => $row['title'],
-                'news' => $row['news'],
-                'news_article' => $row['news_article'],
-            );
+            $just_news_row = db_map_restrict($row, array('id', 'title', 'news', 'news_article'));
 
             $title = get_translated_tempcode('news', $just_news_row, 'title');
 

@@ -45,10 +45,10 @@ class Hook_choose_catalogue_category
             $tree = array();
             $catalogues = $GLOBALS['SITE_DB']->query_select('catalogues', array('c_name'));
             foreach ($catalogues as $catalogue) {
-                $tree = array_merge($tree, get_catalogue_category_tree($catalogue['c_name'], is_null($id) ? null : intval($id), null, null, 1, $addable_filter, $compound_list));
+                $tree = array_merge($tree, get_catalogue_category_tree($catalogue['c_name'], is_null($id) ? null : intval($id), '', null, 1, $addable_filter, $compound_list));
             }
         } else {
-            $tree = get_catalogue_category_tree($catalogue_name, is_null($id) ? null : intval($id), null, null, 1, $addable_filter, $compound_list);
+            $tree = get_catalogue_category_tree($catalogue_name, is_null($id) ? null : intval($id), '', null, 1, $addable_filter, $compound_list);
         }
 
         $levels_to_expand = array_key_exists('levels_to_expand', $options) ? ($options['levels_to_expand']) : intval(get_long_value('levels_to_expand__' . substr(get_class($this), 5)));

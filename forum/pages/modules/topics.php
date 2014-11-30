@@ -945,7 +945,8 @@ class Module_topics
         }
 
         $breadcrumbs = ocf_forum_breadcrumbs($forum_id, null, null, false);
-        breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang('PERFORM_MULTI_MODERATION') . '</span>'));
+        breadcrumb_set_parents($breadcrumbs);
+        breadcrumb_set_self(do_lang_tempcode('PERFORM_MULTI_MODERATION'));
 
         $title = get_screen_title('PERFORM_MULTI_MODERATION');
         $mm = $GLOBALS['FORUM_DB']->query_select('f_multi_moderations', array('*'), array('id' => $mm_id), '', 1);
@@ -1071,7 +1072,8 @@ class Module_topics
         $hidden = $this->keep_markers();
 
         $breadcrumbs = ocf_forum_breadcrumbs($forum_id, null, null, false);
-        breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang('MOVE_TOPICS') . '</span>'));
+        $breadcrumbs[] = do_lang_tempcode('MOVE_TOPICS');
+        breadcrumb_set_parents($breadcrumbs);
 
         $title = get_screen_title('MOVE_TOPICS');
         $submit_name = do_lang_tempcode('MOVE_TOPICS');
@@ -1497,7 +1499,8 @@ class Module_topics
             }
 
             $breadcrumbs = ocf_forum_breadcrumbs($forum_id, null, null, false);
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang('ADD_TOPIC') . '</span>'));
+            $breadcrumbs[] = do_lang_tempcode('ADD_TOPIC');
+            breadcrumb_set_parents($breadcrumbs);
         }
 
         url_default_parameters__enable();
@@ -1738,7 +1741,7 @@ class Module_topics
      * @param  AUTO_LINK                $forum_id The forum for breadcrumbing
      * @param  AUTO_LINK                $topic_id The topic for breadcrumbing
      * @param  string                   $topic_title The topic title
-     * @param  string                   $doing The action currently being done
+     * @param  tempcode                 $doing The action currently being done
      */
     public function handle_topic_breadcrumbs($forum_id, $topic_id, $topic_title, $doing)
     {
@@ -1746,7 +1749,9 @@ class Module_topics
             breadcrumb_set_parents(array(array('_SEARCH:forumview:pt', do_lang_tempcode('PRIVATE_TOPICS')), array('_SEARCH:topicview:' . strval($topic_id), $topic_title)));
         } else {
             $breadcrumbs = ocf_forum_breadcrumbs($forum_id, null, null, false);
-            breadcrumb_add_segment($breadcrumbs, array(array('_SEARCH:topicview:' . strval($topic_id), $topic_title), array('', protect_from_escaping('<span>' . escape_html($doing->evaluate()) . '</span>'))));
+            $breadcrumbs[] = array('_SEARCH:topicview:' . strval($topic_id), $topic_title);
+            $breadcrumbs[] = array('', $doing);
+            breadcrumb_set_parents($breadcrumbs);
         }
     }
 

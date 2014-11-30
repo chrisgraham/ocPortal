@@ -34,7 +34,7 @@ Unsupported syntax:
   Not documented in PHP manual, so may be unreliable.
 */
 
-safe_ini_set('memory_limit', '-1');
+ini_set('memory_limit', '-1');
 
 ini_set('display_errors', '1');
 

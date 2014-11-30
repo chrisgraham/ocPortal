@@ -152,7 +152,6 @@ class Block_main_include_module
             $keep += array(
                 'BREADCRUMBS',
                 'BREADCRUMB_SET_PARENTS',
-                'BREADCRUMB_EXTRA_SEGMENTS',
                 'BREADCRUMB_SET_SELF',
             );
         }
@@ -188,11 +187,6 @@ class Block_main_include_module
             if (strpos($_out, $attributes['page']) !== false) {
                 $_out = str_replace($url_from, $url_to, $_out);
                 $out = make_string_tempcode($_out);
-            }
-            if ($use_breadcrumbs) {
-                if ($GLOBALS['BREADCRUMB_EXTRA_SEGMENTS'] !== null) {
-                    $GLOBALS['BREADCRUMB_EXTRA_SEGMENTS'] = make_string_tempcode(str_replace($url_from, $url_to, $GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']->evaluate()));
-                }
             }
         }
 

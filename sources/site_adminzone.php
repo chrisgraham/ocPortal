@@ -58,13 +58,15 @@ function adminzone_special_cases($codename)
 }
 
 /**
- * Extend breadcrumbs for the Admin Zone (called by breadcrumbs_get_default_stub).
+ * Get extended breadcrumbs for the Admin Zone (called by breadcrumbs_get_default_stub).
  *
- * @param  tempcode                     $stub Reference to the breadcrumbs stub we're assembling
+ * @return array                        Extra breadcrumbs
  */
-function adminzone_extend_breadcrumbs(&$stub)
+function adminzone_extended_breadcrumbs()
 {
     global $BREADCRUMB_SET_PARENTS;
+
+    $breadcrumbs = array();
 
     if ((count($BREADCRUMB_SET_PARENTS) > 0) && (!is_object($BREADCRUMB_SET_PARENTS[0][0]))) { // Ideally
         // Works by finding where our oldest ancestor connects on to the do-next menus, and carries from there
@@ -110,19 +112,21 @@ function adminzone_extend_breadcrumbs(&$stub)
 
                     if ((is_array($i[2])) && ($page == $i[2][0]) && (((!isset($i[2][1]['type'])) && ($type == 'browse')) || ((isset($i[2][1]['type'])) && (($type == $i[2][1]['type']) || ($i[2][1]['type'] == 'browse')))) && ($zone == $i[2][2])) {
                         if ($i[0] == 'cms') {
-                            $url = build_url(array('page' => 'cms', 'type' => ($i[0] == 'cms') ? null : $i[0]), 'cms');
+                            $page_link = build_page_link(array('page' => 'cms', 'type' => ($i[0] == 'cms') ? null : $i[0]), 'cms');
                         } else {
-                            $url = build_url(array('page' => 'admin', 'type' => $i[0]), 'adminzone');
+                            $page_link = build_page_link(array('page' => 'admin', 'type' => $i[0]), 'adminzone');
                         }
 
                         $title = do_lang_tempcode(strtoupper($i[0])); // The lang string version of the page grouping we found our current module was in
 
-                        $stub->attach(hyperlink($url, $title, false, false, do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode(strip_tags($title->evaluate()), ENT_QUOTES, get_charset()))));
+                        $breadcrumbs[] = array($page_link, $title);
 
-                        return;
+                        return $breadcrumbs;
                     }
                 }
             }
         }
     }
+
+    return $breadcrumbs;
 }

@@ -49,7 +49,7 @@ if ($no_custom) {
     $files[] = $OCPORTAL_PATH . '/sources_custom/phpstub.php';
 }
 
-safe_ini_set('memory_limit', '-1');
+ini_set('memory_limit', '-1');
 
 $classes = array();
 $global = array();

@@ -95,7 +95,8 @@ function render_catalogue_entry_box($row, $zone = '_SEARCH', $give_context = tru
 
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = catalogue_category_breadcrumbs($row['cc_id'], ($root === null) ? get_param_integer('keep_catalogue_' . $catalogue['c_name'] . '_root', null) : $root, false);
+        $_breadcrumbs = catalogue_category_breadcrumbs($row['cc_id'], ($root === null) ? get_param_integer('keep_catalogue_' . $catalogue['c_name'] . '_root', null) : $root, false);
+        $breadcrumbs = breadcrumb_segments_to_tempcode($_breadcrumbs);
     }
 
     $tpl_set = $catalogue_name;
@@ -144,7 +145,7 @@ function render_catalogue_category_box($row, $zone = '_SEARCH', $give_context = 
     // Breadcrumbs
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = catalogue_category_breadcrumbs($row['id'], ($root === null) ? get_param_integer('keep_catalogue_' . $row['c_name'] . '_root', null) : $root, $attach_to_url_filter);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(catalogue_category_breadcrumbs($row['id'], ($root === null) ? get_param_integer('keep_catalogue_' . $row['c_name'] . '_root', null) : $root, $attach_to_url_filter));
     }
 
     // Image
@@ -857,9 +858,10 @@ function catalogue_entries_manual_sort($fields, &$entries, $order_by, $direction
  * @param  boolean                      $feedback_details Whether to grab the feedback details
  * @param  boolean                      $breadcrumbs_details Whether to grab the breadcrumbs details
  * @param  ?integer                     $order_by Field index to order by (null: none)
+ * @param  ?array                       $_breadcrumbs Write breadcrumbs into here (null: don't bother)
  * @return array                        A map of information relating to the entry. The map contains 'FIELDS' (tempcode for all accumulated fields), 'FIELD_x' (for each field x applying to the entry), STAFF_DETAILS, COMMENT_DETAILS, RATING_DETAILS, VIEW_URL, BREADCRUMBS
  */
-function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root = null, $fields = null, $only_fields = null, $feedback_details = false, $breadcrumbs_details = false, $order_by = null)
+function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root = null, $fields = null, $only_fields = null, $feedback_details = false, $breadcrumbs_details = false, $order_by = null, &$_breadcrumbs = null)
 {
     $id = $entry['id'];
     $all_visible = true;
@@ -1051,7 +1053,8 @@ function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root
     if ($breadcrumbs_details) {
         $map['BREADCRUMBS'] = '';
         if (($catalogue['c_is_tree'] == 1) && ($only_fields === null)) {
-            $breadcrumbs = catalogue_category_breadcrumbs($entry['cc_id'], $root, false);
+            $_breadcrumbs = catalogue_category_breadcrumbs($entry['cc_id'], $root, false);
+            $breadcrumbs = breadcrumb_segments_to_tempcode($_breadcrumbs);
             $map['BREADCRUMBS'] = $breadcrumbs;
         }
     }
@@ -1348,7 +1351,7 @@ function create_selection_list_catalogue_category_tree($catalogue_name, $it = nu
     foreach ($temp_rows as $row) {
         $category_id = $row['id'];
         $title = get_translated_text($row['cc_title']);
-        $subtree = get_catalogue_category_tree($catalogue_name, $category_id, null, $title, null, $addable_filter, $use_compound_list);
+        $subtree = get_catalogue_category_tree($catalogue_name, $category_id, '', $title, null, $addable_filter, $use_compound_list);
         if (($use_compound_list) && (array_key_exists(0, $subtree))) {
             $subtree = $subtree[0];
         }
@@ -1374,7 +1377,7 @@ function create_selection_list_catalogue_category_tree($catalogue_name, $it = nu
  *
  * @param  ID_TEXT                      $catalogue_name The catalogue name
  * @param  ?AUTO_LINK                   $category_id The category being at the root of our recursion (null: true root category)
- * @param  ?tempcode                    $breadcrumbs The breadcrumbs up to this point in the recursion (null: blank, as we are starting the recursion)
+ * @param  string                       $breadcrumbs The breadcrumbs up to this point in the recursion
  * @param  ?string                      $category_details The category details of the $category_id we are currently going through (null: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs details
  * @param  ?integer                     $levels The number of recursive levels to search (null: all)
  * @param  boolean                      $addable_filter Whether to only show for what may be added to by the current member
@@ -1382,14 +1385,10 @@ function create_selection_list_catalogue_category_tree($catalogue_name, $it = nu
  * @param  boolean                      $do_stats Whether to collect entry counts with our tree information
  * @return array                        A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title), and 'entries_count' (the number of entries in the category).
  */
-function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs = null, $category_details = null, $levels = null, $addable_filter = false, $use_compound_list = false, $do_stats = false)
+function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs = '', $category_details = null, $levels = null, $addable_filter = false, $use_compound_list = false, $do_stats = false)
 {
     if ($levels == -1) {
         return $use_compound_list ? array(array(), '') : array();
-    }
-
-    if ($breadcrumbs === null) {
-        $breadcrumbs = new Tempcode();
     }
 
     if (!has_category_access(get_member(), 'catalogues_catalogue', $catalogue_name)) {
@@ -1408,7 +1407,7 @@ function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs
     }
  
     $title = ($category_details === null) ? do_lang('HOME') : get_translated_text($category_details['cc_title']);
-    $breadcrumbs->attach($title);
+    $breadcrumbs .= $title;
 
     // We'll be putting all children in this entire tree into a single list
     $children = array();
@@ -1442,14 +1441,12 @@ function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs
     if (!$no_root) {
         $children[0]['child_count'] = count($rows);
     }
-    $child_breadcrumbs = new Tempcode();
-    $child_breadcrumbs->attach($breadcrumbs);
-    $child_breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+    $child_breadcrumbs = $breadcrumbs . ' > ';
     if ($levels !== 0) {
         foreach ($rows as $child) {
             $child_id = $child['id'];
 
-            $child_children = get_catalogue_category_tree($catalogue_name, $child_id, clone $child_breadcrumbs, $child, ($levels === null) ? null : ($levels - 1), $addable_filter, $use_compound_list, $do_stats);
+            $child_children = get_catalogue_category_tree($catalogue_name, $child_id, $child_breadcrumbs, $child, ($levels === null) ? null : ($levels - 1), $addable_filter, $use_compound_list, $do_stats);
             if ($child_children != array()) {
                 if ($use_compound_list) {
                     list($child_children, $_compound_list) = $child_children;
@@ -1625,20 +1622,19 @@ function get_catalogue_entries_tree($catalogue_name, $submitter = null, $categor
  * @param  ?AUTO_LINK                   $root The root of the tree (null: the true root)
  * @param  boolean                      $no_link_for_me_sir Whether to include category links at this level (the recursed levels will always contain links - the top level is optional, hence this parameter)
  * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
- * @return tempcode                     The breadcrumbs
+ * @return array                        The breadcrumbs
  */
 function catalogue_category_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = true, $attach_to_url_filter = false)
 {
-    $map = array('page' => 'catalogues', 'type' => 'category', 'id' => $category_id);
+    if ($category_id === null) {
+        return array();
+    }
 
+    $map = array('page' => 'catalogues', 'type' => 'category', 'id' => $category_id);
     if (get_page_name() == 'catalogues') {
         $map += propagate_ocselect();
     }
-    $url = build_url($map, get_module_zone('catalogues'));
-
-    if ($category_id === null) {
-        return new Tempcode();
-    }
+    $page_link = build_page_link($map, get_module_zone('catalogues'));
 
     if (($category_id != $root) || (!$no_link_for_me_sir)) {
         global $PT_PAIR_CACHE;
@@ -1656,25 +1652,19 @@ function catalogue_category_breadcrumbs($category_id, $root = null, $no_link_for
     }
 
     if ($category_id == $root) {
-        $below = new Tempcode();
+        $below = array();
     } else {
         $below = catalogue_category_breadcrumbs($PT_PAIR_CACHE[$category_id]['cc_parent_id'], $root, false, $attach_to_url_filter);
     }
 
+    $segments = array();
+
     if (!$no_link_for_me_sir) {
         $title = get_translated_text($PT_PAIR_CACHE[$category_id]['cc_title']);
-        if (!$below->is_empty()) {
-            $tpl_url = do_template('BREADCRUMB_SEPARATOR');
-        } else {
-            $tpl_url = new Tempcode();
-        }
-        $tpl_url->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
-    } else {
-        $tpl_url = new Tempcode();
+        $segments[] = array($page_link, $title);
     }
 
-    $below->attach($tpl_url);
-    return $below;
+    return array_merge($below, $segments);
 }
 
 /**
@@ -1775,7 +1765,8 @@ function render_catalogue_entry_screen($id, $no_title = false, $attach_to_url_fi
     }
 
     $root = get_param_integer('keep_catalogue_' . $catalogue_name . '_root', null);
-    $map = get_catalogue_entry_map($entry, $catalogue, 'PAGE', $tpl_set, $root, null, null, true, true);
+    $breadcrumbs = array();
+    $map = get_catalogue_entry_map($entry, $catalogue, 'PAGE', $tpl_set, $root, null, null, true, true, null, $breadcrumbs);
 
     if ((get_db_type() != 'xml') && (get_value('no_view_counts') !== '1') && (is_null(get_bot_type()))) {
         $entry['ce_views']++;
@@ -1841,26 +1832,29 @@ function render_catalogue_entry_screen($id, $no_title = false, $attach_to_url_fi
     seo_meta_load_for('catalogue_entry', strval($id), strip_tags($title_to_use_2));
 
     if ($map['BREADCRUMBS'] === '') {
-        $map['BREADCRUMBS'] = new Tempcode();
-        $url = build_url(array('page' => '_SELF', 'type' => 'index', 'id' => $catalogue_name), '_SELF');
-        $map['BREADCRUMBS']->attach(hyperlink($url, escape_html(get_translated_text($catalogue['c_title'])), false, false, do_lang('INDEX')));
-        $map['BREADCRUMBS']->attach(do_template('BREADCRUMB_SEPARATOR'));
-        $url_map = array('page' => '_SELF', 'type' => 'category', 'id' => $category['id']);
+        $breadcrumbs = array();
+        $page_link = build_page_link(array('page' => '_SELF', 'type' => 'index', 'id' => $catalogue_name), '_SELF');
+        $breadcrumbs[] = array($page_link, get_translated_text($catalogue['c_title']));
+        $page_link_map = array('page' => '_SELF', 'type' => 'category', 'id' => $category['id']);
         if ($attach_to_url_filter) {
-            $url_map += propagate_ocselect();
+            $page_link_map += propagate_ocselect();
         }
-        $url = build_url($url_map, '_SELF');
-        $map['BREADCRUMBS']->attach(hyperlink($url, escape_html(get_translated_text($category['cc_title'])), false, false, do_lang('GO_BACKWARDS_TO', get_translated_text($category['cc_title'])), null, null, 'up'));
+        $page_link = build_page_link($page_link_map, '_SELF');
+        $breadcrumbs[] = array($page_link, get_translated_text($category['cc_title']));
+        $map['BREADCRUMBS'] = breadcrumb_segments_to_tempcode($breadcrumbs);
     }
     $map['CATEGORY_TITLE'] = get_translated_text($category['cc_title']);
     $map['CAT'] = strval($entry['cc_id']);
 
     $map['TAGS'] = get_loaded_tags('catalogue_entries');
 
-    breadcrumb_add_segment($map['BREADCRUMBS'], protect_from_escaping('<span>' . $title_to_use->evaluate() . '</span>'));
     if ($root === null) {
-        breadcrumb_set_parents(array(array('_SELF:_SELF:browse' . ($ecommerce ? ':ecommerce=1' : ''), do_lang('CATALOGUES'))));
+        $_breadcrumbs = array();
+        $_breadcrumbs[] = array('_SELF:_SELF:browse' . ($ecommerce ? ':ecommerce=1' : ''), do_lang_tempcode('CATALOGUES'));
+        $breadcrumbs = $_breadcrumbs;
     }
+    $breadcrumbs[] = array('', $title_to_use);
+    breadcrumb_set_parents($_breadcrumbs);
 
     set_extra_request_metadata(array(
         'created' => date('Y-m-d', $entry['ce_add_date']),

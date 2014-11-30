@@ -314,16 +314,13 @@ class Module_galleries
 
             // Breadcrumbs
             $breadcrumbs = gallery_breadcrumbs($cat, $root, true, get_module_zone('galleries'), true);
-            if (!$breadcrumbs->is_empty()) {
-                $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-            }
             if ((has_privilege(get_member(), 'open_virtual_roots')) && ($cat != $root)) {
-                $url = get_self_url(false, false, array('keep_gallery_root' => $cat));
-                $breadcrumbs->attach(hyperlink($url, escape_html($fullname), false, false, do_lang_tempcode('VIRTUAL_ROOT')));
+                $page_link = build_page_link(array('page' => '_SELF', 'type' => 'misc', 'id' => $cat, 'keep_gallery_root' => $cat), '_SELF');
+                $breadcrumbs[] = array($page_link, $fullname, do_lang_tempcode('VIRTUAL_ROOT'));
             } else {
-                $breadcrumbs->attach('<span>' . escape_html($fullname) . '</span>');
+                $breadcrumbs[] = array('', $fullname);
             }
-            breadcrumb_add_segment($breadcrumbs);
+            breadcrumb_set_parents($breadcrumbs);
 
             // Page title
             if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
@@ -429,7 +426,8 @@ class Module_galleries
             seo_meta_load_for($type, strval($id));
 
             $breadcrumbs = gallery_breadcrumbs($cat, $root, false, get_module_zone('galleries'));
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . escape_html($title_plain) . '</span>'));
+            $breadcrumbs[] = array('', $title_plain);
+            breadcrumb_set_parents($breadcrumbs);
 
             if ($type == 'video') {
                 $extension = get_file_extension($url);

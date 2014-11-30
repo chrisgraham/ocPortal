@@ -258,16 +258,13 @@ class Module_downloads
 
             // Breadcrumbs
             $breadcrumbs = download_breadcrumbs($category_id, $root, true, get_zone_name(), true);
-            if (!$breadcrumbs->is_empty()) {
-                $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-            }
             if ((has_privilege(get_member(), 'open_virtual_roots')) && ($category_id != $root)) {
-                $url = get_self_url(false, false, array('keep_download_root' => $category_id));
-                $breadcrumbs->attach(hyperlink($url, escape_html($title_to_use), false, false, do_lang_tempcode('VIRTUAL_ROOT')));
+                $page_link = build_page_link(array('page' => '_SELF', 'type' => 'misc', 'id' => $category_id, 'keep_download_root' => $category_id), '_SELF');
+                $breadcrumbs[] = array($page_link, $title_to_use, do_lang_tempcode('VIRTUAL_ROOT'));
             } else {
-                $breadcrumbs->attach($title_to_use);
+                $breadcrumbs[] = array('', $title_to_use);
             }
-            breadcrumb_add_segment($breadcrumbs);
+            breadcrumb_set_parents($breadcrumbs);
 
             // Meta data
             seo_meta_load_for('downloads_category', strval($category_id), $title_to_use);
@@ -335,7 +332,8 @@ class Module_downloads
 
             // Breadcrumbs
             $breadcrumbs = download_breadcrumbs($myrow['category_id'], $root, false, get_zone_name());
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . $title_to_use_tempcode->evaluate() . '</span>'));
+            $breadcrumbs[] = array('', $title_to_use);
+            breadcrumb_set_parents($breadcrumbs);
 
             // Images in associated gallery
             $images_details = new Tempcode();

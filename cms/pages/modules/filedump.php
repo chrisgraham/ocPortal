@@ -134,25 +134,23 @@ class Module_filedump
             // Show breadcrumbs
             $dirs = explode('/', substr($place, 0, strlen($place) - 1));
             $pre = '';
-            $breadcrumbs = new Tempcode();
+            $breadcrumbs = array();
             foreach ($dirs as $i => $d) {
                 if ($i == 0) {
                     $d = do_lang('FILEDUMP');
                 }
 
                 if (array_key_exists($i + 1, $dirs)) {
-                    $breadcrumbs_url = build_url(array('page' => '_SELF', 'place' => $pre . $dirs[$i] . '/'), '_SELF');
-                    if (!$breadcrumbs->is_empty()) {
-                        $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR', array('_GUID' => '7ee62e230d53344a7d9667dc59be21c6')));
-                    }
-                    $breadcrumbs->attach(hyperlink($breadcrumbs_url, $d));
+                    $breadcrumbs_page_link = build_page_link(array('page' => '_SELF', 'place' => $pre . $dirs[$i] . '/'), '_SELF');
+                    $breadcrumbs[] = array($breadcrumbs_page_link, $d);
                 }
                 $pre .= $dirs[$i] . '/';
             }
             if (!$breadcrumbs->is_empty()) {
-                breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . escape_html($d) . '</span>'));
+                $breadcrumbs[] = array('', $d);
+                breadcrumb_set_parents($breadcrumbs);
             } else {
-                breadcrumb_set_self(($i == 1) ? do_lang_tempcode('FILEDUMP') : make_string_tempcode(escape_html($d)));
+                breadcrumb_set_self(($i == 1) ? do_lang_tempcode('FILEDUMP') : protect_from_escaping(escape_html($d)));
             }
 
             $this->place = $place;

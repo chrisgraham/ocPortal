@@ -407,22 +407,9 @@ function get_logo_url($zone_name = null)
  */
 function breadcrumbs($show_self = true)
 {
-    global $BREADCRUMB_SET_PARENTS, $BREADCRUMBS, $BREADCRUMB_EXTRA_SEGMENTS;
-
-    if ($BREADCRUMBS === null) {
-        $BREADCRUMBS = breadcrumbs_get_default_stub(($BREADCRUMB_EXTRA_SEGMENTS === null || $BREADCRUMB_EXTRA_SEGMENTS->is_empty()) && $show_self);
-    }
-    $out = new Tempcode();
-    $out->attach($BREADCRUMBS);
-    if (($BREADCRUMB_EXTRA_SEGMENTS !== null) && (!$BREADCRUMB_EXTRA_SEGMENTS->is_empty())) {
-        if (!$out->is_empty()) {
-            $out->attach(do_template('BREADCRUMB_SEPARATOR'));
-        }
-        $out->attach($BREADCRUMB_EXTRA_SEGMENTS);
-    }
+    global $BREADCRUMB_SET_PARENTS, $BREADCRUMBS;
 
     // Substitutions
-    $segment_substitutions = array();
     if ((addon_installed('breadcrumbs')) && (function_exists('xml_parser_create'))) {
         $data = persistent_cache_get('BREADCRUMBS');
         if ($data === null) {
@@ -438,16 +425,17 @@ function breadcrumbs($show_self = true)
         }
         if (trim($data) != '') {
             require_code('breadcrumbs');
-            $segment_substitutions = array_merge($segment_substitutions, load_breadcrumb_substitutions($out->evaluate(), $data));
+            $BREADCRUMB_SET_PARENTS = load_breadcrumb_substitutions($BREADCRUMB_SET_PARENTS, $data);
         }
     }
-    if (count($segment_substitutions) != 0) {
-        $_out = $out->evaluate();
-        foreach ($segment_substitutions as $from => $to) {
-            $_out = preg_replace('~' . str_replace('~', '\~', $from) . '~Us', $to, $_out, 1);
-        }
-        return make_string_tempcode($_out);
+
+    // Render
+    if ($BREADCRUMBS === null) {
+        $BREADCRUMBS = breadcrumbs_get_default_stub($show_self);
     }
+    $out = new Tempcode();
+    $out->attach($BREADCRUMBS);
+
     return $out;
 }
 
@@ -460,49 +448,28 @@ function breadcrumbs($show_self = true)
 function breadcrumbs_get_default_stub($link_to_self_entrypoint = true)
 {
     global $BREADCRUMB_SET_PARENTS, $DISPLAYED_TITLE, $BREADCRUMB_SET_SELF;
-    $stub = new Tempcode();
 
     // Special hard-coded link to sitemap structure for Admin and CMS zones
     $zone = get_zone_name();
     if ((($zone == 'adminzone') || ($zone == 'cms')) && (get_option('deeper_admin_breadcrumbs') == '1')) {
         require_code('site_adminzone');
-        adminzone_extend_breadcrumbs($stub);
+        $BREADCRUMB_SET_PARENTS = array_merge(adminzone_extended_breadcrumbs(), $BREADCRUMB_SET_PARENTS);
     }
+
+    $stub = new Tempcode();
 
     // Specified parents
-    foreach ($BREADCRUMB_SET_PARENTS as $bit) {
-        list($entrypoint, $title) = $bit;
-        $title = symbol_truncator(array(is_object($title) ? $title : escape_html($title), BREADCRUMB_CROP_LENGTH, '1', '1'), 'spread');
-
-        if (!$stub->is_empty()) {
-            $stub->attach(do_template('BREADCRUMB_SEPARATOR'));
-        }
-        if ($entrypoint === '') {
-            $stub->attach($title);
-        } else {
-            if (is_object($entrypoint)) {
-                $url = $entrypoint;
-            } else {
-                list($zone, $attributes,) = page_link_decode($entrypoint);
-                $url = build_url($attributes, $zone);
-            }
-            $stub->attach(hyperlink($url, $title, false, false, do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode(strip_tags(is_object($title) ? $title->evaluate() : $title), ENT_QUOTES, get_charset()))));
-        }
-    }
+    $stub->attach(breadcrumb_segments_to_tempcode($BREADCRUMB_SET_PARENTS, $link_to_self_entrypoint));
 
     // Self-link
     if ($link_to_self_entrypoint) {
-        if (!$stub->is_empty()) {
-            $stub->attach(do_template('BREADCRUMB_SEPARATOR'));
-        }
-        $title = ($BREADCRUMB_SET_SELF === null) ? $DISPLAYED_TITLE : $BREADCRUMB_SET_SELF;
-        if ($title !== null) {
-            $title = symbol_truncator(array(is_object($title) ? $title : escape_html($title), (strlen(strip_tags($stub->evaluate())) < BREADCRUMB_CROP_LENGTH) ? (BREADCRUMB_CROP_LENGTH * 2) : BREADCRUMB_CROP_LENGTH, '1', '1'), 'spread');
-            if (((is_object($title)) && (!$title->is_empty())) || ((is_string($title)) && ($title != ''))) {
-                $stub->attach('<span>');
-                $stub->attach($title);
-                $stub->attach('</span>');
+        $label = ($BREADCRUMB_SET_SELF === null) ? $DISPLAYED_TITLE : $BREADCRUMB_SET_SELF;
+        if ($label !== null) {
+            if (count($BREADCRUMB_SET_PARENTS) != 0) {
+                $stub->attach(do_template('BREADCRUMB_SEPARATOR'));
             }
+
+            $stub->attach(do_template('BREADCRUMB_LONE_WRAP', array('LABEL' => $label)));
         }
     }
 
@@ -510,48 +477,40 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint = true)
 }
 
 /**
- * Add a segment to the breadcrumbs (if this isn't used, a default will be used for the stub).
+ * Convert breadcrumb segments to Tempcode breadcrumbs.
  *
- * @sets_output_state
- *
- * @param  tempcode                     $segment The segment
- * @param  ?mixed                       $final_title The title of the follower of the segment OR an array as for breadcrumb_set_parents (null: implicit in $segment)
+ * @param  array                        $segments The segments in array format
+ * @param  ?mixed                       $link_to_self_entrypoint Whether we'll be providing a link to where we are currently at (by reference, gets set to false in some circumstances) (null: don't save by reference)
+ * @return tempcode                     The segments in Tempcode0
  */
-function breadcrumb_add_segment($segment, $final_title = null)
+function breadcrumb_segments_to_tempcode($segments, &$link_to_self_entrypoint = null)
 {
-    global $BREADCRUMB_EXTRA_SEGMENTS;
+    $out = new Tempcode();
 
-    if ($BREADCRUMB_EXTRA_SEGMENTS === null) {
-        $BREADCRUMB_EXTRA_SEGMENTS = new Tempcode();
-    }
-    $BREADCRUMB_EXTRA_SEGMENTS->attach($segment);
-    if ($final_title !== null) {
-        if (is_array($final_title)) {
-            foreach ($final_title as $bit) {
-                list($entrypoint, $title) = $bit;
-                $title = symbol_truncator(array(is_object($title) ? $title : escape_html($title), BREADCRUMB_CROP_LENGTH, '1', '1'), 'spread');
+    foreach ($segments as $i => $bit) {
+        list($entry_point, $label) = $bit;
+        $tooltip = isset($bit[2]) ? $bit[2] : '';
+        if (!(((is_string($tooltip)) && ($tooltip == '')) || ((is_object($tooltip)) && ($tooltip->is_empty())))) {
+            $link_to_self_entrypoint = false; // Tooltip implies that we are defining end-point ourselves
+        }
 
-                $BREADCRUMB_EXTRA_SEGMENTS->attach(do_template('BREADCRUMB_SEPARATOR'));
+        if ($i != 0) {
+            $out->attach(do_template('BREADCRUMB_SEPARATOR'));
+        }
 
-                if ($entrypoint === '') {
-                    $BREADCRUMB_EXTRA_SEGMENTS->attach($title);
-                } else {
-                    if (is_object($entrypoint)) {
-                        $url = $entrypoint;
-                    } else {
-                        list($zone, $attributes,) = page_link_decode($entrypoint);
-                        $url = build_url($attributes, $zone);
-                    }
-                    $BREADCRUMB_EXTRA_SEGMENTS->attach(hyperlink($url, $title, false, false, do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode(strip_tags(is_object($title) ? $title->evaluate() : $title), ENT_QUOTES, get_charset()))));
-                }
-            }
+        if ($entry_point == '') {
+            $out->attach(do_template('BREADCRUMB_LONE_WRAP', array('LABEL' => $label)));
+
+            $link_to_self_entrypoint = false; // Empty part implies that we are defining end-point ourselves
         } else {
-            $title = $final_title;
-            $BREADCRUMB_EXTRA_SEGMENTS->attach(do_template('BREADCRUMB_SEPARATOR'));
-            $title = symbol_truncator(array(is_object($title) ? $title : escape_html($title), BREADCRUMB_CROP_LENGTH, '1', '1'), 'spread');
-            $BREADCRUMB_EXTRA_SEGMENTS->attach($title);
+            list($zone, $attributes, $hash) = page_link_decode($entry_point);
+            $url = build_url($attributes, $zone, null, false, false, $hash);
+
+            $out->attach(do_template('BREADCRUMB_LINK_WRAP', array('LABEL' => $label, 'URL' => $url, 'TOOLTIP' => $tooltip)));
         }
     }
+
+    return $out;
 }
 
 /**
@@ -572,7 +531,7 @@ function breadcrumb_set_parents($parents)
  *
  * @sets_output_state
  *
- * @param  tempcode                     $title The title
+ * @param  mixed                        $title The title (Tempcode or string)
  */
 function breadcrumb_set_self($title)
 {
@@ -1612,7 +1571,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
         $PT_PAIR_CACHE_CP[$codename]['cc_page_title'] = ($title_to_use === null) ? do_lang_tempcode('NA_EM') : make_string_tempcode($title_to_use);
         $PT_PAIR_CACHE_CP[$codename]['p_parent_page'] = $comcode_page_row['p_parent_page'];
         $comcode_breadcrumbs = comcode_breadcrumbs($codename, $zone, get_param('keep_page_root', ''), ($comcode_page_row['p_parent_page'] == '') || !has_privilege(get_member(), 'open_virtual_roots'));
-        breadcrumb_add_segment($comcode_breadcrumbs);
+        breadcrumb_set_parents($comcode_breadcrumbs);
 
         set_extra_request_metadata(array(
             'created' => date('Y-m-d', $comcode_page_row['p_add_date']),
@@ -1662,19 +1621,19 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
 }
 
 /**
- * Get a UI element of a route from a known Comcode page back to the declared root of the tree.
+ * Get a route from a known Comcode page back to the declared root of the tree.
  *
  * @param  ID_TEXT                      $the_page The Comcode page name
  * @param  ID_TEXT                      $the_zone The Comcode page zone
  * @param  ID_TEXT                      $root The virtual root
  * @param  boolean                      $no_link_for_me_sir Whether not to put a link at this point in the navigation tree (usually, because the viewer is already at it)
  * @param  integer                      $jumps The number of jumps we have gone through so far (cuts out after 10 as a failsafe)
- * @return tempcode                     The navigation element
+ * @return array                        The breadcrumbs
  */
 function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_sir = true, $jumps = 0)
 {
     if ($jumps == 10) {
-        return new Tempcode();
+        return array();
     }
 
     $map = array('page' => $the_page);
@@ -1683,14 +1642,14 @@ function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_s
     } elseif ($root != '') {
         $map['keep_page_root'] = $root;
     }
-    $url = build_url($map, $the_zone);
+    $page_link = build_page_link($map, $the_zone);
 
     if ($the_page == '') {
-        return new Tempcode();
+        return array();
     }
     if ($the_page == $root) {
         if ($no_link_for_me_sir) {
-            return new Tempcode();
+            return array();
         }
         $_title = $GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages', 'cc_page_title', array('the_page' => $the_page, 'the_zone' => $the_zone));
         $title = null;
@@ -1700,7 +1659,7 @@ function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_s
         if ($_title === null) {
             $title = escape_html($the_page);
         }
-        return hyperlink($url, $title, false, false, do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode(strip_tags($title), ENT_QUOTES, get_charset())), null, null, 'up');
+        return array(array($page_link, $title));
     }
 
     global $PT_PAIR_CACHE_CP;
@@ -1730,20 +1689,15 @@ function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_s
     if ($title === null) {
         $title = $the_page;
     }
-    if (!$no_link_for_me_sir) {
-        $tpl_url = ($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'] == '') ? new Tempcode() : do_template('BREADCRUMB_SEPARATOR');
-        $_title = is_object($title) ? $title->evaluate() : $title;
-        $tooltip = ($jumps == 0) ? do_lang_tempcode('VIRTUAL_ROOT') : do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode(strip_tags($_title), ENT_QUOTES, get_charset()));
 
-        $title = symbol_truncator(array($_title, BREADCRUMB_CROP_LENGTH, '1', '1'), 'spread', $tooltip);
-        $tpl_url->attach(hyperlink($url, $title, false, false, (strlen($_title) > BREADCRUMB_CROP_LENGTH) ? new Tempcode() : $tooltip, null, null, 'up'));
+    $segments = array();
+
+    if (!$no_link_for_me_sir) {
+        $segments[] = array($page_link, $title);
     } else {
-        $tpl_url = new Tempcode();
         if ($jumps == 0) {
-            $tpl_url = ($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'] == '') ? new Tempcode() : do_template('BREADCRUMB_SEPARATOR');
-            $_title = is_object($title) ? $title->evaluate() : $title;
-            if ($_title != '') {
-                $tpl_url->attach('<span>' . $_title . '</span>');
+            if (!(((is_string($title)) && ($title == '')) || ((is_object($title)) && ($title->is_empty())))) {
+                $segments[] = array('', $title);
             }
         }
     }
@@ -1751,10 +1705,10 @@ function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_s
     if ($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'] == $the_page) {
         fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN', escape_html($the_page)));
     }
-    $below = comcode_breadcrumbs($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'], $the_zone, $root, false, $jumps + 1);
-    $below->attach($tpl_url);
 
-    return $below;
+    $below = comcode_breadcrumbs($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'], $the_zone, $root, false, $jumps + 1);
+
+    return array_merge($below, $segments);
 }
 
 /**

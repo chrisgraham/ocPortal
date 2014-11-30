@@ -112,9 +112,11 @@ class Module_cms_wiki
         }
 
         if ($type == 'edit_page') {
-            $breadcrumbs = wiki_breadcrumbs(get_param('id', false, true), null, true, true);
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang('WIKI_EDIT_PAGE') . '</span>'));
             breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page', do_lang_tempcode('PAGE'))));
+
+            $breadcrumbs = wiki_breadcrumbs(get_param('id', false, true), null, true, true);
+            breadcrumb_set_parents($breadcrumbs);
+            breadcrumb_set_self(do_lang_tempcode('WIKI_EDIT_PAGE'));
 
             $this->title = get_screen_title('WIKI_EDIT_PAGE');
         }
@@ -130,7 +132,8 @@ class Module_cms_wiki
         if ($type == 'edit_tree') {
             list($id, $chain) = get_param_wiki_chain('id');
             $breadcrumbs = wiki_breadcrumbs($chain, null, true, true);
-            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . do_lang('WIKI_EDIT_TREE') . '</span>'));
+            breadcrumb_set_parents($breadcrumbs);
+            breadcrumb_set_self(do_lang_tempcode('WIKI_EDIT_TREE'));
 
             $pages = $GLOBALS['SITE_DB']->query_select('wiki_pages', array('*'), array('id' => $id), '', 1);
             if (!array_key_exists(0, $pages)) {

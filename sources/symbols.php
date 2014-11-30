@@ -352,7 +352,7 @@ function ecv($lang, $escaped, $type, $name, $param)
             case 'INCLUDE':
                 if (isset($param[1])) {
                     $tpl_params = $param['vars'];
-                    $explode = explode("\n", $param[1]->evaluate());
+                    $explode = explode("\n", $param[count($param) - 2]->evaluate());
                     foreach ($explode as $val) {
                         $bits = explode('=', $val, 2);
                         if (count($bits) == 2) {
@@ -3334,9 +3334,9 @@ function ecv_PREG_REPLACE($lang, $escaped, $param)
     if (isset($param[2])) {
         $GLOBALS['SUPPRESS_ERROR_DEATH'] = true;
         $value = preg_replace('#' . str_replace('#', '\#', $param[0]) . '#' . (isset($param[3]) ? str_replace('e', '', $param[3]) : ''), $param[1], $param[2]);
-        $GLOBALS['SUPPRESS_ERROR_DEATH']=false;
+        $GLOBALS['SUPPRESS_ERROR_DEATH'] = false;
         if (isset($php_errormsg)) {
-            attach_message($php_errormsg,'warn');
+            attach_message($php_errormsg, 'warn');
         }
     }
 

@@ -68,7 +68,7 @@ function render_comcode_page_box($row, $give_context = true, $include_breadcrumb
 
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = comcode_breadcrumbs($row['the_page'], $row['the_zone'], is_null($root) ? get_param('keep_page_root', null) : $root);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(comcode_breadcrumbs($row['the_page'], $row['the_zone'], is_null($root) ? get_param('keep_page_root', null) : $root));
     }
 
     return do_template('COMCODE_PAGE_BOX', array(

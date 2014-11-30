@@ -606,7 +606,7 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
     $post = $topic['first_post'];
     if (!is_null($show_forum)) {
         $hover = do_lang_tempcode('FORUM_AND_TIME_HOVER', escape_html($show_forum), escape_html(get_timezoned_date($topic['first_time'])));
-        $breadcrumbs = ocf_forum_breadcrumbs($topic['forum_id'], null, null, false);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(ocf_forum_breadcrumbs($topic['forum_id'], null, null, false));
     } else {
         $hover = protect_from_escaping(is_null($topic['first_time']) ? '' : escape_html(get_timezoned_date($topic['first_time'])));
         $breadcrumbs = new Tempcode();

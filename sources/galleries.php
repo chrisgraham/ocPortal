@@ -62,7 +62,7 @@ function render_image_box($row, $zone = '_SEARCH', $give_context = true, $includ
     // Breadcrumbs
     $breadcrumbs = new Tempcode();
     if ($include_breadcrumbs) {
-        $breadcrumbs = gallery_breadcrumbs($row['cat'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, false, $zone);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(gallery_breadcrumbs($row['cat'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, false, $zone));
     }
 
     // Title
@@ -133,7 +133,7 @@ function render_video_box($row, $zone = '_SEARCH', $give_context = true, $includ
     // Breadcrumbs
     $breadcrumbs = new Tempcode();
     if ($include_breadcrumbs) {
-        $breadcrumbs = gallery_breadcrumbs($row['cat'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, false, $zone);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(gallery_breadcrumbs($row['cat'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, false, $zone));
     }
 
     // Title
@@ -292,7 +292,7 @@ function render_gallery_box($myrow, $root = 'root', $show_member_stats_if_approp
     // Breadcrumbs
     $breadcrumbs = mixed();
     if ($include_breadcrumbs) {
-        $breadcrumbs = gallery_breadcrumbs($myrow['name'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, $attach_to_url_filter);
+        $breadcrumbs = breadcrumb_segments_to_tempcode(gallery_breadcrumbs($myrow['name'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, $attach_to_url_filter));
     }
 
     // Render
@@ -830,14 +830,14 @@ function can_submit_to_gallery($name)
 }
 
 /**
- * Get a UI element of a route from a known gallery back to the declared root of the tree.
+ * Get a route from a known gallery back to the declared root of the tree.
  *
  * @param  ID_TEXT                      $gallery The gallery name
  * @param  ?ID_TEXT                     $root The virtual root (null: none)
  * @param  boolean                      $no_link_for_me_sir Whether not to put a link at this point in the breadcrumbs (usually, because the viewer is already at it)
  * @param  ID_TEXT                      $zone The zone that the linked to gallery module is in
  * @param  boolean                      $attach_to_url_filter Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
- * @return tempcode                     The navigation element
+ * @return array                        The navigation element
  */
 function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = true, $zone = '', $attach_to_url_filter = false)
 {
@@ -853,31 +853,30 @@ function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = tru
     if (get_page_name() == 'galleries') {
         $url_map += propagate_ocselect();
     }
-    $url = build_url($url_map, $zone);
+    $page_link = build_page_link($url_map, $zone);
 
     if (($gallery == $root) || ($gallery == 'root')) {
         if ($no_link_for_me_sir) {
-            return new Tempcode();
+            return array();
         }
         $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries', 'fullname', array('name' => $gallery)));
-        return hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up');
+        return array(array($page_link, $title));
     }
 
     global $PT_PAIR_CACHE_G;
     if (!array_key_exists($gallery, $PT_PAIR_CACHE_G)) {
         $category_rows = $GLOBALS['SITE_DB']->query_select('galleries', array('parent_id', 'fullname'), array('name' => $gallery), '', 1);
         if (!array_key_exists(0, $category_rows)) {
-            return new Tempcode();
+            return array();
         }//fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html($gallery)));
         $PT_PAIR_CACHE_G[$gallery] = $category_rows[0];
     }
 
+    $segments = array();
+
     $title = get_translated_text($PT_PAIR_CACHE_G[$gallery]['fullname']);
     if (!$no_link_for_me_sir) {
-        $tpl_url = do_template('BREADCRUMB_SEPARATOR');
-        $tpl_url->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
-    } else {
-        $tpl_url = new Tempcode();
+        $segments[] = array($page_link, $title);
     }
 
     if ($PT_PAIR_CACHE_G[$gallery]['parent_id'] == $gallery) {
@@ -887,28 +886,24 @@ function gallery_breadcrumbs($gallery, $root = 'root', $no_link_for_me_sir = tru
     if ((get_option('personal_under_members') == '1') && (get_forum_type() == 'ocf')) {
         $owner = get_member_id_from_gallery_name($gallery, null, true);
         if (!is_null($owner)) {
-            $below = new Tempcode();
-            foreach (array(array('_SEARCH:members:browse', do_lang_tempcode('MEMBERS')), array('_SEARCH:members:view:' . strval($owner) . '#tab__galleries', do_lang_tempcode('ocf:MEMBER_PROFILE', escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner, true))))) as $i => $bits) {
+            $below = array();
+
+            foreach (array(array('_SEARCH:members:browse', do_lang_tempcode('MEMBERS')), array('_SEARCH:members:view:' . strval($owner) . '#tab__galleries', do_lang_tempcode('ocf:MEMBER_PROFILE', escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner, true))))) as $bits) {
                 list($page_link, $title) = $bits;
                 list($zone, $map, $hash) = page_link_decode($page_link);
                 if (get_page_name() == 'galleries') {
                     $map += propagate_ocselect();
                 }
-                $url = build_url($map, $zone, null, false, false, false, $hash);
-                if ($i != 0) {
-                    $below->attach(do_template('BREADCRUMB_SEPARATOR'));
-                }
-                $below->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
+                $page_link = build_page_link($map, $zone, $hash);
+                $below[] = array($page_link, $title);
             }
-            $below->attach($tpl_url);
-            return $below;
+            return array_merge($below, $segments);
         }
     }
 
     $below = gallery_breadcrumbs($PT_PAIR_CACHE_G[$gallery]['parent_id'], $root, false, $zone, $attach_to_url_filter);
 
-    $below->attach($tpl_url);
-    return $below;
+    return array_merge($below, $segments);
 }
 
 /**

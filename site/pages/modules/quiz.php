@@ -253,7 +253,7 @@ class Module_quiz
             $title_to_use_2 = do_lang('QUIZ_THIS_WITH', do_lang($quiz['q_type']), $quiz_name);
             seo_meta_load_for('quiz', strval($quiz_id), $title_to_use_2);
 
-            breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))));
+            breadcrumb_set_self(get_translated_text($quiz['q_name']));
 
             $type = 'Quiz';
             switch ($quiz['q_type']) {
@@ -309,7 +309,7 @@ class Module_quiz
             $this->enforcement_checks($quiz);
 
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('QUIZZES')), array('_SELF:_SELF:do:' . strval($quiz_id), make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('QUIZZES')), array('_SELF:_SELF:do:' . strval($quiz_id), get_translated_text($quiz['q_name']))));
 
             $this->title = get_screen_title(do_lang_tempcode('QUIZ_THIS_WITH', do_lang_tempcode($quiz['q_type']), make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))), false);
 

@@ -141,8 +141,8 @@ class Module_forumview
 
             require_code('ocf_forums');
             $breadcrumbs = ocf_forum_breadcrumbs($id, $forum_name, $forum_info['f_parent_forum']);
-            breadcrumb_add_segment($breadcrumbs);
-            $this->breadcrumbs = $breadcrumbs;
+            breadcrumb_set_parents($breadcrumbs);
+            $this->breadcrumbs = breadcrumb_segments_to_tempcode($breadcrumbs);
 
             $this->id = $id;
             $this->forum_info = $forum_info;
@@ -153,16 +153,16 @@ class Module_forumview
 
             $root = get_param_integer('keep_forum_root', db_get_first_id());
             $root_forum_name = $GLOBALS['FORUM_DB']->query_select_value('f_forums', 'f_name', array('id' => $root));
-            $breadcrumbs = hyperlink(build_url(array('page' => '_SELF', 'id' => ($root == db_get_first_id()) ? null : $root), '_SELF'), escape_html($root_forum_name), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $root_forum_name), null, null, 'up');
-            $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+            $breadcrumbs = array();
+            $breadcrumbs[] = array(build_page_link(array('page' => '_SELF', 'id' => ($root == db_get_first_id()) ? null : $root), '_SELF'), $root_forum_name);
             $of_member_id = get_param_integer('id', get_member());
             $pt_username = $GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
             $pt_displayname = $GLOBALS['FORUM_DRIVER']->get_username($of_member_id, true);
             if (is_null($pt_username)) {
                 $pt_username = do_lang('UNKNOWN');
             }
-            $breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF', escape_html($pt_displayname), escape_html($pt_username)));
-            $this->breadcrumbs = $breadcrumbs;
+            $breadcrumbs[] = array('', do_lang_tempcode('PRIVATE_TOPICS_OF', escape_html($pt_displayname), escape_html($pt_username)));
+            $this->breadcrumbs = breadcrumb_segments_to_tempcode($breadcrumbs);
             $this->of_member_id = $of_member_id;
         }
 
