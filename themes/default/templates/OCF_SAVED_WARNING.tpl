@@ -22,7 +22,7 @@
 		explanation.value='{EXPLANATION;^/}';
 
 		var message=win.document.getElementById('message');
-		win.insert_textbox(message,'{MESSAGE;^/}',null,false,'{MESSAGE_HTML*;^}');
+		win.insert_textbox(message,'{MESSAGE;^/}',null,false,'{MESSAGE_HTML;^*}');
 
 		if (typeof window.faux_close!='undefined') window.faux_close(); else window.close();
 

@@ -3848,38 +3848,6 @@ function ecv_GT($lang, $escaped, $param)
  * @param  array                        $param Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string                       The result.
  */
-function ecv_FIX_ID($lang, $escaped, $param)
-{
-    $value = '';
-    if ($GLOBALS['XSS_DETECT']) {
-        ocp_mark_as_escaped($value);
-    }
-
-    if (isset($param[0])) {
-        if (preg_match('#^[A-Za-z][\w]*$#', $param[0]) != 0) { // Optimisation
-            $value = $param[0];
-        } else {
-            $value = fix_id($param[0]);
-        }
-        if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) {
-            ocp_mark_as_escaped($value);
-        }
-    }
-
-    if ($escaped != array()) {
-        apply_tempcode_escaping($escaped, $value);
-    }
-    return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME                $lang The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array                        $escaped Array of escaping operations.
- * @param  array                        $param Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string                       The result.
- */
 function ecv_INSERT_SPAMMER_BLACKHOLE($lang, $escaped, $param)
 {
     if (get_option('spam_blackhole_detection') == '1') {

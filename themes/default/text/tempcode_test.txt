@@ -84,10 +84,6 @@
 		<td>{$OBFUSCATE,chris@example.com}</td>
 	</tr>
 	<tr>
-		<td>$FIX_ID,3+2</td>
-		<td>{$FIX_ID,3+2}</td>
-	</tr>
-	<tr>
 		<td>$GET,foobar</td>
 		<td>{$GET,foobar}</td>
 	</tr>

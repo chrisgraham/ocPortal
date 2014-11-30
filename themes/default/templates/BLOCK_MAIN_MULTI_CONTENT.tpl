@@ -76,7 +76,7 @@
 
 		{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 		<div id="{$GET*,wrapper_id}" class="box_wrapper">
-			<div class="float_surrounder cguid_{$FIX_ID*,{_GUID}} raw_ajax_grow_spot">
+			<div class="float_surrounder cguid_{_GUID|*} raw_ajax_grow_spot">
 				{+START,IF_NON_EMPTY,{CONTENT}}
 					{+START,LOOP,CONTENT}
 						{_loop_var}

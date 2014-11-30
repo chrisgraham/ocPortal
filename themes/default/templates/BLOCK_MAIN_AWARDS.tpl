@@ -1,4 +1,4 @@
-<section class="box box___main_awards cguid_{$FIX_ID*,{_GUID}}"><div class="box_inner">
+<section class="box box___main_awards cguid_{_GUID|*}"><div class="box_inner">
 	{$SET_NOPREEVAL,content_box_title,}
 	{$SET_NOPREEVAL,skip_content_box_title,1}
 	{$SET_NOPREEVAL,eval_content,{CONTENT}}{$,Force early evaluation, to get title}

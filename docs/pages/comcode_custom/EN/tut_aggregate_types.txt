@@ -32,24 +32,24 @@ Here is an example of the definition of two aggregate content types: Course, and
     </aggregateType>
 
     <aggregateType name="Country">
-        <resource type="zone" label="{$FIX_ID*,{LABEL}}" template_label="_country"> <!-- NB: the 'label' in this case is the zone codename -->
+        <resource type="zone" label="{LABEL|*}" template_label="_country"> <!-- NB: the 'label' in this case is the zone codename -->
             <property key="human_title">{LABEL*}</property>
             <access usergroup="*" value="1" />
         </resource>
-        <resource type="comcode_page" subpath="{$FIX_ID*,{LABEL}}" label="start">
+        <resource type="comcode_page" subpath="{LABEL|*}" label="start">
             <property resync="false" key="text">
                 All about {LABEL*}.
             </property>
             <access usergroup="*" value="1" />
         </resource>
-        <resource type="comcode_page" subpath="{$FIX_ID*,{LABEL}}" label="panel_left">
+        <resource type="comcode_page" subpath="{LABEL|*}" label="panel_left">
             <property key="text">
-                [block="{$FIX_ID*,{LABEL}}"]menu[/block]
+                [block="{LABEL|*}"]menu[/block]
             </property>
             <access usergroup="*" value="1" />
         </resource>
-        <resource type="menu_item" subpath="{$FIX_ID*,{LABEL}}" label="Home">
-            <property key="page_link">{$FIX_ID*,{LABEL}}:start</property>
+        <resource type="menu_item" subpath="{LABEL|*}" label="Home">
+            <property key="page_link">{LABEL|*}:start</property>
         </resource>
     </aggregateType>
 </aggregateTypes>

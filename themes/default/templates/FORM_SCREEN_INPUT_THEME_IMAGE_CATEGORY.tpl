@@ -14,7 +14,7 @@
 {+END}
 
 {+START,IF_EMPTY,{CATEGORY_NAME}}
-	<div class="float_surrounder theme_image__{$FIX_ID*,{FIELD_NAME}}">
+	<div class="float_surrounder theme_image__{FIELD_NAME|*}">
 		{CATEGORY}
 	</div>
 {+END}

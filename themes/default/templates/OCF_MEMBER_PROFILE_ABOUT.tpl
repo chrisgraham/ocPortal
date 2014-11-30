@@ -120,7 +120,7 @@
 							{$SET,is_messenger_field,{$EQ,{NAME},{!DEFAULT_CPF_im_skype_NAME},{!DEFAULT_CPF_im_jabber_NAME},{!DEFAULT_CPF_sn_twitter_NAME},{!DEFAULT_CPF_sn_facebook_NAME},{!DEFAULT_CPF_sn_google_NAME}}}
 
 							{+START,IF,{$NOR,{$GET,is_point_field},{$GET,is_messenger_field}}}
-								<tr id="cpf_{$FIX_ID*,{NAME}}">
+								<tr id="cpf_{NAME|*}">
 									<th class="de_th">
 										{NAME*}:
 									</th>

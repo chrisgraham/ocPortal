@@ -52,7 +52,7 @@ Any Tempcode construct may be escaped (made to fit in an encoding scheme, such a
 	(multiple lines drawn together with [tt]\n[/tt] as a separator)
 [*][tt]&[/tt] URL parameters   (or [tt].[/tt] if you don't want extra ocPortal URL escaping to happen)
 	(e.g. [tt]a&b[/tt]  [html]&rarr;[/html]  [tt]a%26b[/tt])
-[*][tt]|[/tt] JavaScript IDs
+[*][tt]|[/tt] JavaScript/XML IDs
 	(e.g. [tt]This is a -terrible- ID[/tt]  [html]&rarr;[/html]  [tt]This__is__a____terrible____ID[/tt])
 [*][tt]%[/tt] Strict codenames
 	(e.g. [tt]ThiS[/tt] [html]&rarr;[/html] [tt]ThiS[/tt]   [i]but[/i]  [tt]This is[/tt]  --> \[\[hack attack]] triggered)
@@ -208,10 +208,6 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 	<tr style="background: #DDFFDD">
 		<td>{$OBFUSCATE,to_obfuscate}</td>
 		<td>Obfuscate a string to make it harder for e-mail scavengers</td>
-	</tr>
-	<tr style="background: #DDFFDD">
-		<td>{$FIX_ID,something to make an ID}</td>
-		<td>Perform escaping similar to ID escaping (convert an arbitrary string into something that can be used as an XML ID (e.g. "*" becomes "_star_").</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$STRIP_TAGS,&lt;strong&gt;example&lt;/strong&gt;}</td>
