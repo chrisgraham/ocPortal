@@ -326,7 +326,23 @@ function comcode_helper_script()
 		if (array_key_exists($tag,$tag_list))
 		{
 			$params=$tag_list[$tag];
-			if ($tag=='include')
+			if ($tag=='currency')
+			{
+				$default=array_key_exists('param',$defaults)?$defaults['param']:get_param('default_param',get_option('currency'));
+				$list=new ocp_tempcode();
+				require_code('currency');
+				foreach (array_keys(get_currency_map()) as $currency)
+				{
+					$list->attach(form_input_list_entry($currency,$currency==$default));
+				}
+				$fields->attach(form_input_list(do_lang_tempcode('CURRENCY'),do_lang_tempcode('COMCODE_TAG_currency_PARAM_param'),'param',$list));
+				$default_embed=array_key_exists('',$defaults)?($defaults['']):get_param('default','');
+				$fields->attach(form_input_float(do_lang_tempcode('AMOUNT'),do_lang_tempcode('COMCODE_TAG_currency_EMBED'),'tag_contents',floatval($default_embed),true));
+				$default=array_key_exists('bracket',$defaults)?$defaults['bracket']:get_param('default_bracket','');
+				$fields->attach(form_input_tick(titleify('bracket'),protect_from_escaping(ucfirst(substr(do_lang('COMCODE_TAG_currency_PARAM_bracket'),12))),'bracket',$default=='1'));
+				$done_tag_contents=true;
+			}
+			elseif ($tag=='include')
 			{
 				$default_embed=array_key_exists('',$defaults)?($defaults['']):get_param('default','');
 				if (strpos($default_embed,':')===false) $default_embed=':'.$default_embed;
@@ -760,7 +776,7 @@ function _get_preview_environment_comcode($tag)
 	{
 		$i=0;
 		$default=post_param_integer('default',0);
-		$comcode='';
+		$comcode='[surround]';
 		$controller=array();
 		while (post_param('tag_contents_'.strval($i),'')!='' && post_param('name_'.strval($i),'')!='')
 		{
@@ -776,7 +792,7 @@ function _get_preview_environment_comcode($tag)
 			$bparameters.="<section=\"$name\"$def>".$content."</section>";
 			$i++;
 		}
-		$comcode.='[section_controller]'.implode(',',$controller).'[/section_controller]';
+		$comcode.='[section_controller]'.implode(',',$controller).'[/section_controller][/surround]';
 		$bparameters.='<section_controller>'.implode(',',$controller).'</section_controller>';
 	}
 	elseif ($tag=='big_tabs')
