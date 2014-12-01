@@ -20,7 +20,7 @@ function init__facebook_connect()
     // Initialise Facebook Connect
     require_code('facebook/facebook');
 
-    class ocpFacebook extends BaseFacebook // We don't want any persistence - we store in normal ocPortal sessions/member rows
+    class CmsFacebook extends BaseFacebook // We don't want any persistence - we store in normal ocPortal sessions/member rows
     {
         protected function setPersistentData($key, $value)
         {
@@ -47,11 +47,14 @@ function init__facebook_connect()
     $FACEBOOK_CONNECT = mixed();
     $appid = get_option('facebook_appid');
     $appsecret = get_option('facebook_secret_code');
-    $FACEBOOK_CONNECT = new ocpFacebook(array('appId' => $appid, 'secret' => $appsecret));
+    $FACEBOOK_CONNECT = new CmsFacebook(array('appId' => $appid, 'secret' => $appsecret));
 
     if (running_script('index')) {
         require_javascript('facebook');
-        attach_to_screen_footer(do_template('FACEBOOK_FOOTER', null, null, true, null, '.tpl', 'templates', 'default'));
+        require_code('site');
+
+        $tpl = do_template('FACEBOOK_FOOTER', null, null, true, null, '.tpl', 'templates', 'default');
+        attach_to_screen_footer($tpl);
     }
 }
 

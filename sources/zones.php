@@ -78,6 +78,9 @@ function init__zones()
     $ALL_ZONES_CACHE = null;
     $ALL_ZONES_TITLED_CACHE = null;
 
+    global $REDIRECT_CACHE;
+    $REDIRECT_CACHE = null;
+
     global $MODULE_INSTALLED_CACHE;
     $MODULE_INSTALLED_CACHE = array();
 
@@ -297,6 +300,32 @@ function get_zone_name()
 }
 
 /**
+ * Load up redirect cache.
+ */
+function load_redirect_cache()
+{
+    global $REDIRECT_CACHE;
+    $REDIRECT_CACHE = array();
+
+    $_zone = get_zone_name();
+    $REDIRECT_CACHE = array($_zone => array());
+    if (addon_installed('redirects_editor')) {
+        $redirect = persistent_cache_get(array('REDIRECT', $_zone));
+        if ($redirect === null) {
+            $redirect = $GLOBALS['SITE_DB']->query_select('redirects', array('*')/*Actually for performance we will load all and cache them ,array('r_from_zone'=>$_zone)*/);
+            persistent_cache_set(array('REDIRECT', $_zone), $redirect);
+        }
+        foreach ($redirect as $r) {
+            if (($r['r_from_zone'] == $r['r_to_zone']) && ($r['r_from_page'] == $r['r_to_page'])) {
+                continue;
+            }
+
+            $REDIRECT_CACHE[$r['r_from_zone']][$r['r_from_page']] = $r;
+        }
+    }
+}
+
+/**
  * Find the zone a page is in.
  *
  * @param  ID_TEXT                      $module_name The page name to find
@@ -339,7 +368,6 @@ function get_module_zone($module_name, $type = 'modules', $dir2 = null, $ftype =
 
     global $REDIRECT_CACHE;
     if ($check_redirects && $REDIRECT_CACHE === null) {
-        require_code('site');
         load_redirect_cache();
     }
     $first_zones = array((substr($module_name, 0, 6) == 'admin_') ? 'adminzone' : $zone);

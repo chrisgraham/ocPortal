@@ -325,6 +325,7 @@ function init__global2()
         handle_logins();
 
         require_code('site'); // This powers the site (top level page generation)
+        check_has_page_access(); // Make sure we're authorised
     }
 
     // Our logging

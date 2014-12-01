@@ -544,7 +544,7 @@ class Module_cms_comcode_pages
         $links = array();
         foreach ($_links as $_link) {
             $links[] = array(
-                'LINK_IMAGE' => find_theme_image($_link[0]),
+                'LINK_IMAGE' => find_theme_image('icons/48x48/' . $_link[0]),
                 'LINK_URL' => build_url(array('page' => $_link[1][0]) + $_link[1][1], $_link[1][2]),
                 'LINK_TEXT' => $_link[2],
             );

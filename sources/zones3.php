@@ -255,6 +255,12 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
         array('menu/_generic_admin/add_one', array('cms_comcode_pages', array('type' => 'edit'), get_module_zone('cms_comcode_pages')), do_lang('COMCODE_PAGE_ADD')),
         array('menu/cms/comcode_page_edit', array('cms_comcode_pages', array('type' => 'browse'), get_module_zone('cms_comcode_pages')), do_lang_tempcode('COMCODE_PAGE_EDIT')),
     );
+    if (!is_null($page)) {
+        $special = array_merge($special, array(
+            array('menu/_generic_admin/edit_this', array('_SELF', array('type' => '_edit', 'page_link' => $zone . ':' . $page), '_SELF'), do_lang('COMCODE_PAGE_EDIT_THIS')),
+            array('menu/_generic_admin/view_this', array($page, array(), $zone), do_lang('COMCODE_PAGE_VIEW_THIS')),
+        ));
+    }
     if (addon_installed('redirects_editor')) {
         require_lang('redirects');
         $special[] = array('menu/adminzone/structure/redirects', array('admin_redirects', array('type' => 'browse'), get_module_zone('admin_redirects')), do_lang_tempcode('REDIRECTS'));
@@ -274,9 +280,9 @@ function sitemap_do_next_manager($title, $page, $zone, $completion_text)
         do_lang('PAGES'),
         /* TYPED-ORDERED LIST OF 'LINKS'   */
         null, // Add one
-        is_null($page) ? null : array('_SELF', array('type' => '_edit', 'page_link' => $zone . ':' . $page), '_SELF'), // Edit this
+        null, // Edit this
         null, // Edit one
-        is_null($page) ? null : array($page, array(), $zone), // View this
+        null, // View this
         null, // View archive
         null, // Add to category
         null, // Add one category

@@ -151,11 +151,10 @@ function get_member($quick_only = false)
     global $SESSION_CACHE, $MEMBER_CACHED, $GETTING_MEMBER, $SITE_INFO;
 
     if ($MEMBER_CACHED !== null) {
-        $GETTING_MEMBER = false;
         return $MEMBER_CACHED;
     }
 
-    if (is_null($GLOBALS['FORUM_DRIVER'])) {
+    if (!isset($GLOBALS['FORUM_DRIVER'])) {
         load_user_stuff();
     }
 

@@ -26,11 +26,16 @@ class Hook_login_provider_facebook
      */
     public function try_login($member) // NB: if $member is set (but not Guest), then it will bind to that account
     {
+        /*if (($member !== null) && (!is_guest($member))) {     Speeds up slighlty, but we don't want to test with this because we need to ensure startup always works right, and it also stops some stuff working
+            return $member;
+        }*/
+
         require_code('facebook_connect');
 
         // Facebook connect
         if ((get_forum_type() == 'ocf') && (get_option('facebook_allow_signups') == '1')) {
             safe_ini_set('ocproducts.type_strictness', '0');
+
             global $FACEBOOK_CONNECT;
             if (!is_null($FACEBOOK_CONNECT)) {
                 try {
@@ -51,6 +56,7 @@ class Hook_login_provider_facebook
                     // User will know what is wrong already (Facebook wil have said), so don't show on our end
                 }
             }
+
             safe_ini_set('ocproducts.type_strictness', '1');
         }
         return $member;

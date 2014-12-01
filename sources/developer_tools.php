@@ -42,9 +42,9 @@ function semi_dev_mode_startup()
             erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
         }*/
 
-        if ((strpos(ocp_srv('HTTP_REFERER'), ocp_srv('HTTP_HOST')) !== false) && (strpos(ocp_srv('HTTP_REFERER'), 'keep_devtest') !== false) && (!running_script('attachment')) && (!running_script('upgrader')) && (strpos(ocp_srv('HTTP_REFERER'), 'login') === false) && (is_null(get_param('keep_devtest', null)))) {
+        if ((strpos(ocp_srv('HTTP_REFERER'), ocp_srv('HTTP_HOST')) !== false) && (strpos(ocp_srv('HTTP_REFERER'), 'keep_devtest') !== false) && (!running_script('attachment')) && (!running_script('upgrader')) && (strpos(ocp_srv('HTTP_REFERER'), 'login') === false) && (get_page_name() != 'login') && (is_null(get_param('keep_devtest', null)))) {
             $_GET['keep_devtest'] = '1';
-            fatal_exit('URL not constructed properly: development mode in use but keep_devtest was not specified. This indicates that links have been made without build_url (in PHP) or keep_stub (in JavaScript). Whilst not fatal this time, failure to use these functions can cause problems when your site goes live. See the ocPortal codebook for more details.');
+            attach_message('URL not constructed properly: development mode in use but keep_devtest was not specified. This indicates that links have been made without build_url (in PHP) or keep_stub (in JavaScript). Whilst not fatal this time, failure to use these functions can cause problems when your site goes live. See the ocPortal codebook for more details.', 'warn');
         } else {
             $_GET['keep_devtest'] = '1';
         }

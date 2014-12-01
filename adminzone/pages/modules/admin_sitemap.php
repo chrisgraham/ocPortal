@@ -322,7 +322,6 @@ class Module_admin_sitemap
         $file = new Tempcode();
         $zone = either_param('zone');
         $pages = array();
-        require_code('site');
         foreach ($_REQUEST as $key => $val) {
             if ((substr($key, 0, 6) == 'page__') && ($val === '1')) {
                 $page = substr($key, 6);
@@ -486,7 +485,6 @@ class Module_admin_sitemap
         }
 
         $pages = array();
-        require_code('site');
         foreach ($_POST as $key => $val) {
             if ((substr($key, 0, 6) == 'page__') && ($val === '1')) {
                 $page = substr($key, 6);

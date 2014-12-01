@@ -70,7 +70,7 @@ function init__site()
     global $ATTACH_MESSAGE_CALLED;
     $ATTACH_MESSAGE_CALLED = 0;
 
-    $real_zone = load_zone_data();
+    load_zone_data();
 
     // SEO redirection
     require_code('urls');
@@ -118,6 +118,16 @@ function init__site()
     if (running_script('index')) {
         process_url_monikers(get_page_name());
     }
+}
+
+/**
+ * Load up details for the current zone.
+ *
+ * @return  ID_TEXT     The "real" zone name (not actually the zone name, but the zone name wants details to load for).
+ */
+function check_has_page_access()
+{
+    $real_zone = load_zone_data();
 
     // The most important security check
     global $SESSION_CONFIRMED_CACHE;
@@ -188,36 +198,7 @@ function load_zone_data()
         }
     }
 
-    global $REDIRECT_CACHE;
-    $REDIRECT_CACHE = null;
-
     return $real_zone;
-}
-
-/**
- * Load up redirect cache.
- */
-function load_redirect_cache()
-{
-    global $REDIRECT_CACHE;
-    $REDIRECT_CACHE = array();
-
-    $_zone = get_zone_name();
-    $REDIRECT_CACHE = array($_zone => array());
-    if (addon_installed('redirects_editor')) {
-        $redirect = persistent_cache_get(array('REDIRECT', $_zone));
-        if ($redirect === null) {
-            $redirect = $GLOBALS['SITE_DB']->query_select('redirects', array('*')/*Actually for performance we will load all and cache them ,array('r_from_zone'=>$_zone)*/);
-            persistent_cache_set(array('REDIRECT', $_zone), $redirect);
-        }
-        foreach ($redirect as $r) {
-            if (($r['r_from_zone'] == $r['r_to_zone']) && ($r['r_from_page'] == $r['r_to_page'])) {
-                continue;
-            }
-
-            $REDIRECT_CACHE[$r['r_from_zone']][$r['r_from_page']] = $r;
-        }
-    }
 }
 
 /**

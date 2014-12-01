@@ -411,7 +411,6 @@ function comcode_convert_script()
 {
     prepare_for_known_ajax_response();
 
-    require_code('site');
     attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
     require_lang('comcode');

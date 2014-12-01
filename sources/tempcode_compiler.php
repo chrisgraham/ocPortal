@@ -416,7 +416,7 @@ function compile_template($data, $template_name, $theme, $lang, $tolerate_errors
                             $new_line = '"' . php_addslashes(debug_eval('return ' . $new_line . ';', $tpl_funcs, array(), $cl)) . '"';
                         } else {
                             // We want the benefit's of keep_ variables but not with having to do lots of individual URL moniker lookup queries - so use a static URL and KEEP_ symbol combination
-                            if (($GLOBALS['OUTPUT_STREAMING']) && ($first_param == '"PAGE_LINK"') && (count($opener_params) == 1) && (preg_match('#^[^\(\)]*$#', $_opener_params) != 0)) {
+                            if (($GLOBALS['OUTPUT_STREAMING']) && ($first_param == '"PAGE_LINK"') && (count($opener_params) == 1) && (preg_match('#^[^\(\)]*$#', $_opener_params) != 0) && (function_exists('has_submit_permission')/*needed for moniker hooks to load up*/)) {
                                 $tmp = $_GET;
                                 foreach (array_keys($_GET) as $key) {
                                     if (substr($key, 0, 5) == 'keep_') {

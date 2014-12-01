@@ -106,7 +106,12 @@ function meta_data_get_fields($content_type, $content_id, $allow_no_owner = fals
                     $url_moniker = '';
                 }
 
-                $moniker_where = array('m_manually_chosen' => 1, 'm_resource_page' => ($content_type == 'comcode_page') ? $_content_id : $attributes['page'], 'm_resource_type' => isset($attributes['type']) ? $attributes['type'] : '', 'm_resource_id' => $_content_id);
+                $moniker_where = array(
+                    'm_manually_chosen' => 1,
+                    'm_resource_page' => ($content_type == 'comcode_page') ? $_content_id : $attributes['page'],
+                    'm_resource_type' => ($content_type == 'comcode_page') ? '' : (isset($attributes['type']) ? $attributes['type'] : ''),
+                    'm_resource_id' => ($content_type == 'comcode_page') ? '' : $_content_id
+                );
                 $manually_chosen = !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers', 'm_moniker', $moniker_where));
             } else {
                 $url_moniker = '';
@@ -237,7 +242,26 @@ function actual_meta_data_get_fields($content_type, $content_id, $fields_to_skip
     if (($info['support_url_monikers']) && (!in_array('url_moniker', $fields_to_skip))) {
         $url_moniker = post_param('meta_url_moniker', '');
         if ($url_moniker == '') {
-            $url_moniker = null;
+            if ($content_type == 'comcode_page') {
+                $url_moniker = '';
+                $parent = post_param('parent_page', '');
+                while ($parent != '') {
+                    if ($url_moniker != '') {
+                        $url_moniker .= '/';
+                    }
+                    $url_moniker .= $parent;
+
+                    $parent = $GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages', 'p_parent_page', array('the_page' => $parent));
+                    if ($parent === null) {
+                        $parent = '';
+                    }
+                }
+                if ($url_moniker != '') {
+                    $url_moniker .= '/' . preg_replace('#^.*:#', '', $content_id);
+                }
+            } else {
+                $url_moniker = null;
+            }
         }
 
         if ($url_moniker !== null) {
