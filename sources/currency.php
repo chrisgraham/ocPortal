@@ -144,21 +144,40 @@ function currency_convert($amount, $from_currency, $to_currency = null, $string 
     }
 
     if ($string) {
-        $ret = '';
-        if (in_array($to_currency, array('USD', 'AUD', 'CAD', 'SRD', 'SBD', 'SGD', 'NZD', 'NAD', 'MXN', 'LRD', 'GYD', 'FJD', 'SVC', 'XCD', 'COP', 'CLP', 'KYD', 'BND', 'BMD', 'BBD', 'BSD', 'ARS'))) {
-            $ret .= '$';
-        } elseif (in_array($to_currency, array('GBP', 'SHP', 'LBP', 'JEP', 'GGP', 'GIP', 'FKP', 'EGP'))) {
-            $ret .= '&pound;';
-        } elseif (in_array($to_currency, array('JPY'))) {
-            $ret .= '&yen;';
-        } elseif (in_array($to_currency, array('EUR'))) {
-            $ret .= '&euro;';
+        list($symbol, $has_primacy) = get_currency_symbol($to_currency);
+        $ret = $symbol;
+        $ret .= escape_html(float_format($new_amount)) . '&nbsp;';
+        if (!$has_primacy) {
+            $ret .= escape_html($to_currency);
         }
-        $ret .= escape_html(float_format($new_amount)) . '&nbsp;' . escape_html($to_currency);
         return $ret;
     }
 
     return $new_amount;
+}
+
+/**
+ * Get the symbol for a currency.
+ *
+ * @param  ID_TEXT                      The currency.
+ * @return array                        A pair: The symbol, and whether the symbol is okay to use on it's own (as it is the accepted default for the symbol).
+ */
+function get_currency_symbol($currency)
+{
+    $ret = '';
+    if (in_array($currency, array('USD', 'AUD', 'CAD', 'SRD', 'SBD', 'SGD', 'NZD', 'NAD', 'MXN', 'LRD', 'GYD', 'FJD', 'SVC', 'XCD', 'COP', 'CLP', 'KYD', 'BND', 'BMD', 'BBD', 'BSD', 'ARS'))) {
+        $ret .= '$';
+    } elseif (in_array($currency, array('GBP', 'SHP', 'LBP', 'JEP', 'GGP', 'GIP', 'FKP', 'EGP'))) {
+        $ret .= '&pound;';
+    } elseif (in_array($currency, array('JPY'))) {
+        $ret .= '&yen;';
+    } elseif (in_array($currency, array('EUR'))) {
+        $ret .= '&euro;';
+    }
+
+    $has_primacy = ($currency == 'USD' || $currency == 'GBP' || $currency == 'JPY' || $currency == 'EUR');
+
+    return array($ret, $has_primacy);
 }
 
 /**

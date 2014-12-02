@@ -106,6 +106,17 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 
         $row = $this->_load_row_from_page_groupings($row, $zone, $page);
 
+        $test_icon = find_theme_image('icons/24x24/menu/pages/' . $page, true);
+        $test_icon_2x = find_theme_image('icons/48x48/menu/pages/' . $page, true);
+        if ($test_icon == '') {
+            $test_icon = find_theme_image('icons/24x24/menu/site_meta/' . $page, true);
+            $test_icon_2x = find_theme_image('icons/48x48/menu/site_meta/' . $page, true);
+            if ($test_icon == '') {
+                $test_icon = mixed();
+                $test_icon_2x = mixed();
+            }
+        }
+
         $struct = array(
             'title' => make_string_tempcode(escape_html(titleify($page))),
             'content_type' => 'comcode_page',
@@ -116,8 +127,8 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
             'url' => null,
             'extra_meta' => array(
                 'description' => null,
-                'image' => null,
-                'image_2x' => null,
+                'image' => $test_icon,
+                'image_2x' => $test_icon_2x,
                 'add_date' => (($meta_gather & SITEMAP_GATHER_TIMES) != 0) ? filectime(get_file_base() . '/' . $path) : null,
                 'edit_date' => (($meta_gather & SITEMAP_GATHER_TIMES) != 0) ? filemtime(get_file_base() . '/' . $path) : null,
                 'submitter' => null,

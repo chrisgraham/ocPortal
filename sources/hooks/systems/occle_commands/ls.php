@@ -52,7 +52,7 @@ class Hook_occle_command_ls
                 '',
                 do_template('OCCLE_LS', array(
                     '_GUID' => '705c3382e34e3d73479521bb8d05902f',
-                    'DIRECTORY' => $occle_fs->_pwd_to_string($dir),
+                    'DIRECTORY' => $occle_fs->pwd_to_string($dir),
                     'DIRECTORIES' => $occle_fs->prepare_dir_contents_for_listing($listing[0]),
                     'FILES' => $occle_fs->prepare_dir_contents_for_listing($listing[1]),
                 )),

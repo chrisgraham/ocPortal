@@ -105,7 +105,7 @@ class OcCLE_fs
         } else {
             $default_dir = array();
             require_code('users_active_actions');
-            ocp_setcookie('occle_dir', $this->_pwd_to_string($default_dir));
+            ocp_setcookie('occle_dir', $this->pwd_to_string($default_dir));
             return $default_dir;
         }
     }
@@ -221,7 +221,7 @@ class OcCLE_fs
      * @param  ?array                   $pwd Path (null: use $this->pwd)
      * @return string                   String-form path
      */
-    protected function _pwd_to_string($pwd = null)
+    public function pwd_to_string($pwd = null)
     {
         if (is_null($pwd)) {
             $pwd = $this->pwd;
@@ -401,7 +401,7 @@ class OcCLE_fs
         if ($array_form) {
             return $this->pwd;
         } else {
-            return $this->_pwd_to_string();
+            return $this->pwd_to_string();
         }
     }
 
@@ -454,7 +454,7 @@ class OcCLE_fs
     {
         // Search!
         $current_dir_contents = $this->listing($dir);
-        $dir_string = $this->_pwd_to_string($dir);
+        $dir_string = $this->pwd_to_string($dir);
         $output_directories = array();
         $output_files = array();
 
@@ -510,7 +510,7 @@ class OcCLE_fs
         if ($this->_is_dir($target_directory)) {
             $this->pwd = $target_directory;
             require_code('users_active_actions');
-            ocp_setcookie('occle_dir', $this->_pwd_to_string($target_directory));
+            ocp_setcookie('occle_dir', $this->pwd_to_string($target_directory));
 
             return true;
         } else {

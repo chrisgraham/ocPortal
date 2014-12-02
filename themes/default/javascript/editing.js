@@ -563,7 +563,7 @@ function find_tags_in_editor(editor,element)
 							var request=do_ajax_request(url,function(ajax_result_frame,ajax_result) {
 								if (ajax_result)
 								{
-									var tmp_rendered=get_inner_html(ajax_result);
+									var tmp_rendered=merge_text_nodes(ajax_result.childNodes);
 									if (tmp_rendered.indexOf('{!CCP_ERROR_STUB;}')==-1)
 										self_ob.rendered_tooltip=tmp_rendered;
 								}

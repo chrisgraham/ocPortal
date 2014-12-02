@@ -98,11 +98,7 @@ class Hook_addon_registry_banners
     {
         return array(
             'themes/default/images/icons/24x24/menu/cms/banners.png',
-            'themes/default/images/icons/24x24/menu/pages/advertise.png',
-            'themes/default/images/icons/24x24/menu/pages/donate.png',
             'themes/default/images/icons/48x48/menu/cms/banners.png',
-            'themes/default/images/icons/48x48/menu/pages/advertise.png',
-            'themes/default/images/icons/48x48/menu/pages/donate.png',
             'themes/default/css/banners.css',
             'sources/hooks/systems/snippets/exists_banner.php',
             'sources/hooks/systems/snippets/exists_banner_type.php',
@@ -151,8 +147,6 @@ class Hook_addon_registry_banners
             'sources/hooks/systems/occle_fs/banners.php',
             'data/images/advertise_here.png',
             'data/images/donate.png',
-            'site/pages/comcode/EN/advertise.txt',
-            'site/pages/comcode/EN/donate.txt',
             'sources/hooks/systems/block_ui_renderers/banners.php',
         );
     }

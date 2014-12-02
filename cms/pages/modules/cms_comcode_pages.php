@@ -176,8 +176,6 @@ class Module_cms_comcode_pages
             return redirect_screen($title, build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF'), $completion_text);
         }
 
-        require_code('zones2');
-        require_code('zones3');
         return sitemap_do_next_manager($title, $page, $zone, $completion_text);
     }
 
@@ -280,10 +278,22 @@ class Module_cms_comcode_pages
 
         require_code('form_templates');
 
+        // Form for adding new
         $fields = new Tempcode();
         $add_new_permission = has_add_comcode_page_permission();
         if ($add_new_permission) {
             $fields->attach(form_input_line(do_lang_tempcode('PAGE'), do_lang_tempcode('DESCRIPTION_NEW_COMCODE_PAGE'), 'page_link_2', '', true));
+
+            $template_list = new Tempcode();
+            $template_list->attach(form_input_list_entry('', true, do_lang('NA')));
+            $templates = get_templates_list();
+            foreach ($templates as $template => $template_title) {
+                $template_list->attach(form_input_list_entry($template, false, $template_title));
+            }
+            if (!$template_list->is_empty()) {
+                $fields->attach(form_input_list(do_lang_tempcode('PAGE_TEMPLATE'), do_lang_tempcode('PAGE_TEMPLATE_DESCRIPTION'), 'page_template', $template_list, NULL, false, false));
+            }
+
             $submit_name = do_lang_tempcode('ADD');
         } else {
             $submit_name = null;
@@ -536,7 +546,11 @@ class Module_cms_comcode_pages
 
         $table = results_table(do_lang('COMCODE_PAGES'), $start, 'start', $max, 'max', $max_rows, $header_row, $table_rows, $sortables, $sortable, $sort_order, 'sort', null, null, null, 8, 'fdgfdfdfdggfd', true);
 
-        $extra = $fields->is_empty() ? new Tempcode() : do_template('FORM', array('FIELDS' => $fields, 'TEXT' => '', 'URL' => $post_url, 'GET' => true, 'HIDDEN' => '', 'SUBMIT_NAME' => $submit_name, 'SUBMIT_ICON' => 'menu___generic_admin__add_one'));
+        if ($fields->is_empty()) {
+            $extra = new Tempcode();
+        } else {
+            $extra = do_template('FORM', array('FIELDS' => $fields, 'TEXT' => '', 'URL' => $post_url, 'GET' => true, 'HIDDEN' => '', 'SUBMIT_NAME' => $submit_name, 'SUBMIT_ICON' => 'menu___generic_admin__add_one'));
+        }
 
         // Custom fields
         require_code('fields');
@@ -646,7 +660,6 @@ class Module_cms_comcode_pages
         }
 
         if ($file != '') {
-            require_code('zones2');
             check_page_name($zone, $file);
         }
 
@@ -673,7 +686,8 @@ class Module_cms_comcode_pages
 
                 $new = false;
             } else {
-                $contents = '[title]' . do_lang('PAGE_DEFAULT_TITLE') . "[/title]\n\n" . do_lang('PAGE_DEFAULT_TEXT');
+                $template_name = get_param('page_template', $file);
+            	$contents = get_template_contents($template_name);
 
                 $new = true;
             }
@@ -976,7 +990,6 @@ class Module_cms_comcode_pages
         }
 
         // Main save function
-        require_code('zones3');
         $path = save_comcode_page($zone, $new_file, $lang, $text, $validated, $parent_page, $meta_data['add_time'], $meta_data['edit_time'], $show_as_edit, $meta_data['submitter'], $file, post_param('meta_keywords', ''), post_param('meta_description', ''));
 
         // Deleting?

@@ -142,6 +142,7 @@ As HTML pages are created outside ocPortal, you must manually copy the file in t
 There are some other text files you might want to translate are, in a similar way to Comcode pages (see above):
  - [tt]text/EN/quotes.txt[/tt]
  - [tt]text/EN/rules*.txt[/tt]
+ - [tt]data/modules/cms_comcode_pages/EN/*.txt[/tt]
 And these files don't need translating but could be replaced with equivalents in your language:
  - [tt]text/EN/too_common_words.txt[/tt] (a list of words that should not be considered in search results, for example)
  - [tt]text/EN/word_characters.txt[/tt] (a list of characters that appear in words in your language -- most languages have all the English characters, but also accented ones)

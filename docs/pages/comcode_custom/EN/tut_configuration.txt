@@ -76,13 +76,13 @@ Comcode pages may be selected for editing from the Comcode pages editor in the A
    </tr>
    <tr>
       <td>Welcome</td>
-      <td>_rules</td>
-      <td>Site rules, also shown when joining the website.</td>
+      <td>sitemap</td>
+      <td>The Site Map, which by default, is automatically generated using a special block.</td>
    </tr>
    <tr>
       <td>Welcome</td>
-      <td>sitemap</td>
-      <td>The Site Map, which by default, is automatically generated using a special block.</td>
+      <td>_rules</td>
+      <td>Site rules, also shown when joining the website.</td>
    </tr>
    <tr>
       <td>Welcome</td>
@@ -95,21 +95,6 @@ Comcode pages may be selected for editing from the Comcode pages editor in the A
       <td>This provides a feedback form, linked from the footer.</td>
    </tr>
    <tr>
-      <td>Welcome</td>
-      <td>donate</td>
-      <td>This is linked to by a default banner, advertising web hosting. You may wish to delete the default banner and remove access to this page.</td>
-   </tr>
-   <tr>
-      <td>Welcome</td>
-      <td>advertise</td>
-      <td>This is linked to by a default banner, advertising web hosting. You may wish to delete the default banner and remove access to this page.</td>
-   </tr>
-   <tr>
-      <td>Site</td>
-      <td>guestbook</td>
-      <td>This provides a simple guest-book, and is unlinked by default.</td>
-   </tr>
-   <tr>
       <td>Site</td>
       <td>help</td>
       <td>Help for your site. Contains default information on points, etc.</td>
@@ -117,7 +102,7 @@ Comcode pages may be selected for editing from the Comcode pages editor in the A
    <tr>
       <td>Collaboration Zone</td>
       <td>about</td>
-      <td>This describes the Collaboration Zone. I recommend that you don't edit this yet.</td>
+      <td>This describes the Collaboration Zone (if you have that installed). I recommend that you don't edit this yet.</td>
    </tr>
 </table>
 [/html]
@@ -127,6 +112,13 @@ Comcode pages may be selected for editing from the Comcode pages editor in the A
 2) creating a page redirection from '','forums' to 'site','forums' (because the 'forums' module isn't actually in the Welcome Zone)
 3) changing your 'site' zone access permissions to grant guest access.[/box]
 The documentation is in-fact provided in Comcode format itself, but you are not likely to want to edit this.
+
+There are a number of built-in page templates available. These are shown when you add a new page from Content Management > Pages.
+The templates are designed to help you in the following ways:
+ - So you don't need to think too hard about what kind of pages your site would benefit from
+  - Note we don't provide an FAQ page template because we have a default FAQ catalogue instead
+ - So you get some reasonable default layouts and graphics (any website benefits greatly from professional design, but the samples are enough to get most sites started)
+ - Specific and detailed advice you can work to, particularly on how to structure persuasive or engaging articles (we think we've saved you a lot of self-education here, bringing together techniques from journalism, PR, sales, and brand marketing, into a single set of convenient techniques)
 
 [title="2"]Editing logo theme images[/title]
 

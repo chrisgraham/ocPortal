@@ -30,7 +30,7 @@ There is a 'main_rating' block that you may use to allow any Comcode page to be 
 [title="2"]The comments block[/title]
 
 There is an ocPortal block named 'main_comments' that allows any Comcode page to become a page with its own comments. This is a very useful feature, usable for purposes such as:
- - a guest-book (see the default 'guestbook' Comcode page)
+ - a guest-book
  - documentation where users may make comments, adding to it, or directing staff to make improvements
 
 [title="2"]Placing comment topics[/title]

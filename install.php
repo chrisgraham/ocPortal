@@ -643,7 +643,7 @@ function step_3()
         warn_exit(do_lang_tempcode('NO_PHP_DB'));
     }
 
-    $js = new ocp_tempcode();
+    $js = new Tempcode();
     $js->attach(do_template('global', null, null, false, null, '.js'));
     $js->attach("\n");
     $js->attach(do_template('ajax', null, null, false, null, '.js'));
@@ -681,7 +681,7 @@ function step_4()
         exit(do_lang('INST_POST_ERROR'));
     }
 
-    $js = new ocp_tempcode();
+    $js = new Tempcode();
     $js->attach(do_template('global', null, null, false, null, '.js'));
     $js->attach("\n");
     $js->attach(do_template('ajax', null, null, false, null, '.js'));

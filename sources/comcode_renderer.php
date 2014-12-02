@@ -803,7 +803,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             if (!array_key_exists('switch_time', $attributes)) {
                 $attributes['switch_time'] = '6000';
             }
-            $temp_tpl = do_template('COMCODE_BIG_TABS_CONTROLLER', array('_GUID' => 'b6cc1835b688f086e34837e3c345ba0a', 'SWITCH_TIME' => ($attributes['switch_time'] == '') ? null : strval(intval($attributes['switch_time'])), 'TABS' => $tabs, 'PASS_ID' => 'x' . $pass_id));
+            $temp_tpl = do_template('COMCODE_BIG_TABS_CONTROLLER', array('_GUID' => 'b6cc1835b688f086e34837e3c345ba0a', 'SWITCH_TIME' => ($attributes['switch_time'] == '' || intval($attributes['switch_time'])<=0) ? null : strval(intval($attributes['switch_time'])), 'TABS' => $tabs, 'PASS_ID' => 'x' . $pass_id));
             break;
 
         case 'tab':

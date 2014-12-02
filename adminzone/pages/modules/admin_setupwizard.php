@@ -324,7 +324,6 @@ class Module_admin_setupwizard
             'downloads',
             'forum_blocks',
             'galleries',
-            'guestbook',
             'match_key_permissions',
             'news',
             'newsletter',
@@ -701,8 +700,8 @@ class Module_admin_setupwizard
      */
     public function get_rules_file($code)
     {
-        require_code('textfiles');
-        return read_text_file('rules_' . $code, '');
+        require_code('zones3');
+        return get_template_contents('rules_' . $code);
     }
 
     /**

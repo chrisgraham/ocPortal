@@ -68,7 +68,7 @@ class Hook_occle_fs_etc
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/occle_fs_extended_config/' . filter_naughty($hook));
             $ob = object_factory('Hook_occle_fs_extended_config__' . $hook);
-            $modification_time = $ob->_get_edit_date();
+            $modification_time = $ob->get_edit_date();
 
             $listing[] = array(
                 '_' . $hook . 's' . '.' . RESOURCEFS_DEFAULT_EXTENSION,

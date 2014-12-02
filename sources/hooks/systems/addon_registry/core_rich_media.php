@@ -181,10 +181,10 @@ class Hook_addon_registry_core_rich_media
             'themes/default/templates/COMCODE_CURRENCY.tpl',
             'themes/default/templates/COMCODE_FAKE_TABLE_WRAP_START.tpl',
             'themes/default/templates/COMCODE_FAKE_TABLE_WRAP_END.tpl',
-            'themes/default/templates/COMCODE_FAKE_TABLE_2_START.tpl',
+            'themes/default/templates/COMCODE_FAKE_TABLE_CELL.tpl',
             'themes/default/templates/COMCODE_FAKE_TABLE_END.tpl',
             'themes/default/templates/COMCODE_FAKE_TABLE_START.tpl',
-            'themes/default/templates/COMCODE_FAKE_TABLE_WIDE2_START.tpl',
+            'themes/default/templates/COMCODE_FAKE_TABLE_WIDE_CELL.tpl',
             'themes/default/templates/COMCODE_FAKE_TABLE_WIDE_START.tpl',
             'themes/default/templates/COMCODE_IF_IN_GROUP.tpl',
             'themes/default/templates/COMCODE_OVERLAY.tpl',
@@ -201,7 +201,6 @@ class Hook_addon_registry_core_rich_media
             'themes/default/templates/COMCODE_REAL_TABLE_ROW_END.tpl',
             'themes/default/templates/COMCODE_REAL_TABLE_ROW_START.tpl',
             'themes/default/templates/COMCODE_REAL_TABLE_START.tpl',
-            'themes/default/templates/COMCODE_REAL_TABLE_START_SUMMARY.tpl',
             'themes/default/templates/COMCODE_PULSE.tpl',
             'themes/default/javascript/pulse.js',
             'themes/default/templates/COMCODE_BIG_TABS_CONTROLLER.tpl',
@@ -389,11 +388,10 @@ class Hook_addon_registry_core_rich_media
             'templates/COMCODE_FAKE_TABLE_WIDE_START.tpl' => 'comcode_table_screens',
             'templates/COMCODE_FAKE_TABLE_START.tpl' => 'comcode_table_screens',
             'templates/COMCODE_FAKE_TABLE_END.tpl' => 'comcode_table_screens',
-            'templates/COMCODE_FAKE_TABLE_WIDE2_START.tpl' => 'comcode_table_screens',
-            'templates/COMCODE_FAKE_TABLE_2_START.tpl' => 'comcode_table_screens',
+            'templates/COMCODE_FAKE_TABLE_WIDE_CELL.tpl' => 'comcode_table_screens',
+            'templates/COMCODE_FAKE_TABLE_CELL.tpl' => 'comcode_table_screens',
             'templates/COMCODE_FAKE_TABLE_WRAP_END.tpl' => 'comcode_table_screens',
             'templates/COMCODE_REAL_TABLE_START.tpl' => 'comcode_table_screens',
-            'templates/COMCODE_REAL_TABLE_START_SUMMARY.tpl' => 'comcode_table_screens',
             'templates/COMCODE_REAL_TABLE_ROW_START.tpl' => 'comcode_table_screens',
             'templates/COMCODE_REAL_TABLE_CELL.tpl' => 'comcode_table_screens',
             'templates/COMCODE_REAL_TABLE_ROW_END.tpl' => 'comcode_table_screens',
@@ -408,7 +406,7 @@ class Hook_addon_registry_core_rich_media
             'templates/COMCODE_VERY_MINOR_TITLE.tpl' => 'comcode_very_minor_title',
             'templates/COMCODE_TAB_HEAD.tpl' => 'comcode_tab_body',
             'templates/COMCODE_CODE.tpl' => 'comcode_code',
-            'templates/COMCODE_CODE_SCROLL.tpl' => 'comcode_table_screens',
+            'templates/COMCODE_CODE_SCROLL.tpl' => 'comcode_code_scroll',
             'templates/MEDIA_AUDIO_WEBSAFE.tpl' => 'media_audio_websafe',
             'templates/MEDIA_FLASH.tpl' => 'media_flash',
             'templates/MEDIA_IMAGE_WEBSAFE.tpl' => 'media_image_websafe',
@@ -1533,15 +1531,27 @@ class Hook_addon_registry_core_rich_media
      *
      * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
      */
+    public function tpl_preview__comcode_code_scroll()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('COMCODE_CODE_SCROLL', array(
+                'TITLE' => lorem_phrase(),
+                'CONTENT' => lorem_phrase(),
+                'TYPE' => '',
+            )), null, '', true)
+        );
+    }
+
+    /**
+     * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+     * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+     * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
+     *
+     * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+     */
     public function tpl_preview__comcode_table_screens()
     {
         $tag_output = new Tempcode();
-
-        $tag_output->attach(do_lorem_template('COMCODE_CODE_SCROLL', array(
-            'TITLE' => lorem_phrase(),
-            'CONTENT' => lorem_phrase(),
-            'TYPE' => '',
-        )));
 
         $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START'));
         $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
@@ -1550,28 +1560,12 @@ class Hook_addon_registry_core_rich_media
             'PADDING' => '-left',
             'PADDING_AMOUNT' => '10',
         )));
-        $tag_output->attach(lorem_word());
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
-
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START'));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_2_START', array(
+        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_CELL', array(
             'WIDTH' => '100%',
             'FLOAT' => 'left',
             'PADDING' => '',
             'PADDING_AMOUNT' => '5',
         )));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
-
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START', array()));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
-            'WIDTH' => '40%',
-            'FLOAT' => 'left',
-            'PADDING' => '-left',
-            'PADDING_AMOUNT' => '10',
-        )));
-        $tag_output->attach(lorem_word());
         $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
         $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 
@@ -1582,11 +1576,7 @@ class Hook_addon_registry_core_rich_media
             'FLOAT' => 'left',
             'PADDING' => '',
         )));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
-
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START', array()));
-        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START', array(
+        $tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE_CELL', array(
             'WIDTH' => '100%',
             'PADDING_AMOUNT' => '0',
             'FLOAT' => 'left',
@@ -1598,27 +1588,8 @@ class Hook_addon_registry_core_rich_media
         $tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START', array(
             'SUMMARY' => lorem_phrase(),
             'CAPTION' => lorem_word(),
-        )));
-        foreach (placeholder_array(2) as $i => $table_row) {
-            $map = array();
-            if ($i == 0) {
-                $map['START_BODY'] = true;
-            }
-            $tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START', $map));
-            foreach (placeholder_array(2) as $cell) {
-                $tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL', array(
-                    'WIDTH' => '',
-                    'C_TYPE' => 'td',
-                    'MID' => $cell,
-                )));
-            }
-            $tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_END'));
-        }
-        $tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END', array('END_BODY' => true)));
-
-        $tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START_SUMMARY', array(
-            'CAPTION' => lorem_word(),
-            'START_BODY' => true,
+            'COLUMNED_TABLE' => false,
+            'WIDE' => true,
         )));
         foreach (placeholder_array(2) as $i => $table_row) {
             $map = array();

@@ -284,7 +284,7 @@ class Hook_media_rendering_oembed extends Media_renderer_with_fallback
             return $this->_fallback_render($url, $attributes, $source_member);
         }
 
-        if ($GLOBALS['MEDIA_MODE'] == MEDIA_LOWFI) {
+        if ((peek_media_mode() & MEDIA_LOWFI) != 0) {
             if (isset($data['thumbnail_url'])) {
                 $data['type'] = 'photo';
                 $data['url'] = $data['thumbnail_url'];

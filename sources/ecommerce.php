@@ -57,35 +57,17 @@ function ecommerce_test_mode()
 /**
  * Get the symbol of the currency we're trading in.
  *
- * @return ID_TEXT                      The currency.
+ * @param  ?ID_TEXT                     The currency (null: configured).
+ * @return ID_TEXT                      The currency symbol.
  */
-function ecommerce_get_currency_symbol()
+function ecommerce_get_currency_symbol($currency = null)
 {
-    $currency = get_option('currency');
-    switch ($currency) {
-        case 'USD':
-            $currency = '$';
-            break;
-        case 'CAD':
-            $currency = '$';
-            break;
-        case 'EUR':
-            $currency = '&euro;';
-            break;
-        case 'GBP':
-            $currency = '&pound;';
-            break;
-        case 'JPY':
-            $currency = '&yen;';
-            break;
-        case 'AUD':
-            $currency = '$';
-            break;
+    if ($currency === null) {
+        $currency = get_option('currency');
     }
-    if ($GLOBALS['XSS_DETECT']) {
-        ocp_mark_as_escaped($currency);
-    }
-    return $currency;
+    require_code('currency');
+    list($symbol,) = get_currency_symbol($currency);
+    return $symbol;
 }
 
 /**

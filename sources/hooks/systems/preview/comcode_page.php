@@ -64,6 +64,7 @@ class Hook_preview_comcode_page
             'ADD_CHILD_URL' => '',
             'NAME' => $codename,
             'ZONE' => $zone,
+            'NATIVE_ZONE' => $zone,
         ));
 
         return array($output, $post_comcode);

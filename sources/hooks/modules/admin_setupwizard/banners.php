@@ -73,19 +73,14 @@ class Hook_sw_banners
             return;
         }
 
-        $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-
         if (post_param_integer('have_default_banners_donation', 0) == 0) {
             $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners', 'name', array('name' => 'donate'));
             if (!is_null($test)) {
                 require_code('banners2');
                 delete_banner('donate');
-                foreach (array_keys($usergroups) as $id) {
-                    $GLOBALS['SITE_DB']->query_insert('group_page_access', array('page_name' => 'donate', 'zone_name' => 'site', 'group_id' => $id));
-                }
 
-                require_code('zones3');
-                delete_ocp_page('site', 'donate', null, true);
+                //require_code('zones3');
+                //delete_ocp_page('site', 'donate', null, true);    Page no longer bundled, can be made via page templates
             }
         }
         if (post_param_integer('have_default_banners_advertising', 0) == 0) {
@@ -93,12 +88,9 @@ class Hook_sw_banners
             if (!is_null($test)) {
                 require_code('banners2');
                 delete_banner('advertise_here');
-                foreach (array_keys($usergroups) as $id) {
-                    $GLOBALS['SITE_DB']->query_insert('group_page_access', array('page_name' => 'advertise', 'zone_name' => 'site', 'group_id' => $id));
-                }
 
-                require_code('zones3');
-                delete_ocp_page('site', 'advertise', null, true);
+                //require_code('zones3');
+                //delete_ocp_page('site', 'advertise', null, true);    Page no longer bundled, can be made via page templates
             }
         }
     }

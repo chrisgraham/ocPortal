@@ -135,7 +135,6 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
 
     global $ADVERTISING_BANNERS_CACHE, $ALLOWED_ENTITIES, $POTENTIALLY_EMPTY_TAGS, $CODE_TAGS, $REVERSABLE_TAGS, $PUREHTML_TAGS, $DANGEROUS_TAGS, $VALID_COMCODE_TAGS, $BLOCK_TAGS, $POTENTIAL_JS_NAUGHTY_ARRAY, $TEXTUAL_TAGS, $LEET_FILTER, $IMPORTED_CUSTOM_COMCODE;
 
-    $wml = false; // removed feature from ocPortal now
     $print_mode = get_param_integer('wide_print', 0) == 1;
 
     $len = strlen($comcode);
@@ -439,7 +438,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                     }
                 } else { // Not in HTML
                     // Text-format possibilities
-                    if (($just_new_line) && ($formatting_allowed) && (!$wml)) {
+                    if ((($just_new_line) || ($just_ended)) && ($formatting_allowed)) {
                         if ($continuation != '') {
                             if ($GLOBALS['XSS_DETECT']) {
                                 ocp_mark_as_escaped($continuation);
@@ -624,7 +623,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                         $tag_output->attach($queued_tempcode);
                         $queued_tempcode = new Tempcode();
                     }
-                    if (($next == "\n") && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode, $pos, 3) == ' - '))) { // Hard-new-lines
+                    if (($next == "\n") && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode))) { // Hard-new-lines
                         ++$NUM_COMCODE_LINES_PARSED;
                         $line_starting = true;
                         if ($GLOBALS['XSS_DETECT']) {
@@ -642,8 +641,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                             $tag_output->attach($temp_tpl);
                         }
                     } else {
-                        $just_new_line = false;
-
+                        $just_new_line = ($just_ended && $next == "\n"); // Only propagate new line signal if it was a real but non-hard-new-line (i.e. the above if clause did not fire)
                         if (($next == ' ') && ($white_space_area) && (!$in_semihtml)) {
                             if (($line_starting) || (($pos > 1) && ($comcode[$pos - 2] == ' '))) { // Hard spaces
                                 $next = '&nbsp;';
@@ -819,7 +817,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                             $not_white_space = (trim($next) != '');
 
                             if (!$differented) {
-                                if ((($textual_area) || ($in_semihtml)) && ($not_white_space) && (!$wml)) {
+                                if ((($textual_area) || ($in_semihtml)) && ($not_white_space)) {
                                     // Emoticon lookahead
                                     foreach ($smilies as $smiley => $imgcode) {
                                         if ($in_semihtml) {
@@ -992,6 +990,8 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
 
                                         $rows = preg_split('#(\|-|\|\})#Um', substr($comcode, $pos, $end_tbl - $pos));
                                         if (preg_match('#(^|\s)floats($|\s)#', $caption) != 0) {
+                                            // Fake table...
+
                                             $caption = preg_replace('#(^|\s)floats($|\s)#', '', $caption);
 
                                             $ratios = array();
@@ -1018,19 +1018,20 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
 
                                                 $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_START'));
 
-                                                // Do floated one
+                                                // Do floated one (if float based)
                                                 $i_dir_1 = (($to_float == 1) ? 'left' : 'right');
                                                 $i_dir_2 = (($to_float != 1) ? 'left' : 'right');
                                                 if (preg_match('#(^|\s)wide($|\s)#', $caption) != 0) {
+                                                    // Float based
                                                     $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START', array(
                                                         '_GUID' => 'ced8c3a142f74296a464b085ba6891c9',
-                                                        'WIDTH' => array_key_exists(($to_float == 1) ? 0 : (count($cells) - 1),
-                                                            $ratios) ? $ratios[($to_float == 1) ? 0 : (count($cells) - 1)] : ((count($cells) == 2) ? '0' : float_to_raw_string(97.0 / (floatval(count($cells)) / 2.0 - 1.0), 2) . '%'),
+                                                        'WIDTH' => array_key_exists(($to_float == 1) ? 0 : (count($cells) - 1), $ratios) ? $ratios[($to_float == 1) ? 0 : (count($cells) - 1)] : ((count($cells) == 2) ? '0' : float_to_raw_string(97.0 / (floatval(count($cells)) / 2.0 - 1.0), 2) . '%'),
                                                         'FLOAT' => $i_dir_1,
                                                         'PADDING' => ($to_float == 1) ? '' : '-left',
                                                         'PADDING_AMOUNT' => (count($cells) == 2) ? '0' : float_to_raw_string(3.0 / (floatval(count($cells) - 2) / 2.0), 2),
                                                     )));
                                                 } else {
+                                                    // Inline-block based
                                                     $tag_output->attach(do_template('COMCODE_FAKE_TABLE_START', array(
                                                         '_GUID' => '90be72fcbb6b9d8a312da0bee5b86cb3',
                                                         'WIDTH' => array_key_exists($to_float, $ratios) ? $ratios[$to_float] : '',
@@ -1041,21 +1042,24 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 }
                                                 $tag_output->attach(comcode_to_tempcode(isset($cells[$to_float]) ? rtrim($cells[$to_float]) : '', $source_member, $as_admin, 60, $pass_id, $connection, $semiparse_mode, $preparse_mode, $in_semihtml, $structure_sweep, $check_only, $highlight_bits, $on_behalf_of_member));
                                                 $tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
+
                                                 // Do non-floated ones
                                                 $cell_i = 0;
                                                 foreach ($cells as $i => $cell) {
                                                     if ($i % 2 == 1) {
                                                         if ($i != $to_float) {
                                                             if (preg_match('#(^|\s)wide($|\s)#', $caption) != 0) {
-                                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE2_START', array(
+                                                                // Float based
+                                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_CELL', array(
                                                                     '_GUID' => '9bac42a1b62c5c9a2f758639fcb3bb2f',
                                                                     'WIDTH' => array_key_exists($cell_i, $ratios) ? $ratios[$cell_i] : (float_to_raw_string(97.0 / (floatval(count($cells)) / 2.0), 2) . '%'),
-                                                                    'PADDING_AMOUNT' => (count($cells) == 2) ? '0' : float_to_raw_string(3.0 / (floatval(count($cells) - 2) / 2.0), 2),
                                                                     'FLOAT' => $i_dir_1,
                                                                     'PADDING' => (($to_float == 1) || ($cell_i != 0)) ? '-left' : '',
+                                                                    'PADDING_AMOUNT' => (count($cells) == 2) ? '0' : float_to_raw_string(3.0 / (floatval(count($cells) - 2) / 2.0), 2),
                                                                 )));
                                                             } else {
-                                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START', array(
+                                                                // Inline-block based
+                                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_CELL', array(
                                                                     '_GUID' => '0f15f9d5554635ed7ac154c9dc5c72b8',
                                                                     'WIDTH' => array_key_exists($cell_i, $ratios) ? $ratios[$cell_i] : '',
                                                                     'FLOAT' => $i_dir_1,
@@ -1073,6 +1077,8 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END'));
                                             }
                                         } else {
+                                            // Real table...
+
                                             $ratios = array();
                                             $ratios_matches = array();
                                             if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#', $caption, $ratios_matches) != 0) {
@@ -1080,11 +1086,12 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 $caption = str_replace($ratios_matches[0], '', $caption);
                                             }
 
-                                            if (preg_match('#(^|\s)wide($|\s)#', $caption) != 0) {
-                                                $tag_output->attach(do_template('COMCODE_REAL_TABLE_START', array('_GUID' => '9fca9672b9d069a0c8a40ebc6e88602b', 'SUMMARY' => preg_replace('#(^|\s)wide($|\s)#', '', $caption))));
-                                            } else {
-                                                $tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY', array('_GUID' => '0c5674fba61ba14b4b9fa39ea31ff54f', 'CAPTION' => $caption)));
-                                            }
+                                            $tag_output->attach(do_template('COMCODE_REAL_TABLE_START', array(
+                                                '_GUID' => '9fca9672b9d069a0c8a40ebc6e88602b',
+                                                'SUMMARY' => preg_replace('#(^|\s)wide($|\s)#', '', $caption),
+                                                'WIDE' => preg_replace('#(^|\s)wide($|\s)#', '', $caption) != $caption,
+                                                'COLUMNED_TABLE' => (strpos($rows[0], '|') === false),
+                                            )));
                                             $finished_thead = false;
                                             foreach ($rows as $table_row) {
                                                 $cells = preg_split('/(\n\! | \!\! |\n\| | \|\| )/', $table_row, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -1101,7 +1108,9 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                     }
                                                     $spec = !$spec;
                                                 }
+
                                                 $tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START', array('_GUID' => '98f20d57692f0bded555a0acb7d55024', 'START_HEAD' => !$finished_thead, 'START_BODY' => (!$finished_thead_prior) && ($finished_thead))));
+
                                                 $spec = true;
                                                 foreach ($cells as $i => $cell) {
                                                     if ($spec) {

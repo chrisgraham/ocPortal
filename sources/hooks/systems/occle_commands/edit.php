@@ -48,7 +48,7 @@ class Hook_occle_command_edit
             }
 
             $file_contents = $occle_fs->read_file($parameters[0]);
-            $parameters[0] = $occle_fs->_pwd_to_string($parameters[0]);
+            $parameters[0] = $occle_fs->pwd_to_string($parameters[0]);
 
             return array('', do_template('OCCLE_EDIT', array(
                 '_GUID' => '8bbf2f9ef545a92b6865c35ed27cd6d4',

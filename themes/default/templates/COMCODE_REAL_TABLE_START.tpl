@@ -3,4 +3,4 @@
 		{SUMMARY*}
 	</p>
 {+END}
-<div class="wide_table_wrap"><table class="wide_table comcode_table results_table">
+<div{+START,IF,{WIDE}} class="wide_table_wrap"{+END}><table class="comcode_table results_table{+START,IF,{COLUMNED_TABLE}} columned_table{+END}{+START,IF,{WIDE}} wide_table{+END}">

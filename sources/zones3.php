@@ -360,6 +360,65 @@ function get_zone_chooser($inline = false, $no_go = null, $reorder = null)
 }
 
 /**
+ * Get the map of names/titles of the available templates.
+ *
+ * @return array                        The names and titles of all available templates (title refers to the text within the first [title] tag in the template file)
+ */
+function get_templates_list()
+{
+    $templates_dir = get_file_base() . '/data/modules/cms_comcode_pages/' . fallback_lang() . '/';
+    $templates = array();
+    if ($handle = @opendir($templates_dir)) {
+        $unknown_count = 0;
+
+        while (false !== ($entry = readdir($handle))) {
+            if (substr($entry, -4) == '.txt' && $entry[0] != '.') {
+                $template_path = $templates_dir . $entry;
+                $matches = array();
+                if (preg_match('#\[title[^\]]*\](.*)\[/title\]#', file_get_contents($template_path), $matches) != 0) {
+                    $template_title = $matches[1];
+                } else {
+                    $unknown_count++;
+                    $template_title = do_lang('UNKNOWN') . strval($unknown_count);
+                }
+                $templates[basename($entry, '.txt')] = $template_title;
+            }
+        }
+        asort($templates);
+
+        closedir($handle);
+    }
+    return $templates;
+}
+
+/**
+ * Read the contents of a template file.
+ *
+ * @param  string                       $name The name of the template (based on the filename)
+ * @return string                       The contents of the file (blank if it does not exist)
+ */
+function get_template_contents($name)
+{
+    $templates_dir = get_file_base() . '/data_custom/modules/cms_comcode_pages/' . either_param('lang', user_lang()) . '/';
+    $template_path = $templates_dir . $name . '.txt';
+    if (!is_file($template_path)) {
+        $templates_dir = get_file_base() . '/data_custom/modules/cms_comcode_pages/' . fallback_lang() . '/';
+        $template_path = $templates_dir . $name . '.txt';
+    }
+    $templates_dir = get_file_base() . '/data/modules/cms_comcode_pages/' . either_param('lang', user_lang()) . '/';
+    $template_path = $templates_dir . $name . '.txt';
+    if (!is_file($template_path)) {
+        $templates_dir = get_file_base() . '/data/modules/cms_comcode_pages/' . fallback_lang() . '/';
+        $template_path = $templates_dir . $name . '.txt';
+    }
+    if (!is_file($template_path)) {
+        return '';
+    }
+
+    return file_get_contents($template_path);
+}
+
+/**
  * Save a Comcode page.
  *
  * @param  ID_TEXT                      $zone The zone

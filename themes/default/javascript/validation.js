@@ -1010,7 +1010,10 @@ function disable_preview_scripts(under)
 	// Make sure links in the preview don't break it - put in a new window
 	elements=under.getElementsByTagName('a');
 	for (i=0;i<elements.length;i++)
-		elements[i].target='false_blank'; // Real _blank would trigger annoying CSS. This is better anyway.
+    {
+        if (elements[i].href.indexOf('://')!=-1)
+    		elements[i].target='false_blank'; // Real _blank would trigger annoying CSS. This is better anyway.
+    }
 }
 
 function _set_up_change_monitor(container,input,container2)

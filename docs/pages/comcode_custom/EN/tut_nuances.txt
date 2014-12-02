@@ -186,7 +186,7 @@ ocPortal will need a cookie path of "/" for this to work, and a blank cookie dom
 
 [title="3"]None-forum[/title]
 
-Using the none-forum driver, many ocPortal features will either be disabled or made useless. This includes the guestbook, content commenting and points, and anything involving interaction between logged in users.
+Using the none-forum driver, many ocPortal features will either be disabled or made useless. This includes content commenting and points, and anything involving interaction between logged in users.
 
 If using this driver, you should remove links and blocks from the menus that involve users (such as the forum link, the points links, and the personal-stats-block).
 

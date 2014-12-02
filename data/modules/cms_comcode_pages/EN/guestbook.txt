@@ -2,5 +2,4 @@
 
 Please leave us a comment in our guestbook :).
 
-[block reverse="1" reviews="0"]main_comments[/block]
-
+[block reverse="1" reviews="0" force_allow="1"]main_comments[/block]

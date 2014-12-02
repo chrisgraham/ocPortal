@@ -274,6 +274,9 @@ thead>tr>th, .boxless_space .box>table>thead>tr>th, .pte_set_box .box>table>thea
 	color: {$GET,box_title_text};
 	background-repeat: repeat-x;
 }
+.light_table th, .light_table .fake_th, .light_table thead>tr>th, .light_table .boxless_space .box>table>thead>tr>th, .light_table .pte_set_box .box>table>thead>tr>th {
+	background-color: {$GET,area_6_background};
+}
 .box>table>thead>tr>th {
 	background: {$GET,point_of_interest_background};
 	color: {$GET,area_key_text};
@@ -574,7 +577,7 @@ header h1 {
 .hero_section * {
 	margin-top: 0;
 }
-.hero_section .hero_button a {
+.hero_section .hero_button a:visited, .hero_section .hero_button a:link, .hero_section .hero_button a:active, .hero_section .hero_button a:hover {
 	text-decoration: none;
 	padding: 0.5em !important;
 	background-image: none !important; /* Will be overridden below if linear-gradient supported by browser */
@@ -2099,7 +2102,9 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .pagination a:first-child,
 .pagination span:first-child,
 .results_launcher a:first-child,
-.results_launcher span:first-child {
+.results_launcher span:first-child,
+.pagination .first-child,
+.results_launcher .first-child {
 	border-left: 1px solid {$GET,standard_border};
 }
 .pagination a:hover, .results_launcher a:hover, .pagination a.button_depressed {
@@ -4252,13 +4257,13 @@ a[rel="lightbox"] {
 		padding-right: 10px !important;
 	}
 
-	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"].user_link { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
-		background-image: none;
-		padding: 0px;
+	body a.link_exempt, body .link_exempt_wrap a, body a[href*=".php"].user_link { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
+		background-image: none !important;
+		padding: 0px !important;
 	}
 
 	body a.link_exempt2 {
-		background-image: none;
+		background-image: none !important;
 	}
 
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {

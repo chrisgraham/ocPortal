@@ -28,7 +28,7 @@ class Hook_occle_fs_extended_config__privilege
      *
      * @return ?TIME                    The edit date or add date, whichever is higher (null: could not find one)
      */
-    protected function _get_edit_date()
+    public function get_edit_date()
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type', 'PAGE_ACCESS') . ' OR ' . db_string_equal_to('the_type', 'PRIVILEGES');
         return $GLOBALS['SITE_DB']->query_value_if_there($query);

@@ -277,19 +277,19 @@ function debuttonise($matches)
 function convert_html_headers_to_titles($semihtml)
 {
     $array_html_preg_replace = array();
-    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title"[^<>]*>\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n");
-    $array_html_preg_replace[] = array('#^\s*<h1 class="screen_title"[^<>]*>\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n");
-    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title" class="screen_title">\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n");
-    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title"[^<>]*>(.*)</h1>\s*$#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n");
-    $array_html_preg_replace[] = array('#^\s*<h1 class="screen_title"[^<>]*>(.*)</h1>\s*$#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n");
-    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title" class="screen_title"[^<>]*>(.*)</h1>\s*$#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n");
-    $array_html_preg_replace[] = array('#^\s*<h1>(.*)</h1>\s*$#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n");
+    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title"[^<>]*>\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU', '[title="1"]${1}[/title]' . "\n");
+    $array_html_preg_replace[] = array('#^\s*<h1 class="screen_title"[^<>]*>\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU', '[title="1"]${1}[/title]' . "\n");
+    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title" class="screen_title">\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU', '[title="1"]${1}[/title]' . "\n");
+    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title"[^<>]*>(.*)</h1>\s*$#siU', '[title="1"]${1}[/title]' . "\n");
+    $array_html_preg_replace[] = array('#^\s*<h1 class="screen_title"[^<>]*>(.*)</h1>\s*$#siU', '[title="1"]${1}[/title]' . "\n");
+    $array_html_preg_replace[] = array('#^\s*<h1 id="screen_title" class="screen_title"[^<>]*>(.*)</h1>\s*$#siU', '[title="1"]${1}[/title]' . "\n");
+    $array_html_preg_replace[] = array('#^\s*<h1>(.*)</h1>\s*$#siU', '[title="1"]${1}[/title]' . "\n");
     $semihtml = array_html_preg_replace('h1', $array_html_preg_replace, $semihtml);
-    $semihtml = preg_replace('#^\s*<h1[^>]+>(.*)</h1>\s*#siU', "\n\n" . '[title="1"]${1}[/title]' . "\n\n", $semihtml);
+    $semihtml = preg_replace('#^\s*<h1[^>]+>(.*)</h1>\s*#siU', '[title="1"]${1}[/title]' . "\n", $semihtml);
     for ($i = 2; $i <= 4; $i++) {
         $array_html_preg_replace = array();
-        $array_html_preg_replace[] = array('#^\s*<h' . strval($i) . '><span class="inner">(.*)</span></h' . strval($i) . '>\s*$#siU', "\n\n" . '[title="' . strval($i) . '"]${1}[/title]' . "\n\n");
-        $array_html_preg_replace[] = array('#^\s*<h' . strval($i) . '>(.*)</h' . strval($i) . '>\s*$#siU', "\n\n" . '[title="' . strval($i) . '"]${1}[/title]' . "\n\n");
+        $array_html_preg_replace[] = array('#^\s*<h' . strval($i) . '><span class="inner">(.*)</span></h' . strval($i) . '>\s*$#siU', '[title="' . strval($i) . '"]${1}[/title]' . "\n");
+        $array_html_preg_replace[] = array('#^\s*<h' . strval($i) . '>(.*)</h' . strval($i) . '>\s*$#siU', '[title="' . strval($i) . '"]${1}[/title]' . "\n");
         $semihtml = array_html_preg_replace('h' . strval($i) . '', $array_html_preg_replace, $semihtml);
     }
     return $semihtml;
@@ -349,7 +349,7 @@ function semihtml_to_comcode($semihtml, $force = false)
     $semihtml = preg_replace('#(\[[\w\_]+)&nbsp;#', '${1} ', $semihtml);
 
     $matches = array();
-    if ((!$force) && ((get_option('eager_wysiwyg') == '0') && ((substr_count($semihtml, '://') <= preg_match_all('#(codebase="[^"]*://[^"]*"|data="[^"]*://[^"]*"|action="[^"]*://[^"]*"|href="[^"]*://[^"]*"|src="[^"]*://[^"]*"|url\([^\)]*://[^\)]*\))#', $semihtml, $matches)) || (count(find_all_hooks('systems', 'comcode_link_handlers')) == 0)) && (has_privilege(get_member(), 'allow_html'))) || (strpos($semihtml, '{$,page hint: no_smart_conversion}') !== false)) {
+    if (((!$force) && (get_option('eager_wysiwyg') == '0') && (has_privilege(get_member(), 'allow_html'))) || (strpos($semihtml, '{$,page hint: no_smart_conversion}') !== false)) {
         $semihtml = preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU', '_img_tag_fixup_raw', $semihtml); // Resolve relative URLs
         $semihtml = preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*)>#siU', '_img_tag_fixup_raw', $semihtml); // Resolve relative URLs
 
@@ -802,8 +802,7 @@ function semihtml_to_comcode($semihtml, $force = false)
     $semihtml = str_replace('</p>', '</p>' . "\n", $semihtml);
     $semihtml = str_replace('[/align]', '[/align]' . "\n", $semihtml);
 
-    return '[semihtml]' . /*apply_emoticons can cause problems inside Comcode tags*/
-    ($semihtml) . '[/semihtml]';
+    return '[semihtml]' . /*apply_emoticons can cause problems inside Comcode tags*/($semihtml) . '[/semihtml]';
 }
 
 /**
