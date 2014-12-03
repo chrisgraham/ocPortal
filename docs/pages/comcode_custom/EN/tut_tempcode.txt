@@ -1312,7 +1312,7 @@ Understanding of these symbols requires an understanding of basic boolean operat
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$COMMA_LIST_FROM_BREADCRUMBS}</td>
-		<td>TODO a comma-separated list.</td>
+		<td>Convert breadcrumbs to a comma-separated list.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$COMMA_LIST_POP,a\,b\,c}</td>

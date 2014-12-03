@@ -108,9 +108,11 @@ class Module_tickets
 
             $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
 
-            $default_types = array(/*'TT_FEATURE_REQUEST','TT_FEATURE_INQUIRY','TT_MODDING_HELP','TT_REPAIR_HELP',*/
+            $default_types = array(
+                /*'TT_FEATURE_REQUEST','TT_FEATURE_INQUIRY','TT_MODDING_HELP','TT_REPAIR_HELP',*/
                 'TT_OTHER',/*'TT_FINANCIAL_INQUIRY',*/
-                'TT_COMPLAINT');
+                'TT_COMPLAINT',
+            );
             foreach ($default_types as $ticket_type_name) {
                 $map = array(
                     'guest_emails_mandatory' => 0,

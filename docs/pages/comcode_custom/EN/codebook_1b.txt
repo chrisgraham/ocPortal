@@ -380,6 +380,27 @@ Saying [tt]I_UNDERSTAND_SQL_INJECTION[/tt] disables extra scanning of queries to
 Saying [tt]I_UNDERSTAND_XSS[/tt] disables automatic escaping of template parameters and language string parameters (which can result in accidental double-escaping in output) and any input parameters that make it into the output of a minimodule/miniblock.
 Saying [tt]I_UNDERSTAND_PATH_INJECTION[/tt] disables hack-attack errors from being generated if any URL parameter has ".." or null bytes in it.
 
+[title="3"]Input sanitisation, the right way[/title]
+
+Sanitising input is almost trivial in ocPortal. Just use the most appropriate reader function and ocPortal will then apply appropriate checking/filtering for you.
+Reader functions include:
+ - [tt]get_param[/tt] -- reading in a string from GET (i.e. the URL)
+ - [tt]get_param_integer[/tt] -- reading in an integer from GET (i.e. the URL)
+ - [tt]post_param[/tt] -- reading in a string from POST (i.e. a form)
+ - [tt]post_param_integer[/tt] -- reading in an integer from POST (i.e. a form)
+
+We also some separate security functions for preventing things like filesystem attacks, or basic conformance checking:
+ - [tt]filter_naughty[/tt] -- make sure no file paths are in something that will be used as a path component
+ - [tt]filter_naughty_harsh[/tt] -- make sure something is strictly alphanumeric
+ - [tt]is_alphanumeric[/tt] -- an alphanumeric test that doesn't result in bail-out if failed
+ - [tt]is_valid_email_address[/tt] -- an e-mail address validity check (valid syntax, does not check if it is real, although [tt]is_mail_bounced[/tt] can help find if an e-mail address has bounced in the past)
+
+For database queries (i.e. to avoid SQL injection) use the simplified database APIs wherever appropriate, [tt]query_select[/tt] for example.
+
+To avoid XSS attacks ensure you use the correct logical escaping in the templates. For example, plain text used in an HTML context would be escaping like [tt]{EXAMPLE*}[/tt] (i.e. with the asterisk).
+
+CSRF attacks are already avoided via a form token system and referral checking system.
+
 [title="3"]Custom version of PHP[/title]
 
 Our custom version of PHP (linked to under "Programming/progmattic-interface standards") performs 2 main functions:

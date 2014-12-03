@@ -72,8 +72,7 @@ function init__comcode_compiler()
 
     // These tags have contents that are not interpreted as Comcode (so no HTML tags either), but are formatted for white-space
     global $CODE_TAGS;
-    $CODE_TAGS = array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/
-        'flash' => 1, 'media' => 1, 'thumb' => 1, 'menu' => 1, 'no_parse' => 1, 'code' => 1, 'tt' => 1, 'samp' => 1, 'codebox' => 1, 'staff_note' => 1);
+    $CODE_TAGS = array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/ 'flash' => 1, 'media' => 1, 'thumb' => 1, 'menu' => 1, 'no_parse' => 1, 'code' => 1, 'tt' => 1, 'samp' => 1, 'codebox' => 1, 'staff_note' => 1);
 
     // ALSO:
     // See $non_text_tags list in comcode_renderer.php
@@ -82,8 +81,7 @@ function init__comcode_compiler()
 
     // We're not allowed to specify any of these as entities
     global $POTENTIAL_JS_NAUGHTY_ARRAY;
-    $POTENTIAL_JS_NAUGHTY_ARRAY = array('d' => 1,/*'a'=>1,'t'=>1,'a'=>1,*/
-        'j' => 1, 'a' => 1, 'v' => 1, 's' => 1, 'c' => 1, 'r' => 1, 'i' => 1, 'p' => 1, 't' => 1, 'J' => 1, 'A' => 1, 'V' => 1, 'S' => 1, 'C' => 1, 'R' => 1, 'I' => 1, 'P' => 1, 'T' => 1, ' ' => 1, "\t" => 1, "\n" => 1, "\r" => 1, ':' => 1, '/' => 1, '*' => 1, '\\' => 1);
+    $POTENTIAL_JS_NAUGHTY_ARRAY = array('d' => 1,/*'a'=>1,'t'=>1,'a'=>1,*/ 'j' => 1, 'a' => 1, 'v' => 1, 's' => 1, 'c' => 1, 'r' => 1, 'i' => 1, 'p' => 1, 't' => 1, 'J' => 1, 'A' => 1, 'V' => 1, 'S' => 1, 'C' => 1, 'R' => 1, 'I' => 1, 'P' => 1, 'T' => 1, ' ' => 1, "\t" => 1, "\n" => 1, "\r" => 1, ':' => 1, '/' => 1, '*' => 1, '\\' => 1);
     $POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)] = 1;
 
     // Hehe

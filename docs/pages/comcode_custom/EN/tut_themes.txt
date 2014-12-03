@@ -74,7 +74,14 @@ You can edit CSS contextually, via the edit links in the Page Rendering Tools dr
 
 The contextual editor allows you to make live changes, to preview on the fly, then save them.
 
-You may want to add [tt]?keep_no_minify=1[/tt] to the URL before using these tools as it will make the live previews more accurate. The ocPortal minificiation features will sometimes prevent the contextual editor from being able to interactively remove styles you remove in the CSS editor.
+You may want to add [tt]?keep_no_minify=1[/tt] to the URL before using these tools as it will make the live previews more accurate. If you're not sure how, just go to [tt]http://yourbaseurl/index.php?keep_no_minify=1[/tt] and browse back to where you want to be. The ocPortal minificiation features will sometimes prevent the contextual editor from being able to interactively remove styles you remove in the CSS editor.
+
+[title="4"]Debugging[/title]
+
+If you find the CSS totally "corrupts", it is likely you have made a typo somewhere. For example, failing to close a comment.
+
+You can't effectively validate the ocPortal CSS because it has lots of Tempcode in it. Additionally, the normal outputted CSS is minified, so hard to read and relate to.
+Fortunately there is a solution. If you go to [tt]http://yourbaseurl/index.php?keep_no_minify=1[/tt] then the CSS will not be minified. You may then look at your HTML source, locate the URL to your CSS, and then pass this onto a regular [url="http://jigsaw.w3.org/css-validator/"]CSS validator[/url].
 
 [title="3"]Revision history[/title]
 

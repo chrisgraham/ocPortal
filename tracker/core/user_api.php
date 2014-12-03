@@ -68,6 +68,11 @@ function user_cache_row( $p_user_id, $p_trigger_errors = true ) {
 	}
 	$ocp_row = db_fetch_array( $result );
 
+    $ocp_updater_groups=array();
+    $ocp_developer_groups=array(22,30);
+    $ocp_manager_groups=array();
+    $ocp_admin_groups=array(2,3);
+
 	// Find access level
 	$access_level = ($ocp_row['m_primary_group']==1)?VIEWER:REPORTER;
 	if (in_array($ocp_row['m_primary_group'],$ocp_updater_groups)) $access_level = UPDATER;

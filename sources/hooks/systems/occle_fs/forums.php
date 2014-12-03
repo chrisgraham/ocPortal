@@ -446,8 +446,7 @@ class Hook_occle_fs_forums extends Resource_fs_base
         }
 
         return array(
-            'label' => $row[/*'t_cache_first_title'*/
-            't_description'],
+            'label' => $row[/*'t_cache_first_title'*/'t_description'],
             /*'description'=>$row['t_description'],*/
             'emoticon' => $row['t_emoticon'],
             'validated' => $row['t_validated'],

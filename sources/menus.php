@@ -185,15 +185,12 @@ function _build_sitemap_menu($menu)
 
         $node = retrieve_sitemap_node(
             $page_link,
-            /*$callback=*/
-            null,
+            /*$callback=*/null,
             $valid_node_types,
             $child_cutoff,
             $max_recurse_depth,
-            /*$require_permission_support=*/
-            false,
-            /*$zone=*/
-            '_SEARCH',
+            /*$require_permission_support=*/false,
+            /*$zone=*/'_SEARCH',
             $use_page_groupings,
             $consider_secondary_categories,
             $consider_validation,

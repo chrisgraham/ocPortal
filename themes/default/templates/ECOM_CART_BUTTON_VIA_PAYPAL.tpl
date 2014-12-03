@@ -24,6 +24,21 @@
 		<input type="hidden" name="item_name_{$ADD*,1,{_loop_key}}" value="{PRODUCT_NAME*}" />
 		<input type="hidden" name="amount_{$ADD*,1,{_loop_key}}" value="{PRICE*}" />
 		<input type="hidden" name="quantity_{$ADD*,1,{_loop_key}}" value="{QUANTITY*}" />
+
+		{+START,COMMENT}
+			ocPortal does not support per-product options, but PayPal does, and will record the choice for you. Uncomment this bit as an example of asking for T-shirt sizes.
+
+			<p>
+				<input type="hidden" name="on0_{$ADD*,1,{_loop_key}}" value="Size" />
+				<label for="os0_{$ADD*,1,{_loop_key}}">Size of {PRODUCT_NAME*} <span class="associated_details">(if applicable)</span></label>
+				<select name="os0_{$ADD*,1,{_loop_key}}" id="os0_{$ADD*,1,{_loop_key}}">
+					<option>Small</option>
+					<option selected="selected">Medium</option>
+					<option>Large</option>
+					<option>Extra Large</option>
+				</select>
+			</p>
+		{+END}
 	{+END}
 
 	<p class="purchase_button">

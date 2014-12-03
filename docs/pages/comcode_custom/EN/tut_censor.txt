@@ -31,7 +31,7 @@ Members may specify the privacy settings for content they post, if the [tt]conte
 [media width="150" description="Using the points system for punishment" float="right"]data_custom/images/docs/censor_point_in_right_direction.png[/media]
 [media width="150" description="Making a warning" float="right"]data_custom/images/docs/censor_make_warning.png[/media]
 [media width="150" description="A warning as displayed on the Account of a member" float="right"]data_custom/images/docs/censor_warning.png[/media]
-There are a number of ways to punish members who do not follow site policy, including:
+There are a number of ways to punish members who do not follow site policy (such as trolls), including:
  - Charging points to the member
  - Giving them a negative number of points (which might result in sustaining a reduced rank for a time, if you also moving them down to a lower ranking usergroup on the rank scale)
  - Banning them (either their user-name, or their IP address, or their ability to make submissions)

@@ -85,22 +85,14 @@ if (get_param_integer('save__pages', 1) == 1) {
     retrieve_sitemap_node(
         '',
         $callback,
-        /*$valid_node_types=*/
-        null,
-        /*$child_cutoff=*/
-        null,
-        /*$max_recurse_depth=*/
-        null,
-        /*$require_permission_support=*/
-        false,
-        /*$zone=*/
-        '_SEARCH',
-        /*$use_page_groupings=*/
-        false,
-        /*$consider_secondary_categories=*/
-        false,
-        /*$consider_validation=*/
-        false,
+        /*$valid_node_types=*/null,
+        /*$child_cutoff=*/null,
+        /*$max_recurse_depth=*/null,
+        /*$require_permission_support=*/false,
+        /*$zone=*/'_SEARCH',
+        /*$use_page_groupings=*/false,
+        /*$consider_secondary_categories=*/false,
+        /*$consider_validation=*/false,
         $meta_gather
     );
 

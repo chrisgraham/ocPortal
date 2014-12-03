@@ -260,6 +260,32 @@ class Virtual_shell
         $this->output[STREAM_STDHTML] = convert_bad_entities($this->output[STREAM_STDHTML], get_charset());
 
         $output = '<' . '?xml version="1.0" encoding="' . get_charset() . '" ?' . '>
+    <!DOCTYPE xc:content [
+    <!ENTITY euro "&#8364;">
+    <!ENTITY ldquo "&#8220;">
+    <!ENTITY rdquo "&#8221;">
+    <!ENTITY lsquo "&#8216;">
+    <!ENTITY rsquo "&#8217;">
+    <!ENTITY dagger "&#8224;">
+    <!ENTITY Dagger "&#8225;">
+    <!ENTITY permil "&#8240;">
+    <!ENTITY Scaron "&#352;">
+    <!ENTITY scaron "&#353;">
+    <!ENTITY Yuml "&#376;">
+    <!ENTITY ndash "&#8211;">
+    <!ENTITY mdash "&#8212;">
+    <!ENTITY hellip "&#8230;">
+    <!ENTITY copy "&#169;">
+    <!ENTITY nbsp " ">
+    <!ENTITY fnof "&#402;">
+    <!ENTITY reg "&#174;">
+    <!ENTITY trade "&#8482;">
+    <!ENTITY raquo "&#187;">
+    <!ENTITY frac14 "&#188;">
+    <!ENTITY frac12 "&#189;">
+    <!ENTITY frac34 "&#190;">
+    <!ENTITY rarr "&#8594;">
+    ]>
 <response>
     <result>
         <command>' . xmlentities($this->current_input) . '</command>
@@ -953,7 +979,7 @@ class Virtual_shell
         } elseif ($this->parse_runtime['occle_command'] == COMMAND_SQL) {
             // SQL command
             $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
-            $occle_output = $GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND], null, null);
+            $occle_output = $GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND], null, null, false, true);
             $GLOBALS['NO_DB_SCOPE_CHECK'] = false;
             if ((is_array($occle_output)) && (count($occle_output) > 100)) {
                 $occle_output = $GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND], 100, null);

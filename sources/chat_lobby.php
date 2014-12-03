@@ -91,7 +91,7 @@ function show_im_contacts($member_id = null, $simpler = false, $max = null)
 
             $friend = array(
                 /*'DATE_AND_TIME_RAW'=>strval($friend['date_and_time']),
-                    'DATE_AND_TIME'=>get_timezoned_date($friend['date_and_time'],false),*/
+                'DATE_AND_TIME'=>get_timezoned_date($friend['date_and_time'],false),*/
                 'MEMBER_PROFILE_URL' => $member_profile_url,
                 'MEMBER_ID' => strval($friend['member_liked']),
                 'USERNAME' => $username,

@@ -17,6 +17,7 @@ If you are moving URLs but not servers, there is no need to perform any of the s
 ocPortal has an enormous number of files. The quick installer extracts all of these to the server so that you do not need to be concerned with transferring them individually.
 
 The good news is that you can simply take a backup of your hosting space using a control panel backup feature, or doing it by hand if you have the access. Once you have your backup, you just need to extract it onto your new server. Exact details on how to do this are beyond the scope of this tutorial, as it depends on your control panel(s) and technique.
+That said, cpanel's file manager is usually pretty good at zipping and unzipping files.
 
 [title="2"]File permissions[/title]
 
@@ -47,13 +48,13 @@ If you do not have such access, you will need to set permissions as specified fo
 
 You also need to delete:
 [indent]
-[tt]themes/*/templates_cached/*/*.tcd[/tt] / [tt]themes/*/templates_cached/*/*.tcp[/tt] (So template cacheing can continue to function)
+[tt]themes/*/templates_cached/*/*.tcp[/tt] (So template cacheing can continue to function)
 [tt]caches/*/*/*.lcd[/tt] (So cacheing can continue to function)
 [/indent]
 (we could delete these files by clearing the cache, but the cache can only be cleared if they have write permissions to these files which you would need to set manually -- so you might as well just delete the files manually anyway)
 [/box]
 
-Lastly, you should clear the block cache from Admin Zone > Tools > Cleanup Tools.
+Lastly, you should clear the block cache from either the upgrader, or Admin Zone > Tools > Cleanup Tools.
 
 [title="2"]Database contents[/title]
 

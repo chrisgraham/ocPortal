@@ -396,6 +396,9 @@ function closure_loop($param, $args, $main_function)
         }
         if (isset($param[1 + 1])) { /* NB: +1 is due to there being a non-numeric index here too */
             $columns = intval($param[1]);
+            if ($columns == 0) {
+                $columns = 1;
+            }
             $row_starter = isset($param[2 + 1]) ? $param[2] : '<tr>';
             $row_terminator = isset($param[3 + 1]) ? $param[3] : '</tr>';
             if ($array != array()) {

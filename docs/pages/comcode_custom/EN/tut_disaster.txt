@@ -14,6 +14,14 @@ If you need a quick data rescue, consider [page="site:support"]using ocProducts 
 
 The upgrader tool (accessible via [tt]upgrader.php[/tt]) contains a very useful 'integrity checker' which can find out-dated and corrupt files. You can use this tool at any point, regardless of whether you have recently upgraded or not.
 
+[title="2"]Repairing corrupted MySQL tables[/title]
+
+Instructions are provided in the [page="_SEARCH:tut_sql"]Manually editing your database with phpMyAdmin[/page] tutorial.
+
+If you don't have phpMyAdmin, whatever database management tool should have an equivalent feature as table repair is a standard MySQL mechanism.
+
+If you don't have any visual database management tool, you should look into getting one. However if you are technical you can use the command line using the MySQL [tt]REPAIR TABLE <tablename>[/tt] command, or the [tt]myisamchk[/tt] program to batch fix all [tt]*.MYI[/tt] files while having the MySQL server temporarily off-line.
+
 [title="2"]Fixing a theme[/title]
 
 If you've set up a theme, that is activated, and you've edited it in such a way that you can no longer realistically use the Admin Zone, you'll need to rescue your theme.

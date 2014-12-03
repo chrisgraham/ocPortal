@@ -126,7 +126,10 @@ function _symbol_thumbnail($param)
             if (!is_image($ext)) {
                 $ext = 'png';
             }
-            $filename = url_to_filename($orig_url) . '.' . $ext;
+            $filename = url_to_filename($orig_url);
+            if (substr($filename, -4) != '.' . $ext) {
+                $filename.= '.' . $ext;
+            }
         }
         if (!is_saveable_image($filename)) {
             $filename .= '.png';

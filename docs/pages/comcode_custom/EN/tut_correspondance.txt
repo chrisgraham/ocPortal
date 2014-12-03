@@ -10,7 +10,7 @@ At times you'll want to know how to talk to your members privately (i.e. not on 
 [media width="150" description="Choosing what kind of whisper to use" float="right"]data_custom/images/docs/correspondance_whisper-page.png[/media]
 Private Topics are very similar in concept to "private/personal messaging" -- a common feature among other forum systems. However, when designing OCF, we took the concept one step further, and integrated private messaging with the forum system in a new way. Private messaging systems are usually segregated from the main forum system; different layout, posting mechanisms, etc. With OCF, Private Topics are just that: topics. They are simply topics that are marked as between two users, and are shown in a special "Private Topics" virtual forum.
 
-Since version 4.0 Private Topics may involve more than 2 people -- a topic is initially between 2 members but other members may be invited.
+Private Topics may involve more than 2 people -- a topic is initially between 2 members but other members may be invited.
 [/surround]
 [title="2"]Inline personal posts (whispers)[/title]
 [surround]

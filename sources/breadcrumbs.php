@@ -44,17 +44,23 @@ function load_breadcrumb_substitutions($segments, $data)
 
             list($zone, $attributes, $hash) = page_link_decode($segment[0]);
 
-            foreach ($substitutions as $details) {
-                if (match_key_match($details[0], false, $attributes, $zone, $attributes['page'])) {
+            foreach ($substitutions as $j => $details) {
+                if ($details !== null && match_key_match($details[0], false, $attributes, $zone, $attributes['page'])) {
                     if ($details[1] === null || $details[1] == $segment[1]) {
                         $segments_new = $details[2]; // New stem found
                         $done_one = true;
+
+                        $substitutions[$j] = null; // Stop loops
                     }
                 }
             }
         }
 
         $segments_new[] = $segment;
+    }
+
+    if ($done_one) {
+        return load_breadcrumb_substitutions($segments_new, $data); // Try a new sweep
     }
 
     return $segments_new;

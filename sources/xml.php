@@ -19,6 +19,43 @@
  */
 
 /**
+ * Get XML definition of common entities we may use.
+ *
+ * @return string                       XML
+ */
+function get_xml_entities()
+{
+    return '
+        <!DOCTYPE xc:content [
+        <!ENTITY euro "&#8364;">
+        <!ENTITY ldquo "&#8220;">
+        <!ENTITY rdquo "&#8221;">
+        <!ENTITY lsquo "&#8216;">
+        <!ENTITY rsquo "&#8217;">
+        <!ENTITY dagger "&#8224;">
+        <!ENTITY Dagger "&#8225;">
+        <!ENTITY permil "&#8240;">
+        <!ENTITY Scaron "&#352;">
+        <!ENTITY scaron "&#353;">
+        <!ENTITY Yuml "&#376;">
+        <!ENTITY ndash "&#8211;">
+        <!ENTITY mdash "&#8212;">
+        <!ENTITY hellip "&#8230;">
+        <!ENTITY copy "&#169;">
+        <!ENTITY nbsp " ">
+        <!ENTITY fnof "&#402;">
+        <!ENTITY reg "&#174;">
+        <!ENTITY trade "&#8482;">
+        <!ENTITY raquo "&#187;">
+        <!ENTITY frac14 "&#188;">
+        <!ENTITY frac12 "&#189;">
+        <!ENTITY frac34 "&#190;">
+        <!ENTITY rarr "&#8594;">
+        ]>
+    ';
+}
+
+/**
  * XML escape the input string.
  *
  * @param  string                       $string Input string

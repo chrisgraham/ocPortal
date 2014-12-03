@@ -44,18 +44,13 @@ require_code('sitemap');
 $root = retrieve_sitemap_node(
 /*$page_link=*/
     '',
-    /*$callback=*/
-    null,
+    /*$callback=*/null,
     /*$valid_node_types=*/
     array('root', 'zone', 'page_grouping', 'page', 'comcode_page'),
-    /*$child_cutoff=*/
-    null,
-    /*$max_recurse_depth=*/
-    null,
-    /*$require_permission_support=*/
-    false,
-    /*$zone=*/
-    '_SEARCH',
+    /*$child_cutoff=*/null,
+    /*$max_recurse_depth=*/null,
+    /*$require_permission_support=*/false,
+    /*$zone=*/'_SEARCH',
     true
 );
 

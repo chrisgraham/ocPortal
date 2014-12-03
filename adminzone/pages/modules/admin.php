@@ -184,11 +184,10 @@ class Module_admin
             array('colour', 'color', 'css', 'font', 'background'),
             array('dob', 'date of birth'),
             array('sef', 'seo', 'google', 'search engine', 'search-engine-friendly', 'search-engine-optimisation'),
-            array('ban', 'suspend', 'suspension', 'probation', 'warn', 'punish', 'punitive'),
+            array('ban', 'suspend', 'suspension', 'probation', 'warn', 'punish', 'punitive', 'troll'),
             array('crash', 'warn', 'error', 'fatal', 'falt'),
             array('staff', 'moderator', 'admin', 'administrator', 'operator', 'webmaster'),
-            array('open', 'closed', 'live', 'activate', 'activation',/*'enable',*/
-                'turn'),
+            array('open', 'closed', 'live', 'activate', 'activation', /*'enable', */'turn'),
             array('import', 'convert', 'migrate', 'upload'),
             array('occle', 'console', 'command prompt', 'command line', 'cle'),
             array('export', 'download'),

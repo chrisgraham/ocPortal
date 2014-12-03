@@ -110,7 +110,7 @@ function adminzone_extended_breadcrumbs()
                         continue;
                     }
 
-                    if ((is_array($i[2])) && ($page == $i[2][0]) && (((!isset($i[2][1]['type'])) && ($type == 'browse')) || ((isset($i[2][1]['type'])) && (($type == $i[2][1]['type']) || ($i[2][1]['type'] == 'browse')))) && ($zone == $i[2][2])) {
+                    if ((is_array($i[2])) && ($page == $i[2][0]) && ($i[0] != '') && (((!isset($i[2][1]['type'])) && ($type == 'browse')) || ((isset($i[2][1]['type'])) && (($type == $i[2][1]['type']) || ($i[2][1]['type'] == 'browse')))) && ($zone == $i[2][2])) {
                         if ($i[0] == 'cms') {
                             $page_link = build_page_link(array('page' => 'cms', 'type' => ($i[0] == 'cms') ? null : $i[0]), 'cms');
                         } else {

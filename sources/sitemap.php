@@ -151,15 +151,18 @@ function sitemap_script()
     $page_link = get_param('id', '', true);
 
     $max_recurse_depth = get_param_integer('max_recurse_depth', (($page_link == '') ? 2 : 1));
-    $node = retrieve_sitemap_node($page_link,/*$callback=*/
-        null,/*$valid_node_types=*/
-        null,/*$child_cutoff=*/
-        null, $max_recurse_depth, $permissions_needed,/*$zone=*/
-        '_SEARCH',/*$use_page_groupings=*/
-        false,/*$consider_secondary_categories=*/
-        false,/*$consider_validation=*/
-        false,/*$meta_gather=*/
-        0);
+    $node = retrieve_sitemap_node($page_link,
+        /*$callback=*/null,
+        /*$valid_node_types=*/null,
+        /*$child_cutoff=*/null,
+        $max_recurse_depth,
+        $permissions_needed,
+        /*$zone=*/'_SEARCH',
+        /*$use_page_groupings=*/false,
+        /*$consider_secondary_categories=*/false,
+        /*$consider_validation=*/false,
+        /*$meta_gather=*/0
+    );
     _sitemap_node_to_xml($node, $permissions_needed);
 
     // Mark parent nodes for pre-expansion

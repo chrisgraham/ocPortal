@@ -229,7 +229,7 @@ Members may view their invoicing history and staff may quickly locate unpaid inv
 
 [title="2"]Online store[/title]
 
-The ocPortal online store was introduced in version 4.2, and works via the existing ocPortal catalogues system. Out-of-the-box there is the shopping cart catalogue (called 'products'). This catalogue has some hard-coded fields:
+The ocPortal online store works via the existing ocPortal catalogues system. Out-of-the-box there is the shopping cart catalogue (called 'products'). This catalogue has some hard-coded fields:
  - Product title -- the product title / name
  - Item code -- a code of your choice for the item, probably taken from your internal labelling system
  - Price -- the item's price (pre-tax)
@@ -280,6 +280,16 @@ Guest users have no member ID, so ocPortal will store the order against their 's
 We can't tie the purchases to IP addresses because often thousands of users can be on the same IP address.
 
 If you think users may be making delayed purchases as guests, you may want to consider removing Guest permissions to the shopping module, to force logins.
+
+[title="3"]Product options[/title]
+
+A popular request is to be able to specify options when purchasing a product, such as size or colour.
+This would be a major task for us to implement, and complicate the system, so we are not currently planning to add it.
+There are, however, two workarounds:
+1) Simply add the different product options as separate products.
+2) If you are using PayPal a template edit can be used to let the PayPal buy button carry through an option selection. We have left an example in the [tt]ECOM_CART_BUTTON_VIA_PAYPAL[/tt] template. This workaround shifts the configuration burden over to being a template editing task, and shifts the administration burden onto PayPal's end.
+
+If you need more flexibility than this (perhaps many different product options for different kinds of product), you should consider either sponsoring extended ocPortal development, or using a dedicated third-party eCommerce system.
 
 [title="2"]Currencies[/title]
 

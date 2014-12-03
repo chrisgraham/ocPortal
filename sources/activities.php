@@ -62,7 +62,7 @@ function has_external_site_wide_syndication()
     $ret = false;
     foreach (array_keys($hooks) as $hook) { // We only expect one actually
         require_code('hooks/systems/activities/' . $hook);
-        $ob = object_factory('Activity_' . $hook);
+        $ob = object_factory('Hook_activities_' . $hook);
         $ret = $ret || $ob->has_external_site_wide_syndication();
     }
     return $ret;
@@ -79,7 +79,7 @@ function get_syndication_option_fields()
     $ret = new Tempcode();
     foreach (array_keys($hooks) as $hook) { // We only expect one actually
         require_code('hooks/systems/activities/' . $hook);
-        $ob = object_factory('Activity_' . $hook);
+        $ob = object_factory('Hook_activities_' . $hook);
         $ret->attach($ob->get_syndication_option_fields());
     }
     return $ret;

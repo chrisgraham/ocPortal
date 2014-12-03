@@ -9,17 +9,17 @@
 	</qualify>
 	<filter notstaff="1">
 		<qualify pages="cms_news" types="add,_add" fields="post">
-<!--			<minLength>5</minLength>-->
-<!--			<maxLength>32000</maxLength>-->
-<!--			<shun>Testing</shun>-->
-<!--			<disallowedWord>shit*</disallowedWord>-->
-<!--			<disallowedSubstring>I shouldn't be telling you this, but</disallowedSubstring>-->
+			<!--<minLength>5</minLength>-->
+			<!--<maxLength>32000</maxLength>-->
+			<!--<shun>Testing</shun>-->
+			<!--<disallowedWord>shit*</disallowedWord>-->
+			<!--<disallowedSubstring>I shouldn't be telling you this, but</disallowedSubstring>-->
 		</qualify>
 		<qualify pages="cms_news" types="add,_add" fields="title">
-<!--			<removeShout />-->
+			<!--<removeShout />-->
 		</qualify>
 		<qualify pages="cms_comcode_pages" fields="post">
-<!--			<disallowedWord>shit*</disallowedWord>-->
+			<!--<disallowedWord>shit*</disallowedWord>-->
 		</qualify>
 		<qualify pages="topics" fields="title">
 			<maxLength error="!TITLE_TOO_LONG">120</maxLength>

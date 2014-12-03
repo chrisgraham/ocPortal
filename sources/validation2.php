@@ -258,8 +258,7 @@ function init__validation2()
         'background' => '((' . $enforce_transparent_or_color . '|' . $enforce_functional_url_or_none . '|' . $enforce_background_repeat . '|' . $enforce_attachment . '|' . $enforce_background_position . ')( |$))+',
         'background-attachment' => $enforce_attachment,
         'background-color' => $enforce_transparent_or_color,
-        'background-image' => /*$enforce_functional_url_or_none*/
-            '.*', // Changed to .* to allow gradients
+        'background-image' => /*$enforce_functional_url_or_none*/'.*', // Changed to .* to allow gradients
         'background-repeat' => $enforce_background_repeat,
         'background-position' => $enforce_background_position,
         'border' => $enforce_border,
