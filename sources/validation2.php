@@ -395,7 +395,7 @@ function init__validation2()
     $strict_form_accessibility = false; // Form fields may not be empty with this strict rule
 
     global $TAG_ATTRIBUTES;
-    $TAG_ATTRIBUTES = array(); // Split up to workaround bug in HipHop PHP
+    $TAG_ATTRIBUTES = array(); // Split up to workaround bug in HHVM
     $TAG_ATTRIBUTES += array(
         'a.accesskey' => $enforce_character,
         'a.charset' => '.+',

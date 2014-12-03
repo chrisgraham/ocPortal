@@ -234,4 +234,5 @@ This error could also be caused by some server configuration issue too. For exam
  - [page="_SEARCH:tut_ldap"]Integrating ocPortal into a corporate network via LDAP[/page]
  - [page="_SEARCH:tut_censor"]Policing a community site[/page]
  - [page="_SEARCH:tut_trace"]IP addresses and tracing users[/page]
+ - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
  - [url="http://www.robotstxt.org/robotstxt.html"]robots.txt help[/url]

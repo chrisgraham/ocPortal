@@ -97,4 +97,4 @@ This short tutorial aims simply to clarify what all these terms to relate to, an
 
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
  - [page="_SEARCH:tut_authors"]Authors[/page]
- - [page="_SEARCH:tut_staff"]The staff/member divide[/page]
+ - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]

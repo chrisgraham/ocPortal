@@ -805,7 +805,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Post reporting with the OCF forum.</td>
 			<!--<td>No</td>-->
 			<td><kbd>ocf_forum</kbd></td>
-			<td><a href="http://ocportal.com/docs10/tut_staff.htm">The staff/member divide</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_staff.htm">Coordination between staff and staff/members</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_reported_posts&amp;status_id=10">Link</a></td>
 		</tr>
@@ -835,7 +835,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Member warnings and punishment.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/tut_censor.htm">Dealing with annoying users</a><br /><br /><a href="http://ocportal.com/docs10/tut_staff.htm">The staff/member divide</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_censor.htm">Dealing with annoying users</a><br /><br /><a href="http://ocportal.com/docs10/tut_staff.htm">Coordination between staff and staff/members</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_warnings&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1025,7 +1025,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Choose and display a selection of staff from the super-administator/super-moderator usergroups. This is useful for multi-site networks, where members with privileges may not be considered staff on all websites on the network.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/tut_staff.htm">The staff/member divide</a><br /><br /><a href="http://ocportal.com/docs10/tut_staff_advice.htm">Advice for choosing and managing staff</a><br /><br /><a href="http://ocportal.com/docs10/tut_users.htm">People in their roles</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_staff.htm">Coordination between staff and staff/members</a><br /><br /><a href="http://ocportal.com/docs10/tut_staff_advice.htm">Advice for choosing and managing staff</a><br /><br /><a href="http://ocportal.com/docs10/tut_users.htm">People in their roles</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=staff&amp;status_id=10">Link</a></td>
 		</tr>

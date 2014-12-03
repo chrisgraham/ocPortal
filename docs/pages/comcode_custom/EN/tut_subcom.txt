@@ -10,6 +10,7 @@ ocPortal is designed to be able to support large community sites, and a common f
  - [b]Themes[/b] (different themes may be applied to different zones, giving sub-communities individual looks)
  - [b]Usergroups and access privileges[/b] (members of sub-communities may be grouped by usergroup, and permissions assigned accordingly)
  - [b]Custom profile fields[/b] [[concept]OCF[/concept] users only] (custom profile fields can be made so that they only apply to a single usergroup: thus allowing specification of user data that applies only to specific sub-communities)
+ - [i]More advanced techniques discussed in "Advanced techniques for multi-site-networks"[/i]
 
 [contents]decimal,lower-alpha[/contents]
 

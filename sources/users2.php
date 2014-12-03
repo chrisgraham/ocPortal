@@ -67,7 +67,7 @@ function get_users_online($longer_time, $filter, &$count)
     $members_online = 0;
     foreach ($SESSION_CACHE as $row) {
         if (!isset($row['member_id'])) {
-            continue; // Workaround to HipHop PHP weird bug
+            continue; // Workaround to HHVM weird bug
         }
 
         if (($row['last_activity'] > $cutoff) && ($row['session_invisible'] == 0)) {

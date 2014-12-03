@@ -212,4 +212,4 @@ There are many advantages to use OCF, such as:
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_importer"]Importing data into ocPortal[/page]
- - [page="_SEARCH:tut_staff"]The staff/member divide[/page]
+ - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]

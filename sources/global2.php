@@ -730,7 +730,7 @@ function catch_fatal_errors()
 
     if (!is_null($error)) {
         if (!array_key_exists('message', $error)) {
-            return; // Needed for HipHop PHP
+            return; // Needed for HHVM
         }
         if (substr($error['message'], 0, 26) == 'Maximum execution time of ') {
             if (function_exists('i_force_refresh')) {

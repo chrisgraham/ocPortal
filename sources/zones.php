@@ -1410,7 +1410,7 @@ function extract_module_functions($path, $functions, $params = null, $prefer_dir
             }
             if ($class_name === null) {
                 $new_classes = HHVM ? array() : array_values(array_diff($classes_after, $classes_before));
-                if (count($new_classes) == 0) { // Ah, HipHop PHP's AllVolatile is probably not enabled
+                if (count($new_classes) == 0) { // Ah, HHVM's AllVolatile is probably not enabled
                     $matches = array();
                     if ((running_script('install')) && (file_exists(preg_replace('#(sources|modules|minimodules)_custom#', '${1}', $path)))) {
                         $path = preg_replace('#(sources|modules|minimodules)_custom#', '${1}', $path);

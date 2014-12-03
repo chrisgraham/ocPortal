@@ -61,7 +61,7 @@ class Hook_addon_registry_match_key_permissions
     public function get_applicable_tutorials()
     {
         return array(
-            'tut_permissions',
+            'tut_adv_permissions',
         );
     }
 

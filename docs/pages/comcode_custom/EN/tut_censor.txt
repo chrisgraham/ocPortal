@@ -75,16 +75,13 @@ There are also 'sort by' and 'show per page' options at the bottom of this secti
 
 [title="2"]Post history[/title]
 
+[surround]
 [media width="150" description="Post history" float="right"]data_custom/images/docs/censor_post_history.png[/media]
 If you are using OCF, then you may make use of the 'post history' feature. This feature was designed for the situation where a member has edit and delete permission over their own posts, and abuses it to hide evidence of their own misdeeds. For staff, a 'history' button is provided by any edited post, and a 'history' button by any topic with post-deletion history. The interface under these buttons allows:
 1) viewing of old versions
 2) restoration of what was deleted
 3) the ability for staff to eternally erase posts from the history record.
-
-
-
-
-
+[/surround]
 
 [concepts
  1_key="Post history"   1_value="The stored text of posts, from before edit and delete actions on them"
@@ -96,8 +93,9 @@ If you are using OCF, then you may make use of the 'post history' feature. This 
 
  - [page="_SEARCH:tut_trace"]IP addresses and tracing users[/page]
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
- - [page="_SEARCH:tut_staff"]The staff/member divide[/page]
+ - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
  - [page="_SEARCH:tut_mod"]Basic forum moderation[/page]
  - [page="_SEARCH:tut_fields_filter"]The form field filter system[/page]
+ - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
 

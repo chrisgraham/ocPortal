@@ -58,6 +58,8 @@ A full description of the Tempcode language is available in the [page="docs:tut_
 
 [title="3"]WCAG notes[/title]
 
+WCAG is the standard accessibility standard. Imagine, for example, a blind user using a website.
+
 Adherence to the following guidelines can't be automatically detected, so need to be checked manually in your XHTML:
  - [color="red"][tt]<noscript>[/tt] is given whenever appropriate and possible[/color]
  - [color="red"]When plugins are used, info about it must be displayed[/color]
@@ -74,6 +76,26 @@ The following guidelines must be adhered to by webmasters themselves:
  - [color="red"]Specify the expansion of each abbreviation or acronym in a document where it first occurs.[/color]
  - [color="red"]Place distinguishing information at the beginning of headings, paragraphs, lists, etc.[/color]
 
+[title="3"]The Theme Wizard[/title]
+
+ocPortal's default CSS uses equations to define colours, all defined against a seed colour. This allows us to define a large harmonious colour scheme progmatically, and thus allows the Theme Wizard to work (re-calculating the colours against a different seed colour). It saves themers an enormous amount of time, as manually redefining each colour would be very time consuming, let alone recreating all the theme images within the colour scheme.
+
+Equations look like this in the CSS...
+[code]
+{$THEME_WIZARD_COLOR,#d91522,red_highlight_text,80% FF0000 + 20% seed}
+...
+
+span.red_alert, a.red_alert, strong.red_alert, em.red_alert {
+    color: {$GET,red_highlight_text};
+    ...
+}
+[/code]
+
+The equations are calculated by an inference chain system. In other words, one equation may reference a colour defined in another equation. The Theme Wizard supports various arithmetically manipulates of colours, using colour science. Any colours defined in [tt]global.css[/tt] may be referenced in any of the other CSS files.
+
+If you are creating a new theme, or just working on a particular site, there is no need to use the Theme Wizard colour system when you add new CSS rules, or change existing ones. Of course because your theme will be derived from the default theme it will still have the Theme Wizard equations in it, coded against the particular seed colour you choose when you created your theme (or the default one if you didn't use the Theme Wizard) -- but that's just to start you off and does not need to be maintained by you. Just embed your own colours directly into the CSS like you normally would, and replace any default equations that you want to. Even if you want the Theme Wizard to work with your theme, the alternative "HSV-shift" Theme Wizard method doesn't require equations to be defined.
+
+If you are adding features to the standard ocPortal, you must make use of Theme Wizard colours. Almost always you will find there is a colour defined that is appropriate for you to use (see the big collection of them toward the top of the [tt]global.css[/tt] file). There are also some OcCLE commands you can use to search for what the nearest defined colour is to an exact RGB colour. If you do need to define a new colour, do so while maintaining the tidy organisation and naming conventions currently in use.
 
 [title="3"]PNG images[/title]
 
@@ -112,7 +134,9 @@ ocPortal has an inbuilt set of JavaScript libraries, which are split across a nu
 4) [tt]transitions[/tt] -- Provide various transition/animation effects.
 
 To flag a javascript file to be loaded up, use the 'require_javascript' API command in the PHP code. For example, if you wanted to load up the JavaScript defined in an 'example.js' template, use:
+[code]
 require_javascript('example');
+[/code]
 This command is usually best placed:
 1) in screen functions if it is not used by all screens in your module
 2) or, in the [tt]run[/tt] function if it is used by all/most screens in your module
@@ -122,10 +146,10 @@ Alternatively, you can load JavaScript from a template with a command like:
 {$REQUIRE_JAVASCRIPT,example}
 [/code]
 
-You may add new JavaScript templates as needed. Just make sure to follow the naming convention.
-When writing new JavaScript code try to make good use of the existing functions that are defined in whatever JavaScript you already have included. For example, use the standard cookie manipulation functions and standard AJAX functions, rather than making new ones. If existing functions are not sufficient consider improving those functions. If you are porting some existing JavaScript libraries to ocPortal you may need to resolve the following:
- - After renaming files, you may find JavaScript makes assumptions about the naming and paths to other files, such as images, or other complementary JavaScript files. You'll need to adjust the associated code for that. In the case of references to images, it is best to use the ocPortal theme-image system, and thus reference them using the '[tt]{$IMG,...}[/tt]' symbol.
- - You may find you need to put some "\" symbols before some "{" symbols, to stop certain bits being parsed as JavaScript.
+You may add new JavaScript templates as needed. The instructions are the same as integrating a third-party library:
+See the [page="_SEARCH:tut_integration"]Integration of ocPortal and other installed scripts/applications[/page] tutorial.
+
+When writing new JavaScript code try to make good use of the existing functions that are defined in whatever JavaScript you already have included. For example, use the standard cookie manipulation functions and standard AJAX functions, rather than making new ones. If existing functions are not sufficient consider improving those functions.
 
 In ocPortal, JavaScript libraries are automatically minified to save on bandwidth, unless [tt]&keep_no_minify=1[/tt] is in the URL (very useful for debugging).
 
@@ -142,13 +166,6 @@ In ocPortal, JavaScript libraries are automatically minified to save on bandwidt
  - HTML manipulation: get_inner_html, set_inner_html
  - AJAX: ajax.js: do_ajax_request
  - Animation: toggleable_tray, smooth_scroll, transitions.js: fade_transition
-
-[title="3"]Integrating third-party JavaScript libraries[/title]
-
-If you're working on a standalone website you can just edit [tt]GLOBAL_HTML_WRAP.tpl[/tt] to include whatever JavaScript calls you like. If you're working on an addon, however, you will want to code it into your addon to insert the necessary code into [tt]<head>[/tt] dynamically. You can do this by calling [tt]attach_to_screen_header[/tt] with whatever Tempcode is required. Typical code will look like:
-[code="PHP"]
-attach_to_screen_header(make_string_tempcode('Extra code goes here'));
-[/code]
 
 [title="3"]JavaScript event handlers[/title]
 
@@ -207,7 +224,7 @@ window.my_template_parameter='{MY_TEMPLATE_PARAMETER;/}';
 <a href="#" onclick="output_my_parameter();">Click me</a>
 [/code]
 
-In the JavaScript library (which must have been loaded using require_javascript):
+In the JavaScript library (which must have been loaded using [tt]require_javascript[/tt]):
 [code="HTML"]
 function output_my_parameter()
 {

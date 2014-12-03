@@ -62,6 +62,7 @@ class Hook_addon_registry_core_permission_management
     {
         return array(
             'tut_permissions',
+            'tut_adv_permissions',
         );
     }
 

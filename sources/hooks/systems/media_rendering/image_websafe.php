@@ -160,6 +160,10 @@ class Hook_media_rendering_image_websafe
             }
         }
 
-        return do_template('MEDIA_IMAGE_WEBSAFE', array('_GUID' => '4dbc2c00dd049f9951c27d198065a4c2', 'URL_SAFE' => $_url_safe, 'HOOK' => 'image_websafe') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
+        if (url_is_local($url_direct_filesystem)) {
+            $url_direct_filesystem = get_custom_base_url() . '/' . $url_direct_filesystem;
+        }
+
+        return do_template('MEDIA_IMAGE_WEBSAFE', array('_GUID' => '4dbc2c00dd049f9951c27d198065a4c2', 'URL_SAFE' => $_url_safe, 'URL_DIRECT_FILESYSTEM' => $url_direct_filesystem, 'HOOK' => 'image_websafe') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

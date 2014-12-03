@@ -63,6 +63,7 @@ class Hook_addon_registry_core_themeing
         return array(
             'tut_themes',
             'tut_releasing_themes',
+            'tut_theme_lifecycle',
             'tut_tempcode',
             'tut_fixed_width',
             'tut_design',

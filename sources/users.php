@@ -477,7 +477,7 @@ function delete_expired_sessions_or_recover($member = null)
     global $SESSION_CACHE;
     foreach ($SESSION_CACHE as $_session => $row) {
         if (!array_key_exists('member_id', $row)) {
-            continue; // Workaround to HipHop PHP weird bug
+            continue; // Workaround to HHVM weird bug
         }
 
         // Delete expiry from cache

@@ -50,7 +50,7 @@ class Hook_addon_registry_hphp_buildkit
      */
     public function get_description()
     {
-        return 'A script to compile ocPortal to run on Facebook HipHop PHP (not Roadsend PHP anymore - we have removed that support).';
+        return 'Scripts for supporting Facebook\'s HHVM.';
     }
 
     /**

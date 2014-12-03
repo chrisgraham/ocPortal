@@ -191,7 +191,7 @@ class Module_admin_permissions
         }
 
         if ($type == 'match_keys' || $type == '_match_keys') {
-            set_helper_panel_tutorial('tut_permissions');
+            set_helper_panel_tutorial('tut_adv_permissions');
         }
 
         if ($type == 'page' || $type == '_page') {

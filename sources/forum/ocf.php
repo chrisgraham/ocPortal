@@ -1608,7 +1608,7 @@ class Forum_driver_ocf extends Forum_driver_base
                     $num_guests = 0;
                     foreach ($SESSION_CACHE as $c) {
                         if (!array_key_exists('member_id', $c)) {
-                            continue; // Workaround to HipHop PHP weird bug
+                            continue; // Workaround to HHVM weird bug
                         }
 
                         if (($c['last_activity'] > time() - 60 * 4) && (is_guest($c['member_id']))) {

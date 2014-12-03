@@ -349,7 +349,7 @@ if (!function_exists('get_tutorial_info')) {
 
             case 'staff':
                 $result = array(
-                    "The staff/member divide",
+                    "Coordination between staff and staff/members",
                     "A discussion on the features ocPortal provides for members, and for staff - and how permissions divide them.",
                     "Aug 2008",
                     "blue",

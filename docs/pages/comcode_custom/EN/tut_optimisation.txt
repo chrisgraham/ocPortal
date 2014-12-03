@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Optimising[/title]
 
-ocPortal is very heavily optimised so that pages load as quickly as possible. This tutorial will provide information on techniques and issues for increasing throughput, so that your site may support more visitors.
+ocPortal is very heavily optimised so that pages load as quickly as possible. This tutorial will provide information on techniques and issues for increasing throughput, so that your site may support more visitors. Some of these techniques are programmer-level in complexity.
 
 If you have need to be able to take particularly high load, considering getting [page="site:support"]the support of the experts[/page].
 
@@ -340,22 +340,18 @@ DNS may be used to route the CDN servers based on geographic location.
 
 There are many commercial CDN services available that can be configured in via this option.
 
-[title="2"]Facebook's HipHop PHP (HHVM / hphp)[/title]
+[title="2"]Facebook's HHVM[/title]
 
-[i]Note that we now support HHVM, which has replaced the original HipHop PHP compiler. The names are used interchangeably, but we are referring to HHVM.[/i]
-
-[i]HHVM is not officially supported, as it is fast evolving and sometimes has bugs. Support can be provided individually upon commercial demand.[/i]
+[i]HHVM is not officially supported, as it is fast evolving and sometimes has bugs. It should work though. Support can be provided individually upon commercial demand.[/i]
 
 Facebook released an alternative implementation of PHP that works as a JIT virtual machine instead of an interpreter. It more than doubles performance, and is set to improve further as it is developed.
 This is not suitable for most people for the following reasons:
  - It requires server admin access
  - The HHVM server is hard to run in parallel to normal web servers
  - It only runs on 64 bit systems running common varieties of Linux (Fedora/CentOS and Debian/Ubuntu are all the ones known to work at the time of writing)
- - You need to be comfortable compiling HHVM yourself
+ - You need to be comfortable compiling HHVM yourself (well actually there are packages, but this is relatively new)
  - It generally requires some advanced skills
 However, it is very suitable for those who need to serve a high capacity and have the skills and staffing to manage all the above.
-
-ocPortal fully supported HHVM since version 10.
 
 The 'hphp_buildkit' addon (bundled by default) provides a config and initialisation scripts for HHVM.
 To invoke (we are assuming that HHVM has been properly installed and is in the path):
@@ -364,7 +360,7 @@ To invoke (we are assuming that HHVM has been properly installed and is in the p
 
 In order to support hphp (which imposes some language restrictions) we made some changes to ocPortal, and updated our coding standards. There's no guarantee that any individual non-bundled addon will meet the coding standards, however.
 
-We expect Facebook will improve HHVM performance will increase over time. They are working on improvements to the PHP language, which ocPortal could benefit from with further development. Type hinting is particularly interesting, as it has great performance potential and mirrors our code quality efforts that have already made ocPortal type-strict. We have preliminary support for this already, but it is not consistently maintained production-ready.
+We expect Facebook will improve HHVM performance will increase over time. They are working on improvements to the PHP language, which ocPortal could benefit from with further development. Type hinting is particularly interesting, as it has great performance potential and mirrors our code quality efforts that have already made ocPortal type-strict. We have preliminary support for this already, but it is not consistently maintained to be production-ready.
 
 We have tried in the past to support:
  - Roadsend (commercial software)
@@ -399,6 +395,29 @@ Web browsers are starting to support link preloading. If you have a situation wh
 
 A developer can run a profiler to work out bottlenecks in code, and decide optimisations.
 For hard-core programming, xdebug would be used. However, you can also run profiling on a live site using ocPortal's built-in profiler. This is enabled via a hidden option (described in the Code Book, and comments in [tt]sources/profiler.php[/tt]).
+
+[title="2"]S3 storage[/title]
+
+If you receive more uploads than you can handle through normal disk space, you could use S3 storage. This will also give your users a marginal improvement in download speeds.
+
+ocPortal has no direct inbuilt S3 support, but this is intentional, because you do not need it. Assuming you have a Linux dedicated server or cloud instance, you may use the 'FUSE' system to make ocPortal upload directory/directories use S3.
+
+First you need to mount S3 storage to a directory, such as [tt]uploads/attachments[tt], using a filesystem driver:
+http://tecadmin.net/mount-s3-bucket-centosrhel-ubuntu-using-s3fs/
+You'll want to mount a subdirectory of your S3 storage rather than a root. I recommend you mirror the same basic filesystem structure as ocPortal, so that you are mapping subdirectories with equivalence.
+You'll need to rename [tt]uploads/attachments[/tt] to something else to do this, and then move the old contents of that directory back into the S3 version of it.
+
+Now immediately you are using S3 for storage, however URLs are still coming through your own server, which will work, but not efficiently.
+Let's say we want normal image attachments to route through S3. We would edit the [tt]MEDIA_IMAGE_WEBSAFE[/tt] template, changing:
+[code]
+{URL*}
+[/code]
+to:
+[code]
+{$PREG_REPLACE,^{$CUSTOM_BASE_URL}/uploads/attachments/,http://whateverYourAmazonBaseURLIS/uploads/attachments/,{URL}}
+[/code]
+
+You'll need to disable the ocPortal "Reveal usage figures" option, as the usage figures can't be maintained with requests not routing through ocPortal.
 
 [title="2"]See also[/title]
 

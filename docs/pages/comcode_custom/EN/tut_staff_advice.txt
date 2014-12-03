@@ -51,4 +51,4 @@ ocPortal has special 'conflict detection' support implemented throughout. If a m
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
- - [page="_SEARCH:tut_staff"]The staff/member divide[/page]
+ - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]

@@ -1,6 +1,7 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Releasing a theme[/title]
 
 If you've developed your own theme for ocPortal, and would like to share it with others, we strongly encourage you to do so via the {$BRAND_BASE_URL} theme gallery.
+
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Why distribute a theme[/title]
@@ -48,3 +49,4 @@ This upgrade process happens on individual site's that use your theme, and hence
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
+ - [page="_SEARCH:tut_theme_lifecycle"]Theme lifecycle[/page]

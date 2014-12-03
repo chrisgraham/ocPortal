@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: ocPortal site structure[/title]
 
-ocPortal has a number of interacting systems, that together form the structure and navigation paradigm of your website. This tutorial will detail these systems, and show how they fit together.
+ocPortal has a number of interacting systems, that together form the structure and navigation paradigm of your website. This tutorial will provide advanced detail to these systems, and show how they fit together. Users who just want to get content won't need to understand the full details of the ocPortal structure, but users needing complex navigations will.
 
 To view the structural contents of your website, head over to the 'Structure' section of the Admin Zone, and choose the 'Sitemap Editor' icon. The Sitemap Editor is a very powerful tool for viewing the zones, pages, and categories within your website, and will help you build up a mental picture of how everything relates.
 
@@ -55,6 +55,17 @@ This system is extremely powerful, allowing you to edit any page in ocPortal, in
 
 ocPortal comes with dozens of modules as standard. Most ocPortal pages are actually modules, and most of the ocPortal database tables are created by module self-installation code.
 
+[i]Information for programmers only...[/i]
+
+Modules/blocks that are not locked may be un-installed and re-installed from a module management page that is buried underneath the addon management page. We do not recommended working on a module level but if you are a programmer it is sometimes useful to be able to uninstall/reinstall your own modules during testing.
+
+[box="Note" width="25em" float="right"]Re-installing or un-installing a module will generally delete all data associated with it, including uploads and entries.[/box]
+If a module has been upgraded (i.e. The on-disk file has been replaced with a newer version), you may upgrade it (to upgrade/create on-disk and on-database data) in 3 ways:
+ - Simply use the module, and it will upgrade itself
+ - Run the [tt]<base-url>/upgrader.php[/tt] script, which will upgrade all modules on your site that need it, as well as clearing caches
+ - Use the module management interface to upgrade the module
+There is also a concept of a 'hacked' module (a module modified as a part of an unofficial addon): the process of performing any upgrades an on-disk file needs for this is the same as for a conventional module upgrade.
+
 [title="3"]Entry points / Page-links[/title]
 
 There is a simple standard in ocPortal for identifying a page accessed by URL, in a way that is not tied down to installation domain and directory, like a URL is. This standard is sometimes called an 'entry point' and sometimes called a 'page-link'; generally, an 'entry point' is a predictable 'page-link' that will work on any ocPortal installation with the same set/configuration of zones and pages. A 'page-link' on the other hand, might depend on the actual content of the site.
@@ -65,11 +76,13 @@ A more complex case is used in the menu editor, which has the ability to insert 
 
 The most complex case is for a full blown 'page-link' that could not be referred to as merely a standard 'entry point', because it depends on the state of content. An example of this might be '[tt]site:downloads:type=cat:id=10[/tt]', to view the download category of ID#10.
 
-It is also worth understanding that page-links have a long-form and a short form syntax. For simplicity I have used the long-form syntax above. The short form syntax allows you to remove [tt]type=[/tt] and [tt]id=[/tt], so long as the parameters match the expected order. You can remove [tt]type=[/tt] from the third component, and [tt]id=[/tt] from the fourth component. So [tt]site:downloads:type=cat:id=10[/tt] will shorten to [tt]site:downloads:cat:10[/tt].
+It is also worth understanding that page-links have a long-form and a short form syntax. For simplicity I have used the long-form syntax above. The short form syntax allows you to remove [tt]type=[/tt] and [tt]id=[/tt], so long as the parameters match the expected order. You can remove [tt]type=[/tt] from the third component, and [tt]id=[/tt] from the fourth component. So [tt]site:downloads:type=browse:id=10[/tt] will shorten to [tt]site:downloads:browse:10[/tt].
 
 If you do not want to hard-code what zone to use, you may specify either '_SEARCH' or '_SELF' as the zone name in the page-link. '_SEARCH' will cause ocPortal to dynamically find the module involved, whilst '_SELF' will use the same zone as the page-link is dynamically being interpreted in (e.g. If if it used on a menu in the site zone, '_SELF' will be equivalent to 'site').
 
 If you have a URL scheme enabled it can be hard to find out what the URL parameters to a screen are. If you go to [tt]http://baseurl/index.php?keep_no_short_url=1[/tt] then all URLs shown will reveal the raw parameter values (this just happens for you, via the [tt]keep_no_short_url=1[/tt] you temporarily set in your address bar).
+
+For more information on how page-links are turned into URLs, see the [page="_SEARCH:tut_short_urls"]URL schemes in ocPortal[/page] tutorial. This tutorial also contains an example on how to link to the current logged in user's member profile (a common request), as a worked example of how page-links and URL schemes work.
 
 [title="3"]Panels and blocks[/title]
 
@@ -104,18 +117,18 @@ Both are used: although if we wished, we could have avoided embedded, having a c
 
 A simplified view of the part of the ocPortal template tree that is common across all pages is:
 [tt]
-   GLOBAL_HTML_WRAP
-      PANEL_TOP (optional)
-         ...
-      PANEL_LEFT (optional)
-         ...
-      (main page)
-         SCREEN_TITLE
-         (main pages wrapping template, and a lot more)
-      PANEL_RIGHT (optional)
-         ...
-      PANEL_BOTTOM (optional)
-         ...
+---GLOBAL_HTML_WRAP
+------PANEL_TOP (optional)
+---------...
+------PANEL_LEFT (optional)
+---------...
+------(main page)
+---------SCREEN_TITLE
+---------(main pages wrapping template, and a lot more)
+------PANEL_RIGHT (optional)
+---------...
+------PANEL_BOTTOM (optional)
+---------...
 [/tt]
 When something appears beneath, on the same level, it has been attached. When one of more things appear beneath, on one level deeper, they have been wrapped. As a tree structure, it is built up from the most deep parts of the tree, and wrapped/attached all the way back until the final composition exists: and then it is output.
 
@@ -137,13 +150,13 @@ ocPortal uses the Sitemap:
 The Sitemap generally reflects the actual structure of your website, and works roughly on these levels:
 [tt]
 (Root)
-	Zone
-		Page group
-			Page
-				Entry-point
-					Category
-						...
-							Entry
+---Zone
+------Page group
+---------Page
+------------Entry-point
+---------------Category
+------------------...
+---------------------Entry
 [/tt]
 
 Zones are the first level and operate as different top-level security contexts, and potentially have different panels, a different theme, and different navigations.
@@ -213,14 +226,13 @@ There is a breadcrumb override facility in the Admin Zone that allows you to cha
 
 [concepts
  1_key="Page-link"      1_value="A special syntax that is like 'an ocPortal URL' that is written in a simplified form, local, and not tied to PHP/ocPortal URL reality (so if ocPortal URLs start to look different, Page-links still work)"
- 2_key="Short URL"      2_value="A URL that points to content in a simpler, shorter, form. Also called a Quick URL' or an 'SEO URL'"
- 3_key="Zone"           3_value="A sub-directory of ocPortal that stores pages and has separate configuration (including permissions)"
- 4_key="Page"           4_value="An ocPortal site consists of pages, and some pages (mainly modules) consist of multiple screens"
- 5_key="screen"         5_value="An actual screen that could be roughly categorised distinctly from all other screens (e.g. the backup system has a screen to start a backup, and a screen to view the results)"
- 6_key="Module"         6_value="An ocPortal page that is written in PHP to a very strict structure"
- 7_key="Mini-module"    7_value="A module that is easier to write, but less powerful (it has no installation support, for example)"
- 8_key="Zone editor"    8_value="A unified zone and panel editor"
- 9_key="Sitemap editor" 9_value="A frontend for viewing and manipulating all content on the website"
+ 2_key="Zone"           2_value="A sub-directory of ocPortal that stores pages and has separate configuration (including permissions)"
+ 3_key="Page"           3_value="An ocPortal site consists of pages, and some pages (mainly modules) consist of multiple screens"
+ 4_key="screen"         4_value="An actual screen that could be roughly categorised distinctly from all other screens (e.g. the backup system has a screen to start a backup, and a screen to view the results)"
+ 5_key="Module"         5_value="An ocPortal page that is written in PHP to a very strict structure"
+ 6_key="Mini-module"    6_value="A module that is easier to write, but less powerful (it has no installation support, for example)"
+ 7_key="Zone editor"    7_value="A unified zone and panel editor"
+ 8_key="Sitemap editor" 8_value="A frontend for viewing and manipulating all content on the website"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]
@@ -231,3 +243,4 @@ There is a breadcrumb override facility in the Admin Zone that allows you to cha
  - [page="_SEARCH:tut_comcode_pages"]Custom pages of information (via Comcode)[/page]
  - [page="_SEARCH:tut_adv_comcode_pages"]Advanced custom pages of information[/page]
  - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]
+ - [page="_SEARCH:tut_short_urls"]URL schemes in ocPortal[/page]

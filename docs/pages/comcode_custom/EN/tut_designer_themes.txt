@@ -66,8 +66,8 @@ This section will step through how to build your design, in a number of steps an
 [title="3"]A starting point (the Theme Wizard)[/title]
 
 [list="1"]
-[*]Using the Theme Wizard (in Admin Zone --> Style --> Themes), create a base theme that matches the colour of the theme that needs to be build as closely as possible (if your theme has many colours, choose the one used most). Tell it to make the theme active.
-[*]You will also want to make sure the 'Block cache' is disabled in the configuration (Admin Zone --> Setup --> Configuration --> Site options --> Caches). This will allow you to make block template changes without having to worry about emptying the block cache each time. It is advisable to leave the other caches as they are; ocPortal is smart enough to detect if files have been changed in most cases.
+[*]Using the Theme Wizard (in Admin Zone > Style > Themes), create a base theme that matches the colour of the theme that needs to be build as closely as possible (if your theme has many colours, choose the one used most). Tell it to make the theme active.
+[*]You will also want to make sure the 'Block cache' is disabled in the configuration (Admin Zone > Setup > Configuration > Site options > Caches). This will allow you to make block template changes without having to worry about emptying the block cache each time. It is advisable to leave the other caches as they are; ocPortal is smart enough to detect if files have been changed in most cases.
 [/list]
 
 [semihtml][b]This section is accompanied by a <a onclick="window.open(this.getAttribute('href'),'','width=910,height=700,status=no,resizable=yes,scrollbars=no'); return false;" href="{$BASE_URL*}/uploads/website_specific/ocportal.com/swf_play.php?file=video_tutorials/designer_themes__theme_wizard.mp4&amp;width=900&amp;height=675">video</a>.[/b][/semihtml]
@@ -560,6 +560,8 @@ This checks to see if "..." is true, and if it is then it puts out a [tt]<a>[/tt
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
+ - [page="_SEARCH:tut_theme_lifecycle"]Theme lifecycle[/page]
+ - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]
  - [page="tut_tempcode"]Tempcode programming[/page]
  - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
