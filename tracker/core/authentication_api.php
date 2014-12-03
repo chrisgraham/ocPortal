@@ -361,11 +361,14 @@ function auth_does_password_match( $p_user_id, $p_test_password ) {
  * @access public
  */
 function auth_process_plain_password( $p_test_password, $p_real_password_bits ) {
-	$bits=explode(':',$p_real_password_bits);
+	$bits=explode(':',$p_real_password_bits); // hash, salt, scheme
 	$password_compatibility_scheme=$bits[2];
 	switch ($password_compatibility_scheme)
 	{
 		case '': // ocPortal style salted MD5 algorithm
+            if (preg_match('#^\w+$#', $bits[0]) == 0) {
+                return password_verify($bits[1] . md5($p_test_password), $bits[0]);
+            }
 			return (md5($bits[1].md5($p_test_password))==$bits[0]);
 		case 'vb3': // vBulletin (used on ocportal.com a lot, for legacy reasons)
 			return (md5(md5($p_test_password).$bits[1])==$bits[0]);
