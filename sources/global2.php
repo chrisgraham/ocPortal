@@ -356,7 +356,7 @@ function init__global2()
 		require_code('temporal'); // Date/time functions
 		require_code('files'); // Contains fix_permissions, needed for 'lang'
 		require_code('lang'); // So that we can do language stuff (e.g. errors)
-		convert_data_encodings(get_param_integer('known_unicode',0)==1);
+		convert_data_encodings();
 		if ($MICRO_BOOTUP==0)
 		{
 			require_code('permissions'); // So we can check access
