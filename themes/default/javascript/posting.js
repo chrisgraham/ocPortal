@@ -212,7 +212,7 @@ function generate_background_preview(post)
 			form_post+='&'+name+'='+window.encodeURIComponent(value);
 		}
 	}
-	var preview_ret=do_ajax_request(form_preview_url+'&js_only=1',null,form_post.substr(1));
+	var preview_ret=do_ajax_request(form_preview_url+'&js_only=1&known_utf8=1',null,form_post.substr(1));
 	eval(preview_ret.responseText.replace('<script>','').replace('</script>',''));
 }
 
