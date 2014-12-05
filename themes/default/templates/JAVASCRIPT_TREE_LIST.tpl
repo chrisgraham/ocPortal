@@ -492,6 +492,10 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 			do_ajax_request(url,function (ajax_result_frame,ajax_result) { set_inner_html(html_node,''); ob.response(ajax_result_frame,ajax_result,clicked_id); });
 			set_inner_html(html_node,'<div aria-busy="true" class="vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> <span>{!LOADING;^}</span></div>');
 			var container=document.getElementById('tree_list__root_'+ob.name);
+			window.setTimeout(function() {
+				var container=document.getElementById('tree_list__root_'+ob.name);
+				container.parentNode.parentNode.parentNode.scrollTop=0; // Workaround bizarre bug in Chrome and Firefox where unrelated div is scrolled. Maybe mobile code leaking through.
+			}, 0);
 			if ((automated) && (container) && (container.style.overflowY=='auto'))
 			{
 				window.setTimeout(function() {
@@ -540,6 +544,14 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 {
 	if (typeof event=='undefined') var event=window.event;
 	if (typeof assume_ctrl=='undefined') var assume_ctrl=false;
+
+	window.setTimeout(function() {
+		var container=document.getElementById('tree_list__root_tree_list');
+		if (container)
+		{
+			container.parentNode.parentNode.parentNode.scrollTop=0; // Workaround bizarre bug in Chrome and Firefox where unrelated div is scrolled. Maybe mobile code leaking through.
+		}
+	}, 0);
 
 	var element=document.getElementById(this.object.name);
 	if (element.disabled) return;

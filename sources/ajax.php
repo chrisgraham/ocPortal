@@ -538,6 +538,7 @@ function snippet_script()
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	header('Content-Type: text/plain; charset='.get_charset());
+	convert_data_encodings(true,true);
 	$hook=filter_naughty_harsh(get_param('snippet'));
 	require_code('hooks/systems/snippets/'.$hook,true);
 	$object=object_factory('Hook_'.$hook);

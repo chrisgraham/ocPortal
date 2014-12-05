@@ -131,7 +131,14 @@ Also, if you need to literally display a tag without it being parsed, you may ty
 
 ocPortal provides a [concept]WYSIWYG[/concept] editor for those who would rather not type Comcode directly. You may mix in raw Comcode with the normal formatted text of the WYSIWYG editor if you wish; this is necessary if you need to insert things that don't have a regular appearance, such as blocks.
 
-The HTML produced by the WYSIWYG editor is normally automatically converted back into Comcode (unless the "Convert HTML to Comcode" option is disabled). However, if a full conversion is not possible, the Comcode 'semihtml' tag is used in order to allow a partial conversion. If this is the case, the remaining HTML would then be subjected to the whitelist/blacklist filter (see the "Security" section of the "Advanced Comcode" tutorial), unless the Comcode was submitted by staff in which case it would not be filtered.
+ocPortal uses the Comcode 'semihtml' tag is used in order to mix HTML and Comcode. You don't see this within the editor, but it is used when saving. Any HTML is subjected to ocPortal's whitelist/blacklist filter when it is being parsed for final output (see the "Security" section of the "Advanced Comcode" tutorial), unless the Comcode was submitted by staff in which case it would not be filtered.
+
+The HTML produced by the WYSIWYG editor is kept as HTML unless the "Convert HTML to Comcode" option is enabled. However, this conversion option is not recommended for the vast majority of users because it will corrupt some custom HTML, and may change some of the alignments.
+Note that ocPortal will actually consider any Comcode fully-surrounded by 'semihtml' tags as coming from the WYSIWYG editor.
+
+If you want "Convert HTML to Comcode" in general then make sure you add this code to the bottom of any Comcode that should not have it:
+[code]{$,page hint: no_smart_conversion}[/code]
+The code is not visible, but passes on as a processing hint to ocPortal.
 
 [title="2"]Tag reference[/title]
 
