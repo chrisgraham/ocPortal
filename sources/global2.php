@@ -2136,6 +2136,32 @@ function convert_data_encodings($known_utf8=false)
 		{
 			iconv_set_encoding('output_encoding',$charset);
 			iconv_set_encoding('internal_encoding',$charset);
+			foreach ($_GET as $key=>$val)
+			{
+				if (is_string($val))
+				{
+					$_GET[$key]=iconv($encoding,$charset.'//TRANSLIT',$val);
+				} elseif (is_array($val))
+				{
+					foreach ($val as $i=>$v)
+					{
+						$_GET[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$val);
+					}
+				}
+			}
+			foreach ($_POST as $key=>$val)
+			{
+				if (is_string($val))
+				{
+					$_POST[$key]=iconv($encoding,$charset.'//TRANSLIT',$val);
+				} elseif (is_array($val))
+				{
+					foreach ($val as $i=>$v)
+					{
+						$_POST[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$val);
+					}
+				}
+			}
 		} else
 		{
 			$VALID_ENCODING=false;
