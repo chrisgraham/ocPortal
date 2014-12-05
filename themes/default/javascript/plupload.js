@@ -13761,7 +13761,7 @@ function html5_upload(event,field_name,files)
 		}
 		if (!good_type)
 		{
-			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\{1\}/g,file_ext).replace(/\{2\}/g,valid_types.join(', ')));
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\{\1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
 			continue;
 		}
 

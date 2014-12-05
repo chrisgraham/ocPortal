@@ -224,6 +224,13 @@ There are many factors to cookie integration, and it is renowned to be problemat
 You must correct it using the config editor script, available under the 'Environment' link in the 'Configuration' box of the Admin Zone. The installer asked for this value, but many users (wrongly) do not change it from the default auto-detected value.
 Note that once the value in the config editor is changed, the 'Comcode page cache' must be cleared so as to update the value. To do this, hold down Ctrl+Alt+Shift and reload a page from your ocPortal site in a browser, when logged into ocPortal as an administrator. Clearing the caches manually is only necessary when using the config editor, as it is separated from ocPortal for fail-safe reasons.
 
+[title="3"]How do I access the web browsers inbuilt spellchecker?[/title]
+
+In the WYSWIYG editor table editing is done by right-clicking. Unfortunately web browsers have no way of merging functionality into the right-click menu (the "context menu"), so editors have to override it if they need to change it, losing the spellchecker feature in the process.
+Fortunately holding down the Ctrl key (Windows) or Option key (Mac) and right-clicking will access the browser's normal right-click menu.
+
+On Internet Explorer the problem is actually a bit different, if you have a word selected it will always show the right-click menu on that word, which can make it harder to get the table editing functionality. Make sure your caret (cursor) isn't within a word when right-clicking.
+
 [title="3"]Why do I not have commenting boxes on my CMS?[/title]
 
 You must create a comment forum with the name specified in your configuration settings. Also, commenting must be enabled for the content involved, and must be enabled globally (-- although both these elements allow commenting by default).

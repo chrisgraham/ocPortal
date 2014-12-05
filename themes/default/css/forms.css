@@ -684,6 +684,6 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 
 .cke_button__ocportal_image_icon { background: url('{$BASE_URL;}/data/ckeditor/skins/kama/icons.png') no-repeat 0 0 !important; }
 
-#htmlarea th, #htmlarea td {
+#wysiwyg_editor th, #wysiwyg_editor td {
 	border: 1px dotted {$GET,native_ui_foreground};
 }

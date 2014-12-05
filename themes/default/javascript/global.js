@@ -3164,7 +3164,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 	if (is_threaded)
 	{
-		post.value='{!QUOTED_REPLY_MESSAGE;^}'.replace(/\{1\}/g,replying_to_username).replace(/\{2\\}/g,replying_to_post_plain);
+		post.value='{!QUOTED_REPLY_MESSAGE;^}'.replace(/\\{1\\}/g,replying_to_username).replace(/\\{2\\}/g,replying_to_post_plain);
 		post.strip_on_focus=post.value;
 		post.style.color='gray';
 	} else
@@ -3231,7 +3231,7 @@ function setup_word_counter(post,count_element)
 				var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
 				var count=0;
 				if(matches) count=matches.length/2;
-				set_inner_html(count_element,'{!WORDS;}'.replace('\{1\}',count));
+				set_inner_html(count_element,'{!WORDS;}'.replace('\\{1\\}',count));
 			}
 			catch (e) {}
 		}
