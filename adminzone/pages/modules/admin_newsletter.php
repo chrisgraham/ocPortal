@@ -1124,7 +1124,12 @@ class Module_admin_newsletter extends Standard_crud_module
                     continue;
                 }
                 if (!$temp[0]->is_empty()) {
-                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '64c8870e7c75354c07b2e94f299cd38c', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]), null, false, null, '.txt', 'text');
+                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array(
+                        '_GUID' => '64c8870e7c75354c07b2e94f299cd38c',
+                        'I' => strval($i + 1),
+                        'TITLE' => $temp[1],
+                        'CONTENT' => $temp[0]
+                    ), null, false, null, '.txt', 'text');
                     $automatic[$find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
                     $i++;
                 }
@@ -1134,7 +1139,12 @@ class Module_admin_newsletter extends Standard_crud_module
                     continue;
                 }
                 if (!$temp[0]->is_empty()) {
-                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array('_GUID' => '8d1e7f448d11853b675a0949b8a0c2c9', 'I' => strval($i + 1), 'TITLE' => $temp[1], 'CONTENT' => $temp[0]), null, false, null, '.txt', 'text');
+                    $tmp = do_template('NEWSLETTER_WHATSNEW_SECTION_FCOMCODE', array(
+                        '_GUID' => '8d1e7f448d11853b675a0949b8a0c2c9',
+                        'I' => strval($i + 1),
+                        'TITLE' => $temp[1],
+                        'CONTENT' => $temp[0]
+                    ), null, false, null, '.txt', 'text');
                     $automatic[$last_find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
                     $i++;
                 }

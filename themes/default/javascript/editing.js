@@ -698,7 +698,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 		var editor=window.wysiwyg_editors[element.id];
 
 		var insert='';
-		if (plain_insert)
+		if (plain_insert || text.split('[/').length>2/*multiple tags*/)
 		{
 			insert=get_selected_html(editor)+(html?html:escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />'));
 		} else

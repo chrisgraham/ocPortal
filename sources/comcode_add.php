@@ -719,6 +719,7 @@ function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $para
     if ((($tag == 'attachment') || ($tag == 'media')) && ($param == 'type')) {
         $list = new Tempcode();
         $list->attach(form_input_list_entry('', $default == '', do_lang('MEDIA_TYPE_')));
+        require_code('media_renderer');
         $hooks = find_all_hooks('systems', 'media_rendering');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/media_rendering/' . $hook);
@@ -766,7 +767,7 @@ function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $para
  */
 function _try_for_special_comcode_tag_extra_param_ui($tag, $actual_tag, &$fields, &$fields_advanced, $hidden, $defaults)
 {
-    if (($tag == 'attachment') && (get_param_integer('multi', 0) == 0)) {
+    if ($tag == 'attachment') {
         if ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg'] != '0')) {
             $field = form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'), do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'), '_safe', $actual_tag == 'attachment_safe');
             $fields->attach($field);
@@ -858,7 +859,7 @@ function comcode_helper_script_step3()
     }
 
     $comcode = _get_preview_environment_comcode($tag);
-    $comcode_semihtml = comcode_to_tempcode($comcode, null, false, 60, null, null, true, false, false);
+    $comcode_semihtml = comcode_to_tempcode($comcode, null, false, null, null, null, true, false, false);
 
     $prefix = get_param('prefix', '', true);
 

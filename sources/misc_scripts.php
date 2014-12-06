@@ -166,6 +166,8 @@ function simple_tracker_script()
  */
 function preview_script()
 {
+    @header('X-XSS-Protection: 0');
+
     require_code('preview');
     list($output, $validation, $keyword_density, $spelling) = build_preview(true);
 

@@ -117,7 +117,7 @@ function apply_emoticons($text)
  * @param  ?MEMBER                      $on_behalf_of_member The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (null: member evaluating)
  * @return tempcode                     The tempcode generated
  */
-function comcode_to_tempcode($comcode, $source_member = null, $as_admin = false, $wrap_pos = 60, $pass_id = null, $connection = null, $semiparse_mode = false, $preparse_mode = false, $is_all_semihtml = false, $structure_sweep = false, $check_only = false, $highlight_bits = null, $on_behalf_of_member = null)
+function comcode_to_tempcode($comcode, $source_member = null, $as_admin = false, $wrap_pos = null, $pass_id = null, $connection = null, $semiparse_mode = false, $preparse_mode = false, $is_all_semihtml = false, $structure_sweep = false, $check_only = false, $highlight_bits = null, $on_behalf_of_member = null)
 {
     $matches = array();
     if (preg_match('#^\{\!([A-Z\_]+)\}$#', $comcode, $matches) != 0) {

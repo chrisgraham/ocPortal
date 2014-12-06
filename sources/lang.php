@@ -997,7 +997,7 @@ function create_selection_list_langs($select_lang = null, $show_unset = false)
  * @param  boolean                      $save_as_volatile Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
  * @return array                        The language ID save fields
  */
-function insert_lang_comcode($field_name, $text, $level, $connection = null, $insert_as_admin = false, $pass_id = null, $wrap_pos = 60, $preparse_mode = true, $save_as_volatile = false)
+function insert_lang_comcode($field_name, $text, $level, $connection = null, $insert_as_admin = false, $pass_id = null, $wrap_pos = null, $preparse_mode = true, $save_as_volatile = false)
 {
     if (is_null($connection)) {
         $connection = $GLOBALS['SITE_DB'];
@@ -1025,7 +1025,7 @@ function insert_lang_comcode($field_name, $text, $level, $connection = null, $in
  * @param  boolean                      $save_as_volatile Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
  * @return array                        The language ID save fields
  */
-function insert_lang($field_name, $text, $level, $connection = null, $comcode = false, $id = null, $lang = null, $insert_as_admin = false, $pass_id = null, $text_parsed = null, $wrap_pos = 60, $preparse_mode = true, $save_as_volatile = false)
+function insert_lang($field_name, $text, $level, $connection = null, $comcode = false, $id = null, $lang = null, $insert_as_admin = false, $pass_id = null, $text_parsed = null, $wrap_pos = null, $preparse_mode = true, $save_as_volatile = false)
 {
     require_code('lang3');
     return _insert_lang($field_name, $text, $level, $connection, $comcode, $id, $lang, $insert_as_admin, $pass_id, $text_parsed, $wrap_pos, $preparse_mode, $save_as_volatile);
@@ -1185,7 +1185,7 @@ function get_translated_tempcode($table, $row, $field_name, $connection = null, 
                     $result['text_original'] = force_clean_comcode($result['text_original']); // Highlighting only works with pure Comcode
                 }
 
-                $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+                $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                 $LAX_COMCODE = $temp;
                 return $ret;
             }
@@ -1210,7 +1210,7 @@ function get_translated_tempcode($table, $row, $field_name, $connection = null, 
                 $row[$field_name] = force_clean_comcode($row[$field_name]); // Highlighting only works with pure Comcode
             }
 
-            $ret = comcode_to_tempcode($row[$field_name], $row[$field_name . '__source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+            $ret = comcode_to_tempcode($row[$field_name], $row[$field_name . '__source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
             $LAX_COMCODE = $temp;
             return $ret;
         }

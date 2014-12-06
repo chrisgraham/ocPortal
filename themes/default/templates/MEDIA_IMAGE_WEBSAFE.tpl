@@ -8,9 +8,12 @@
 	<figure class="attachment">
 		<figcaption>{!IMAGE}</figcaption>
 		<div>
-			<div{+START,IF,{$NEQ,{WIDTH}x{HEIGHT},{$CONFIG_OPTION,thumb_width}x{$CONFIG_OPTION,thumb_width}}} style="width: {WIDTH*}px"{+END}>
-				{$PARAGRAPH,{DESCRIPTION}}
-			</div>
+			{+START,IF_NON_EMPTY,{DESCRIPTION}}
+				{$,Extra div needed to stop WYSIWYG editor making a mess}
+				<div{+START,IF,{$NEQ,{WIDTH}x{HEIGHT},{$CONFIG_OPTION,thumb_width}x{$CONFIG_OPTION,thumb_width}}} style="width: {WIDTH*}px"{+END}>
+					{$PARAGRAPH,{DESCRIPTION}}
+				</div>
+			{+END}
 
 			<div class="attachment_details">
 				<a {+START,IF,{$NOT,{$INLINE_STATS}}}onclick="return ga_track(this,'{!IMAGE;*}','{FILENAME;*}');" {+END} target="_blank" title="{+START,IF_NON_EMPTY,{DESCRIPTION}}{DESCRIPTION*} {+END}{!LINK_NEW_WINDOW}"{+START,IF_PASSED,CLICK_URL} href="{CLICK_URL*}"{+END}{+START,IF_NON_PASSED,CLICK_URL} rel="lightbox" href="{URL*}"{+END}><img{+START,IF,{$NEQ,{WIDTH}x{HEIGHT},{$CONFIG_OPTION,thumb_width}x{$CONFIG_OPTION,thumb_width}}} width="{WIDTH*}" height="{HEIGHT*}"{+END} src="{THUMB_URL*}"{+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_EDITABLE}{+START,IF,{THUMB}}{+START,IF_PASSED,NUM_DOWNLOADS} alt="{!IMAGE_ATTACHMENT,{$NUMBER_FORMAT*,{NUM_DOWNLOADS}},{CLEAN_FILESIZE*}}"{+END}{+END}{+START,IF,{$NOT,{THUMB}}} title="{DESCRIPTION*}" alt="{DESCRIPTION*}"{+END}{+END}{+START,IF_PASSED_AND_TRUE,WYSIWYG_EDITABLE}{+START,IF,{THUMB}}{+END}{+START,IF,{$NOT,{THUMB}}} title="{DESCRIPTION*}"{+END} alt="{DESCRIPTION*}"{+END} /></a>

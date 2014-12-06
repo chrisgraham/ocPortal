@@ -344,7 +344,7 @@ function get_posting_form($submit_name, $submit_icon, $post, $post_url, $hidden_
     $LAX_COMCODE = true;
     $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
     /*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */
-    $default_parsed = @comcode_to_tempcode($post, null, false, 60, null, null, true);
+    $default_parsed = @comcode_to_tempcode($post, null, false, null, null, null, true);
     $LAX_COMCODE = $temp;
 
     return do_template('POSTING_FORM', array(
@@ -998,7 +998,7 @@ function form_input_text_comcode($pretty_name, $description, $name, $default, $r
         $LAX_COMCODE = true;
         $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
         /*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */
-        $default_parsed = @comcode_to_tempcode($default, null, false, 60, null, null, true);
+        $default_parsed = @comcode_to_tempcode($default, null, false, null, null, null, true);
         $LAX_COMCODE = $temp;
     } else {
         $w = false;
@@ -1062,7 +1062,7 @@ function form_input_huge_comcode($pretty_name, $description, $name, $default, $r
         $LAX_COMCODE = true;
         $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
         /*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */
-        $default_parsed = @comcode_to_tempcode($default, null, false, 60, null, null, true);
+        $default_parsed = @comcode_to_tempcode($default, null, false, null, null, null, true);
         $LAX_COMCODE = $temp;
     } else {
         $w = false;

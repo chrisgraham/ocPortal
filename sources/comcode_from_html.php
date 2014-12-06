@@ -329,25 +329,52 @@ function semihtml_to_comcode($semihtml, $force = false)
     require_code('obfuscate');
     $semihtml = trim($semihtml);
 
+    // Optimisation, not long enough to clean up
     if (ocp_trim($semihtml, strlen($semihtml) < 30) == '') {
         return '';
     }
 
     safe_ini_set('pcre.backtrack_limit', '10000000');
 
+    // Special clean up we always do regardless...
+
+    // Our invisible characters isolating the ocp Keep markers from style run-off
+    $semihtml = str_replace('&#8203;', '', $semihtml);
+
+    // ocP Keep markers
     $semihtml = preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?' . '>#siU', 'debuttonise', $semihtml);
     $array_html_preg_replace = array();
-    $semihtml = str_replace('&#8203;', '', $semihtml);
     if (strtolower(get_charset()) == 'utf-8') {
         $semihtml = str_replace(chr(hexdec('e2')) . chr(hexdec('80')) . chr(hexdec('8b')), '', $semihtml);
     }
     $array_html_preg_replace[] = array('#^<kbd class="(ocp_keep|ocp_keep_block)"[^>]*>(.*)</kbd>$#siU', "\${2}");
     $semihtml = array_html_preg_replace('kbd', $array_html_preg_replace, $semihtml);
+
+    // Empty comments
     $semihtml = str_replace('<!-- >', '', $semihtml);
+
+    // CKEditor gibberish
     $semihtml = preg_replace('#<span id="cke_bm_[^"]+" style="display: none;\s*">&nbsp;</span>#', '', $semihtml);
 
+    // CKEditor may leave white-space on the end, we have to assume it was not intentional
     $semihtml = preg_replace('#(\[[\w\_]+)&nbsp;#', '${1} ', $semihtml);
 
+    // Media set contents doesn't need any divs, which get left from native attachments
+    $i = 0;
+    do {
+        $media_set_start = strpos($semihtml, '[media_set', $i);
+        $media_set_end = strpos($semihtml, '[/media_set]', $i);
+        if ($media_set_start !== false && $media_set_end !== false && $media_set_end > $media_set_start) {
+            $middle_before = substr($semihtml, $media_set_start, $media_set_end - $media_set_start);
+            $middle_after = preg_replace('#</?(div|br)( [^<>]*)?>#', '', $middle_before);
+            $semihtml = substr($semihtml, 0, $media_set_start) . $middle_after . substr($semihtml, $media_set_end);
+            $i = $media_set_end - (strlen($middle_before) - strlen($middle_after)) + 1;
+        }
+    } while ($media_set_start !== false && $media_set_end !== false && $media_set_end > $media_set_start);
+
+    // ---
+
+    // Maybe we don't do a conversion?
     $matches = array();
     if (((!$force) && (get_option('eager_wysiwyg') == '0') && (has_privilege(get_member(), 'allow_html'))) || (strpos($semihtml, '{$,page hint: no_smart_conversion}') !== false)) {
         $semihtml = preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU', '_img_tag_fixup_raw', $semihtml); // Resolve relative URLs
@@ -380,6 +407,8 @@ function semihtml_to_comcode($semihtml, $force = false)
         $semihtml = preg_replace('#<h1[^>]*>(.*)</h1>#Us', '[title]${1}[/title]', $semihtml);
         return $semihtml;
     }
+
+    // Okay, do a conversion...
 
     require_code('xhtml');
     $semihtml = xhtmlise_html($semihtml, true); // Needed so we can parse it right

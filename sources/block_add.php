@@ -483,7 +483,7 @@ function block_helper_script()
             $comcode = $tempcode; // This is what will be written in
         }
 
-        $comcode_semihtml = comcode_to_tempcode($comcode, null, false, 60, null, null, true, false, false);
+        $comcode_semihtml = comcode_to_tempcode($comcode, null, false, null, null, null, true, false, false);
 
         $content = do_template('BLOCK_HELPER_DONE', array(
             '_GUID' => '575d6c8120d6001c8156560be518f296',

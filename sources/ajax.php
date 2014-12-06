@@ -445,7 +445,7 @@ function comcode_convert_script()
         if (get_param_integer('forum_db', 0) == 1) {
             $db = $GLOBALS['FORUM_DB'];
         }
-        $tpl = comcode_to_tempcode($data, get_member(), false, 60, null, $db, either_param_integer('semihtml', 0) == 1/*true*/, false, false, false);
+        $tpl = comcode_to_tempcode($data, get_member(), false, null, null, $db, either_param_integer('semihtml', 0) == 1/*true*/, false, false, false);
         $evaluated = $tpl->evaluate();
         $out = '';
         if ($evaluated != '') {

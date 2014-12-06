@@ -31,7 +31,7 @@ var editor_settings={
 	fontSize_sizes : '0.6em;0.85em;1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;2em',
 	removePlugins: '',
 	//removePlugins: 'contextmenu,liststyle,tableresize,tabletools', to restore the native context menu, with spellcheck/working-copy&paste (although not really needed, see FAQ)
-	extraPlugins: ''+(use_ocportal_toolbar?'ocportal':''),
+	extraPlugins: 'autogrow'+(use_ocportal_toolbar?',ocportal':''),
 	customConfig : '',
 	bodyId : 'wysiwyg_editor',
 	baseHref : get_base_url()+'/',

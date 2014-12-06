@@ -53,6 +53,6 @@ function check_comcode($comcode, $source_member = null, $as_admin = false, $conn
             $LAX_COMCODE = true; // We don't want a simple syntax error to cause us to lose our attachments
         }
     }
-    comcode_to_tempcode($comcode, $source_member, $as_admin, 60, null, $connection, false, false, false, false, true);
+    comcode_to_tempcode($comcode, $source_member, $as_admin, null, null, $connection, false, false, false, false, true);
     $LAX_COMCODE = $temp;
 }

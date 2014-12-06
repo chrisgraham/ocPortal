@@ -347,11 +347,11 @@ function handle_has_checked_recently($id_code)
 {
     $last_check_test = $GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache', 't_title', array('t_url' => substr('!' . $id_code, 0, 255)));
     if ((is_null($last_check_test)) || (substr($last_check_test, 0, 1) != '!') || (intval(substr($last_check_test, 1)) + 60 * 60 * 24 * 30 < time())) { // only re-checks every 30 days
-        // Show when it was last tested
+        // Record when it was last tested (i.e. it will be tested now, so put this into the DB)
         $GLOBALS['SITE_DB']->query_delete('url_title_cache', array('t_url' => substr('!' . $id_code, 0, 255)), '', 1); // To make sure it can insert below
         $GLOBALS['SITE_DB']->query_insert('url_title_cache', array('t_meta_title' => '', 't_keywords' => '', 't_description' => '', 't_image_url' => '', 't_title' => '!' . strval(time()), 't_url' => substr('!' . $id_code, 0, 255)), false, true); // To stop weird race-like conditions
 
-        return false;
+        return false; // Make sure to test it after getting this result, else the above assumption wouldn't be valid
     }
 
     return true;

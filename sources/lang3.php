@@ -227,7 +227,7 @@ function _create_selection_list_langs($select_lang = null, $show_unset = false)
  * @param  boolean                      $save_as_volatile Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
  * @return array                        The language ID save fields
  */
-function _insert_lang($field_name, $text, $level, $connection = null, $comcode = false, $id = null, $lang = null, $insert_as_admin = false, $pass_id = null, $text_parsed = null, $wrap_pos = 60, $preparse_mode = true, $save_as_volatile = false)
+function _insert_lang($field_name, $text, $level, $connection = null, $comcode = false, $id = null, $lang = null, $insert_as_admin = false, $pass_id = null, $text_parsed = null, $wrap_pos = null, $preparse_mode = true, $save_as_volatile = false)
 {
     if ($connection === null) {
         $connection = $GLOBALS['SITE_DB'];
@@ -368,7 +368,7 @@ function _lang_remap($field_name, $id, $text, $connection = null, $comcode = fal
     }
 
     if ($comcode) {
-        $_text_parsed = comcode_to_tempcode($text, ($source_user === null) ? $for_member : $source_user, $as_admin, 60, $pass_id, $connection);
+        $_text_parsed = comcode_to_tempcode($text, ($source_user === null) ? $for_member : $source_user, $as_admin, null, $pass_id, $connection);
         $connection->text_lookup_cache[$id] = $_text_parsed;
         $text_parsed = $_text_parsed->to_assembly();
     } else {
@@ -493,7 +493,7 @@ function parse_translated_text($table, &$row, $field_name, $connection, $lang, $
             $LAX_COMCODE = true;
             _lang_remap($field_name, $entry, ($result === null) ? '' : $result['text_original'], $connection, true, null, $result['source_user'], $as_admin, false, true);
             if ($SEARCH__CONTENT_BITS !== null) {
-                $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+                $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                 $LAX_COMCODE = $temp;
                 $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
                 return $ret;
@@ -517,7 +517,7 @@ function parse_translated_text($table, &$row, $field_name, $connection, $lang, $
             _lang_remap($field_name, $entry, $result['text_original'], $connection, true, null, $result['source_user'], $as_admin, false, true);
 
             if ($SEARCH__CONTENT_BITS !== null) {
-                $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+                $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                 $LAX_COMCODE = $temp;
                 $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
                 return $ret;
@@ -529,7 +529,7 @@ function parse_translated_text($table, &$row, $field_name, $connection, $lang, $
             $row = $map + $row;
 
             if ($SEARCH__CONTENT_BITS !== null) {
-                $ret = comcode_to_tempcode($row[$field_name], $row[$field_name . '__source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+                $ret = comcode_to_tempcode($row[$field_name], $row[$field_name . '__source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                 $LAX_COMCODE = $temp;
                 $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
                 return $ret;
@@ -616,7 +616,7 @@ function _comcode_lang_string($lang_code)
         'the_theme' => $GLOBALS['FORUM_DRIVER']->get_theme(),
         'cc_page_title' => multi_lang_content() ? null : '',
     );
-    $map += insert_lang_comcode('string_index', $looked_up, 4, null, true, null, 60, false, true);
+    $map += insert_lang_comcode('string_index', $looked_up, 4, null, true, null, null, false, true);
     $GLOBALS['SITE_DB']->query_insert('cached_comcode_pages', $map, false, true); // Race conditions
     $parsed = get_translated_tempcode('cached_comcode_pages', $map, 'string_index');
     $COMCODE_LANG_STRING_CACHE[$lang_code] = $parsed;

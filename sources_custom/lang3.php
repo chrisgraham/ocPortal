@@ -67,7 +67,7 @@ if (!function_exists('parse_translated_text')) {
                 $LAX_COMCODE = true;
                 _lang_remap($field_name, $entry, ($result === null) ? '' : $result['text_original'], $connection, true, null, $result['source_user'], $as_admin, false, true);
                 if ($SEARCH__CONTENT_BITS !== null) {
-                    $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+                    $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                     $LAX_COMCODE = $temp;
                     $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
                     return $ret;
@@ -94,7 +94,7 @@ if (!function_exists('parse_translated_text')) {
                 _lang_remap($field_name, $entry, $result['text_original'], $connection, true, null, $result['source_user'], $as_admin, false, true);
 
                 if ($SEARCH__CONTENT_BITS !== null) {
-                    $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+                    $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                     $LAX_COMCODE = $temp;
                     $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
                     return $ret;
@@ -106,7 +106,7 @@ if (!function_exists('parse_translated_text')) {
                 $row = $map + $row;
 
                 if ($SEARCH__CONTENT_BITS !== null) {
-                    $ret = comcode_to_tempcode($row[$field_name], $row[$field_name . '__source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
+                    $ret = comcode_to_tempcode($row[$field_name], $row[$field_name . '__source_user'], $as_admin, null, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                     $LAX_COMCODE = $temp;
                     $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
                     return $ret;

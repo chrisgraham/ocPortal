@@ -112,7 +112,7 @@ function do_comcode_attachments($comcode, $type, $id, $previewing_only = false, 
     if ($has_one) {
         $LAX_COMCODE = true; // We don't want a simple syntax error to cause us to lose our attachments
     }
-    $tempcode = comcode_to_tempcode($comcode, $member, $insert_as_admin, 60, $id, $connection, false, false, false, false, false, null, $for_member);
+    $tempcode = comcode_to_tempcode($comcode, $member, $insert_as_admin, null, $id, $connection, false, false, false, false, false, null, $for_member);
     $LAX_COMCODE = $temp;
     $ATTACHMENTS_ALREADY_REFERENCED = $old_already;
     if (!array_key_exists($id, $COMCODE_ATTACHMENTS)) {

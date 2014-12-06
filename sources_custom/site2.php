@@ -78,7 +78,7 @@ if (!function_exists('_load_comcode_page_not_cached')) {
                 'the_page' => $codename,
                 'the_theme' => $GLOBALS['FORUM_DRIVER']->get_theme(),
             );
-            $map += insert_lang('cc_page_title', clean_html_title($COMCODE_PARSE_TITLE), 1, null, false, null, null, false, null, null, 60, true, true);
+            $map += insert_lang('cc_page_title', clean_html_title($COMCODE_PARSE_TITLE), 1, null, false, null, null, false, null, null, null, true, true);
             if (multi_lang_content()) {
                 $map['string_index'] = $GLOBALS['SITE_DB']->query_insert('translate', array('source_user' => $page_submitter, 'broken' => 0, 'importance_level' => 1, 'text_original' => $comcode, 'text_parsed' => $text_parsed, 'language' => $lang), true, false, true);
             } else {
@@ -126,7 +126,7 @@ if (!function_exists('_load_comcode_page_not_cached')) {
                 }
             } else {
                 $map = array();
-                $map += insert_lang('cc_page_title', clean_html_title($COMCODE_PARSE_TITLE), 1, null, false, null, null, false, null, null, 60, true, true);
+                $map += insert_lang('cc_page_title', clean_html_title($COMCODE_PARSE_TITLE), 1, null, false, null, null, false, null, null, null, true, true);
                 $map['string_index'] = $comcode;
                 $map['string_index__source_user'] = $page_submitter;
                 $map['string_index__text_parsed'] = $text_parsed;
@@ -177,7 +177,7 @@ if (!function_exists('_load_comcode_page_cache_off')) {
             $comcode = google_translate($comcode, user_lang());
         }
         $lang = user_lang();
-        $html = comcode_to_tempcode($comcode, array_key_exists(0, $_comcode_page_row) ? $_comcode_page_row[0]['p_submitter'] : get_member(), (!array_key_exists(0, $_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])), 60, ($being_included || (strpos($codename, 'panel_') !== false)) ? 'panel' : null);
+        $html = comcode_to_tempcode($comcode, array_key_exists(0, $_comcode_page_row) ? $_comcode_page_row[0]['p_submitter'] : get_member(), (!array_key_exists(0, $_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])), null, ($being_included || (strpos($codename, 'panel_') !== false)) ? 'panel' : null);
         $LAX_COMCODE = $temp;
         $title_to_use = is_null($COMCODE_PARSE_TITLE) ? null : clean_html_title($COMCODE_PARSE_TITLE);
 

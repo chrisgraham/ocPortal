@@ -90,7 +90,7 @@ function set_attachment(field_name,number,filename,multi)
 				for (var i=1;i<split_filename.length;i++)
 				{
 					window.num_attachments++;
-					insert_textbox(post,"\n\n",null,true,"<br /><br />"); // Not sure why but one break gets stripped
+					//insert_textbox(post,"\n\n",null,true,"<br /><br />"); // Not sure why but one break gets stripped
 					insert_textbox(
 						post,
 						comcode.replace(']new_'+number+'[',']new_'+window.num_attachments+'['),
@@ -122,7 +122,7 @@ function set_attachment(field_name,number,filename,multi)
 		var url='{$FIND_SCRIPT;,comcode_helper}';
 		url+='?field_name='+field_name;
 		url+='&type=step2';
-		url+='&tag='+((is_image && !multi)?'attachment_safe':'attachment');
+		url+='&tag='+(is_image?'attachment_safe':'attachment');
 		url+='&default=new_'+number;
 		if (multi) url+='&default_framed=0';
 		url+='&is_image='+(is_image?'1':'0');
@@ -158,7 +158,7 @@ function set_attachment(field_name,number,filename,multi)
 							for (var i=1;i<split_filename.length;i++)
 							{
 								window.num_attachments++;
-								insert_textbox(post,"\n\n",null,true,"<br /><br />"); // Not sure why but one break gets stripped
+								//insert_textbox(post,"\n\n",null,true,"<br /><br />"); // Not sure why but one break gets stripped     Don't want this on new UI
 								window.insert_comcode_tag(']new_'+number+'[',']new_'+window.num_attachments+'[');
 							}
 							number=''+(window.parseInt(number)+split_filename.length-1);
@@ -700,7 +700,7 @@ function init_form_saving(form_id)
 	if ((fields_to_do_counter!=0) && (biggest_length_data!=''))
 	{
 		var key;
-		biggest_length_data=biggest_length_data.replace(/<[^>]*>/g,'');
+		biggest_length_data=biggest_length_data.replace(/<[^>]*>/g,'').replace(/\n/g,' ');
 		if (biggest_length_data.length>100) biggest_length_data=biggest_length_data.substr(0,100)+'...';
 		window.fauxmodal_confirm(
 			'{!javascript:RESTORE_SAVED_FORM_DATA;^}\n\n'+biggest_length_data,

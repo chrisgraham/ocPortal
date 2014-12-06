@@ -506,7 +506,7 @@ class Forum_driver_ipb2 extends forum_driver_ipb_shared
                 }
                 $temp = $LAX_COMCODE;
                 $LAX_COMCODE = true;
-                $out[$i]['firstpost'] = comcode_to_tempcode(xhtmlise_html($post), $r['starter_id'], false, 60, null, null, false, false, true); // Assumes HTML for posts
+                $out[$i]['firstpost'] = comcode_to_tempcode(xhtmlise_html($post), $r['starter_id'], false, null, null, null, false, false, true); // Assumes HTML for posts
                 $LAX_COMCODE = $temp;
             }
         }

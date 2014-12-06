@@ -57,6 +57,8 @@ class Hook_whatsnew_quiz
             $description = get_translated_text($row['q_start_text'], null, $lang);
             $member_id = null;
             $new->attach(do_template('NEWSLETTER_WHATSNEW_RESOURCE_FCOMCODE', array('_GUID' => '1a8cad8defc5b92eded5aee376250ae5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'quiz', 'CONTENT_ID' => strval($id)), null, false, null, '.txt', 'text'));
+
+            handle_has_checked_recently($url); // We know it works, so mark it valid so as to not waste CPU checking within the generated Comcode
         }
 
         return array($new, do_lang('QUIZZES', '', '', '', $lang));

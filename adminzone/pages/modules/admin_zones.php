@@ -355,7 +355,7 @@ class Module_admin_zones
                     $comcode = file_get_contents($fullpath);
                     @flock($tmp, LOCK_UN);
                     fclose($tmp);
-                    $default_parsed = comcode_to_tempcode($comcode, null, false, 60, null, null, true);
+                    $default_parsed = comcode_to_tempcode($comcode, null, false, null, null, null, true);
                 } else {
                     $comcode = '';
                 }
