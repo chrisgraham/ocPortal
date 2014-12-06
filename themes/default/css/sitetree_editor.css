@@ -8,6 +8,11 @@
 	overflow: auto;
 }
 
+.pt_editor, .sitemap_editor {
+	height: auto;
+	overflow: visible;
+}
+
 .site_tree_left {
 	width: 50%;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
