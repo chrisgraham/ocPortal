@@ -75,9 +75,12 @@ function show_permission_setting(ob,event)
 		}
 
 		var url='{$FIND_SCRIPT_NOHTTP;,find_permissions}?serverid='+window.encodeURIComponent(serverid)+'&x='+window.encodeURIComponent(ob.name);
-		var ret=do_ajax_request(url+keep_stub(),false);
-		if (!ret) return;
-		ob.full_setting=ret.responseText;
+		do_ajax_request(url+keep_stub(),function(ret) {
+    		if (!ret) return;
+    		ob.full_setting=ret.responseText;
+        	ob.title+=' [{!permissions:DEFAULT_PERMISSION;^} '+ob.full_setting+']';
+		});
+        return;
 	}
 
 	ob.title+=' [{!permissions:DEFAULT_PERMISSION;^} '+ob.full_setting+']';
@@ -555,7 +558,13 @@ function set_permissions(setting)
 		}
 
 		// Send AJAX request
-		if (set_request!='') do_ajax_request('{$BASE_URL_NOHTTP;}/data/sitemap.php?set_perms=1'+keep_stub(),null,set_request);
+		if (set_request!='')
+        {
+            do_ajax_request('{$BASE_URL_NOHTTP;}/data/sitemap.php?set_perms=1'+keep_stub(),function() {
+            	window.fauxmodal_alert('{!permissions:PERMISSIONS_TREE_EDITOR_SAVED;^}');
+            },set_request);
+            return;
+        }
 	}
 	window.fauxmodal_alert('{!permissions:PERMISSIONS_TREE_EDITOR_SAVED;^}');
 }

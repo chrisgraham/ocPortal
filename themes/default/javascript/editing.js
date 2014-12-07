@@ -191,7 +191,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 				{
 					var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub());
 					if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
-					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(wysiwyg_data.replace(new RegExp(String.fromCharCode(8203),'g'),'')));
+					var request=do_ajax_request(url,null,'data='+window.encodeURIComponent(wysiwyg_data.replace(new RegExp(String.fromCharCode(8203),'g'),'')));
 					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName('result')[0]))
 					{
 						textarea.value='[semihtml]'+wysiwyg_data+'[/semihtml]';
@@ -221,6 +221,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 	window.wysiwyg_on=function() { return false; };
 }
 
+// Initialising the HTML editor if requested later (i.e. toggling it to on)
 if (typeof window.wysiwyg_editors=='undefined')
 {
 	window.wysiwyg_editors={};
@@ -290,7 +291,7 @@ function load_html_edit(posting_form,ajax_copy)
 			{
 				var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?semihtml=1&from_html=0'+keep_stub());
 				if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
-				var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(posting_form.elements[counter].value.replace(new RegExp(String.fromCharCode(8203),'g'),'').replace('{'+'$,page hint: no_wysiwyg}','')));
+				var request=do_ajax_request(url,null,'data='+window.encodeURIComponent(posting_form.elements[counter].value.replace(new RegExp(String.fromCharCode(8203),'g'),'').replace('{'+'$,page hint: no_wysiwyg}','')));
 				if (!request.responseXML)
 				{
 					posting_form.elements[counter].value='';
@@ -361,11 +362,13 @@ function wysiwyg_editor_init_for(element,id)
 
 	/*{+START,INCLUDE,WYSIWYG_SETTINGS,.js,javascript}{+END}*/
 
-	if (typeof window.CKEDITOR.instances[element.id]!='undefined' && window.CKEDITOR.instances[element.id]) delete window.CKEDITOR.instances[element.id]; // Workaround "The instance "xxx" already exists" error in Google Chrome
+	if (typeof window.CKEDITOR.instances[element.id]!='undefined' && window.CKEDITOR.instances[element.id])
+        delete window.CKEDITOR.instances[element.id]; // Workaround "The instance "xxx" already exists" error in Google Chrome
 	var editor=window.CKEDITOR.replace(element.id,editor_settings);
 	if (!editor) return; // Not supported on this platform
 	window.wysiwyg_editors[id]=editor;
 
+    // CSS to run inside the CKEditor frame
 	linked_sheets=document.getElementsByTagName('style');
 	var css='';
 	css+='body { width: 100%; min-height: 140px; }'; // IE9 selectability fix
@@ -399,10 +402,7 @@ function wysiwyg_editor_init_for(element,id)
 	});
 	window.lang_PREFER_OCP_ATTACHMENTS='{!javascript:PREFER_OCP_ATTACHMENTS;}';
 
-	/*window.setTimeout( function() {
-		window.scrollTo(0,0); // Otherwise jumps to last editor
-	} , 500);*/
-
+    // Mainly used by autosaving
 	editor.on('key', function (event) {
 		if (typeof element.externalonKeyPress!='undefined')
 		{
@@ -411,6 +411,7 @@ function wysiwyg_editor_init_for(element,id)
 		}
 	});
 
+    // Instant preview of Comcode
 	editor.on('instanceReady', function (event) {
 		set_up_comcode_autocomplete(id);
 
@@ -431,6 +432,7 @@ function wysiwyg_editor_init_for(element,id)
 		}
 	});
 
+    // Allow drag and drop uploading
 	editor.on('contentDom',function() {
 		editor.document.on('dragover',function(e) {
 			html5_upload_event_drag_over(e.data.$,element,element.id);
@@ -675,9 +677,10 @@ function set_textbox(element,text,html)
 		window.setTimeout(function() {
 			find_tags_in_editor(window.wysiwyg_editors[element.id],element);
 		}, 100);
-	}
-
-	element.value=text;
+	} else
+    {
+    	element.value=text;
+    }
 }
 
 /*
@@ -751,6 +754,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 			if (after==before) // Could have just been a window.scrollBy popup-blocker exception, so only do this if the op definitely failed
 				editor.document.getBody().appendHtml(insert);
 		}
+
 		return;
 	}
 

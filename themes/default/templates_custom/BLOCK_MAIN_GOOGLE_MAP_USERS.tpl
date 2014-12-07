@@ -72,7 +72,7 @@
 					try
 					{
 						navigator.geolocation.getCurrentPosition(function(position) {
-							do_ajax_request('{SET_COORD_URL;}'+position.coords.latitude+'_'+position.coords.longitude+keep_stub());
+							do_ajax_request('{SET_COORD_URL;}'+position.coords.latitude+'_'+position.coords.longitude+keep_stub(),function() {});
 							var initialLocation=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 							map.setCenter(initialLocation);
 
@@ -125,13 +125,14 @@
 			return function()
 			{
 				{$,Dynamically load a specific members details only when their marker is clicked.}
-				var reply=do_ajax_request('{$BASE_URL;}/data_custom/get_member_tooltip.php?member='+arg_member+keep_stub());
-				var content=reply.responseXML.documentElement.getElementsByTagName('result')[0].firstChild.nodeValue;
-				if (content!='')
-				{
-					info_window.setContent('<div class="global_middle_faux float_surrounder">'+content+'<\/div>');
-					info_window.open(map,arg_marker);
-				}
+				do_ajax_request('{$BASE_URL;}/data_custom/get_member_tooltip.php?member='+arg_member+keep_stub(),function(reply) {
+					var content=reply.responseXML.documentElement.getElementsByTagName('result')[0].firstChild.nodeValue;
+					if (content!='')
+					{
+						info_window.setContent('<div class="global_middle_faux float_surrounder">'+content+'<\/div>');
+						info_window.open(map,arg_marker);
+					}
+				});
 			};
 		})(marker,data_point[0])); {$,These are the args passed to the dynamic function above.}
 	}

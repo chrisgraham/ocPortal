@@ -341,6 +341,7 @@ class Hook_addon_registry_chat
                 'AVATAR_URL' => placeholder_avatar(),
                 'STAFF_ACTIONS' => $chat_actions,
                 'MEMBER' => lorem_word(),
+                'MEMBER_ID' => placeholder_number(),
                 'MESSAGE' => lorem_phrase(),
                 'TIME' => placeholder_time(),
                 'RAW_TIME' => placeholder_time(),

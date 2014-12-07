@@ -78,13 +78,18 @@
 				//message='{!ADDED_COMCODE_ONLY;}';	Kind of states the obvious
 			}
 
-			target_window.insert_comcode_tag=function(rep_from,rep_to) { // We define as a temporary global method so we can clone out the tag if needed (e.g. for multiple attachment selections)
+			target_window.insert_comcode_tag=function(rep_from,rep_to,ret) { // We define as a temporary global method so we can clone out the tag if needed (e.g. for multiple attachment selections)
 				var _comcode_semihtml=comcode_semihtml;
 				var _comcode=comcode;
 				if (typeof rep_from!='undefined')
 				{
 					_comcode_semihtml=_comcode_semihtml.replace(rep_from,rep_to);
 					_comcode=_comcode.replace(rep_from,rep_to);
+				}
+
+				if (typeof ret!='undefined' && ret)
+				{
+					return [_comcode_semihtml,_comcode];
 				}
 
 				if ((element.value.indexOf(comcode_semihtml)==-1) || (comcode.indexOf('[attachment')==-1)) // Don't allow attachments to add twice

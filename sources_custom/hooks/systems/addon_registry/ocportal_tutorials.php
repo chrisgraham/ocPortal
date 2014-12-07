@@ -180,6 +180,7 @@ The documentation is primarily maintained on our website, and this archive is on
             'docs/pages/comcode_custom/EN/tut_design.txt',
             'docs/pages/comcode_custom/EN/tut_disaster.txt',
             'docs/pages/comcode_custom/EN/tut_do.txt',
+            'docs/pages/comcode_custom/EN/tut_software_feedback.txt',
             'docs/pages/comcode_custom/EN/tut_domain_names.txt',
             'docs/pages/comcode_custom/EN/tut_downloads.txt',
             'docs/pages/comcode_custom/EN/tut_drinking.txt',

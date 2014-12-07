@@ -127,13 +127,13 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 
 		var save_function=function() {
 			// Call AJAX request
-			var response=do_ajax_request(input.form.action,false,input.name+'='+window.encodeURIComponent(input.value));
+			var response=do_ajax_request(input.form.action,null,input.name+'='+window.encodeURIComponent(input.value));
 
 			// Some kind of error?
 			if (((response.responseText=='') && (input.value!='')) || (response.status!=200))
 			{
 				var session_test_url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
-				var session_test_ret=do_ajax_request(session_test_url+keep_stub(true));
+				var session_test_ret=do_ajax_request(session_test_url+keep_stub(true),null);
 
 				if ((session_test_ret.responseText!='') && (session_test_ret.responseText!=null)) // If it failed, see if it is due to a non-confirmed session
 				{

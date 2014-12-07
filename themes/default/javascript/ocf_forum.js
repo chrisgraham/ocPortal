@@ -19,14 +19,14 @@ function ocf_check_poll(form,min,max,error)
 
 function ignore_ocf_notification(ignore_url,ob)
 {
-	do_ajax_request(ignore_url);
+	do_ajax_request(ignore_url,function() {
+    	var o=ob.parentNode.parentNode.parentNode.parentNode;
+    	o.parentNode.removeChild(o);
 
-	var o=ob.parentNode.parentNode.parentNode.parentNode;
-	o.parentNode.removeChild(o);
-
-	var nots=get_elements_by_class_name(document,'ocf_member_column_pts');
-	if ((nots[0]) && (get_elements_by_class_name(document,'ocf_notification').length==0))
-		nots[0].parentNode.removeChild(nots[0]);
+    	var nots=get_elements_by_class_name(document,'ocf_member_column_pts');
+    	if ((nots[0]) && (get_elements_by_class_name(document,'ocf_notification').length==0))
+    		nots[0].parentNode.removeChild(nots[0]);
+	});
 
 	return false;
 }

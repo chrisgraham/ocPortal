@@ -987,34 +987,35 @@ function confirm_session(callback)
 	var url='{$FIND_SCRIPT_NOHTTP;,confirm_session}'+keep_stub(true);
 
 	// First see if session already established
-	var ret=null;
 	require_javascript('javascript_ajax');
-	if (typeof window.do_ajax_request!='undefined') ret=do_ajax_request(url+keep_stub(true),false);
-	if (!ret) return;
+    if (typeof window.do_ajax_request=='undefined') return;
+	var ret=do_ajax_request(url+keep_stub(true),function(ret) {
+    	if (!ret) return;
 
-	if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
-	{
-		callback(true);
-		return;
-	}
+    	if (ret.responseText==='') // Blank means success, no error - so we can call callback
+    	{
+    		callback(true);
+    		return;
+    	}
 
-	// But non blank tells us the username, and there is an implication that no session is confirmed for this login
+    	// But non blank tells us the username, and there is an implication that no session is confirmed for this login
 
-	if (ret.responseText=='{!GUEST;}') // Hmm, actually whole login was lost, so we need to ask for username too
-	{
-		window.fauxmodal_prompt(
-			'{!USERNAME;^}',
-			'',
-			function(promptt)
-			{
-				_confirm_session(callback,promptt,url);
-			},
-			'{!_LOGIN;}'
-		);
-		return;
-	}
+    	if (ret.responseText=='{!GUEST;}') // Hmm, actually whole login was lost, so we need to ask for username too
+    	{
+    		window.fauxmodal_prompt(
+    			'{!USERNAME;^}',
+    			'',
+    			function(promptt)
+    			{
+    				_confirm_session(callback,promptt,url);
+    			},
+    			'{!_LOGIN;}'
+    		);
+    		return;
+    	}
 
-	_confirm_session(callback,ret.responseText,url);
+    	_confirm_session(callback,ret.responseText,url);
+    });
 }
 function _confirm_session(callback,username,url)
 {
@@ -1025,12 +1026,12 @@ function _confirm_session(callback,username,url)
 		{
 			if (promptt!==null)
 			{
-				var ret=do_ajax_request(url,false,'login_username='+window.encodeURIComponent(username)+'&password='+window.encodeURIComponent(promptt));
-
-				if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
-					callback(true);
-				else
-					_confirm_session(callback,username,url); // Recurse
+				do_ajax_request(url,function(ret) {
+    				if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
+    					callback(true);
+    				else
+    					_confirm_session(callback,username,url); // Recurse
+				},'login_username='+window.encodeURIComponent(username)+'&password='+window.encodeURIComponent(promptt));
 			} else callback(false);
 		},
 		'{!_LOGIN;}',
@@ -2127,7 +2128,7 @@ function trigger_resize(and_subframes)
 
 	for (var i=0;i<frames.length;i++)
 	{
-		if ((frames[i].src==window.location.href) || (frames[i].contentWindow==window) || ((typeof window.parent.frames[frames[i].id]!='undefined') && (window.parent.frames[frames[i].id]==window)))
+		if ((frames[i].src==window.location.href) || (frames[i].contentWindow==window) || ((frames[i].id!='') && (typeof window.parent.frames[frames[i].id]!='undefined') && (window.parent.frames[frames[i].id]==window)))
 		{
 			if (frames[i].style.height=='900px') frames[i].style.height='auto';
 			window.parent.resize_frame(frames[i].name);

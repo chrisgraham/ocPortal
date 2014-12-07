@@ -22,5 +22,7 @@ function recalculate_price(form)
 		}
 		post+=form.elements[i].name+'='+window.encodeURIComponent(value)+'&';
 	}
-	set_inner_html(document.getElementById('price'),escape_html(do_ajax_request('{$FIND_SCRIPT;,booking_price_ajax}'+keep_stub(true),null,post).responseText));
+    do_ajax_request('{$FIND_SCRIPT;,booking_price_ajax}'+keep_stub(true),function(result) {
+    	set_inner_html(document.getElementById('price'),escape_html(result.responseText));
+    },post);
 }

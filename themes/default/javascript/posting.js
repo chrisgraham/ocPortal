@@ -154,16 +154,25 @@ function set_attachment(field_name,number,filename,multi)
 						// Add in additional Comcode buttons for the other files selected at the same time
 						if (multi)
 						{
+                            var comcode_semihtml='',comcode='';
 							var split_filename=document.getElementById('txtFileName_file'+window.num_attachments).value.split(/:/);
 							for (var i=1;i<split_filename.length;i++)
 							{
 								window.num_attachments++;
 								//insert_textbox(post,"\n\n",null,true,"<br /><br />"); // Not sure why but one break gets stripped     Don't want this on new UI
-								window.insert_comcode_tag(']new_'+number+'[',']new_'+window.num_attachments+'[');
+								var tmp=window.insert_comcode_tag(']new_'+number+'[',']new_'+window.num_attachments+'[',true);
+                                comcode_semihtml+=tmp[0];
+                                comcode+=tmp[1];
 							}
 							number=''+(window.parseInt(number)+split_filename.length-1);
 
-							if (suffix!='') insert_textbox(post,suffix,null,true,suffix);
+							if (suffix!='')
+                            {
+                                comcode+=suffix;
+                                comcode_semihtml+=suffix;
+                            }
+
+                            insert_textbox(post,comcode,null,true,comcode_semihtml);
 						}
 
 						// Add field for next one
@@ -680,7 +689,7 @@ function init_form_saving(form_id)
 
 			if ((cookie_value!='') && (cookie_value!='0')) // Fields are auto-saved individually, but e know if something was auto-saved via the cookie reference
 			{
-				result=do_ajax_request('{$FIND_SCRIPT;,autosave}?type=retrieve'+keep_stub(),false,'key='+window.encodeURIComponent(cookie_name));
+				result=do_ajax_request('{$FIND_SCRIPT;,autosave}?type=retrieve'+keep_stub(),null,'key='+window.encodeURIComponent(cookie_name));
 				if ((result) && (result.responseText) && (posting_form.elements[i].value.length<result.responseText.length))
 				{
 					fields_to_do[name]=result.responseText.replace(/\u0000/g,'');

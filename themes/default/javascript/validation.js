@@ -706,6 +706,10 @@ function __standard_alternate_field_create_listeners(field,refreshFunction)
 
 function _standard_alternate_fields_get_object(field_name)
 {
+    // Maybe it's an N/A so no actual field
+    if (field_name=='') return null;
+
+    // Try and get direct field
 	var field=document.getElementById(field_name);
 	if (field) return field;
 

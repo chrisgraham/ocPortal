@@ -26,9 +26,19 @@
 			window.detect_interval=window.setInterval(
 				function() {
 					{+START,IF_PASSED,CHANGE_DETECTION_URL}
-						if ((typeof window.detect_change!='undefined') && (detect_change('{CHANGE_DETECTION_URL;/}','{REFRESH_IF_CHANGED;/}')) && ((!document.getElementById('post')) || (document.getElementById('post').value=='')))
+						if (typeof window.detect_change!='undefined')
+						{
+							detect_change('{CHANGE_DETECTION_URL;/}','{REFRESH_IF_CHANGED;/}',function() {
+								if ((!document.getElementById('post')) || (document.getElementById('post').value==''))
+								{
+									call_block('{URL;/}','',document.getElementById('{$GET;,wrapper_id}'),false,null,true);
+								}
+							});
+						}
 					{+END}
-							call_block('{URL;/}','',document.getElementById('{$GET;,wrapper_id}'),false,null,true);
+					{+START,IF_NON_PASSED,CHANGE_DETECTION_URL}
+						call_block('{URL;/}','',document.getElementById('{$GET;,wrapper_id}'),false,null,true);
+					{+END}
 				},
 				{REFRESH_TIME%}*1000);
 		{+END}

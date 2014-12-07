@@ -1,6 +1,6 @@
 {$SET,rand,{$RAND}}
 
-<div class="xhtml_substr_no_break media_set">
+<div class="{$,xhtml_substr_no_break Enable if you do not want the grid-style layout }media_set">
 	<div id="media_set_{$GET*,rand}">
 		{$SET,raw_video,1}
 		{MEDIA}
@@ -53,7 +53,7 @@
 			}
 
 			// If you only want a single image-based thumbnail
-			if (contains_video) {$,Remove this 'if' if you do not want the grid-style layout (plus remove the media_set class)}
+			if (contains_video) {$,Remove this 'if' (so it always runs) if you do not want the grid-style layout (plus remove the media_set class from the outer div)}
 			{
 				var media_set_html=' \
 					<figure class="attachment"{+START,IF_NON_EMPTY,{WIDTH}} style="width: {WIDTH*}px"{+END}> \

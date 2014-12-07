@@ -288,8 +288,12 @@ function build_preview($multi_return = false)
 
     // This is to get the Comcode attachments updated to the new IDs
     if (!is_null($new_post_value)) {
-        $new_post_value_html = comcode_to_tempcode($new_post_value, null, false, null, null, $db, true);
-        if (strpos($new_post_value_html->evaluate(), '<!-- CC-error -->') === false) {
+        $_new_post_value_html = comcode_to_tempcode($new_post_value, null, false, null, null, $db, true);
+
+        require_code('comcode_from_html');
+        $new_post_value_html = wysiwygify_media_set($_new_post_value_html->evaluate());
+
+        if (strpos($new_post_value_html, '<!-- CC-error -->') === false) {
             $output->attach(do_template('PREVIEW_SCRIPT_CODE', array('_GUID' => 'bc7432af91e1eaf212dc210f3bf2f756', 'NEW_POST_VALUE_HTML' => $new_post_value_html, 'NEW_POST_VALUE' => $new_post_value)));
         }
     }

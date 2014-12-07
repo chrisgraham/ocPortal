@@ -1,22 +1,34 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Comcode and the attachment system[/title]
 
-Comcode is the ocPortal 'mark-up language'. Using Comcode you can add rich text to your website with minimal effort, but with maximum control. Unlike HTML, you do not need to use any complex syntax unless you wish to create special formatting effects, or embed dynamic elements. Comcode does a great deal of work itself to make things so easy for you -- behind a simple, intuitive, and easy to use set of syntaxes is a very sophisticated 'parsing' (parsing is the name for the technique of conversion of one language into a much more 'finicky' lower level language, HTML in this case) system. Comcode adds a lot of power that HTML cannot itself provide; for example, with Comcode you can easily add an automatically-generated table of contents, or draw on the power from any of our pre-designed dynamic 'blocks' (blocks are described in our 'Advanced Pages of information (via Comcode)' tutorial).
+Comcode is the ocPortal 'mark-up language'.
 
-Many fields in ocPortal support Comcode, and 'Comcode pages' may be used to layout pages and menus of your site without having to do complex template editing, and without needing to use a restrictive layout editor. The front pages and panels of ocPortal are, by default, Comcode pages.
+The main uses of Comcode are:
+ - Intuitive content authoring (written just like plain text, no paragraph tags, special white-space rules, etc)
+ - Tying in dynamic functionality (such as filtered content)
+ - Tying in prebuilt special-effects (such as tabs or carousels)
+ - Basic website layout
+ - As a container for HTML (and other standard web technologies), for more advanced layout
+
+Many fields in ocPortal support Comcode, and 'Comcode pages' may be used to layout pages and panels of your site without having to do complex template editing, and without needing to use a restrictive layout configurer. The front pages and panels of ocPortal are, by default, Comcode pages.
+
+Unlike HTML, you do not need to use any complex syntax for Comcode -- Comcode is written more naturally, and is converted into HTML for you (combining in whatever ocPortal content/data is needed to make things work). Comcode adds a lot of power that HTML cannot itself provide; for example, with Comcode you can easily add an automatically-generated table of contents, or draw on the power from any of our pre-designed dynamic 'blocks' (blocks are described in our 'Advanced Pages of information (via Comcode)' tutorial).
+
+To be clear, Comcode is not a general language for designing websites. It is not in general an HTML-substitute, it is designed to work alongside it (it can embed it). Your primary design would still be done using standard technologies (HTML, CSS, JavaScript). The ocPortal panels and front page are, by default, Comcode pages, so you can lay it out all in Comcode, but not much more than a block-block-block kind of sequential layout -- you'll drop to the level of HTML (via the Comcode 'semihtml' or 'html' tags) for fine-tuned layout.
 
 Those familiar with forum systems may see that Comcode is similar to [concept]BBCode[/concept] in some respects.
+There isn't a lot of need to directly learn Comcode, because our editor has a tag assistant to build Comcode tags for you. Never-the-less, it doesn't hurt to know some of the tools you can use, especially if you choose to have the WYSIWYG editor disabled.
 
 [contents]decimal,lower-alpha[/contents]
 
-[title="2"]Syntax[/title]
+[title="2"]The basics/title]
 
-Comcode is written and laid out as plain-text. Within this plain text certain syntaxes can be used to make changes or additions:
+Comcode is primarily written and laid out as plain-text. Special tags (and other codes) are then interpreted with meanings:
 [list]
 [*] emoticon codes may be used (for OCF, these are listed in the 'The ocPortal emoticon system' tutorial)
 [*] Comcode tags may be used to change content, such as [tt][b]text[/b][/tt] to make some text bold
 [*] Comcode tags may be used to add content, such as  [tt][block]main_contact_us[/block][/tt] to add a dynamic comments box
 [*] horizontal lines may be added by placing a few '-'s on their own line
-[*] HTML style entities can be use to place special characters inside the text
+[*] HTML-style entities can be use to place special characters inside the text (e.g. [tt]&reg;[/tt])
 [*] member profile links can be placed by typing [tt]{{username-goes-here}}[/tt], or [tt]{{?username-goes-here}}[/tt] to show extra details when the mouse is hovered over and send a notification to the referenced member ([concept]OCF[/concept] only)
 [*] member profile links can also be placed by typing the simpler syntax (OCF-only, always shows the extra details), [tt]@username-goes-here[/tt]; the simpler syntax is a bit more flimsy due to the possibility for ambiguity if usernames have spaces
 [*] [concept]Wiki+[/concept] page-links can be placed by typing [tt][[pagename-goes-here]][/tt], or [tt][[pagename-goes-here#anchor]][/tt]
@@ -26,11 +38,8 @@ Comcode is written and laid out as plain-text. Within this plain text certain sy
 [*] certain shortcuts may be used, such as [tt](c)[/tt] for (c) (described in separate section)
 [/list]
 
-The following functions are also performed automatically by the Comcode parser:
- - Hyperlinks may be written directly, and are automatically detected
- - Long text is forcibly word-wrapped if it would break layout
-
-There is also an XML version of Comcode, which is described in further detail in the 'Advanced Comcode' tutorial.
+Additionally:
+ - Hyperlinks may be written directly, and are automatically detected; these will be interpreted by the media rendering system (for example, a YouTube video hyperlink would result in the video being embedded)
 
 [title="3"]Table syntax[/title]
 
@@ -134,17 +143,7 @@ ocPortal provides a [concept]WYSIWYG[/concept] editor for those who would rather
 
 The HTML produced by the WYSIWYG editor is normally automatically converted back into Comcode (unless the "Convert HTML to Comcode" option is disabled). However, if a full conversion is not possible, the Comcode 'semihtml' tag is used in order to allow a partial conversion. If this is the case, the remaining HTML would then be subjected to the whitelist/blacklist filter (see the "Security" section of the "Advanced Comcode" tutorial), unless the Comcode was submitted by staff in which case it would not be filtered.
 
-[title="2"]Code formatting[/title]
-
-If you are using a lot of complex code, it is nice to be able to use white-space (e.g. indentation) to lay it all out. The 'semihtml' tag will allow you to do this, as white-space will be collapsed just like it is in normal HTML.
-
-[title="2"]Tag reference[/title]
-
-Tags may be easily added via the "Comcode Tag Assistant" feature in ocPortal, which lists all tags and provides an input mechanism for each. In addition, new tags may be created (discussed in the 'Advanced Comcode' tutorial).
-
-[title="3"]Notes[/title]
-
-When only certain parameters are allowed they are shown as, [i]param[/i]=option1|option2(|...) for brevity. In that example it means you could choose to use either "option1" or "option2" as values for the "param" parameter.
+[title="2"]Wrapping[/title]
 
 When a tag is said to 'wrap' Comcode, it essentially adds on properties. For example:
 [code]
@@ -152,15 +151,18 @@ When a tag is said to 'wrap' Comcode, it essentially adds on properties. For exa
 [/code]
 The 'text' is both emboldened and italicised.
 
-A 'string' is just a length of text. That text may be a number written as text, or any other form of text.
+[title="2"]Spacing[/title]
 
-For tags where it makes no sense for certain syntaxes to be interpreted within the embedded contents of the tag, the syntaxes will not be interpreted. For example, the 'code' and 'html' tags naturally do not actually parse Comcode within them.
+Comcode will create HTML that is laid out similarly to the Comcode. So, if you type two spaces between words, you'll see those two spaces. If you do 5 blank lines, you'll (roughly) see 5 blank lines.
 
-For tags that would add their own blank lines (visually speaking) after them (e.g. [tt]title[/tt]), blank lines in Comcode after them are skipped in order to allow the Comcode itself to be attractive without affecting layout.
+If you are using a lot of complex code, it is nice to be able to use white-space (e.g. indentation) to lay it all out. The 'semihtml' tag will allow you to do this, as runs of white-space will be collapsed into a single white-space (like it is in HTML).
 
-Some parameter values actually support Comcode themselves. To use this, you will need to use the \" escaping syntax described in the 'Tag syntax' section if you need to quote parameter values.
+A small note about generated HTML:
+For tags where generated-HTML would add automatic blank lines (visually speaking) after them (e.g. [tt]title[/tt]), blank lines in Comcode after them are skipped in order to allow the Comcode itself to be attractive without affecting layout.
 
-Few tags really need parameters (i.e. most parameters are optional). Often giving parameters will greatly improve the usefulness of a tag though: for example, without a 'param' parameter, the quote tag does virtually nothing except put something in a box.
+[title="2"]Tag reference[/title]
+
+Tags may be easily added via the "Comcode Tag Assistant" feature in ocPortal, which lists all tags and provides an input mechanism for each. In addition, new tags may be created (discussed in the 'Advanced Comcode' tutorial).
 
 [title="3"]Formatting tags[/title]
 
@@ -169,6 +171,8 @@ These tags define formatting, but some also have semantic meaning (meaning that 
 [title="3"]Semantic tags[/title]
 
 These are 'semantic' tags, meaning they do very few (if any) display changes, but code up extra meanings into your documents.
+
+A note about paragraphs:
 Comcode has excellent support for semantics, but there is just one small area where it isn't able to support them, which is paragraphs. In Comcode the XHTML5 is created using XHTML <kbd>br</kbd> (line break) tags to separate lines. This has few practical ramifications known to us, and it is by necessity to make sure Comcode produces validating and consistent XHTML5. However if you want to use 'p' tags, you should use the Comcode 'semihtml' tag so that you have full control over how whitespace will display.
 
 [title="2"]Attachments[/title]

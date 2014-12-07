@@ -318,9 +318,33 @@ function force_clean_comcode($comcode)
 }
 
 /**
+ * Strip down the contents of the media_set tag for easier WYSIWYG-editing
+ *
+ * @param  LONG_TEXT                    $semihtml The Semi-HTML to be converted
+ * @return LONG_TEXT                    The equivalent Comcode
+ */
+function wysiwygify_media_set($semihtml)
+{
+    // Media set contents doesn't need any divs, which get left from native attachments
+    $i = 0;
+    do {
+        $media_set_start = strpos($semihtml, '[media_set', $i);
+        $media_set_end = strpos($semihtml, '[/media_set]', $i);
+        if ($media_set_start !== false && $media_set_end !== false && $media_set_end > $media_set_start) {
+            $middle_before = substr($semihtml, $media_set_start, $media_set_end - $media_set_start);
+            $middle_after = preg_replace('#</?(div|br|figure)( [^<>]*)?>#', '', $middle_before);
+            $middle_after = preg_replace('#<figcaption( [^<>]*)?>.*</figcaption>#Us', '', $middle_after);
+            $semihtml = substr($semihtml, 0, $media_set_start) . $middle_after . substr($semihtml, $media_set_end);
+            $i = $media_set_end - (strlen($middle_before) - strlen($middle_after)) + 1;
+        }
+    } while ($media_set_start !== false && $media_set_end !== false && $media_set_end > $media_set_start);
+    return $semihtml;
+}
+
+/**
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
- * @param  LONG_TEXT                    $semihtml The Semi-HTML to converted
+ * @param  LONG_TEXT                    $semihtml The Semi-HTML to be converted
  * @param  boolean                      $force Whether to force full conversion regardless of settings
  * @return LONG_TEXT                    The equivalent Comcode
  */
@@ -359,18 +383,7 @@ function semihtml_to_comcode($semihtml, $force = false)
     // CKEditor may leave white-space on the end, we have to assume it was not intentional
     $semihtml = preg_replace('#(\[[\w\_]+)&nbsp;#', '${1} ', $semihtml);
 
-    // Media set contents doesn't need any divs, which get left from native attachments
-    $i = 0;
-    do {
-        $media_set_start = strpos($semihtml, '[media_set', $i);
-        $media_set_end = strpos($semihtml, '[/media_set]', $i);
-        if ($media_set_start !== false && $media_set_end !== false && $media_set_end > $media_set_start) {
-            $middle_before = substr($semihtml, $media_set_start, $media_set_end - $media_set_start);
-            $middle_after = preg_replace('#</?(div|br)( [^<>]*)?>#', '', $middle_before);
-            $semihtml = substr($semihtml, 0, $media_set_start) . $middle_after . substr($semihtml, $media_set_end);
-            $i = $media_set_end - (strlen($middle_before) - strlen($middle_after)) + 1;
-        }
-    } while ($media_set_start !== false && $media_set_end !== false && $media_set_end > $media_set_start);
+    $semihtml = wysiwygify_media_set($semihtml);
 
     // ---
 
