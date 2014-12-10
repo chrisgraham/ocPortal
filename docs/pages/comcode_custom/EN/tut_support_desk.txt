@@ -27,17 +27,22 @@ Four different ocPortal systems may be used to provide such a support desk:
 [/surround]
 [media width="150" description="Viewing support tickets as staff" float="right"]data_custom/images/docs/support_list_tickets.png[/media]
 [media width="150" description="Viewing a support ticket" float="left"]data_custom/images/docs/support_show_ticket.png[/media]
-However, if these two advantages are not significant, we recommend use of the Discussion Forum directly.
 
-To use the Support Ticket system, you must not be using the 'none' forum driver, and you must have created the support forum that is referenced in the ocPortal configuration (for [concept]OCF[/concept] it's auto-created). It is usual to use page access permissions to restrict access to the support ticket page so that only those that may request support may access the system. Support tickets are not linked to on the menu by default- use the entry point finder tool in the menu editor to create a link.
-
-Support tickets are created simply by visiting the support ticket page, clicking to add a ticket, and filling in the appropriate details. Upon completion of this, an e-mail is sent to the staff, and the staff can then respond to the ticket as appropriate; it should be noted that staff should not reply to the support ticket forum-topic itself, because if they do so, no 'staff have replied' message will be sent back to the ticket starter. This said, the forum interface should be used for any ticket post editing and deleting, as the support ticket system itself does not provide this.
+Support tickets are created simply by visiting the support ticket page, clicking to add a ticket, and filling in the appropriate details. Upon completion of this, an e-mail is sent to the staff, and the staff can then respond to the ticket as appropriate.
 
 The support ticket system supports attachments, but only in [concept]OCF[/concept].
 
 Guests may create support tickets, but they need to leave their e-mail address (there is a field for this) if they want a reply.
 
 Staff will see all open support tickets when they visit the support ticket page, but users may only seen their own. If the support ticket list is left open then it will automatically make your computer beep if a new ticket is made, and refresh to show that new ticket. Likewise, if a support ticket is left open, your computer will beep and the ticket will refresh, if a new post is made in the ticket.
+
+[title="3"]Requirements[/title]
+
+ - you must not be using the 'none' forum driver (don't worry, you probably aren't)
+ - you must have created the support forum that is referenced in the ocPortal configuration (don't worry, for regular [concept]OCF[/concept] users it's auto-created)
+ - users will need a way to get to the support system; a link is in the default menus, and may also be created using the menu editor
+
+[title="3"]Approach to support functions[/title]
 
 [html]
 <table class="columned_table results_table wide_table">
@@ -59,7 +64,7 @@ Staff will see all open support tickets when they visit the support ticket page,
    </tr>
    <tr>
       <td>ASSIGNING</td>
-      <td>If more than one member of staff are viewing the same support ticket then a notification will be shown; also all staff monitoring the ticket are considered assigned to it</td>
+      <td>If more than one member of staff are viewing the same support ticket then a notification will be shown; when you reply, you are automatically assigned to the ticket; multiple staff may be assigned, manually or automatically; you may unassign yourself or other staff</td>
    </tr>
    <tr>
       <td>NOTIFICATIONS</td>
@@ -67,7 +72,7 @@ Staff will see all open support tickets when they visit the support ticket page,
    </tr>
    <tr>
       <td>COORDINATION</td>
-      <td>A topic-like reply feature is provided. There's a staff-only reply feature</td>
+      <td>A topic-like reply feature is provided. There's a staff-only reply feature to make hidden messages only the staff may see</td>
    </tr>
    <tr>
       <td>RESOLUTION</td>
@@ -79,6 +84,26 @@ Staff will see all open support tickets when they visit the support ticket page,
    </tr>
 </table>
 [/html]
+
+[title="3"]Relationship with the forum[/title]
+
+As described earlier, the forum is used to store the tickets.
+
+The ticket forum should not generally be used for making or managing support tickets. It is also generally configured as closed to regular users (i.e. staff-only).
+The tickets module is the primary interface for making or managing tickets.
+Advantages of using the tickets module include:
+ - the ability to split replies into separate tickets
+ - ticket assignment
+ - ticket type filtering
+ - creation of new tickets (manually creating a new topic is not automatically a valid ticket)
+ - staff conflict detection
+ - automatic display and alert when someone replies to an open ticket
+
+The tickets are stored on the forum as they are built on top of our feedback subsystem, which is designed to integrate well with forums (so you can find new posts there etc). This includes all forums ocPortal supports, not just [concept]OCF[/concept]. The feedback system is also what powers comments (e.g. comments on news). The main interface is not built on forums as we cannot extend the features of what is a potentially third-party forum. Each individual topic viewed from the forum will give you a link taking you back to view that topic as a ticket, to help you get over to there if you're coming from the forum.
+
+[title="3"]Defining who gets support[/title]
+
+It is usual to use page access permissions to restrict access to the support ticket page, so that only those that may request support may access the system.
 
 [title="3"]Integration with e-mail[/title]
 
@@ -104,6 +129,8 @@ You can also use square brackets to specify the ticket type to log as. ocPortal 
 The Messaging system is designed to allow staff to easily receive messages and organise themselves with respect to those messages. It is different from the Support Ticket system because the Messaging system is designed around staff planning, and unlike support tickets there is no inbuilt reply mechanism to reply to messages received (although people may leave their contact details). It is optimised for managing feedback instead of maintaining customer relationships.
 
 The Messaging system hooks up to the [tt]main_contact_us[/tt] block. This block gets placed on a Comcode page of your choice, and you use it to gather messages. Any messages gathered will be e-mailed out to any staff who have notifications enabled for the particular usage of the block. Staff can set up their notifications by visiting the Comcode page where the block is placed. When staff are e-mailed they get a link to view the message, and discuss it between themselves. One member of staff may opt to take ownership over the message, which gives them the responsibility of actioning/implementing whatever it implies is required (e.g. if it is a suggestion, implementing that suggestion).
+ 
+[title="3"]Approach to support functions[/title]
 
 [html]
 <table class="columned_table results_table wide_table">
@@ -151,6 +178,8 @@ The Messaging system hooks up to the [tt]main_contact_us[/tt] block. This block 
 The Discussion Forum (our own OCF, at least) is designed to be an extremely efficient multi-purpose working environment: forums are at their heart an interactive communication medium. There are also a number of special features, such as post templates, and multi moderations, that make the forums particularly appropriate for use to provide support.
 
 For more information on this, see the 'Running a discussion forum based help desk' tutorial.
+ 
+[title="3"]Approach to support functions[/title]
 
 [html]
 <table class="columned_table results_table wide_table">
@@ -201,6 +230,8 @@ Most forms of ocPortal content support commenting, via the feedback system. For 
 The advantage of the feedback system over the Discussion Forums is simply that the discussion is attached directly to actual content. For most forms of content, these discussions are unlikely to be classifiable as 'support', but the download system in particular may contain questions and answers relating to the download itself.
 
 To use the feedback commenting system, you must not be using the 'none' forum driver, and you must have created the comment topic forum that is referenced in the ocPortal configuration (for [concept]OCF[/concept] it's auto-created).
+ 
+[title="3"]Approach to support functions[/title]
 
 [html]
 <table class="columned_table results_table wide_table">
