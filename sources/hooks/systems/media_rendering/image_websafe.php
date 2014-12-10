@@ -128,7 +128,7 @@ class Hook_media_rendering_image_websafe
                 $file_thumb = get_custom_file_base() . '/uploads/auto_thumbs/' . $new_name;
                 if (function_exists('imagepng')) {
                     if (!file_exists($file_thumb)) {
-                        convert_image($url_direct_filesystem, $file_thumb, $auto_width ? -1 : intval($attributes['width']), $auto_height ? -1 : intval($attributes['height']), ($auto_width && $auto_height) ? $attributes['width'] : -1, false);
+                        convert_image($url_direct_filesystem, $file_thumb, $auto_width ? -1 : intval($attributes['width']), $auto_height ? -1 : intval($attributes['height']), ($auto_width && $auto_height) ? intval($attributes['width']) : -1, false);
                     }
                     $attributes['thumb_url'] = get_custom_base_url() . '/uploads/auto_thumbs/' . rawurlencode($new_name);
                     if (($auto_width) || ($auto_height)) {

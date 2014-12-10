@@ -68,6 +68,94 @@ Recall that ocPortal zones are sub-directories of your site, which operate with 
  - CMS ([tt]/cms[/tt]) -- Where the content is managed
  - Forum ([tt]/forum[/tt]) -- Only for installations using OCF
 
+[title="4"]How do you create a new mini-module?[/title]
+
+The ocPortal mini-module feature lets you create new ocPortal pages very easily. You don't need to code to any particular structure or API, just write plain PHP and output as normal from it. You have full access to ocPortal's APIs for when you need to interface with the rest of ocPortal.
+
+Mini-modules allow:
+ - PHP programmers with no experience with ocPortal to hit the ground running
+ - experienced ocPortal developers to develop simple pages without any coding overhead
+ - easier porting of third-party PHP scripts into ocPortal (you may need to change some links around, and remove HTML header tags -- but it's a lot easier than doing a rewrite)
+
+We will present 3 examples. To try each out, simply save the code into a [tt]site/pages/minimodules_custom/example_page.php[/tt] file, then call it up via [tt]http://yourbaseurl/site/index.php?page=example_page[/tt].
+As you can see, [tt]site/pages/minimodules_custom/example_page.php[/tt] corresponds to a page called [tt]example_page[/tt], in the [tt]site[/tt] zone.
+
+As mini-modules are just a kind of ocPortal page, you can control access to them using normal ocPortal page permissions (i.e. set from Admin Zone > Security > Permission Tree Editor).
+
+[title="5"]Example 1[/title]
+
+The standard introductory example, Hello World.
+
+[code="PHP"]
+<?php
+
+echo 'Hello World';
+[/code]
+
+[title="5"]Example 2[/title]
+
+Now let's do some simple ocPortal API calls.
+
+[code="PHP"]
+<?php
+
+$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+echo '<p>Hello, '.htmlentities($username).'.</p>';
+
+$time=get_timezoned_date(time());
+echo '<p>It is '.htmlentities($time).'.</p>';
+[/code]
+
+[title="5"]Example 3[/title]
+
+Need to output a simple spreadsheet? You are allowed to set headers and [tt]exit();[/tt] within your page, so that ocPortal doesn't continue doing anything more after your spreadsheet has output and your code has run.
+
+[code="PHP"]
+<?php
+
+header('Content-type: text/plain');
+header('Content-disposition: attachment; filename="example.csv"');
+
+// Some arbitrary data to output
+$example_data=array(
+	array(
+		'country'=>'UK',
+		'capital'=>'London',
+	),
+	array(
+		'country'=>'France',
+		'capital'=>'Paris',
+	),
+);
+
+foreach ($example_data as $i=>$row)
+{
+	// If first row, show show headings
+	if ($i==0)
+	{
+		foreach (array_keys($row) as $heading)
+		{
+			echo csv_escape($heading).',';
+		}
+		echo "\n";
+	}
+
+	// Show values
+	foreach ($row as $value)
+	{
+		echo csv_escape($value).',';
+	}
+	echo "\n";
+}
+
+exit();
+
+function csv_escape($value)
+{
+	return str_replace('"','""',$value);
+}
+[/code]
+
 [title="4"]How do you create a new full-module?[/title]
 
 A module is a PHP file that defines one class. For a page in the 'site' zone named 'example', the file would be [tt]site/pages/modules/example.php[/tt] (or [tt]site/pages/modules_custom/example.php[/tt] if this module is non-official, or a modified version of an official module). Our module 'example' would contain a class named 'Module_example'. Usually this class does not inherit, although some modules do inherit from a class named 'Standard_crud_module', which is used for acceleration/standardising development of add/edit/delete user interfaces.
@@ -136,13 +224,20 @@ Modules are responsible for the installation, upgrading, and uninstallation of t
 For example, the 'downloads' module sets up:
 1) database tables that relate to downloads
 2) database indexes that relate to downloads
-3) configuration options that relate to downloads
 and removes:
 1) database tables that relate to downloads (and associated indexes)
-2) configuration options that relate to downloads
-3) entries in shared database tables that relate to downloads (access permissions and trackbacks)
-4) uploaded files that relate to downloads
-5) stored values that relate to downloads
+2) entries in shared database tables that relate to downloads (access permissions and trackbacks)
+3) uploaded files that relate to downloads
+4) stored values that relate to downloads
+
+ocPortal modules auto-install/auto-upgrade when accessed.
+If a user is installing an addon, it will install any modules/blocks within it, if said module/block was not already installed.
+If a user is uninstalling an addon, it will uninstall any modules/blocks within it.
+
+If you are supplying an updated module to a user, outside of the formal addon process:
+ - If the database structure has changed, code the module with correct versioning to update the database structure (versioning is described further down)
+ - Make sure the user does [b]not[/b] uninstall the old module, because we do not wish to lose the data
+ - Get the user to simply replace the old module file with your new one; just accessing it will then cause it to auto-upgrade
 
 [title="5"]The '[tt]install[/tt]' function[/title]
 
@@ -213,7 +308,55 @@ Be aware that the '[tt]get_option[/tt]' function always returns a string regardl
 The code in the [tt]install[/tt] function needs to analyse the parameters passed to see if an upgrade is being performed (and from what version) or if a new install is being performed. The code is then structured to act accordingly.
 For a new module there is no need to consider how upgrades would happen.
 
-See the note above about [tt]update_require_upgrade[/tt] needing to be set for the upgrade details to be passed.
+Your code will follow a pattern like:
+
+[code="PHP"]
+/**
+ * Standard modular info function.
+ *
+ * @return ?array	Map of module info (NULL: module is disabled).
+ */
+function info()
+{
+	$info=array();
+	...
+	$info['version']=2;
+	// Setting 'update_require_upgrade' makes ocPortal realise it can do an upgrade
+	//  At run-time it will compare the version in the database, to the version above and auto-upgrade if required
+	$info['update_require_upgrade']=1;
+	...
+	return $info;
+}
+
+/**
+ * Standard modular uninstall function.
+ */
+function uninstall()
+{
+	...
+}
+
+/**
+ * Standard modular install function.
+ *
+ * @param  ?integer	What version we're upgrading from (NULL: new install)
+ * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+ */
+function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
+{
+	if (is_null($upgrade_from))
+	{
+		// Code for initial install goes here
+		...
+	}
+
+	if ((!is_null($upgrade_from)) && ($upgrade_from<2))
+	{
+		// Code from upgrading from v1 goes here (1<2)
+		...
+	}
+}
+[/code]
 
 [title="5"]The '[tt]uninstall[/tt]' function[/title]
 

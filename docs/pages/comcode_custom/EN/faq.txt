@@ -458,7 +458,7 @@ Please read about the GUID feature in our [page="_SEARCH:tut_tempcode"]tempcode 
 
 [b]Can I put PHP in templates?[/b]
 This is not supported for security and architectural reasons. We could have very easily allowed this, but it would mean that themes could essentially be distributed that delete files, for instance. Templates could still be abused, to steal password cookies, for example: but direct server attacks are less likely.
-Instead, you can create a miniblock, and then place that miniblock into a template using the [tt]BLOCK[/tt] symbol.
+Instead, you can create a mini-block, and then place that mini-block into a template using the [tt]BLOCK[/tt] symbol.
 
 [title="3"]Is there a CSS map?[/title]
 

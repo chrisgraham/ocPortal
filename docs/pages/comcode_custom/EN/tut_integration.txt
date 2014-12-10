@@ -127,11 +127,38 @@ The draw-back on relying on this auto-resizing method is that it is somewhat com
 
 [title="3"]Naturally[/title]
 
-The most preferable method of getting the other system to display inside ocPortal is to 'port' it to ocPortal, as a properly constructed module, minimodule, block or miniblock. This would be very possible for most systems, but also a very significant programming effort.
+The most preferable method of getting the other system to display inside ocPortal is to 'port' it to ocPortal, as a properly constructed module, mini-module, block or mini-block. This would be very possible for most systems, but also a very significant programming effort.
 
-The quickest way is to use minimodules/miniblocks. These are simplified equivalents to the normal ocPortal blocks and modules- anything echoed out is put into the output stream in the place you'd expect. They are placed in the correspondingly named directories in ocPortal's file-system, and then you can just use them as normal pages/blocks.
+The quickest way is to use mini-modules/mini-blocks. These are simplified equivalents to the normal ocPortal blocks and modules- anything echoed out is put into the output stream in the place you'd expect. They are placed in the correspondingly named directories in ocPortal's file-system, and then you can just use them as normal pages/blocks.
 
-ocPortal is written so that it treats 'PHP notices' as fatal errors. This is a part of our quality standards. Some poorly written PHP code, however, is designed for PHP configurations that suppress these notices. To work around this we turn off a lot of our standard checking settings when minimodules or miniblocks are loaded.
+ocPortal is written so that it treats 'PHP notices' as fatal errors. This is a part of our quality standards. Some poorly written PHP code, however, is designed for PHP configurations that suppress these notices. To work around this we turn off a lot of our standard checking settings when mini-modules or mini-blocks are loaded.
+
+[title="4"]Integrations via direct PHP code[/title]
+
+You may wish to integrate with another database (i.e. not ocPortal's main database), third-party web-services, or other programming languages.
+
+These complexities can be dealt with in the same way as any PHP programmer would deal with them, while making use of ocPortal's APIs only as is convenient.
+
+For example, you can use:
+ - standard PHP database functionality to open a new connection (MySQL, SQL Server, Oracle, ...)
+ - PHP's [tt]file_get_contents[/tt] function to download from REST web services
+ - PHP's [tt]file_get_contents[/tt] function to download from scripts written in another language, bridging their output over into the ocPortal page
+ - PHP's [url="SOAP support"]http://php.net/manual/en/book.soap.php[/url] to integrate with more complex REST services (assuming the PHP SOAP extension is installed)
+ - PHP's [url="COM support"]http://php.net/manual/en/book.com.php[/url] to integrate to ASP code (assuming the PHP COM extension is installed)
+
+[title="5"]Example[/title]
+
+This simple example shows how to bridge one web system, to another. The example embeds Google into your page. Naturally, this is a silly example, but the same technique can be used to bridge your own scripts, should you be more comfortable programming in a language other than PHP.
+
+[code="PHP"]
+<?php
+
+echo '<div style="position: relative; overflow: hidden">';
+echo file_get_contents('http://google.com/');
+echo '</div>';
+[/code]
+
+Note I had to add a little CSS to stop Google trying to render parts of its layout on-top of the ocPortal website.
 
 [title="3"]Third-party APIs (for developers)[/title]
 

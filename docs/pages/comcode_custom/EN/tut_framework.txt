@@ -56,7 +56,7 @@ All this was done, without touching the core ocPortal code. The ocPortal API mad
 The process of writing the module went along this basic route:
 1) The functionality of the module was decided upon, and tests designed that would allow us to test all this functionality worked once the module was finished (we usually define tests first, write a module in one go, and then carry out all the tests: it usually is the most efficient and robust way for us to write the code)
 2) The database schema was designed for the module, by consideration and then simply listing of the tables and fields that would be needed to adequately (and consistently with our standards and the guidance of our expertise)
-3) The shell for the main module was written, based on that which all other modules (other than minimodules and abstracted CRUD modules) uses
+3) The shell for the main module was written, based on that which all other modules (other than mini-modules and abstracted CRUD modules) uses
 4) It was decided what screens that module would use, and these were all assigned code-names. Functions were created for these code-names, and the run function was filled in to call them up according to the 'type' parameter (as featured in all other modules)
 5) Install and uninstall functions were written for the module, according to the database schema
 6) Add, edit, and delete backend functions were written for the data of the module

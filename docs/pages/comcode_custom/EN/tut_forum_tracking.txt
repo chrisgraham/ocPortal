@@ -56,7 +56,7 @@ As well as automatic notifications, you can enable notifications for topics manu
 
 You can also mark whole forums for notifications, by clicking the "monitor" button in the forum view. Note that if you enable notifications in a forum it does not automatically enable for sub-forums of that forum.
 
-In fact, since ocPortal 8, you can set notifications for virtually any category of content. This can all be configured within your member settings.
+In fact you can set notifications for virtually any category of content. This can all be configured within your member settings.
 [/surround]
 [title="2"]Disabling notifications[/title]
 [surround]

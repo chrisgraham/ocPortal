@@ -244,7 +244,7 @@ By default the catalogue is configured to allow product reviews, but you may tur
 
 Once you are happy with your set of fields, you can add categories and entries to your catalogue. Once you have entries, and your eCommerce configuration is configured, users can start using your store. Point them to the catalogue to do their shopping, and from there they will be able to navigate to the shopping cart and finalise and pay for their order.
 
-Be aware that once ordered, a catalogue entry shouldn't usually be deleted. You can unvalidate the entries instead. This is vital to your ledger integrity. As of ocPortal 9.0.7 you can forcibly purge an item from the database and all past order history for it, but it's not usually recommended.
+Be aware that once ordered, a catalogue entry shouldn't usually be deleted. You can unvalidate the entries instead. This is vital to your ledger integrity. There is an option to forcibly purge an item from the database and all past order history for it, but it's not usually recommended.
 
 You may customise the appearance of the store in the usual way of editing catalogue templates (the 'products' catalogue already has most of the templates overridden with eCommerce-tuned styles, so you do not need to worry about accidentally altering the look of non-eCommerce catalogues).
 

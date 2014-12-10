@@ -2143,7 +2143,7 @@ function browser_matches($code)
                 $BROWSER_MATCHES_CACHE[$code] = false;
                 return false;
             }
-            $BROWSER_MATCHES_CACHE[$code] = (strpos($browser, 'android') === false); // As of ocPortal 5.1, using CKEditor
+            $BROWSER_MATCHES_CACHE[$code] = (strpos($browser, 'android') === false); // Using CKEditor, which does not yet support Android
             return $BROWSER_MATCHES_CACHE[$code];
         case 'windows':
             $BROWSER_MATCHES_CACHE[$code] = (strpos($os, 'windows') !== false) || (strpos($os, 'win32') !== false);

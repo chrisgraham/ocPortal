@@ -128,11 +128,9 @@ header('X-Frame-Options: SAMEORIGIN');
 
 If you use vBulletin 3.5 or earlier put:
 [code]
-$SITE_INFO[vb_version]=3.5;
+$SITE_INFO['vb_version']=3.5;
 [/code]
 into [tt]_config.php[/tt].
-
-(this flipped around in ocPortal 4 -- previously you had to change _config.php for 3.6 to work)
 
 [title="3"]phpBB2[/title]
 

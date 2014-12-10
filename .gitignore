@@ -54,6 +54,7 @@ docs/api
 ; themes/[abcefghijklmnopqrstuvwxyz0123456789]*
 *.[1234567890]*
 comcode_custom
+!docs/pages/comcode_custom
 html_custom
 spelling
 themes/default/images_custom/*logo.png

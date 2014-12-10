@@ -13,7 +13,7 @@ ocPortal is built on top of standard web/Internet technologies. These technologi
  - [abbr="eXtensible HyperText Markup Language"]XHTML5[/abbr] (and microformats) -- this is the standard for web pages
  - [abbr="Cascading Style Sheets"]CSS[/abbr] -- this is the standard for styling web pages; it ties into the XHTML
  - JavaScript (aka ECMA-Script) [i](optional)[/i] and [abbr="Document Object Model"]DOM[/abbr] -- this is the standard to make web pages interactive; it ties into the XHTML
- - Dublin Core -- this is the standard for adding meta-data to web pages; it ties into the XHTML (ocPortal 4.2+)
+ - Dublin Core -- this is the standard for adding meta-data to web pages; it ties into the XHTML
  - PHP -- this is the programming language ocPortal is written in
  - Web server -- this is the software applicaton that serves data over HTTP, and ties into PHP; Apache and [abbr="Internet Information Server"]IIS[/abbr] are examples of the web server applications ocPortal can use
  - [abbr="Structured Query Language"]SQL[/abbr] -- this is the standard for accessing/manipulating data inside databases; ocPortal uses it to talk to the database (e.g. [tt]SELECT * FROM table WHERE something='somevalue'[/tt]), which is usually the MySQL database application

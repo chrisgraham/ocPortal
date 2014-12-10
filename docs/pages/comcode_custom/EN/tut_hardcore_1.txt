@@ -37,13 +37,13 @@ Since we are going to make a block, we'll quickly go over the fundamentals of wh
 
 Blocks are fully self-contained units. Blocks have no limit in the amount of code or page space they may take. There are two kinds:
 [list]
-[*]miniblock (very simple to code, no class required, recommended for quick coding)
+[*]mini-block (very simple to code, no class required, recommended for quick coding)
 [*](regular) block (supports caching, supports install/uninstall code, uses OOP, recommended for mature codebases)
 [/list]
 
-We will create a miniblock for this example, as follows:
+We will create a mini-block for this example, as follows:
 [tt]Block name:[/tt] [tt]main_counter[/tt] (the PHP file will be [tt]sources_custom/miniblocks/main_counter.php[/tt])
-[tt]Coding method:[/tt] A simple miniblock (without using template or language file).
+[tt]Coding method:[/tt] A simple mini-block (without using template or language file).
 
 [codebox]
 <?php
@@ -89,7 +89,7 @@ Some famous event...
 
 [title="2"]Exercises[/title]
 
-At the end of each of the tutorial in this series I will be releasing some exercises out. If you complete them, or have trouble completing them, post about it in the forum for this tutorial!
+At the end of each of the tutorial in this series I will be releasing some exercises out. If you complete them, or have trouble completing them, post about it in the Developing forum.
 
 [title="3"]Exercise-1: Hit counter[/title]
 

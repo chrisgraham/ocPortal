@@ -60,15 +60,15 @@ SQL is beyond the scope of this tutorial, but basic queries fit one of the follo
 
 [title="2"]ocPortal database structure[/title]
 
-[i]This is an advanced section, and you may wish to skip it.[/i]
+[i]This is an advanced section designed for programmers, and you may wish to skip it.[/i]
 
 At the time of writing, ocPortal uses 176 tables when all addons are installed.
 
 For the technically inclined, the database table structure is mostly in 4NF form, with the main exception being fields that are for cacheing purposes (such as post count) and other fields that remove the need for complex and slow 'JOIN's or 'EXIST's clauses.
 
-A common cause of confusion is where text is located. ocPortal is designed to support content translatable into multiple languages -- text is located in the 'translate' table, and linked into other places by language ID. The 'translate' table is also used to store parsed Comcode, which works out as a very clean solution. If an entry in the 'translate' table is being edited by hand, and has Comcode, then setting the text_parsed field to NULL will cause the Comcode to be re-parsed on demand.
+ocPortal is designed to support content translatable into multiple languages, although this is off by default. If enabled, then text is located in the 'translate' table, and linked into other places by language ID. The 'translate' table is also used to store parsed Comcode, which works out as a very clean solution. If an entry in the 'translate' table is being edited by hand, and has Comcode, then setting the text_parsed field to blank will cause the Comcode to be re-parsed on demand.
 
-Since ocPortal 2, ocPortal has been designed to work with many different databases, not just mySQL. We dropped this feature, because like multiple language content, we could not thoroughly beta test it, especially due to very strange and varying limitations and differences in different database systems. However, ocPortal still avoids using mySQL-specific features wherever possible. Instead of using highly specialist (if they exist at all) queries to analyse database table structure, for systems such as backup or OCF-member-id-migration, ocPortal actually stores database structure in the 'db_meta' table. ocPortal's own installation techniques for creating and changing database tables will properly update this table, and if modifications are being made, it is preferable that the db_meta table is updated to reflect them.
+ocPortal has been designed to be able to work with many different databases, not just mySQL. We dropped official support for this feature, because like multiple language content, we could not thoroughly beta test it, especially due to very strange and varying limitations and differences in different database systems. However, ocPortal still avoids using mySQL-specific features wherever possible. Instead of using highly specialist (if they exist at all) queries to analyse database table structure, for systems such as backup or OCF-member-id-migration, ocPortal actually stores database structure in the 'db_meta' table. ocPortal's own installation techniques for creating and changing database tables will properly update this table, and if modifications are being made, it is preferable that the db_meta table is updated to reflect them.
 
 [title="2"]Transferring data between websites[/title]
 

@@ -10,9 +10,9 @@ Today we're going to make a module that will allow you to track visitors progres
 
 We'll also keep tally of whether they visited the purchase module and whether they joined, to get an idea on how 'successful the visit was' from the webmaster's point of view.
 
-As with the previous tutorial, we'll avoid making things difficult for ourselves, and just write our code in English, without using templates. As we're making a module this time, we'll be implementing using a 'minimodule'.
+As with the previous tutorial, we'll avoid making things difficult for ourselves, and just write our code in English, without using templates. As we're making a module this time, we'll be implementing using a 'mini-module'.
 
-Here is our adminzone/pages/minimodules_custom/admin_tracking.php file:
+Here is our adminzone/pages/mini-modules_custom/admin_tracking.php file:
 
 [codebox]
 <?php
@@ -72,10 +72,10 @@ print_r($failure);
 ?>
 [/codebox]
 
-[media width="150" description="Our minimodule in action on {$BRAND_BASE_URL}. Heavily censored to protect our and our visitors privacy ;)." float="right"]data_custom/images/docs/hardcore_censor.png[/media]
-We call up the minimodule by going to [tt]http://baseurl/adminzone/?page=admin_tracking[/tt], as we saved it as a page in the Admin Zone.
+[media width="150" description="Our mini-module in action on {$BRAND_BASE_URL}. Heavily censored to protect our and our visitors privacy ;)." float="right"]data_custom/images/docs/hardcore_censor.png[/media]
+We call up the mini-module by going to [tt]http://baseurl/adminzone/?page=admin_tracking[/tt], as we saved it as a page in the Admin Zone.
 
-The minimodule is actually very simple -- mainly it just looks for all the hits to the website where a 'from' parameter was given, and then puts out all the URLs they visited since entering the site, by date, along with some other basic information. It also looks for whether each hit user joined or went to purchase and tallies it against each 'from' value it finds.
+The mini-module is actually very simple -- mainly it just looks for all the hits to the website where a 'from' parameter was given, and then puts out all the URLs they visited since entering the site, by date, along with some other basic information. It also looks for whether each hit user joined or went to purchase and tallies it against each 'from' value it finds.
 
 [title="2"]But but but...[/title]
 
@@ -91,11 +91,11 @@ If you're really serious about programming, read lots of books and write lots of
 
 [title="3"]Players module[/title]
 
-Make a minimodule that shows the top 10 gift point givers, and the top 10 gift point receivers.
+Make a mini-module that shows the top 10 gift point givers, and the top 10 gift point receivers.
 
 [title="3"]Be imaginative[/title]
 
-Make a minimodule of your own design, and release it as an addon.
+Make a mini-module of your own design, and release it as an addon.
 
 [title="2"]Points challenge[/title]
 

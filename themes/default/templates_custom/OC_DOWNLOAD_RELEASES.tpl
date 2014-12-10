@@ -2,7 +2,7 @@
 <div class="automatic option left blue">
 	<div class="s_wrap"><p class="s">
 		This package (&ldquo;quick installer&rdquo;) will self-extract on your server and automatically set all permissions.<br /><br />
-		Needs <span class="comcode_concept_inline" onmouseout="if (window.deactivateTooltip) deactivateTooltip(this,event);" onmousemove="if (window.activateTooltip) repositionTooltip(this,event);" onmouseover="if (window.activateTooltip) activateTooltip(this,event,'Either your server must support FTP and you have the PHP FTP extension, or you need a &ldquo;SuExec&rdquo; server (ocPortal 5.1+ only)','auto');">FTP</span> or suEXEC on your server.
+		Needs <span class="comcode_concept_inline" onmouseout="if (window.deactivateTooltip) deactivateTooltip(this,event);" onmousemove="if (window.activateTooltip) repositionTooltip(this,event);" onmouseover="if (window.activateTooltip) activateTooltip(this,event,'Either your server must support FTP and you have the PHP FTP extension, or you need a &ldquo;SuExec&rdquo; server','auto');">FTP</span> or suEXEC on your server.
 	</p></div>
 	<div class="go_wrap"><p class="go">
 		<span class="details">v{QUICK_VERSION*} | {QUICK_FILESIZE*}</span>

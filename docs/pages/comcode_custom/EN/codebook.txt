@@ -57,6 +57,7 @@ Page output is displayed  by wrapping the primary page output within  the GLOBAL
 
 An introduction to the ocPortal framework:
  - [page="docs:tut_framework"]The ocPortal programming framework[/page]
+ - [page="docs:tut_sql"]Manually editing your database with phpMyAdmin[/page] (see the "ocPortal database structure" section which contains details of the directory structure, and database system)
 
 [title="2"]Back-end (more about 'models' and 'sub-controllers')[/title]
 
@@ -134,7 +135,7 @@ ocPortal contains many "cross-cutting" features that are often present in differ
  - Feedback: rating, commenting, trackbacks (instructions for implementation provided in this book)
  - Permissions (instructions for implementation provided in this book)
  - Virtual roots (see how breadcrumb code for the news addon handles virtual roots -- it provides the capability to define them, and also applies them in the way it decides the root of a breadcrumb trail)
- - Edit lists (filtered according to what the logged-in user can actually see) (just define a [tt]create_selection_list_whatever function[/tt] like other similar functions)
+ - Edit lists (filtered according to what the logged-in user can actually see) (just define a [tt]create_selection_list_whatever[/tt] function like other similar functions)
  - Do-next interface (instructions for implementation provided in this book)
  - Blocking guests trying to edit something owned by Guest (a bug if it isn't, but it would be good to try and abstract this)
  - Ditto blocking editing interface for something you don't have category access to

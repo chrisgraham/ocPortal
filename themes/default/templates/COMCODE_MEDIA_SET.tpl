@@ -41,7 +41,7 @@
 					{
 						as[i].title=as[i].title.replace('{!LINK_NEW_WINDOW;}','').replace(/^\s+/,'');
 
-						imgs_{$GET%,rand}.push([as[i].href,as[i].title,false]);
+						imgs_{$GET%,rand}.push([as[i].href,(as[i].title=='')?as[i].childNodes[0].alt:as[i].title,false]);
 						imgs_thumbs_{$GET%,rand}.push(as[i].childNodes[0].src);
 
 						as[i].onclick=function(x) { return function() { open_images_into_lightbox(imgs_{$GET%,rand},x); return false; } }(x);

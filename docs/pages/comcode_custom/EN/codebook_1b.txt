@@ -221,6 +221,142 @@ Generally any code in a file suffixed '[tt]_action.php[/tt]', and often code in 
 
 For AJAX handler scripts, less may be loaded into the global scope than indicated in the table, and less may generally be initialised -- for performance reasons.
 
+[title="3"]Results tables[/title]
+
+If you are coding up a screen to display multiple database results you may want to use results tables.
+You could simply create your own table within a template, which would not be hard. However, using results tables you may be able to avoid creating a template at all, plus you get free sorting and pagination support.
+
+Use cases:
+ - an index screen
+ - if you just have a few fields so want to show all entries at once
+
+First call up the code:
+[code]
+require_code('templates_results_table');
+[/code]
+
+Then you'll do a query, probably using something like:
+[code="PHP"]
+$rows = $GLOBALS['SITE_DB']->query_select('table',array('*'));
+[/code]
+(actually it'll be a bit more complex, when we support pagination)
+
+These are the three main functions for the UI:
+ - [tt]results_field_title[/tt] (defines field header templating)
+ - [tt]results_entry[/tt] (defines individual result row templating)
+ - [tt]results_table[/tt] (defines the surrounding interface)
+
+You compose some [tt]results_field_title[/tt] call results together using PHP arrays, to form the combined header.
+
+You compose some [tt]results_entry[/tt] call results together using Tempcode attach, to put the rows together.
+
+Then you pass it, and some other stuff, to [tt]results_table[/tt].
+
+You will also need to implement pagination and sorting. That is simply done within your initial database query. [tt]results_table[/tt] will automatically bind UI widgets to the GET parameters needed to determine sorting and the start position in the result set, and the maximum number of results to return.
+
+Finally, you can use the [tt]RESULTS_TABLE_SCREEN[/tt] template to put your result into a screen, avoiding the need to even create a screen template (in most cases -- you may want to add other things into the page).
+
+A complete example (assumes a table named [tt]example[/tt], with fields [tt]name[/tt] and [tt]add_date[/tt]):
+[code="PHP"]
+// We're using this API
+require_code('templates_results_table');
+
+// Read in current sorting, and apply security
+$current_ordering = get_param('sort', 'name ASC');
+if (strpos($current_ordering, ' ') === false) {
+    warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+}
+list($sortable, $sort_order) = explode(' ', $current_ordering, 2); // Invalid parameter
+$sortables = array(
+    'name' => do_lang_tempcode('CODENAME'),
+    'add_date' => do_lang_tempcode('ADDED'),
+);
+if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable, $sortables))) {
+    log_hack_attack_and_exit('ORDERBY_HACK');
+}
+
+// Render header (with support for sorting within the header)
+$hr = array(
+    do_lang_tempcode('CODENAME'),
+    do_lang_tempcode('ADDED'),
+);
+$header_row = results_field_title($hr, $sortables, 'sort', $sortable . ' ' . $sort_order);
+
+// Query, with pagination
+$max_rows = $GLOBALS['SITE_DB']->query_select_value('example', 'COUNT(*)');
+if ($max_rows == 0) {
+    inform_exit(do_lang_tempcode('NO_ENTRIES'));
+}
+$max = get_param_integer('example_max', 20);
+$start = get_param_integer('example_start', 0);
+$rows = $GLOBALS['SITE_DB']->query_select('example', array('name', 'add_date'), null, 'ORDER BY ' . $current_ordering, $max, $start);
+
+// Render table rows
+foreach ($rows as $row) {
+    $fr = array(
+        $row['name'],
+        get_timezoned_date($row['add_date']),
+    );
+
+    $fields->attach(results_entry($fr), true);
+}
+
+// Render table
+$table = results_table('Example', $start, 'example_start', $max, 'example_max', $max_rows, $header_row, $fields, $sortables, $sortable, $sort_order);
+
+// Render screen
+return do_template('RESULTS_TABLE_SCREEN', array(
+    'TITLE' => $title,
+    'TEXT' => '',
+    'RESULTS_TABLE' => $table;
+));
+[/code]
+
+[title="3"]Breadcrumbs[/title]
+
+If you are making a new module you are likely to want to implement breadcrumbs.
+
+Let's say you have a front page to the module, and you have something in a category with a parent category "Bar" and that has a parent category "Foo" and that has a parent category "Root".
+
+This would create: [tt]Module index > Root > Foo > Bar[/tt]
+
+[code="PHP"]
+breadcrumb_set_parents(array(
+    array('_SELF:_SELF:misc','Module index'), // type=misc
+    array('_SELF:_SELF:category:1','Root'), // type=category&id=1
+    array('_SELF:_SELF:category:3','Foo'), // type=category&id=3
+    array('_SELF:_SELF:category:6','Bar'), // type=category&id=6
+));
+[/code]
+
+[tt]_SELF:_SELF[/tt] means "current zone, current page". It stops you having to hard-code zone and page names.
+
+ocPortal automatically puts stuff in front, and puts the title of the current page on the end (as a non-link), so it would show something like: [tt]Home > Module index > Root > Foo > Bar > Something[/tt]
+
+Of course, in real code you are more likely to put this together in a loop, so your code will be more like:
+[code="PHP"]
+$breadcrumbs=array();
+$_category_id=$category_id;
+do // Recursively find parents and put each as a breadcrumb
+{
+    list($_category_id,$_category_name)=find_parent($_category_id);
+    if ($_category_id!==NULL)
+    {
+        $breadcrumbs[]=array('_SELF:_SELF:category:'.strval($_category_id),$_category_name);
+    }
+}
+while ($_category_id!==NULL);
+$breadcrumbs[]=array('_SELF:_SELF:misc','Module index');
+breadcrumb_set_parents(array_reverse($breadcrumbs));
+[/code]
+
+The above code is just illustrative. The [tt]find_parent[/tt] function is not real, nor is [tt]$category_id[/tt] -- substitute as appropriate for whatever you write/use yourself.
+
+If the title of the current page is too long or looks weird in the breadcrumbs, you can override it
+[code="PHP"]
+breadcrumb_set_self('Thing');
+[/code]
+
 [title="3"]Database structure[/title]
 
 We describe ocPortal's database structure in a [url="separate document"]{$BRAND_BASE_URL}/docs/codebook_data_dictionary.doc[/url].
@@ -331,7 +467,7 @@ It has to achieve a number of key design goals (these are implemented in ocPorta
   - For example, a template might include a block, which might require some CSS -- this CSS would need to be included in the HTML <head> before the block itself was output
   - The Shift encoding feature ('SHIFT_ENCODE' directive to set, 'SHIFT_ENCODING' symbol to get) has to work. Shift encoding provides the ability to define things in one template, and have them used in another: clearly something rather difficult for a template engine to implement.
 
-Tempcode in ocPortal 4+ works via a very elaborate concept that we call the 'closure tree'. Essentially Tempcode objects link to form a tree structure via parameters. If you pass some Tempcode to a template as a parameter, that parameter is encoded into the Tempcode tree of the result of the template call.
+Tempcode works via a very elaborate concept that we call the 'closure tree'. Essentially Tempcode objects link to form a tree structure via parameters. If you pass some Tempcode to a template as a parameter, that parameter is encoded into the Tempcode tree of the result of the template call.
 
 Each Tempcode object consists of a series of 'closures' (stored as a 'seq_part'). These closures are a pair: a PHP function name, and a set of parameters to that function. Essentially each closure represents a template call -- the PHP function name is the name of a compiled version of that template (templates are compiled to PHP code), and the parameters are the parameters to the template. A Tempcode object represents more than one template call because Tempcode gets attached together using the 'attach' method. This is why we say 'seq' -- as in, the sequence of attachments stored inside a particular Tempcode object.
 
@@ -341,7 +477,7 @@ Some complex tracking goes on to ensure that the correct template functions are 
 
 When I say "function call" and "function", this is actually simulated for performance reasons (PHP uses huge amounts of memory to store real functions). It actually happens via an 'eval' call. There are a few exceptions to this where real calls are used, when a template is so commonly used that we think it does justify getting loaded up as a real function.
 
-Tempcode in ocPortal 3 worked in an entirely different way to ocPortal 4. It was actually an interpreted programming language, and hence was quite a lot slower (whilst PHP of course is an interpreted language itself, it is fast because it is interpreted by assembly code). Rather than being compiled PHP, it essentially used the equivalent of op-codes and operands. Tempcode in ocPortal 2 was similar to ocPortal 3, except a bit more primitive -- ocPortal 3 would 'flatten' the template tree, and was very clever about being able to merge certain things to increase execution speed and memory consumption.
+Tempcode in ocPortal 3 worked in an entirely different way to ocPortal 4+. It was actually an interpreted programming language, and hence was quite a lot slower (whilst PHP of course is an interpreted language itself, it is fast because it is interpreted by assembly code). Rather than being compiled PHP, it essentially used the equivalent of op-codes and operands. Tempcode in ocPortal 2 was similar to ocPortal 3, except a bit more primitive -- ocPortal 3 would 'flatten' the template tree, and was very clever about being able to merge certain things to increase execution speed and memory consumption.
 
 I have just explained the history of Tempcode so I can make an important point -- Tempcode is a bit of a black-box, and the internal engine can be rewritten so long as the API, written language, and semantics, are preserved. If the Tempcode language is ever changed, the caches need to be cleared -- to clear away any compiled Tempcode (we never store anything primarily in compiled Tempcode -- instead we store in Comcode and cache the Tempcode).
 
@@ -377,7 +513,7 @@ This way ocPortal has the best of both worlds:
  - Newbie developers will be protected for the vast majority of cases.
 
 Saying [tt]I_UNDERSTAND_SQL_INJECTION[/tt] disables extra scanning of queries to ensure they are always made in the most secure way and that custom data within the queries is correctly escaped. The scanning slightly impacts performance.
-Saying [tt]I_UNDERSTAND_XSS[/tt] disables automatic escaping of template parameters and language string parameters (which can result in accidental double-escaping in output) and any input parameters that make it into the output of a minimodule/miniblock.
+Saying [tt]I_UNDERSTAND_XSS[/tt] disables automatic escaping of template parameters and language string parameters (which can result in accidental double-escaping in output) and any input parameters that make it into the output of a mini-module/mini-block.
 Saying [tt]I_UNDERSTAND_PATH_INJECTION[/tt] disables hack-attack errors from being generated if any URL parameter has ".." or null bytes in it.
 
 [title="3"]Input sanitisation, the right way[/title]
@@ -544,6 +680,16 @@ Valid product types are:
 [*][tt]get_product_dispatch_type[/tt] -- This optional function will return the dispatch type for a product. It will return "manual" or "automatic" -- most products are "automatic" (they require no manual effort to be dispatched -- the code sorts it out automatically).
 [*][tt]enable_manual_transaction[/tt] -- This optional function will return whether manual transactions (from the Admin Zone) are allowed or not. If enabled, uncompleted transaction's orders will display in Admin zone->Usage->Ecommerce >Manual transaction screen. Administrator can trigger the transaction as complete if he/she got an external payment via direct cash or cheque etc.
 [/list]
+
+[title="3"]Forum drivers[/title]
+
+ocPortal supports third-party forums. This is so people who have an existing/preferred forum and need a CMS for it, can still benefit from ocPortal. For example, comment topics for news are stored on the forum, even if it's a third-party forum.
+
+The user picks a forum driver when the install, which maps to a [tt]sources/forum/*.php[/tt] file. A forum driver is basically an implementation to a standardised interface, and is accessed from ocPortal via [tt]$GLOBALS['FORUM_DRIVER'][/tt].
+
+In the case of OCF, the forum driver just ties into the lower-level OCF API. In the case of others, it's a basic clean-room implementation of accessing the relevant forum software's DB and files.
+
+Stuff that is not an OCF feature but uses the forum, has to go through the official forum driver interface (unless you're working on an addon or a private site). We can supplement functionality exclusively targeted for OCF with a [tt]if (get_forum_type()=='ocf')[/tt] guard. If we are coding functionality that is directly a part of OCF (i.e. accessed in some OCF-only part of the system, like the forum zone), then we don't need to worry about any of this.
 
 [title="3"]Permissions[/title]
 
