@@ -2145,7 +2145,7 @@ function convert_data_encodings($known_utf8=false)
 				{
 					foreach ($val as $i=>$v)
 					{
-						$_GET[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$val);
+						$_GET[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$v);
 					}
 				}
 			}
@@ -2158,7 +2158,7 @@ function convert_data_encodings($known_utf8=false)
 				{
 					foreach ($val as $i=>$v)
 					{
-						$_POST[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$val);
+						$_POST[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$v);
 					}
 				}
 			}
