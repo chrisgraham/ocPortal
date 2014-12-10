@@ -388,6 +388,12 @@ Look at the URL you see in the web browser address bar when you have clicked thr
 [b]PHP files need to end with "?>" but none of ocPortal's do[/b]
 This is a common misunderstanding. It is actually the documented PHP best practice (as described in the PHP manual) to leave off "?>" from the end of PHP files. Some text editors (especially online ones) insert white-space at the end of files, and if that happens after "?>" then it can cause operational problems relating to HTTP headers and cookies.
 
+[b]Why are 'em' units used rather than 'pt' units?[/b]
+'em' are relatively sized units. So '1em' does nothing, while '2em' would double the font size.
+This is done for purposes of accessibility: all sizing in ocPortal is relative, so the text size can be scaled up properly without any fudges.
+Also, as content is defined as layout agnostic, the content can be correctly proportioned while shown in different sizing contexts.
+The [tt]WYSIWYG_SETTINGS.tpl[/tt] template lists the font sizes in the WYSIWYG font size picker, so can be customised with pt units if this is desired.
+
 [title="2"]Themes/Appearance[/title]
 
 [b]Where do I get new themes?[/b]
