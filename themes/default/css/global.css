@@ -207,7 +207,11 @@ textarea, input, code {
 
 /* Our little 'typing' effect */
 input[type="text"]:focus, input[type="password"]:focus {
-	background: url('{$IMG;,keyboard}') right center no-repeat white;
+	background: url('{$IMG;,keyboard}') right center no-repeat {$GET,native_ui_background};
+}
+
+input[type="text"][size="6"]:focus {
+	background-image: none;
 }
 
 /* Normally a browser default, but gets inherited on some phones */

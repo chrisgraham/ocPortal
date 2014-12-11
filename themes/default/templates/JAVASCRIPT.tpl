@@ -430,12 +430,11 @@ function disable_button_just_clicked(input)
 /* Making the height of a textarea match its contents */
 function manage_scroll_height(ob)
 {
-	var dif=0;
-	if ((browser_matches('chrome'))/* || (browser_matches('ie')) This is some gap but it is needed for the scrollbox rendering */) dif=-4;
-	var height=(ob.scrollHeight-sts(ob.style.paddingTop)-sts(ob.style.paddingBottom)-sts(ob.style.marginTop)-sts(ob.style.marginBottom)+dif)
-	if ((height>5) && (sts(ob.style.height)<height) && (find_height(ob)<height))
+	var height=ob.scrollHeight+3;
+	if ((height>5) && (sts(ob.style.height)<height-3) && (find_height(ob)<height-3))
 	{
 		ob.style.height=height+'px';
+		ob.style.overflowY='hidden';
 		trigger_resize();
 	}
 }
@@ -1032,10 +1031,19 @@ function find_url_tab()
 			select_tab('g',tab);
 	}
 }
-function select_tab(id,tab)
+function select_tab(id,tab,automated)
 {
-	if (document.getElementById('tab__'+tab.toLowerCase()))
+	if (typeof automated=='undefined') automated=false;
+
+	var tab_marker=document.getElementById('tab__'+tab.toLowerCase());
+	if (tab_marker)
+	{
+		// For URL purposes, we will change URL to point to tab
+		// HOWEVER, we do not want to cause a scroll so we will be careful
+		tab_marker.id='';
 		window.location.hash='#tab__'+tab.toLowerCase();
+		tab_marker.id='tab__'+tab.toLowerCase();
+	}
 
 	var tabs=[];
 	var i,element;
@@ -1090,7 +1098,7 @@ function select_tab(id,tab)
 		}
 	}
 
-	if (typeof window['load_tab__'+tab]!='undefined') window['load_tab__'+tab](); // Usually an AJAX loader
+	if (typeof window['load_tab__'+tab]!='undefined') window['load_tab__'+tab](automated); // Usually an AJAX loader
 
 	return false;
 }
@@ -2969,6 +2977,9 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[snapback]'+id+'[/snapback][/quote]\n\n';
 		//post.default_substring_to_strip=post.value;
 	}
+
+	manage_scroll_height(post);
+	post.scrollTop=post.scrollHeight;
 
 	return false;
 }

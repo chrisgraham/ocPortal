@@ -22,9 +22,12 @@
 						<p class="ajax_tree_list_loading"><img class="vertical_alignment" src="{$IMG*,loading}" /></p>
 
 						<script type="text/javascript">// <![CDATA[
-							function load_tab__{TAB_CODE%}()
+							function load_tab__{TAB_CODE%}(automated)
 							{
-								try { window.scrollTo(0,0); } catch (e) {};
+								if (automated)
+								{
+									try { window.scrollTo(0,0); } catch (e) {};
+								}
 
 								load_snippet('profile_tab&tab={TAB_CODE%}&member_id={MEMBER_ID%}'+window.location.search.replace('?','&'),null,function(result) {
 									set_inner_html(document.getElementById('g_{TAB_CODE*}'),result.responseText);

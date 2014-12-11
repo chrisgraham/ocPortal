@@ -1623,7 +1623,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (get_forum_type()=='ocf')
 				{
 					$member_info=ocf_read_in_member_profile(get_member(),true);
-					$_new_topics=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE NOT t_forum_id IS NULL AND t_cache_first_time>'.strval((integer)$member_info['last_visit_time']));
+					$_new_topics=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_forum_id IS NOT NULL AND t_cache_first_time>'.strval((integer)$member_info['last_visit_time']));
 					$new_topics=$_new_topics[0]['mycnt'];
 					$value=strval($new_topics);
 				}
@@ -1633,7 +1633,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (get_forum_type()=='ocf')
 				{
 					$member_info=ocf_read_in_member_profile(get_member(),true);
-					$_new_posts=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE NOT p_cache_forum_id IS NULL AND p_time>'.strval((integer)$member_info['last_visit_time']));
+					$_new_posts=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_cache_forum_id IS NOT NULL AND p_time>'.strval((integer)$member_info['last_visit_time']));
 					$new_posts=$_new_posts[0]['mycnt'];
 					$value=strval($new_posts);
 				}
