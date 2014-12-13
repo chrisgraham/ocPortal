@@ -1990,7 +1990,7 @@ function seo_meta_load_for($type,$id,$title=NULL)
 	$result=seo_meta_get_for($type,$id);
 	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SEO_TITLE;
 	if ($SEO_TITLE=='DO_NOT_REPLACE') return; // main_include_module block set this
-	if ($result[0]!='') $SEO_KEYWORDS=array_map('trim',explode(',',$result[0]));
+	if ($result[0]!='') $SEO_KEYWORDS=array_map('trim',explode(',',trim($result[0],',')));
 	if ($result[1]!='') $SEO_DESCRIPTION=$result[1];
 	if ($title!==NULL) $SEO_TITLE=str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title)));
 }

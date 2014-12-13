@@ -325,7 +325,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							$keywords=get_option('keywords');
 							if ($SEO_KEYWORDS===NULL) $SEO_KEYWORDS=array();
 							$keywords_array=$SEO_KEYWORDS;
-							if ($keywords!='') $keywords_array=array_merge($keywords_array,explode(',',$keywords));
+							if ($keywords!='') $keywords_array=array_merge($keywords_array,array_map('trim',explode(',',$keywords)));
 							$value=implode(',',array_unique($keywords_array));
 							break;
 
