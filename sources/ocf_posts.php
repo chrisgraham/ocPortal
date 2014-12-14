@@ -68,7 +68,7 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL)
 	if (is_null($forum_id))
 	{
 		if (has_specific_permission($member_id,'moderate_personal_topic')) return true;
-		if (($resource_owner!=$member_id) || (!has_specific_permission($member_id,'delete_personal_topic_posts'))) return false;
+		if (($resource_owner!=$member_id) || (!has_specific_permission($member_id,'edit_personal_topic_posts'))) return false;
 	} else
 	{
 		$ticket_forum=get_option('ticket_forum_name',true);

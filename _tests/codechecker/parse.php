@@ -1431,13 +1431,13 @@ function _parse_parameter()
 			$variable=pparse__parser_expect('variable');
 			// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
 			$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['i']);
-			/*$next_2=pparse__parser_peek();		Not valid in all PHP versions
+			$next_2=pparse__parser_peek();
 			if ($next_2=='EQUAL')
 			{
 				pparse__parser_next();
 				$value=_parse_literal();
 				$parameter[2]=$value;
-			}*/
+			}
 			break;
 
 		case 'variable':
