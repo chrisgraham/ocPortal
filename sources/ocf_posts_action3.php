@@ -128,7 +128,7 @@ function ocf_edit_post($post_id, $validated, $title, $post, $skip_sig, $is_empha
 
     if ($check_perms) {
         $closed = ($GLOBALS['FORUM_DB']->query_select_value('f_topics', 't_is_open', array('id' => $topic_id)) == 0);
-        if (!ocf_may_edit_post_by($post_owner, $forum_id, null, $closed)) {
+        if (!ocf_may_edit_post_by($post_id, $post_info[0]['p_time'], $post_owner, $forum_id, null, $closed)) {
             access_denied('I_ERROR');
         }
     }
@@ -256,7 +256,7 @@ function ocf_delete_posts_topic($topic_id, $posts, $reason = '', $check_perms = 
         }
         $post_owner = $post['p_poster'];
         if ($check_perms) {
-            if (!ocf_may_delete_post_by($post_owner, $forum_id)) {
+            if (!ocf_may_delete_post_by($post['id'], $post['p_time'], $post_owner, $forum_id)) {
                 access_denied('I_ERROR');
             }
         }

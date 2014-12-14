@@ -229,11 +229,19 @@ function ocf_get_details_to_show_post($_postdetails, $topic_info, $only_post = f
 
     // Do we have any special controls over this post?
     require_code('ocf_posts');
-    if (ocf_may_edit_post_by($_postdetails['p_poster'], $forum_id, null, $topic_info['t_is_open'] == 0)) {
+    $reason = null;
+    $may_edit = ocf_may_edit_post_by($_postdetails['id'], $_postdetails['p_time'], $_postdetails['p_poster'], $forum_id, get_member(), $topic_info['t_is_open'] == 0, $reason);
+    if ($may_edit || $reason !== null/*Interesting reason, let them find it out when they click*/)
+    {
         $post['may_edit'] = true;
     }
-    if ((ocf_may_delete_post_by($_postdetails['p_poster'], $forum_id)) && (!$only_post)) {
-        $post['may_delete'] = true;
+    if (!$only_post)
+    {
+        $may_delete=ocf_may_delete_post_by($_postdetails['id'], $_postdetails['p_time'], $_postdetails['p_poster'], $forum_id, get_member(), $reason);
+        if ($may_delete || $reason !== null/*Interesting reason, let them find it out when they click*/)
+        {
+            $post['may_delete'] = true;
+        }
     }
 
     // More

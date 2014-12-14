@@ -2521,6 +2521,18 @@ END;
         if (!array_key_exists(0, $topic_info)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
+
+        $reason = null;
+        $may_delete = ocf_may_delete_post_by($post_id, null, null, null, get_member(), $reason);
+        if (!$may_delete)
+        {
+            if (!is_null($reason))
+            {
+                warn_exit($reason);
+            }
+            access_denied('I_ERROR');
+        }
+
         $this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'], $topic_id, $topic_info[0]['t_cache_first_title'], do_lang_tempcode('DELETE_POST'));
 
         if ((addon_installed('securitylogging')) && (has_privilege(get_member(), 'mass_delete_from_ip'))) {
@@ -2893,7 +2905,14 @@ END;
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
 
-        if (!ocf_may_edit_post_by($post_details[0]['p_poster'], $forum_id, null, $topic_info[0]['t_is_open'] == 0)) {
+        $reason = null;
+        $may_edit = ocf_may_edit_post_by($post_id, $post_details[0]['p_time'], $post_details[0]['p_poster'], $forum_id, get_member(), $topic_info[0]['t_is_open'] == 0, $reason);
+        if (!$may_edit)
+        {
+            if (!is_null($reason))
+            {
+                warn_exit($reason);
+            }
             access_denied('I_ERROR');
         }
 
@@ -2976,7 +2995,7 @@ END;
         $options[] = array(do_lang_tempcode('MARK_UNREAD'), 'mark_as_unread', false, do_lang_tempcode('DESCRIPTION_MARK_UNREAD'));
         $options[] = array(do_lang_tempcode('SHOW_AS_EDITED'), 'show_as_edited', ((time() - $post_details[0]['p_time']) > 60 * 3), do_lang_tempcode('DESCRIPTION_POST_SHOW_AS_EDITED'));
         $specialisation2->attach(form_input_various_ticks($options, ''));
-        if (ocf_may_delete_post_by($post_details[0]['p_poster'], $forum_id)) {
+        if (ocf_may_delete_post_by($post_id, $post_details[0]['p_time'], $post_details[0]['p_poster'], $forum_id)) {
             $specialisation2->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false));
         }
 

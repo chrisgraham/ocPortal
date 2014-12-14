@@ -30,8 +30,8 @@ function init__ocf_posts()
 /**
  * Find whether a member may post in a certain topic.
  *
- * @param  AUTO_LINK                    $forum_id The forum ID of the forum the topic is in.
- * @param  AUTO_LINK                    $topic_id The topic ID is in.
+ * @param  AUTO_LINK $forum_id The forum ID of the forum the topic is in.
+ * @param  AUTO_LINK $topic_id The topic ID is in.
  * @param  ?MEMBER                      $last_member_id The last poster in the topic (null: do not check for double posting).
  * @param  ?MEMBER                      $member_id The member (null: current member).
  * @return boolean                      The answer.
@@ -65,16 +65,37 @@ function ocf_may_post_in_topic($forum_id, $topic_id, $last_member_id = null, $me
 /**
  * Find whether a member may edit the detailed post.
  *
- * @param  MEMBER                       $resource_owner The owner of the post.
- * @param  ?AUTO_LINK                   $forum_id The forum the post is in (null: is a Private Topic).
+ * @param  AUTO_LINK $post_id The post ID.
+ * @param  ?TIME                        $post_time The time of the post (NULL: lookup).
+ * @param  ?MEMBER                      $resource_owner The owner of the post (NULL: lookup).
+ * @param  ?AUTO_LINK                   $forum_id The forum the post is in (NULL: is a Private Topic, unless $post_time is NULL in which case we look this up too).
  * @param  ?MEMBER                      $member_id The member (null: current member).
- * @param  ?boolean                     $topic_is_closed Whether the topic the post is in is closed (null: don't consider this, maybe we're not considering any one specific case).
+ * @param  ?boolean                     $topic_is_closed Whether the topic the post is in is closed (null: don't consider this, maybe we're not considering any one specific case, unless $post_time is NULL in which case we look this up to).
  * @return boolean                      The answer.
  */
-function ocf_may_edit_post_by($resource_owner, $forum_id, $member_id = null, $topic_is_closed = null)
+function ocf_may_edit_post_by($post_id, $post_time = null, $resource_owner, $forum_id, $member_id = null, $topic_is_closed = null, &$reason = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
+    }
+
+    $reason = null;
+
+    if (is_null($post_time)) {
+        $posts = $GLOBALS['FORUM_DB']->query_select('f_posts p JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t ON t.id=p.p_topic_id', array('p_time', 'p_poster', 'p_cache_forum_id', 't_is_open'), array('id' => $post_id), '', 1);
+        if (!array_key_exists(0, $posts)) {
+            $reason = do_lang_tempcode('INTERNAL_ERROR');
+            return false;
+        }
+        $post_time = $posts[0]['p_time'];
+        $resource_owner = $posts[0]['p_poster'];
+        $forum_id = $posts[0]['p_cache_forum_id'];
+        $topic_is_closed = ($posts[0]['t_is_open'] == 0);
+    }
+
+    if (((time() - $post_time) > intval(get_option('edit_time_limit')) * 60) && (!has_privilege($member_id, 'exceed_edit_time_limit'))) {
+        $reason = do_lang_tempcode('EXCEEDED_TIME_LIMIT', escape_html(display_time_period(intval(get_option('edit_time_limit')) * 60)));
+        return false;
     }
 
     if (is_null($forum_id)) {
@@ -107,15 +128,37 @@ function ocf_may_edit_post_by($resource_owner, $forum_id, $member_id = null, $to
 /**
  * Find whether a member may delete the detailed post.
  *
- * @param  MEMBER                       $resource_owner The owner of the post.
- * @param  ?AUTO_LINK                   $forum_id The forum the post is in (null: is a Private Topic).
+ * @param  AUTO_LINK $post_id The post ID.
+ * @param  ?TIME                        $post_time The time of the post (NULL: lookup).
+ * @param  ?MEMBER                      $resource_owner The owner of the post (NULL: lookup).
+ * @param  ?AUTO_LINK                   $forum_id The forum the post is in (NULL: is a Private Topic, unless $post_time is NULL in which case we look this up too).
  * @param  ?MEMBER                      $member_id The member (null: current member).
+ * @param  ?boolean                     $topic_is_closed Whether the topic the post is in is closed (null: don't consider this, maybe we're not considering any one specific case, unless $post_time is NULL in which case we look this up to).
  * @return boolean                      The answer.
  */
-function ocf_may_delete_post_by($resource_owner, $forum_id, $member_id = null)
+function ocf_may_delete_post_by($post_id, $post_time = null, $resource_owner, $forum_id, $member_id = null, $topic_is_closed = null, &$reason = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
+    }
+
+    $reason = null;
+
+    if (is_null($post_time)) {
+        $posts = $GLOBALS['FORUM_DB']->query_select('f_posts p JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t ON t.id=p.p_topic_id', array('p_time', 'p_poster', 'p_cache_forum_id', 't_is_open'), array('id' => $post_id), '', 1);
+        if (!array_key_exists(0, $posts)) {
+            $reason = do_lang_tempcode('INTERNAL_ERROR');
+            return false;
+        }
+        $post_time = $posts[0]['p_time'];
+        $resource_owner = $posts[0]['p_poster'];
+        $forum_id = $posts[0]['p_cache_forum_id'];
+        $topic_is_closed = ($posts[0]['t_is_open'] == 0);
+    }
+
+    if (((time() - $post_time) > intval(get_option('delete_time_limit')) * 60) && (!has_privilege($member_id, 'exceed_delete_time_limit'))) {
+        $reason = do_lang_tempcode('EXCEEDED_TIME_LIMIT', escape_html(display_time_period(intval(get_option('delete_time_limit')) * 60)));
+        return false;
     }
 
     if (is_null($forum_id)) {
@@ -141,8 +184,8 @@ function ocf_may_delete_post_by($resource_owner, $forum_id, $member_id = null)
 /**
  * Try and make a spacer post look nicer on OCF than it automatically would.
  *
- * @param  ID_TEXT                      $linked_type Content type.
- * @param  ID_TEXT                      $linked_id Content ID.
+ * @param  ID_TEXT $linked_type Content type.
+ * @param  ID_TEXT $linked_id Content ID.
  * @return array                        A pair: better description (may be NULL), better post (may be NULL).
  */
 function ocf_display_spacer_post($linked_type, $linked_id)

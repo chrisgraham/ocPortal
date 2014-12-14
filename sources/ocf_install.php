@@ -261,6 +261,9 @@ function install_ocf($upgrade_from = null)
             'p_time' => 'TIME',
         ));
         $GLOBALS['FORUM_DB']->create_index('f_password_history', 'p_member_id', array('p_member_id'));
+
+        add_privilege('SECTION_FORUMS', 'exceed_post_edit_time_limit', false);
+        add_privilege('SECTION_FORUMS', 'exceed_post_delete_time_limit', false);
     }
     if ((!is_null($upgrade_from)) && ($upgrade_from < 10.0)) {
         $GLOBALS['FORUM_DB']->delete_index_if_exists('f_posts', 'posts_by');
