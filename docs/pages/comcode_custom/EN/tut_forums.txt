@@ -83,6 +83,12 @@ If you see guest posts somewhere where guests cannot post then this is probably 
 
 Staff can track which user made the post via clicking on the 'Guest' label and hence investigating the IP address. This is no different to an investigation on a normal Guest post.
 
+[title="2"]Replying[/title]
+
+Replies can either be made beneath the topic ("quick reply"), or via the full reply screen.
+
+If your users are confused by the quick reply function (for example, they miss the WYSIWYG), you can turn off the 'Use quick reply' privilege for them.
+
 [title="2"]Topic polls[/title]
 
 Topics may have a poll attached to them (by any member) by default, so as to gauge opinion tied to a discussion. These polls are separate to the main ocPortal poll system, and have different options. Forum polls may only be used by members, and there are options to restrict:

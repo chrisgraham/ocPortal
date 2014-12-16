@@ -96,7 +96,7 @@ function set_field_error(the_element,error_msg)
 						p=p.parentNode;
 						if ((error_msg.substr(0,5)!='{!DISABLED_FORM_FIELD;}'.substr(0,5)) && (p) && (typeof p.getAttribute!='undefined') && (p.getAttribute('id')) && (p.getAttribute('id').substr(0,2)=='g_') && (p.style.display=='none'))
 						{
-							select_tab('g',p.getAttribute('id').substr(2,p.id.length-2));
+							select_tab('g',p.getAttribute('id').substr(2,p.id.length-2),false,true);
 							break;
 						}
 					}

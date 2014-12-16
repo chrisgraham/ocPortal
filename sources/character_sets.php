@@ -22,7 +22,7 @@
  * Performs lots of magic to make sure data encodings are converted correctly. Input, and output too (as often stores internally in UTF or performs automatic dynamic conversions from internal to external charsets).
  * Roll on PHP6 that has a true internal UTF string model. For now, anyone who uses UTF will get some (albeit minor) imperfections from PHP's manipulations of the strings.
  *
- * @param  boolean                      $known_utf8 Whether we know we are working in UTF-8. This is the case for AJAX calls.
+ * @param  boolean $known_utf8 Whether we know we are working in UTF-8. This is the case for AJAX calls.
  */
 function _convert_data_encodings($known_utf8 = false)
 {
@@ -46,20 +46,40 @@ function _convert_data_encodings($known_utf8 = false)
 
         $done_something = true;
     } elseif (($known_utf8) && /*test method works...*/
-        (will_be_unicode_neutered(serialize($_GET) . serialize($_POST))) && (in_array(strtolower($charset), array('iso-8859-1', 'iso-8859-15', 'koi8-r', 'big5', 'gb2312', 'big5-hkscs', 'shift_jis', 'euc-jp')))
+              (will_be_unicode_neutered(serialize($_GET) . serialize($_POST))) && (in_array(strtolower($charset), array('iso-8859-1', 'iso-8859-15', 'koi8-r', 'big5', 'gb2312', 'big5-hkscs', 'shift_jis', 'euc-jp')))
     ) { // Preferred as it will sub entities where there's no equivalent character
         do_environment_utf8_conversion($charset);
 
         $done_something = true;
-    } elseif ((function_exists('iconv_set_encoding')) && (get_value('disable_iconv') !== '1')) {
+    } elseif ((function_exists('iconv')) && (get_value('disable_iconv') !== '1')) {
         $encoding = $known_utf8 ? 'UTF-8' : $charset;
-        if (@iconv_set_encoding('input_encoding', $encoding)) {
-            iconv_set_encoding('output_encoding', $charset);
-            iconv_set_encoding('internal_encoding', $charset);
+        if (!function_exists('iconv_set_encoding') || @iconv_set_encoding('input_encoding', $encoding)) {
+            if (function_exists('iconv_set_encoding')) {
+                @iconv_set_encoding('output_encoding', $charset);
+                @iconv_set_encoding('internal_encoding', $charset);
+            }
+            ini_set('default_charset', $charset);
+            foreach ($_GET as $key => $val) {
+                if (is_string($val)) {
+                    $_GET[$key] = iconv($encoding, $charset . '//TRANSLIT', $val);
+                } elseif (is_array($val)) {
+                    foreach ($val as $i => $v) {
+                        $_GET[$key][$i] = iconv($encoding, $charset . '//TRANSLIT', $v);
+                    }
+                }
+            }
+            foreach ($_POST as $key => $val) {
+                if (is_string($val)) {
+                    $_POST[$key] = iconv($encoding, $charset . '//TRANSLIT', $val);
+                } elseif (is_array($val)) {
+                    foreach ($val as $i => $v) {
+                        $_POST[$key][$i] = iconv($encoding, $charset . '//TRANSLIT', $v);
+                    }
+                }
+            }
         } else {
             $VALID_ENCODING = false;
         }
-
         $done_something = true;
     } elseif ((function_exists('mb_convert_encoding')) && (get_value('disable_mbstring') !== '1')) {
         if (function_exists('mb_list_encodings')) {
@@ -133,7 +153,7 @@ function _convert_data_encodings($known_utf8 = false)
 /**
  * Convert a unicode character number to a unicode string. Callback for preg_replace.
  *
- * @param  array                        $matches Regular expression match array.
+ * @param  array $matches Regular expression match array.
  * @return ~string                      Converted data (false: could not convert).
  */
 function unichrm_hex($matches)
@@ -144,7 +164,7 @@ function unichrm_hex($matches)
 /**
  * Convert a unicode character number to a unicode string. Callback for preg_replace.
  *
- * @param  array                        $matches Regular expression match array.
+ * @param  array $matches Regular expression match array.
  * @return ~string                      Converted data (false: could not convert).
  */
 function unichrm($matches)
@@ -155,7 +175,7 @@ function unichrm($matches)
 /**
  * Convert a unicode character number to a HTML-entity enabled string, using lower ASCII characters where possible.
  *
- * @param  integer                      $c Character number.
+ * @param  integer $c Character number.
  * @return ~string                      Converted data (false: could not convert).
  */
 function unichr($c)
@@ -170,7 +190,7 @@ function unichr($c)
 /**
  * Convert text to an entity format via unicode, compatible with the GD TTF functions. Originally taken from php manual but heavily modified. Passed text is assumed to be in the get_charset() character set.
  *
- * @param  string                       $data Input text.
+ * @param  string $data Input text.
  * @return string                       Output 7-bit unicode-entity-encoded ASCII text.
  */
 function foxy_utf8_to_nce($data = '')
@@ -280,7 +300,7 @@ function foxy_utf8_to_nce($data = '')
 /**
  * Turn utf-8 characters into unicode HTML entities. Useful as GD truetype functions need this. Based on function in PHP code comments.
  *
- * @param  string                       $utf8 Input.
+ * @param  string $utf8 Input.
  * @return string                       Output.
  */
 function utf8tohtml($utf8)
@@ -298,7 +318,7 @@ function utf8tohtml($utf8)
             // two-byte character
             $ascii1 = ord($utf8[$i + 1]);
             $unicode = (63 & $ascii) * 64 +
-                (63 & $ascii1);
+                       (63 & $ascii1);
             $result .= '&#' . strval($unicode) . ';';
             $i += 1;
         } elseif ($ascii < 240) {
@@ -306,8 +326,8 @@ function utf8tohtml($utf8)
             $ascii1 = ord($utf8[$i + 1]);
             $ascii2 = ord($utf8[$i + 2]);
             $unicode = (15 & $ascii) * 4096 +
-                (63 & $ascii1) * 64 +
-                (63 & $ascii2);
+                       (63 & $ascii1) * 64 +
+                       (63 & $ascii2);
             $result .= '&#' . strval($unicode) . ';';
             $i += 2;
         } elseif ($ascii < 248) {
@@ -316,9 +336,9 @@ function utf8tohtml($utf8)
             $ascii2 = ord($utf8[$i + 2]);
             $ascii3 = ord($utf8[$i + 3]);
             $unicode = (15 & $ascii) * 262144 +
-                (63 & $ascii1) * 4096 +
-                (63 & $ascii2) * 64 +
-                (63 & $ascii3);
+                       (63 & $ascii1) * 4096 +
+                       (63 & $ascii2) * 64 +
+                       (63 & $ascii3);
             $result .= '&#' . strval($unicode) . ';';
             $i += 3;
         }
@@ -357,7 +377,7 @@ function do_simple_environment_utf8_conversion()
 /**
  * Do a UTF8 conversion on the environmental GET/POST parameters.
  *
- * @param  string                       $from_charset Charset that was used to encode the environmental data.
+ * @param  string $from_charset Charset that was used to encode the environmental data.
  */
 function do_environment_utf8_conversion($from_charset)
 {
@@ -402,7 +422,7 @@ function do_environment_utf8_conversion($from_charset)
 /**
  * Guard for entity_utf8_decode. Checks that the data can be stripped so there is no unicode left. Either the htmlentities function must convert mechanically to entity-characters or all higher ascii character codes (which are actually unicode control codes in a unicode interpretation) that are used happen to be linked to named entities.
  *
- * @param  string                       $data Data to check.
+ * @param  string $data Data to check.
  * @return boolean                      Whether we are good to execute entity_utf8_decode.
  */
 function will_be_unicode_neutered($data)
@@ -422,7 +442,7 @@ function will_be_unicode_neutered($data)
 /**
  * Convert some data from one encoding to the internal encoding.
  *
- * @param  string                       $data Data to convert.
+ * @param  string $data Data to convert.
  * @param  ?string                      $input_charset Charset to convert from (null: that read by the last http_download_file call).
  * @param  ?string                      $internal_charset Charset to convert to (null: current encoding).
  * @return string                       Converted data.
@@ -503,8 +523,8 @@ function convert_to_internal_encoding($data, $input_charset = null, $internal_ch
 /**
  * Convert some data from UTF to a character set PHP supports, using HTML entities where there's no direct match.
  *
- * @param  string                       $data Data to convert.
- * @param  string                       $internal_charset Charset to convert to.
+ * @param  string $data Data to convert.
+ * @param  string $internal_charset Charset to convert to.
  * @return ~string                      Converted data (false: could not convert).
  */
 function entity_utf8_decode($data, $internal_charset)

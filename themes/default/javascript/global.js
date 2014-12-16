@@ -1102,14 +1102,22 @@ function find_url_tab(hash)
 			select_tab('g',tab,true);
 	}
 }
-function select_tab(id,tab,from_url)
+function select_tab(id,tab,from_url,automated)
 {
 	if (typeof from_url=='undefined') from_url=false;
+    f (typeof automated=='undefined') automated=false;
 
 	if (!from_url)
 	{
-		if (document.getElementById('tab__'+tab.toLowerCase()))
-			window.location.hash='#tab__'+tab.toLowerCase();
+        var tab_marker=document.getElementById('tab__'+tab.toLowerCase());
+        if (tab_marker)
+        {
+        	// For URL purposes, we will change URL to point to tab
+        	// HOWEVER, we do not want to cause a scroll so we will be careful
+        	tab_marker.id='';
+        	window.location.hash='#tab__'+tab.toLowerCase();
+        	tab_marker.id='tab__'+tab.toLowerCase();
+        }
 	}
 
 	var tabs=[];
@@ -1147,7 +1155,7 @@ function select_tab(id,tab,from_url)
 		}
 	}
 
-	if (typeof window['load_tab__'+tab]!='undefined') window['load_tab__'+tab](); // Usually an AJAX loader
+	if (typeof window['load_tab__'+tab]!='undefined') window['load_tab__'+tab](automated); // Usually an AJAX loader
 
 	return false;
 }
@@ -3179,6 +3187,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 		if (!explicit_quote) post.default_substring_to_strip=post.value;
 	}
 
+    manage_scroll_height(post);
 	post.scrollTop=post.scrollHeight;
 
 	return false;

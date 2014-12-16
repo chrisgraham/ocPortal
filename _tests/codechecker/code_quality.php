@@ -81,8 +81,9 @@ if (array_key_exists('mixed', $_GET)) {
 if (array_key_exists('pedantic', $_GET)) {
     $GLOBALS['PEDANTIC'] = 1;
 }
-/*if (array_key_exists('todo',$_GET)) */
-$GLOBALS['TODO'] = 1;    //NB: Test set skips these ones anyway
+/*if (array_key_exists('todo',$_GET)) { */
+$GLOBALS['TODO'] = 1; // NB: Unit test skips these ones anyway
+/* } */
 if (array_key_exists('security', $_GET)) {
     $GLOBALS['SECURITY'] = 1;
 }

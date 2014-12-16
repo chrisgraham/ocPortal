@@ -1517,13 +1517,12 @@ function _parse_parameter()
             } else {
                 $parameter = array('RECEIVE_BY_REFERENCE', $variable, null, $GLOBALS['I']);
             }
-            /*$next_2=pparse__parser_peek();    Not valid in all PHP versions
-            if ($next_2=='EQUAL')
-            {
+            $next_2 = pparse__parser_peek();
+            if ($next_2 == 'EQUAL') {
                     pparse__parser_next();
-                    $value=_parse_literal();
-                    $parameter[2]=$value;
-            }*/
+                    $value = _parse_literal();
+                    $parameter[2] = $value;
+            }
             break;
 
         case 'variable':

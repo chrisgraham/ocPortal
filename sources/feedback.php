@@ -584,7 +584,9 @@ function actualise_specific_rating($rating, $page_name, $member_id, $content_typ
                     $cma_ob = get_content_object($content_type);
                     $cma_content_row = content_get_row($content_id, $cma_ob->info());
                     if (!is_null($cma_content_row)) {
-                        $rendered = preg_replace('#keep_session=\w*#', 'filtered=1', static_evaluate_tempcode($cma_ob->run($cma_content_row, '_SEARCH', true, true)));
+                        $rendered = static_evaluate_tempcode($cma_ob->run($cma_content_row, '_SEARCH', true, true));
+                        $rendered = preg_replace('#keep_session=\w*#', 'filtered=1', $rendered);
+                        $rendered = preg_replace('#keep_devtest=\w*#', 'filtered=1', $rendered);
                     }
                 }
                 $mail = do_lang('CONTENT_LIKED_NOTIFICATION_MAIL', comcode_escape(get_site_name()), comcode_escape(($content_title == '') ? ocp_mb_strtolower($content_type_title) : $content_title), array(comcode_escape(is_object($safe_content_url) ? $safe_content_url->evaluate() : $safe_content_url), $rendered, comcode_escape($displayname), comcode_escape($username)));
@@ -608,7 +610,9 @@ function actualise_specific_rating($rating, $page_name, $member_id, $content_typ
                     $activity_type = ((is_null($submitter)) || (is_guest($submitter))) ? '_ACTIVITY_LIKES' : 'ACTIVITY_LIKES';
                     $_safe_content_url = is_object($safe_content_url) ? $safe_content_url->evaluate() : $safe_content_url;
                     if ($_safe_content_url == '') {
-                        $_safe_content_url = preg_replace('#keep_session=\w*#', 'filtered=1', is_object($content_url) ? $content_url->evaluate() : $content_url);
+                        $_safe_content_url = is_object($content_url) ? $content_url->evaluate() : $content_url;
+                        $_safe_content_url = preg_replace('#keep_session=\w*#', 'filtered=1', $_safe_content_url);
+                        $_safe_content_url = preg_replace('#keep_devtest=\w*#', 'filtered=1', $_safe_content_url);
                     }
                     $content_page_link = url_to_page_link($_safe_content_url);
                     require_code('activities');
@@ -891,7 +895,9 @@ function actualise_post_comment($allow_comments, $content_type, $content_id, $co
                 $activity_type = ((is_null($submitter)) || (is_guest($submitter))) ? '_ADDED_COMMENT_ON' : 'ADDED_COMMENT_ON';
                 $_safe_content_url = is_object($safe_content_url) ? $safe_content_url->evaluate() : $safe_content_url;
                 if ($_safe_content_url == '') {
-                    $_safe_content_url = preg_replace('#keep_session=\w*#', 'filtered=1', is_object($content_url) ? $content_url->evaluate() : $content_url);
+                    $_safe_content_url = is_object($content_url) ? $content_url->evaluate() : $content_url;
+                    $_safe_content_url = preg_replace('#keep_session=\w*#', 'filtered=1', $_safe_content_url);
+                    $_safe_content_url = preg_replace('#keep_devtest=\w*#', 'filtered=1', $_safe_content_url);
                 }
                 $content_page_link = url_to_page_link($_safe_content_url);
                 require_code('activities');

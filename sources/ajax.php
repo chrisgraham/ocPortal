@@ -623,6 +623,7 @@ function snippet_script()
     prepare_for_known_ajax_response();
 
     header('Content-Type: text/plain; charset=' . get_charset());
+    convert_data_encodings(true,true);
     $hook = filter_naughty_harsh(get_param('snippet'));
     require_code('hooks/systems/snippets/' . $hook, true);
     $object = object_factory('Hook_snippet_' . $hook);

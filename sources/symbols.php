@@ -936,7 +936,7 @@ function ecv_META_DATA($lang, $escaped, $param)
                     }
                     $keywords_array = $SEO_KEYWORDS;
                     if ($keywords != '') {
-                        $keywords_array = array_merge($keywords_array, explode(',', $keywords));
+                        $keywords_array = array_merge($keywords_array, array_map('trim', explode(',', $keywords)));
                     }
                     $value = implode(',', array_unique($keywords_array));
                 }

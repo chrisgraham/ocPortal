@@ -711,7 +711,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
         $javascript = null;
         $javascript_explicit_quote = null;
 
-        if ((array_key_exists('message_comcode', $_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (strlen($_postdetails['message_comcode']) < 1024 * 10/*10kb limit, for reasonable performance*/) && (!array_key_exists('intended_solely_for', $map))) {
+        if ((array_key_exists('message_comcode', $_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (strlen($_postdetails['message_comcode']) < 1024 * 10/*10kb limit, for reasonable performance*/) && ($topic_info['may_use_quick_reply']) && (!array_key_exists('intended_solely_for', $map))) {
             $replying_to_post = str_replace("\n", '\n', addslashes(preg_replace('#\[staff_note\].*\[/staff_note\]#Us', '', $_postdetails['message_comcode'])));
             $replying_to_post_plain = str_replace("\n", '\n', addslashes(($topic_info['is_threaded'] == 0) ? '' : strip_comcode($_postdetails['message_comcode'])));
             $javascript = 'return topic_reply(' . ($topic_info['is_threaded'] ? 'true' : 'false') . ',this,\'' . strval($_postdetails['id']) . '\',\'' . addslashes($_postdetails['poster_username']) . '\',\'' . $replying_to_post . '\',\'' . $replying_to_post_plain . '\');';

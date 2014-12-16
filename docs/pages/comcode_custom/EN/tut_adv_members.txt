@@ -64,8 +64,7 @@ It is possible to configure where a value for a custom profile field for members
  - if 'show in posts' is selected, it will also be visible on their forum posts, and their member galleries and member gallery images/videos
  - if 'show in post previews' is selected, it will also be visible when displaying a member sub-gallery in a list of sub-galleries
 
-If you have more than 60 textual CPFs (except Comcode ones), any ones created after the 60th will not be included for searching on the search module's member search form.
-
+If you have more than 60 textual CPFs (except Comcode ones), any ones created after the 60th will not be included for searching on the search module's member search form. This is due to a limitation in MySQL.
 [/surround]
 
 [title="3"]Display rules[/title]
@@ -119,6 +118,22 @@ Note that encrypted CPFs are not supported for any kind of CPF value that is not
 [title="3"]Categorisation of CPFs[/title]
 
 If you prefix CPF names like "Example: Field A" and "Example: Field B", ocPortal will be smart enough to treat this as a categorisation and render the join/edit-profile forms in a more appropriate way.
+
+[title="3"]Special CPFs[/title]
+
+ocPortal may install a number of special CPFs used for keeping hold of standardised user data. ocPortal's core set of profile settings is intentionally kept very narrow, and the special CPFs extend it, even for some core data. This both keeps our system lightweight, and also serves as a mechanism for us to store core data in third party forums.
+
+To avoid user-interface-bloat, we automatically hide some of the special fields, if they are not currently in use. Typically this is when no addon needing them is installed.
+
+Special CPFs include:
+ - CPFs for tracking different sources of points (for example, how many ratings the member has made)
+ - CPFs for holding address details (used by the shopping addon, passed through to PayPal, for example)
+ - CPFs for holding payment details (if local payment is enabled, which is not a default-supported option by any bundled payment gateway, and should only be developed by programmers with a strong understanding of security and who will customise payment flow code as required)
+ - CPFs for storing a list of what sites a member of staff is staff on (used if a multi-site-network has been configured)
+
+All these CPFs may be edited just like any other CPF -- as long as they are currently active (see above). One exception is the CPF title, which has to be edited via language string editing rather than on the CPF editing form.
+
+By default the values of the CPFs are not publicly viewable.
 
 [title="2"]Welcome E-mails[/title]
 [surround]

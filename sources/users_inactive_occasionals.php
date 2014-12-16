@@ -163,11 +163,13 @@ function create_session($member, $session_confirmed = 0, $invisible = false)
         if ($points_per_daily_visit != 0) {
             // See if this is the first visit today
             $test = $GLOBALS['SITE_DB']->query_select_value('stats', 'MAX(date_and_time)', array('member_id' => $member));
-            if ($test < time() - 60 * 60 * 24) {
-                require_code('points');
-                $_before = point_info($member);
-                if (array_key_exists('points_gained_given', $_before)) {
-                    $GLOBALS['FORUM_DRIVER']->set_custom_field($member, 'points_gained_given', strval(intval($_before['points_gained_given']) + $points_per_daily_visit));
+            if (!is_null($test)) {
+                if (date('d/m/Y', tz_time($test, get_site_timezone())) != date('d/M/Y', tz_time(time(), get_site_timezone()))) {
+                    require_code('points');
+                    $_before = point_info($member);
+                    if (array_key_exists('points_gained_given', $_before)) {
+                        $GLOBALS['FORUM_DRIVER']->set_custom_field($member, 'points_gained_given', strval(intval($_before['points_gained_given']) + $points_per_daily_visit));
+                    }
                 }
             }
         }

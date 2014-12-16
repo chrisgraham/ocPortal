@@ -2521,7 +2521,7 @@ function seo_meta_load_for($type, $id, $title = null)
         $result = seo_meta_get_for($type, $id);
         global $SEO_KEYWORDS, $SEO_DESCRIPTION, $SHORT_TITLE;
         if ($result[0] != '') {
-            $SEO_KEYWORDS = array_map('trim', explode(',', $result[0]));
+            $SEO_KEYWORDS = array_map('trim', explode(',', trim($result[0], ',')));
         }
         if ($result[1] != '') {
             $SEO_DESCRIPTION = $result[1];

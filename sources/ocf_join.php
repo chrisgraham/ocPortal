@@ -322,6 +322,8 @@ function ocf_join_actual($captcha_if_enabled = true, $intro_message_if_enabled =
     $validated = ($require_new_member_validation || $coppa) ? 0 : 1;
     if (is_null($member_id)) {
         $member_id = ocf_make_member($username, $password, $email_address, $groups, $dob_day, $dob_month, $dob_year, $actual_custom_fields, $timezone, $primary_group, $validated, time(), time(), '', null, '', 0, (get_option('default_preview_guests') == '1') ? 1 : 0, $reveal_age, '', '', '', 1, (get_option('allow_auto_notifications') == '0') ? 0 : 1, $language, $allow_emails, $allow_emails_from_staff, get_ip_address(), $validated_email_confirm_code, true, '', '');
+    } else {
+        attach_message(do_lang_tempcode('ALREADY_EXISTS', escape_html($username)), 'notice');
     }
 
     // Send confirm mail
@@ -416,7 +418,7 @@ function ocf_join_actual($captcha_if_enabled = true, $intro_message_if_enabled =
     } elseif ($skip_confirm) {
         if (($instant_login) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) { // Automatic instant log in
             require_code('users_active_actions');
-            handle_active_login($username);
+            handle_active_login($username); // The auto-login simulates a real login, i.e. actually checks the password from the form against the real account. So no security hole when "re-registering" a real user
             $message->attach(do_lang_tempcode('OCF_LOGIN_AUTO'));
         } else { // Invite them to explicitly instant log in
             $_login_url = build_url(array('page' => 'login', 'redirect' => get_param('redirect', null)), get_module_zone('login'));

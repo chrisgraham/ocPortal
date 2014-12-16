@@ -487,6 +487,13 @@ If you [i]don't[/i] have the WYSIWYG editor enabled:
 If you have the WYSIWYG editor enabled:
 [indent]There is a button on the editor's toolbar to toggle HTML source viewing mode. When inside the HTML source viewing mode you can paste in your HTML directly.[/indent]
 
+[title="3"]Why are 'em' units used rather than 'pt' units?[/title]
+
+'em' are relatively sized units. So '1em' does nothing, while '2em' would double the font size.
+This is done for purposes of accessibility: all sizing in ocPortal is relative, so the text size can be scaled up properly without any fudges.
+Also, as content is defined as layout agnostic, the content can be correctly proportioned while shown in different sizing contexts.
+The [tt]WYSIWYG_SETTINGS.tpl[/tt] template lists the font sizes in the WYSIWYG font size picker, so can be customised with pt units if this is desired.
+
 [title="3"]How can I add a block / How can I change how a block looks / How can I add a box?[/title]
 
 There is often confusion about the difference between a block and a box. A block is an embeddable dynamic unit, and whilst most blocks are rendered in boxes, this is not necessarily the case. It also certainly isn't the case that all boxes are around blocks. Boxes can be placed around anything, and are used in many places.
