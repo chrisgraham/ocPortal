@@ -28,6 +28,7 @@ No need for presetting up, or usernames or passwords.
 
 /**
  * Database Driver.
+ * @package    core_database_drivers
  */
 class Database_Static_sqlite
 {

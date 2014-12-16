@@ -31,6 +31,7 @@ function init__forum__ipb1()
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_ipb1 extends forum_driver_ipb_shared
 {

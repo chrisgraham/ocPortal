@@ -36,6 +36,7 @@ function init__database__sqlserver()
 
 /**
  * Database Driver.
+ * @package    core_database_drivers
  */
 class Database_Static_sqlserver
 {

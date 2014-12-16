@@ -284,6 +284,7 @@ function load_field_restrictions($this_page = null, $this_type = null)
 
 /**
  * Field restriction loader.
+ * @package    core
  */
 class Field_restriction_loader
 {

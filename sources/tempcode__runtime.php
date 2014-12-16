@@ -779,6 +779,7 @@ function handle_symbol_preprocessing($bit, &$children)
 
 /**
  * Tempcode (non-compiled implementation).
+ * @package    core
  */
 class Tempcode
 {

@@ -22,6 +22,7 @@ require_code('forum/shared/ipb');
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_ipb3 extends forum_driver_ipb_shared
 {

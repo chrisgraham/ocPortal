@@ -39,7 +39,7 @@ class auth_test_set extends ocp_test_case
         $login_array = $GLOBALS['FORUM_DRIVER']->forum_authorise_login($username, null, apply_forum_driver_md5_variant($password, $username), $password);
         $member = $login_array['id'];
         $this->assertTrue(is_null($member));
-        $this->assertTrue(static_evaluate_tempcode($login_array['error']) == do_lang('MEMBER_BAD_PASSWORD'));
+        $this->assertTrue(isset($out['error']) && is_object($login_array['error']) && static_evaluate_tempcode($login_array['error']) == do_lang('MEMBER_BAD_PASSWORD'));
     }
 
     public function testUnknownUsernameDoesFail()

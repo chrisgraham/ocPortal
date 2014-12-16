@@ -48,7 +48,7 @@ function open_link_as_overlay(ob,width,height,target)
 
 		var previous_button=document.createElement('img');
 		previous_button.className='previous_button';
-		previous_button.src='{$IMG;,mediaset_previous}';
+		previous_button.src='{$IMG;,mediaset_previous}'.replace(/^http:/,window.location.protocol);
 		var previous=function(e) {
 			if (typeof e=='undefined') e=window.event;
 			cancel_bubbling(e);
@@ -65,7 +65,7 @@ function open_link_as_overlay(ob,width,height,target)
 
 		var next_button=document.createElement('img');
 		next_button.className='next_button';
-		next_button.src='{$IMG;,mediaset_next}';
+		next_button.src='{$IMG;,mediaset_next}'.replace(/^http:/,window.location.protocol);
 		var next=function(e) {
 			if (typeof e=='undefined') e=window.event;
 			cancel_bubbling(e);

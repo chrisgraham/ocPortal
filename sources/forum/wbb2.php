@@ -22,6 +22,7 @@ require_code('forum/shared/wbb');
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_wbb2 extends forum_driver_wbb_shared
 {

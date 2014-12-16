@@ -291,7 +291,7 @@ class Module_cms_comcode_pages
                 $template_list->attach(form_input_list_entry($template, false, $template_title));
             }
             if (!$template_list->is_empty()) {
-                $fields->attach(form_input_list(do_lang_tempcode('PAGE_TEMPLATE'), do_lang_tempcode('PAGE_TEMPLATE_DESCRIPTION'), 'page_template', $template_list, NULL, false, false));
+                $fields->attach(form_input_list(do_lang_tempcode('PAGE_TEMPLATE'), do_lang_tempcode('PAGE_TEMPLATE_DESCRIPTION'), 'page_template', $template_list, null, false, false));
             }
 
             $submit_name = do_lang_tempcode('ADD');
@@ -687,7 +687,7 @@ class Module_cms_comcode_pages
                 $new = false;
             } else {
                 $template_name = get_param('page_template', $file);
-            	$contents = get_template_contents($template_name);
+                $contents = get_template_contents($template_name);
 
                 $new = true;
             }

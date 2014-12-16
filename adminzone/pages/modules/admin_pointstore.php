@@ -137,7 +137,7 @@ class Module_admin_pointstore
         $start = get_param_integer('start', 0);
 
         $rows = $GLOBALS['SITE_DB']->query_select('sales', array('*'), null, 'ORDER BY date_and_time DESC', $max, $start);
-        $max_rows = $GLOBALS['SITE_DB']->query_value('sales', 'COUNT(*)');
+        $max_rows = $GLOBALS['SITE_DB']->query_select_value('sales', 'COUNT(*)');
 
         $out = new Tempcode();
         require_code('templates_results_table');

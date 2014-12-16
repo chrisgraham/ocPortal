@@ -36,6 +36,7 @@ function init__forum_stub()
 
 /**
  * Forum driver class.
+ * @package    core
  */
 class Forum_driver_base
 {

@@ -992,7 +992,7 @@ function create_selection_list_langs($select_lang = null, $show_unset = false)
  * @param  ?object                      $connection The database connection to use (null: standard site connection)
  * @param  boolean                      $insert_as_admin Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges)
  * @param  ?string                      $pass_id The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (null: none)
- * @param  integer                      $wrap_pos Comcode parser wrap position
+ * @param  ?integer                     $wrap_pos Comcode parser wrap position (null: no wrapping)
  * @param  boolean                      $preparse_mode Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean                      $save_as_volatile Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
  * @return array                        The language ID save fields
@@ -1020,7 +1020,7 @@ function insert_lang_comcode($field_name, $text, $level, $connection = null, $in
  * @param  boolean                      $insert_as_admin Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges)
  * @param  ?string                      $pass_id The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (null: none)
  * @param  ?string                      $text_parsed Assembled Tempcode portion (null: work it out)
- * @param  integer                      $wrap_pos Comcode parser wrap position
+ * @param  ?integer                     $wrap_pos Comcode parser wrap position (null: no wrapping)
  * @param  boolean                      $preparse_mode Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean                      $save_as_volatile Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
  * @return array                        The language ID save fields

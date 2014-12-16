@@ -22,6 +22,7 @@ require_code('forum/shared/vb');
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_vb22 extends forum_driver_vb_shared
 {

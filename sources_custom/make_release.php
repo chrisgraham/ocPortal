@@ -408,6 +408,8 @@ function populate_build_files_array($dir = '', $pretend_dir = '')
 {
     require_code('files');
 
+    disable_php_memory_limit();
+
     global $MAKE_INSTALLERS__FILE_ARRAY, $MAKE_INSTALLERS__DIR_ARRAY;
 
     $builds_path = get_builds_path();

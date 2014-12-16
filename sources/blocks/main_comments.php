@@ -75,7 +75,7 @@ class Block_main_comments
             $extra = '';
         }
 
-        $map['explicit_allow'] = (array_key_exists('force_allow', $map)) ? ($map['force_allow'] == '1') : false;
+        $explicit_allow = (array_key_exists('explicit_allow', $map)) ? ($map['explicit_allow'] == '1') : false;
 
         require_code('feedback');
 
@@ -87,7 +87,7 @@ class Block_main_comments
         if (!is_null($test_changed)) {
             decache('main_comments');
         }
-        $hidden = $submitted ? actualise_post_comment(true, 'block_main_comments', $map['page'] . '_' . $map['param'] . $extra, $self_url, $self_title, array_key_exists('forum', $map) ? $map['forum'] : null, false, null, $explicit_allow : false;
+        $hidden = $submitted ? actualise_post_comment(true, 'block_main_comments', $map['page'] . '_' . $map['param'] . $extra, $self_url, $self_title, array_key_exists('forum', $map) ? $map['forum'] : null, false, null, $explicit_allow) : false;
 
         if ((array_key_exists('title', $_POST)) && ($hidden) && ($submitted)) {
             attach_message(do_lang_tempcode('MESSAGE_POSTED'), 'inform');

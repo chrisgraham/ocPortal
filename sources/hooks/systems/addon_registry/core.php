@@ -1243,6 +1243,7 @@ class Hook_addon_registry_core
             'themes/default/images/EN/1x/index.html',
             'themes/default/images/EN/2x/index.html',
             'themes/default/images/icons/16x16/index.html',
+            'sources/persistent_cacheing/.htaccess',
 
             // Admin theme
             'themes/admin/css/index.html',

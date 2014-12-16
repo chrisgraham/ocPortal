@@ -26,6 +26,7 @@ For: php_oci8.dll
 
 /**
  * Database Driver.
+ * @package    core_database_drivers
  */
 class Database_Static_oracle
 {

@@ -31,6 +31,7 @@ function extract_plain_links($matches)
 
 /**
  * RSS loader.
+ * @package    core
  */
 class OCP_RSS
 {

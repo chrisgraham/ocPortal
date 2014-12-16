@@ -30,6 +30,7 @@ Make sure you have write permissions on the file as 'Everyone'.
 
 /**
  * Database Driver.
+ * @package    core_database_drivers
  */
 class Database_Static_access
 {

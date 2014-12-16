@@ -303,6 +303,6 @@ function ocf_delete_warning($warning_id)
 
     $GLOBALS['FORUM_DB']->query_delete('f_warnings', array('id' => $warning_id), '', 1);
 
-    $num_warnings = $GLOBALS['FORUM_DB']->query_value('f_warnings', 'COUNT(*)', array('w_is_warning' => 1, 'w_member_id' => $member_id));
+    $num_warnings = $GLOBALS['FORUM_DB']->query_select_value('f_warnings', 'COUNT(*)', array('w_is_warning' => 1, 'w_member_id' => $member_id));
     $GLOBALS['FORUM_DB']->query_update('f_members', array('m_cache_warnings' => $num_warnings), array('id' => $member_id), '', 1);
 }

@@ -29,7 +29,7 @@ function get_product_details()
 
     require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($_hook));
 
-    $object = object_factory('Hook_' . filter_naughty_harsh($_hook));
+    $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($_hook));
 
     $products = $object->get_product_details();
 
@@ -47,7 +47,7 @@ function add_to_cart($product_det)
 
     require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($_hook));
 
-    $object = object_factory('Hook_' . filter_naughty_harsh($_hook));
+    $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($_hook));
 
     $object->add_order($product_det);
 }
@@ -254,7 +254,7 @@ function update_stock($order_id)
 
         require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($hook), true);
 
-        $object = object_factory('Hook_' . $hook, true);
+        $object = object_factory('Hook_ecommerce_' . $hook, true);
         if (is_null($object)) {
             continue;
         }
@@ -351,7 +351,7 @@ function payment_form()
 
         require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($hook), true);
 
-        $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
+        $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($hook), true);
         if (is_null($object)) {
             continue;
         }

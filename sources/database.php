@@ -444,6 +444,7 @@ function get_db_forums_password()
 
 /**
  * Database handling.
+ * @package    core
  */
 class Database_driver
 {

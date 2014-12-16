@@ -65,15 +65,16 @@ function ocf_may_post_in_topic($forum_id, $topic_id, $last_member_id = null, $me
 /**
  * Find whether a member may edit the detailed post.
  *
- * @param  AUTO_LINK $post_id The post ID.
- * @param  ?TIME                        $post_time The time of the post (NULL: lookup).
- * @param  ?MEMBER                      $resource_owner The owner of the post (NULL: lookup).
- * @param  ?AUTO_LINK                   $forum_id The forum the post is in (NULL: is a Private Topic, unless $post_time is NULL in which case we look this up too).
+ * @param  AUTO_LINK                    $post_id The post ID.
+ * @param  ?TIME                        $post_time The time of the post (null: lookup).
+ * @param  ?MEMBER                      $resource_owner The owner of the post (null: lookup).
+ * @param  ?AUTO_LINK                   $forum_id The forum the post is in (null: is a Private Topic, unless $post_time is NULL in which case we look this up too).
  * @param  ?MEMBER                      $member_id The member (null: current member).
  * @param  ?boolean                     $topic_is_closed Whether the topic the post is in is closed (null: don't consider this, maybe we're not considering any one specific case, unless $post_time is NULL in which case we look this up to).
+ * @param  ?string                      $reason The reason for the topic being closed is put here (null: no interesting reason).
  * @return boolean                      The answer.
  */
-function ocf_may_edit_post_by($post_id, $post_time = null, $resource_owner, $forum_id, $member_id = null, $topic_is_closed = null, &$reason = null)
+function ocf_may_edit_post_by($post_id, $post_time, $resource_owner, $forum_id, $member_id = null, $topic_is_closed = null, &$reason = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
@@ -129,11 +130,12 @@ function ocf_may_edit_post_by($post_id, $post_time = null, $resource_owner, $for
  * Find whether a member may delete the detailed post.
  *
  * @param  AUTO_LINK $post_id The post ID.
- * @param  ?TIME                        $post_time The time of the post (NULL: lookup).
- * @param  ?MEMBER                      $resource_owner The owner of the post (NULL: lookup).
- * @param  ?AUTO_LINK                   $forum_id The forum the post is in (NULL: is a Private Topic, unless $post_time is NULL in which case we look this up too).
+ * @param  ?TIME                        $post_time The time of the post (null: lookup).
+ * @param  ?MEMBER                      $resource_owner The owner of the post (null: lookup).
+ * @param  ?AUTO_LINK                   $forum_id The forum the post is in (null: is a Private Topic, unless $post_time is NULL in which case we look this up too).
  * @param  ?MEMBER                      $member_id The member (null: current member).
  * @param  ?boolean                     $topic_is_closed Whether the topic the post is in is closed (null: don't consider this, maybe we're not considering any one specific case, unless $post_time is NULL in which case we look this up to).
+ * @param  ?string                      $reason The reason for the topic being closed is put here (null: no interesting reason).
  * @return boolean                      The answer.
  */
 function ocf_may_delete_post_by($post_id, $post_time = null, $resource_owner, $forum_id, $member_id = null, $topic_is_closed = null, &$reason = null)

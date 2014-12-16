@@ -26,6 +26,7 @@
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_vb_shared extends Forum_driver_base
 {

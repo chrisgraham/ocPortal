@@ -738,6 +738,6 @@ class Hook_ecommerce_catalogue_items
  */
 function handle_catalogue_items($entry_id, $details)
 {
-    $object = object_factory('Hook_catalogue_items');
+    $object = object_factory('Hook_ecommerce_catalogue_items');
     $object->update_stock($entry_id, 1);
 }

@@ -29,6 +29,7 @@ function init__occle_fs()
 
 /**
  * Virtual filesystems.
+ * @package    occle
  */
 class OcCLE_fs
 {

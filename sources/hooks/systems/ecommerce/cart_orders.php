@@ -150,7 +150,7 @@ class Hook_ecommerce_cart_orders
 
             require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($item['p_type']));
 
-            $object = object_factory('Hook_' . filter_naughty_harsh($item['p_type']));
+            $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($item['p_type']));
 
             //if any of the product's dispatch type is manual, return type as 'manual'
             if ($object->get_product_dispatch_type() == 'manual') {

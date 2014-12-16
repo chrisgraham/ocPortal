@@ -83,6 +83,7 @@ class Module_admin_version
         $GLOBALS['SITE_DB']->drop_table_if_exists('task_queue');
         $GLOBALS['SITE_DB']->drop_table_if_exists('comcode_pages');
         $GLOBALS['SITE_DB']->drop_table_if_exists('cached_comcode_pages');
+        $GLOBALS['SITE_DB']->drop_table_if_exists('email_bounces');
 
         /*$zones=find_all_zones(true);    We don't want to get rid of on-disk data when reinstalling
         require_code('files');

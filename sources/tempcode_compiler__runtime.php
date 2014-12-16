@@ -326,6 +326,7 @@ function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $them
 
 /**
  * Static implementation of Tempcode.
+ * @package    core
  */
 class Tempcode_static
 {

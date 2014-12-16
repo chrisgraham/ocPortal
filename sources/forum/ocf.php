@@ -42,6 +42,7 @@ function init__forum__ocf()
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_ocf extends Forum_driver_base
 {

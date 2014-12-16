@@ -87,6 +87,8 @@ class ocp_merge_test_set extends ocp_test_case
             'quiz_member_last_visit',
             'referees_qualified_for',
             'referrer_override',
+            'credit_charge_log',
+            'email_bounces',
             'reported_content',
             'searches_logged',
             'sessions',

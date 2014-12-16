@@ -78,7 +78,7 @@ class specsettings_documented_test_set extends ocp_test_case
         sort($found);
 
         foreach ($found as $var) {
-            $this->assertTrue(strpos($config_editor_code, '\'' . $var . '\'=>\'') !== false, 'Missing config_editor UI for ' . $var);
+            $this->assertTrue(strpos($config_editor_code, '\'' . $var . '\' => \'') !== false, 'Missing config_editor UI for ' . $var);
         }
     }
 

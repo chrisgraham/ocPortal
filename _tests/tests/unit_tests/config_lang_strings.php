@@ -41,7 +41,7 @@ class config_lang_strings_test_set extends ocp_test_case
             $details = $ob->get_details();
             $options[] = $details;
 
-            $this->assertTrue(strpos($code, "@package\t\t" . $details['addon']) !== false, 'Addon definition mismatch in ' . $hook);
+            $this->assertTrue(strpos($code, "@package    " . $details['addon']) !== false, 'Addon definition mismatch in ' . $hook);
         }
         require_all_lang();
         foreach ($options as $option) {

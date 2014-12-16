@@ -132,6 +132,7 @@ function occle_script()
 
 /**
  * OcCLE.
+ * @package    occle
  */
 class Virtual_shell
 {

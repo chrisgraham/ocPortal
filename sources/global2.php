@@ -275,7 +275,12 @@ function init__global2()
     }
 
     // At this point we can display errors nicely
-    $GLOBALS['SUPPRESS_ERROR_DEATH'] = false;
+    /** Whether error display is suppressed
+     *
+     * @global boolean $SUPPRESS_ERROR_DEATH
+     */
+    global $SUPPRESS_ERROR_DEATH;
+    $SUPPRESS_ERROR_DEATH = false;
     set_error_handler('ocportal_error_handler');
     if (function_exists('error_get_last')) {
         register_shutdown_function('catch_fatal_errors');

@@ -524,6 +524,7 @@ function remap_portable_as_resource_id($resource_type, $portable)
 
 /**
  * Resource-fs base class.
+ * @package    occle
  */
 class Resource_fs_base
 {

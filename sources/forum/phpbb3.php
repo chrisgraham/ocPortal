@@ -121,6 +121,7 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_phpbb3 extends Forum_driver_base
 {

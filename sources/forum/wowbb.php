@@ -20,6 +20,7 @@
 
 /**
  * Forum driver class.
+ * @package    core_forum_drivers
  */
 class Forum_driver_wowbb extends Forum_driver_base
 {

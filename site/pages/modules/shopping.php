@@ -370,7 +370,7 @@ class Module_shopping
 
                 require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($_hook));
 
-                $object = object_factory('Hook_' . filter_naughty_harsh($_hook));
+                $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($_hook));
 
                 if (method_exists($object, 'show_cart_entry')) {
                     $object->show_cart_entry($shopping_cart, $value);

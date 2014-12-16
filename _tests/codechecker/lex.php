@@ -168,6 +168,8 @@ function lex($text = null)
 {
     global $PCONTINUATIONS, $PCONTINUATIONS_SIMPLE, $PTOKENS, $TEXT;
 
+    ini_set('pcre.backtrack_limit', '10000000');
+
     if (!is_null($text)) {
         $TEXT = $text;
     }
@@ -179,7 +181,7 @@ function lex($text = null)
             if (strpos($TEXT, '?' . '>') !== false) {
                 log_warning('It is best to only have one PHP code block and not to terminate it. This stops problems with white-space at the end of files.');
             } else {
-                $TEXT .= '?' . '>';
+                $TEXT .= '?' . '>' . ((substr($TEXT, -1) == "\n") ? "\n" : '');
             }
 
             log_warning('Use "<' . '?php" tagging for compatibility.');
@@ -188,7 +190,7 @@ function lex($text = null)
             if (strpos($TEXT, '%' . '>') !== false) {
                 log_warning('It is best to only have one PHP code block and not to terminate it. This stops problems with white-space at the end of files.');
             } else {
-                $TEXT .= '%>';
+                $TEXT .= '%' . '>' . ((substr($TEXT, -1) == "\n") ? "\n" : '');
             }
 
             log_warning('Use "<' . '?php" tagging for compatibility.');
@@ -200,7 +202,7 @@ function lex($text = null)
         if (strpos($TEXT, '?' . '>') !== false) {
             log_warning('It is best to only have one PHP code block and not to terminate it. This stops problems with white-space at the end of files.');
         } else {
-            $TEXT .= '?' . '>';
+            $TEXT .= '?' . '>' . ((substr($TEXT, -1) == "\n") ? "\n" : '');
         }
 
         $num_matches = preg_match_all('#<\\?php(.*)\\?' . '>#sU', $TEXT, $matches, PREG_OFFSET_CAPTURE);
@@ -239,7 +241,10 @@ function lex($text = null)
     }
 
     // So that we don't have to consider end-of-file states as much.
-    $TEXT .= "\n";
+    if (substr($TEXT, -1) != "\n") {
+        log_warning('Files are supposed to end with a blank line according to PSR-2', $i, true);
+        $TEXT .= "\n";
+    }
 
     $tokens = array(); // We will be lexing into this list of tokens
 
@@ -805,10 +810,6 @@ function lex($text = null)
 
                 break;
         }
-    }
-
-    if (substr($TEXT, $len - 2) != "\n\n") {
-        log_warning('Files are supposed to end with a blank line according to PSR-2', $i, true);
     }
 
     return $tokens;

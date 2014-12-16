@@ -57,7 +57,7 @@ function ecommerce_test_mode()
 /**
  * Get the symbol of the currency we're trading in.
  *
- * @param  ?ID_TEXT                     The currency (null: configured).
+ * @param  ?ID_TEXT                     $currency The currency (null: configured).
  * @return ID_TEXT                      The currency symbol.
  */
 function ecommerce_get_currency_symbol($currency = null)
