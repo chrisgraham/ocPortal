@@ -2132,10 +2132,14 @@ function convert_data_encodings($known_utf8=false)
 	elseif ((function_exists('iconv_set_encoding')) && (get_value('disable_iconv')!=='1'))
 	{
 		$encoding=$known_utf8?'UTF-8':$charset;
-		if (@iconv_set_encoding('input_encoding',$encoding))
+		if (!function_exists('iconv_set_encoding') || @iconv_set_encoding('input_encoding',$encoding))
 		{
-			iconv_set_encoding('output_encoding',$charset);
-			iconv_set_encoding('internal_encoding',$charset);
+			if (function_exists('iconv_set_encoding'))
+			{
+				@iconv_set_encoding('output_encoding',$charset);
+				@iconv_set_encoding('internal_encoding',$charset);
+			}
+			ini_set('default_charset',$charset);
 			foreach ($_GET as $key=>$val)
 			{
 				if (is_string($val))
