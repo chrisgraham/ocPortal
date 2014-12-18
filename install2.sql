@@ -6,7 +6,7 @@ CREATE TABLE `ocp_db_meta` (
   `m_type` varchar(80) NOT NULL,
   PRIMARY KEY (`m_table`,`m_name`),
   KEY `findtransfields` (`m_type`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 insert into `ocp_db_meta` values('translate','id','*AUTO'),
  ('translate','language','*LANGUAGE_NAME'),
@@ -1414,7 +1414,7 @@ CREATE TABLE `ocp_db_meta_indices` (
   `i_name` varchar(80) NOT NULL,
   `i_fields` varchar(80) NOT NULL,
   PRIMARY KEY (`i_table`,`i_name`,`i_fields`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 insert into `ocp_db_meta_indices` values('adminlogs','aip','ip'),
  ('adminlogs','athe_type','the_type'),
