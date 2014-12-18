@@ -290,6 +290,8 @@ class Hook_addon_registry_catalogues
             'ENTRIES' => $entries,
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
+            'SORTING' => '',
+            'PAGINATION' => '',
 
             'CART_LINK' => new Tempcode(),
 
@@ -371,6 +373,8 @@ class Hook_addon_registry_catalogues
             'ENTRIES' => $entries,
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
+            'SORTING' => '',
+            'PAGINATION' => '',
 
             'CART_LINK' => new Tempcode(),
 
@@ -437,6 +441,8 @@ class Hook_addon_registry_catalogues
             'ENTRIES' => $entries,
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
+            'SORTING' => '',
+            'PAGINATION' => '',
 
             'CART_LINK' => new Tempcode(),
 
@@ -523,6 +529,8 @@ class Hook_addon_registry_catalogues
             'ENTRIES' => $content,
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
+            'SORTING' => '',
+            'PAGINATION' => '',
 
             'CART_LINK' => new Tempcode(),
 
@@ -605,6 +613,8 @@ class Hook_addon_registry_catalogues
             'ENTRIES' => $content,
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
+            'SORTING' => '',
+            'PAGINATION' => '',
 
             'CART_LINK' => new Tempcode(),
 
@@ -679,6 +689,7 @@ class Hook_addon_registry_catalogues
             lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_ENTRY_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'WARNINGS' => '',
+                'ID' => placeholder_id(),
                 'ENTRY' => $entry,
                 'EDIT_URL' => placeholder_url(),
                 '_EDIT_LINK' => placeholder_link(),

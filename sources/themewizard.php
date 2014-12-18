@@ -271,6 +271,7 @@ function generate_logo($name, $font_choice = 'Vera', $logo_theme_image = 'logo/d
 {
     require_code('character_sets');
     require_code('files');
+    require_code('themes2');
 
     if (is_null($theme)) {
         $theme = $GLOBALS['SITE_DB']->query_select_value('zones', 'zone_theme', array('zone_name' => ''));

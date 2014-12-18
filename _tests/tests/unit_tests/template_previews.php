@@ -37,6 +37,8 @@ class template_previews_test_set extends ocp_test_case
         $_GET['wide'] = '1';
         $_GET['keep_devtest'] = '1';
         $_GET['keep_has_js'] = '0';
+        $_GET['keep_no_minify'] = '1'; // Disables resource merging, which messes with results
+        $_GET['keep_fatalistic'] = '1';
 
         require_code('lorem');
     }
@@ -47,11 +49,12 @@ class template_previews_test_set extends ocp_test_case
         $dh = opendir(get_file_base() . '/themes/default/templates');
         while (($f = readdir($dh)) !== false) {
             if ((strtolower(substr($f, -4)) == '.tpl') && ($f[0] != '.')) {
-                $templates[] = $f;
+                $templates[] = 'templates/' . $f;
             }
         }
 
         $all_previews = find_all_previews__by_template();
+
         foreach ($templates as $t) {
             $this->assertFalse((!array_key_exists($t, $all_previews)), 'Missing preview for: ' . $t);
         }
@@ -136,11 +139,15 @@ class template_previews_test_set extends ocp_test_case
             }
             $_out = $out->evaluate();
 
-            $result = check_xhtml($_out, false, false, false, true, true, false, false);
-            if ((!is_null($result)) && (count($result['errors']) == 0)) {
+            if (strpos($_out, '<html') !== false && strpos($_out, '<xsl') === false) {
+                $result = check_xhtml($_out, false, false, false, true, true, false, false);
+                if ((!is_null($result)) && (count($result['errors']) == 0)) {
+                    $result = null;
+                }
+            } else {
                 $result = null;
             }
-            $this->assertTrue(is_null($result), $hook . ':' . $template);
+            $this->assertTrue(is_null($result), $hook . ':' . $function);
             if (!is_null($result)) {
                 require_code('view_modes');
                 display_validation_results($_out, $result, false, false);
@@ -163,7 +170,6 @@ class template_previews_test_set extends ocp_test_case
 
         global $HAS_KEEP_IN_URL_CACHE;
         $_GET['wide'] = '1';
-        $_GET['keep_no_minify'] = '1'; // Disables resource merging, which messes with results
         $HAS_KEEP_IN_URL_CACHE = null;
 
         $lists = find_all_previews__by_screen();

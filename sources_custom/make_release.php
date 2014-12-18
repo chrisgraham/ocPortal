@@ -423,7 +423,7 @@ function populate_build_files_array($dir = '', $pretend_dir = '')
         $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . '_config.php'] = '';
     }
     if ($pretend_dir == 'data_custom/') {
-        $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . 'execute_temp.php'] = file_get_contents(get_file_base() . '/execute_temp.php.bundle');
+        $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . 'execute_temp.php'] = file_get_contents(get_file_base() . '/data_custom/execute_temp.php.bundle');
     }
 
     // Go over files in the directory

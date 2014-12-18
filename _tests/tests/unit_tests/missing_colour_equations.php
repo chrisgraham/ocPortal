@@ -31,8 +31,9 @@ class missing_colour_equations_test_set extends ocp_test_case
             'widget_plupload.css',
             'widget_color.css',
             'widget_date.css',
-            'widget_select2',
+            'widget_select2.css',
             'phpinfo.css',
+            'jquery_ui.css',
         );
 
         $dh = opendir(get_file_base() . '/themes/default/css');

@@ -85,10 +85,10 @@ function _indent_callback($matches)
 function _title_callback($matches)
 {
     $symbol = '-';
-    if (strpos($matches[1], '1') !== false || strpos($matches[1], '2') !== false || $matches[1] == '') {
+    if (strpos($matches[2], '1') !== false || strpos($matches[2], '2') !== false || $matches[2] == '') {
         $symbol = '=';
     }
-    return $matches[2] . "\n" . str_repeat($symbol, strlen($matches[2]));
+    return $matches[1] . $matches[3] . "\n" . str_repeat($symbol, strlen($matches[3]));
 }
 
 /**
@@ -179,7 +179,7 @@ function comcode_to_clean_text($message_plain, $for_extract = false)
     $message_plain = preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us', '${1}', $message_plain);
     $message_plain = preg_replace('#\[abbr="([^"]*)"[^\]]*\].*\[/abbr\]#Us', '${1}', $message_plain);
     $message_plain = preg_replace_callback('#\[indent[^\]]*\](.*)\[/indent\]#Us', '_indent_callback', $message_plain);
-    $message_plain = preg_replace_callback('#\s*\[title([^\]]*)\](.*)\[/title\]#Us', '_title_callback', $message_plain);
+    $message_plain = preg_replace_callback('#(\s*)\[title([^\]]*)\](.*)\[/title\]#Us', '_title_callback', $message_plain);
     $message_plain = preg_replace_callback('#\[box="([^"]*)"[^\]]*\](.*)\[/box\]#Us', '_box_callback', $message_plain);
     $tags_to_strip_inards = array('if_in_group', 'snapback', 'post', 'topic', 'include', 'staff_note', 'attachment', 'attachment_safe', 'contents', 'block', 'random');
     foreach ($tags_to_strip_inards as $s) {

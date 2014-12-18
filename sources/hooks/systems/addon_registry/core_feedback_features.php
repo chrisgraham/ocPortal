@@ -176,7 +176,7 @@ class Hook_addon_registry_core_feedback_features
             'templates/TRACKBACK.tpl' => 'administrative__trackback_delete_screen',
             'templates/TRACKBACK_DELETE_SCREEN.tpl' => 'administrative__trackback_delete_screen',
             'xml/TRACKBACK_XML_NO_ERROR.xml' => 'trackback_xml_wrapper',
-            'xml/TRACKBACK_XML_ERROR.xml' => 'trackback_xml_error',
+            'xml/TRACKBACK_XML_ERROR.xml' => 'trackback_xml_wrapper',
             'xml/TRACKBACK_XML_WRAPPER.xml' => 'trackback_xml_wrapper',
             'templates/COMMENTS_POSTING_FORM.tpl' => 'comments',
             'templates/RATING_BOX.tpl' => 'rating',
@@ -248,22 +248,6 @@ class Hook_addon_registry_core_feedback_features
      *
      * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
      */
-    public function tpl_preview__trackback_xml_error()
-    {
-        return array(
-            lorem_globalise(do_lorem_template('TRACKBACK_XML_ERROR', array(
-                'TRACKBACK_ERROR' => lorem_phrase(),
-            ), null, false, null, '.xml', 'xml'), null, '', true)
-        );
-    }
-
-    /**
-     * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-     * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-     * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
-     *
-     * @return array                    Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-     */
     public function tpl_preview__trackback_xml_wrapper()
     {
         $xml = do_lorem_template('TRACKBACK_XML', array(
@@ -272,10 +256,11 @@ class Hook_addon_registry_core_feedback_features
             'EXCERPT' => lorem_phrase(),
         ), null, false, null, '.xml', 'xml');
         $xml->attach(do_lorem_template('TRACKBACK_XML_NO_ERROR', array(), null, false, null, '.xml', 'xml'));
+        $xml->attach(do_lorem_template('TRACKBACK_XML_ERROR', array('TRACKBACK_ERROR' => lorem_phrase()), null, false, null, '.xml', 'xml'));
         return array(
-            lorem_globalise(do_lorem_template('TRACKBACK_XML_WRAPPER', array(
+            do_lorem_template('TRACKBACK_XML_WRAPPER', array(
                 'XML' => $xml,
-            ), null, false, null, '.xml', 'xml'), null, '', true)
+            ), null, false, null, '.xml', 'xml')
         );
     }
 
@@ -326,6 +311,7 @@ class Hook_addon_registry_core_feedback_features
             'CREATE_TICKET_MAKE_POST' => true,
             'FIRST_POST' => lorem_paragraph_html(),
             'FIRST_POST_URL' => placeholder_url(),
+            'NAME' => 'field',
         ));
 
         $ret->attach(do_lorem_template('COMMENT_AJAX_HANDLER', array(
@@ -413,6 +399,7 @@ class Hook_addon_registry_core_feedback_features
             'TITLE' => lorem_word(),
             'MAKE_POST' => true,
             'CREATE_TICKET_MAKE_POST' => true,
+            'NAME' => 'field',
         ));
 
         $out = do_lorem_template('COMMENTS_WRAPPER', array(
@@ -428,9 +415,9 @@ class Hook_addon_registry_core_feedback_features
         ));
 
         $out->attach(do_lorem_template('COMMENT_AJAX_HANDLER', array(
-            'OPTIONS' => lorem_phrase(),
-            'HASH' => lorem_phrase(),
-            'PAGE_NAME' => lorem_word(),
+            'OPTIONS' => '',
+            'IS_THREADED' => false,
+            'HASH' => '',
         )));
 
         return array(
@@ -489,7 +476,7 @@ class Hook_addon_registry_core_feedback_features
         ), null, false, null, '.xml', 'xml');
 
         return array(
-            lorem_globalise($content, null, '', true)
+            $content
         );
     }
 
@@ -565,7 +552,8 @@ class Hook_addon_registry_core_feedback_features
             'HAS_RATINGS' => true,
             'SIMPLISTIC' => false,
             'ERROR' => '',
-
+            'CONTENT_URL' => placeholder_url(),
+            'CONTENT_TITLE' => lorem_phrase(),
         ));
         return array(
             lorem_globalise(do_lorem_template('RATING_INLINE_STATIC', array(
@@ -609,6 +597,8 @@ class Hook_addon_registry_core_feedback_features
             'SIMPLISTIC' => false,
             'ERROR' => '',
             'LIKES' => true,
+            'CONTENT_URL' => placeholder_url(),
+            'CONTENT_TITLE' => lorem_phrase(),
         ));
         return array(
             lorem_globalise(do_lorem_template('RATING_INLINE_DYNAMIC', array(
@@ -652,6 +642,8 @@ class Hook_addon_registry_core_feedback_features
             'SIMPLISTIC' => false,
             'ERROR' => '',
             'LIKES' => true,
+            'CONTENT_URL' => placeholder_url(),
+            'CONTENT_TITLE' => lorem_phrase(),
         ));
         return array(
             lorem_globalise(do_lorem_template('RATING_DISPLAY_SHARED', array(

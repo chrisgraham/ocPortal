@@ -141,7 +141,10 @@ function is_mail_bounced($email, $server = null, $port = null, $folder = null, $
         return null; // Not configured, so cannot proceed
     }
 
-    $update_since = $GLOBALS['SITE_DB']->query_select_value_if_there('email_bounces', 'MAX(b_time)');
+    static $update_since = null;
+    if (is_null($update_since)) {
+        $update_since = $GLOBALS['SITE_DB']->query_value_if_there('email_bounces', 'MAX(b_time)');
+    }
     update_bounce_storage($server, $port, $folder, $username, $password, $update_since);
 
     return $GLOBALS['SITE_DB']->query_select_value_if_there('email_bounces', 'MAX(b_time)', array('b_email_address' => $email));
@@ -161,6 +164,15 @@ function update_bounce_storage($server, $port, $folder, $username, $password, $s
 {
     if (is_null($since)) {
         $since = time() - 60 * 60 * 24 * 7 * 8;
+    } else {
+		static $done_in_session = false;
+		if ($since > time() - 10) {
+			return;
+		}
+		if ($done_in_session) {
+			return;
+		}
+		$done_in_session = true;
     }
 
     $bounces = _find_mail_bounces($server, $port, $folder, $username, $password, true, $since);

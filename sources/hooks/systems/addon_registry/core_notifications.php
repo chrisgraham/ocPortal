@@ -199,7 +199,7 @@ class Hook_addon_registry_core_notifications
                 'DATE_WRITTEN_TIME' => placeholder_time(),
                 'NOTIFICATION_CODE' => placeholder_id(),
                 'CODE_CATEGORY' => placeholder_id(),
-                'HAS_READ' => true,
+                'HAS_READ' => false,
             ))
         );
 
@@ -283,6 +283,7 @@ class Hook_addon_registry_core_notifications
             'DATE_WRITTEN_TIME' => placeholder_time(),
             'NOTIFICATION_CODE' => placeholder_id(),
             'CODE_CATEGORY' => placeholder_id(),
+            'HAS_READ' => true,
         ));
 
         return array(
@@ -412,6 +413,9 @@ class Hook_addon_registry_core_notifications
             'COLOR' => 'FFFFFF',
             'NOTIFICATION_TYPES_TITLES' => $notification_types_titles,
             'NOTIFICATION_SECTIONS' => $notification_sections,
+            'AUTO_NOTIFICATION_CONTRIB_CONTENT' => false,
+            'SMART_TOPIC_NOTIFICATION_CONTENT' => false,
+            'MEMBER_ID' => placeholder_id(),
         ));
         $out = do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN', array(
             'TITLE' => lorem_title(),

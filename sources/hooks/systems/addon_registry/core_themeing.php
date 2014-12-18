@@ -284,7 +284,7 @@ class Hook_addon_registry_core_themeing
                 'PING_URL' => placeholder_url(),
                 'WARNING_DETAILS' => '',
                 'TITLE' => lorem_title(),
-                'EDIT_FORMS' => array('_TITLE' => lorem_phrase(), 'FORM' => placeholder_form()),
+                'EDIT_FORMS' => array(array('_TITLE' => lorem_phrase(), 'FORM' => placeholder_form())),
             )), null, '', true)
         );
     }

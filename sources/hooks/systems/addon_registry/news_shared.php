@@ -141,6 +141,7 @@ class Hook_addon_registry_news_shared
                 'SUBMITTER' => placeholder_id(),
                 'AVATAR' => lorem_phrase(),
                 'NEWS_TITLE' => lorem_phrase(),
+                'NEWS_TITLE_PLAIN' => lorem_word(),
                 'DATE' => lorem_phrase(),
                 'NEWS' => lorem_phrase(),
                 'COMMENTS' => lorem_phrase(),

@@ -151,7 +151,7 @@ class Hook_addon_registry_search
             'templates/BLOCK_TOP_SEARCH.tpl' => 'block_top_search',
             'templates/BLOCK_SIDE_TAG_CLOUD.tpl' => 'block_side_tag_cloud',
             'templates/TAGS.tpl' => 'tags',
-            'OPENSEARCH.xml' => 'opensearch',
+            'xml/OPENSEARCH.xml' => 'opensearch',
             'templates/SEARCH_RESULT.tpl' => 'search_form_screen',
             'templates/SEARCH_RESULT_TABLE.tpl' => 'search_form_screen',
             'templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl' => 'search_form_screen',
@@ -290,9 +290,9 @@ class Hook_addon_registry_search
     public function tpl_preview__opensearch()
     {
         return array(
-            lorem_globalise(do_lorem_template('OPENSEARCH', array(
+            do_lorem_template('OPENSEARCH', array(
                 'DESCRIPTION' => lorem_paragraph(),
-            ), null, false, null, '.xml', 'xml'), null, '', true)
+            ), null, false, null, '.xml', 'xml')
         );
     }
 

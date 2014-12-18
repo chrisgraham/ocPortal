@@ -344,6 +344,7 @@ class Hook_addon_registry_iotds
             'TITLE' => lorem_word(),
             'MAKE_POST' => true,
             'CREATE_TICKET_MAKE_POST' => true,
+            'NAME' => 'field',
         ));
 
         $comment_details = do_lorem_template('COMMENTS_WRAPPER', array(

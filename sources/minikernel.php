@@ -55,6 +55,9 @@ function init__minikernel()
     global $MICRO_BOOTUP;
     $MICRO_BOOTUP = false;
 
+    global $EXTERNAL_CALL;
+    $EXTERNAL_CALL = false;
+
     global $XSS_DETECT, $LAX_COMCODE;
     $XSS_DETECT = false;
     $LAX_COMCODE = false;

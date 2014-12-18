@@ -320,7 +320,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
 
     if ($GLOBALS['SEMI_DEV_MODE']) {
         if (($codename == strtolower($codename)) && ($directory == 'templates')) {
-            fatal_exit('Template names should be in upper case, and the files should be stored in upper case.');
+            fatal_exit('Template names should be in upper case, and the files should be stored in upper case (' . $codename . ').');
         }
 
         if ((substr($codename, -7) == '_SCREEN') || (substr($codename, -8) == '_OVERLAY') || ($codename == 'POOR_XHTML_WRAPPER')) {
@@ -1150,7 +1150,7 @@ class Tempcode
                         } else {
                             require_code('site');
                             if (!$under_loop) {
-                                attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER', $bit_2, $codename), 'warn');
+                                attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER', $bit_2, ($codename == '') ? '???' : $codename), 'warn');
                             }
                             continue;
                         }

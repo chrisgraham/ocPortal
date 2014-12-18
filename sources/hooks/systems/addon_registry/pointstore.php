@@ -316,7 +316,7 @@ class Hook_addon_registry_pointstore
         $temp = do_lorem_template('POINTSTORE_FORWARDER_MAIL', array('ENCODED_REASON' => lorem_phrase(), 'EMAIL' => lorem_word(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'FORW_URL' => placeholder_url(), 'SUFFIX_PRICE' => lorem_phrase()), null, false, null, '.txt', 'text');
 
         return array(
-            lorem_globalise($temp, null, '', true)
+            $temp
         );
     }
 
@@ -357,9 +357,7 @@ class Hook_addon_registry_pointstore
         $temp = do_lorem_template('POINTSTORE_POP3_MAIL', array('EMAIL' => lorem_word(), 'ENCODED_REASON' => lorem_phrase(), 'LOGIN' => lorem_phrase(), 'QUOTA' => placeholder_number(), 'MAIL_SERVER' => lorem_phrase(), 'PASSWORD' => lorem_phrase(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'POP3_URL' => placeholder_url(), 'SUFFIX_PRICE' => placeholder_number()), null, false, null, '.txt', 'text');
 
         return array(
-            lorem_globalise(
-                $temp, null, '', true
-            ),
+            $temp
         );
     }
 
@@ -405,7 +403,6 @@ class Hook_addon_registry_pointstore
     public function tpl_preview__pointstore_quota_mail()
     {
         return array(
-            lorem_globalise(
                 do_lorem_template('POINTSTORE_QUOTA_MAIL', array(
                         'ENCODED_REASON' => lorem_phrase(),
                         'QUOTA' => placeholder_number(),
@@ -413,7 +410,7 @@ class Hook_addon_registry_pointstore
                         'QUOTA_URL' => placeholder_url(),
                         'PRICE' => placeholder_number(),
                     ), null, false, null, '.txt', 'text'
-                ), null, '', true),
+                ),
         );
     }
 

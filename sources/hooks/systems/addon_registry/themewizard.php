@@ -226,6 +226,7 @@ class Hook_addon_registry_themewizard
             'LOGO_THEME_IMAGE' => 'logo/default_logos/1',
             'BACKGROUND_THEME_IMAGE' => 'logo/default_backgrounds/1',
             'THEME' => lorem_phrase(),
+            'FONT' => 'Veranda',
         ));
 
         return array(

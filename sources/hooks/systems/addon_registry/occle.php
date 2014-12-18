@@ -526,6 +526,9 @@ class Hook_addon_registry_occle
                 'DIRECTORY' => lorem_phrase(),
                 'DIRECTORIES' => placeholder_array(),
                 'FILES' => placeholder_array(),
+                'FILENAME' => lorem_word(),
+                'FILESIZE' => lorem_word(),
+                'MTIME' => lorem_word(),
             )), null, '', true)
         );
     }

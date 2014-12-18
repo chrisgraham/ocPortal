@@ -1072,7 +1072,7 @@ function __check_tag($tag, $attributes, $self_close, $close, $errors)
                         }
                     }
 
-                    if ((isset($attributes['size'])) && (isset($attributes['type'])) && (($attributes['type'] == 'time') || ($attributes['type'] == 'week') || ($attributes['type'] == 'hidden') || ($attributes['type'] == 'color') || ($attributes['type'] == 'date') || ($attributes['type'] == 'datetime') || ($attributes['type'] == 'datetime-local') || ($attributes['type'] == 'month') || ($attributes['type'] == 'range') || ($attributes['type'] == 'radio') || ($attributes['type'] == 'checkbox') || ($attributes['type'] == 'number'))) {
+                    if ((isset($attributes['size'])) && (isset($attributes['type'])) && (($attributes['type'] == 'week') || ($attributes['type'] == 'hidden') || ($attributes['type'] == 'color') || ($attributes['type'] == 'month') || ($attributes['type'] == 'range') || ($attributes['type'] == 'radio') || ($attributes['type'] == 'checkbox') || ($attributes['type'] == 'number'))) {
                         $errors[] = array('XHTML_NO_SIZE_FOR');
                     }
 
@@ -1083,7 +1083,7 @@ function __check_tag($tag, $attributes, $self_close, $close, $errors)
                     if (($attributes['type'] == 'checkbox') && (isset($attributes['id']))) {
                         $pre_content = substr($OUT, 0, $POS);
                         if (preg_match('#<label for="' . preg_quote($attributes['id'], '#') . '">[^:]+<input[^<>]+id="' . preg_quote($attributes['id'], '#') . '"#', $pre_content) != 0) {
-                            $errors[] = array('ACCESSIB_COLONS_IN_PRE_LABELS');
+                            //$errors[] = array('ACCESSIB_COLONS_IN_PRE_LABELS');   Annoying
                         }
                     }
 

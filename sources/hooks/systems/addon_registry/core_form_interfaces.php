@@ -117,8 +117,8 @@ class Hook_addon_registry_core_form_interfaces
             'themes/default/templates/WYSIWYG_LOAD.tpl',
             'themes/default/javascript/posting.js',
             'themes/default/javascript/editing.js',
-            'themes/default/templates/WYSIWYG_SETTINGS.tpl',
-            'themes/default/templates/ATTACHMENT_UI_DEFAULTS.tpl',
+            'themes/default/javascript/WYSIWYG_SETTINGS.js',
+            'themes/default/javascript/ATTACHMENT_UI_DEFAULTS.js',
             'themes/default/javascript/multi.js',
             'themes/default/javascript/validation.js',
             'themes/default/templates/FORM_FIELD_SET_GROUPER.tpl',
@@ -262,6 +262,13 @@ class Hook_addon_registry_core_form_interfaces
             'data/ckeditor/lang/zh.js',
             'data/ckeditor/LICENSE.md',
             'data/ckeditor/ocproducts_patch.sh',
+            'data/ckeditor/lang/tt.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/en-gb.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/tt.js',
+            'data/ckeditor/plugins/magicline/images/hidpi/icon-rtl.png',
+            'data/ckeditor/plugins/magicline/images/icon-rtl.png',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/en-gb.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/tt.js',
             'data/ckeditor/plugins/a11yhelp/dialogs/a11yhelp.js',
             'data/ckeditor/plugins/a11yhelp/dialogs/lang/_translationstatus.txt',
             'data/ckeditor/plugins/a11yhelp/dialogs/lang/ar.js',
@@ -552,8 +559,8 @@ class Hook_addon_registry_core_form_interfaces
             'templates/BLOCK_HELPER_BLOCK_GROUP.tpl' => 'administrative__block_helper_block_group',
             'templates/BLOCK_HELPER_START.tpl' => 'administrative__block_helper_start',
             'templates/BLOCK_HELPER_DONE.tpl' => 'administrative__block_helper_done',
-            'templates/WYSIWYG_SETTINGS.tpl' => 'wysiwyg_settings',
-            'templates/ATTACHMENT_UI_DEFAULTS.tpl' => 'attachment_ui_defaults',
+            'javascript/WYSIWYG_SETTINGS.js' => 'wysiwyg_settings',
+            'javascript/ATTACHMENT_UI_DEFAULTS.js' => 'attachment_ui_defaults',
         );
     }
 
@@ -567,7 +574,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__wysiwyg_settings()
     {
         return array(
-            lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS', array()), null, '', true)
+            do_lorem_template('WYSIWYG_SETTINGS', array(), null, false, null, '.js', 'javascript')
         );
     }
 
@@ -581,7 +588,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__attachment_ui_defaults()
     {
         return array(
-            lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS', array()), null, '', true)
+            do_lorem_template('ATTACHMENT_UI_DEFAULTS', array(), null, false, null, '.js', 'javascript')
         );
     }
 
@@ -828,7 +835,6 @@ class Hook_addon_registry_core_form_interfaces
             'CAPTION' => lorem_phrase(),
         ));
         $_description->attach($extra);
-
         $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
@@ -851,25 +857,23 @@ class Hook_addon_registry_core_form_interfaces
             'DEFAULT' => '',
         )));
 
-        // Dates
         $start_year = intval(date('Y')) - 1;
         $start_month = intval(date('m'));
         $start_day = intval(date('d'));
         $start_hour = intval(date('H'));
         $start_minute = intval(date('i'));
-
         $name = placeholder_random_id();
-        $time = do_lorem_template('FORM_SCREEN_INPUT_TIME', array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_TIME', array(
             'REQUIRED' => true,
             'TABINDEX' => placeholder_number(),
-            'NAME' => placeholder_random_id(),
+            'NAME' => $name,
 
             'MINUTE' => placeholder_number(),
             'HOUR' => placeholder_number(),
         ));
         $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
-            'SKIP_LABEL' => true,
+            'SKIP_LABEL' => false,
             'NAME' => $name,
             'PRETTY_NAME' => lorem_word(),
             'DESCRIPTION' => lorem_sentence_html(),
@@ -878,6 +882,7 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
+        $name = placeholder_random_id();
         $input = do_lorem_template('FORM_SCREEN_INPUT_DATE', array(
             'REQUIRED' => true,
             'TABINDEX' => placeholder_number(),
@@ -899,7 +904,7 @@ class Hook_addon_registry_core_form_interfaces
         ));
         $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
-            'SKIP_LABEL' => true,
+            'SKIP_LABEL' => false,
             'NAME' => $name,
             'PRETTY_NAME' => lorem_word(),
             'DESCRIPTION' => lorem_sentence_html(),

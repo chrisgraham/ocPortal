@@ -259,6 +259,7 @@ class Hook_addon_registry_news
             'RECENT_BLOG_POSTS' => lorem_paragraph_html(),
             'RSS_URL' => placeholder_url(),
             'ADD_BLOG_POST_URL' => placeholder_url(),
+            'PAGINATION' => '',
         ));
         return array(
             lorem_globalise($tab_content, null, '', true)
@@ -567,6 +568,7 @@ class Hook_addon_registry_news
             'CREATE_TICKET_MAKE_POST' => true,
             'FIRST_POST_URL' => '',
             'FIRST_POST' => '',
+            'NAME' => 'field',
         ));
 
         return array(

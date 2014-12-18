@@ -316,6 +316,8 @@ class Hook_addon_registry_ocf_forum
             'themes/default/templates/OCF_PRIVATE_TOPIC_LINK.tpl',
             'themes/default/templates/OCF_PT_FILTERS.tpl',
             'themes/default/templates/OCF_MEMBER_PROFILE_POSTS.tpl',
+            'sources/hooks/systems/config/edit_time_limit.php',
+            'sources/hooks/systems/config/delete_time_limit.php',
             'sources/hooks/systems/config/enable_add_topic_btn_in_topic.php',
             'sources/hooks/systems/config/enable_forum_dupe_buttons.php',
             'sources/hooks/systems/config/enable_mark_forum_read.php',
@@ -508,7 +510,7 @@ class Hook_addon_registry_ocf_forum
 
         $orderings = '<label for="order_' . strval(1) . '">' . do_lang('ORDER') . ' <select id="order_' . strval(1) . '" name="order_' . strval(1) . '">' . $orderings . '</select></label>';
 
-        $categories = do_lorem_template('OCF_EDIT_FORUM_SCREEN_GROUPING', array(
+        $forum_groupings = do_lorem_template('OCF_EDIT_FORUM_SCREEN_GROUPING', array(
             'ORDERINGS' => $orderings,
             'GROUPING' => lorem_word_2(),
             'SUBFORUMS' => lorem_phrase(),
@@ -517,7 +519,7 @@ class Hook_addon_registry_ocf_forum
         $root_forum = do_lorem_template('OCF_EDIT_FORUM_SCREEN_FORUM', array(
             'ID' => placeholder_id(),
             'ORDERINGS' => lorem_phrase(),
-            'CATEGORIES' => $categories,
+            'FORUM_GROUPINGS' => $forum_groupings,
             'CLASS' => lorem_phrase(),
             'FORUM' => lorem_phrase(),
             'VIEW_URL' => placeholder_url(),
@@ -835,6 +837,8 @@ class Hook_addon_registry_ocf_forum
             'JOIN_URL' => placeholder_url(),
             'FULL_LOGIN_URL' => placeholder_url(),
             'INLINE_PERSONAL_POSTS_URL' => placeholder_url(),
+            'NEW_POSTS_URL' => placeholder_url(),
+            'UNANSWERED_TOPICS_URL' => placeholder_url(),
         ));
 
         $member_bar = do_lorem_template('BLOCK_MAIN_MEMBER_BAR', array('BAR' => $bar));
@@ -1558,6 +1562,7 @@ class Hook_addon_registry_ocf_forum
                 'TITLE' => lorem_word(),
                 'MAKE_POST' => true,
                 'CREATE_TICKET_MAKE_POST' => true,
+                'NAME' => 'field',
             ));
 
             $poll = new Tempcode();

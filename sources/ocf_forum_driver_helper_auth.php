@@ -47,7 +47,7 @@ function _forum_authorise_login($this_ref, $username, $userid, $password_hashed,
         require_code('tempcode');
     }
     if (!function_exists('require_lang')) {
-        return $out;
+        return $out; // Bootstrap got really mixed up, so we need to bomb out
     }
     require_lang('ocf');
     require_code('mail');
@@ -122,18 +122,19 @@ function _forum_authorise_login($this_ref, $username, $userid, $password_hashed,
 
     // Now LDAP can kick in and get the correct hash
     if (ocf_is_ldap_member($userid)) {
-        //$rows[0]['m_pass_hash_salted']=ocf_get_ldap_hash($userid);
+        //$rows[0]['m_pass_hash_salted'] = ocf_get_ldap_hash($userid);
 
         // Doesn't exist any more? This is a special case - the 'LDAP member' exists in our DB, but not LDAP. It has been deleted from LDAP or LDAP server has jumped
         /*if (is_null($rows[0]['m_pass_hash_salted']))
         {
-            $out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',$username);
+            $out['error'] = do_lang_tempcode('_MEMBER_NO_EXIST', $username);
             return $out;
-        } No longer appropriate with new authentication mode - instead we just have to give an invalid password message  */
+        } No longer appropriate with new authentication mode - instead we just have to give an invalid password message */
 
         $row = array_merge($row, ocf_ldap_authorise_login($username, $password_hashed));
     }
 
+    // Check valid user
     if (addon_installed('unvalidated')) {
         if ($row['m_validated'] == 0) {
             $out['error'] = do_lang_tempcode('MEMBER_NOT_VALIDATED_STAFF');
@@ -171,27 +172,34 @@ function _forum_authorise_login($this_ref, $username, $userid, $password_hashed,
                     }
                 }
                 break;
+
             case 'plain':
                 if ($password_hashed != md5($row['m_pass_hash_salted'])) {
                     $out['error'] = do_lang_tempcode('MEMBER_BAD_PASSWORD');
                     return $out;
                 }
                 break;
+
             case 'md5': // Old style plain md5     (also works if both are unhashed: used for LDAP)
                 if (($password_hashed != $row['m_pass_hash_salted']) && ($password_hashed != '!!!')) { // The !!! bit would never be in a hash, but for plain text checks using this same code, we sometimes use '!!!' to mean 'Error'.
                     $out['error'] = do_lang_tempcode('MEMBER_BAD_PASSWORD');
                     return $out;
                 }
                 break;
-            /*case 'httpauth':
-                    // This is handled in get_member()
-                    break;*/
+
+            /*
+            case 'httpauth':
+                // This is handled in get_member()
+                break;
+            */
+
             case 'ldap':
                 if ($password_hashed != $row['m_pass_hash_salted']) {
                     $out['error'] = do_lang_tempcode('MEMBER_BAD_PASSWORD');
                     return $out;
                 }
                 break;
+
             default:
                 $path = get_file_base() . '/sources_custom/hooks/systems/ocf_auth/' . $password_compatibility_scheme . '.php';
                 if (!file_exists($path)) {

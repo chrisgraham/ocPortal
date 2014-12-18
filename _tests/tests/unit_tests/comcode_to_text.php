@@ -81,6 +81,12 @@ Want
 
 Cascading Style Sheets
             ';
-        $this->assertTrue(trim($got) == trim($expected));
+
+        $ok = trim($got) == trim($expected);
+        $this->assertTrue($ok);
+        if (!$ok) {
+            require_code('diff');
+            echo '<code style="white-space: pre">' . diff_simple_2($got, $expected, true) . '</code>';
+        }
     }
 }

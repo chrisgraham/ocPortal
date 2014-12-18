@@ -559,7 +559,7 @@ function step_3()
         $forums = array_reverse($forums);
         $rec = in_array($DEFAULT_FORUM, $forums);
         foreach ($forums as $forum) {
-            if (!GOOGLE_APPENGINE) {
+            if (GOOGLE_APPENGINE) {
                 if ($forum != 'ocf') {
                     continue;
                 }
@@ -590,7 +590,7 @@ function step_3()
     $tdatabase = new Tempcode();
     $dbs_found = 0;
     foreach (array_keys($databases) as $database) {
-        if (!GOOGLE_APPENGINE) {
+        if (GOOGLE_APPENGINE) {
             if ($database != 'mysql') {
                 continue;
             }
@@ -644,9 +644,9 @@ function step_3()
     }
 
     $js = new Tempcode();
-    $js->attach(do_template('global', null, null, false, null, '.js'));
+    $js->attach(do_template('global', null, null, false, null, '.js', 'javascript'));
     $js->attach("\n");
-    $js->attach(do_template('ajax', null, null, false, null, '.js'));
+    $js->attach(do_template('ajax', null, null, false, null, '.js', 'javascript'));
 
     $url = 'install.php?step=4';
     if (in_safe_mode()) {
@@ -682,9 +682,9 @@ function step_4()
     }
 
     $js = new Tempcode();
-    $js->attach(do_template('global', null, null, false, null, '.js'));
+    $js->attach(do_template('global', null, null, false, null, '.js', 'javascript'));
     $js->attach("\n");
-    $js->attach(do_template('ajax', null, null, false, null, '.js'));
+    $js->attach(do_template('ajax', null, null, false, null, '.js', 'javascript'));
 
     require_code('database/' . post_param('db_type'));
     $GLOBALS['DB_STATIC_OBJECT'] = object_factory('Database_Static_' . post_param('db_type'));
@@ -2359,7 +2359,7 @@ function safe_ini_set($var,$value)
         return false;
     }
 
-    return safe_ini_set($var, $value);
+    return ini_set($var, $value);
 }
 
 /**

@@ -380,7 +380,8 @@ body.website_body.frame {
 	background: transparent; /* Don't assume too much for a frame, it may be nested inside a box for example */
 }
 
-/*{+START,IF,{$CONFIG_OPTION,fixed_width}}/*{+START,IF,{$NOT,{$MOBILE}}}*/*/
+/*{+START,IF,{$CONFIG_OPTION,fixed_width}}*/
+/*{+START,IF,{$NOT,{$MOBILE}}}*/
 	html>body#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
 		/* Want to change the tiled background?
 			Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
@@ -404,7 +405,8 @@ body.website_body.frame {
 			{$BETA_CSS_PROPERTY,box-shadow: none;}
 		}
 	}
-/*{+END}*//*{+END}*/
+/*{+END}*/
+/*{+END}*/
 
 body.website_body, #wysiwyg_editor {
 	font-size: 13px; /* Note that the font sizer may override this (FONT_SIZER.tpl) */

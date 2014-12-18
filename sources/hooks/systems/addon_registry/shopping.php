@@ -604,6 +604,7 @@ class Hook_addon_registry_shopping
         $cart_link = do_lorem_template('ECOM_CART_LINK', array(
             'URL' => placeholder_url(),
             'TITLE' => lorem_phrase(),
+            'ITEMS' => placeholder_number(),
         ), null, false);
 
         $rating_inside = new Tempcode();
@@ -631,15 +632,16 @@ class Hook_addon_registry_shopping
 
         return array(
             lorem_globalise(do_lorem_template('CATALOGUE_products_ENTRY_SCREEN', $map + array(
-                    'TITLE' => lorem_title(),
-                    'WARNINGS' => '',
-                    'ENTRY' => $entry,
-                    'EDIT_URL' => placeholder_url(),
-                    '_EDIT_LINK' => placeholder_link(),
-                    'TRACKBACK_DETAILS' => lorem_phrase(),
-                    'RATING_DETAILS' => lorem_phrase(),
-                    'COMMENT_DETAILS' => lorem_phrase(),
-                )), null, '', true)
+                'TITLE' => lorem_title(),
+                'WARNINGS' => '',
+                'ENTRY' => $entry,
+                'ID' => placeholder_id(),
+                'EDIT_URL' => placeholder_url(),
+                '_EDIT_LINK' => placeholder_link(),
+                'TRACKBACK_DETAILS' => lorem_phrase(),
+                'RATING_DETAILS' => lorem_phrase(),
+                'COMMENT_DETAILS' => lorem_phrase(),
+            )), null, '', true)
         );
     }
 
@@ -687,6 +689,7 @@ class Hook_addon_registry_shopping
         $cart_link = do_lorem_template('ECOM_CART_LINK', array(
             'URL' => placeholder_url(),
             'TITLE' => lorem_phrase(),
+            'ITEMS' => placeholder_number(),
         ), null, false);
 
         $rating_inside = new Tempcode();
@@ -716,6 +719,8 @@ class Hook_addon_registry_shopping
             'ENTRIES' => $entry,
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
+            'SORTING' => '',
+            'PAGINATION' => '',
 
             'CART_LINK' => placeholder_link(),
 
@@ -727,23 +732,23 @@ class Hook_addon_registry_shopping
 
         return array(
             lorem_globalise(do_lorem_template('CATALOGUE_products_CATEGORY_SCREEN', $map + array(
-                    'ID' => placeholder_id(),
-                    'ADD_DATE_RAW' => placeholder_time(),
-                    'TITLE' => lorem_title(),
-                    '_TITLE' => lorem_phrase(),
-                    'TAGS' => '',
-                    'CATALOGUE' => lorem_word_2(),
-                    'ADD_ENTRY_URL' => placeholder_url(),
-                    'ADD_CAT_URL' => placeholder_url(),
-                    'EDIT_CAT_URL' => placeholder_url(),
-                    'EDIT_CATALOGUE_URL' => placeholder_url(),
-                    'ENTRIES' => $entries,
-                    'SUBCATEGORIES' => '',
-                    'DESCRIPTION' => lorem_sentence(),
-                    'CART_LINK' => placeholder_link(),
-                    'TREE' => lorem_phrase(),
-                    'DISPLAY_TYPE' => '0',
-                )), null, '', true)
+                'ID' => placeholder_id(),
+                'ADD_DATE_RAW' => placeholder_time(),
+                'TITLE' => lorem_title(),
+                '_TITLE' => lorem_phrase(),
+                'TAGS' => '',
+                'CATALOGUE' => lorem_word_2(),
+                'ADD_ENTRY_URL' => placeholder_url(),
+                'ADD_CAT_URL' => placeholder_url(),
+                'EDIT_CAT_URL' => placeholder_url(),
+                'EDIT_CATALOGUE_URL' => placeholder_url(),
+                'ENTRIES' => $entries,
+                'SUBCATEGORIES' => '',
+                'DESCRIPTION' => lorem_sentence(),
+                'CART_LINK' => placeholder_link(),
+                'TREE' => lorem_phrase(),
+                'DISPLAY_TYPE' => '0',
+            )), null, '', true)
         );
     }
 

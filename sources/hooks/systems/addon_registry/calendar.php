@@ -752,6 +752,7 @@ class Hook_addon_registry_calendar
             'CREATE_TICKET_MAKE_POST' => true,
             'FIRST_POST_URL' => '',
             'FIRST_POST' => '',
+            'NAME' => 'field',
         ));
         return array(
             lorem_globalise(do_lorem_template('CALENDAR_EVENT_SCREEN', array(

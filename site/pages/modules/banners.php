@@ -71,6 +71,8 @@ class Module_banners
     public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
+            require_lang('banners');
+
             $GLOBALS['SITE_DB']->create_table('banners', array(
                 'name' => '*ID_TEXT',
                 'expiry_date' => '?TIME',

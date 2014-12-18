@@ -594,7 +594,7 @@ class Hook_addon_registry_core_abstract_interfaces
         require_lang('do_next');
         $list = array(
             array(
-                'welcome',
+                'menu/welcome',
                 array(
                     null,
                     array(),
@@ -602,7 +602,7 @@ class Hook_addon_registry_core_abstract_interfaces
                 )
             ),
             array(
-                'cms/cms',
+                'menu/cms/cms',
                 array(
                     null,
                     array(),
@@ -610,7 +610,7 @@ class Hook_addon_registry_core_abstract_interfaces
                 )
             ),
             array(
-                'adminzone/adminzone',
+                'menu/adminzone/adminzone',
                 array(
                     null,
                     array(),

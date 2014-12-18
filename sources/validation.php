@@ -127,6 +127,7 @@ function init__validation()
         'script' => 1, // If we have one of these as self-closing in IE... it kills it!
         'noscript' => 1,
         'li' => 1,
+        'embed' => 1,
     );
     if ($strict_form_accessibility) {
         unset($POSSIBLY_EMPTY_TAGS['textarea']);
@@ -146,7 +147,6 @@ function init__validation()
         'col' => 1,
         'source' => 1,
         'nobr' => 1,
-        'embed' => 1,
     );
 
     // B's may not appear under A

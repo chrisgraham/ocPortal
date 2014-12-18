@@ -462,6 +462,7 @@ class Hook_addon_registry_installer
             'BOARD_PATH' => lorem_phrase(),
             'SECTIONS' => $section,
             'MAX' => '1000',
+            'HIDDEN' => '',
         ));
         return array(
             lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP', array(

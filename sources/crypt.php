@@ -159,8 +159,8 @@ function init__crypt()
          */
         function password_verify($password, $hash)
         {
-            $ret = crypt($password, $hash);
-            if (!is_string($ret) || _crypt_strlen($ret) != _crypt_strlen($hash) || _crypt_strlen($ret) == 0/* || _crypt_strlen($ret)<=13  causes problem on mac with old PHP version*/) {
+            $ret = crypt($password, $hash/*Used to get crypt-salt via looking at that of existing hash*/);
+            if (!is_string($ret) || _crypt_strlen($ret) != _crypt_strlen($hash) || _crypt_strlen($ret) == 0 || _crypt_strlen($ret)<=13/*Just salt returned back*/) {
                 return false;
             }
 
@@ -168,7 +168,6 @@ function init__crypt()
             for ($i = 0; $i < _crypt_strlen($ret); $i++) {
                 $status |= (ord($ret[$i]) ^ ord($hash[$i]));
             }
-
             return $status === 0;
         }
 

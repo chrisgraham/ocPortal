@@ -928,9 +928,11 @@ function get_text_templates()
         'templates/FORM_SCREEN_FIELD_DESCRIPTION.tpl',
         'templates/FORM_SCREEN_ARE_REQUIRED.tpl',
         'templates/GALLERY_POPULAR.tpl',
+        'templates/RSS_HEADER.tpl',
 
         // In header, and uses IDs, so can't be used except in isolation
         'templates/BLOCK_TOP_NOTIFICATIONS.tpl',
+        'templates/BLOCK_TOP_LOGIN.tpl',
         'templates/MENU_BRANCH_zone.tpl',
         'templates/MENU_SPACER_zone.tpl',
         'templates/MENU_zone.tpl',

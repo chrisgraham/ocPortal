@@ -239,6 +239,7 @@ class Hook_addon_registry_forum_blocks
                 'DATE' => placeholder_time(),
                 'DATE_RAW' => placeholder_date_raw(),
                 'NEWS_TITLE' => lorem_word(),
+                'NEWS_TITLE_PLAIN' => lorem_word(),
                 'CATEGORY' => '',
                 'IMG' => '',
                 '_IMG' => '',

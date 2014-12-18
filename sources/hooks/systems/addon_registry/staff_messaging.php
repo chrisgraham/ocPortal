@@ -159,6 +159,7 @@ class Hook_addon_registry_staff_messaging
             'CREATE_TICKET_MAKE_POST' => true,
             'FIRST_POST_URL' => '',
             'FIRST_POST' => '',
+            'NAME' => 'field',
         ));
 
         return array(
@@ -174,6 +175,7 @@ class Hook_addon_registry_staff_messaging
                 'USERNAME' => lorem_word(),
                 'DATE' => placeholder_time(),
                 'MEMBER_URL' => placeholder_url(),
+                'MEMBER_ID' => placeholder_id(),
             )), null, '', true)
         );
     }
@@ -203,6 +205,7 @@ class Hook_addon_registry_staff_messaging
             'CREATE_TICKET_MAKE_POST' => true,
             'FIRST_POST_URL' => '',
             'FIRST_POST' => '',
+            'NAME' => 'field',
         ));
 
         return array(
@@ -242,6 +245,7 @@ class Hook_addon_registry_staff_messaging
             'COMMENT_URL' => placeholder_url(),
             'MAKE_POST' => true,
             'CREATE_TICKET_MAKE_POST' => true,
+            'NAME' => 'field',
         ));
 
         return array(

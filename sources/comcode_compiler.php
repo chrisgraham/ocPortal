@@ -1023,7 +1023,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 $i_dir_2 = (($to_float != 1) ? 'left' : 'right');
                                                 if (preg_match('#(^|\s)wide($|\s)#', $caption) != 0) {
                                                     // Float based
-                                                    $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START', array(
+                                                    $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START_CELL', array(
                                                         '_GUID' => 'ced8c3a142f74296a464b085ba6891c9',
                                                         'WIDTH' => array_key_exists(($to_float == 1) ? 0 : (count($cells) - 1), $ratios) ? $ratios[($to_float == 1) ? 0 : (count($cells) - 1)] : ((count($cells) == 2) ? '0' : float_to_raw_string(97.0 / (floatval(count($cells)) / 2.0 - 1.0), 2) . '%'),
                                                         'FLOAT' => $i_dir_1,
@@ -1032,7 +1032,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                     )));
                                                 } else {
                                                     // Inline-block based
-                                                    $tag_output->attach(do_template('COMCODE_FAKE_TABLE_START', array(
+                                                    $tag_output->attach(do_template('COMCODE_FAKE_TABLE_START_CELL', array(
                                                         '_GUID' => '90be72fcbb6b9d8a312da0bee5b86cb3',
                                                         'WIDTH' => array_key_exists($to_float, $ratios) ? $ratios[$to_float] : '',
                                                         'FLOAT' => $i_dir_1,
@@ -1041,7 +1041,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                     )));
                                                 }
                                                 $tag_output->attach(comcode_to_tempcode(isset($cells[$to_float]) ? rtrim($cells[$to_float]) : '', $source_member, $as_admin, $wrap_pos, $pass_id, $connection, $semiparse_mode, $preparse_mode, $in_semihtml, $structure_sweep, $check_only, $highlight_bits, $on_behalf_of_member));
-                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
+                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_END_CELL'));
 
                                                 // Do non-floated ones
                                                 $cell_i = 0;
@@ -1074,7 +1074,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                     }
                                                 }
 
-                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END'));
+                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END_CELL'));
                                             }
                                         } else {
                                             // Real table...
