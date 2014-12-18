@@ -40,7 +40,7 @@ function realtime_rain_button_load_handler()
 	e.style.left=0;
 	e.style.top=0;
 	e.style.width='100%';
-	e.style.height=(getWindowHeight()-40)+'px';
+	e.style.height=(getWindowScrollHeight()-40)+'px';
 	smoothScroll(0);
 
 	start_realtime_rain();

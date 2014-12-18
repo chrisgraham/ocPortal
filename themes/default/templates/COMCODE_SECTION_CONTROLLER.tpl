@@ -7,7 +7,7 @@
 	var a{$FIX_ID,{PASS_ID|}}_sections=[];
 	addEventListenerAbstract(window,'load',function () {
 		{+START,LOOP,SECTIONS}
-			a{$FIX_ID,{PASS_ID|}}_sections.push('{_loop_var|;}');
+			a{$FIX_ID,{PASS_ID|}}_sections.push('{$FIX_ID,{_loop_var|;}}');
 		{+END}
 		flip_page(0,'{$FIX_ID,{PASS_ID|;}}',a{$FIX_ID,{PASS_ID|}}_sections);
 	} );

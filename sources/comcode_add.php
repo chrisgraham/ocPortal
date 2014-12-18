@@ -747,7 +747,7 @@ function _get_preview_environment_comcode($tag)
 	{
 		$i=0;
 		$default=post_param_integer('default',0);
-		$comcode='';
+		$comcode='[surround]';
 		$controller=array();
 		while (post_param('tag_contents_'.strval($i),'')!='' && post_param('name_'.strval($i),'')!='')
 		{

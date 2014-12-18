@@ -37,7 +37,7 @@
 					<div class="accessibility_hidden"><label for="tree_list">{!ENTRY}</label></div>
 					<input onchange="update_permission_box(this)" style="display: none" type="text" id="tree_list" name="tree_list" value="{$_GET*,id}" />
 				</form>
-				<div id="tree_list__root_tree_list" class="tree_list__root_tree_list pt_editor">
+				<div id="tree_list__root_tree_list" class="tree_list__root_tree_list pt_editor" style="height: auto; overflow: visible;">
 					<!-- List put in here -->
 				</div>
 				<script type="text/javascript">// <![CDATA[

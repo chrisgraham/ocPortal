@@ -548,7 +548,7 @@ class Module_cms_banners_cat extends standard_aed_module
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 
-		$fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'new_id',$id,false));
+		$fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_BANNER_TYPE_2'),'new_id',$id,false));
 		if ($id!='')
 		{
 			$hidden->attach(form_input_hidden('is_textual',strval($is_textual)));

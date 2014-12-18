@@ -1191,21 +1191,24 @@ class virtual_bash
 			if (array_key_exists('occle_state',$_COOKIE))
 			{
 				if (get_magic_quotes_gpc()) $_COOKIE['occle_state']=stripslashes($_COOKIE['occle_state']);
-				$occle_state_diff=unserialize($_COOKIE['occle_state']);
+				$occle_state_diff=@unserialize($_COOKIE['occle_state']);
+				if (!is_array($occle_state_diff)) $occle_state_diff=array();
 			}
 			else $occle_state_diff=array();
 
 			if (array_key_exists('occle_state_lang',$_COOKIE))
 			{
 				if (get_magic_quotes_gpc()) $_COOKIE['occle_state_lang']=stripslashes($_COOKIE['occle_state_lang']);
-				$occle_state_lang_diff=unserialize($_COOKIE['occle_state_lang']);
+				$occle_state_lang_diff=@unserialize($_COOKIE['occle_state_lang']);
+				if (!is_array($occle_state_lang_diff)) $occle_state_lang_diff=array();
 			}
 			else $occle_state_lang_diff=array();
 
 			if (array_key_exists('occle_state_code',$_COOKIE))
 			{
 				if (get_magic_quotes_gpc()) $_COOKIE['occle_state_code']=stripslashes($_COOKIE['occle_state_code']);
-				$occle_state_code_diff=unserialize($_COOKIE['occle_state_code']);
+				$occle_state_code_diff=@unserialize($_COOKIE['occle_state_code']);
+				if (!is_array($occle_state_code_diff)) $occle_state_code_diff=array();
 			}
 			else $occle_state_code_diff=array();
 
@@ -1455,6 +1458,7 @@ class virtual_fs
 	function _pwd_to_array($pwd)
 	{
 		//Convert a string-form pwd to an array-form pwd, and sanitise it
+		if ($pwd=='') $pwd='/';
 		$absolute=($pwd[0]=='/');
 		$_pwd=explode('/',$pwd);
 		if ($absolute) $target_directory=array();

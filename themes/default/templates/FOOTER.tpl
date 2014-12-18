@@ -18,9 +18,9 @@
 			{+START,IF,{$ADDON_INSTALLED,bookmarks}}{+START,IF,{$NOT,{$IS_GUEST}}}
 				<span class="global_bottom_button_ref_point" id="bookmarks_menu_rel">&nbsp;</span><a accesskey="n" id="bookmarks_menu_button" onclick="if (typeof window.load_management_menu=='undefined') { require_javascript('javascript_staff'); window.setTimeout(document.getElementById('bookmarks_menu_button').onclick,10); return false; } else return load_management_menu('bookmarks',true);" href="{$PAGE_LINK*,_SEARCH:bookmarks}&amp;url={$SELF_URL*&}"><img id="bookmarks_menu_img" class="no_theme_img_click" title="{!BOOKMARKS}" alt="{!BOOKMARKS}" src="{$IMG*,bottom/bookmarksmenu}" /></a>&nbsp;
 			{+END}{+END}
-			{+START,IF,{$ADDON_INSTALLED,realtime_rain}}{+START,IF,{$CONFIG_OPTION,bottom_show_realtime_rain_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_realtime_rain}}{+START,IF,{$NOT,{$BROWSER_MATCHES,ie6}}}
+			{+START,IF,{$ADDON_INSTALLED,realtime_rain}}{+START,IF,{$CONFIG_OPTION,bottom_show_realtime_rain_button}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_realtime_rain}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_realtime_rain}}{+START,IF,{$NOT,{$BROWSER_MATCHES,ie6}}}
 				<a id="realtime_rain_button" onclick="if (typeof window.load_realtime_rain!='undefined') return load_realtime_rain(); else return false;" href="{$PAGE_LINK*,adminzone:admin_realtime_rain}"><img id="realtime_rain_img" title="{!realtime_rain:REALTIME_RAIN}" alt="{!realtime_rain:REALTIME_RAIN}" src="{$IMG*,bottom/realtime_rain}" /></a>&nbsp;
-			{+END}{+END}{+END}{+END}
+			{+END}{+END}{+END}{+END}{+END}
 			{+START,IF,{$HAS_ZONE_ACCESS,adminzone}}
 				{+START,IF,{$ADDON_INSTALLED,occle}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_occle}}{+START,IF,{$CONFIG_OPTION,bottom_show_occle_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_occle}}
 					<a id="occle_button" accesskey="o" onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;" href="{$PAGE_LINK*,adminzone:admin_occle}"><img id="occle_img" title="OcCLE" alt="OcCLE" src="{$IMG*,bottom/occle}" /></a>&nbsp;

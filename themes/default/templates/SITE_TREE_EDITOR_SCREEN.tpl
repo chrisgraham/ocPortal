@@ -14,7 +14,7 @@
 			<div class="accessibility_hidden"><label for="tree_list">{!ENTRY}</label></div>
 			<form title="{!PRIMARY_PAGE_FORM}" action="index.php" method="post">
 				<input onchange="update_details_box(this)" style="display: none" type="text" id="tree_list" name="tree_list" value="{$_GET*,id}" />
-				<div id="tree_list__root_tree_list">
+				<div id="tree_list__root_tree_list" style="height: auto; overflow: visible;">
 					<!-- List put in here -->
 				</div>
 			</form>

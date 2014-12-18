@@ -1892,17 +1892,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'SELF_PAGE_LINK':
-			    $value='';
-                if (running_script('index') || running_script('iframe'))
-                {
-    				$value=get_zone_name().':'.get_page_name();
-    				foreach ($_GET as $key=>$val)
-    				{
-    					if ($key=='page') continue;
-    					if (is_array($val)) continue;
-    					if (substr($key,0,5)=='keep_') continue;
-    					$value.=':'.$key.'='.$val;
-    				}
+				$value='';
+				if (running_script('index') || running_script('iframe'))
+				{
+					$value=get_zone_name().':'.get_page_name();
+					foreach ($_GET as $key=>$val)
+					{
+						if ($key=='page') continue;
+						if (is_array($val)) continue;
+						if (substr($key,0,5)=='keep_') continue;
+						$value.=':'.$key.'='.$val;
+					}
 				}
 				break;
 

@@ -331,6 +331,8 @@ class Module_topicview
 			if (!is_null($threaded_topic_ob->topic_title)) // Updated topic title
 				$topic_info['title']=$threaded_topic_ob->topic_title;
 			$topic_info['max_rows']=$threaded_topic_ob->total_posts;
+
+			$second_poster=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // No definitive post orders
 		}
 
 		// Buttons for topic as whole

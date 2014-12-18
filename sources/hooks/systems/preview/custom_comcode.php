@@ -44,16 +44,37 @@ class Hook_Preview_custom_comcode
 		$tag=post_param('tag');
 
 		$replace=post_param('replace');
-		$parameters=explode(',',post_param('parameters'));
+
+		$parameters='';
+		foreach ($_POST as $key=>$val)
+		{
+			if (substr($key,0,11)!='parameters_')
+			{
+				continue;
+			}
+			if ($val=='')
+			{
+				continue;
+			}
+			if ($parameters!='')
+			{
+			$parameters.=',';
+			}
+			$parameters.=$val;
+		}
+		$_parameters=($parameters=='')?array():explode(',',$parameters);
+
 		$example=post_param('example');
+
 		$content=do_lang_tempcode('EXAMPLE');
+
 		$matches=array();
 		if (preg_match('#\](.*)\[#',$example,$matches)!=0)
 		{
 			$content=make_string_tempcode($matches[1]);
 		}
 		$binding=array('CONTENT'=>$content);
-		foreach ($parameters as $parameter)
+		foreach ($_parameters as $parameter)
 		{
 			$parameter=trim($parameter);
 			$parts=explode('=',$parameter);

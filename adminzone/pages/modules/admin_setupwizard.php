@@ -742,6 +742,7 @@ class Module_admin_setupwizard
 		if (post_param_integer('skip_3',0)==0)
 		{
 			set_option('site_name',$name);
+			set_option('copyright','Copyright &copy; '.$name.' '.date('Y'));
 			set_option('description',post_param('description'));
 			set_option('site_scope',post_param('site_scope'));
 			set_option('copyright',post_param('copyright'));

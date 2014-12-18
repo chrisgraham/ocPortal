@@ -195,7 +195,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array(
-		'p_title'=>$title,
+		'p_title'=>substr($title,0,255),
 		'p_post'=>$lang_id,
 		'p_ip_address'=>$ip_address,
 		'p_time'=>$time,
