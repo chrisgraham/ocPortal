@@ -2359,7 +2359,7 @@ function safe_ini_set($var,$value)
         return false;
     }
 
-    return ini_set($var, $value);
+    return @ini_set($var, $value);
 }
 
 /**
