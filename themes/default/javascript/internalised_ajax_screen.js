@@ -3,7 +3,7 @@
 function detect_change(change_detection_url,refresh_if_changed,callback)
 {
     do_ajax_request(change_detection_url,function(result) {
-    	var response=resultresponseText;
+    	var response=result.responseText;
     	if (response=='1')
     	{
     		try

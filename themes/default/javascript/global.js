@@ -1105,7 +1105,7 @@ function find_url_tab(hash)
 function select_tab(id,tab,from_url,automated)
 {
 	if (typeof from_url=='undefined') from_url=false;
-    f (typeof automated=='undefined') automated=false;
+    if (typeof automated=='undefined') automated=false;
 
 	if (!from_url)
 	{

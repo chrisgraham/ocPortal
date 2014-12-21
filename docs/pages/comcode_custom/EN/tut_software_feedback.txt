@@ -35,6 +35,8 @@ We don't want people to have to labour over bug reports. However there are some 
 Before starting your report:
  - [b]Check the bug has not already been fixed[/b]. If you are on the latest release then you'll find a bug list linked to from your Admin Zone front page. Don't spend more than 5 minutes looking, but at least have a glance over.
  - [b]Try not to report unrelated problems together[/b]. We're not strict on this, because we would encourage people to submit large testing reports and we'll tolerate some collation for that, but generally speaking it is better each issue is reported separately so that it can be handled in one go without interdependence.
+ - [b]Check it is an ocPortal bug[/b]. If it relates to a third-party addon, it should not be reported as an ocPortal bug.
+ - [b]Check the FAQ[/b]. If your problem looks like it might be caused by a server configuration issue (for example if you are getting an 'Internal server error' message), please check our [page="_SEARCH:faq"]FAQ[/page] first.
 
 What to include on your report:
  - [b]Describe your problem[/b]. If the problem it is at all complex it may also help if you can give precise [b]steps to reproduce the problem[/b]. That said, we are a huge fan of [url="Jing"]http://www.techsmith.com/jing.html[/url], and often simply spending a few minutes recording a video means you won't need to type much explanation and your problem will be more easily understood without ambiguity or language problems.
@@ -58,6 +60,14 @@ In general:
  - [b]Don't write it as a letter[/b] to someone specific. Chris Graham may currently be the lead developer, but don't start your report "Dear Chris" - it's a little annoying because it adds some unnecessary pressure / filing difficulty. What if Chris is on holiday or ill and someone else is covering lead development duties?
  - [b]Write for a broad audience[/b]. Other users are probably also reading your report. Don't write the report as something about you and your site, try to keep the focus on the problem itself, and ocPortal.
  - [b]Assume the staff have amnesia[/b]. You may have previously interacted with staff, and therefore assume details of this will be remembered. However, assuming 4 issues are dealt with per day, that means 1460 issues per year - so please forgive that staff will often dump their memory after dealing with something.
+
+If you can't remember a PHP or ocPortal-critical error message, you may be able to find it in your error log (located in the Admin Zone, under the Usage section). The error log shows all non-user-errors that have occurred on your site.
+
+If your report is not clear enough for us to [i]mmediately[/i] see it as a bug we may require you to post with a commercial ticket and refund you if an investigation proves it was a bug &ndash; so please make your reports as clear as possible.
+
+[title="3"Automatic reporting[/title]
+
+ocPortal comes with an automatic bug reporting mechanism, that is enabled by default but may be disabled during installation and at any time in the site configuration. We prefer that users leave this option enabled, as it allows us to fix bugs that do not get reported (which is probably a high percentage). This system logs and emails us any stack traces you may encounter.
 
 [title="3"]Where to post[/title]
 

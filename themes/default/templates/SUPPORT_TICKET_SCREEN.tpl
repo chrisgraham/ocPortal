@@ -83,38 +83,43 @@
 	{+END}
 </div>
 
-<h2>{!ASSIGNED_TO}</h2>
+{+START,IF,{$NOT,{NEW}}}
+	<h2>{!ASSIGNED_TO}</h2>
 
-{+START,IF_NON_EMPTY,{ASSIGNED}}
-	{!_ASSIGNED_TO}
-	<ul>
-		{+START,LOOP,ASSIGNED}
-			<li>
-				{_loop_var*}
-				{+START,IF,{$HAS_PRIVILEGE,ticket_assigned_staff}}
-					<form action="{$PAGE_LINK*,_SEARCH:tickets:unassign:ticket_id={ID}:member_id={_loop_key}}" method="post" class="inline">
-						<input class="button_micro menu___generic_admin__delete" type="submit" value="{!REMOVE}" />
-					</form>
-				{+END}
-			</li>
-		{+END}
-	</ul>
+	{+START,IF_NON_EMPTY,{ASSIGNED}}
+		{!_ASSIGNED_TO}
+		<ul>
+			{+START,LOOP,ASSIGNED}
+				<li>
+					{_loop_var*}
+					{+START,IF,{$HAS_PRIVILEGE,ticket_assigned_staff}}
+						<form action="{$PAGE_LINK*,_SEARCH:tickets:unassign:ticket_id={ID}:member_id={_loop_key}}" method="post" class="inline">
+							<input class="button_micro menu___generic_admin__delete" type="submit" value="{!REMOVE}" />
+						</form>
+					{+END}
+				</li>
+			{+END}
+		</ul>
+	{+END}
+
+	{+START,IF_EMPTY,{ASSIGNED}}
+		<p><em>{!UNASSIGNED}</em></p>
+	{+END}
+
+	{+START,IF,{$HAS_PRIVILEGE,ticket_assigned_staff}}
+		<form action="{$PAGE_LINK*,_SEARCH:tickets:assign:ticket_id={ID}}" method="post">
+			{$REQUIRE_JAVASCRIPT,people_lists}
+
+			<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" onfocus="if (this.value=='') update_ajax_member_list(this,null,true,event);" onkeyup="update_ajax_member_list(this,null,false,event);" class="input_username" type="text" id="username" name="username" value="{$USERNAME*}" />
+			<input class="button_micro buttons__proceed" type="submit" value="{!ASSIGN_TO}" />
+		</form>
+	{+END}
 {+END}
 
-{+START,IF_EMPTY,{ASSIGNED}}
-	<p><em>{!UNASSIGNED}</em></p>
+{+START,IF_NON_EMPTY,{EXTRA_DETAILS}}
+	<br />
+	{EXTRA_DETAILS}
 {+END}
-
-{+START,IF,{$HAS_PRIVILEGE,ticket_assigned_staff}}
-	<form action="{$PAGE_LINK*,_SEARCH:tickets:assign:ticket_id={ID}}" method="post">
-		{$REQUIRE_JAVASCRIPT,people_lists}
-
-		<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" onfocus="if (this.value=='') update_ajax_member_list(this,null,true,event);" onkeyup="update_ajax_member_list(this,null,false,event);" class="input_username" type="text" id="username" name="username" value="{$USERNAME*}" />
-		<input class="button_micro buttons__proceed" type="submit" value="{!ASSIGN_TO}" />
-	</form>
-{+END}
-
-{EXTRA_DETAILS}
 
 {+START,SET,EXTRA_COMMENTS_FIELDS_2}
 	{+START,IF,{STAFF_ONLY}}
@@ -144,6 +149,8 @@
 
 {+START,IF_NON_EMPTY,{COMMENT_FORM}}
 	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type_id']) || (check_field_for_blankness(this.elements['ticket_type_id'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
+		{$INSERT_SPAMMER_BLACKHOLE}
+
 		{COMMENT_FORM}
 	</form>
 
@@ -160,21 +167,30 @@
 		{+END}
 	{+END}
 
-	{+START,IF_PASSED,TOGGLE_TICKET_CLOSED_URL}
-		{+START,INCLUDE,BUTTON_SCREEN}
-			TITLE={$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}
-			IMG={$?,{CLOSED},buttons__closed,buttons__clear}
-			IMMEDIATE=1
-			URL={TOGGLE_TICKET_CLOSED_URL}
-		{+END}
-	{+END}
-
 	{+START,IF_PASSED,SET_TICKET_EXTRA_ACCESS_URL}
 		{+START,INCLUDE,BUTTON_SCREEN}
 			TITLE={!_SET_TICKET_EXTRA_ACCESS}
 			IMG=menu__adminzone__security__permissions__privileges
 			URL={SET_TICKET_EXTRA_ACCESS_URL}
 			IMMEDIATE=0
+		{+END}
+	{+END}
+
+	{+START,IF_PASSED,EDIT_URL}
+		{+START,INCLUDE,BUTTON_SCREEN}
+			TITLE={!EDIT_TICKET}
+			IMG=buttons__save
+			URL={EDIT_URL}
+			IMMEDIATE=0
+		{+END}
+	{+END}
+
+	{+START,IF_PASSED,TOGGLE_TICKET_CLOSED_URL}
+		{+START,INCLUDE,BUTTON_SCREEN}
+			TITLE={$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}
+			IMG={$?,{CLOSED},buttons__closed,buttons__clear}
+			IMMEDIATE=1
+			URL={TOGGLE_TICKET_CLOSED_URL}
 		{+END}
 	{+END}
 </div>
@@ -223,20 +239,22 @@
 
 {+START,IF,{$IS_STAFF}}
 	{+START,IF_NON_EMPTY,{TYPE_ACTIVITY_OVERVIEW}}
-		<p>
-			{!TICKET_ACTIVITY_OVERVIEW,{USERNAME*}}
-		</p>
+		{+START,COMMENT} This is kind of bloaty
+			<p>
+				{!TICKET_ACTIVITY_OVERVIEW,{USERNAME*}}
+			</p>
 
-		<dl class="compact_list">
-			{+START,LOOP,TYPE_ACTIVITY_OVERVIEW}
-				<dt>
-					{OVERVIEW_TYPE*}
-				</dt>
-				<dd>
-					{$NUMBER_FORMAT*,{OVERVIEW_COUNT}}
-				</dd>
-			{+END}
-		</dl>
+			<dl class="compact_list">
+				{+START,LOOP,TYPE_ACTIVITY_OVERVIEW}
+					<dt>
+						{OVERVIEW_TYPE*}
+					</dt>
+					<dd>
+						{$NUMBER_FORMAT*,{OVERVIEW_COUNT}}
+					</dd>
+				{+END}
+			</dl>
+		{+END}
 	{+END}
 {+END}
 

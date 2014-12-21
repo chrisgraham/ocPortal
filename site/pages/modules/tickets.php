@@ -215,6 +215,12 @@ class Module_tickets
             $this->title = get_screen_title('TICKET_UNASSIGN');
         }
 
+        if ($type == 'edit' || $type == '_edit') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:browse', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+
+            $this->title = get_screen_title('EDIT_TICKET');
+        }
+
         return null;
     }
 
@@ -265,6 +271,12 @@ class Module_tickets
         }
         if ($type == 'unassign') {
             return $this->unassign();
+        }
+        if ($type == 'edit') {
+            return $this->edit();
+        }
+        if ($type == '_edit') {
+            return $this->_edit();
         }
 
         return new Tempcode();
@@ -592,11 +604,11 @@ class Module_tickets
                     'COMMENT_TEXT' => '',
                     'GET_EMAIL' => is_guest(),
                     'EMAIL_OPTIONAL' => ((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),
-                    'GET_TITLE' => true,
+                    'GET_TITLE' => $new,
                     'EM' => $em,
                     'DISPLAY' => 'block',
                     'COMMENT_URL' => '',
-                    'SUBMIT_NAME' => do_lang_tempcode('MAKE_POST'),
+                    'SUBMIT_NAME' => do_lang_tempcode($new ? 'CREATE_SUPPORT_TICKET' : 'MAKE_POST'),
                     'TITLE' => do_lang_tempcode($new ? 'CREATE_TICKET_MAKE_POST' : 'REPLY'),
                 ));
             } else {
@@ -658,6 +670,12 @@ class Module_tickets
             $support_operator_url = mixed();
             if ((has_privilege(get_member(), 'assume_any_member')) && (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username(do_lang('SUPPORT_ACCOUNT')))) && ($GLOBALS['FORUM_DRIVER']->get_username(get_member()) != do_lang('SUPPORT_ACCOUNT'))) {
                 $support_operator_url = get_self_url(false, false, array('keep_su' => do_lang('SUPPORT_ACCOUNT')));
+            }
+
+            // Link to edit ticket subject/type
+            $edit_url = mixed();
+            if (!$new) {
+                $edit_url = build_url(array('page' => '_SELF', 'type' => 'edit', 'id' => $id), '_SELF');
             }
 
             // Link to set ticket extra access
@@ -728,6 +746,7 @@ class Module_tickets
                 'PAGINATION' => $pagination,
                 'TYPE_ACTIVITY_OVERVIEW' => $type_activity_overview,
                 'SET_TICKET_EXTRA_ACCESS_URL' => $set_ticket_extra_access_url,
+                'EDIT_URL' => $edit_url,
                 'ASSIGNED' => $assigned,
                 'EXTRA_DETAILS' => $extra_details,
             ));
@@ -991,6 +1010,81 @@ class Module_tickets
                 'ticket_id' => $id,
                 'member_id' => $member_id,
             ));
+        }
+
+        $url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $id), '_SELF');
+        if (is_guest()) {
+            $url = build_url(array('page' => '_SELF'), '_SELF');
+        }
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
+    }
+
+    /**
+     * UI for editing a ticket.
+     *
+     * @return tempcode                 The UI
+     */
+    public function edit()
+    {
+        require_code('form_templates');
+
+        $id = get_param('id');
+
+        check_ticket_access($id);
+
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_edit', 'id' => $id), '_SELF');
+
+        require_code('tickets2');
+        list($title) = get_ticket_details($id);
+
+        $submit_name = do_lang_tempcode('EDIT_TICKET');
+
+        $text = '';
+
+        $fields = new Tempcode();
+
+        $selected_ticket_type_id = $GLOBALS['SITE_DB']->query_select_value('tickets', 'ticket_type', array('ticket_id' => $id));
+
+        if (get_forum_type() == 'ocf') {
+            $fields->attach(form_input_line(do_lang_tempcode('SUBJECT'), '', 'title', $title, true));
+        }
+
+        $ticket_types = build_types_list($selected_ticket_type_id, array($selected_ticket_type_id));
+        $_ticket_types = new Tempcode();
+        foreach ($ticket_types as $ticket_type) {
+            $_ticket_types->attach(form_input_list_entry($ticket_type['TICKET_TYPE_ID'], $ticket_type['SELECTED'], $ticket_type['NAME']));
+        }
+        $fields->attach(form_input_list(do_lang_tempcode('TICKET_TYPE'), '', 'ticket_type', $_ticket_types));
+
+        return do_template('FORM_SCREEN', array('TITLE' => $this->title, 'HIDDEN' => '', 'TEXT' => $text, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'buttons__save', 'SUBMIT_NAME' => $submit_name, 'URL' => $post_url));
+    }
+
+    /**
+     * Actualiser for setting ticket access.
+     *
+     * @return tempcode                 The UI
+     */
+    public function _edit()
+    {
+        $id = get_param('id');
+
+        check_ticket_access($id);
+
+        $ticket_type = post_param_integer('ticket_type');
+
+        $forum_id = get_ticket_forum_id(null, $ticket_type, true);
+
+        $GLOBALS['SITE_DB']->query_update('tickets', array('ticket_type'=>$ticket_type, 'forum_id' => $forum_id), array('ticket_id' => $id), '', 1);
+
+        if (get_forum_type() == 'ocf') {
+            $title = post_param('title');
+
+            $topic_id = $GLOBALS['SITE_DB']->query_select_value('tickets', 'topic_id', array('ticket_id' => $id));
+            $post_id = $GLOBALS['FORUM_DB']->query_select_value('f_topics', 't_cache_first_post_id', array('id' => $topic_id));
+            $post_id = $GLOBALS['FORUM_DB']->query_select_value('f_posts', 'MIN(id)', array('p_topic_id' => $topic_id), 'AND id<>' . strval($post_id));
+            $GLOBALS['FORUM_DB']->query_update('f_topics', array('t_forum_id' => $forum_id, 't_cache_first_title' => $title), array('id' => $topic_id), '', 1);
+            $GLOBALS['FORUM_DB']->query_update('f_posts', array('p_cache_forum_id' => $forum_id), array('p_topic_id' => $topic_id), '', 1);
+            $GLOBALS['FORUM_DB']->query_update('f_posts', array('p_title' => $title), array('id' => $post_id), '', 1);
         }
 
         $url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $id), '_SELF');

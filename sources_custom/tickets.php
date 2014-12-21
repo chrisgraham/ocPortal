@@ -30,7 +30,7 @@ function get_ocportal_support_timings($open, $member_id, $ticket_type_name, $las
     }
 
     if (has_privilege($member_id, 'support_operator')) {
-        $d->attach(div('Last reply was by staff'));
+        $d->attach(div('The last reply was by staff.'));
     } else {
         $timestamp_to_answer_by = mixed();
         switch ($ticket_type_name) {
@@ -52,7 +52,7 @@ function get_ocportal_support_timings($open, $member_id, $ticket_type_name, $las
                 break;
         }
         if (!is_null($timestamp_to_answer_by)) {
-            $text = 'Next reply by: ' . date('D jS M', $timestamp_to_answer_by);
+            $text = 'Next reply due by: ' . date('D jS M', $timestamp_to_answer_by);
             if ($say_more) {
                 $text .= ' (Response times are determined by the requested ticket priority. Any requested programming tasks are started at the time of response. Response times apply between replies, as well as initially. Tickets may not be read until the next response time, so higher priority requests should be made in a new ticket. Often we will beat response times but this should not be considered a precedent.)';
             }
