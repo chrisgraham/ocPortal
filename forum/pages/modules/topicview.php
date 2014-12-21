@@ -124,7 +124,7 @@ class Module_topicview
 
 		// Render posts according to whether threaded or not
 		$threaded=($topic_info['is_threaded']==1);
-		$may_reply=(array_key_exists('may_reply',$topic_info)) && (($topic_info['is_open']) || (array_key_exists('may_post_closed',$topic_info)));
+		$may_reply=array_key_exists('may_reply',$topic_info);
 		if (!$threaded)
 		{
 			$GLOBALS['META_DATA']['description']=$topic_info['description'];

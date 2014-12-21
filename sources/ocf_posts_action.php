@@ -175,10 +175,11 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	{
 		if ($check_permissions)
 		{
-			if (($info[0]['t_is_open']==0) && (!ocf_may_moderate_forum($forum_id))) access_denied('I_ERROR');
+			if (!has_category_access($poster,'forums',strval($forum_id)))
+				access_denied('I_ERROR');
 
 			$last_member_id=$info[0]['t_cache_last_member_id'];
-			if ((!ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id)) && (!$is_starter))
+			if ((!ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id,$info[0]['t_is_open']==0,$poster,!is_null($intended_solely_for))) && (!$is_starter))
 				access_denied('I_ERROR');
 		}
 	}

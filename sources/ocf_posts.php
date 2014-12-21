@@ -29,20 +29,27 @@ function init__ocf_posts()
 
 /**
  * Find whether a member may post in a certain topic.
+ * Note that we do not check forum or private topic access permissions here. It is assumed there is already topic access.
  *
  * @param  AUTO_LINK 	The forum ID of the forum the topic is in.
  * @param  AUTO_LINK 	The topic ID is in.
  * @param  ?MEMBER		The last poster in the topic (NULL: do not check for double posting).
+ * @param  boolean 		Whether this topic is closed.
  * @param  ?MEMBER		The member (NULL: current member).
+ * @param  boolean 		Whether this post will be private.
  * @return boolean		The answer.
  */
-function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_id=NULL)
+function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$closed=false,$member_id=NULL,$will_be_private_post=false)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
+	if (($closed) && (!ocf_may_moderate_forum($forum_id,$member_id))) return false;
+
+	if (is_null($forum_id)) return true; // A private topic
+
 	if (!has_specific_permission($member_id,'submit_lowrange_content','topics',array('forums',$forum_id,'topics',$topic_id))) return false;
 	if (is_null($last_member_id)) return true;
-	if (($last_member_id==$member_id) && (!is_null($forum_id)))
+	if (($last_member_id==$member_id) && (!$will_be_private_post))
 	{
 		if (!has_specific_permission($member_id,'double_post')) return false;
 	}
