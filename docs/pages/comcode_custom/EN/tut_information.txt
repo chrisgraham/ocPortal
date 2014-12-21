@@ -275,3 +275,5 @@ Downloads may be used to release information indirectly, essentially via archive
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
+
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

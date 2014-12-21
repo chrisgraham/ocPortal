@@ -59,3 +59,5 @@ If an ocPortal website is intended solely for collaboration, and the collaborato
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_users"]People in their roles[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

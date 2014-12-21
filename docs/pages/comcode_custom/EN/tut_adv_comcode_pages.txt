@@ -52,18 +52,13 @@ The '[tt]main_multi_content[/tt]', '[tt]main_cc_embed[/tt]', '[tt]main_gallery_e
 
 [title="2"]Exporting attachments[/title]
 
+[surround]
 [media width="150" description="Where to export a Comcode page from" float="left"]data_custom/images/docs/adv_comcode_export.png[/media]
 [media width="150" description="An exported Comcode page consists of text like this" float="right"]data_custom/images/docs/adv_comcode_exported.png[/media]
 Comcode pages support attachments, so that media may be arranged in the document to make a rich experience. When you create or edit your page, you have the option to add your attachments, and to arrange the Comcode attachment tags in your document, to perfect the layout.
 The Comcode system also has support for 'inline attachments', which are constructed in a similar way to how attachments are stored in e-mail addresses (technically, it is called base64-encoding). This feature is very useful if you want to give a Comcode page, complete with attachments (images, or downloads, for instance), to another ocPortal user (for example, we are using it to distribute tutorials). When 'inline attachments' are found, ocPortal will extract them, much like the extracting of an archive, and rewrite the page so as to reference the extracted files as if the attachments were uploading locally.
 To export a Comcode page with 'inline attachments', choose to edit the page, and click the 'Export page' link.
-
-
-
-
-
-
-
+[/surround]
 
 [concepts
  1_key="Block"   1_value="Building blocks that can be inserted into a Comcode page, in order to add interactive and date-bound functionality"
@@ -76,3 +71,4 @@ To export a Comcode page with 'inline attachments', choose to edit the page, and
  - [page="_SEARCH:tut_adv_comcode"]Advanced Comcode[/page]
  - [page="_SEARCH:tut_comcode_pages"]Custom pages of information (via Comcode)[/page]
 
+{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]

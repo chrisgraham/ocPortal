@@ -80,3 +80,4 @@ In addition, the search module is able to search within the actual downloadable 
  - [page="_SEARCH:tut_news"]News[/page]
  - [page="_SEARCH:tut_information"]Choosing how to publish[/page]
 
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

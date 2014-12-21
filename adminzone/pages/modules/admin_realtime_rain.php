@@ -88,8 +88,6 @@ class Module_admin_realtime_rain
         if (!has_js()) {
             // Send them to the page permissions screen
             $url = build_url(array('page' => 'admin_stats', 'type' => 'browse'), '_SELF');
-            require_code('site2');
-            assign_refresh($url, 5.0);
             return redirect_screen($this->title, $url, do_lang_tempcode('NO_JS_REALTIME'));
         }
 

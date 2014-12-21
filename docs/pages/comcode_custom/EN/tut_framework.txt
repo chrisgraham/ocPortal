@@ -213,4 +213,4 @@ If you still are not convinced that ocPortal is the right choice for you, consid
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
-
+{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]

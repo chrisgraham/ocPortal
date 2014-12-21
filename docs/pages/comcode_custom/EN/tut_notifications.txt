@@ -56,3 +56,5 @@ Note that it will only CC a notification e-mail to this address once, not once p
  - [page="_SEARCH:tut_correspondance"]Correspondence between members[/page]
  - [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page]
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

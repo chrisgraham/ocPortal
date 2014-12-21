@@ -115,3 +115,4 @@ Many marketing agencies prefer to pick competition winners from raw CSV data, as
  - [page="_SEARCH:tut_featured"]Providing featured content[/page]
  - [page="_SEARCH:tut_sql"]Manually editing your database with phpMyAdmin[/page]
 
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

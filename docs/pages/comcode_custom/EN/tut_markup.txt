@@ -1017,3 +1017,4 @@ It should also be stressed as a last point that [b]JavaScript is not secure[/b];
  - [page="_SEARCH:tut_browsers"]Browser version requirements[/page]
  - [page="_SEARCH:tut_how_internet_works"]How the Internet actually works[/page]
 
+{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]

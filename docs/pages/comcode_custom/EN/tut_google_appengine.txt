@@ -349,3 +349,5 @@ Be advised that Google cannot provide automated "sharding" of data. This means t
 
  - [page="_SEARCH:tut_optimisation"]Optimising[/page]
  - [page="_SEARCH:tut_repository"]The Repository[/page]
+
+{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]

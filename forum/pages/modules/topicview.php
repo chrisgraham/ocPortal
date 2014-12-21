@@ -102,13 +102,9 @@ class Module_topicview
         if ($type == 'findpost') {
             $post_id = get_param_integer('id');
             $redirect = find_post_id_url($post_id);
-            require_code('site2');
-            assign_refresh($redirect, 0.0);
             return redirect_screen(get_screen_title('VIEW_TOPIC'), $redirect);
         } elseif ($type == 'first_unread') {
             $redirect = find_first_unread_url($id);
-            require_code('site2');
-            assign_refresh($redirect, 0.0);
             return redirect_screen(get_screen_title('VIEW_TOPIC'), $redirect);
         }
 

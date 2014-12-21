@@ -55,7 +55,7 @@ When composing your newsletter you will be given a choice to send it out at a sc
 
 Before your newsletter is sent, you have an opportunity to preview it, so you can ensure it is correct. Look at your preview carefully, as it is easy to make minor typographical or layout mistakes that would affect the professionalism portrayed in these bulk e-mails. You will also be e-mailed the newsletter during the preview stage so that you can perform the ultimate check.
 
-If you have [page="tut_configuration"]CRON enabled[/page], once you proceed to send the e-mails to individual members will be put in 'drip' queue, and mails will be sent out on a cycle. This works around server limits and avoids overloading the server.
+If you have [page="_SEARCH:tut_configuration"]CRON enabled[/page], once you proceed to send the e-mails to individual members will be put in 'drip' queue, and mails will be sent out on a cycle. This works around server limits and avoids overloading the server.
 
 [title="2"]Sent newsletters[/title]
 
@@ -171,3 +171,5 @@ You may add additional columns to the CSV file, which will be ignored. You can u
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_news"]Releasing news & running a blog[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

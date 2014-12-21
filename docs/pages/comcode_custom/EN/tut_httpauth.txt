@@ -42,3 +42,4 @@ This takes some time to get-your-head-around, but makes sense when you do. If it
  - [url="Apache manual section"]http://httpd.apache.org/docs/1.3/howto/auth.html[/url]
  - [url="Tutorial"]http://www.authenticationtutorial.com/tutorial/[/url]
 
+{$SET,tutorial_tags,TODO,Integration configuration}[block]main_tutorial_rating[/block]

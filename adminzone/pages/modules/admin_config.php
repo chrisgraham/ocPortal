@@ -743,10 +743,8 @@ class Module_admin_config
      */
     public function base()
     {
-        require_code('site2');
         $keep = symbol_tempcode('KEEP', array('1'));
         $url = get_base_url() . '/config_editor.php' . $keep->evaluate();
-        assign_refresh($url, 0.0);
         return redirect_screen($this->title, $url);
     }
 
@@ -757,10 +755,8 @@ class Module_admin_config
      */
     public function upgrader()
     {
-        require_code('site2');
         $keep = symbol_tempcode('KEEP', array('1'));
         $url = get_base_url() . '/upgrader.php' . $keep->evaluate();
-        assign_refresh($url, 0.0);
         return redirect_screen($this->title, $url);
     }
 
@@ -771,10 +767,8 @@ class Module_admin_config
      */
     public function backend()
     {
-        require_code('site2');
         $keep = symbol_tempcode('KEEP', array('1'));
         $url = get_base_url() . '/backend.php' . $keep->evaluate();
-        assign_refresh($url, 0.0);
         return redirect_screen($this->title, $url);
     }
 
@@ -785,10 +779,8 @@ class Module_admin_config
      */
     public function code_editor()
     {
-        require_code('site2');
         $keep = symbol_tempcode('KEEP', array('1'));
         $url = get_base_url() . '/code_editor.php' . $keep->evaluate();
-        assign_refresh($url, 0.0);
         return redirect_screen($this->title, $url);
     }
 

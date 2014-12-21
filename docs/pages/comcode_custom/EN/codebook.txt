@@ -209,3 +209,5 @@ The documentation and tools on the ocPortal website may be out of date between o
  - Graphics https://www.dropbox.com/sh/3lt8yaj60wxeb24/PxztQ4hGJR
  - [url="Community documentation"]{$BRAND_BASE_URL}/site/wiki.htm[/url]
 [/surround]
+
+{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]

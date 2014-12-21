@@ -45,7 +45,7 @@ ocPortal supports the two main formats for syndication of news (and most other k
 Links to view the feeds are made available from the news blocks, as well as from the web browsers auto-discovery mechanism. If the news block is filtered (for a blog, for example) the link will open up the feed with the same filter. The URLs are not intended to be viewed directly, although we have used a technology called 'XSLT' to allow them to be displayed in the browser if desired; instead, they should be copied and pasted to another program.
 [/surround]
 
-The [page="tut_comcode"]Comcode[/page] syntax you should use to place the main block in a page is as follows:
+The [page="_SEARCH:tut_comcode"]Comcode[/page] syntax you should use to place the main block in a page is as follows:
 [code][block="http://example.com/feed.xml"]main_rss[/block][/code]
 
 You may also use the compressed version intended for the sides of pages:
@@ -108,4 +108,4 @@ The default news archive screen shows just the news headlines. By adding [tt]:in
  - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
  - [url="FeedReader"]http://www.feedreader.com/[/url]
 
-
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

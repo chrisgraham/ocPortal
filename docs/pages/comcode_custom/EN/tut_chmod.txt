@@ -75,4 +75,4 @@ The screen-shots show how to set file permissions for:
  - [page="_SEARCH:tut_security"]Security[/page]
  - [page="_SEARCH:tut_chmod"]Linux file permissions[/page]
 
-
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

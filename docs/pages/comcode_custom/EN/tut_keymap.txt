@@ -42,3 +42,5 @@ On most web browsers you can activate a key shortcut by holding down the Alt key
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_accessibility"]Helping improve site accessibility for disabled users[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

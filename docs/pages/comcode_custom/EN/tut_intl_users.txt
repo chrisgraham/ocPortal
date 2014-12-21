@@ -98,3 +98,5 @@ Once all of the above sections are complete you should have a fully translated w
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_intl"]Localisation and internationalisation[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

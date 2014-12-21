@@ -130,4 +130,4 @@ Note that the default advertised Atom feed will not work. Only RSS is supported 
  - [page="_SEARCH:tut_galleries"]Galleries[/page]
  - [page="_SEARCH:tut_featured"]Providing featured content[/page]
 
-
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

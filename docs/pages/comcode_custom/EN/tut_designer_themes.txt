@@ -555,14 +555,14 @@ However, because this code is actually used inside a check (see 11, below) it is
 
 This checks to see if "..." is true, and if it is then it puts out a [tt]<a>[/tt] tag using [tt]SUBMIT_URL[/tt] as the URL and a language string [tt]ADD_NEWS[/tt] as the link text.
 
-
-
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
  - [page="_SEARCH:tut_theme_lifecycle"]Theme lifecycle[/page]
  - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]
- - [page="tut_tempcode"]Tempcode programming[/page]
+ - [page="_SEARCH:tut_tempcode"]Tempcode programming[/page]
  - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
+
+{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]

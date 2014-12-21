@@ -186,7 +186,9 @@ For more tips, see [page="forum:topicview:browse:9553"]a walk-through guide[/pag
 
  - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
  - [page="_SEARCH:tut_designer_themes"]Designer themes, implementing a clean-room design[/page]
- - [page="tut_tempcode"]Tempcode programming[/page]
+ - [page="_SEARCH:tut_tempcode"]Tempcode programming[/page]
  - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]
  - [page="_SEARCH:tut_theme_lifecycle"]Theme lifecycle[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
+
+{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]

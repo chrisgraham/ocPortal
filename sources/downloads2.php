@@ -700,7 +700,7 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
         case 'doc':
         case 'ppt':
         case 'hlp':
-//    default: // Binary formats are complex to parse, but whatsmore, as textual tagging isn't used, extraction can be done automatically as all identified text is good.
+        //default: // Binary formats are complex to parse, but whatsmore, as textual tagging isn't used, extraction can be done automatically as all identified text is good.
             // Strip out interleaved nulls because they are used in wide-chars, obscuring the data
             $sstring_regexp = '[a-zA-Z0-9\'\-\x91\x92\x93\x94]';
             $data = preg_replace('#(' . $sstring_regexp . ')\x00(' . $sstring_regexp . ')\x00#', '${1}${2}', $data);

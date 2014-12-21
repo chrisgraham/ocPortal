@@ -62,3 +62,5 @@ These techniques also work within Comcode pages.
  - [page="_SEARCH:tut_permissions"]Access control and privileges[/page]
  - [page="_SEARCH:tut_adv_configuration"]Advanced configuration[/page]
  - [page="_SEARCH:tut_security"]Security[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

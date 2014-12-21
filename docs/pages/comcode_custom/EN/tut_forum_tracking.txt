@@ -76,3 +76,4 @@ After enabling notifications topics and forums, you can easily disable it again,
 
  - [page="_SEARCH:tut_forums"]Organising discussion forums[/page]
 
+{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]

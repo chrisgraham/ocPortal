@@ -69,4 +69,4 @@ You can see the edits a page has gone through via the revision history on the ed
 
  - [page="_SEARCH:tut_catalogues"]Creating structured information (via catalogues)[/page]
 
-
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

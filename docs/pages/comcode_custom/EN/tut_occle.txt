@@ -73,3 +73,5 @@ OcCLEchat is designed to allow website administrators to communicate with each o
 
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
  - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

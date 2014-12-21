@@ -92,3 +92,5 @@ Positive advice:
  - [page="_SEARCH:tut_cookies"]Introduction to Cookies and sessions (and JavaScript)[/page]
  - [page="_SEARCH:tut_domain_names"]How domain names work[/page]
  - [page="_SEARCH:tut_notifications"]Notifications[/page]
+
+{$SET,tutorial_tags,TODO,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]

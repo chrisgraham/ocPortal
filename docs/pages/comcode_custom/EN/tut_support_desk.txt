@@ -290,3 +290,5 @@ ocPortal does not come with its own issue management database, but we have a non
  - [page="_SEARCH:tut_forum_helpdesk"]Running a discussion-forum-based helpdesk[/page]
  - [page="_SEARCH:tut_forum_tracking"]Keeping on track of busy forums[/page]
  - [page="_SEARCH:tut_nuances"]Nuances of forum integration[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

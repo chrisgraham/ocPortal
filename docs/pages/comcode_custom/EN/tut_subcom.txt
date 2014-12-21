@@ -116,3 +116,5 @@ The club forum has default permissions that only allow website staff and club me
 
  - [page="_SEARCH:tut_msn"]Advanced techniques for multi-site-networks[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

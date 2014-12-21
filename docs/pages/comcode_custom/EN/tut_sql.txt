@@ -94,3 +94,5 @@ If you want to transfer parts of the database contents to another website (e.g. 
  - [page="_SEARCH:tut_framework"]The ocPortal programming framework[/page]
  - [page="_SEARCH:tut_programming"]Introduction to programming[/page]
  - [page="_SEARCH:tut_disaster"]Disaster recovery[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

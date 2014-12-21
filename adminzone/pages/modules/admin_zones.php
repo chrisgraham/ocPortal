@@ -268,8 +268,6 @@ class Module_admin_zones
         if (!has_js()) {
             // Send them to the page permissions screen
             $url = build_url(array('page' => '_SELF', 'type' => 'edit'), '_SELF');
-            require_code('site2');
-            assign_refresh($url, 5.0);
             return redirect_screen($this->title, $url, do_lang_tempcode('NO_JS_ADVANCED_SCREEN_ZONE_EDITOR'));
         }
 

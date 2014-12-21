@@ -244,3 +244,5 @@ There is a breadcrumb override facility in the Admin Zone that allows you to cha
  - [page="_SEARCH:tut_adv_comcode_pages"]Advanced custom pages of information[/page]
  - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]
  - [page="_SEARCH:tut_short_urls"]URL schemes in ocPortal[/page]
+
+{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]

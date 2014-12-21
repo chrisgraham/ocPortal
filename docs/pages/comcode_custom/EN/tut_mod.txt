@@ -75,3 +75,5 @@ Moderators may choose to flag a post of theirs as important. This will usually b
  - [page="_SEARCH:tut_forum_helpdesk"]Running a discussion-forum-based helpdesk[/page]
  - [page="_SEARCH:tut_forum_tracking"]Keeping on track of busy forums[/page]
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
+
+{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]

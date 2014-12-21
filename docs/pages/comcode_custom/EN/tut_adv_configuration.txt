@@ -51,7 +51,7 @@ You can optionally override privilege settings in almost all the places where yo
 
 Using the Permissions Tree Editor you may configure access and privileges for almost any aspect of the system, as well as make batch changes with great efficiency.
 
-For a good real-world example of how to set up privileges, see the 'Setting bypass-validation access' section of the [page="tut_forums"]organising discussion forums[/page] tutorial.
+For a good real-world example of how to set up privileges, see the 'Setting bypass-validation access' section of the [page="_SEARCH:tut_forums"]organising discussion forums[/page] tutorial.
 
 [title="3"]Access permissions[/title]
 
@@ -113,7 +113,6 @@ There are three caveats here:
 [/list]
 [/surround]
 
-
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_configuration"]Basic Configuration[/page]
@@ -122,4 +121,4 @@ There are three caveats here:
  - [page="_SEARCH:tut_permissions"]Access Control and Privileges[/page]
  - [page="_SEARCH:tut_short_urls"]URL schemes in ocPortal[/page]
 
-
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

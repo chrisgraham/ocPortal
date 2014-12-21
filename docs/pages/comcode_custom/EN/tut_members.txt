@@ -31,7 +31,7 @@ The form includes, if enabled in the configuration, a security image ([concept]C
 [media width="150" description="The detailed logging in page" float="right"]data_custom/images/docs/members_login.png[/media]
 There are a number of constraints on how fields may be filled in, and some of these are configurable from the main Admin Zone Configuration. For example, special characters are not allowed in user-names, and by default, any e-mail address may only be used for one account.
 
-Once the form is filled in successfully, an e-mail will be sent to the given e-mail address containing a link to activate the account (assuming this option has not been disabled). The purpose of this is to ensure that they are giving a real working e-mail address, and hence are contactable. If the e-mail never arrives for any joining user, the most likely situation is a fault with e-mail sending on the server: it is essential that ocPortal is connected to a working e-mail server, either by directly residing on it, or by setting up SMTP settings in the main Admin Zone Configuration (see the [page="tut_email"]Understanding and configuring e-mail[/page] tutorial). Joining users must be patient for a few minutes, as e-mails can sometimes take a while to arrive.
+Once the form is filled in successfully, an e-mail will be sent to the given e-mail address containing a link to activate the account (assuming this option has not been disabled). The purpose of this is to ensure that they are giving a real working e-mail address, and hence are contactable. If the e-mail never arrives for any joining user, the most likely situation is a fault with e-mail sending on the server: it is essential that ocPortal is connected to a working e-mail server, either by directly residing on it, or by setting up SMTP settings in the main Admin Zone Configuration (see the [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page] tutorial). Joining users must be patient for a few minutes, as e-mails can sometimes take a while to arrive.
 
 Once the account is activated, the user may log in from numerous areas, including the login block available on most zones, the forums, and the full login page.
 
@@ -271,3 +271,5 @@ Essentially member profiles contain a last request date (in the database), which
  - [page="_SEARCH:tut_httpauth"]Integrating ocPortal into a network via HTTP authentication[/page]
  - [page="_SEARCH:tut_notifications"]Notifications[/page]
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
+
+{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]

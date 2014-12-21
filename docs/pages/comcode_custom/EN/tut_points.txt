@@ -222,3 +222,5 @@ A common point of confusion is users thinking the leader-board shows who are the
 
  - [page="_SEARCH:tut_banners"]Running advertisements (via the banner system)[/page]
  - [page="_SEARCH:tut_downloads"]Providing downloads[/page]
+
+{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]

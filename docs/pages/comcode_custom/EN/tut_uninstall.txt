@@ -24,3 +24,5 @@ It is very important to us that we work to improve our offerings, and we need yo
  - [page="_SEARCH:tut_adv_installation"]Advanced installation[/page]
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]
  - [page="_SEARCH:tut_upgrade"]Performing an upgrade[/page]
+
+{$SET,tutorial_tags,TODO,Configurational events}[block]main_tutorial_rating[/block]

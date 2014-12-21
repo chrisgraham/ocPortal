@@ -162,3 +162,5 @@ You should develop a policy about how you handle feedback. This is of particular
  - [page="_SEARCH:tut_staff_advice"]Advice for choosing and managing staff[/page]
  - [url="The COPPA website"]http://www.coppa.org/comply.htm[/url]
  - [page="_SEARCH:tut_do"]Dos and Do-nots of an (ocPortal) website[/page]
+
+{$SET,tutorial_tags,TODO,Advice and guidance}[block]main_tutorial_rating[/block]

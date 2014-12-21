@@ -56,10 +56,6 @@ Members may add downloads, and charge for those downloads, using the 'submitter 
 
 Another example is a community based upon subscription: points could be bought via a service such as PayPal (ocPortal at the time of writing provides no specific support for this, but staff could manually allocate points based on PayPal transactions) and the website could require spending of these points to download files.
 
-
-
-
-
 [concepts
  1_key="outmode"   1_value="Mark an entry as having been replaced by another one"
 ]Concepts[/concepts]
@@ -68,4 +64,4 @@ Another example is a community based upon subscription: points could be bought v
 
  - [page="_SEARCH:tut_downloads"]Providing downloads[/page]
 
-
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

@@ -96,7 +96,6 @@ When members use the OCF whisper feature to make inline-personal-posts, they are
 1) moderators can tell when members abuse the feature
 2) moderators can use the feature to write in-topic messages to each other (and hence, all other moderators too, due to the ability for all the moderators to see them all). It may be necessary to reign back your staff if they use this feature too much and make sarcastic remarks: the unforeseen may become reality, with the target of the sarcasm becoming staff at a later date, and seeing such remarks.
 
-
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_censor"]Policing a community site[/page]
@@ -108,3 +107,5 @@ When members use the OCF whisper feature to make inline-personal-posts, they are
  - [page="_SEARCH:tut_permissions"]Access control and privileges[/page]
  - [page="_SEARCH:tut_msn"]Advanced techniques for multi-site-networks[/page]
  - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

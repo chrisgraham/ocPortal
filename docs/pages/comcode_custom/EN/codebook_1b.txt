@@ -312,6 +312,41 @@ return do_template('RESULTS_TABLE_SCREEN', array(
 ));
 [/code]
 
+[title="3"]Attaching messages[/title]
+
+If you have a message to attach to regular screen output, use the [tt]attach_message[/tt] function.
+You can generate [tt]inform[/tt]/[tt]notice[/tt]/[tt]warn[/tt] messages.
+
+[title="3"]Redirects[/title]
+
+It is quite common to want to automatically redirect from one screen to another.
+For example, after an action is performed, you may want to redirect from the screen actualising the action, to somewhere else.
+
+You can do this by returning a [tt]redirect_screen[/tt]. It goes something like this:
+[code="PHP"]
+$url = build_url(array('page' => 'somepage'), 'somezone');
+return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
+[/code]
+Of course, you need to define an appropriate URL, an appropriate language string (although [tt]SUCCESS[/tt] is very handy), and an appropriate screen title.
+
+[tt]redirect_screen[/tt] handles a few things for you:
+ - It sends a full redirecting screen to the user's browser, saying a redirect is happening
+ - It redirects using both HTTP header and meta tag, for maximum reliability (some server environments don't support HTTP header redirects)
+ - If you are viewing a "special page mode", such as the query list, the redirect is suppressed
+ - It attaches a message explaining the redirect has happened (the [tt]SUCCESS[/tt] language string in the above example); this message is shown after the redirect has happened
+ - It also propagates any [tt]attach_message[/tt] calls onto the final screen, so that any messages put out will actually be seen
+
+If you just want to do a simple redirect without returning a screen, you can use [tt]assign_refresh[/tt]:
+[code]
+require_code('site2');
+assign_refresh($url, 0.0);
+[/code]
+
+Of course you can also just do raw PHP, for the simplest cases:
+[code]
+header('Location:' . $url);
+[/code]
+
 [title="3"]Breadcrumbs[/title]
 
 If you are making a new module you are likely to want to implement breadcrumbs.
@@ -355,6 +390,25 @@ The above code is just illustrative. The [tt]find_parent[/tt] function is not re
 If the title of the current page is too long or looks weird in the breadcrumbs, you can override it
 [code="PHP"]
 breadcrumb_set_self('Thing');
+[/code]
+
+[title="3"]URL monikers[/title]
+
+URL monikers (use of title-derived phrases in URLs, rather than numeric IDs), work transparently behind the scenes.
+Within ocPortal you generate URLs to the IDs, but ocPortal then converts those into the monikers, and back from the monikers, within the system architecture.
+
+To support URL monikers you need to define a new content type, via defining a new [tt]content_meta_aware[/tt] hook for it.
+You need to define all the details in the hook, which is frankly a complex task. Some of these will be defined as 'null', as you probably won't (for example) have a search hook to tie it into.
+
+The specific ones relating to URL monikers are...
+[code]
+'support_url_monikers' => true, // Set to true
+'connection' => $GLOBALS['SITE_DB'], // Database the resource table is in
+'table' => 'example', // The resource table
+'id_field' => 'id', // The field containing the ID number (what is used in URLs conventionally)
+'title_field' => 'title', // The field containing the resource title (what the moniker will generate from)
+'title_field_dereference' => true, // Whether the title_field is a language string field; if you are not using content translation it doesn't really matter
+'view_page_link_pattern' => '_SEARCH:downloads:entry:_WILD', // The URL pattern we support the monikers on
 [/code]
 
 [title="3"]Database structure[/title]

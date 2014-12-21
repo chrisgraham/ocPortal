@@ -205,3 +205,5 @@ If you do not want to hard-code what zone a page is in (perhaps because you migh
  - [page="_SEARCH:tut_comcode_pages"]Custom pages of information (via Comcode)[/page]
  - [page="_SEARCH:tut_adv_comcode_pages"]Advanced custom pages of information[/page]
  - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
+
+{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]

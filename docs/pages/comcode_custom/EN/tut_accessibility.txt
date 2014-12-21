@@ -1038,10 +1038,6 @@ A properly marked-up version, using ocPortal conventions, would look as follows:
 </table>
 [/code]
 
-
-
-
-
 [concepts
  1_key="WAI"         1_value="Web Accessibility Initiative; a group working under the W3C who are the official standards organisation behind the world wide web."
  2_key="WCAG"        2_value="Web Content Accessibility Guidelines, as written under the WAI."
@@ -1058,4 +1054,4 @@ A properly marked-up version, using ocPortal conventions, would look as follows:
  - [url="W3C validators"]http://validator.w3.org/[/url]
  - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
 
-
+{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]

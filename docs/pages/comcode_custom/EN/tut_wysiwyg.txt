@@ -131,3 +131,5 @@ If you turn off the WYSIWYG editor when editing something, ocPortal may actually
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
+
+{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]

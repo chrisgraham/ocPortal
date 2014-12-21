@@ -112,9 +112,6 @@ Users may choose to overlay [concept]RSS[/concept] or [concept]Atom[/concept] fe
 
 It is possible to customise the calendar to have a different start-of-week-day, or to use a 24 hour clock. This is done by editing the time strings in the [tt]global[/tt] language file. For more information, see 'Localisation and internationalisation' tutorial.
 
-
-
-
 [concepts
  1_key="Event"                1_value="An entry in the calendar system that may recur"
  2_key="Recurrence pattern"   2_value="A pattern, written in binary, that indicates the on/off sequences of an events occurence, masked and repeating over the recurrences that would happen by default"
@@ -127,3 +124,4 @@ It is possible to customise the calendar to have a different start-of-week-day, 
  - [page="_SEARCH:tut_news"]Providing news[/page]
  - [page="_SEARCH:tut_intl"]Localisation and internationalisation[/page]
 
+{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]

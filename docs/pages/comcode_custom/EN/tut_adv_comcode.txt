@@ -109,9 +109,6 @@ There are some accessibility issues with certain Comcode tags, and these are des
 
 ocPortal supports syntax highlighting via [url="GeSHi"]http://qbnz.com/highlighter/[/url]. This operates using the normal 'code' and 'codebox' tags, adding support for GeSHi highlighter codes to the 'param' attribute of the tags. For this support to function it is necessary for you to download GeSHi and extract the [tt]geshi.php[/tt] file and [tt]geshi[/tt] directory into ocPortal's [tt]sources_custom[/tt] directory. This is for licensing reasons. Alternatively, install the non-bundled GeSHi addon we maintain.
 
-
-
-
 [concepts
  1_key="Wiki-Code"   1_value="The mark-up language used on most Wiki systems"
  2_key="BBCode"      2_value="The mark-up language used on many discussion forum systems, which is similar to Comcode"
@@ -123,3 +120,4 @@ ocPortal supports syntax highlighting via [url="GeSHi"]http://qbnz.com/highlight
  - [page="_SEARCH:tut_wysiwyg"]WYSIWYG editing[/page]
  - [page="_SEARCH:tut_accessibility"]Helping improve site accessibility for disabled users[/page]
 
+{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]

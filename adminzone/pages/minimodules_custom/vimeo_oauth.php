@@ -42,8 +42,6 @@ if ($oauth_token == '') {
     set_long_value($service_name . '_access_token_secret', $token['oauth_token_secret']);
 
     // Send off to authorize...
-    require_code('site2');
-    assign_refresh($auth_url, 0.0);
     $echo = redirect_screen($title, $auth_url);
     $echo->evaluate_echo();
     return;

@@ -97,7 +97,6 @@ If you are a hosting administrator and would like to configure PHP on a server f
  - That the file upload and post data limits are put to at least 10MB.
  - That you consider implementing the Apache Su-Exec feature.
 
-
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_install"]Installation[/page]
@@ -105,4 +104,4 @@ If you are a hosting administrator and would like to configure PHP on a server f
  - [page="_SEARCH:tut_web_hosting"]Web hosting[/page]
  - [page="_SEARCH:tut_windows"]Installing ocPortal on a Windows desktop[/page]
 
-
+{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]

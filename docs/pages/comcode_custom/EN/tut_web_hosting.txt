@@ -179,3 +179,5 @@ The final step is to configure ocPortal to use the key pair to encrypt data. In 
  - [page="_SEARCH:tut_adv_installation"]Advanced installation[/page]
  - [page="_SEARCH:tut_windows"]Installing ocPortal on a Windows desktop[/page]
  - [page="_SEARCH:tut_browsers"]Browser version requirements[/page]
+
+{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]

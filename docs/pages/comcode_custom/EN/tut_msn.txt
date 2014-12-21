@@ -342,3 +342,5 @@ ocPortal does not contain a way for individual sites to be set up automatically 
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_subcom"]Creating sub-communities (and sub-sites)[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

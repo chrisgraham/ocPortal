@@ -579,3 +579,5 @@ PHP is a very widely deployed scripting language to power dynamic websites. Beca
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
+
+{$SET,tutorial_tags,TODO,Introduction and background information}[block]main_tutorial_rating[/block]

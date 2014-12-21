@@ -100,3 +100,4 @@ There is also a "contact member" addon. This allows you to e-mail a member, with
  - [page="_SEARCH:tut_mod"]Basic forum moderation[/page]
  - [page="_SEARCH:tut_notifications"]Notifications[/page]
 
+{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]

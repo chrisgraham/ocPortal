@@ -81,3 +81,5 @@ Once the permissions are set, just run through the installer, and you should hav
  - [url="phpMyAdmin"]http://www.phpmyadmin.net/[/url]
  - [page="_SEARCH:tut_install"]Basic Installation[/page]
  - [page="_SEARCH:tut_adv_installation"]Advanced installation[/page]
+
+{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]

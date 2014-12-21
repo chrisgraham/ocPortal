@@ -63,7 +63,7 @@ If the [tt]content_reviews[/tt] addon is installed, you can set content to be re
 You can also set the last review date to be shown visibly to users. This might be very useful from some legal and customer service standpoints -- it is essentially an automatic public declaration of content that may be outdated, and thus that you should not necessarily be held to what it says.
 
 The content review settings are shown on content add/edit forms.
-=======
+
 [title="2"]Printing[/title]
 
 It is not usually appropriate for a printed webpage to look like it does on the screen. For example, margins would want removing from each side of the site, social media links should not show, background images should be disabled, and so on.
@@ -76,9 +76,9 @@ The ocPortal [tt]wide_print[/tt] parameter is activated from either:
 a) The link from the [tt]side_printer_friendly[/tt] block
 b) The link from the [tt]main_screen_actions[/tt] block
 c) [i]Or, a link you've put together yourself[/i]
->>>>>>> comcode_username_syntax
 
 [concepts
  1_key="Admin Zone"   1_value="The zone used to perform most site maintenance, accessible only by staff"
 ]Concepts[/concepts]
 
+{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]

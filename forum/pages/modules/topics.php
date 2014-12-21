@@ -3921,8 +3921,6 @@ END;
 
         // We should be somewhere else entirely - it's just our moderator action list took us here
         $url = build_url(array('page' => 'admin_ocf_history', 'type' => 'browse', 'topic_id' => get_param_integer('id')), 'adminzone');
-        require_code('site2');
-        assign_refresh($url->evaluate(), 0.0);
         return redirect_screen($title, $url);
     }
 
@@ -4036,8 +4034,6 @@ END;
         if (!is_null($topic_id)) {
             $title = get_screen_title('VIEW_TOPIC');
             $url = $GLOBALS['FORUM_DRIVER']->topic_url($topic_id, '', true);
-            require_code('site2');
-            assign_refresh($url, 0.0);
             return redirect_screen($title, $url, do_lang_tempcode('REDIRECTING_TO_BIRTHDAY_TOPIC'));
         }
         $_POST['title'] = do_lang('HAPPY_BIRTHDAY_PERSON', $id);

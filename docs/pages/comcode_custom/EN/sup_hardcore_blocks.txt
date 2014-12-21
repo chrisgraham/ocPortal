@@ -417,3 +417,5 @@ The parameters we add to the end of the image URL may seem incomprehensible, but
 [attachment_safe thumb="1" type="island" description=""]5433[/attachment_safe]
 
 If you wish to turn your mini-block into an ocPortal addon that anyone can install then you can follow the instructions and diagrams in this section of the [url="http://ocportal.com/docs/tut_framework.htm#title__9"]ocPortal programming framework tutorial[/url]. ocPortal, by default, gives administrators access to a "tree view" of all the addons which have been published on ocPortal.com. This means that, if you upload your addon to ocPortal.com, it will appear inside (almost) every ocPortal installation in the world, and can be downloaded and installed automatically with just a few clicks!
+
+{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]

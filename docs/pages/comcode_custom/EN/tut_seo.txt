@@ -102,3 +102,5 @@ This is very cryptic, but the ID number is on the end after [tt]%3A[/tt] (in thi
  - [url="Submit to OpenDMOZ"]http://www.dmoz.org/add.html[/url]
  - [url="Sitemaps specification"]http://www.sitemaps.org/[/url]
  - [url="Google webmaster tools"]http://www.google.com/webmasters/tools/[/url]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

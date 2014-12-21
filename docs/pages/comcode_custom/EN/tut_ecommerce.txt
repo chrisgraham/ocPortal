@@ -309,16 +309,14 @@ ocPortal can generate the following charts over a custom specified period:
 [/surround]
 [title="2"]Payment system[/title]
 
+[surround]
 [media width="150" description="Inputting a manual transaction" float="left"]data_custom/images/docs/ecommerce_manual.png[/media]
 Whilst ocPortal only supports PayPal/WorldPay/SecPay payments by default, it does allow manual transactions to be entered. This is possible in the Admin Zone module. Entering a manual transaction will trigger any code associated with the purchase of a product (such as a usergroup promotion).
 
 Manual transactions may be a bit tricky to perform at first, as it is necessary to enter the ID number associated with the transaction type in order to finalise it; typically the ID for a product is the member ID of the member who the purchase is attributable to.
 
 Manual transactions may also be used to input transactions that are totally external to ocPortal, and thus otherwise immeasurable by the charting. For example, an organisations expenditure may be recorded by manually inputting a negative transaction for the special 'Other' product.
-
-
-
-
+[/surround]
 
 [concepts
  1_key="PayPal"           1_value="The most popular online payment gateway"
@@ -327,10 +325,10 @@ Manual transactions may also be used to input transactions that are totally exte
  4_key="Product"           4_value="An item in the eCommerce system that defines everything relating to the natural view of a product or service, including handling of any actions associated with a sale being completed or retracted; these products are not like supermarket products -- they are very engrandised and dynamic"
 ]Concepts[/concepts]
 
-
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_catalogues"]Custom structured content (via catalogues)[/page]
  - [page="_SEARCH:tut_subcom"]Creating sub-communities (and sub-sites)[/page]
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
 
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

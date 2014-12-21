@@ -1107,8 +1107,6 @@ class Module_chat
         $keep = symbol_tempcode('KEEP');
         $mod_url = find_script('download_chat_logs') . '?room=' . strval($room) . '&start=' . strval($start_date_and_time) . '&finish=' . strval($finish_date_and_time) . '&zone=' . get_zone_name() . $keep->evaluate();
 
-        require_code('site2');
-        assign_refresh($mod_url, 0.0);
         return redirect_screen($this->title, $mod_url);
     }
 
@@ -1272,8 +1270,6 @@ class Module_chat
 
         $redirect = post_param('redirect', null);
         if (!is_null($redirect)) {
-            require_code('site2');
-            assign_refresh($redirect, 0.0);
             return redirect_screen($this->title, $redirect, do_lang_tempcode('SUCCESS'));
         }
 

@@ -1693,3 +1693,5 @@ If you enter the template editor from the 'Template tree' screen then you will b
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
+
+{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]

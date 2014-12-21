@@ -55,3 +55,4 @@ To use a post template, simply submit a new topic or post using the verbose post
  - [page="_SEARCH:tut_forum_tracking"]Keeping on track of busy forums[/page]
  - [page="_SEARCH:tut_support_desk"]Running a virtual support desk[/page]
 
+{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]

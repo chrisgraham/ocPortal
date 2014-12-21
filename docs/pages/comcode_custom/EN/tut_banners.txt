@@ -123,9 +123,6 @@ If banners won't show check:
 7) The banner type has permissions for the viewer's usergroup.
 8) The "Community advert chance" configuration option is not set to zero.
 
-
-
-
 [concepts
  1_key="Default banner"       1_value="A banner that is displayable at any time (i.e. both when campaign and permanent banners would be chosen for viewing), but is intended to have a low importance level such that it is shown when the system is low on banners"
  2_key="Campaign banner"      2_value="A banner that has a limited number of hits, but with support for hit balancing should the banner be tied to a site that is generating banner network clicks"
@@ -138,4 +135,4 @@ If banners won't show check:
 
  - [page="_SEARCH:tut_points"]Creating an economy/reward-system for members via points[/page]
 
-
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

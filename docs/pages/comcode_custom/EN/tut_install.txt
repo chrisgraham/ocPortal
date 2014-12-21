@@ -6,7 +6,7 @@ Before you begin using ocPortal, you will need to install it. Installing ocPorta
 
 [title="2"]Prerequisites[/title]
 
-Before you install ocPortal, you will need to make sure that your host covers our [page="tut_web_hosting"]minimum requirements[/page], and a general knowledge of [page="tut_webapp"]web applications[/page] will also help you, but is not required. You also need the following information from your web host, if you don't already.
+Before you install ocPortal, you will need to make sure that your host covers our [page="_SEARCH:tut_web_hosting"]minimum requirements[/page], and a general knowledge of [page="_SEARCH:tut_webapp"]web applications[/page] will also help you, but is not required. You also need the following information from your web host, if you don't already.
  - FTP hostname
  - FTP username
  - FTP password
@@ -54,7 +54,7 @@ Regardless whether or not you chose to make a new subfolder, you need to put the
 
 [title="2"]Permissions[/title]
 [box="Tip" width="25em" float="right"]Note for Linux-server users: If you are on a suexec-system (where the PHP script is run as your own user), the default 744 and 644 permissions should be suitable (with _config.php being 600 for additional security). The installer will tell you if you are on a suexec-system, otherwise assume you are not and you still will need to set the permissions.[/box]
-[box="Tip" width="25em" float="right"]Note for Windows-server users: Permission setting can be complex and is discussed in depth in the [page="tut_adv_installation"]advanced installation[/page] tutorial. You may be able to avoid setting any permissions at all though.[/box]
+[box="Tip" width="25em" float="right"]Note for Windows-server users: Permission setting can be complex and is discussed in depth in the [page="_SEARCH:tut_adv_installation"]advanced installation[/page] tutorial. You may be able to avoid setting any permissions at all though.[/box]
 If you chose the manual installer, you now need to set the appropriate permissions for your files and folders (read on). You usually do not need to set any permissions if you chose the quick installer.
 
 If you have "shell access" (ask your web host if you don't know), then you can automatically set these permissions by logging into your server with a program like [url="putty"]http://www.putty.nl[/url], and executing the file [tt]fixperms.sh[/tt].
@@ -164,7 +164,7 @@ On step two, you are shown a license agreement. You must agree to the license ag
 
 On step three, you are presented with a choice to choose which forum system you would like to use for your website. We recommend that you use ocPortal's own forum (OCF), which if chosen will be installed at the same time as ocPortal. If you're using a third-party forum software, then you will need to already have it installed. Select the name of the software on the left, and then choose the appropriate version from the right-hand column.
 
-If you would like your website to be one of many on one network, you can choose the option to install a multi-site-network. Read our [page="tut_msn"]multi-site-network[/page] tutorial for more information on this feature, and to decide whether or not you would like to use it.
+If you would like your website to be one of many on one network, you can choose the option to install a multi-site-network. Read our [page="_SEARCH:tut_msn"]multi-site-network[/page] tutorial for more information on this feature, and to decide whether or not you would like to use it.
 
 [media width="150" description="Step 4: primary configuration" float="left"]data_custom/images/docs/install_step4.png[/media]
 
@@ -195,7 +195,9 @@ Congratulations on your successful installation![/surround]
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_configuration"]Basic Configuration[/page]
- - [page="tut_webapp"]Web applications information[/page]
- - [page="tut_web_hosting"]Web hosting information[/page] (including ocPortal minimum requirements)
+ - [page="_SEARCH:tut_webapp"]Web applications information[/page]
+ - [page="_SEARCH:tut_web_hosting"]Web hosting information[/page] (including ocPortal minimum requirements)
  - [page=":privacy"]ocProducts privacy policy[/page]
- - [page="tut_uninstall"]Uninstalling ocPortal[/page]
+ - [page="_SEARCH:tut_uninstall"]Uninstalling ocPortal[/page]
+
+{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]

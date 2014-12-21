@@ -71,3 +71,4 @@ If you don't have shell access to import a database you'll probably end up tryin
  - [page="_SEARCH:tut_adv_installation"]Advanced installation[/page]
  - [page="_SEARCH:tut_backup"]Backing up your site[/page]
 
+{$SET,tutorial_tags,TODO,Configurational events}[block]main_tutorial_rating[/block]

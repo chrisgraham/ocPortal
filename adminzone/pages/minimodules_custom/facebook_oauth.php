@@ -12,8 +12,6 @@ $facebook_appid = get_option('facebook_appid');
 
 if ($facebook_appid == '') {
     $config_url = build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => 'FEATURE', 'redirect' => get_self_url(true)), '_SELF', null, false, false, false, 'group_FACEBOOK_SYNDICATION');
-    require_code('site2');
-    assign_refresh($config_url, 0.0);
     $echo = redirect_screen($title, $config_url, do_lang_tempcode('FACEBOOK_SETUP_FIRST'));
     $echo->evaluate_echo();
     return;

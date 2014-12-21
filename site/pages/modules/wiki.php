@@ -398,8 +398,6 @@ class Module_wiki
             $post_id = get_param_integer('id');
             $page_id = $GLOBALS['SITE_DB']->query_select('wiki_posts', 'page_id', array('id' => $post_id));
             $redirect = build_url(array('page' => '_SELF', 'type' => 'browse', 'id' => $page_id), '_SELF', null, false, false, false, 'post_' . strval($post_id));
-            require_code('site2');
-            assign_refresh($redirect, 0.0);
             return redirect_screen(get_screen_title('WIKI'), $redirect);
         }
         if ($type == 'browse') {

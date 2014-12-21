@@ -196,8 +196,6 @@ Images have automatically generated and cached thumbnails.
 If you go back to edit the content with your attachment, you will see that it has been given a number, whereas it as just marked as 'new' when being added. You may actually copy and paste the attachment tag into any other area of Comcode, so as to re-use the attachment. Anyone with permission to access any of the attachment supporting content locations that the attachment is placed in will be able to view/download it. The attachment will remain in the system until all content that using it is edited to stop using it, or deleted.
 [/surround]
 
-
-
 [concepts
  0_key="Mark-up language" 0_value="A language designed so that text may be laid out by surrounding special elements around portions of the text to define meta-properties (such as font)"
  1_key="Comcode"          1_value="ocPortal's mark-up language for the creation of formatted text and inclusion of dynamic elements"
@@ -218,4 +216,4 @@ If you go back to edit the content with your attachment, you will see that it ha
  - [page="_SEARCH:tut_filter"]Filtering using ocFilter syntax[/page]
  - [page="site:userguide_comcode"]Comcode User-guide[/page]
 
-
+{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]

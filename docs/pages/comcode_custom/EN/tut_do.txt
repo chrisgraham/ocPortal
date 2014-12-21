@@ -16,3 +16,4 @@ This tutorial will detail a few of the do and do-nots of running a website power
  - Use every ocPortal feature on your site just because they exist
  - Plagiarise content: if you use other peoples content, credit them
 
+{$SET,tutorial_tags,TODO,Advice and guidance}[block]main_tutorial_rating[/block]

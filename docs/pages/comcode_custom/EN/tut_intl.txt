@@ -315,3 +315,5 @@ If you don't want to worry about a proper translation, but do want to support mu
 
  - [page="_SEARCH:tut_intl_users"]Translating ocPortal[/page]
  - [page="_SEARCH:tut_intl_content"]Translating ocPortal content[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

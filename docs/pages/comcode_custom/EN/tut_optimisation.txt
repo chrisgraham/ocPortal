@@ -423,3 +423,5 @@ You'll need to disable the ocPortal "Reveal usage figures" option, as the usage 
 
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]
  - [page="_SEARCH:tut_google_appengine"]Installing on Google App Engine[/page]
+
+{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]

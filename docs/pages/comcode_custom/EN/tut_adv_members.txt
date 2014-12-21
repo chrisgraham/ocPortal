@@ -193,11 +193,10 @@ You can also run SQL queries. To force all members to change their passwords:
 UPDATE ocp_f_members SET m_password_compat_scheme='temporary' WHERE m_password_compat_scheme=''
 [/code]
 
-
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
  - [page="_SEARCH:tut_subcom"]Creating sub-communities[/page]
  - [page="_SEARCH:tut_web_hosting"]Web Hosting for ocPortal[/page]
 
-
+{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]

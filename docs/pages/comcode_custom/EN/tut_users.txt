@@ -98,3 +98,5 @@ This short tutorial aims simply to clarify what all these terms to relate to, an
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
  - [page="_SEARCH:tut_authors"]Authors[/page]
  - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

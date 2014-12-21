@@ -512,8 +512,6 @@ N/A is used to mark characters that have a special meaning.
 31     N/A    63    ?     95    _     127    �
 [/tt]
 
-
-
 [concepts
  1_key="ASCII"                  1_value="American Standard Code for Information Interchange: a code that maps numbers to symbols, allowing computers to store text"
  2_key="abstraction"            2_value="The process of creating shared concepts out of what would otherwise be chaos"
@@ -543,4 +541,4 @@ N/A is used to mark characters that have a special meaning.
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
-
+{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]

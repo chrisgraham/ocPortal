@@ -150,3 +150,5 @@ These are the current known omissions for the repository:
  - [page="_SEARCH:tut_occle"]OcCLE[/page]
  - [page="_SEARCH:tut_aggregate_types"]Aggregate Content Types[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
+
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

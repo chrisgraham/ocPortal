@@ -12,7 +12,7 @@ Depending on your site policies (for a good discussion of this, see the 'Legal a
 
 The word filter makes no attempt to try and detect when users try to 'cheat it', as this would be a futile struggle: if users abuse the filter, then they are almost certainly knowingly that they are doing so, and thus setting themselves up for punishment.
 
-In addition to the word filter there is a more sophisticated filtering system, the [page="tut_fields_filter"]The form field filter system[/page].
+In addition to the word filter there is a more sophisticated filtering system, the [page="_SEARCH:tut_fields_filter"]The form field filter system[/page].
 
 [title="2"]Tools for moderation[/title]
 
@@ -88,7 +88,6 @@ If you are using OCF, then you may make use of the 'post history' feature. This 
  2_key="Validation"     2_value="The process of checking submitted content is suitable for display on the website"
 ]Concepts[/concepts]
 
-
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_trace"]IP addresses and tracing users[/page]
@@ -99,3 +98,4 @@ If you are using OCF, then you may make use of the 'post history' feature. This 
  - [page="_SEARCH:tut_fields_filter"]The form field filter system[/page]
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
 
+{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]

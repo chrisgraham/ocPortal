@@ -211,3 +211,5 @@ There are many advantages to use OCF, such as:
 
  - [page="_SEARCH:tut_importer"]Importing data into ocPortal[/page]
  - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]
+
+{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]
