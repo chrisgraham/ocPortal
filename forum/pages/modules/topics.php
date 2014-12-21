@@ -1572,6 +1572,16 @@ class Module_topics
 			$post=$this->attach_quotes($quotes);
 		}
 
+		$whisperer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_poster',array('p_topic_id'=>$topic_id,'p_intended_solely_for'=>get_member()),'ORDER BY p_time DESC');
+		if (!is_null($whisperer))
+		{
+			$_whisperer=$GLOBALS['FORUM_DRIVER']->get_username($whisperer);
+			if (!is_null($_whisperer))
+			{
+				attach_message(do_lang_tempcode('TOPIC_HAS_WHISPER_TO_YOU',escape_html($_whisperer)),'notice');
+			}
+		}
+
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$forum_id=$topic_info[0]['t_forum_id'];
