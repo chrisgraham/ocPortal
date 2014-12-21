@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `ocp_addons` (
   `addon_description` longtext NOT NULL,
   `addon_install_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`addon_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_addons`
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `ocp_addons_dependencies` (
   `addon_name_dependant_upon` varchar(255) NOT NULL,
   `addon_name_incompatibility` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_addons_dependencies`
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `ocp_addons_files` (
   `addon_name` varchar(255) NOT NULL,
   `filename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_addons_files`
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `ocp_adminlogs` (
   KEY `ts` (`date_and_time`),
   KEY `aip` (`ip`),
   KEY `athe_type` (`the_type`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_adminlogs`
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `ocp_attachments` (
   PRIMARY KEY (`id`),
   KEY `ownedattachments` (`a_member_id`),
   KEY `attachmentlimitcheck` (`a_add_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_attachments`
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `ocp_attachment_refs` (
   `r_referer_id` varchar(80) NOT NULL,
   `a_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_attachment_refs`
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `ocp_authors` (
   `skills` int(10) unsigned NOT NULL,
   PRIMARY KEY (`author`),
   KEY `findmemberlink` (`forum_handle`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_authors`
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `ocp_autosave` (
   `a_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `myautosaves` (`a_member_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_autosave`
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `ocp_award_archive` (
   `member_id` int(11) NOT NULL,
   PRIMARY KEY (`a_type_id`,`date_and_time`),
   KEY `awardquicksearch` (`content_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_award_archive`
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `ocp_award_types` (
   `a_hide_awardee` tinyint(1) NOT NULL,
   `a_update_time_hours` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_award_types`
@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `ocp_banners` (
   KEY `topsites` (`hits_from`,`hits_to`),
   KEY `campaign_remaining` (`campaign_remaining`),
   KEY `bvalidated` (`validated`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_banners`
@@ -297,7 +297,7 @@ CREATE TABLE IF NOT EXISTS `ocp_banner_clicks` (
   `c_banner_id` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `clicker_ip` (`c_ip_address`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_banner_clicks`
@@ -320,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `ocp_banner_types` (
   `t_comcode_inline` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `hottext` (`t_comcode_inline`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_banner_types`
@@ -343,7 +343,7 @@ CREATE TABLE IF NOT EXISTS `ocp_blocks` (
   `block_hack_version` int(11) DEFAULT NULL,
   `block_version` int(11) NOT NULL,
   PRIMARY KEY (`block_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_blocks`
@@ -444,7 +444,7 @@ CREATE TABLE IF NOT EXISTS `ocp_bookmarks` (
   `b_title` varchar(255) NOT NULL,
   `b_page_link` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_bookmarks`
@@ -472,7 +472,7 @@ CREATE TABLE IF NOT EXISTS `ocp_cache` (
   KEY `cached_forf` (`lang`),
   KEY `cached_forg` (`identifier`),
   KEY `cached_forh` (`the_theme`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_cache`
@@ -496,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `ocp_cached_comcode_pages` (
   KEY `ftjoin_ccpt` (`cc_page_title`),
   KEY `ftjoin_ccsi` (`string_index`),
   KEY `ccp_join` (`the_page`,`the_zone`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_cached_comcode_pages`
@@ -515,7 +515,7 @@ CREATE TABLE IF NOT EXISTS `ocp_cached_weather_codes` (
   `w_string` varchar(255) NOT NULL,
   `w_code` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_cached_weather_codes`
@@ -534,7 +534,7 @@ CREATE TABLE IF NOT EXISTS `ocp_cache_on` (
   `cache_on` longtext NOT NULL,
   `cache_ttl` int(11) NOT NULL,
   PRIMARY KEY (`cached_for`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_cache_on`
@@ -591,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `ocp_calendar_events` (
   KEY `validated` (`validated`),
   KEY `ftjoin_etitle` (`e_title`),
   KEY `ftjoin_econtent` (`e_content`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_calendar_events`
@@ -609,7 +609,7 @@ CREATE TABLE IF NOT EXISTS `ocp_calendar_interests` (
   `i_member_id` int(11) NOT NULL,
   `t_type` int(11) NOT NULL,
   PRIMARY KEY (`i_member_id`,`t_type`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_calendar_interests`
@@ -631,7 +631,7 @@ CREATE TABLE IF NOT EXISTS `ocp_calendar_jobs` (
   `j_event_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `applicablejobs` (`j_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_calendar_jobs`
@@ -651,7 +651,7 @@ CREATE TABLE IF NOT EXISTS `ocp_calendar_reminders` (
   `n_member_id` int(11) NOT NULL,
   `n_seconds_before` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_calendar_reminders`
@@ -671,7 +671,7 @@ CREATE TABLE IF NOT EXISTS `ocp_calendar_types` (
   `t_logo` varchar(255) NOT NULL,
   `t_external_feed` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `ocp_calendar_types`
@@ -705,7 +705,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogues` (
   `c_ecommerce` tinyint(1) NOT NULL,
   `c_send_view_reports` varchar(80) NOT NULL,
   PRIMARY KEY (`c_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_catalogues`
@@ -744,7 +744,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_categories` (
   KEY `cc_parent_id` (`cc_parent_id`),
   KEY `ftjoin_cctitle` (`cc_title`),
   KEY `ftjoin_ccdescrip` (`cc_description`)
-) ENGINE=MyISAM  AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `ocp_catalogue_categories`
@@ -769,7 +769,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_cat_treecache` (
   `cc_ancestor_id` int(11) NOT NULL,
   PRIMARY KEY (`cc_id`,`cc_ancestor_id`),
   KEY `cc_ancestor_id` (`cc_ancestor_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_catalogue_cat_treecache`
@@ -792,7 +792,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_childcountcache` (
   `c_num_rec_children` int(11) NOT NULL,
   `c_num_rec_entries` int(11) NOT NULL,
   PRIMARY KEY (`cc_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_catalogue_childcountcache`
@@ -816,7 +816,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_efv_float` (
   KEY `fcf_id` (`cf_id`),
   KEY `fce_id` (`ce_id`),
   KEY `cefv_f_combo` (`ce_id`,`cf_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_catalogue_efv_float`
@@ -840,7 +840,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_efv_integer` (
   KEY `icf_id` (`cf_id`),
   KEY `ice_id` (`ce_id`),
   KEY `cefv_i_combo` (`ce_id`,`cf_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_catalogue_efv_integer`
@@ -864,7 +864,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_efv_long` (
   KEY `lcf_id` (`cf_id`),
   KEY `lce_id` (`ce_id`),
   FULLTEXT KEY `lcv_value` (`cv_value`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_catalogue_efv_long`
@@ -888,7 +888,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_efv_long_trans` (
   KEY `ltcf_id` (`cf_id`),
   KEY `ltce_id` (`ce_id`),
   KEY `ltcv_value` (`cv_value`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_catalogue_efv_long_trans`
@@ -913,7 +913,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_efv_short` (
   KEY `scf_id` (`cf_id`),
   KEY `sce_id` (`ce_id`),
   FULLTEXT KEY `scv_value` (`cv_value`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_catalogue_efv_short`
@@ -937,7 +937,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_efv_short_trans` (
   KEY `stcf_id` (`cf_id`),
   KEY `stce_id` (`ce_id`),
   KEY `stcv_value` (`cv_value`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_catalogue_efv_short_trans`
@@ -973,7 +973,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_entries` (
   KEY `ce_add_date` (`ce_add_date`),
   KEY `ce_c_name` (`c_name`),
   KEY `ce_cc_id` (`cc_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_catalogue_entries`
@@ -993,7 +993,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_entry_linkage` (
   `content_id` varchar(80) NOT NULL,
   PRIMARY KEY (`catalogue_entry_id`),
   KEY `custom_fields` (`content_type`,`content_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_catalogue_entry_linkage`
@@ -1022,7 +1022,7 @@ CREATE TABLE IF NOT EXISTS `ocp_catalogue_fields` (
   `cf_put_in_category` tinyint(1) NOT NULL,
   `cf_put_in_search` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=43 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=43 ;
 
 --
 -- Dumping data for table `ocp_catalogue_fields`
@@ -1085,7 +1085,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chargelog` (
   `reason` int(10) unsigned NOT NULL,
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_chargelog`
@@ -1108,7 +1108,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chat_active` (
   KEY `active_ordering` (`date_and_time`),
   KEY `member_select` (`member_id`),
   KEY `room_select` (`room_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_chat_active`
@@ -1127,7 +1127,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chat_blocking` (
   `member_blocked` int(11) NOT NULL,
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`member_blocker`,`member_blocked`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_chat_blocking`
@@ -1146,7 +1146,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chat_buddies` (
   `member_liked` int(11) NOT NULL,
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`member_likes`,`member_liked`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_chat_buddies`
@@ -1168,7 +1168,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chat_events` (
   `e_date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `event_ordering` (`e_date_and_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_chat_events`
@@ -1195,7 +1195,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chat_messages` (
   PRIMARY KEY (`id`),
   KEY `ordering` (`date_and_time`),
   KEY `room_id` (`room_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_chat_messages`
@@ -1225,7 +1225,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chat_rooms` (
   KEY `is_im` (`is_im`,`room_name`),
   KEY `first_public` (`is_im`,`id`),
   KEY `allow_list` (`allow_list`(30))
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_chat_rooms`
@@ -1245,7 +1245,7 @@ CREATE TABLE IF NOT EXISTS `ocp_chat_sound_effects` (
   `s_effect_id` varchar(80) NOT NULL,
   `s_url` varchar(255) NOT NULL,
   PRIMARY KEY (`s_member`,`s_effect_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_chat_sound_effects`
@@ -1272,7 +1272,7 @@ CREATE TABLE IF NOT EXISTS `ocp_comcode_pages` (
   KEY `p_submitter` (`p_submitter`),
   KEY `p_add_date` (`p_add_date`),
   KEY `p_validated` (`p_validated`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_comcode_pages`
@@ -1299,7 +1299,7 @@ CREATE TABLE IF NOT EXISTS `ocp_config` (
   `shared_hosting_restricted` tinyint(1) NOT NULL,
   `c_data` varchar(255) NOT NULL,
   PRIMARY KEY (`the_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_config`
@@ -1739,7 +1739,7 @@ CREATE TABLE IF NOT EXISTS `ocp_cron_caching_requests` (
   KEY `c_compound` (`c_codename`,`c_theme`,`c_lang`,`c_timezone`),
   KEY `c_is_bot` (`c_is_bot`),
   KEY `c_store_as_tempcode` (`c_store_as_tempcode`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_cron_caching_requests`
@@ -1761,7 +1761,7 @@ CREATE TABLE IF NOT EXISTS `ocp_customtasks` (
   `recurevery` varchar(80) NOT NULL,
   `taskisdone` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=14 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=14 ;
 
 --
 -- Dumping data for table `ocp_customtasks`
@@ -1800,7 +1800,7 @@ CREATE TABLE IF NOT EXISTS `ocp_custom_comcode` (
   `tag_block_tag` tinyint(1) NOT NULL,
   `tag_textual_tag` tinyint(1) NOT NULL,
   PRIMARY KEY (`tag_tag`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_custom_comcode`
@@ -1822,7 +1822,7 @@ CREATE TABLE IF NOT EXISTS `ocp_db_meta` (
   `m_type` varchar(80) NOT NULL,
   PRIMARY KEY (`m_table`,`m_name`),
   KEY `findtransfields` (`m_type`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_db_meta`
@@ -3246,7 +3246,7 @@ CREATE TABLE IF NOT EXISTS `ocp_db_meta_indices` (
   `i_name` varchar(80) NOT NULL,
   `i_fields` varchar(80) NOT NULL,
   PRIMARY KEY (`i_table`,`i_name`,`i_fields`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_db_meta_indices`
@@ -3591,7 +3591,7 @@ CREATE TABLE IF NOT EXISTS `ocp_digestives_consumed` (
   `c_frequency` int(11) NOT NULL,
   `c_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`c_member_id`,`c_frequency`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_digestives_consumed`
@@ -3621,7 +3621,7 @@ CREATE TABLE IF NOT EXISTS `ocp_digestives_tin` (
   KEY `d_date_and_time` (`d_date_and_time`),
   KEY `d_frequency` (`d_frequency`),
   KEY `d_to_member_id` (`d_to_member_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_digestives_tin`
@@ -3647,7 +3647,7 @@ CREATE TABLE IF NOT EXISTS `ocp_download_categories` (
   KEY `child_find` (`parent_id`),
   KEY `ftjoin_dccat` (`category`),
   KEY `ftjoin_dcdescrip` (`description`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_download_categories`
@@ -3703,7 +3703,7 @@ CREATE TABLE IF NOT EXISTS `ocp_download_downloads` (
   KEY `ftjoin_dcomments` (`comments`),
   FULLTEXT KEY `download_data_mash` (`download_data_mash`),
   FULLTEXT KEY `original_filename` (`original_filename`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_download_downloads`
@@ -3722,7 +3722,7 @@ CREATE TABLE IF NOT EXISTS `ocp_download_licences` (
   `l_title` varchar(255) NOT NULL,
   `l_text` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_download_licences`
@@ -3743,7 +3743,7 @@ CREATE TABLE IF NOT EXISTS `ocp_download_logging` (
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`,`the_user`),
   KEY `calculate_bandwidth` (`date_and_time`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_download_logging`
@@ -3765,7 +3765,7 @@ CREATE TABLE IF NOT EXISTS `ocp_edit_pings` (
   `the_time` int(10) unsigned NOT NULL,
   `the_member` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_edit_pings`
@@ -3785,7 +3785,7 @@ CREATE TABLE IF NOT EXISTS `ocp_failedlogins` (
   `date_and_time` int(10) unsigned NOT NULL,
   `ip` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_failedlogins`
@@ -3806,7 +3806,7 @@ CREATE TABLE IF NOT EXISTS `ocp_feature_lifetime_monitor` (
   `running_now` tinyint(1) NOT NULL,
   `last_update` int(10) unsigned NOT NULL,
   PRIMARY KEY (`content_id`,`block_cache_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_feature_lifetime_monitor`
@@ -3827,7 +3827,7 @@ CREATE TABLE IF NOT EXISTS `ocp_filedump` (
   `description` int(10) unsigned NOT NULL,
   `the_member` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_filedump`
@@ -3847,7 +3847,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_categories` (
   `c_description` longtext NOT NULL,
   `c_expanded_by_default` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `ocp_f_categories`
@@ -3881,7 +3881,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_custom_fields` (
   `cf_encrypted` tinyint(1) NOT NULL,
   `cf_show_on_join_form` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=36 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=36 ;
 
 --
 -- Dumping data for table `ocp_f_custom_fields`
@@ -3939,7 +3939,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_emoticons` (
   PRIMARY KEY (`e_code`),
   KEY `relevantemoticons` (`e_relevance_level`),
   KEY `topicemos` (`e_use_topics`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_emoticons`
@@ -4027,7 +4027,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_forums` (
   KEY `subforum_parenting` (`f_parent_forum`),
   KEY `findnamedforum` (`f_name`),
   KEY `f_position` (`f_position`)
-) ENGINE=MyISAM  AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `ocp_f_forums`
@@ -4053,7 +4053,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_forum_intro_ip` (
   `i_forum_id` int(11) NOT NULL,
   `i_ip` varchar(40) NOT NULL,
   PRIMARY KEY (`i_forum_id`,`i_ip`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_forum_intro_ip`
@@ -4071,7 +4071,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_forum_intro_member` (
   `i_forum_id` int(11) NOT NULL,
   `i_member_id` int(11) NOT NULL,
   PRIMARY KEY (`i_forum_id`,`i_member_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_forum_intro_member`
@@ -4123,7 +4123,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_groups` (
   KEY `hidden` (`g_hidden`),
   KEY `is_presented_at_install` (`g_is_presented_at_install`),
   KEY `gorder` (`g_order`,`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `ocp_f_groups`
@@ -4155,7 +4155,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_group_members` (
   KEY `gm_validated` (`gm_validated`),
   KEY `gm_member_id` (`gm_member_id`),
   KEY `gm_group_id` (`gm_group_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_group_members`
@@ -4174,7 +4174,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_group_member_timeouts` (
   `group_id` int(11) NOT NULL,
   `timeout` int(10) unsigned NOT NULL,
   PRIMARY KEY (`member_id`,`group_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_group_member_timeouts`
@@ -4195,7 +4195,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_invites` (
   `i_time` int(10) unsigned NOT NULL,
   `i_taken` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_invites`
@@ -4263,7 +4263,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_members` (
   KEY `primary_group` (`m_primary_group`),
   KEY `avatar_url` (`m_avatar_url`),
   FULLTEXT KEY `search_user` (`m_username`)
-) ENGINE=MyISAM  AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `ocp_f_members`
@@ -4288,7 +4288,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_member_cpf_perms` (
   `friend_view` tinyint(1) NOT NULL,
   `group_view` varchar(255) NOT NULL,
   PRIMARY KEY (`member_id`,`field_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_member_cpf_perms`
@@ -4364,7 +4364,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_member_custom_fields` (
   FULLTEXT KEY `mcf33` (`field_33`),
   FULLTEXT KEY `mcf34` (`field_34`),
   FULLTEXT KEY `mcf35` (`field_35`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_member_custom_fields`
@@ -4386,7 +4386,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_member_known_login_ips` (
   `i_ip` varchar(40) NOT NULL,
   `i_val_code` varchar(255) NOT NULL,
   PRIMARY KEY (`i_member_id`,`i_ip`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_member_known_login_ips`
@@ -4409,7 +4409,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_moderator_logs` (
   `l_reason` longtext NOT NULL,
   `l_by` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_moderator_logs`
@@ -4434,7 +4434,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_multi_moderations` (
   `mm_forum_multi_code` varchar(255) NOT NULL,
   `mm_title_suffix` varchar(255) NOT NULL,
   PRIMARY KEY (`id`,`mm_name`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_f_multi_moderations`
@@ -4459,7 +4459,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_polls` (
   `po_maximum_selections` int(11) NOT NULL,
   `po_requires_reply` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_polls`
@@ -4479,7 +4479,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_poll_answers` (
   `pa_answer` varchar(255) NOT NULL,
   `pa_cache_num_votes` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_poll_answers`
@@ -4498,7 +4498,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_poll_votes` (
   `pv_member_id` int(11) NOT NULL,
   `pv_answer_id` int(11) NOT NULL,
   PRIMARY KEY (`pv_poll_id`,`pv_member_id`,`pv_answer_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_poll_votes`
@@ -4540,7 +4540,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_posts` (
   KEY `postsinforum` (`p_cache_forum_id`),
   KEY `deletebyip` (`p_ip_address`),
   FULLTEXT KEY `p_title` (`p_title`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_f_posts`
@@ -4567,7 +4567,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_post_history` (
   `h_action` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `phistorylookup` (`h_post_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_post_history`
@@ -4588,7 +4588,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_post_templates` (
   `t_forum_multi_code` varchar(255) NOT NULL,
   `t_use_default_forums` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `ocp_f_post_templates`
@@ -4611,7 +4611,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_read_logs` (
   `l_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`l_member_id`,`l_topic_id`),
   KEY `erase_old_read_logs` (`l_time`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_read_logs`
@@ -4630,7 +4630,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_saved_warnings` (
   `s_explanation` longtext NOT NULL,
   `s_message` longtext NOT NULL,
   PRIMARY KEY (`s_title`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_saved_warnings`
@@ -4648,7 +4648,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_special_pt_access` (
   `s_member_id` int(11) NOT NULL,
   `s_topic_id` int(11) NOT NULL,
   PRIMARY KEY (`s_member_id`,`s_topic_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_f_special_pt_access`
@@ -4708,7 +4708,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_topics` (
   KEY `topic_order_3` (`t_forum_id`,`t_cascading`,`t_pinned`,`t_cache_last_time`),
   KEY `ownedtopics` (`t_cache_first_member_id`),
   FULLTEXT KEY `t_description` (`t_description`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_f_topics`
@@ -4737,7 +4737,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_usergroup_subs` (
   `s_mail_uhoh` int(10) unsigned NOT NULL,
   `s_uses_primary` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_usergroup_subs`
@@ -4767,7 +4767,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_warnings` (
   `p_changed_usergroup_from` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `warningsmemberid` (`w_member_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_warnings`
@@ -4789,7 +4789,7 @@ CREATE TABLE IF NOT EXISTS `ocp_f_welcome_emails` (
   `w_send_time` int(11) NOT NULL,
   `w_newsletter` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_f_welcome_emails`
@@ -4833,7 +4833,7 @@ CREATE TABLE IF NOT EXISTS `ocp_galleries` (
   KEY `parent_id` (`parent_id`),
   KEY `ftjoin_gfullname` (`fullname`),
   KEY `ftjoin_gdescrip` (`description`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_galleries`
@@ -4859,7 +4859,7 @@ CREATE TABLE IF NOT EXISTS `ocp_gifts` (
   PRIMARY KEY (`id`),
   KEY `giftsgiven` (`gift_from`),
   KEY `giftsreceived` (`gift_to`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_gifts`
@@ -4878,7 +4878,7 @@ CREATE TABLE IF NOT EXISTS `ocp_group_category_access` (
   `category_name` varchar(80) NOT NULL,
   `group_id` int(11) NOT NULL,
   PRIMARY KEY (`module_the_name`,`category_name`,`group_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_group_category_access`
@@ -5267,7 +5267,7 @@ CREATE TABLE IF NOT EXISTS `ocp_group_page_access` (
   `zone_name` varchar(80) NOT NULL,
   `group_id` int(11) NOT NULL,
   PRIMARY KEY (`page_name`,`zone_name`,`group_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_group_page_access`
@@ -5356,7 +5356,7 @@ CREATE TABLE IF NOT EXISTS `ocp_group_zone_access` (
   `group_id` int(11) NOT NULL,
   PRIMARY KEY (`zone_name`,`group_id`),
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_group_zone_access`
@@ -5421,7 +5421,7 @@ CREATE TABLE IF NOT EXISTS `ocp_gsp` (
   `category_name` varchar(80) NOT NULL,
   `the_value` tinyint(1) NOT NULL,
   PRIMARY KEY (`group_id`,`specific_permission`,`the_page`,`module_the_name`,`category_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_gsp`
@@ -6018,7 +6018,7 @@ CREATE TABLE IF NOT EXISTS `ocp_hackattack` (
   PRIMARY KEY (`id`),
   KEY `otherhacksby` (`ip`),
   KEY `h_date_and_time` (`date_and_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_hackattack`
@@ -6035,7 +6035,7 @@ DROP TABLE IF EXISTS `ocp_https_pages`;
 CREATE TABLE IF NOT EXISTS `ocp_https_pages` (
   `https_page_name` varchar(80) NOT NULL,
   PRIMARY KEY (`https_page_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_https_pages`
@@ -6072,7 +6072,7 @@ CREATE TABLE IF NOT EXISTS `ocp_images` (
   KEY `xis` (`submitter`),
   KEY `iadd_date` (`add_date`),
   KEY `ftjoin_icomments` (`comments`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_images`
@@ -6092,7 +6092,7 @@ CREATE TABLE IF NOT EXISTS `ocp_import_id_remap` (
   `id_type` varchar(80) NOT NULL,
   `id_session` int(11) NOT NULL,
   PRIMARY KEY (`id_old`,`id_type`,`id_session`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_import_id_remap`
@@ -6110,7 +6110,7 @@ CREATE TABLE IF NOT EXISTS `ocp_import_parts_done` (
   `imp_id` varchar(255) NOT NULL,
   `imp_session` int(11) NOT NULL,
   PRIMARY KEY (`imp_id`,`imp_session`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_import_parts_done`
@@ -6133,7 +6133,7 @@ CREATE TABLE IF NOT EXISTS `ocp_import_session` (
   `imp_refresh_time` int(11) NOT NULL,
   `imp_session` int(11) NOT NULL,
   PRIMARY KEY (`imp_session`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_import_session`
@@ -6154,7 +6154,7 @@ CREATE TABLE IF NOT EXISTS `ocp_incoming_uploads` (
   `i_orig_filename` varchar(255) NOT NULL,
   `i_save_url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_incoming_uploads`
@@ -6178,7 +6178,7 @@ CREATE TABLE IF NOT EXISTS `ocp_invoices` (
   `i_time` int(10) unsigned NOT NULL,
   `i_note` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_invoices`
@@ -6216,7 +6216,7 @@ CREATE TABLE IF NOT EXISTS `ocp_iotd` (
   KEY `iadd_date` (`add_date`),
   KEY `date_and_time` (`date_and_time`),
   KEY `ftjoin_icap` (`caption`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_iotd`
@@ -6236,7 +6236,7 @@ CREATE TABLE IF NOT EXISTS `ocp_ip_country` (
   `end_num` int(10) unsigned NOT NULL,
   `country` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_ip_country`
@@ -6255,7 +6255,7 @@ CREATE TABLE IF NOT EXISTS `ocp_leader_board` (
   `lb_points` int(11) NOT NULL,
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`lb_member`,`date_and_time`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_leader_board`
@@ -6276,7 +6276,7 @@ CREATE TABLE IF NOT EXISTS `ocp_link_tracker` (
   `c_ip_address` varchar(40) NOT NULL,
   `c_url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_link_tracker`
@@ -6312,7 +6312,7 @@ CREATE TABLE IF NOT EXISTS `ocp_logged_mail_messages` (
   PRIMARY KEY (`id`),
   KEY `recentmessages` (`m_date_and_time`),
   KEY `queued` (`m_queued`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_logged_mail_messages`
@@ -6331,7 +6331,7 @@ CREATE TABLE IF NOT EXISTS `ocp_long_values` (
   `the_value` longtext NOT NULL,
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`the_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_long_values`
@@ -6350,7 +6350,7 @@ CREATE TABLE IF NOT EXISTS `ocp_match_key_messages` (
   `k_message` int(10) unsigned NOT NULL,
   `k_match_key` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_match_key_messages`
@@ -6372,7 +6372,7 @@ CREATE TABLE IF NOT EXISTS `ocp_member_category_access` (
   PRIMARY KEY (`active_until`,`module_the_name`,`category_name`,`member_id`),
   KEY `mcaname` (`module_the_name`,`category_name`),
   KEY `mcamember_id` (`member_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_member_category_access`
@@ -6394,7 +6394,7 @@ CREATE TABLE IF NOT EXISTS `ocp_member_page_access` (
   PRIMARY KEY (`active_until`,`page_name`,`zone_name`,`member_id`),
   KEY `mzaname` (`page_name`,`zone_name`),
   KEY `mzamember_id` (`member_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_member_page_access`
@@ -6418,7 +6418,7 @@ CREATE TABLE IF NOT EXISTS `ocp_member_tracking` (
   PRIMARY KEY (`mt_member_id`,`mt_time`,`mt_page`,`mt_type`,`mt_id`),
   KEY `mt_page` (`mt_page`),
   KEY `mt_id` (`mt_page`,`mt_id`,`mt_type`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_member_tracking`
@@ -6439,7 +6439,7 @@ CREATE TABLE IF NOT EXISTS `ocp_member_zone_access` (
   PRIMARY KEY (`active_until`,`zone_name`,`member_id`),
   KEY `mzazone_name` (`zone_name`),
   KEY `mzamember_id` (`member_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_member_zone_access`
@@ -6468,7 +6468,7 @@ CREATE TABLE IF NOT EXISTS `ocp_menu_items` (
   `i_theme_img_code` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `menu_extraction` (`i_menu`)
-) ENGINE=MyISAM  AUTO_INCREMENT=56 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=56 ;
 
 --
 -- Dumping data for table `ocp_menu_items`
@@ -6544,7 +6544,7 @@ CREATE TABLE IF NOT EXISTS `ocp_messages_to_render` (
   `r_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `forsession` (`r_session_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_messages_to_render`
@@ -6566,7 +6566,7 @@ CREATE TABLE IF NOT EXISTS `ocp_modules` (
   `module_hack_version` int(11) DEFAULT NULL,
   `module_version` int(11) NOT NULL,
   PRIMARY KEY (`module_the_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_modules`
@@ -6711,7 +6711,7 @@ CREATE TABLE IF NOT EXISTS `ocp_msp` (
   PRIMARY KEY (`active_until`,`member_id`,`specific_permission`,`the_page`,`module_the_name`,`category_name`),
   KEY `mspname` (`specific_permission`,`the_page`,`module_the_name`,`category_name`),
   KEY `mspmember_id` (`member_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_msp`
@@ -6752,7 +6752,7 @@ CREATE TABLE IF NOT EXISTS `ocp_news` (
   KEY `ftjoin_ititle` (`title`),
   KEY `ftjoin_nnews` (`news`),
   KEY `ftjoin_nnewsa` (`news_article`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_news`
@@ -6779,7 +6779,7 @@ CREATE TABLE IF NOT EXISTS `ocp_newsletter` (
   PRIMARY KEY (`id`),
   KEY `welcomemails` (`join_time`),
   KEY `code_confirm` (`code_confirm`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_newsletter`
@@ -6798,7 +6798,7 @@ CREATE TABLE IF NOT EXISTS `ocp_newsletters` (
   `title` int(10) unsigned NOT NULL,
   `description` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_newsletters`
@@ -6821,7 +6821,7 @@ CREATE TABLE IF NOT EXISTS `ocp_newsletter_archive` (
   `language` varchar(80) NOT NULL,
   `importance_level` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_newsletter_archive`
@@ -6849,7 +6849,7 @@ CREATE TABLE IF NOT EXISTS `ocp_newsletter_drip_send` (
   `d_template` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `d_inject_time` (`d_inject_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_newsletter_drip_send`
@@ -6880,7 +6880,7 @@ CREATE TABLE IF NOT EXISTS `ocp_newsletter_periodic` (
   `np_template` varchar(80) NOT NULL,
   `np_last_sent` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_newsletter_periodic`
@@ -6900,7 +6900,7 @@ CREATE TABLE IF NOT EXISTS `ocp_newsletter_subscribe` (
   `email` varchar(255) NOT NULL,
   PRIMARY KEY (`newsletter_id`,`email`),
   KEY `peopletosendto` (`the_level`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_newsletter_subscribe`
@@ -6922,7 +6922,7 @@ CREATE TABLE IF NOT EXISTS `ocp_news_categories` (
   `notes` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ncs` (`nc_owner`)
-) ENGINE=MyISAM  AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `ocp_news_categories`
@@ -6948,7 +6948,7 @@ CREATE TABLE IF NOT EXISTS `ocp_news_category_entries` (
   `news_entry_category` int(11) NOT NULL,
   PRIMARY KEY (`news_entry`,`news_entry_category`),
   KEY `news_entry_category` (`news_entry_category`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_news_category_entries`
@@ -6972,7 +6972,7 @@ CREATE TABLE IF NOT EXISTS `ocp_news_rss_cloud` (
   `watching_channel` varchar(255) NOT NULL,
   `register_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_news_rss_cloud`
@@ -6995,7 +6995,7 @@ CREATE TABLE IF NOT EXISTS `ocp_notifications_enabled` (
   PRIMARY KEY (`id`),
   KEY `l_member_id` (`l_member_id`,`l_notification_code`),
   KEY `l_code_category` (`l_code_category`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_notifications_enabled`
@@ -7013,7 +7013,7 @@ CREATE TABLE IF NOT EXISTS `ocp_notification_lockdown` (
   `l_notification_code` varchar(80) NOT NULL,
   `l_setting` int(11) NOT NULL,
   PRIMARY KEY (`l_notification_code`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_notification_lockdown`
@@ -7034,7 +7034,7 @@ CREATE TABLE IF NOT EXISTS `ocp_occlechat` (
   `c_incoming` tinyint(1) NOT NULL,
   `c_timestamp` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_occlechat`
@@ -7094,7 +7094,7 @@ CREATE TABLE IF NOT EXISTS `ocp_poll` (
   KEY `ftjoin_po3` (`option3`),
   KEY `ftjoin_po4` (`option4`),
   KEY `ftjoin_po5` (`option5`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_poll`
@@ -7118,7 +7118,7 @@ CREATE TABLE IF NOT EXISTS `ocp_poll_votes` (
   KEY `v_voter_id` (`v_voter_id`),
   KEY `v_voter_ip` (`v_voter_ip`),
   KEY `v_vote_for` (`v_vote_for`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_poll_votes`
@@ -7136,7 +7136,7 @@ CREATE TABLE IF NOT EXISTS `ocp_prices` (
   `name` varchar(80) NOT NULL,
   `price` int(11) NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_prices`
@@ -7160,7 +7160,7 @@ CREATE TABLE IF NOT EXISTS `ocp_pstore_customs` (
   `c_cost` int(11) NOT NULL,
   `c_one_per_member` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_pstore_customs`
@@ -7190,7 +7190,7 @@ CREATE TABLE IF NOT EXISTS `ocp_pstore_permissions` (
   `p_module` varchar(80) NOT NULL,
   `p_category` varchar(80) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_pstore_permissions`
@@ -7226,7 +7226,7 @@ CREATE TABLE IF NOT EXISTS `ocp_quizzes` (
   PRIMARY KEY (`id`),
   KEY `q_validated` (`q_validated`),
   KEY `ftjoin_qstarttext` (`q_start_text`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_quizzes`
@@ -7247,7 +7247,7 @@ CREATE TABLE IF NOT EXISTS `ocp_quiz_entries` (
   `q_quiz` int(11) NOT NULL,
   `q_results` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_quiz_entries`
@@ -7267,7 +7267,7 @@ CREATE TABLE IF NOT EXISTS `ocp_quiz_entry_answer` (
   `q_question` int(11) NOT NULL,
   `q_answer` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_quiz_entry_answer`
@@ -7287,7 +7287,7 @@ CREATE TABLE IF NOT EXISTS `ocp_quiz_member_last_visit` (
   `v_member_id` int(11) NOT NULL,
   `v_quiz_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_quiz_member_last_visit`
@@ -7310,7 +7310,7 @@ CREATE TABLE IF NOT EXISTS `ocp_quiz_questions` (
   `q_order` int(11) NOT NULL,
   `q_required` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_quiz_questions`
@@ -7332,7 +7332,7 @@ CREATE TABLE IF NOT EXISTS `ocp_quiz_question_answers` (
   `q_order` int(11) NOT NULL,
   `q_explanation` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_quiz_question_answers`
@@ -7351,7 +7351,7 @@ CREATE TABLE IF NOT EXISTS `ocp_quiz_winner` (
   `q_entry` int(11) NOT NULL,
   `q_winner_level` int(11) NOT NULL,
   PRIMARY KEY (`q_quiz`,`q_entry`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_quiz_winner`
@@ -7376,7 +7376,7 @@ CREATE TABLE IF NOT EXISTS `ocp_rating` (
   PRIMARY KEY (`id`),
   KEY `alt_key` (`rating_for_type`,`rating_for_id`),
   KEY `rating_for_id` (`rating_for_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_rating`
@@ -7397,7 +7397,7 @@ CREATE TABLE IF NOT EXISTS `ocp_redirects` (
   `r_to_zone` varchar(80) NOT NULL,
   `r_is_transparent` tinyint(1) NOT NULL,
   PRIMARY KEY (`r_from_page`,`r_from_zone`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_redirects`
@@ -7431,7 +7431,7 @@ CREATE TABLE IF NOT EXISTS `ocp_review_supplement` (
   `r_rating_for_type` varchar(80) NOT NULL,
   PRIMARY KEY (`r_post_id`,`r_rating_type`),
   KEY `rating_for_id` (`r_rating_for_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_review_supplement`
@@ -7453,7 +7453,7 @@ CREATE TABLE IF NOT EXISTS `ocp_sales` (
   `details` varchar(255) NOT NULL,
   `details2` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_sales`
@@ -7477,7 +7477,7 @@ CREATE TABLE IF NOT EXISTS `ocp_searches_logged` (
   PRIMARY KEY (`id`),
   KEY `past_search` (`s_primary`),
   FULLTEXT KEY `past_search_ft` (`s_primary`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_searches_logged`
@@ -7499,7 +7499,7 @@ CREATE TABLE IF NOT EXISTS `ocp_searches_saved` (
   `s_primary` varchar(255) NOT NULL,
   `s_auxillary` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_searches_saved`
@@ -7519,7 +7519,7 @@ CREATE TABLE IF NOT EXISTS `ocp_security_images` (
   `si_code` int(11) NOT NULL,
   PRIMARY KEY (`si_session_id`),
   KEY `si_time` (`si_time`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_security_images`
@@ -7541,7 +7541,7 @@ CREATE TABLE IF NOT EXISTS `ocp_seedy_changes` (
   `ip` varchar(40) NOT NULL,
   `the_user` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_seedy_changes`
@@ -7561,7 +7561,7 @@ CREATE TABLE IF NOT EXISTS `ocp_seedy_children` (
   `the_order` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   PRIMARY KEY (`parent_id`,`child_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_seedy_children`
@@ -7590,7 +7590,7 @@ CREATE TABLE IF NOT EXISTS `ocp_seedy_pages` (
   KEY `sadd_date` (`add_date`),
   KEY `ftjoin_spt` (`title`),
   KEY `ftjoin_spd` (`description`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_seedy_pages`
@@ -7621,7 +7621,7 @@ CREATE TABLE IF NOT EXISTS `ocp_seedy_posts` (
   KEY `cdate_and_time` (`date_and_time`),
   KEY `svalidated` (`validated`),
   KEY `ftjoin_spm` (`the_message`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_seedy_posts`
@@ -7643,7 +7643,7 @@ CREATE TABLE IF NOT EXISTS `ocp_seo_meta` (
   `meta_description` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `alt_key` (`meta_for_type`,`meta_for_id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_seo_meta`
@@ -7707,7 +7707,7 @@ CREATE TABLE IF NOT EXISTS `ocp_shopping_cart` (
   KEY `ordered_by` (`ordered_by`),
   KEY `session_id` (`session_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_shopping_cart`
@@ -7730,7 +7730,7 @@ CREATE TABLE IF NOT EXISTS `ocp_shopping_logging` (
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`,`e_member_id`),
   KEY `calculate_bandwidth` (`date_and_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_shopping_logging`
@@ -7761,7 +7761,7 @@ CREATE TABLE IF NOT EXISTS `ocp_shopping_order` (
   KEY `sosession_id` (`session_id`),
   KEY `soadd_date` (`add_date`),
   KEY `recent_shopped` (`add_date`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_shopping_order`
@@ -7786,7 +7786,7 @@ CREATE TABLE IF NOT EXISTS `ocp_shopping_order_addresses` (
   `receiver_email` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_shopping_order_addresses`
@@ -7814,7 +7814,7 @@ CREATE TABLE IF NOT EXISTS `ocp_shopping_order_details` (
   PRIMARY KEY (`id`),
   KEY `p_id` (`p_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_shopping_order_details`
@@ -7833,7 +7833,7 @@ CREATE TABLE IF NOT EXISTS `ocp_sitewatchlist` (
   `siteurl` varchar(255) NOT NULL,
   `site_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `ocp_sitewatchlist`
@@ -7856,7 +7856,7 @@ CREATE TABLE IF NOT EXISTS `ocp_sms_log` (
   PRIMARY KEY (`id`),
   KEY `sms_log_for` (`s_member_id`,`s_time`),
   KEY `sms_trigger_ip` (`s_trigger_ip`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_sms_log`
@@ -7875,7 +7875,7 @@ CREATE TABLE IF NOT EXISTS `ocp_sp_list` (
   `the_name` varchar(80) NOT NULL,
   `the_default` tinyint(1) NOT NULL,
   PRIMARY KEY (`the_name`,`the_default`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_sp_list`
@@ -8038,7 +8038,7 @@ CREATE TABLE IF NOT EXISTS `ocp_stafflinks` (
   `link_title` varchar(255) NOT NULL,
   `link_desc` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=29 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=29 ;
 
 --
 -- Dumping data for table `ocp_stafflinks`
@@ -8084,7 +8084,7 @@ CREATE TABLE IF NOT EXISTS `ocp_staff_tips_dismissed` (
   `t_member` int(11) NOT NULL,
   `t_tip` varchar(80) NOT NULL,
   PRIMARY KEY (`t_member`,`t_tip`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_staff_tips_dismissed`
@@ -8120,7 +8120,7 @@ CREATE TABLE IF NOT EXISTS `ocp_stats` (
   KEY `referer` (`referer`),
   KEY `browser` (`browser`),
   KEY `operating_system` (`operating_system`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_stats`
@@ -8146,7 +8146,7 @@ CREATE TABLE IF NOT EXISTS `ocp_subscriptions` (
   `s_auto_fund_key` varchar(255) NOT NULL,
   `s_via` varchar(80) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_subscriptions`
@@ -8166,7 +8166,7 @@ CREATE TABLE IF NOT EXISTS `ocp_temp_block_permissions` (
   `p_block_constraints` longtext NOT NULL,
   `p_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_temp_block_permissions`
@@ -8189,7 +8189,7 @@ CREATE TABLE IF NOT EXISTS `ocp_tests` (
   `t_status` int(11) NOT NULL,
   `t_inherit_section` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_tests`
@@ -8210,7 +8210,7 @@ CREATE TABLE IF NOT EXISTS `ocp_test_sections` (
   `s_inheritable` tinyint(1) NOT NULL,
   `s_assigned_to` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_test_sections`
@@ -8235,7 +8235,7 @@ CREATE TABLE IF NOT EXISTS `ocp_text` (
   `notes` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `findflagrant` (`active_now`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_text`
@@ -8256,7 +8256,7 @@ CREATE TABLE IF NOT EXISTS `ocp_theme_images` (
   `lang` varchar(5) NOT NULL,
   PRIMARY KEY (`id`,`theme`,`lang`),
   KEY `theme` (`theme`,`lang`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_theme_images`
@@ -8278,7 +8278,7 @@ CREATE TABLE IF NOT EXISTS `ocp_tickets` (
   `forum_id` int(11) NOT NULL,
   `ticket_type` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ticket_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_tickets`
@@ -8298,7 +8298,7 @@ CREATE TABLE IF NOT EXISTS `ocp_ticket_types` (
   `search_faq` tinyint(1) NOT NULL,
   `cache_lead_time` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ticket_type`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_ticket_types`
@@ -8328,7 +8328,7 @@ CREATE TABLE IF NOT EXISTS `ocp_trackbacks` (
   KEY `trackback_for_type` (`trackback_for_type`),
   KEY `trackback_for_id` (`trackback_for_id`),
   KEY `trackback_time` (`trackback_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_trackbacks`
@@ -8356,7 +8356,7 @@ CREATE TABLE IF NOT EXISTS `ocp_transactions` (
   `t_memo` longtext NOT NULL,
   `t_via` varchar(80) NOT NULL,
   PRIMARY KEY (`id`,`t_time`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_transactions`
@@ -8383,7 +8383,7 @@ CREATE TABLE IF NOT EXISTS `ocp_translate` (
   KEY `equiv_lang` (`text_original`(4)),
   KEY `decache` (`text_parsed`(2)),
   FULLTEXT KEY `search` (`text_original`)
-) ENGINE=MyISAM  AUTO_INCREMENT=394 ;
+) ENGINE=MyISAM CHARACTER SET=latin1  AUTO_INCREMENT=394 ;
 
 --
 -- Dumping data for table `ocp_translate`
@@ -8799,7 +8799,7 @@ CREATE TABLE IF NOT EXISTS `ocp_translate_history` (
   `action_member` int(11) NOT NULL,
   `action_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`,`language`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_translate_history`
@@ -8825,7 +8825,7 @@ CREATE TABLE IF NOT EXISTS `ocp_trans_expecting` (
   `e_length` int(11) DEFAULT NULL,
   `e_length_units` varchar(80) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_trans_expecting`
@@ -8843,7 +8843,7 @@ CREATE TABLE IF NOT EXISTS `ocp_tutorial_links` (
   `the_name` varchar(80) NOT NULL,
   `the_value` longtext NOT NULL,
   PRIMARY KEY (`the_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_tutorial_links`
@@ -8867,7 +8867,7 @@ CREATE TABLE IF NOT EXISTS `ocp_url_id_monikers` (
   PRIMARY KEY (`id`),
   KEY `uim_pagelink` (`m_resource_page`,`m_resource_type`,`m_resource_id`),
   KEY `uim_moniker` (`m_moniker`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_url_id_monikers`
@@ -8886,7 +8886,7 @@ CREATE TABLE IF NOT EXISTS `ocp_url_title_cache` (
   `t_url` varchar(255) NOT NULL,
   `t_title` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_url_title_cache`
@@ -8905,7 +8905,7 @@ CREATE TABLE IF NOT EXISTS `ocp_usersonline_track` (
   `peak` int(11) NOT NULL,
   PRIMARY KEY (`date_and_time`),
   KEY `peak_track` (`peak`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_usersonline_track`
@@ -8925,7 +8925,7 @@ CREATE TABLE IF NOT EXISTS `ocp_usersubmitban_ip` (
   `i_ban_until` int(10) unsigned DEFAULT NULL,
   `i_ban_positive` tinyint(1) NOT NULL,
   PRIMARY KEY (`ip`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_usersubmitban_ip`
@@ -8942,7 +8942,7 @@ DROP TABLE IF EXISTS `ocp_usersubmitban_member`;
 CREATE TABLE IF NOT EXISTS `ocp_usersubmitban_member` (
   `the_member` int(11) NOT NULL,
   PRIMARY KEY (`the_member`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_usersubmitban_member`
@@ -8959,7 +8959,7 @@ DROP TABLE IF EXISTS `ocp_validated_once`;
 CREATE TABLE IF NOT EXISTS `ocp_validated_once` (
   `hash` varchar(33) NOT NULL,
   PRIMARY KEY (`hash`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_validated_once`
@@ -8979,7 +8979,7 @@ CREATE TABLE IF NOT EXISTS `ocp_values` (
   `date_and_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`the_name`),
   KEY `date_and_time` (`date_and_time`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_values`
@@ -9021,7 +9021,7 @@ CREATE TABLE IF NOT EXISTS `ocp_videos` (
   KEY `category_list` (`cat`),
   KEY `vadd_date` (`add_date`),
   KEY `ftjoin_vcomments` (`comments`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM CHARACTER SET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `ocp_videos`
@@ -9046,7 +9046,7 @@ CREATE TABLE IF NOT EXISTS `ocp_video_transcoding` (
   `t_height_field` varchar(80) NOT NULL,
   `t_output_filename` varchar(80) NOT NULL,
   PRIMARY KEY (`t_id`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_video_transcoding`
@@ -9065,7 +9065,7 @@ CREATE TABLE IF NOT EXISTS `ocp_wordfilter` (
   `w_replacement` varchar(255) NOT NULL,
   `w_substr` tinyint(1) NOT NULL,
   PRIMARY KEY (`word`,`w_substr`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_wordfilter`
@@ -9126,7 +9126,7 @@ CREATE TABLE IF NOT EXISTS `ocp_zones` (
   `zone_require_session` tinyint(1) NOT NULL,
   `zone_displayed_in_menu` tinyint(1) NOT NULL,
   PRIMARY KEY (`zone_name`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET=latin1;
 
 --
 -- Dumping data for table `ocp_zones`
