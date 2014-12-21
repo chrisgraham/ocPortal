@@ -111,6 +111,8 @@ class Module_points
 
         if ((is_null($upgrade_from)) || ($upgrade_from < 8)) {
             rename_config_option('leaderboard_start_date', 'leader_board_start_date');
+
+            $GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_visiting', 20, 1, 0, 0, 0, '', 'integer');
         }
     }
 

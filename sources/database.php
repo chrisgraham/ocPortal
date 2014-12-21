@@ -591,16 +591,6 @@ class Database_driver
      */
     public function query_insert($table, $map, $ret = false, $fail_ok = false, $save_as_volatile = false)
     {
-        if (($table == 'cache') && (get_db_type() != 'xml') && (get_option('filesystem_caching') == '1')) {
-            global $FILECACHE_OBJECT;
-            if ($FILECACHE_OBJECT === null) {
-                $this->initialise_filesystem_db();
-            }
-            if ($FILECACHE_OBJECT != $this) {
-                return $FILECACHE_OBJECT->query_insert($table, $map, $ret, $fail_ok, $save_as_volatile);
-            }
-        }
-
         $keys = '';
         $all_values = array();
 
@@ -852,16 +842,6 @@ class Database_driver
      */
     public function query_select($table, $select = null, $where_map = null, $end = '', $max = null, $start = null, $fail_ok = false, $lang_fields = null)
     {
-        if (($table == 'cache') && (get_db_type() != 'xml') && (get_option('filesystem_caching') == '1')) {
-            global $FILECACHE_OBJECT;
-            if ($FILECACHE_OBJECT === null) {
-                $this->initialise_filesystem_db();
-            }
-            if ($FILECACHE_OBJECT != $this) {
-                return $FILECACHE_OBJECT->query_select($table, $select, $where_map, $end, $max, $start, $fail_ok, $lang_fields);
-            }
-        }
-
         $full_table = $this->table_prefix . $table;
 
         $field_prefix = '';
@@ -1352,17 +1332,6 @@ class Database_driver
      */
     public function query_delete($table, $where_map = null, $end = '', $max = null, $start = null, $fail_ok = false)
     {
-        if (($table == 'cache') && (get_db_type() != 'xml') && (get_option('filesystem_caching') == '1')) {
-            global $FILECACHE_OBJECT;
-            if ($FILECACHE_OBJECT === null) {
-                $this->initialise_filesystem_db();
-            }
-            if ($FILECACHE_OBJECT != $this) {
-                $FILECACHE_OBJECT->query_delete($table, $where_map, $end, $max, $start, $fail_ok);
-                return;
-            }
-        }
-
         if ($where_map === null) {
             if (($end == '') && (is_null($max)) && (is_null($start)) && (strpos(get_db_type(), 'mysql') !== false)) {
                 $this->_query('TRUNCATE ' . $this->table_prefix . $table, null, null, $fail_ok);

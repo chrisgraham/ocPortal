@@ -2898,6 +2898,12 @@ END;
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
 
+        if (!has_privilege(get_member(), 'exceed_edit_time_limit')) {
+            $post_time = $post_details[0]['p_time'];
+            $time_left = ($post_time - time() + intval(get_option('edit_time_limit')) * 60);
+            attach_message(do_lang_tempcode('TIME_LEFT_TO_EDIT_POST', escape_html(display_time_period($time_left))), 'notice');
+        }
+
         $forum_id = $post_details[0]['p_cache_forum_id'];
 
         $topic_info = $GLOBALS['FORUM_DB']->query_select('f_topics', array('*'), array('id' => $post_details[0]['p_topic_id']), '', 1);

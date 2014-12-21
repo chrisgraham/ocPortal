@@ -9,6 +9,8 @@
 
 function init__forum__pages__modules_custom__topicview($in = null)
 {
+    i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
     $in = str_replace('$_postdetails[\'post\']', 'ocjester_filtering_wrap($_postdetails[\'post\']->evaluate())', $in);
 
     return $in;

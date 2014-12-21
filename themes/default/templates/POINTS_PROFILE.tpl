@@ -67,6 +67,13 @@
 					<td class="answer">= {MULT_POINTS_CHAT_POSTING*} {!POINTS_UNIT}</td>
 				</tr>
 			{+END}{+END}
+			{+START,IF,{$NEQ,{POINTS_PER_DAILY_VISIT},0}}
+				<tr>
+					<td>&bull; {!COUNT_VISITS}:</td>
+					<td class="equation">{POINTS_GAINED_VISITING*} &times; {POINTS_PER_DAILY_VISIT*} {!POINTS_UNIT}</td>
+					<td class="answer">= {MULT_POINTS_VISITING*} {!POINTS_UNIT}</td>
+				</tr>
+			{+END}
 			{+START,IF,{$NEQ,{POINTS_VOTING},0}}{+START,IF,{$ADDON_INSTALLED,polls}}
 				<tr>
 					<td>&bull; {!COUNT_VOTINGS}:</td>

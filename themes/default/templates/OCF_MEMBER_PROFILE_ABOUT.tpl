@@ -116,7 +116,7 @@
 				<tbody>
 					{+START,IF,{VIEW_PROFILES}}
 						{+START,LOOP,CUSTOM_FIELDS}
-							{$SET,is_point_field,{$EQ,{NAME},{!SPECIAL_CPF__ocp_points_used},{!SPECIAL_CPF__ocp_gift_points_used},{!SPECIAL_CPF__ocp_points_gained_chat},{!SPECIAL_CPF__ocp_points_gained_given},{!SPECIAL_CPF__ocp_points_gained_rating},{!SPECIAL_CPF__ocp_points_gained_voting},{!SPECIAL_CPF__ocp_points_gained_wiki}}}
+							{$SET,is_point_field,{$EQ,{NAME},{!SPECIAL_CPF__ocp_points_used},{!SPECIAL_CPF__ocp_gift_points_used},{!SPECIAL_CPF__ocp_points_gained_chat},{!SPECIAL_CPF__ocp_points_gained_given},{!SPECIAL_CPF__ocp_points_gained_visiting},{!SPECIAL_CPF__ocp_points_gained_rating},{!SPECIAL_CPF__ocp_points_gained_voting},{!SPECIAL_CPF__ocp_points_gained_wiki}}}
 							{$SET,is_messenger_field,{$EQ,{NAME},{!DEFAULT_CPF_im_skype_NAME},{!DEFAULT_CPF_im_jabber_NAME},{!DEFAULT_CPF_sn_twitter_NAME},{!DEFAULT_CPF_sn_facebook_NAME},{!DEFAULT_CPF_sn_google_NAME}}}
 
 							{+START,IF,{$NOR,{$GET,is_point_field},{$GET,is_messenger_field}}}

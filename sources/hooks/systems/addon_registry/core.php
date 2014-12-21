@@ -506,7 +506,6 @@ class Hook_addon_registry_core
             'sources/actionlog.php',
             'sources/hooks/systems/config/fixed_width.php',
             'sources/hooks/systems/config/collapse_user_zones.php',
-            'sources/hooks/systems/config/filesystem_caching.php',
             'sources/hooks/systems/config/url_monikers_enabled.php',
             'sources/hooks/systems/cron/ip_address_sharing.php',
             'themes/admin/javascript/.htaccess',

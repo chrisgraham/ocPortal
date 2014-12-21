@@ -1070,7 +1070,33 @@ class Module_tickets
 
         check_ticket_access($id);
 
+        $old_ticket_type = $GLOBALS['SITE_DB']->query_select_value('tickets', 'ticket_type', array('ticket_id' => $id));
         $ticket_type = post_param_integer('ticket_type');
+
+        require_code('tickets2');
+        list($title, , , $uid) = get_ticket_details($id);
+
+        if ($old_ticket_type != $ticket_type) {
+            // Tell the staff that the ticket has been re-routed
+
+            require_code('notifications');
+            $username = $GLOBALS['FORUM_DRIVER']->get_username($uid);
+            if (is_null($username)) $username = do_lang('UNKNOWN');
+            $ticket_type_details = get_ticket_type($ticket_type);
+            $ticket_type_name_new = get_translated_text($ticket_type_details['ticket_type_name']);
+            $ticket_type_details = get_ticket_type($old_ticket_type);
+            $ticket_type_name_old = get_translated_text($ticket_type_details['ticket_type_name']);
+
+            $subject = do_lang('SUBJECT_TICKET_REROUTED', $title, $username, array($ticket_type_name_new, $ticket_type_name_old));
+            $message = do_lang('BODY_TICKET_REROUTED', comcode_escape($title), comcode_escape($username), array(comcode_escape($ticket_type_name_new), comcode_escape($ticket_type_name_old)));
+
+            dispatch_notification(
+                'ticket_new_staff',
+                strval($ticket_type),
+                $subject,
+                $message
+            );
+        }
 
         $forum_id = get_ticket_forum_id(null, $ticket_type, true);
 

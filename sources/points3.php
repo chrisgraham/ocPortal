@@ -50,6 +50,7 @@ function points_profile($member_id_of, $member_id_viewing)
     $post_count = $GLOBALS['FORUM_DRIVER']->get_post_count($member_id_of);
     $_point_info = point_info($member_id_of);
     $points_gained_given = array_key_exists('points_gained_given', $_point_info) ? $_point_info['points_gained_given'] : 0;
+    $points_gained_visiting = array_key_exists('points_gained_visiting', $_point_info) ? $_point_info['points_gained_visiting'] : 0;
     $points_gained_rating = array_key_exists('points_gained_rating', $_point_info) ? $_point_info['points_gained_rating'] : 0;
     $points_gained_voting = array_key_exists('points_gained_voting', $_point_info) ? $_point_info['points_gained_voting'] : 0;
     $wiki_post_count = array_key_exists('points_gained_wiki', $_point_info) ? $_point_info['points_gained_wiki'] : 0;
@@ -60,6 +61,7 @@ function points_profile($member_id_of, $member_id_viewing)
     $gift_points_available = get_gift_points_to_give($member_id_of);
 
     $points_posting = intval(get_option('points_posting'));
+    $points_per_daily_visit = intval(get_option('points_per_daily_visit'));
     $points_rating = intval(get_option('points_rating'));
     $points_voting = intval(get_option('points_voting'));
     $points_joining = intval(get_option('points_joining'));
@@ -74,7 +76,6 @@ function points_profile($member_id_of, $member_id_viewing)
     }
     $points_chat_posting = intval($_points_chat);
     $points_per_day = intval(get_option('points_per_day'));
-    $points_per_daily_visit = intval(get_option('points_per_daily_visit'));
 
     $days_joined = intval(floor(floatval(time() - $GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member_id_of)) / (60.0 * 60.0 * 24.0)));
     $points_gained_auto = $points_per_day * $days_joined;
@@ -172,6 +173,9 @@ function points_profile($member_id_of, $member_id_viewing)
         'MULT_POINTS_VOTING' => integer_format($points_voting * $points_gained_voting),
 
         'POINTS_PER_DAILY_VISIT' => integer_format($points_per_daily_visit),
+        'POINTS_GAINED_VISITING' => integer_format($points_gained_visiting),
+        'MULT_POINTS_VISITING' => integer_format($points_per_daily_visit * $points_gained_visiting),
+
         'POINTS_GAINED_GIVEN' => integer_format($points_gained_given),
         'POINTS_USED' => integer_format($points_used),
         'REMAINING' => integer_format($remaining),

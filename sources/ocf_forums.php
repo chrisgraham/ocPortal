@@ -347,6 +347,8 @@ function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_foru
 
     if ($end_point_forum !== $root) {
         $out = ocf_forum_breadcrumbs($parent_forum, null, null, false, $root);
+    } else {
+        $out = array();
     }
 
     $out = array_merge($out, $segments);
