@@ -109,4 +109,4 @@ To find where mail traffic is sent, do a DNS lookup of type 'MX'.
  - [page="_SEARCH:tut_cookies"]Introduction to Cookies and sessions (and JavaScript)[/page]
  - [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page]
 
-{$SET,tutorial_tags,TODO,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]

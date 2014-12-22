@@ -51,4 +51,4 @@ This upgrade process happens on individual site's that use your theme, and hence
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
  - [page="_SEARCH:tut_theme_lifecycle"]Theme lifecycle[/page]
 
-{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Contributing,core_themeing,Design & Themeing}[block]main_tutorial_rating[/block]

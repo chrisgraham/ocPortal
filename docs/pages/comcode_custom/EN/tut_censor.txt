@@ -98,4 +98,4 @@ If you are using OCF, then you may make use of the 'post history' feature. This 
  - [page="_SEARCH:tut_fields_filter"]The form field filter system[/page]
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Security,wordfilter,unvalidated,ocf_warnings,content_privacy,actionlog,Administration}[block]main_tutorial_rating[/block]

@@ -192,4 +192,4 @@ Thanks for reading!
  - [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page]
  - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
 
-{$SET,tutorial_tags,TODO,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]

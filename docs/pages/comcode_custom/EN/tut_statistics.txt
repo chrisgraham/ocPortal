@@ -118,4 +118,4 @@ We don't consider Google Analytics a competitor to our own inbuilt analytics -- 
 
  - [page="_SEARCH:tut_trace"]IP addresses and tracing users[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Analytics,stats_block,stats,realtime_rain,Administration}[block]main_tutorial_rating[/block]

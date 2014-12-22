@@ -108,4 +108,4 @@ When members use the OCF whisper feature to make inline-personal-posts, they are
  - [page="_SEARCH:tut_msn"]Advanced techniques for multi-site-networks[/page]
  - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,staff,ocf_warnings,ocf_reported_posts,Staff management,Collaboration}[block]main_tutorial_rating[/block]

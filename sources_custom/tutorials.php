@@ -13,6 +13,20 @@
  * @package    ocportal_tutorials
  */
 
+/*
+
+Tags defined in .txt files...
+
+pinned
+document video audio slideshow
+novice regular expert
+<names of addons>
+Classifications, for which we have icons
+
+Tags correspond also to icons, if one matches. Earliest match.
+
+*/
+
 function list_tutorials()
 {
     $tutorials = array();
@@ -57,7 +71,7 @@ function get_tutorial_metadata($tutorial_name, $db_row = null, $tags = null)
             'url' => $db_row['t_url'],
             'title' => $db_row['t_title'],
             'summary' => $db_row['t_summary'],
-            'icon' => find_tutorial_image($db_row['t_icon'], $tags),
+            'icon' => find_tutorial_image($db_row['t_icon'], array_merge($tags, $db_row['t_media_type'], $db_row['t_difficulty_level'])),
             'tags' => $tags,
             'media_type' => $db_row['t_media_type'],
             'difficulty_level' => $db_row['t_difficulty_level'],
@@ -84,14 +98,17 @@ function get_tutorial_metadata($tutorial_name, $db_row = null, $tags = null)
 
         $url = build_url(array('page' => $tutorial_name), '_SEARCH');
 
+        $media_type = in_array('audio', $all_tags) ? 'audio' : (in_array('video', $all_tags) ? 'video' : (in_array('slideshow', $all_tags) ? 'slideshow' : 'document'));
+        $difficulity_level = in_array('expert', $all_tags) ? 'expert' : (in_array('novice', $all_tags) ? 'novice' : 'regular');
+
         return array(
             'url' => $url,
             'title' => TODO,
             'summary' => TODO,
-            'icon' => find_tutorial_image('', $tags),
+            'icon' => find_tutorial_image('', array_merge($tags, array($media_type, $difficulty_level))),
             'tags' => $tags,
-            'media_type' => in_array('audio', $all_tags) ? 'audio' : (in_array('video', $all_tags) ? 'video' : (in_array('slideshow', $all_tags) ? 'slideshow' : 'document')),
-            'difficulty_level' => in_array('expert', $all_tags) ? 'expert' : (in_array('novice', $all_tags) ? 'novice' : 'regular'),
+            'media_type' => $media_type,
+            'difficulty_level' => $difficulty_level,
             'core' => TODO,
             'pinned' => in_array('pinned', $all_tags),
             'author' => TODO,
@@ -134,7 +151,7 @@ function find_tutorial_image($icon, $tags)
     }
 
     foreach ($tags as $tag) {
-        $img = find_theme_image('tutorial_icons/' . $tag, true);
+        $img = find_theme_image('tutorial_icons/' . strtolower(str_replace(' ', '_', $tag)), true);
         if ($img != '') {
             return $img;
         }

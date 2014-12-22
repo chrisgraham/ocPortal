@@ -47,4 +47,4 @@ Blocks can be classified into:
  - [page="_SEARCH:tut_adv_comcode"]Advanced Comcode[/page]
  - [page="_SEARCH:tut_adv_comcode_pages"]Advanced Custom pages of information (via comcode)[/page]
 
-{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Pages,Content,core_comcode_pages,Structure and navigation}[block]main_tutorial_rating[/block]

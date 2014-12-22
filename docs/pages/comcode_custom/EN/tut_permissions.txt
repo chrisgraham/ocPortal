@@ -139,4 +139,4 @@ Fortunately ocPortal has a special feature for this situation: under the 'Securi
  - [page="_SEARCH:tut_security"]Security[/page]
  - [page="_SEARCH:tut_forums"]Organising discussion forums[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Security,core_permission_management,Configuration}[block]main_tutorial_rating[/block]

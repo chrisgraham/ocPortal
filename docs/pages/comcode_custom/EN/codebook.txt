@@ -210,4 +210,4 @@ The documentation and tools on the ocPortal website may be out of date between o
  - [url="Community documentation"]{$BRAND_BASE_URL}/site/wiki.htm[/url]
 [/surround]
 
-{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Development,PHP,testing_platform,Programming}[block]main_tutorial_rating[/block]

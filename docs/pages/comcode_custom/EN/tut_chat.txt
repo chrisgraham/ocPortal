@@ -162,4 +162,4 @@ This is one of the few cases where relying on a third party tool does not provid
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
  - [page="_SEARCH:tut_correspondance"]Correspondence between members[/page]
 
-{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Chatrooms,chat,Social}[block]main_tutorial_rating[/block]

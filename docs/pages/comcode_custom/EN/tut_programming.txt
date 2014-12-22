@@ -541,4 +541,4 @@ N/A is used to mark characters that have a special meaning.
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
-{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,PHP,Programming,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]

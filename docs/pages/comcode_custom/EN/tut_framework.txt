@@ -35,6 +35,8 @@ Of course, the actual function code is also available. All this information is p
 
 [title="2"]Extending ocPortal[/title]
 
+This section provides a high-level overview of ocPortal's core programming. Much more thorough documentation is in the Code Book.
+
 ocPortal is not just a lump of code like most software: a lot of effort has gone into structuring the system so that code may be cleanly hooked in, via various methods.
 
 These methods include:
@@ -213,4 +215,4 @@ If you still are not convinced that ocPortal is the right choice for you, consid
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
-{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,PHP,core_addon_management,code_editor,Programming}[block]main_tutorial_rating[/block]

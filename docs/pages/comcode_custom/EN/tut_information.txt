@@ -276,4 +276,4 @@ Downloads may be used to release information indirectly, essentially via archive
 
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
 
-{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,wiki,ocf_forum,news,downloads,core_comcode_pages,catalogues,Content,Pages}[block]main_tutorial_rating[/block]

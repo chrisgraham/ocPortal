@@ -245,7 +245,7 @@ class Module_admin
             array('news', 'story', 'stories', 'article'),
             array('language', 'unicode', 'utf', 'utf8', 'utf-8', 'character', 'charset', '24', 'clock', 'timezone', 'time-zone', 'time', 'date', 'translate'),
             array('ldap', 'active directory'),
-            array('contact', 'contactmember'/*TODO: remove in v10*/, 'feedback', 'ticket', 'message', 'issue', 'email', 'e-mail'),
+            array('contact', 'contactmember'/*TODO: remove in v10*/, 'feedback', 'ticket', 'message', 'issue', 'email', 'e-mail', 'support', 'desk'),
             array('documentation', 'help', 'guide'),
             array('sef', 'short', 'friendly'),
             array('survey', 'quiz', 'competition', 'test'),

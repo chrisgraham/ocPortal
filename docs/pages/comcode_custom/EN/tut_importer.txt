@@ -165,4 +165,4 @@ For developers instructions on writing an importer please see the ocPortal Code 
 
  - [page="_SEARCH:tut_framework"]The ocPortal programming framework[/page]
 
-{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,import,Installation}[block]main_tutorial_rating[/block]

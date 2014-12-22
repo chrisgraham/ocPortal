@@ -115,4 +115,4 @@ To claim your prize, post in the Addons forum and 'report post' with the phrase 
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
-{$SET,tutorial_tags,TODO,Programming}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,PHP,Programming}[block]main_tutorial_rating[/block]

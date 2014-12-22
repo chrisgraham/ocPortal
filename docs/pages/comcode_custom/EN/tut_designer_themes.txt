@@ -280,9 +280,8 @@ and customise the numbers until they work.
 [title="3"]Menus[/title]
 
 You don't want to hard-code sets of page-links into templates for themes as it's hard to edit (a theme should not assume what pages a site has, although it is okay to make smaller assumptions, like what social media buttons it might use), so we suggest you use menus. There are a number of different default menu layout types:
- - [b]zone[/b]: used at the top of the default theme.
  - [b]top[/b]: styled to work well as a single-layer horizontal menu. On the default theme it's used on the forums, for example.
- - [b]dropdown[/b]: a horizontal menu with drop-downs. Used in the Admin Zone, for example.
+ - [b]dropdown[/b]: a horizontal menu with drop-downs. Used on all zones in ocPortal, by default.
  - [b]tree[/b]: a vertical menu. Used by default on panels.
  - [b]embossed[/b]: a vertical menu, that makes each link look like a button.
  - [b]popup[/b]: a vertical menu, with pop-outs (the vertical equivalent of a drop-down menu).
@@ -565,4 +564,4 @@ This checks to see if "..." is true, and if it is then it puts out a [tt]<a>[/tt
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
 
-{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,themewizard,core_themeing,core_primary_layout,Design & Themeing,CSS,JavaScript}[block]main_tutorial_rating[/block]

@@ -254,4 +254,4 @@ Our WCAG compliance is detailed in a [url="separate document"]{$TUTORIAL_URL,tut
 
 This is because the information is important for those who modify templates in ocPortal, so that they understand the techniques we have used and know how to apply them themselves.
 
-{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Web standards & Accessibility,Design}[block]main_tutorial_rating[/block]

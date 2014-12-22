@@ -76,4 +76,4 @@ c) [i]Or, a link you've put together yourself[/i]
  - [page="_SEARCH:tut_cookies"]Introduction to Cookies and sessions[/page]
  - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
 
-{$SET,tutorial_tags,TODO,Introduction and background information}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,printer_friendly_block,Introduction,Design & Themeing,CSS,JavaScript}[block]main_tutorial_rating[/block]

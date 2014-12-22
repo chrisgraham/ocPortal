@@ -471,4 +471,4 @@ That said, please don't let it stop you giving feedback. The critical difference
 7) Sponsor a feature, then try and use that to leverage free support in other areas (a sponsorship payment would go directly to fund the work involved implementing the feature, so would not be a donation)
 8) Try to negotiate the lowering of professional hourly rates to that of independent freelancers, or companies operating from developing countries
 
-{$SET,tutorial_tags,TODO,Advice and guidance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Contributing,Advice and guidance}[block]main_tutorial_rating[/block]

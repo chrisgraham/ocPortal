@@ -62,4 +62,4 @@ When you use ocPortal with LDAP, there are some necessary changes to how ocPorta
  - [page="_SEARCH:tut_httpauth"]Integrating ocPortal into a network via HTTP authentication[/page]
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
 
-{$SET,tutorial_tags,TODO,Integration configuration}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Third Party Integration,Security,Members,ldap}[block]main_tutorial_rating[/block]

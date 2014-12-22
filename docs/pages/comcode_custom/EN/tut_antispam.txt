@@ -105,4 +105,4 @@ c) Insufficient protection within ocPortal -- in which case we can consider maki
  - [page="_SEARCH:tut_security"]Security[/page]
  - [page="_SEARCH:tut_mod"]Basic forum moderation[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Security}[block]main_tutorial_rating[/block]

@@ -70,4 +70,4 @@ Any numbers of different polls may be shown on your website if you choose to sel
  - [page="_SEARCH:tut_adv_news"]Advanced news[/page]
  - [page="_SEARCH:tut_adv_comcode_pages"]Advanced Custom pages of information (via Comcode)[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Feedback features,staff_messaging,core_feedback_features}[block]main_tutorial_rating[/block]

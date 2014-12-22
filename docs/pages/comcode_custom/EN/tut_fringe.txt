@@ -149,4 +149,4 @@ You have probably spotted that all these examples are using a new block, 'main_c
 
  - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
 
-{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core_graphic_text,Design & Themeing}[block]main_tutorial_rating[/block]

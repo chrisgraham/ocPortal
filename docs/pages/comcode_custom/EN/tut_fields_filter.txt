@@ -55,4 +55,4 @@ The form field filter system is ripe for extension by programmers. It would not 
 
  - [page="_SEARCH:tut_filter"]Filtering using ocFilter syntax[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,xml_fields,Power tools}[block]main_tutorial_rating[/block]

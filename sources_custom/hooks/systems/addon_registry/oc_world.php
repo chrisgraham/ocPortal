@@ -104,7 +104,7 @@ ocWorld is a full zone addon for ocPortal.';
     public function get_applicable_tutorials()
     {
         return array(
-            'tut_ocworld',
+            'tut_points',
         );
     }
 

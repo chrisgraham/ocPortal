@@ -60,4 +60,4 @@ If an ocPortal website is intended solely for collaboration, and the collaborato
 
  - [page="_SEARCH:tut_users"]People in their roles[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Collaboration,supermember_directory,filedump,collaboration_zone}[block]main_tutorial_rating[/block]

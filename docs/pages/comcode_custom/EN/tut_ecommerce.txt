@@ -331,4 +331,4 @@ Manual transactions may also be used to input transactions that are totally exte
  - [page="_SEARCH:tut_subcom"]Creating sub-communities (and sub-sites)[/page]
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,eCommerce,shopping,ecommerce}[block]main_tutorial_rating[/block]

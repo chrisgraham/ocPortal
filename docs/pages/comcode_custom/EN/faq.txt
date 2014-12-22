@@ -511,4 +511,4 @@ We use ckeditor, which disables this. However, if you edit the [tt]WYSIWYG_SETTI
 Please first check the documentation, and if there is no obvious answer, post your question on our public forums so anyone can answer.
 If you need an answer from an ocProducts employee, we have a commercial support scheme called "Experts by the hour".
 
-{$SET,tutorial_tags,TODO,Introduction and background information}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Introduction}[block]main_tutorial_rating[/block]

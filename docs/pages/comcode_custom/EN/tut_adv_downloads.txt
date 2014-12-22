@@ -64,4 +64,4 @@ Another example is a community based upon subscription: points could be bought v
 
  - [page="_SEARCH:tut_downloads"]Providing downloads[/page]
 
-{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Downloads,downloads,Content}[block]main_tutorial_rating[/block]

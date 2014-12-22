@@ -43,4 +43,4 @@ On most web browsers you can activate a key shortcut by holding down the Alt key
 
  - [page="_SEARCH:tut_accessibility"]Helping improve site accessibility for disabled users[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Web standards & Accessibility,Administration}[block]main_tutorial_rating[/block]

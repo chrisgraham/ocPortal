@@ -94,4 +94,4 @@ It is important to understand that file permissions are not backed up in archive
  - [page="_SEARCH:tut_sql"]Manually editing your database with phpMyAdmin[/page]
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,backup,Maintenance}[block]main_tutorial_rating[/block]

@@ -120,4 +120,4 @@ Categories and Tags are both imported from the same set of terms. You may wish t
  - [page="_SEARCH:tut_configuration"]Configuration[/page]
  - [page="_SEARCH:tut_newsletter"]Running a newsletter[/page]
 
-{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,News,syndication_blocks,syndication,news_shared,news,Content}[block]main_tutorial_rating[/block]

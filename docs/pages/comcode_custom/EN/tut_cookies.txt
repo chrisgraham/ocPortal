@@ -104,4 +104,4 @@ ocProducts recommends that users do have cookies enabled, but that they possibly
  - [page="_SEARCH:tut_cookies"]Introduction to Cookies and sessions (and JavaScript)[/page]
  - [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page]
 
-{$SET,tutorial_tags,TODO,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,General (non-ocPortal-specific) guides,Programming}[block]main_tutorial_rating[/block]

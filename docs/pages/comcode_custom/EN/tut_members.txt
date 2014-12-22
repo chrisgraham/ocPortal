@@ -272,4 +272,4 @@ Essentially member profiles contain a last request date (in the database), which
  - [page="_SEARCH:tut_notifications"]Notifications[/page]
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
 
-{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Members,users_online_block,recommend,ocf_thematic_avatars,ocf_signatures,ocf_member_titles,ocf_member_photos,ocf_member_avatars,ocf_cartoon_avatars,ocf_avatars,core_ocf,captcha,bookmarks,Social}[block]main_tutorial_rating[/block]

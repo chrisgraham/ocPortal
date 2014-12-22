@@ -81,4 +81,4 @@ c) [i]Or, a link you've put together yourself[/i]
  1_key="Admin Zone"   1_value="The zone used to perform most site maintenance, accessible only by staff"
 ]Concepts[/concepts]
 
-{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Administration,errorlog,core_adminzone_dashboard,content_reviews}[block]main_tutorial_rating[/block]

@@ -33,4 +33,4 @@ The Admin Zone provides an interface for merging authors. This feature is provid
 
  - [page="_SEARCH:tut_users"]People in their roles[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Staff management,authors}[block]main_tutorial_rating[/block]

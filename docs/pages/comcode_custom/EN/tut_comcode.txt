@@ -216,4 +216,4 @@ If you go back to edit the content with your attachment, you will see that it ha
  - [page="_SEARCH:tut_filter"]Filtering using ocFilter syntax[/page]
  - [page="site:userguide_comcode"]Comcode User-guide[/page]
 
-{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Content,core_rich_media,Structure and navigation}[block]main_tutorial_rating[/block]

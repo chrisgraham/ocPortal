@@ -139,4 +139,4 @@ You may find the best way to learn is through tutorials. Here are some sites fea
  - [page="_SEARCH:tut_accessibility"]Helping improve site accessibility for disabled users[/page]
  - [page="_SEARCH:tut_fringe"]Favicons, Web fonts, Media file compatibility[/page]
 
-{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core_themeing,Design & Themeing}[block]main_tutorial_rating[/block]

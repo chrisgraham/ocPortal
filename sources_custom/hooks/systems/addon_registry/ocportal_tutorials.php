@@ -257,7 +257,6 @@ The documentation is primarily maintained on our website, and this archive is on
             'docs/pages/comcode_custom/EN/codebook_1b.txt',
             'docs/pages/comcode_custom/EN/codebook_2.txt',
             'docs/pages/comcode_custom/EN/codebook_3.txt',
-            'docs/pages/comcode_custom/EN/tutorials.txt',
             'docs/pages/comcode_custom/EN/atag.txt',
             'docs/pages/comcode_custom/EN/tut_designer_themes.txt',
             'docs/pages/comcode_custom/EN/tut_intl_users.txt',

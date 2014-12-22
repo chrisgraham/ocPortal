@@ -123,4 +123,4 @@ You may wonder how to find IDs for use in filtering. The best way is to look at 
  - [page="_SEARCH:tut_adv_comcode_pages"]Advanced Custom pages of information (via comcode)[/page]
  - [page="_SEARCH:tut_ocselect"]Filtering using ocSelect syntax[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Power tools}[block]main_tutorial_rating[/block]

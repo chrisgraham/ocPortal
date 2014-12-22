@@ -172,4 +172,4 @@ You may add additional columns to the CSV file, which will be ignored. You can u
 
  - [page="_SEARCH:tut_news"]Releasing news & running a blog[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Newsletters,newsletter}[block]main_tutorial_rating[/block]

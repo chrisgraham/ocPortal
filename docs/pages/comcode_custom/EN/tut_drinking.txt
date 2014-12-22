@@ -93,4 +93,4 @@ To add to the download system, head over to 'Content Management' and there is an
  - [page="_SEARCH:tut_information"]Choosing how to publish[/page]
  - [page="_SEARCH:tut_do"]Dos and Do-nots of an (ocPortal) website[/page]
 
-{$SET,tutorial_tags,TODO,Introduction and background information}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,setupwizard,core,Introduction}[block]main_tutorial_rating[/block]

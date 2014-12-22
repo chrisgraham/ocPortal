@@ -120,4 +120,4 @@ ocPortal supports syntax highlighting via [url="GeSHi"]http://qbnz.com/highlight
  - [page="_SEARCH:tut_wysiwyg"]WYSIWYG editing[/page]
  - [page="_SEARCH:tut_accessibility"]Helping improve site accessibility for disabled users[/page]
 
-{$SET,tutorial_tags,TODO,Core ocPortal structure}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Content,custom_comcode,core_rich_media}[block]main_tutorial_rating[/block]

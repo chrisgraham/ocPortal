@@ -1054,4 +1054,4 @@ A properly marked-up version, using ocPortal conventions, would look as follows:
  - [url="W3C validators"]http://validator.w3.org/[/url]
  - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
 
-{$SET,tutorial_tags,TODO,Design}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Web standards & Accessibility,core_validation,Design & Themeing}[block]main_tutorial_rating[/block]

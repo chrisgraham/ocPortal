@@ -199,4 +199,4 @@ UPDATE ocp_f_members SET m_password_compat_scheme='temporary' WHERE m_password_c
  - [page="_SEARCH:tut_subcom"]Creating sub-communities[/page]
  - [page="_SEARCH:tut_web_hosting"]Web Hosting for ocPortal[/page]
 
-{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Members,welcome_emails,ocf_cpfs,core_ocf,Social}[block]main_tutorial_rating[/block]

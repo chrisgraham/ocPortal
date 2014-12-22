@@ -108,4 +108,4 @@ The default news archive screen shows just the news headlines. By adding [tt]:in
  - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
  - [url="FeedReader"]http://www.feedreader.com/[/url]
 
-{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,News,syndication_blocks,syndication,news_shared,news,core_feedback_features,Content}[block]main_tutorial_rating[/block]

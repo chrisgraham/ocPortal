@@ -580,4 +580,4 @@ PHP is a very widely deployed scripting language to power dynamic websites. Beca
 
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
 
-{$SET,tutorial_tags,TODO,Introduction and background information}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core,Introduction,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]

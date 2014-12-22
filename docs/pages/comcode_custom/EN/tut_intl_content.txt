@@ -69,4 +69,4 @@ All sites on an ocPortal multi-site-network must have the same multi-lang-conten
  - [page="_SEARCH:tut_intl"]Localisation and internationalisation[/page]
  - [page="_SEARCH:tut_intl_users"]Translating ocPortal[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Internationalisation}[block]main_tutorial_rating[/block]

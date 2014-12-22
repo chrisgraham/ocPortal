@@ -135,4 +135,4 @@ If banners won't show check:
 
  - [page="_SEARCH:tut_points"]Creating an economy/reward-system for members via points[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Banners,eCommerce,banners}[block]main_tutorial_rating[/block]

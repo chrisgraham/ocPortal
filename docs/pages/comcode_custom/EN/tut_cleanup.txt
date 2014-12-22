@@ -29,4 +29,4 @@ The cleanup tools interface includes support for mySQL database repairing and op
 
  - [page="_SEARCH:tut_framework"]The ocPortal programming framework[/page]
 
-{$SET,tutorial_tags,TODO,Configuration and maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core_cleanup_tools,Maintenance}[block]main_tutorial_rating[/block]

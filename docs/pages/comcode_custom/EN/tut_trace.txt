@@ -78,4 +78,4 @@ in addition to various other punitive measures, such as removing rank, or chargi
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
 
-{$SET,tutorial_tags,TODO,Miscellaneous}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Security,securitylogging,Administration}[block]main_tutorial_rating[/block]

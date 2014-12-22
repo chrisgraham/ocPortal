@@ -104,4 +104,4 @@ If you are a hosting administrator and would like to configure PHP on a server f
  - [page="_SEARCH:tut_web_hosting"]Web hosting[/page]
  - [page="_SEARCH:tut_windows"]Installing ocPortal on a Windows desktop[/page]
 
-{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,windows_helper_scripts,linux_helper_scripts,installer,core_database_drivers,Installation}[block]main_tutorial_rating[/block]

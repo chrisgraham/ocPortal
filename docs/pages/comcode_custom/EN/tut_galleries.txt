@@ -108,4 +108,4 @@ Unfortunately FFMPEG does have some major problems with audio/video synchronisat
  - [page="_SEARCH:tut_downloads"]Providing downloads[/page]
  - [page="_SEARCH:tut_adv_galleries"]Advanced galleries[/page]
 
-{$SET,tutorial_tags,TODO,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Galleries,galleries,Content}[block]main_tutorial_rating[/block]

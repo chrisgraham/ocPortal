@@ -159,4 +159,4 @@ RewriteRule ^([^/\&\?]+)\.htm$ index.php\?page=$1 [L,U]
  - [page="_SEARCH:tut_adv_configuration"]Advanced configuration[/page]
  - [page="_SEARCH:tut_seo"]Improving your search engine ranking[/page]
 
-{$SET,tutorial_tags,TODO,Installation and configuration}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,SEO,Installation}[block]main_tutorial_rating[/block]

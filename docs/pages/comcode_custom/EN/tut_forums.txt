@@ -125,4 +125,4 @@ You can find the post ID from above (before) the post in the topicview.
  - [page="_SEARCH:tut_forum_helpdesk"]Running a discussion-forum-based helpdesk[/page]
  - [page="_SEARCH:tut_forum_tracking"]Keeping on track of busy forums[/page]
 
-{$SET,tutorial_tags,TODO,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Forum,ocf_forum,Social}[block]main_tutorial_rating[/block]
