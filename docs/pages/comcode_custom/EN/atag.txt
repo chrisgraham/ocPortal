@@ -1,8 +1,10 @@
-[title sub="10th April 2006"]Authoring Tool Accessibility Guidelines 2.0 - ocPortal version 3.0 compliance[/title]
+[title sub="Written by Chris Graham, ocProducts"]Authoring Tool Accessibility Guidelines 2.0 - ocPortal version 3.0 compliance[/title]
 
 This document fulfills the compliancy needs of the ATAG 2.0 draft document on demonstrating ATAG compliance for an authoring tool.
 The document is brief, but ocProducts are happy to clarify any issues that organisations or individuals may have, and if any flaw is found in our compliance, we will work to fix this.
 At the time of writing we believe ocPortal does indeed fully comply with ATAG, and we have made numerous changes to get ocPortal to that point. Some of the wording in the specification is, however, not completely appropriate to the kind of tool ocPortal is, and hence some guidelines are met in spirit rather than a strict literal interpretation would require; we believe that this is reasonable and expected.
+
+[contents]decimal,lower-alpha[/contents]
 
 [title="2"]Conformance profile[/title]
 
@@ -254,4 +256,4 @@ Our WCAG compliance is detailed in a [url="separate document"]{$TUTORIAL_URL,tut
 
 This is because the information is important for those who modify templates in ocPortal, so that they understand the techniques we have used and know how to apply them themselves.
 
-{$SET,tutorial_tags,Web standards & Accessibility,Design}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Web standards & Accessibility,Design & Themeing,regular}{$SET,tutorial_add_date,10th April 2006}{$SET,tutorial_summary,A formal description of ocPortal's compliancy with the ATAG accessibility standard.}[block]main_tutorial_rating[/block][block]main_tutorial_rating[/block]

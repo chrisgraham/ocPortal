@@ -343,4 +343,4 @@ ocPortal does not contain a way for individual sites to be set up automatically 
 
  - [page="_SEARCH:tut_subcom"]Creating sub-communities (and sub-sites)[/page]
 
-{$SET,tutorial_tags,msn,Structure and navigation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,msn,Structure and navigation,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,You can link multiple installations, via a forum, into a 'multi-site-network'. Read more about it here.}[block]main_tutorial_rating[/block]

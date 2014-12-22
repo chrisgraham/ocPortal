@@ -2,7 +2,6 @@
 
 This tutorial covers advanced installation issues which most users do not need to be concerned with.
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Quick installation, without the quick installer![/title]
@@ -104,4 +103,4 @@ If you are a hosting administrator and would like to configure PHP on a server f
  - [page="_SEARCH:tut_web_hosting"]Web hosting[/page]
  - [page="_SEARCH:tut_windows"]Installing ocPortal on a Windows desktop[/page]
 
-{$SET,tutorial_tags,windows_helper_scripts,linux_helper_scripts,installer,core_database_drivers,Installation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,windows_helper_scripts,linux_helper_scripts,installer,core_database_drivers,Installation,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,This tutorial covers advanced installation issues which most users do not need to be concerned with.}[block]main_tutorial_rating[/block]

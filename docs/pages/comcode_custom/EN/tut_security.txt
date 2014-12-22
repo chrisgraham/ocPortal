@@ -237,4 +237,4 @@ This error could also be caused by some server configuration issue too. For exam
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
  - [url="http://www.robotstxt.org/robotstxt.html"]robots.txt help[/url]
 
-{$SET,tutorial_tags,ssl,securitylogging,rootkit_detector,Security}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,ssl,securitylogging,rootkit_detector,Security,expert}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Details and guidance on the advanced security protections available in ocPortal.}[block]main_tutorial_rating[/block]

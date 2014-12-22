@@ -121,4 +121,4 @@ You can re-sync all instances of all aggregate content types, or for just a sele
  - [page="_SEARCH:tut_occle"]OcCLE[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
 
-{$SET,tutorial_tags,aggregate_types,Content,Power tools}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,aggregate_types,Content,Power tools,expert}{$SET,tutorial_add_date,May 2013}{$SET,tutorial_summary,How to set up complex content types, by linking standard ocPortal types/structure together.}[block]main_tutorial_rating[/block]

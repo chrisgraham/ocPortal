@@ -2,7 +2,6 @@
 
 ocPortal provides features to allow Comcode pages to be very feature rich. This tutorial explains two advanced aspects to this: blocks and 'inline attachments'. It will also explain how ocPortal allows your website content to be organised using different methodologies.
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Blocks[/title]
@@ -71,4 +70,4 @@ To export a Comcode page with 'inline attachments', choose to edit the page, and
  - [page="_SEARCH:tut_adv_comcode"]Advanced Comcode[/page]
  - [page="_SEARCH:tut_comcode_pages"]Custom pages of information (via Comcode)[/page]
 
-{$SET,tutorial_tags,Pages,Content,core_comcode_pages,Structure and navigation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Pages,Content,core_comcode_pages,Structure and navigation,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,How to add dynamism and inline content to your pages, using blocks; and multimedia, using attachments.}[block]main_tutorial_rating[/block]

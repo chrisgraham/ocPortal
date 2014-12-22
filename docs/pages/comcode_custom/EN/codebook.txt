@@ -1,4 +1,4 @@
-[title sub="For ocPortal version 9.0"]ocPortal Code Book[/title]
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Code Book, contents and introduction[/title]
 
 [surround="spaced_list"]
 The Code Book contains documentation to teach experienced developers how to program for ocPortal.
@@ -210,4 +210,4 @@ The documentation and tools on the ocPortal website may be out of date between o
  - [url="Community documentation"]{$BRAND_BASE_URL}/site/wiki.htm[/url]
 [/surround]
 
-{$SET,tutorial_tags,Development,PHP,testing_platform,Programming}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Development,PHP,testing_platform,Development,expert}{$SET,tutorial_add_date,Jan 2006}{$SET,tutorial_summary,The programmer's guide for ocPortal development. Contents and Introduction.}[block]main_tutorial_rating[/block][block]main_tutorial_rating[/block]

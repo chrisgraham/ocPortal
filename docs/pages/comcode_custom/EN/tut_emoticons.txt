@@ -29,4 +29,4 @@ You can also determine whether an emoticon can be used as a 'topic emoticon' (an
 
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
 
-{$SET,tutorial_tags,core_ocf,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core_ocf,Social,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Find out about all the funky-cool emoticons that come with ocPortal, and how to extinguish them or add more.}[block]main_tutorial_rating[/block]

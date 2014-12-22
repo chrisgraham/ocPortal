@@ -3,7 +3,6 @@
 [media width="150" description="Importing will generally use the contents of database tables designed for one product to create equivalent data suitable for ocPortal" float="right"]data_custom/images/docs/importer_dbs.png[/media]
 {!import:DOC_IMPORT}
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Importers[/title]
@@ -165,4 +164,4 @@ For developers instructions on writing an importer please see the ocPortal Code 
 
  - [page="_SEARCH:tut_framework"]The ocPortal programming framework[/page]
 
-{$SET,tutorial_tags,import,Installation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,import,Installation,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,How to switch to ocPortal from other software. We discuss how it's done, and some specifics for various different products.}[block]main_tutorial_rating[/block]

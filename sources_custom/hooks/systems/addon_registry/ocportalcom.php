@@ -151,7 +151,6 @@ class Hook_addon_registry_ocportalcom
             'sources_custom/miniblocks/fp_animation.php',
             'sources_custom/miniblocks/ocportalcom_featuretray.php',
             'sources_custom/miniblocks/ocportalcom_make_upgrader.php',
-            'sources_custom/miniblocks/ocportalcom_new_tutorials.php',
             'themes/default/templates_custom/MO_NEW_WEBSITE.tpl',
             'themes/default/templates_custom/OC_DOWNLOAD_RELEASES.tpl',
             'themes/default/templates_custom/OC_DOWNLOAD_SCREEN.tpl',

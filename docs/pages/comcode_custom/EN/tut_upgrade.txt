@@ -83,4 +83,4 @@ If you require assistance for an upgrade, consider the [page="site:support"]Expe
  - [page="_SEARCH:tut_support"]Getting support, making requests, reporting bugs, registration, and paid consultancy[/page]
  - [page="_SEARCH:tut_theme_lifecycle"]Theme lifecycle[/page]
 
-{$SET,tutorial_tags,Upgrading,core_upgrader,Maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Upgrading,core_upgrader,Maintenance,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Important background information that will help you keep your website up-to-date with the latest ocPortal.}[block]main_tutorial_rating[/block]

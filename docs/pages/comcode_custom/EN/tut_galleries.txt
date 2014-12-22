@@ -108,4 +108,4 @@ Unfortunately FFMPEG does have some major problems with audio/video synchronisat
  - [page="_SEARCH:tut_downloads"]Providing downloads[/page]
  - [page="_SEARCH:tut_adv_galleries"]Advanced galleries[/page]
 
-{$SET,tutorial_tags,Galleries,galleries,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Galleries,galleries,Content,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,A gallery system is provided for the storage, organisation and viewing of images and videos.  Read about it.}[block]main_tutorial_rating[/block]

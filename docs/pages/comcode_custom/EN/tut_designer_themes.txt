@@ -564,4 +564,4 @@ This checks to see if "..." is true, and if it is then it puts out a [tt]<a>[/tt
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
 
-{$SET,tutorial_tags,themewizard,core_themeing,core_primary_layout,Design & Themeing,CSS,JavaScript}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,themewizard,core_themeing,core_primary_layout,Design & Themeing,CSS,JavaScript,regular}{$SET,tutorial_add_date,Feb 2011}{$SET,tutorial_summary,This tutorial is a deep-end introduction to ocPortal for web designers.}[block]main_tutorial_rating[/block]

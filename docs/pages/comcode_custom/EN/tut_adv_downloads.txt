@@ -2,7 +2,6 @@
 
 The ocPortal download system is an advanced system, specifically designed to be an effective tool on sites with very large numbers of downloads. It is also integrated with the points system, which is useful for sites where members publish their own 'works' as downloads.
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Getting the downloads onto the site[/title]
@@ -64,4 +63,4 @@ Another example is a community based upon subscription: points could be bought v
 
  - [page="_SEARCH:tut_downloads"]Providing downloads[/page]
 
-{$SET,tutorial_tags,Downloads,downloads,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Downloads,downloads,Content,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,We go through some of the advanced features in the downloads system, such as batch importing, and download selling.}[block]main_tutorial_rating[/block]

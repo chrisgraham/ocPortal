@@ -1,4 +1,4 @@
-[title sub="For ocPortal version 9.0"]ocPortal Code Book[/title]
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Code Book, part 3[/title]
 
 [surround="spaced_list"]
 &laquo; Return to [page="_SEARCH:codebook"]Code Book table of contents[/page]
@@ -602,3 +602,5 @@ If you are considering overriding a file just so that you can add some new funct
 
 We're glad you've made it to the end of our Code Book. Thanks for reading this far, and we hope you find ocPortal an effective and enjoyable environment to code for.
 [/surround]
+
+{$SET,tutorial_tags,Development,PHP,debrand,Development,expert}{$SET,tutorial_add_date,Jan 2006}{$SET,tutorial_summary,The programmer's guide for ocPortal development. Miscellaneous technical guidance.}[block]main_tutorial_rating[/block][block]main_tutorial_rating[/block]

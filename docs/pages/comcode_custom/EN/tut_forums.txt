@@ -125,4 +125,4 @@ You can find the post ID from above (before) the post in the topicview.
  - [page="_SEARCH:tut_forum_helpdesk"]Running a discussion-forum-based helpdesk[/page]
  - [page="_SEARCH:tut_forum_tracking"]Keeping on track of busy forums[/page]
 
-{$SET,tutorial_tags,Forum,ocf_forum,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Forum,ocf_forum,Social,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,This tutorial will explain how discussion forums work in OCF, and how best to organise them.}[block]main_tutorial_rating[/block]

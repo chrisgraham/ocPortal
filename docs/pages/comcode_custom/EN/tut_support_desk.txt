@@ -291,4 +291,4 @@ ocPortal does not come with its own issue management database, but we have a non
  - [page="_SEARCH:tut_forum_tracking"]Keeping on track of busy forums[/page]
  - [page="_SEARCH:tut_nuances"]Nuances of forum integration[/page]
 
-{$SET,tutorial_tags,Support,tickets,staff_messaging,Administration}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Support,tickets,staff_messaging,Administration,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,ocPortal can be used as an effective support desk tool. Find out what features to use for it.}[block]main_tutorial_rating[/block]

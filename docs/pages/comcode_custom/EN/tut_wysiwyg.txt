@@ -132,4 +132,4 @@ If you turn off the WYSIWYG editor when editing something, ocPortal may actually
 
  - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
 
-{$SET,tutorial_tags,Content,core_rich_media}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Content,core_rich_media,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,This tutorial provides some advanced information on the WYSIWYG editor, for those wanting to push it to the limit.}[block]main_tutorial_rating[/block]

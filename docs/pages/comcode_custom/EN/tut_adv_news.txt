@@ -2,7 +2,6 @@
 
 This tutorial describes some of the more complex features available for news, including blogging and syndication.
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Personal Categories / Blogs[/title]
@@ -108,4 +107,4 @@ The default news archive screen shows just the news headlines. By adding [tt]:in
  - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
  - [url="FeedReader"]http://www.feedreader.com/[/url]
 
-{$SET,tutorial_tags,News,syndication_blocks,syndication,news_shared,news,core_feedback_features,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,News,syndication_blocks,syndication,news_shared,news,core_feedback_features,Content,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Details on some of the more complex features available for news, including blogging and syndication.}[block]main_tutorial_rating[/block]

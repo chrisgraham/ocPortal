@@ -1,9 +1,8 @@
-[title]ocPortal/ocProducts FAQ[/title]
+[title sub="Written by Chris Graham, ocProducts"]ocPortal/ocProducts FAQ[/title]
 
 This page will answer frequently asked questions (FAQs) about ocPortal and ocProducts.
 
 [contents]decimal,lower-alpha[/contents]
-
 
 [title="2"]About ocPortal[/title]
 
@@ -511,4 +510,4 @@ We use ckeditor, which disables this. However, if you edit the [tt]WYSIWYG_SETTI
 Please first check the documentation, and if there is no obvious answer, post your question on our public forums so anyone can answer.
 If you need an answer from an ocProducts employee, we have a commercial support scheme called "Experts by the hour".
 
-{$SET,tutorial_tags,Introduction}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Introduction,novice,pinned}{$SET,tutorial_add_date,Dec 2004}{$SET,tutorial_summary,Frequently Asked Questions about ocPortal.}[block]main_tutorial_rating[/block][block]main_tutorial_rating[/block]

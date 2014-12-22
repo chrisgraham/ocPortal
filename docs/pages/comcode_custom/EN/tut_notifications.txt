@@ -57,4 +57,4 @@ Note that it will only CC a notification e-mail to this address once, not once p
  - [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page]
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
 
-{$SET,tutorial_tags,Members,Administration,sms,core_notifications}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Members,Administration,sms,core_notifications,novice}{$SET,tutorial_add_date,Aug 2013}{$SET,tutorial_summary,How different kinds of notifications may be set up in ocPortal.}[block]main_tutorial_rating[/block]

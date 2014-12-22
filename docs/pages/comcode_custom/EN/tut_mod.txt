@@ -76,4 +76,4 @@ Moderators may choose to flag a post of theirs as important. This will usually b
  - [page="_SEARCH:tut_forum_tracking"]Keeping on track of busy forums[/page]
  - [page="_SEARCH:tut_antispam"]Anti-spam settings[/page]
 
-{$SET,tutorial_tags,Forum,ocf_forum,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Forum,ocf_forum,Social,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,This tutorial explains how to moderate topics and posts under OCF, and how post approval works.}[block]main_tutorial_rating[/block]

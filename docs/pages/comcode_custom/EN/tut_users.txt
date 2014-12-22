@@ -99,4 +99,4 @@ This short tutorial aims simply to clarify what all these terms to relate to, an
  - [page="_SEARCH:tut_authors"]Authors[/page]
  - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]
 
-{$SET,tutorial_tags,Members,staff,core_ocf,authors}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Members,staff,core_ocf,authors,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Find out the difference between the 12 terms we use for describing the people who interact with an ocPortal website.}[block]main_tutorial_rating[/block]

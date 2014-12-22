@@ -139,4 +139,4 @@ Fortunately ocPortal has a special feature for this situation: under the 'Securi
  - [page="_SEARCH:tut_security"]Security[/page]
  - [page="_SEARCH:tut_forums"]Organising discussion forums[/page]
 
-{$SET,tutorial_tags,Security,core_permission_management,Configuration}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Security,core_permission_management,Configuration,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,A detailed explanation of how you can configure permissions, how to test them, and how to manage them.}[block]main_tutorial_rating[/block]

@@ -276,4 +276,4 @@ Downloads may be used to release information indirectly, essentially via archive
 
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
 
-{$SET,tutorial_tags,wiki,ocf_forum,news,downloads,core_comcode_pages,catalogues,Content,Pages}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,wiki,ocf_forum,news,downloads,core_comcode_pages,catalogues,Content,Pages,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Details on different publishing features available in ocPortal, and their advantages/disadvantages.}[block]main_tutorial_rating[/block]

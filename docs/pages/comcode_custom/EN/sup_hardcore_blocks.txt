@@ -1,5 +1,7 @@
 [title sub="Written by Chris Warburton, ocProducts"]ocPortal Supplementary: Coding blocks[/title]
 
+[contents]decimal,lower-alpha[/contents]
+
 [title="2"]Creating mini-blocks from Third-Party Code[/title]
 
 This is a short example-driven tutorial on creating a new ocPortal block (actually a "mini-block") by using externally-provided code. This is a great way to get started with customising ocPortal to your needs, and providing some level of integration between your ocPortal installation and your favourite external Web sites.
@@ -418,4 +420,4 @@ The parameters we add to the end of the image URL may seem incomprehensible, but
 
 If you wish to turn your mini-block into an ocPortal addon that anyone can install then you can follow the instructions and diagrams in this section of the [url="http://ocportal.com/docs/tut_framework.htm#title__9"]ocPortal programming framework tutorial[/url]. ocPortal, by default, gives administrators access to a "tree view" of all the addons which have been published on ocPortal.com. This means that, if you upload your addon to ocPortal.com, it will appear inside (almost) every ocPortal installation in the world, and can be downloaded and installed automatically with just a few clicks!
 
-{$SET,tutorial_tags,PHP,Programming}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Development,PHP,expert}{$SET,tutorial_add_date,Aug 12}{$SET,tutorial_summary,A worked guide to writing new blocks for ocPortal.}[block]main_tutorial_rating[/block]

@@ -4,7 +4,6 @@ When you run an ocPortal site, you do not merely create a website for people to 
 
 Staff can use these features to distinguish themselves from ordinary users, and to collaborate together towards the operation of the website. This tutorial will cover a number of these features and how you might use them; some of these referenced features will be presented according to the [concept]OCF[/concept] system but are also likely to be included in third-party forum solutions in some form.
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Staff and the staff page[/title]
@@ -108,4 +107,4 @@ When members use the OCF whisper feature to make inline-personal-posts, they are
  - [page="_SEARCH:tut_msn"]Advanced techniques for multi-site-networks[/page]
  - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]
 
-{$SET,tutorial_tags,staff,ocf_warnings,ocf_reported_posts,Staff management,Collaboration}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,staff,ocf_warnings,ocf_reported_posts,Collaboration,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,A discussion on the features ocPortal provides for members, and for staff - and how permissions divide them.}[block]main_tutorial_rating[/block]

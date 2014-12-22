@@ -580,4 +580,4 @@ PHP is a very widely deployed scripting language to power dynamic websites. Beca
 
  - [page="_SEARCH:tut_drinking"]Drinking from the feature pool[/page]
 
-{$SET,tutorial_tags,core,Introduction,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core,Introduction,Internet Technology,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Background into the different kinds of solutions that are out there for creating websites - and where ocPortal fits in.}[block]main_tutorial_rating[/block]

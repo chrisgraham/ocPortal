@@ -99,4 +99,4 @@ Once all of the above sections are complete you should have a fully translated w
 
  - [page="_SEARCH:tut_intl"]Localisation and internationalisation[/page]
 
-{$SET,tutorial_tags,language_block,core_language_editing,Internationalisation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,language_block,core_language_editing,Internationalisation,novice}{$SET,tutorial_add_date,Mar 2011}{$SET,tutorial_summary,How to translate your (ocPortal-powered) website into different languages.}[block]main_tutorial_rating[/block]

@@ -2,7 +2,6 @@
 
 This tutorial serves as an introduction to programming, with a particular emphasis on PHP. Programming knowledge is not necessary to use ocPortal, and we do not provide support for re/new-programming issues, but those who wish to do advance customisation by themselves, or are otherwise interested, may wish to read this tutorial. This tutorial is not intended to fully explain PHP programming: few examples are given, as hopefully you will be able to use ocPortal source code to see examples, and use this tutorial as an explanation of the 'syntax'.
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]About the PHP language[/title]
@@ -541,4 +540,4 @@ N/A is used to mark characters that have a special meaning.
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
-{$SET,tutorial_tags,PHP,Programming,General (non-ocPortal-specific) guides}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Development,PHP,expert}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,This huge tutorial serves as an introduction to programming, with a particular emphasis on PHP.}[block]main_tutorial_rating[/block]

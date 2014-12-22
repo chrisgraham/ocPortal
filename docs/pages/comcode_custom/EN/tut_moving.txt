@@ -71,4 +71,4 @@ If you don't have shell access to import a database you'll probably end up tryin
  - [page="_SEARCH:tut_adv_installation"]Advanced installation[/page]
  - [page="_SEARCH:tut_backup"]Backing up your site[/page]
 
-{$SET,tutorial_tags,core_configuration,Maintenance}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core_configuration,Maintenance,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,It's really not hard if you know how to do it. In this tutorial we move a sample install from a Windows PC to a Linux server.}[block]main_tutorial_rating[/block]

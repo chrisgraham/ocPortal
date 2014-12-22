@@ -75,4 +75,4 @@ The screen-shots show how to set file permissions for:
  - [page="_SEARCH:tut_security"]Security[/page]
  - [page="_SEARCH:tut_chmod"]Linux file permissions[/page]
 
-{$SET,tutorial_tags,installer,Installation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,installer,Installation,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,The theory behind the permissions ocPortal needs on most web hosts, and practical guidance on setting them.}[block]main_tutorial_rating[/block]

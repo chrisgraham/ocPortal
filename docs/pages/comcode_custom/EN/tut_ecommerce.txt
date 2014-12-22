@@ -2,7 +2,6 @@
 
 {!ecommerce:DOC_ECOMMERCE}
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Payment gateways[/title]
@@ -331,4 +330,4 @@ Manual transactions may also be used to input transactions that are totally exte
  - [page="_SEARCH:tut_subcom"]Creating sub-communities (and sub-sites)[/page]
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
 
-{$SET,tutorial_tags,eCommerce,shopping,ecommerce}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,eCommerce,Development,shopping,ecommerce,expert}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Use the eCommerce system to sell things. Usergroup subscription and member invoicing are available out-of-the-box.}[block]main_tutorial_rating[/block]

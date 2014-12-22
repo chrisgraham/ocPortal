@@ -117,4 +117,4 @@ The club forum has default permissions that only allow website staff and club me
  - [page="_SEARCH:tut_msn"]Advanced techniques for multi-site-networks[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
 
-{$SET,tutorial_tags,redirects_editor,ocf_clubs,Structure and navigation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,redirects_editor,ocf_clubs,Structure and navigation,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,A common features of the largest community sites is to have sub-communities within the larger community. See how.}[block]main_tutorial_rating[/block]

@@ -191,4 +191,4 @@ For more tips, see [page="forum:topicview:browse:9553"]a walk-through guide[/pag
  - [page="_SEARCH:tut_theme_lifecycle"]Theme lifecycle[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
 
-{$SET,tutorial_tags,themewizard,core_themeing,core_primary_layout,core_html_abstractions,core_form_interfaces,core_abstract_interfaces,core_abstract_components,Design & Themeing}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,themewizard,core_themeing,core_primary_layout,core_html_abstractions,core_form_interfaces,core_abstract_interfaces,core_abstract_components,Design & Themeing,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Our key themeing tutorial - how to re-theme your site, by changing CSS, templates, and theme images.}[block]main_tutorial_rating[/block]

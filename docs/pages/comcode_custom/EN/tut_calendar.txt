@@ -2,7 +2,6 @@
 
 {!calendar:DOC_CALENDAR}
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Events[/title]
@@ -124,4 +123,4 @@ It is possible to customise the calendar to have a different start-of-week-day, 
  - [page="_SEARCH:tut_news"]Providing news[/page]
  - [page="_SEARCH:tut_intl"]Localisation and internationalisation[/page]
 
-{$SET,tutorial_tags,Calendar,calendar,Content}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Calendar,calendar,Content,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,How to create a community calendar, or let your members maintain online diaries.}[block]main_tutorial_rating[/block]

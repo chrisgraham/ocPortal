@@ -24,4 +24,4 @@ Most modern designs are fixed with on desktop computers, and have "responsive de
  - [page="_SEARCH:tut_tempcode"]Tempcode programming[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
 
-{$SET,tutorial_tags,core_themeing,Design & Themeing}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core_themeing,Design & Themeing,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,A very practical tutorial showing how to created a fixed-width layout, and how to change the site header.}[block]main_tutorial_rating[/block]

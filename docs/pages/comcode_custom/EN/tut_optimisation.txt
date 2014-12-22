@@ -424,4 +424,4 @@ You'll need to disable the ocPortal "Reveal usage figures" option, as the usage 
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]
  - [page="_SEARCH:tut_google_appengine"]Installing on Google App Engine[/page]
 
-{$SET,tutorial_tags,Performance,textbased_persistent_cacheing,hphp_buildkit,Maintenance,Power tools}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Performance,textbased_persistent_cacheing,hphp_buildkit,Maintenance,Development,Power tools,expert}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,ocPortal is very heavily optimised for high performance out-of-the-box, but here are some advanced performance tips.}[block]main_tutorial_rating[/block]

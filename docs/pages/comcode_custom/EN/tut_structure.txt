@@ -245,4 +245,4 @@ There is a breadcrumb override facility in the Admin Zone that allows you to cha
  - [page="_SEARCH:tut_repository"]The ocPortal repository[/page]
  - [page="_SEARCH:tut_short_urls"]URL schemes in ocPortal[/page]
 
-{$SET,tutorial_tags,page_management,core_zone_editor,breadcrumbs,Structure and navigation}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,page_management,core_zone_editor,breadcrumbs,Structure and navigation,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,An explanation of the ocPortal systems that together form the structure and navigation for ocPortal-powered websites.}[block]main_tutorial_rating[/block]

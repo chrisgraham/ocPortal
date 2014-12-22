@@ -76,4 +76,4 @@ After enabling notifications topics and forums, you can easily disable it again,
 
  - [page="_SEARCH:tut_forums"]Organising discussion forums[/page]
 
-{$SET,tutorial_tags,Forum,ocf_forum,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Forum,ocf_forum,Social,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,It can get hard to keep up with all the discussions if you've got an active community. See how OCF can help.}[block]main_tutorial_rating[/block]

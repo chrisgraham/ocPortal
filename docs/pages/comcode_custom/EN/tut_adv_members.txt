@@ -2,7 +2,6 @@
 
 This tutorial will cover some of the more advanced features of the [concept]OCF[/concept] member system.
 
-
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Birthdays[/title]
@@ -199,4 +198,4 @@ UPDATE ocp_f_members SET m_password_compat_scheme='temporary' WHERE m_password_c
  - [page="_SEARCH:tut_subcom"]Creating sub-communities[/page]
  - [page="_SEARCH:tut_web_hosting"]Web Hosting for ocPortal[/page]
 
-{$SET,tutorial_tags,Members,welcome_emails,ocf_cpfs,core_ocf,Social}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Members,welcome_emails,ocf_cpfs,core_ocf,Social,regular}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,How to create custom profile fields, manually add members, and set up welcome emails for new members.}[block]main_tutorial_rating[/block]

@@ -212,4 +212,4 @@ There are many advantages to use OCF, such as:
  - [page="_SEARCH:tut_importer"]Importing data into ocPortal[/page]
  - [page="_SEARCH:tut_staff"]Coordination between staff and staff/members[/page]
 
-{$SET,tutorial_tags,core_forum_drivers,Installation,Forum}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,core_forum_drivers,Installation,Forum,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,ocPortal supports integration with a number of forum systems through our forum driver system. We discuss any issues here.}[block]main_tutorial_rating[/block]

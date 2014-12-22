@@ -348,4 +348,4 @@ These are all very technical tasks, so we do not expect that many users will hav
  - [page="_SEARCH:tut_httpauth"]Integrating ocPortal into a network via HTTP authentication[/page]
  - [page="_SEARCH:tut_ldap"]Integrating ocPortal into a corporate network via LDAP[/page]
 
-{$SET,tutorial_tags,Third Party Integration,syndication}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Third Party Integration,syndication,expert}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,This tutorial will provide details on how to integrate ocPortal with another web system installed for your website.}[block]main_tutorial_rating[/block]

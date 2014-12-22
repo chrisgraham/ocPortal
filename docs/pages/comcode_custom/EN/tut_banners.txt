@@ -1,8 +1,9 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Running advertisements (via the banner system)[/title]
 
+[surround]
 [media width="150" description="A banner" float="right"]data_custom/images/docs/banners_action.png[/media]
 {!banners:DOC_BANNERS}
-
+[/surround]
 
 [contents]decimal,lower-alpha[/contents]
 
@@ -135,4 +136,4 @@ If banners won't show check:
 
  - [page="_SEARCH:tut_points"]Creating an economy/reward-system for members via points[/page]
 
-{$SET,tutorial_tags,Banners,eCommerce,banners}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Banners,eCommerce,banners,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,Use the banners system to run multiple advertising campaigns on your website, using multiple media profiles.}[block]main_tutorial_rating[/block]

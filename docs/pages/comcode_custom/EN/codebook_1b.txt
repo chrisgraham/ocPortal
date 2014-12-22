@@ -1,4 +1,4 @@
-[title sub="For ocPortal version 9.0"]ocPortal Code Book[/title]
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Code Book, part 1b[/title]
 
 [surround="spaced_list"]
 &laquo; Return to [page="_SEARCH:codebook"]Code Book table of contents[/page]
@@ -1049,3 +1049,5 @@ The best way to achieve this is to code up a startup hook. Using PHP code you ca
 
 For example, if you wanted a module as seen in one zone to have one virtual root, and the same module as seen in another zone, to have another -- you could code up a startup hook that sets the default root accordingly.
 [/surround]
+
+{$SET,tutorial_tags,Development,PHP,core_forum_drivers,Development,expert}{$SET,tutorial_add_date,Jan 2006}{$SET,tutorial_summary,The programmer's guide for ocPortal development. Back-end development, part 2.}[block]main_tutorial_rating[/block][block]main_tutorial_rating[/block]

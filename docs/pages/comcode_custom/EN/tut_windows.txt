@@ -82,4 +82,4 @@ Once the permissions are set, just run through the installer, and you should hav
  - [page="_SEARCH:tut_install"]Basic Installation[/page]
  - [page="_SEARCH:tut_adv_installation"]Advanced installation[/page]
 
-{$SET,tutorial_tags,windows_helper_scripts,Installation,Web hosting}[block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,windows_helper_scripts,Installation,Web hosting,novice}{$SET,tutorial_add_date,Aug 2008}{$SET,tutorial_summary,How to get an ocPortal installation running on your own Windows computer, if you choose to use that as your server.}[block]main_tutorial_rating[/block]
