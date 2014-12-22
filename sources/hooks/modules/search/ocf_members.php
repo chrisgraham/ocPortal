@@ -221,7 +221,19 @@ class Hook_search_ocf_members
 			{
 				$where_clause.=' AND ';
 
-				if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!is_under_radar($param)))
+				if ($storage_type=='integer')
+				{
+					$temp='?='.strval(intval($param));
+				}
+				elseif ($storage_type=='float')
+				{
+					$temp='?='.float_to_raw_string(floatval($param));
+				}
+				elseif ($type=='list' || $type=='combo')
+				{
+					$temp=db_string_equal_to('?',$param);
+				}
+				elseif ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!is_under_radar($param)))
 				{
 					$temp=db_full_text_assemble('"'.$param.'"',true);
 				} else
