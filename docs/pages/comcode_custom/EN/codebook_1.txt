@@ -1181,4 +1181,4 @@ Each '[tt]do_template[/tt]' call in ocPortal, which loads up a template, passes 
 Don't bother manually putting in GUIDs. We have a script that auto-generates them and inserts them across the code base. We run this script before major releases.
 [/surround]
 
-{$SET,tutorial_tags,Development,PHP,Development,expert}{$SET,tutorial_add_date,Jan 2006}{$SET,tutorial_summary,The programmer's guide for ocPortal development. Back-end development, part 1.}[block]main_tutorial_rating[/block][block]main_tutorial_rating[/block]
+{$SET,tutorial_tags,Development,PHP,Development,expert}{$SET,tutorial_add_date,Jan 2006}{$SET,tutorial_summary,The programmer's guide for ocPortal development. Back-end development, part 1.}[block]main_tutorial_rating[/block]

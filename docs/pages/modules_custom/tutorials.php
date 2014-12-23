@@ -103,7 +103,22 @@ class Module_tutorials
      */
     public function run()
     {
-        // TODO
-        return new Tempcode();
+        require_code('tutorials');
+
+        $title = get_screen_title('Tutorials &ndash; Learning ocPortal', false);
+
+        $tag = get_param('type', 'Installation');
+
+        $tags = list_tutorial_tags(true, ($tag == '') ? null : $tag);
+
+        $tutorials = list_tutorials_by('title', ($tag == '') ? null : $tag);
+        $_tutorials = templatify_tutorial_list($tutorials);
+
+        return do_template('TUTORIAL_INDEX_SCREEN', array(
+            'TITLE' => $title,
+            'TAGS' => $tags,
+            'SELECTED_TAG' => $tag,
+            'TUTORIALS' => $_tutorials,
+        ));
     }
 }

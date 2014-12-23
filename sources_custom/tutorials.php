@@ -47,6 +47,75 @@ function list_tutorial_tags($skip_addons_and_specials = false)
     return $tags;
 }
 
+function list_tutorials_by($criteria, $tag = null)
+{
+    $tutorials = null;
+
+    switch ($criteria) {
+        case 'pinned':
+            $_tutorials = list_tutorials();
+
+            $tutorials=array();
+            foreach ($_tutorials as $tutorial) {
+                if ($tutorial['pinned']) {
+                    $tutorials[] = $tutorial;
+                }
+            }
+
+            sort_maps_by($tutorials, 'title');
+
+            break;
+
+        case 'recent':
+            $tutorials = list_tutorials();
+            sort_maps_by($_tutorials, '!add_date');
+            break;
+
+        case 'likes':
+            $tutorials = list_tutorials();
+            sort_maps_by($_tutorials, '!likes');
+            break;
+
+        case 'likes_recent':
+            $tutorials = list_tutorials();
+            sort_maps_by($_tutorials, '!likes_recent');
+            break;
+
+        case 'rating':
+            $tutorials = list_tutorials();
+            sort_maps_by($_tutorials, '!rating');
+            break;
+
+        case 'rating_recent':
+            $tutorials = list_tutorials();
+            sort_maps_by($_tutorials, '!rating_recent');
+            break;
+
+        case 'views':
+            $tutorials = list_tutorials();
+            sort_maps_by($_tutorials, '!views');
+            break;
+
+        case 'title':
+            $tutorials = list_tutorials();
+            sort_maps_by($_tutorials, 'title');
+            break;
+    }
+
+    if ($tag !== null) {
+        $_tutorials = $tutorials;
+
+        $tutorials = array();
+        foreach ($_tutorials as $tutorial) {
+            if (in_array($tag, $tutorial['tags'])) {
+                $tutorials[] = $tutorial;
+            }
+        }
+    }
+
+    return $tutorials;
+}
+
 function list_tutorials()
 {
     $tutorials = array();
@@ -90,6 +159,36 @@ function list_tutorials()
     sync_file($cache_path);
 
     return $tutorials;
+}
+
+function templatify_tutorial_list($tutorials)
+{
+    $_tutorials = array();
+
+    foreach ($tutorials as $tutorial) {
+        $tags = array();
+        foreach ($tutorial['tags'] as $tag) {
+            if (strtolower($tag) != $tag) {
+                $tags[] = $tag;
+            }
+        }
+
+        $_tutorials[] = array(
+            'URL' => $tutorial['url'],
+            'TITLE' => $tutorial['title'],
+            'SUMMARY' => $tutorial['summary'],
+            'ICON' => $tutorial['icon'],
+            'TAGS' => $tags,
+            'MEDIA_TYPE' => $tutorial['media_type'],
+            'DIFFICULTY_LEVEL' => $tutorial['difficulty_level'],
+            'CORE' => $tutorial['core'],
+            'AUTHOR' => $tutorial['author'],
+            'ADD_DATE' => get_timezoned_date($tutorial['add_date'], false),
+            'EDIT_DATE' => get_timezoned_date($tutorial['edit_date'], false),
+        );
+    }
+
+    return $_tutorials;
 }
 
 function get_tutorial_metadata($tutorial_name, $db_row = null, $tags = null)

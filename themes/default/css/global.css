@@ -4068,7 +4068,7 @@ td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
 figure {
 	margin: 1em 0;
 }
-.left>figure {
+.left>figure, .right>figure {
 	margin: 0;
 }
 /* Wordpress compatibility */
