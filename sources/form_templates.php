@@ -1555,7 +1555,7 @@ function form_input_radio_entry($name, $value, $selected = false, $text = '', $t
  * @param  mixed                        $pretty_name A human intelligible name for this input field
  * @param  mixed                        $description A description for this input field
  * @param  ID_TEXT                      $name The name which this input field is for
- * @param  array                        $ids A list of image IDs (codes) we can choose from
+ * @param  array                        $ids A list of image IDs (codes) we can choose from, probably found via get_all_image_ids_type
  * @param  ?URLPATH                     $selected_url The currently selected entry in our picture choosing, by URL (null: none)
  * @param  ?string                      $selected_code The currently selected entry in our picture choosing, by code (null: none)
  * @param  ?integer                     $tabindex The tab index of the field (null: not specified)

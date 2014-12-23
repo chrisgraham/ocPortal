@@ -78,6 +78,11 @@ class Module_tutorials
             't_page_name' => '*ID_TEXT',
             't_views' => 'INTEGER',
         ));
+
+        // TODO: Write code to bootstrap existing external tutorials...
+        //  Arvixe
+        //  Ones on Youtube
+        //  (we have some more videos to add to Youtube too)
     }
 
     /**
@@ -92,7 +97,7 @@ class Module_tutorials
     public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'browse' => array('HELP', 'menu/pages/help'),
+            'browse' => array('tutorials:TUTORIALS', 'menu/pages/help'),
         );
     }
 
@@ -109,7 +114,7 @@ class Module_tutorials
 
         $tag = get_param('type', 'Installation');
 
-        $tags = list_tutorial_tags(true, ($tag == '') ? null : $tag);
+        $tags = list_tutorial_tags(true, ($tag == '' || $tag == 'browse') ? null : $tag);
 
         $tutorials = list_tutorials_by('title', ($tag == '') ? null : $tag);
         $_tutorials = templatify_tutorial_list($tutorials);

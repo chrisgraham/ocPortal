@@ -262,6 +262,9 @@ The documentation is primarily maintained on our website, and this archive is on
             'docs/pages/comcode_custom/EN/tut_intl_users.txt',
             'docs/pages/comcode_custom/EN/tut_ocselect.txt',
             'docs/pages/comcode_custom/EN/tut_google_appengine.txt',
+            'docs/pages/comcode_custom/EN/tut_mobile.txt',
+            'docs/pages/comcode_custom/EN/tut_google_analytics.txt',
+            'docs/pages/comcode_custom/EN/tut_responsive_design.txt',
             'default.png',
             'themes/default/images_custom/tutorial_icons/index.html',
             'docs/pages/modules/index.html',
@@ -820,6 +823,8 @@ The documentation is primarily maintained on our website, and this archive is on
             'themes/default/templates_custom/BLOCK_MAIN_TUTORIALS_CAROUSEL.tpl',
             'themes/default/templates_custom/BLOCK_MAIN_TUTORIAL_RATING.tpl',
             'themes/default/templates_custom/TUTORIAL_INDEX_SCREEN.tpl',
+            'cms/pages/modules_custom/cms/cms_tutorials.php',
+            'lang_custom/EN/tutorials.ini',
         );
     }
 }

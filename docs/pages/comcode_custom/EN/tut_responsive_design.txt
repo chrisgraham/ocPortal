@@ -1,0 +1,13 @@
+[title sub="Written by Salman Abbas, ocProducts"]ocPortal Tutorial: Using responsive design techniques[/title]
+
+TODO
+
+[contents]decimal,lower-alpha[/contents]
+
+TODO
+
+[concepts
+ 1_key="Boolean TODO"   1_value="TODO"
+]Concepts[/concepts]
+
+{$SET,tutorial_tags,Mobile,Design & Themeing,CSS,regular,pinned}{$SET,tutorial_add_date,Jan 2014}{$SET,tutorial_summary,TODO}[block]main_tutorial_rating[/block]
