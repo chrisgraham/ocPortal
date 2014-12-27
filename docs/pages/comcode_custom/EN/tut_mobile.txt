@@ -7,7 +7,7 @@ TODO
 TODO
 
 [concepts
- 1_key="Boolean TODO"   1_value="TODO"
+ 1_key="TODO"   1_value="TODO"
 ]Concepts[/concepts]
 
 {$SET,tutorial_tags,Mobile,Development,expert,pinned}{$SET,tutorial_add_date,Jan 2014}{$SET,tutorial_summary,TODO}[block]main_tutorial_rating[/block]
