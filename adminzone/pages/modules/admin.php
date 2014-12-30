@@ -143,7 +143,7 @@ class Module_admin
 			array('atom','rss','feed'),
 			array('login','logon','log-in','log-on'),
 			array('redirect','move'),
-			array('gallery','album'),
+			array('gallery','album','podcast'),
 			array('audit','log','usage'),
 			array('download','file','document'),
 			array('page','article','comcode'),
