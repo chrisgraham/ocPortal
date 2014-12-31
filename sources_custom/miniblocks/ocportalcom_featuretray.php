@@ -316,7 +316,7 @@ $featuretree = array(
             array(
                 array('Supports images, videos, and audio'),
                 array('Personal galleries', 'Allow your members to create their own galleries'),
-                array('Transcoding', 'Upload any format, have the server convert it'),
+                //array('Transcoding', 'Upload any video format, have the server convert it'),  Optimistic, transcoding can be a PITA
                 array('Support for linking to YouTube videos', 'Save on bandwidth'),
                 null, // divider
                 array('Auto-detection of video length and resolution (most file formats)'),
