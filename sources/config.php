@@ -30,7 +30,7 @@ function init__config()
     global $VALUE_OPTIONS_CACHE, $IN_MINIKERNEL_VERSION;
     if (!$IN_MINIKERNEL_VERSION) {
         $CONFIG_OPTIONS_CACHE = $SMART_CACHE->get('CONFIG_OPTIONS');
-        if ($CONFIG_OPTIONS_CACHE === NULL) {
+        if ($CONFIG_OPTIONS_CACHE === null) {
             $CONFIG_OPTIONS_CACHE = array();
         }
 
@@ -191,6 +191,8 @@ function get_option($name, $missing_ok = false)
 
     // Non-translated
     if ($option['c_needs_dereference'] == 0) {
+        global $SMART_CACHE;
+
         $value = $option['c_value'];
         $option['c_value_translated'] = $value; // Allows slightly better code path next time
 

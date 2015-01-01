@@ -72,20 +72,18 @@ function init__caches()
             $psuedo_page .= '__' . get_param('id', '');
         }
     } else {
-        $psuedo_page = 'script__'.current_script();
+        $psuedo_page = 'script__' . current_script();
     }
     $SMART_CACHE = new Self_learning_cache($psuedo_page);
 
     // Some loading from the smart cache
-    $test=$SMART_CACHE->get('JAVASCRIPT');
-    if ($test!==NULL)
-    {
-        $JAVASCRIPT=$test;
+    $test = $SMART_CACHE->get('JAVASCRIPT');
+    if ($test !== null) {
+        $JAVASCRIPT = $test;
     }
-    $test=$SMART_CACHE->get('CSSS');
-    if ($test!==NULL)
-    {
-        $CSSS=$test;
+    $test = $SMART_CACHE->get('CSSS');
+    if ($test !== null) {
+        $CSSS = $test;
     }
 }
 
@@ -93,7 +91,7 @@ function init__caches()
  * The self-learning cache is an adaptive per-page/script cache, which loads from disk in a single efficient operation.
  * If something will not 'get' then the expectation is that a more costly "full load" or "upfront work" operation will be performed, but
  * a 'set' will also happen so on next script load this won't be needed (at least, eventually, after things settle down across different access patterns).
- * 
+ *
  * The cache size is minimised, only required resources by the particular per-page/script are put there.
  * Typically cache entries will be very small and voluminous, but predictable,
  * hence why we don't just use individual fetches on a conventional cache layer.
@@ -112,151 +110,147 @@ function init__caches()
  */
 class Self_learning_cache
 {
-	private $page_name=NULL;
-	private $path=NULL;
-	private $data=NULL; // null means "Nothing loaded"
-	private $keys_inital=array();
+    private $page_name = null;
+    private $path = null;
+    private $data = null; // null means "Nothing loaded"
+    private $keys_inital = array();
 
-	/**
-	 * Constructor. Initialise our cache.
-	 *
-	 * @param  ID_TEXT		$page_name Page/script name this cache object is for
-	 */
-	function __construct($page_name)
-	{
-		$this->page_name=$page_name;
-		$this->path=get_custom_file_base().'/caches/self_learning/'.filter_naughty($page_name).'.gcd';
-		$this->load();
-	}
-
-	/**
-	 * Find whether the smart cache is on.
-	 *
-	 * @return boolean			                   Whether it is
-	 */
-    function is_on()
+    /**
+     * Constructor. Initialise our cache.
+     *
+     * @param  ID_TEXT $page_name Page/script name this cache object is for
+     */
+    public function __construct($page_name)
     {
-        static $is_on=NULL;
-        if ($is_on!==null) return $is_on;
+        $this->page_name = $page_name;
+        $this->path = get_custom_file_base() . '/caches/self_learning/' . filter_naughty($page_name) . '.gcd';
+        $this->load();
+    }
+
+    /**
+     * Find whether the smart cache is on.
+     *
+     * @return boolean                               Whether it is
+     */
+    public function is_on()
+    {
+        static $is_on = null;
+        if ($is_on !== null) {
+            return $is_on;
+        }
         global $SITE_INFO;
-        $is_on= isset($SITE_INFO['self_learning_cache']) && $SITE_INFO['self_learning_cache'] == '1';
+        $is_on = isset($SITE_INFO['self_learning_cache']) && $SITE_INFO['self_learning_cache'] == '1';
         return $is_on;
     }
 
-	/**
-	 * Load the cache for the particular page this cache object is for.
-	 */
-	private function load()
-	{
+    /**
+     * Load the cache for the particular page this cache object is for.
+     */
+    private function load()
+    {
         if (!$this->is_on()) {
             return;
         }
 
-		$data=function_exists('persistent_cache_get')?persistent_cache_get(array('SELF_LEARNING_CACHE',$this->page_name)):NULL;
-		if ($data!==NULL)
-		{
-			$this->data=$data;
-		} else
-		{
-			$_data=@file_get_contents($this->path);
-			if ($_data!==false)
-			{
-				$data=@unserialize($data);
-				if ($_data!==false)
-				{
-					$this->data=$data;
-				} else
-				{
-					$this->invalidate(); // Corrupt
-                    $this->data=NULL;
-				}
-			}
-		}
-
-        if ($data!==NULL)
-        {
-            $this->keys_initial=array_flip(array_keys($this->data));
+        $data = function_exists('persistent_cache_get') ? persistent_cache_get(array('SELF_LEARNING_CACHE', $this->page_name)) : null;
+        if ($data !== null) {
+            $this->data = $data;
+        } else {
+            $_data = @file_get_contents($this->path);
+            if ($_data !== false) {
+                $data = @unserialize($data);
+                if ($_data !== false) {
+                    $this->data = $data;
+                } else {
+                    $this->invalidate(); // Corrupt
+                    $this->data = null;
+                }
+            }
         }
-	}
 
-	/**
-	 * Get a cache key.
-	 *
-	 * @param  ID_TEXT		                       $key Cache key
-	 * @return ?mixed			                   The value (null: not in cache - needs to be learnt)
-	 */
-	public function get($key)
-	{
-		if (isset($this->data[$key])) return $this->data[$key];
-		return NULL; // Not set. We cannot take a default value to return, as we need to signal that this was missing in order to allow the cache to be adapted
-	}
+        if ($data !== null) {
+            $this->keys_initial = array_flip(array_keys($this->data));
+        }
+    }
 
-	/**
-	 * See if a cache key was initially set.
-	 *
-	 * @param  ID_TEXT		                       $key Cache key
-	 * @return boolean			                   Whether it was
-	 */
-	public function get_initial_status($key)
-	{
-		return isset($this->keys_initial[$key]);
-	}
+    /**
+     * Get a cache key.
+     *
+     * @param  ID_TEXT $key Cache key
+     * @return ?mixed                               The value (null: not in cache - needs to be learnt)
+     */
+    public function get($key)
+    {
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
+        }
+        return null; // Not set. We cannot take a default value to return, as we need to signal that this was missing in order to allow the cache to be adapted
+    }
 
-	/**
-	 * Set a cache key.
-	 *
-	 * @param  ID_TEXT		                        $key Cache key
-	 * @param  mixed			                    $value Value. Should not be null, as that is reserved for "not in cache"
-	 */
-	public function set($key,$value)
-	{
-		$this->data[$key]=$value;
+    /**
+     * See if a cache key was initially set.
+     *
+     * @param  ID_TEXT $key Cache key
+     * @return boolean                               Whether it was
+     */
+    public function get_initial_status($key)
+    {
+        return isset($this->keys_initial[$key]);
+    }
 
-		$this->save();
-	}
+    /**
+     * Set a cache key.
+     *
+     * @param  ID_TEXT $key Cache key
+     * @param  mixed   $value Value. Should not be null, as that is reserved for "not in cache"
+     */
+    public function set($key, $value)
+    {
+        $this->data[$key] = $value;
 
-	/**
-	 * Add something to a list entry in the cache. Uses keys to set the value, then assigns $value_2 to the key.
-	 * This is efficient for duplication prevention.
-	 *
-	 * @param  ID_TEXT		                   $key Cache key
-	 * @param  mixed			               $value Value to append (must not be an object or array, so you may need to pre-serialize)
-	 * @param  mixed		                   $value_2 Secondary value to attach to appended value (optional)
-	 * @return boolean		                   Whether the value was appended (false if it was already there)
-	 */
-	public function append($key,$value,$value_2=true)
-	{
-		if (!isset($this->data[$key][$value]))
-		{
-			if (!isset($this->data[$key]))
-				$this->data[$key]=array();
+        $this->save();
+    }
 
-			$this->data[$key][$value]=$value_2;
+    /**
+     * Add something to a list entry in the cache. Uses keys to set the value, then assigns $value_2 to the key.
+     * This is efficient for duplication prevention.
+     *
+     * @param  ID_TEXT $key Cache key
+     * @param  mixed   $value Value to append (must not be an object or array, so you may need to pre-serialize)
+     * @param  mixed   $value_2 Secondary value to attach to appended value (optional)
+     * @return boolean                           Whether the value was appended (false if it was already there)
+     */
+    public function append($key, $value, $value_2 = true)
+    {
+        if (!isset($this->data[$key][$value])) {
+            if (!isset($this->data[$key])) {
+                $this->data[$key] = array();
+            }
 
-			$this->save();
+            $this->data[$key][$value] = $value_2;
 
-			return true;
-		}
+            $this->save();
 
-		return false;
-	}
+            return true;
+        }
 
-	/**
-	 * Save the cache, after some change has happened.
-	 */
-	private function save()
-	{
+        return false;
+    }
+
+    /**
+     * Save the cache, after some change has happened.
+     */
+    private function save()
+    {
         if (!$this->is_on()) {
             return;
         }
 
-		if (function_exists('persistent_cache_set'))
-		{
-			persistent_cache_set(array('SELF_LEARNING_CACHE',$this->page_name),$this->data);
-		}
+        if (function_exists('persistent_cache_set')) {
+            persistent_cache_set(array('SELF_LEARNING_CACHE', $this->page_name), $this->data);
+        }
 
-		if (!is_null($this->path))
-		{
+        if (!is_null($this->path)) {
             $contents = serialize($this->data);
 
             if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) { // Safer
@@ -276,60 +270,54 @@ class Self_learning_cache
                 fclose($myfile);
                 fix_permissions($this->path);
             }
-		} else
-		{
-			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		}
-	}
-
-	/**
-	 * Invalidate the cache, so that it will rebuild.
-	 */
-	public function invalidate()
-	{
-        if (!$this->is_on()) {
-            return;
+        } else {
+            fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
+    }
 
-		if (!is_null($this->path))
-		{
-			@unlink($this->path);
-		} else
-		{
-			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		}
-        $this->data = NULL;
-	}
-
-	/**
-	 * Called by various other erase_* functions that know the smart cache may be involved.
-	 */
-    static function erase_smart_cache()
+    /**
+     * Invalidate the cache, so that it will rebuild.
+     */
+    public function invalidate()
     {
         if (!$this->is_on()) {
             return;
         }
 
-		$dh=@opendir(get_custom_file_base().'/caches/self_learning');
-        if ($dh!==false)
-        {
-            while (($f=readdir($dh))!==false)
-            {
-                if (substr($f,-4)=='.gcd')
-                {
-                    unlink(get_custom_file_base().'/caches/self_learning/'.$f);
+        if (!is_null($this->path)) {
+            @unlink($this->path);
+        } else {
+            fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        }
+        $this->data = null;
+    }
+
+    /**
+     * Called by various other erase_* functions that know the smart cache may be involved.
+     */
+    public static function erase_smart_cache()
+    {
+        if (!$this->is_on()) {
+            return;
+        }
+
+        $dh = @opendir(get_custom_file_base() . '/caches/self_learning');
+        if ($dh !== false) {
+            while (($f = readdir($dh)) !== false) {
+                if (substr($f, -4) == '.gcd') {
+                    unlink(get_custom_file_base() . '/caches/self_learning/' . $f);
                 }
             }
             closedir($dh);
         }
-        $this->data = NULL;
+        $this->data = null;
     }
 }
 
 /**
  * Get data from the persistent cache.
  *
- * @param  mixed                        $key Key
+ * @param  mixed $key Key
  * @param  ?TIME                        $min_cache_date Minimum timestamp that entries from the cache may hold (null: don't care)
  * @return ?mixed                       The data (null: not found / NULL entry)
  */
@@ -351,9 +339,9 @@ function persistent_cache_get($key, $min_cache_date = null)
 /**
  * Put data into the persistent cache.
  *
- * @param  mixed                        $key Key
- * @param  mixed                        $data The data
- * @param  boolean                      $server_wide Whether it is server-wide data
+ * @param  mixed   $key Key
+ * @param  mixed   $data The data
+ * @param  boolean $server_wide Whether it is server-wide data
  * @param  ?integer                     $expire_secs The expiration time in seconds. (null: Default expiry in 60 minutes, or never if it is server-wide).
  */
 function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = null)
@@ -371,8 +359,8 @@ function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = 
 /**
  * Delete data from the persistent cache.
  *
- * @param  mixed                        $key Key name
- * @param  boolean                      $substring Whether we are deleting via substring
+ * @param  mixed   $key Key name
+ * @param  boolean $substring Whether we are deleting via substring
  */
 function persistent_cache_delete($key, $substring = false)
 {
@@ -428,7 +416,7 @@ function erase_persistent_cache()
 /**
  * Remove an item from the general cache (most commonly used for blocks).
  *
- * @param  mixed                        $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
+ * @param  mixed $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array                       $identifier A map of identifiying characteristics (null: no identifying characteristics, decache all)
  */
 function decache($cached_for, $identifier = null)
@@ -444,7 +432,7 @@ function decache($cached_for, $identifier = null)
 /**
  * Find the cache-on parameters for 'codename's cacheing style (prevents us needing to load up extra code to find it).
  *
- * @param  ID_TEXT                      $codename The codename of what will be checked for cacheing
+ * @param  ID_TEXT $codename The codename of what will be checked for cacheing
  * @return ?array                       The cached result (null: no cached result)
  */
 function find_cache_on($codename)
@@ -467,11 +455,11 @@ function find_cache_on($codename)
 /**
  * Find the cached result of what is named by codename and the further constraints.
  *
- * @param  ID_TEXT                      $codename The codename to check for cacheing
- * @param  LONG_TEXT                    $cache_identifier The further restraints (a serialized map)
- * @param  integer                      $ttl The TTL for the cache entry. Defaults to a very big ttl
- * @param  boolean                      $tempcode Whether we are cacheing Tempcode (needs special care)
- * @param  boolean                      $caching_via_cron Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
+ * @param  ID_TEXT   $codename The codename to check for cacheing
+ * @param  LONG_TEXT $cache_identifier The further restraints (a serialized map)
+ * @param  integer   $ttl The TTL for the cache entry. Defaults to a very big ttl
+ * @param  boolean   $tempcode Whether we are cacheing Tempcode (needs special care)
+ * @param  boolean   $caching_via_cron Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
  * @param  ?array                       $map Parameters to call up block with if we have to defer caching (null: none)
  * @return ?mixed                       The cached result (null: no cached result)
  */
@@ -484,7 +472,7 @@ function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode =
 /**
  * Ability to do multiple get_cache_entry at once, for performance reasons.
  *
- * @param  array                        $dets An array of tuples of parameters (as per get_cache_entry, almost)
+ * @param  array $dets An array of tuples of parameters (as per get_cache_entry, almost)
  * @return array                        Array of results
  */
 function _get_cache_entries($dets)

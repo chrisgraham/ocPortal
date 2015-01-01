@@ -85,7 +85,7 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
     $site = ($GLOBALS['SITE_DB'] == $db) ? 'site' : 'forums';
 
     if (!isset($THEME_IMAGES_CACHE[$site])) {
-        load_theme_image_cache($site, $true_theme, $true_lang);
+        load_theme_image_cache($db, $site, $true_theme, $true_lang);
     }
 
     if ((!$truism) && (!$pure_only)) { // Separate lookup, cannot go through $THEME_IMAGES_CACHE
@@ -109,7 +109,7 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
 
     if ((!$pure_only) && ($site == 'site') && (!array_key_exists($id, $THEME_IMAGES_CACHE[$site]))) {
         // Smart cache update
-        load_theme_image_cache($site, $true_theme, $true_lang);
+        load_theme_image_cache($db, $site, $true_theme, $true_lang);
         $ret = find_theme_image($id, true, true, $theme, $lang, $db, $pure_only);
         $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, $ret);
     }
@@ -244,16 +244,17 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
 /**
  * Load up theme image cache.
  *
- * @param  ID_TEXT                      $site The database to load from (used for theme images running across multi-site-networks)
+ * @param  object                       $db The database to load from (used for theme images running across multi-site-networks)
+ * @param  ID_TEXT                      $site The internal name of the database to load from (used for theme images running across multi-site-networks)
  * @param  ID_TEXT                      $true_theme Theme0
  * @param  LANGUAGE_NAME                $true_lang Language
  */
-function load_theme_image_cache($site, $true_theme, $true_lang)
+function load_theme_image_cache($db, $site, $true_theme, $true_lang)
 {
     global $THEME_IMAGES_CACHE, $THEME_IMAGES_SMART_CACHE_LOAD, $SMART_CACHE;
 
     if ($THEME_IMAGES_SMART_CACHE_LOAD == 0) {
-        $THEME_IMAGES_CACHE[$site] = $SMART_CACHE->get('theme_images_' . $theme . '_' . $lang);
+        $THEME_IMAGES_CACHE[$site] = $SMART_CACHE->get('theme_images_' . $true_theme . '_' . $true_lang);
         if (is_null($THEME_IMAGES_CACHE[$site])) {
             $THEME_IMAGES_CACHE[$site] = array();
         }

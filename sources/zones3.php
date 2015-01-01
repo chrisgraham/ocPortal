@@ -370,7 +370,7 @@ function get_templates_list()
 {
     $templates_dir = get_file_base() . '/data/modules/cms_comcode_pages/' . fallback_lang() . '/';
     $templates = array();
-    if ($handle = @opendir($templates_dir)) {
+    if (($handle = @opendir($templates_dir)) !== false) {
         $unknown_count = 0;
 
         while (false !== ($entry = readdir($handle))) {

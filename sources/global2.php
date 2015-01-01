@@ -268,7 +268,7 @@ function init__global2()
     require_code('lang'); // So that we can do language stuff (e.g. errors). Note that even though we have included a lot so far, we can't really use any of it until lang is loaded. Lang isn't loaded earlier as it itself has a dependency on Tempcode.
     if (!$MICRO_AJAX_BOOTUP) {
         require_code('temporal'); // Date/time functions
-        convert_data_encodings(get_param_integer('known_utf8',0) == 1);
+        convert_data_encodings(get_param_integer('known_utf8', 0) == 1);
         if (!$MICRO_BOOTUP) {
             require_code('permissions'); // So we can check access
         }

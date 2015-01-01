@@ -48,5 +48,5 @@ class Hook_cleanup_self_learning
         Self_learning_cache::erase_smart_cache();
 
         return new Tempcode();
-     }
+    }
 }

@@ -122,7 +122,7 @@ function init__site()
     // Bulk advance loading
     global $SMART_CACHE;
     $_comcode_pages_needed = $SMART_CACHE->get('comcode_pages_needed');
-    if ($_comcode_pages_needed != null) {
+    if ($_comcode_pages_needed !== null) {
         $comcode_pages_needed = array();
         foreach ($_comcode_pages_needed as $_comcode_page_needed => $_) {
             $comcode_pages_needed[] = unserialize($_comcode_page_needed);
@@ -133,8 +133,6 @@ function init__site()
 
 /**
  * Load up details for the current zone.
- *
- * @return  ID_TEXT     The "real" zone name (not actually the zone name, but the zone name wants details to load for).
  */
 function check_has_page_access()
 {
@@ -1390,7 +1388,7 @@ function _load_comcodes_page_from_cache($pages)
 
     $needs_query = false;
 
-	$sql = 'SELECT * FROM ' . get_table_prefix() . 'cached_comcode_pages a JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'comcode_pages b ON a.the_page=b.the_page AND a.the_zone=b.the_zone';
+    $sql = 'SELECT * FROM ' . get_table_prefix() . 'cached_comcode_pages a JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'comcode_pages b ON a.the_page=b.the_page AND a.the_zone=b.the_zone';
     $sql .= ' WHERE 1=0';
     foreach ($pages as $page) {
         $sz = serialize($page);

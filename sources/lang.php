@@ -667,7 +667,7 @@ function protect_from_escaping($in)
  */
 function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
 {
-    global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_LANG_LOADED;, $PAGE_CACHE_LAZY_LOAD, $SMART_CACHE, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
+    global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_LANG_LOADED, $PAGE_CACHE_LAZY_LOAD, $SMART_CACHE, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
 
     if ($lang === null) {
         $lang = ($USER_LANG_CACHED === null) ? user_lang() : $USER_LANG_CACHED;
@@ -1019,9 +1019,13 @@ function delete_lang($id, $connection = null)
  */
 function get_translated_tempcode__and_simplify($table, $row, $field_name, $connection = null, $lang = null, $force = false, $as_admin = false, $clear_away_from_cache = false)
 {
-    if ($connection === null) $connection = $GLOBALS['SITE_DB'];
+    if ($connection === null) {
+        $connection = $GLOBALS['SITE_DB'];
+    }
     $ret = get_translated_tempcode($table, $row, $field_name, $connection, $lang, $force, $as_admin, $clear_away_from_cache);
-    if (is_null($ret)) return $ret;
+    if (is_null($ret)) {
+        return $ret;
+    }
     $ret = make_string_tempcode($ret->evaluate());
     if (multi_lang_content()) {
         $connection->query_update('translate', array('text_parsed' => $ret->to_assembly()), array('id' => $row[$field_name], 'language' => $lang), '', 1);

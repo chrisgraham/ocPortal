@@ -313,9 +313,9 @@ function has_page_access($member, $page, $zone, $at_now = false)
     }
     $where .= ')';
 
-    $sql = 'SELECT zone_name,page_name,group_id FROM ' . get_table_prefix() . 'group_page_access WHERE (' . $pg_where . ') AND (' . $groups . ')';
+    $sql = 'SELECT zone_name,page_name,group_id FROM ' . get_table_prefix() . 'group_page_access WHERE (' . $where . ') AND (' . $groups . ')';
     $sql .= ' UNION ';
-    $sql .= 'SELECT zone_name,page_name,NULL AS group_id FROM ' . get_table_prefix() . 'member_page_access WHERE (' . $pg_where . ') AND (' . $groups . ') AND (member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . '))';
+    $sql .= 'SELECT zone_name,page_name,NULL AS group_id FROM ' . get_table_prefix() . 'member_page_access WHERE (' . $where . ') AND (' . $groups . ') AND (member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . '))';
     $rows = $GLOBALS['SITE_DB']->query($sql, null, null, false, true);
     $rows_organised_for_groups = array();
     $rows_organised_for_member = array();
@@ -352,18 +352,18 @@ function has_page_access($member, $page, $zone, $at_now = false)
         }
 
         // Match-keys
+        $regexp = array();
+        $regexp[] = '(_WILD:' . preg_quote($_page, '#') . ':.*)';
+        $regexp[] = '(' . preg_quote($_zone, '#') . ':' . preg_quote($_page, '#') . ':.*)';
+        $regexp[] = '(_WILD:_WILD:.*)';
+        $regexp[] = '(' . preg_quote($_zone, '#') . ':_WILD:.*)';
+        $regexp[] = '(_WILD:' . preg_quote($_page, '#') . ')';
+        $regexp[] = '(' . preg_quote($_zone, '#') . ':' . preg_quote($_page, '#') . ')';
+        $regexp[] = '(_WILD:_WILD)';
+        $regexp[] = '(' . preg_quote($_zone, '#') . ':_WILD)';
+        $regexp[] = '(' . preg_quote($_zone, '#') . ')';
         foreach ($rows_organised_for_groups_match_key as $match_key => $bits) {
-            $regexp = array();
-            $regexp[] = '(_WILD:' . preg_quote($_page, '#') . ':.*)';
-            $regexp[] = '(' . preg_quote($_zone, '#') . ':' . preg_quote($_page, '#') . ':.*)';
-            $regexp[] = '(_WILD:_WILD:.*#') . ')';
-            $regexp[] = '(' . preg_quote($_zone, '#') . ':_WILD:.*)';
-            $regexp[] = '(_WILD:' . preg_quote($_page, '#') . ')';
-            $regexp[] = '(' . preg_quote($_zone, '#') . ':' . preg_quote($_page, '#') . ')';
-            $regexp[] = '(_WILD:_WILD#') . ')';
-            $regexp[] = '(' . preg_quote($_zone, '#') . ':_WILD)';
-            $regexp[] = '(' . preg_quote($_zone, '#') . ')';
-            if (preg_match('#^' . implode('|', $regexp) . '$#') !=0) {
+            if (preg_match('#^' . implode('|', $regexp) . '$#', $match_key) != 0) {
                 $PAGE_ACCESS_CACHE_MATCH_KEYS[$member][$_page_access_needed][$match_key] = (count($bits) < $group_cnt) || (isset($rows_organised_for_member_match_key[$match_key]));
             }
         }
@@ -703,7 +703,7 @@ function has_privilege($member, $permission, $page = null, $cats = null)
     // Not loaded yet, load, then re-call ourself...
 
     global $SMART_CACHE;
-    $where .= ' AND (1=0';
+    $where = ' AND (1=0';
     $SMART_CACHE->append('privileges_needed', $permission, true);
     $test = $SMART_CACHE->get('privileges_needed');
     if ($test === null) {
