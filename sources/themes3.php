@@ -122,7 +122,7 @@ function regen_theme_images($theme, $langs = null, $target_theme = null)
         }
     }
 
-    persistent_cache_delete('THEME_IMAGES');
+    Self_learning_cache::erase_smart_cache();
 }
 
 /**
@@ -233,6 +233,8 @@ function actual_copy_theme($theme, $to)
         $i['path'] = str_replace('themes/' . $theme . '/', 'themes/' . $to . '/', $i['path']);
         $GLOBALS['SITE_DB']->query_insert('theme_images', $i);
     }
+
+    Self_learning_cache::erase_smart_cache();
 
     log_it('COPY_THEME', $theme, $to);
 }

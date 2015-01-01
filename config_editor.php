@@ -181,6 +181,7 @@ function do_access($given_password)
         'use_mem_cache' => '<em>Performance:</em> Whether persistent memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available).',
         'fast_spider_cache' => '<em>Performance:</em> The number of hours that the spider/bot cache lasts for (this sets both HTTP cacheing, and server retention of cached screens).',
         'any_guest_cached_too' => '<em>Performance:</em> Whether Guests are cached with the spider cache time too.',
+        'self_learning_cache' => '<em>Performance:</em> Whether to allow pages to learn what resources they need, for efficient bulk loading of essentials while avoiding loading full resource sets upfront. Stores copies of some resources within the self-learning cache itself.',
 
         'disable_smart_decaching' => '<em>Tuning/Disk performance:</em> Don\'t check file times to check caches aren\'t stale.',
         'no_disk_sanity_checks' => '<em>Tuning/Disk performance:</em> Assume that there are no missing language directories, or other configured directories; things may crash horribly if they are missing and this is enabled.',
@@ -242,29 +243,29 @@ function do_access($given_password)
 
         echo '
             <tr>
-                    <th style="text-align: right">
-                            ' . $_key . '
-                    </th>
-                    <td>
-                            <input type="' . $type . '" name="' . $_key . '" value="' . $_val . '" ' . (($type == 'checkbox') ? ($checked ? 'checked="checked"' : '') : 'size="20"') . ' />
-                    </td>
-                    <td>
-                            ' . $notes . '
-                    </td>
+                <th style="text-align: right">
+                    ' . $_key . '
+                </th>
+                <td>
+                    <input type="' . $type . '" name="' . $_key . '" value="' . $_val . '" ' . (($type == 'checkbox') ? ($checked ? 'checked="checked"' : '') : 'size="20"') . ' />
+                </td>
+                <td>
+                    ' . $notes . '
+                </td>
             </tr>
         ';
         if ($key == 'master_password') {
             echo '
-                    <tr>
-                            <th style="text-align: right">
-                                        &raquo; Confirm password
-                            </th>
-                            <td>
-                                        <input type="' . $type . '" name="confirm_master_password" value="' . $_val . '" size="20" />
-                            </td>
-                            <td>
-                            </td>
-                    </tr>
+                <tr>
+                    <th style="text-align: right">
+                        &raquo; Confirm password
+                    </th>
+                    <td>
+                        <input type="' . $type . '" name="confirm_master_password" value="' . $_val . '" size="20" />
+                    </td>
+                    <td>
+                    </td>
+                </tr>
             ';
         }
     }

@@ -93,8 +93,6 @@ class Hook_search_comcode_pages
                 break;
         }
 
-        load_up_all_self_page_permissions(get_member());
-
         $sq = build_search_submitter_clauses('p_submitter', $author_id, $author);
         if (is_null($sq)) {
             return array();

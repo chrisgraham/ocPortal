@@ -84,7 +84,7 @@ function init__global2()
     }
 
     // Initialise some globals
-    $JAVASCRIPTS_DEFAULT = array('global' => 1, 'transitions' => 1, 'modalwindow' => 1, 'custom_globals' => 1);
+    $JAVASCRIPTS_DEFAULT = array('global' => true, 'transitions' => true, 'modalwindow' => true, 'custom_globals' => true);
     $JAVASCRIPT_BOTTOM = array();
     $RUNNING_SCRIPT_CACHE = array();
     $BROWSER_DECACHEING_CACHE = null;
@@ -1827,16 +1827,22 @@ function _javascript_tempcode($j, &$js, $_minify = null, $_https = null, $_mobil
  */
 function require_javascript($javascript)
 {
-    global $JAVASCRIPTS;
+    global $JAVASCRIPTS, $SMART_CACHE;
+
+    if (isset($JAVASCRIPTS[$javascript])) {
+        return;
+    }
 
     // Has to do this inline, as you're not allowed to reference sheets outside head
-    if ((!isset($JAVASCRIPTS[$javascript])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])) {
+    if ($GLOBALS['TEMPCODE_OUTPUT_STARTED']) {
         $value = new Tempcode();
         _javascript_tempcode($javascript, $value);
         attach_to_screen_footer($value);
     }
 
-    $JAVASCRIPTS[$javascript] = 1;
+    $JAVASCRIPTS[$javascript] = true;
+
+    $SMART_CACHE->append('JAVASCRIPTS', $javascript);
 }
 
 /**
@@ -2073,16 +2079,22 @@ function _css_tempcode($c, &$css, &$css_need_inline, $inline = false, $context =
  */
 function require_css($css)
 {
-    global $CSSS;
+    global $CSSS, $SMART_CACHE;
+
+    if (isset($CSSS[$css])) {
+        return;
+    }
 
     // Has to move into footer
-    if ((!isset($CSSS[$css])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])) {
+    if ($GLOBALS['TEMPCODE_OUTPUT_STARTED']) {
         $value = new Tempcode();
         _css_tempcode($css, $value, $value);
         attach_to_screen_footer($value);
     }
 
-    $CSSS[$css] = 1;
+    $CSSS[$css] = true;
+
+    $SMART_CACHE->append('CSSS', $css);
 }
 
 /**

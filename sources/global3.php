@@ -317,7 +317,7 @@ function _load_blank_output_state($just_tempcode = false, $true_blank = false)
          *
          * @global ?array $CSSS
          */
-        $CSSS = $true_blank ? array() : array('no_cache' => 1, 'global' => 1);
+        $CSSS = $true_blank ? array() : array('no_cache' => true, 'global' => true);
     }
 
     global $CYCLES, $TEMPCODE_SETGET;

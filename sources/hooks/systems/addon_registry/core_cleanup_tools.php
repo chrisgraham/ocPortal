@@ -128,6 +128,7 @@ class Hook_addon_registry_core_cleanup_tools
             'sources/hooks/systems/tasks/find_broken_urls.php',
             'sources/hooks/systems/tasks/find_orphaned_lang_strings.php',
             'sources/hooks/systems/tasks/find_orphaned_uploads.php',
+            'sources/hooks/systems/cleanup/self_learning.php',
             'sources/hooks/systems/cleanup/tags.php',
 
         );

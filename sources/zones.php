@@ -945,6 +945,22 @@ function get_block_id($map)
 }
 
 /**
+ * Find whether block cacheing is enabled.
+ *
+ * @return boolean                      Whether block cacheing is enabled
+ */
+function has_block_cacheing()
+{
+    return
+        ((get_option('is_on_block_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1) || (get_param_integer('cache_blocks', 0) == 1)) && 
+        (strpos(get_param('special_page_type', ''), 't') === false) &&
+        (get_param_integer('keep_cache', null) !== 0) && 
+        (get_param_integer('cache_blocks', null) !== 0) && 
+        (get_param_integer('cache', null) !== 0)
+    ;
+}
+
+/**
  * Get the processed tempcode for the specified block. Please note that you pass multiple parameters in as an array, but single parameters go in as a string or other flat variable.
  *
  * @param  ID_TEXT                      $codename The block name
@@ -973,24 +989,12 @@ function do_block($codename, $map = null, $ttl = null)
     }
 
     $object = mixed();
-    if (((get_option('is_on_block_cache') == '1') && (strpos(get_param('special_page_type', ''), 't') === false) || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1) || (get_param_integer('cache_blocks', 0) == 1)) && ((get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache_blocks', null) !== 0) && (get_param_integer('cache', null) !== 0))) {
+    if (has_block_cacheing()) {
         // See if the block may be cached (else cannot, or is yet unknown)
         if ($map['cache'] == '0') {
             $row = null;
         } else { // We may allow it to be cached but not store the cache signature, as it is too complex
-            $row = find_cache_on($codename);
-            if ($row === null) {
-                list($object, $new_security_scope) = do_block_hunt_file($codename, $map);
-                if ((is_object($object)) && (method_exists($object, 'cacheing_environment'))) {
-                    $info = $object->cacheing_environment($map);
-                    if ($info !== null) {
-                        $row = array('cached_for' => $codename, 'cache_on' => $info['cache_on'], 'cache_ttl' => $info['ttl']);
-                    }
-                }
-            }
-            if (($row === null) && (isset($map['quick_cache'])) && ($map['quick_cache'] == '1')) {
-                $row = array('cached_for' => $codename, 'cache_on' => 'array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))', 'cache_ttl' => 60);
-            }
+            $row = get_block_info_row($codename, $map);
         }
         if ($row !== null) {
             $cache_identifier = do_block_get_cache_identifier($row['cache_on'], $map);
@@ -1000,7 +1004,7 @@ function do_block($codename, $map = null, $ttl = null)
                 if ($ttl === null) {
                     $ttl = $row['cache_ttl'];
                 }
-                $cache = get_cache_entry($codename, $cache_identifier, $ttl, true, (isset($map['cache'])) && ($map['cache'] == '2'), $map);
+                $cache = get_cache_entry($codename, $cache_identifier, $ttl, true, $map['cache'] == '2', $map);
                 if ($cache === null) {
                     $nql_backup = $GLOBALS['NO_QUERY_LIMIT'];
                     $GLOBALS['NO_QUERY_LIMIT'] = true;
@@ -1258,6 +1262,38 @@ function do_block_hunt_file($codename, $map = null)
 }
 
 /**
+ * Get standardised info about a block.
+ *
+ * @param  ID_TEXT                      $codename The block name
+ * @param  array                        $map The block parameter map
+ * @return ?array                       The block info (null: cannot cache for some reason)
+ */
+function get_block_info_row($codename, $map)
+{
+    static $cache = array();
+    $sz = serialize(array($codename, $map));
+    if (isset($cache[$sz])) {
+        return $cache[$sz];
+    }
+
+    $row = find_cache_on($codename);
+    if ($row === null) {
+        list($object, $new_security_scope) = do_block_hunt_file($codename, $map);
+        if ((is_object($object)) && (method_exists($object, 'cacheing_environment'))) {
+            $info = $object->cacheing_environment($map);
+            if ($info !== null) {
+                $row = array('cached_for' => $codename, 'cache_on' => $info['cache_on'], 'cache_ttl' => $info['ttl']);
+            }
+        }
+    }
+    if (($row === null) && (isset($map['quick_cache'])) && ($map['quick_cache'] == '1')) {
+        $row = array('cached_for' => $codename, 'cache_on' => 'array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))', 'cache_ttl' => 60);
+    }
+    $cache[$sz] = $row;
+    return $row;
+}
+
+/**
  * Takes a string which is a PHP expression over $map (parameter map), and returns a derived identifier.
  * We see if we have something cached by looking for a matching identifier.
  *
@@ -1267,6 +1303,12 @@ function do_block_hunt_file($codename, $map = null)
  */
 function do_block_get_cache_identifier($cache_on, $map)
 {
+    static $cache = array();
+    $sz = serialize(array($cache_on, $map));
+    if (isset($cache[$sz])) {
+        return $cache[$sz];
+    }
+
     $_cache_identifier = array();
     if (is_array($cache_on)) {
         $_cache_identifier = call_user_func($cache_on[0], $map);
@@ -1293,6 +1335,8 @@ function do_block_get_cache_identifier($cache_on, $map)
     $_cache_identifier[] = (get_bot_type() === null);
 
     $cache_identifier = serialize($_cache_identifier);
+
+    $cache[$sz] = $cache_identifier;
 
     return $cache_identifier;
 }

@@ -927,7 +927,7 @@ class Module_admin_zones
                     }
                     $GLOBALS['SITE_DB']->query_delete('theme_images', array('id' => 'logo/' . $new_zone . '-logo', 'theme' => $theme, 'lang' => get_site_default_lang()), '', 1);
                     $GLOBALS['SITE_DB']->query_insert('theme_images', array('id' => 'logo/' . $new_zone . '-logo', 'theme' => $theme, 'path' => $iurl, 'lang' => get_site_default_lang()));
-                    persistent_cache_delete('THEME_IMAGES');
+                    Self_learning_cache::erase_smart_cache();
                 }
             }
 

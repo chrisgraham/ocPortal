@@ -177,7 +177,7 @@ class Hook_addon_registry_oc_smiles
         if (is_null($upgrade_from)) {
             $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'theme_images WHERE path LIKE \'themes/%/images/ocf_emoticons/%\'');
             $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'theme_images WHERE path LIKE \'themes/%/images//ocf_emoticons/%\'');
-            persistent_cache_delete('THEME_IMAGES');
+            Self_learning_cache::erase_smart_cache();
         }
     }
 }

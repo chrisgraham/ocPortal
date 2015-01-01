@@ -155,6 +155,8 @@ function actual_edit_theme_image($old_id, $theme, $lang, $id, $path, $quick = fa
     }
 
     if (!$quick) {
+        Self_learning_cache::erase_smart_cache();
+
         if (addon_installed('!ssl')) {
             require_code('caches3');
             erase_cached_templates(); // Paths may have been cached
@@ -246,6 +248,8 @@ function actual_add_theme($name)
     }
     while (count($theme_images) == 100);
 
+    Self_learning_cache::erase_smart_cache();
+
     log_it('ADD_THEME', $name);
 }
 
@@ -272,7 +276,7 @@ function actual_add_theme_image($theme, $lang, $id, $path, $fail_ok = false)
 
     log_it('ADD_THEME_IMAGE', $id, $theme);
 
-    persistent_cache_delete('THEME_IMAGES');
+    Self_learning_cache::erase_smart_cache();
 
     if (addon_installed('!ssl')) {
         require_code('caches3');
@@ -308,7 +312,7 @@ function get_theme_img_code($type, $allow_skip = false, $field_file = 'file', $f
 
         $db->query_insert('theme_images', array('id' => $theme_img_code, 'theme' => 'default', 'path' => $urls[0], 'lang' => get_site_default_lang()));
 
-        persistent_cache_delete('THEME_IMAGES');
+        Self_learning_cache::erase_smart_cache();
     } else {
         $theme_img_code = post_param($field_choose, '');
 

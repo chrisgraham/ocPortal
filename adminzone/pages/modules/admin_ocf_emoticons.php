@@ -344,7 +344,7 @@ class Module_admin_ocf_emoticons extends Standard_crud_module
             'e_is_special' => 0
         ));
 
-        persistent_cache_delete('THEME_IMAGES');
+        Self_learning_cache::erase_smart_cache();
     }
 
     /**

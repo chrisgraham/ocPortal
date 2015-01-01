@@ -176,10 +176,11 @@ function set_option($name, $value, $will_be_formally_set = 1)
         log_it('CONFIGURATION', $name, $value);
     }
 
-    // Update persistent cache
+    // Clear caches
     if (function_exists('persistent_cache_delete')) {
         persistent_cache_delete('OPTIONS');
     }
+    Self_learning_cache::erase_smart_cache();
 }
 
 /**

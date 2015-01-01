@@ -39,6 +39,7 @@ function auto_decache($changed_base_url)
     erase_cached_templates(!$changed_base_url);
     erase_comcode_cache();
     erase_cached_language();
+    Self_learning_cache::erase_smart_cache();
     erase_persistent_cache();
     if ($changed_base_url) {
         erase_comcode_page_cache();
@@ -225,6 +226,8 @@ function erase_cached_language()
     $LANGS_REQUESTED = $langs_requested_copy;
     require_all_open_lang_files();
 
+    Self_learning_cache::erase_smart_cache();
+
     ocp_profile_end_for('erase_cached_language');
 }
 
@@ -300,6 +303,8 @@ function erase_cached_templates($preserve_some = false)
         javascript_enforce('validation');
         javascript_enforce('editing');
     }
+
+    Self_learning_cache::erase_smart_cache();
 
     ocp_profile_end_for('erase_cached_templates');
 }

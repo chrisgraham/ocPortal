@@ -2094,7 +2094,7 @@ class Module_admin_themes
             actual_add_theme_image($theme, $lang, $id, $path[0]);
         }
 
-        persistent_cache_delete('THEME_IMAGES');
+        Self_learning_cache::erase_smart_cache();
         erase_cached_templates();
 
         return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $theme, $lang, 'image', $id);
@@ -2261,7 +2261,8 @@ class Module_admin_themes
             }
             actual_edit_theme_image($old_id, $theme, $lang, $id, $path[0]);
         }
-        persistent_cache_delete('THEME_IMAGES');
+
+        Self_learning_cache::erase_smart_cache();
 
         erase_cached_templates();
 

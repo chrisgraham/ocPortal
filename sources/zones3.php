@@ -145,6 +145,8 @@ function actual_rename_zone_lite($zone, $new_zone, $dont_bother_with_main_row = 
     global $ALL_ZONES_CACHE, $ALL_ZONES_TITLED_CACHE;
     $ALL_ZONES_CACHE = null;
     $ALL_ZONES_TITLED_CACHE = null;
+
+    Self_learning_cache::erase_smart_cache();
 }
 
 /**

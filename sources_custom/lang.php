@@ -21,7 +21,7 @@ if (!function_exists('_do_lang')) {
      */
     function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
     {
-        global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED;
+        global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_LANG_LOADED;, $PAGE_CACHE_LAZY_LOAD, $SMART_CACHE, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
 
         if ($lang === null) {
             $lang = ($USER_LANG_CACHED === null) ? user_lang() : $USER_LANG_CACHED;
@@ -65,14 +65,7 @@ if (!function_exists('_do_lang')) {
                     $ret = _do_lang($codename, $token1, $token2, $token3, $lang, $require_result);
                     if ($ret === null) {
                         $PAGE_CACHE_LANG_LOADED[$lang][$codename] = null;
-                        if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-                            persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
-                        } else {
-                            open_page_cache_file();
-                            @rewind($PAGE_CACHE_FILE);
-                            @ftruncate($PAGE_CACHE_FILE, 0);
-                            @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
-                        }
+                        $SMART_CACHE->append('lang_strings', $codename, null);
                     }
                     return $ret;
                 }
@@ -126,18 +119,9 @@ if (!function_exists('_do_lang')) {
                     }
                 }
 
-                if ($PAGE_CACHE_FILE !== null) {
-                    if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]))) {
-                        $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
-                        if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-                            persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
-                        } else {
-                            open_page_cache_file();
-                            @rewind($PAGE_CACHE_FILE);
-                            @ftruncate($PAGE_CACHE_FILE, 0);
-                            @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
-                        }
-                    }
+                if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]))) {
+                    $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $ret; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
+                    $SMART_CACHE->append('lang_strings', $ret, null);
                 }
 
                 return $ret;
@@ -160,18 +144,9 @@ if (!function_exists('_do_lang')) {
             }
         }
 
-        if ($PAGE_CACHE_FILE !== null) {
-            if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename, $PAGE_CACHE_LANG_LOADED[$lang])))) {
-                $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $LANGUAGE_STRINGS_CACHE[$lang][$codename];
-                if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-                    persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
-                } else {
-                    open_page_cache_file();
-                    @rewind($PAGE_CACHE_FILE);
-                    @ftruncate($PAGE_CACHE_FILE, 0);
-                    @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
-                }
-            }
+        if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename, $PAGE_CACHE_LANG_LOADED[$lang])))) {
+            $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $LANGUAGE_STRINGS_CACHE[$lang][$codename];
+            $SMART_CACHE->append('lang_strings', $LANGUAGE_STRINGS_CACHE[$lang][$codename], null);
         }
 
         // Put in parameters

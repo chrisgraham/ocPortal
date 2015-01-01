@@ -64,37 +64,17 @@ function init__lang()
     $REQUIRED_ALL_LANG = array();
 
     // Lazy loading code: learning algorithm to cache strings against different pages without loading all, unless we get a cache miss in the page's pool
-    global $PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED, $PAGE_CACHE_LAZY_LOAD, $PAGE_CACHE_LANGS_REQUESTED;
-    $PAGE_CACHE_FILE = mixed();
+    global $PAGE_CACHE_LANG_LOADED, $PAGE_CACHE_LAZY_LOAD, $PAGE_CACHE_LANGS_REQUESTED, $SMART_CACHE;
     $PAGE_CACHE_LANG_LOADED = array();
     $PAGE_CACHE_LAZY_LOAD = false;
     $PAGE_CACHE_LANGS_REQUESTED = array();
     if (((function_exists('get_option')) && (get_option('is_on_lang_cache') == '1') && ((!array_key_exists('page', $_GET)) || ((is_string($_GET['page'])) && (strpos($_GET['page'], '..') === false))))) {
-        if (running_script('index')) {
-            $key = 'page__' . get_zone_name() . '__' . get_page_name();
-        } else {
-            $key = 'script__' . md5(serialize(ocp_srv('SCRIPT_NAME')));
+        $contents = $SMART_CACHE->get('lang_strings');
+        if ($contents !== null) {
+            $PAGE_CACHE_LANG_LOADED = $contents;
+            $LANGUAGE_STRINGS_CACHE = $contents;
+            $PAGE_CACHE_LAZY_LOAD = true;
         }
-        $cache_path = get_custom_file_base() . '/caches/lang/' . user_lang() . '/' . filter_naughty($key, true) . '.lcd';
-        if (!is_null($GLOBALS['PERSISTENT_CACHE'])) {
-            $PAGE_CACHE_LANG_LOADED = persistent_cache_get($cache_path);
-            if (is_array($PAGE_CACHE_LANG_LOADED)) {
-                $LANGUAGE_STRINGS_CACHE = $PAGE_CACHE_LANG_LOADED;
-            }
-            $PAGE_CACHE_FILE = $cache_path;
-        } else {
-            $contents = @file_get_contents($cache_path);
-            if ($contents !== false) {
-                $PAGE_CACHE_LANG_LOADED = @unserialize($contents);
-                if (is_array($PAGE_CACHE_LANG_LOADED)) {
-                    $LANGUAGE_STRINGS_CACHE = $PAGE_CACHE_LANG_LOADED;
-                } else {
-                    $PAGE_CACHE_LANG_LOADED = array();
-                }
-            }
-            $PAGE_CACHE_FILE = $cache_path;
-        }
-        $PAGE_CACHE_LAZY_LOAD = true;
     }
 
     require_lang('critical_error');
@@ -128,32 +108,6 @@ function init__lang()
 function do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
 {
     return _do_lang($codename, $token1, $token2, $token3, $lang, $require_result);
-}
-
-/**
- * Open up our language cache file for appending.
- */
-function open_page_cache_file()
-{
-    if ($GLOBALS['PERSISTENT_CACHE'] === null) {
-        global $PAGE_CACHE_FILE, $PAGE_CACHE_LAZY_LOAD;
-        if ($PAGE_CACHE_FILE === null) {
-            return;
-        }
-        if (!is_string($PAGE_CACHE_FILE)) {
-            return;
-        }
-        $cache_path = $PAGE_CACHE_FILE;
-        $PAGE_CACHE_FILE = @fopen($cache_path, GOOGLE_APPENGINE ? 'wb' : 'at');
-        if ($PAGE_CACHE_FILE !== false) {
-            if (ftell($PAGE_CACHE_FILE) == 0) {
-                require_code('files');
-                fix_permissions($cache_path, 0666);
-            }
-        } else {
-            $PAGE_CACHE_FILE = null;
-        }
-    }
 }
 
 /**
@@ -468,14 +422,10 @@ function require_lang($codename, $lang = null, $type = null, $ignore_errors = fa
             }
             $PAGE_CACHE_LANGS_REQUESTED[] = array($codename, $lang);
             return;
-        } else { // Invalidate it, as our .lcd cache was dirty
-            global $PAGE_CACHE_FILE;
-            open_page_cache_file();
+        } else { // Invalidate it, as our smart cache was dirty compared to latest .ini version
+            global $SMART_CACHE;
+            $SMART_CACHE->invalidate();
             $LANGUAGE_STRINGS_CACHE = array();
-            @rewind($PAGE_CACHE_FILE);
-            @flock($PAGE_CACHE_FILE, LOCK_EX);
-            @ftruncate($PAGE_CACHE_FILE, 0);
-            @flock($PAGE_CACHE_FILE, LOCK_UN);
             $PAGE_CACHE_LAZY_LOAD = false;
             $LANG_LOADED_LANG = array();
             $PAGE_CACHE_LANGS_REQUESTED[] = array($codename, $lang);
@@ -717,7 +667,7 @@ function protect_from_escaping($in)
  */
 function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
 {
-    global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED;
+    global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_LANG_LOADED;, $PAGE_CACHE_LAZY_LOAD, $SMART_CACHE, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
 
     if ($lang === null) {
         $lang = ($USER_LANG_CACHED === null) ? user_lang() : $USER_LANG_CACHED;
@@ -754,8 +704,6 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
         }
 
         if ((!$there) && ((!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename, $LANGUAGE_STRINGS_CACHE[$lang])))) {
-            global $PAGE_CACHE_LAZY_LOAD, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
-
             if ($PAGE_CACHE_LAZY_LOAD) {
                 $PAGE_CACHE_LAZY_LOAD = false; // We can't be lazy any more, but we will keep growing our pool so hopefully CAN be lazy the next time
                 foreach ($PAGE_CACHE_LANGS_REQUESTED as $request) {
@@ -766,16 +714,7 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
                 $ret = _do_lang($codename, $token1, $token2, $token3, $lang, $require_result);
                 if ($ret === null) {
                     $PAGE_CACHE_LANG_LOADED[$lang][$codename] = null;
-                    if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-                        persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
-                    } else {
-                        open_page_cache_file();
-                        @rewind($PAGE_CACHE_FILE);
-                        @flock($PAGE_CACHE_FILE, LOCK_EX);
-                        @ftruncate($PAGE_CACHE_FILE, 0);
-                        @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
-                        @flock($PAGE_CACHE_FILE, LOCK_UN);
-                    }
+                    $SMART_CACHE->append('lang_strings', $codename, null);
                 }
                 return $ret;
             }
@@ -792,20 +731,9 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
         if ($lang != fallback_lang()) {
             $ret = do_lang($codename, $token1, $token2, $token3, fallback_lang(), $require_result);
 
-            if ($PAGE_CACHE_FILE !== null) {
-                if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]))) {
-                    $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
-                    if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-                        persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
-                    } else {
-                        open_page_cache_file();
-                        @rewind($PAGE_CACHE_FILE);
-                        @flock($PAGE_CACHE_FILE, LOCK_EX);
-                        @ftruncate($PAGE_CACHE_FILE, 0);
-                        @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
-                        @flock($PAGE_CACHE_FILE, LOCK_UN);
-                    }
-                }
+            if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]))) {
+                $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $ret; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
+                $SMART_CACHE->append('lang_strings', $ret, null);
             }
 
             return $ret;
@@ -831,20 +759,9 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
         }
     }
 
-    if ($PAGE_CACHE_FILE !== null) {
-        if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename, $PAGE_CACHE_LANG_LOADED[$lang])))) {
-            $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $LANGUAGE_STRINGS_CACHE[$lang][$codename];
-            if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-                persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
-            } else {
-                open_page_cache_file();
-                @rewind($PAGE_CACHE_FILE);
-                @flock($PAGE_CACHE_FILE, LOCK_EX);
-                @ftruncate($PAGE_CACHE_FILE, 0);
-                @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
-                @flock($PAGE_CACHE_FILE, LOCK_UN);
-            }
-        }
+    if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename, $PAGE_CACHE_LANG_LOADED[$lang])))) {
+        $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $LANGUAGE_STRINGS_CACHE[$lang][$codename];
+        $SMART_CACHE->append('lang_strings', $LANGUAGE_STRINGS_CACHE[$lang][$codename], null);
     }
 
     // Put in parameters

@@ -1,7 +1,7 @@
 {$, - Note you will need to empty the template cache manually if you change this file manually due to the way it is included - }
 
 {$,Want a nice Google font? Try uncommenting the below}
-{$,<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet" />}
+{$,<link href="//fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet" />}
 
 {$,The character set of the page}
 <meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />

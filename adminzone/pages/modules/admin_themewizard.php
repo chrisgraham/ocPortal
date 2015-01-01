@@ -517,7 +517,7 @@ class Module_admin_themewizard
             png_compress(get_custom_file_base() . '/' . $path);
             actual_edit_theme_image('logo/standalone_logo', $logo_save_theme, user_lang(), 'logo/standalone_logo', $path);
         }
-        persistent_cache_delete('THEME_IMAGES');
+        Self_learning_cache::erase_smart_cache();
 
         $message = do_lang_tempcode('LOGOWIZARD_3_DESCRIBE', escape_html($theme));
         return inform_screen($this->title, $message);

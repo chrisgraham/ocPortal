@@ -23,11 +23,12 @@
  */
 function init__themes()
 {
-    global $THEME_IMAGES_CACHE, $CDN_CONSISTENCY_CHECK, $RECORD_THEME_IMAGES_CACHE, $RECORDED_THEME_IMAGES;
+    global $THEME_IMAGES_CACHE, $CDN_CONSISTENCY_CHECK, $RECORD_THEME_IMAGES_CACHE, $RECORDED_THEME_IMAGES, $THEME_IMAGES_SMART_CACHE_LOAD;
     $THEME_IMAGES_CACHE = array();
     $CDN_CONSISTENCY_CHECK = array();
     $RECORD_THEME_IMAGES_CACHE = false;
     $RECORDED_THEME_IMAGES = array();
+    $THEME_IMAGES_SMART_CACHE_LOAD = 0;
 }
 
 /**
@@ -44,6 +45,8 @@ function init__themes()
  */
 function find_theme_image($id, $silent_fail = false, $leave_local = false, $theme = null, $lang = null, $db = null, $pure_only = false)
 {
+    global $THEME_IMAGES_CACHE, $USER_LANG_CACHED, $THEME_IMAGES_SMART_CACHE_LOAD, $RECORD_THEME_IMAGES_CACHE, $SMART_CACHE, $SITE_INFO;
+
     if ((substr($id, 0, 4) == 'ocf_') && (is_file(get_file_base() . '/themes/default/images/avatars/index.html'))) { // Allow debranding of theme img dirs
         $id = substr($id, 4);
     }
@@ -60,7 +63,6 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
         $db = $GLOBALS['SITE_DB'];
     }
 
-    global $RECORD_THEME_IMAGES_CACHE;
     if ($RECORD_THEME_IMAGES_CACHE) {
         global $RECORDED_THEME_IMAGES;
         if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write !== $GLOBALS['FORUM_DB']->connection_write)) {
@@ -73,7 +75,6 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
         $theme = $true_theme;
     }
 
-    global $USER_LANG_CACHED;
     $true_lang = ($USER_LANG_CACHED === null) ? user_lang() : $USER_LANG_CACHED;
     if ($lang === null) {
         $lang = $true_lang;
@@ -83,27 +84,8 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
 
     $site = ($GLOBALS['SITE_DB'] == $db) ? 'site' : 'forums';
 
-    global $THEME_IMAGES_CACHE;
     if (!isset($THEME_IMAGES_CACHE[$site])) {
-        static $cache = null;
-        if (($site == 'site') && (function_exists('persistent_cache_get'))) {
-            $cache = persistent_cache_get('THEME_IMAGES');
-        }
-
-        if (!isset($cache[$true_theme][$true_lang])) {
-            $THEME_IMAGES_CACHE[$site] = $db->query_select('theme_images', array('id', 'path'), array('theme' => $true_theme, 'lang' => $true_lang));
-            $THEME_IMAGES_CACHE[$site] = collapse_2d_complexity('id', 'path', $THEME_IMAGES_CACHE[$site]);
-
-            if (($site == 'site') || (!is_ocf_satellite_site())) {
-                if ($cache === null) {
-                    $cache = array();
-                }
-                $cache[$theme][$true_lang] = $THEME_IMAGES_CACHE[$site];
-                persistent_cache_set('THEME_IMAGES', $cache);
-            }
-        } else {
-            $THEME_IMAGES_CACHE[$site] = $cache[$true_theme][$true_lang];
-        }
+        load_theme_image_cache($site, $true_theme, $true_lang);
     }
 
     if ((!$truism) && (!$pure_only)) { // Separate lookup, cannot go through $THEME_IMAGES_CACHE
@@ -125,7 +107,16 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
         }
     }
 
+    if ((!$pure_only) && ($site == 'site') && (!array_key_exists($id, $THEME_IMAGES_CACHE[$site]))) {
+        // Smart cache update
+        load_theme_image_cache($site, $true_theme, $true_lang);
+        $ret = find_theme_image($id, true, true, $theme, $lang, $db, $pure_only);
+        $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, $ret);
+    }
+
     if (($pure_only) || (!isset($THEME_IMAGES_CACHE[$site][$id])) || (!$truism)) {
+        // Disk search...
+
         $path = null;
 
         $priorities = array();
@@ -202,7 +193,7 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
                 $db->query_delete('theme_images', array('id' => $id, 'theme' => $theme, 'lang' => $lang)); // Allow for race conditions
                 $db->query_insert('theme_images', array('id' => $id, 'theme' => $theme, 'path' => ($path === null) ? '' : $path, 'lang' => $lang), false, true); // Allow for race conditions
                 $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
-                persistent_cache_delete('THEME_IMAGES');
+                Self_learning_cache::erase_smart_cache();
             }
         }
 
@@ -219,13 +210,14 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
     } else {
         $path = $THEME_IMAGES_CACHE[$site][$id];
 
-        global $SITE_INFO;
-
+        // Decache if file has disappeared
         if (($path != '') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching'] != '1')) && (url_is_local($path)) && ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks'] == '0')) && (!is_file(get_file_base() . '/' . rawurldecode($path))) && (!is_file(get_custom_file_base() . '/' . rawurldecode($path)))) { // Missing image, so erase to re-search for it
             unset($THEME_IMAGES_CACHE[$site][$id]);
             return find_theme_image($id, $silent_fail, $leave_local, $theme, $lang, $db, $pure_only);
         }
     }
+
+    // Make absolute
     if ((url_is_local($path)) && (!$leave_local) && ($path != '')) {
         if ($db->connection_write != $GLOBALS['SITE_DB']->connection_write) {
             $base_url = get_forum_base_url();
@@ -244,20 +236,33 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
         }
 
         $path = $base_url . '/' . $path;
-
-        // Save as absolute, back into the persistent cache, for simple cases only
-        if (($truism) && (!addon_installed('ssl')) && ($site == 'site')) {
-            $THEME_IMAGES_CACHE[$site][$id] = $path;
-
-            $cache = persistent_cache_get('THEME_IMAGES');
-            if ($cache !== null) {
-                $cache[$theme][$lang][$id] = $path;
-                persistent_cache_set('THEME_IMAGES', $cache);
-            }
-        }
     }
 
     return cdn_filter($path);
+}
+
+/**
+ * Load up theme image cache.
+ *
+ * @param  ID_TEXT                      $site The database to load from (used for theme images running across multi-site-networks)
+ * @param  ID_TEXT                      $true_theme Theme0
+ * @param  LANGUAGE_NAME                $true_lang Language
+ */
+function load_theme_image_cache($site, $true_theme, $true_lang)
+{
+    global $THEME_IMAGES_CACHE, $THEME_IMAGES_SMART_CACHE_LOAD, $SMART_CACHE;
+
+    if ($THEME_IMAGES_SMART_CACHE_LOAD == 0) {
+        $THEME_IMAGES_CACHE[$site] = $SMART_CACHE->get('theme_images_' . $theme . '_' . $lang);
+        if (is_null($THEME_IMAGES_CACHE[$site])) {
+            $THEME_IMAGES_CACHE[$site] = array();
+        }
+    } elseif ($THEME_IMAGES_SMART_CACHE_LOAD == 1) {
+        $test = $db->query_select('theme_images', array('id', 'path'), array('theme' => $true_theme, 'lang' => $true_lang));
+        $THEME_IMAGES_CACHE[$site] = collapse_2d_complexity('id', 'path', $test);
+    }
+
+    $THEME_IMAGES_SMART_CACHE_LOAD++;
 }
 
 /**

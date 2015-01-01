@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_cleanup_admin_theme_images
+class Hook_cleanup_self_learning
 {
     /**
      * Find details about this cleanup hook.
@@ -31,8 +31,8 @@ class Hook_cleanup_admin_theme_images
     public function info()
     {
         $info = array();
-        $info['title'] = do_lang_tempcode('THEME_IMAGES_CACHE');
-        $info['description'] = do_lang_tempcode('DESCRIPTION_THEME_IMAGES_CACHE');
+        $info['title'] = do_lang_tempcode('SELF_LEARNING_CACHE');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_SELF_LEARNING_CACHE');
         $info['type'] = 'cache';
 
         return $info;
@@ -45,21 +45,8 @@ class Hook_cleanup_admin_theme_images
      */
     public function run()
     {
-        $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'theme_images WHERE path LIKE \'themes/%/images/%\'');
-
         Self_learning_cache::erase_smart_cache();
 
-        $paths = $GLOBALS['SITE_DB']->query_select('theme_images', array('path', 'id'));
-        foreach ($paths as $path) {
-            if ($path['path'] == '') {
-                $GLOBALS['SITE_DB']->query_delete('theme_images', $path, '', 1);
-            } elseif (preg_match('#^themes/[^/]+/images_custom/+' . preg_quote($path['id'], '#') . '\.#', $path['path']) != 0) {
-                if ((!file_exists(get_custom_file_base() . '/' . $path['path'])) && (!file_exists(get_file_base() . '/' . $path['path']))) {
-                    $GLOBALS['SITE_DB']->query_delete('theme_images', $path, '', 1);
-                }
-            }
-        }
-
         return new Tempcode();
-    }
+     }
 }

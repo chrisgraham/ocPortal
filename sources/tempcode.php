@@ -96,13 +96,13 @@ function init__tempcode()
      */
     global $OUTPUT_STREAMING;
     $OUTPUT_STREAMING = (function_exists('get_option')) && (get_option('output_streaming') == '1') && (get_param_integer('keep_no_output_streaming', 0) == 0);
-    if (get_param('special_page_type', 'view') != 'view') {
+    if ($GLOBALS['SMART_CACHE'] === null) {
         $OUTPUT_STREAMING = false;
-    }
-    if (get_param_integer('keep_markers', 0) == 1) {
+    } elseif (get_param('special_page_type', 'view') != 'view') {
         $OUTPUT_STREAMING = false;
-    }
-    if (get_param_integer('show_edit_links', 0) == 1) {
+    } elseif (get_param_integer('keep_markers', 0) == 1) {
+        $OUTPUT_STREAMING = false;
+    } elseif (get_param_integer('show_edit_links', 0) == 1) {
         $OUTPUT_STREAMING = false;
     }
 
@@ -111,6 +111,44 @@ function init__tempcode()
     $STUCK_ABORT_SIGNAL = false;
     $TEMPCODE_OUTPUT_STARTED = false;
     $TEMPCODE_CURRENT_PAGE_OUTPUTTING = null;
+
+    preload_block_internal_cacheing();
+}
+
+/**
+ * Pre-load used blocks in bulk.
+ */
+function preload_block_internal_cacheing()
+{
+    global $SMART_CACHE;
+    if (has_block_cacheing()) {
+    	$blocks_needed = $SMART_CACHE->get('blocks_needed');
+        if ($blocks_needed !== null) {
+            $bulk = array();
+
+        	foreach ($blocks_needed as $param => $_) {
+        		$map = unserialize($param);
+
+                if (!isset($map['cache'])) {
+                    $map['cache'] = block_cache_default($map['block']);
+                }
+
+        		$row = get_block_info_row($map['block'], $map);
+                if ($row !== null) {
+                    $cache_identifier = do_block_get_cache_identifier($row['cache_on'], $map);
+                    if ($cache_identifier !== null) {
+                        if ($ttl === null) {
+                            $ttl = $row['cache_ttl'];
+                        }
+
+                        $bulk[] = array($codename, $cache_identifier, md5($cache_identifier), $ttl, true, $map['cache'] == '2', $map);
+                    }
+        		}
+        	}
+
+            _get_cache_entries($bulk); // Will cache internally so that block loads super-quick
+        }
+    }
 }
 
 /**
@@ -942,7 +980,7 @@ function handle_symbol_preprocessing($seq_part, &$children)
                 // Nothing has to be done here, except preparing for AJAX
                 require_javascript('ajax');
             } else {
-                global $REQUEST_BLOCK_NEST_LEVEL;
+                global $REQUEST_BLOCK_NEST_LEVEL, $SMART_CACHE;
 
                 global $BLOCKS_CACHE;
                 if (isset($BLOCKS_CACHE[serialize($param)])) {
@@ -973,6 +1011,8 @@ function handle_symbol_preprocessing($seq_part, &$children)
                     $before = memory_get_usage();
                 }
                 if (isset($block_parms['block'])) {
+                    $SMART_CACHE->append('blocks_needed', serialize($param));
+
                     $b_value = do_block($block_parms['block'], $block_parms);
                     if ((isset($_GET['keep_show_loading'])) && (function_exists('memory_get_usage')) && ($_GET['keep_show_loading'] == '1')) {
                         require_code('files');

@@ -108,7 +108,7 @@ function init__site()
                         attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN', escape_html($parsed_base_url['host']), escape_html($access_host)), 'warn');
                     }
 
-                    header('Location: ' . str_replace($access_host, $parsed_base_url['host'], get_self_url_easy()));
+    				header('Location: ' . get_self_url(true, false));
                     exit();
                 }
             }
@@ -117,6 +117,17 @@ function init__site()
 
     if (running_script('index')) {
         process_url_monikers(get_page_name());
+    }
+
+    // Bulk advance loading
+    global $SMART_CACHE;
+    $_comcode_pages_needed = $SMART_CACHE->get('comcode_pages_needed');
+    if ($_comcode_pages_needed != null) {
+        $comcode_pages_needed = array();
+        foreach ($_comcode_pages_needed as $_comcode_page_needed => $_) {
+            $comcode_pages_needed[] = unserialize($_comcode_page_needed);
+        }
+        _load_comcodes_page_from_cache($comcode_pages_needed);
     }
 }
 
@@ -1347,6 +1358,61 @@ function _request_page__redirects($codename, $zone, $wildcard_mode = false)
 }
 
 /**
+ * Get a Comcode page from the cache.
+ *
+ * @param  ID_TEXT                      $codename The codename of the page
+ * @param  ID_TEXT                      $zone The zone the page is being loaded from
+ * @param  ID_TEXT                      $theme The theme
+ * @return array                        The page row
+ */
+function load_comcode_page_from_cache($codename, $zone, $theme)
+{
+    $tuple = array($codename, $zone, $theme);
+
+    global $SMART_CACHE;
+    $SMART_CACHE->append('comcode_pages_needed', serialize($tuple));
+
+    $ret = _load_comcodes_page_from_cache(array($tuple));
+    return isset($ret[0]) ? $ret[0] : null;
+}
+
+/**
+ * Wraps load_comcode_page_from_cache for bulk loading.
+ *
+ * @param  array                        $pages Details of pages to load
+ * @return array                        Database rows
+ */
+function _load_comcodes_page_from_cache($pages)
+{
+    static $cache = array();
+
+    $ret = array();
+
+    $needs_query = false;
+
+	$sql = 'SELECT * FROM ' . get_table_prefix() . 'cached_comcode_pages a JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'comcode_pages b ON a.the_page=b.the_page AND a.the_zone=b.the_zone';
+    $sql .= ' WHERE 1=0';
+    foreach ($pages as $page) {
+        $sz = serialize($page);
+        if (isset($cache[$sz])) {
+            $ret[] = $cache[$sz];
+        } else {
+            list($codename, $zone, $theme) = $page;
+
+            $sql .= ' OR ';
+            $sql .= db_string_equal_to('a.the_page', $codename) . ' AND ' . db_string_equal_to('a.the_zone', $zone) . ' AND ' . db_string_equal_to('the_theme', $theme);
+
+            $needs_query = true;
+        }
+    }
+    if ($needs_query) {
+        $ret = array_merge($ret, $GLOBALS['SITE_DB']->query($sql, null, null, false, false, array('string_index' => 'LONG_TRANS__COMCODE', 'cc_page_title' => '?SHORT_TRANS')));
+    }
+
+    return $ret;
+}
+
+/**
  * Get the parsed contents of a Comcode page.
  *
  * @param  PATH                         $string The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
@@ -1428,7 +1494,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
 
         if (is_browser_decacheing()) {
             $comcode_page = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages', array('string_index', 'cc_page_title'), array('the_page' => $codename, 'the_zone' => $zone, 'the_theme' => $GLOBALS['FORUM_DRIVER']->get_theme()), '', 1, 0, false, array());
-            if (array_key_exists(0, $comcode_page)) {
+            if (isset($comcode_page[0])) {
                 if ($comcode_page[0]['string_index'] !== null) {
                     delete_lang($comcode_page[0]['string_index']);
                 }
@@ -1450,16 +1516,15 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
             $pcache = null;
         }
         if ($pcache === null) {
-            $comcode_page = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)', array('*'), array('a.the_page' => $codename, 'a.the_zone' => $zone, 'the_theme' => $theme), '', 1, null, false, array('string_index' => 'LONG_TRANS__COMCODE', 'cc_page_title' => '?SHORT_TRANS'));
-            if (isset($comcode_page[0])) {
+            $comcode_page_row = load_comcode_page_from_cache($codename, $zone, $theme);
+            if ($comcode_page_row !== null) {
                 if ($support_smart_decaching) {
                     $mtime = filemtime($file_base . '/' . $string);
                     if ($mtime > time()) {
                         $mtime = time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
                     }
                 }
-                if ((!$support_smart_decaching) || ((($comcode_page[0]['p_edit_date'] !== null) && ($comcode_page[0]['p_edit_date'] >= $mtime)) || (($comcode_page[0]['p_edit_date'] === null) && ($comcode_page[0]['p_add_date'] !== null) && ($comcode_page[0]['p_add_date'] >= $mtime)))) { // Make sure it has not been edited since last edited or created
-                    $comcode_page_row = $comcode_page[0];
+                if ((!$support_smart_decaching) || ((($comcode_page_row['p_edit_date'] !== null) && ($comcode_page_row['p_edit_date'] >= $mtime)) || (($comcode_page_row['p_edit_date'] === null) && ($comcode_page_row['p_add_date'] !== null) && ($comcode_page_row['p_add_date'] >= $mtime)))) { // Make sure it has not been edited since last edited or created
                     $just_comcode_page_row = db_map_restrict($comcode_page_row, array('the_page', 'the_zone', 'the_theme', 'string_index'));
                     $db_set = get_translated_tempcode('cached_comcode_pages', $just_comcode_page_row, 'string_index', null, user_lang(), true, true/*,true*/);
                 } else {
@@ -1469,7 +1534,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
                     }
                     $GLOBALS['SITE_DB']->query_update('comcode_pages', array('p_edit_date' => $mtime), array('the_page' => $codename, 'the_zone' => $zone), '', 1);
                     $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages', array('the_zone' => $zone, 'the_page' => $codename));
-                    delete_lang($comcode_page[0]['string_index']);
+                    delete_lang($comcode_page_row['string_index']);
 
                     $db_set = null;
                     $comcode_page_row = null;
@@ -1479,8 +1544,8 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
                 $comcode_page_row = null;
             }
             if ($db_set !== null) {
-                $index = $comcode_page[0]['string_index'];
-                $title_to_use = $comcode_page[0]['cc_page_title'];
+                $index = $comcode_page_row['string_index'];
+                $title_to_use = $comcode_page_row['cc_page_title'];
                 if ($title_to_use !== null) {
                     $title_to_use = get_translated_text($title_to_use, null, null, true);
                     if ($title_to_use === null) {
@@ -1488,7 +1553,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
                     }
                 }
                 $html = $db_set;
-                $raw_comcode = get_translated_text($comcode_page[0]['string_index']);
+                $raw_comcode = get_translated_text($comcode_page_row['string_index']);
             } else {
                 $comcode_page = $GLOBALS['SITE_DB']->query_select('comcode_pages', array('*'), array('the_page' => $codename, 'the_zone' => $zone), '', 1);
                 if (isset($comcode_page[0])) {

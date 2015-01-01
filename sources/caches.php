@@ -58,6 +58,272 @@ function init__caches()
             $PERSISTENT_CACHE = new Persistent_cacheing_filecache();
         }
     }
+
+    /** The smart cache (self-learning cache).
+     *
+     * @global boolean $SMART_CACHE
+     */
+    global $SMART_CACHE;
+    if (running_script('index') || running_script('iframe')) {
+        $page = get_page_name();
+        $screen = get_param('type', 'browse');
+        $psuedo_page = $page . '__' . $screen;
+        if ($page != 'topicview' && $screen == 'browse') {
+            $psuedo_page .= '__' . get_param('id', '');
+        }
+    } else {
+        $psuedo_page = 'script__'.current_script();
+    }
+    $SMART_CACHE = new Self_learning_cache($psuedo_page);
+
+    // Some loading from the smart cache
+    $test=$SMART_CACHE->get('JAVASCRIPT');
+    if ($test!==NULL)
+    {
+        $JAVASCRIPT=$test;
+    }
+    $test=$SMART_CACHE->get('CSSS');
+    if ($test!==NULL)
+    {
+        $CSSS=$test;
+    }
+}
+
+/**
+ * The self-learning cache is an adaptive per-page/script cache, which loads from disk in a single efficient operation.
+ * If something will not 'get' then the expectation is that a more costly "full load" or "upfront work" operation will be performed, but
+ * a 'set' will also happen so on next script load this won't be needed (at least, eventually, after things settle down across different access patterns).
+ * 
+ * The cache size is minimised, only required resources by the particular per-page/script are put there.
+ * Typically cache entries will be very small and voluminous, but predictable,
+ * hence why we don't just use individual fetches on a conventional cache layer.
+ * It is a disk vs CPU tradeoff. The intent is to approach performance as if each page/script were hand-coded to know its exact dependencies.
+ *
+ * Some usage notes:
+ * Cached items should not be too volatile, although the cache is clever enough to not re-save if no real changes actually resulted from set/append operations;
+ *  in other words the cache should quickly stabilise and not keep having to do writes
+ * You should not use this as an alternative to the persistent cache for caching everything that the persistent cache can already do;
+ *  although sometimes it is good to do special batching operations (e.g. avoid repeating query patterns) that would already be separately optimised when the persistent cache was on
+ * We cannot always put cache stuff direct into smart cache as it may vary per-usergroup for example;
+ *  anything in the cache really should be useful for all page loads, we do not want to have to load a great bloated smart cache on each page load;
+ *  the above said, we will often *say* what is needed, then feed this in for doing bulk loads from the dedicated caches (e.g. saying which blocks to bulk load)
+ *
+ * @package    core
+ */
+class Self_learning_cache
+{
+	private $page_name=NULL;
+	private $path=NULL;
+	private $data=NULL; // null means "Nothing loaded"
+	private $keys_inital=array();
+
+	/**
+	 * Constructor. Initialise our cache.
+	 *
+	 * @param  ID_TEXT		$page_name Page/script name this cache object is for
+	 */
+	function __construct($page_name)
+	{
+		$this->page_name=$page_name;
+		$this->path=get_custom_file_base().'/caches/self_learning/'.filter_naughty($page_name).'.gcd';
+		$this->load();
+	}
+
+	/**
+	 * Find whether the smart cache is on.
+	 *
+	 * @return boolean			                   Whether it is
+	 */
+    function is_on()
+    {
+        static $is_on=NULL;
+        if ($is_on!==null) return $is_on;
+        global $SITE_INFO;
+        $is_on= isset($SITE_INFO['self_learning_cache']) && $SITE_INFO['self_learning_cache'] == '1';
+        return $is_on;
+    }
+
+	/**
+	 * Load the cache for the particular page this cache object is for.
+	 */
+	private function load()
+	{
+        if (!$this->is_on()) {
+            return;
+        }
+
+		$data=function_exists('persistent_cache_get')?persistent_cache_get(array('SELF_LEARNING_CACHE',$this->page_name)):NULL;
+		if ($data!==NULL)
+		{
+			$this->data=$data;
+		} else
+		{
+			$_data=@file_get_contents($this->path);
+			if ($_data!==false)
+			{
+				$data=@unserialize($data);
+				if ($_data!==false)
+				{
+					$this->data=$data;
+				} else
+				{
+					$this->invalidate(); // Corrupt
+                    $this->data=NULL;
+				}
+			}
+		}
+
+        if ($data!==NULL)
+        {
+            $this->keys_initial=array_flip(array_keys($this->data));
+        }
+	}
+
+	/**
+	 * Get a cache key.
+	 *
+	 * @param  ID_TEXT		                       $key Cache key
+	 * @return ?mixed			                   The value (null: not in cache - needs to be learnt)
+	 */
+	public function get($key)
+	{
+		if (isset($this->data[$key])) return $this->data[$key];
+		return NULL; // Not set. We cannot take a default value to return, as we need to signal that this was missing in order to allow the cache to be adapted
+	}
+
+	/**
+	 * See if a cache key was initially set.
+	 *
+	 * @param  ID_TEXT		                       $key Cache key
+	 * @return boolean			                   Whether it was
+	 */
+	public function get_initial_status($key)
+	{
+		return isset($this->keys_initial[$key]);
+	}
+
+	/**
+	 * Set a cache key.
+	 *
+	 * @param  ID_TEXT		                        $key Cache key
+	 * @param  mixed			                    $value Value. Should not be null, as that is reserved for "not in cache"
+	 */
+	public function set($key,$value)
+	{
+		$this->data[$key]=$value;
+
+		$this->save();
+	}
+
+	/**
+	 * Add something to a list entry in the cache. Uses keys to set the value, then assigns $value_2 to the key.
+	 * This is efficient for duplication prevention.
+	 *
+	 * @param  ID_TEXT		                   $key Cache key
+	 * @param  mixed			               $value Value to append (must not be an object or array, so you may need to pre-serialize)
+	 * @param  mixed		                   $value_2 Secondary value to attach to appended value (optional)
+	 * @return boolean		                   Whether the value was appended (false if it was already there)
+	 */
+	public function append($key,$value,$value_2=true)
+	{
+		if (!isset($this->data[$key][$value]))
+		{
+			if (!isset($this->data[$key]))
+				$this->data[$key]=array();
+
+			$this->data[$key][$value]=$value_2;
+
+			$this->save();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Save the cache, after some change has happened.
+	 */
+	private function save()
+	{
+        if (!$this->is_on()) {
+            return;
+        }
+
+		if (function_exists('persistent_cache_set'))
+		{
+			persistent_cache_set(array('SELF_LEARNING_CACHE',$this->page_name),$this->data);
+		}
+
+		if (!is_null($this->path))
+		{
+            $contents = serialize($this->data);
+
+            if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) { // Safer
+                if (file_put_contents($this->path, $contents, LOCK_EX) < strlen($contents)) {
+                    unlink($this->path);
+                    fix_permissions($this->path);
+                    warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+                }
+                fix_permissions($this->path);
+            } else {
+                $myfile = fopen($this->path, GOOGLE_APPENGINE ? 'wb' : 'wt');
+                if (fwrite($myfile, $contents) < strlen($contents)) {
+                    unlink($this->path);
+                    fix_permissions($this->path);
+                    warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+                }
+                fclose($myfile);
+                fix_permissions($this->path);
+            }
+		} else
+		{
+			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		}
+	}
+
+	/**
+	 * Invalidate the cache, so that it will rebuild.
+	 */
+	public function invalidate()
+	{
+        if (!$this->is_on()) {
+            return;
+        }
+
+		if (!is_null($this->path))
+		{
+			@unlink($this->path);
+		} else
+		{
+			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		}
+        $this->data = NULL;
+	}
+
+	/**
+	 * Called by various other erase_* functions that know the smart cache may be involved.
+	 */
+    static function erase_smart_cache()
+    {
+        if (!$this->is_on()) {
+            return;
+        }
+
+		$dh=@opendir(get_custom_file_base().'/caches/self_learning');
+        if ($dh!==false)
+        {
+            while (($f=readdir($dh))!==false)
+            {
+                if (substr($f,-4)=='.gcd')
+                {
+                    unlink(get_custom_file_base().'/caches/self_learning/'.$f);
+                }
+            }
+            closedir($dh);
+        }
+        $this->data = NULL;
+    }
 }
 
 /**
@@ -203,62 +469,131 @@ function find_cache_on($codename)
  *
  * @param  ID_TEXT                      $codename The codename to check for cacheing
  * @param  LONG_TEXT                    $cache_identifier The further restraints (a serialized map)
- * @param  integer                      $ttl The TTL for the cache entry
+ * @param  integer                      $ttl The TTL for the cache entry. Defaults to a very big ttl
  * @param  boolean                      $tempcode Whether we are cacheing Tempcode (needs special care)
  * @param  boolean                      $caching_via_cron Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
  * @param  ?array                       $map Parameters to call up block with if we have to defer caching (null: none)
  * @return ?mixed                       The cached result (null: no cached result)
  */
-function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode = false, $caching_via_cron = false, $map = null) // Default to a very big ttl
+function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode = false, $caching_via_cron = false, $map = null)
 {
-    if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-        $theme = $GLOBALS['FORUM_DRIVER']->get_theme();
-        $lang = user_lang();
-        $pcache = persistent_cache_get(array('CACHE', $codename, md5($cache_identifier), $lang, $theme));
-        if ($pcache === null) {
-            if ($caching_via_cron) {
-                require_code('caches2');
-                request_via_cron($codename, $map, $tempcode);
-                return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'), '', 'nothing_here');
-            }
-            return null;
-        }
-        $cache_rows = array($pcache);
-    } else {
-        $cache_rows = $GLOBALS['SITE_DB']->query_select('cache', array('the_value', 'date_and_time', 'dependencies'), array('lang' => user_lang(), 'cached_for' => $codename, 'the_theme' => $GLOBALS['FORUM_DRIVER']->get_theme(), 'identifier' => md5($cache_identifier)), '', 1);
-        if (!isset($cache_rows[0])) { // No
-            if ($caching_via_cron) {
-                require_code('caches2');
-                request_via_cron($codename, $map, $tempcode);
-                return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'), '', 'nothing_here');
-            }
-            return null;
-        }
+    $ret = _get_cache_entries(array(array($codename, $cache_identifier, md5($cache_identifier), $ttl, $tempcode, $caching_via_cron, $map)));
+    return $ret[0];
+}
 
-        if ($tempcode) {
-            $ob = new Tempcode();
-            if (!$ob->from_assembly($cache_rows[0]['the_value'], true)) {
-                return null;
-            }
-            $cache_rows[0]['the_value'] = $ob;
-        } else {
-            $cache_rows[0]['the_value'] = unserialize($cache_rows[0]['the_value']);
-        }
+/**
+ * Ability to do multiple get_cache_entry at once, for performance reasons.
+ *
+ * @param  array                        $dets An array of tuples of parameters (as per get_cache_entry, almost)
+ * @return array                        Array of results
+ */
+function _get_cache_entries($dets)
+{
+    static $cache = array();
+
+    if ($dets == array()) {
+        return array();
     }
 
-    $stale = (($ttl != -1) && (time() > ($cache_rows[0]['date_and_time'] + $ttl * 60)));
+    $rets = array();
 
-    if ((!$caching_via_cron) && ($stale)) { // Out of date
-        return null;
-    } else { // We can use directly
-        if ($stale) {
+    // Bulk load
+    if ($GLOBALS['PERSISTENT_CACHE'] === null) {
+        $sql = 'SELECT the_value,date_and_time,dependencies FROM ' . get_table_prefix() . 'cache WHERE ' . db_string_equal_to('lang', user_lang()) . ' AND ' . db_string_equal_to('the_theme', $GLOBALS['FORUM_DRIVER']->get_theme()) . ' AND (1=0';
+        foreach ($dets as $det) {
+            list($codename, $cache_identifier, $md5_cache_identifier, $ttl, $tempcode, $caching_via_cron, $map) = $det;
+            $sql .= ' OR ';
+            $sql .= db_string_equal_to('cached_for', $codename) . ' AND ' . db_string_equal_to('identifier', $md5_cache_identifier);
+        }
+        $sql .= ')';
+        $cache_rows = $GLOBALS['SITE_DB']->query($sql);
+    }
+
+    // Each requested entry
+    foreach ($dets as $det) {
+        list($codename, $cache_identifier, $md5_cache_identifier, $ttl, $tempcode, $caching_via_cron, $map) = $det;
+
+        $sz = serialize(array($codename, $cache_identifier));
+        if (isset($cache[$sz])) { // Already cached
+            $rets[] = $cache[$sz];
+            continue;
+        }
+
+        if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
+            $theme = $GLOBALS['FORUM_DRIVER']->get_theme();
+            $lang = user_lang();
+            $cache_row = persistent_cache_get(array('CACHE', $codename, $md5_cache_identifier, $lang, $theme));
+
+            if ($cache_row === null) { // No
+                if ($caching_via_cron) {
+                    require_code('caches2');
+                    request_via_cron($codename, $map, $tempcode);
+                    $ret = paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'), '', 'nothing_here');
+                } else {
+                    $ret = null;
+                }
+
+                $cache[$sz] = $ret;
+                $rets[] = $ret;
+                continue;
+            }
+        } else {
+            $cache_row = mixed();
+            foreach ($cache_rows as $_cache_row) {
+                if ($_cache_row['cached_for'] == $codename && $_cache_row['identifier'] == $md5_cache_identifier) {
+                    $cache_row = $_cache_row;
+                    break;
+                }
+            }
+
+            if ($cache_row === null) { // No
+                if ($caching_via_cron) {
+                    require_code('caches2');
+                    request_via_cron($codename, $map, $tempcode);
+                    $ret = paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'), '', 'nothing_here');
+                } else {
+                    $ret = null;
+                }
+
+                $cache[$sz] = $ret;
+                $rets[] = $ret;
+                continue;
+            }
+
+            if ($tempcode) {
+                $ob = new Tempcode();
+                if (!$ob->from_assembly($cache_row['the_value'], true)) { // Error
+                    $ret = null;
+                    $cache[$sz] = $ret;
+                    $rets[] = $ret;
+                    continue;
+                }
+
+                $cache_row['the_value'] = $ob;
+            } else {
+                $cache_row['the_value'] = unserialize($cache_row['the_value']);
+            }
+        }
+
+        $stale = (($ttl != -1) && (time() > ($cache_row['date_and_time'] + $ttl * 60)));
+
+        if ($stale) { // Stale
+            if (!$caching_via_cron) {
+                $ret = null;
+                $cache[$sz] = $ret;
+                $rets[] = $ret;
+                continue;
+            }
+
             require_code('caches2');
             request_via_cron($codename, $map, $tempcode);
         }
 
-        $cache = $cache_rows[0]['the_value'];
-        if ($cache_rows[0]['dependencies'] != '') {
-            $bits = explode('!', $cache_rows[0]['dependencies']);
+        // We can use directly...
+
+        $ret = $cache_row['the_value'];
+        if ($cache_row['dependencies'] != '') {
+            $bits = explode('!', $cache_row['dependencies']);
             $langs_required = explode(':', $bits[0]); // Sometimes lang has got intertwinded with non cacheable stuff (and thus was itself not cached), so we need the lang files
             foreach ($langs_required as $lang) {
                 if ($lang != '') {
@@ -282,6 +617,10 @@ function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode =
                 }
             }
         }
-        return $cache;
+
+        $cache[$sz] = $ret;
+        $rets[] = $ret;
     }
+
+    return $rets;
 }

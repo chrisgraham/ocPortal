@@ -23,15 +23,32 @@
  */
 function init__config()
 {
+    global $CONFIG_OPTIONS_CACHE, $CONFIG_OPTIONS_FULLY_LOADED, $VALUES_FULLY_LOADED, $SMART_CACHE, $PERSISTENT_CACHE;
+    $CONFIG_OPTIONS_FULLY_LOADED = false;
+    $VALUES_FULLY_LOADED = false;
+
     global $VALUE_OPTIONS_CACHE, $IN_MINIKERNEL_VERSION;
     if (!$IN_MINIKERNEL_VERSION) {
-        load_options();
+        $CONFIG_OPTIONS_CACHE = $SMART_CACHE->get('CONFIG_OPTIONS');
+        if ($CONFIG_OPTIONS_CACHE === NULL) {
+            $CONFIG_OPTIONS_CACHE = array();
+        }
 
-        $VALUE_OPTIONS_CACHE = persistent_cache_get('VALUES');
-        if (!is_array($VALUE_OPTIONS_CACHE)) {
-            $VALUE_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('values', array('*'));
-            $VALUE_OPTIONS_CACHE = list_to_map('the_name', $VALUE_OPTIONS_CACHE);
-            persistent_cache_set('VALUES', $VALUE_OPTIONS_CACHE);
+        if ($PERSISTENT_CACHE === null) {
+            load_value_options();
+        } else {
+            $test = $SMART_CACHE->get('VALUE_OPTIONS');
+            $or_list = '1=0';
+            foreach ($test as $key => $_) {
+                $or_list .= ' OR ' . db_string_equal_to('the_name', $key);
+            }
+            $_value_options = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'values WHERE ' . $or_list);
+            $VALUE_OPTIONS_CACHE = list_to_map('the_name', $_value_options);
+            foreach ($test as $key => $_) {
+                if (!isset($VALUE_OPTIONS_CACHE[$key])) {
+                    $VALUE_OPTIONS_CACHE[$key] = null;
+                }
+            }
         }
     } else {
         $VALUE_OPTIONS_CACHE = array();
@@ -44,9 +61,9 @@ function init__config()
     $MULTI_LANG_CACHE = null;
 
     // Enforce XML db synching
-    if ((get_db_type() == 'xml') && (!running_script('xml_db_import')) && (is_file(get_file_base() . '/data_custom/xml_db_import.php')) && (is_dir(get_file_base() . '/.svn'))) {
+    if ((get_db_type() == 'xml') && (!running_script('xml_db_import')) && (is_file(get_file_base() . '/data_custom/xml_db_import.php')) && (is_dir(get_file_base() . '/.git'))) {
         $last_xml_import = get_value('last_xml_import');
-        $mod_time = filemtime(get_file_base() . '/.svn');
+        $mod_time = filemtime(get_file_base() . '/.git');
         if ((is_null($last_xml_import)) || (intval($last_xml_import) < $mod_time)) {
             set_value('last_xml_import', strval(time()));
 
@@ -90,14 +107,9 @@ function multi_lang()
  */
 function load_options()
 {
-    global $CONFIG_OPTIONS_CACHE, $CONFIG_OPTIONS_BEING_CACHED;
+    global $CONFIG_OPTIONS_CACHE, $CONFIG_OPTIONS_FULLY_LOADED;
 
-    $CONFIG_OPTIONS_BEING_CACHED = function_exists('persistent_cache_get');
-
-    $CONFIG_OPTIONS_CACHE = $CONFIG_OPTIONS_BEING_CACHED ? persistent_cache_get('OPTIONS') : null;
-    if (is_array($CONFIG_OPTIONS_CACHE)) {
-        return;
-    }
+    $CONFIG_OPTIONS_FULLY_LOADED = true;
 
     $CONFIG_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('config', array('*'), null, '', null, null, true);
 
@@ -113,9 +125,22 @@ function load_options()
     }
 
     $CONFIG_OPTIONS_CACHE = list_to_map('c_name', $CONFIG_OPTIONS_CACHE);
+}
 
-    if ($CONFIG_OPTIONS_BEING_CACHED) {
-        persistent_cache_set('OPTIONS', $CONFIG_OPTIONS_CACHE);
+/**
+ * Load all value options.
+ */
+function load_value_options()
+{
+    global $VALUE_OPTIONS_CACHE, $VALUES_FULLY_LOADED;
+
+    $VALUES_FULLY_LOADED = true;
+
+    $VALUE_OPTIONS_CACHE = persistent_cache_get('VALUES');
+    if (!is_array($VALUE_OPTIONS_CACHE)) {
+        $_value_options = $GLOBALS['SITE_DB']->query_select('values', array('*'));
+        $VALUE_OPTIONS_CACHE = list_to_map('the_name', $_value_options);
+        persistent_cache_set('VALUES', $VALUE_OPTIONS_CACHE);
     }
 }
 
@@ -132,6 +157,12 @@ function get_option($name, $missing_ok = false)
 
     // Maybe missing a DB row, or has an old NULL one, so we need to auto-create from hook
     if (!isset($CONFIG_OPTIONS_CACHE[$name]['c_value'])) {
+        global $CONFIG_OPTIONS_FULLY_LOADED;
+        if (!$CONFIG_OPTIONS_FULLY_LOADED) {
+            load_options();
+            return get_option($name, $missing_ok);
+        }
+
         if ((running_script('upgrader')) || (running_script('execute_temp'))) {
             return ''; // Upgrade scenario, probably can't do this robustly
         }
@@ -163,10 +194,7 @@ function get_option($name, $missing_ok = false)
         $value = $option['c_value'];
         $option['c_value_translated'] = $value; // Allows slightly better code path next time
 
-        global $CONFIG_OPTIONS_BEING_CACHED;
-        if ($CONFIG_OPTIONS_BEING_CACHED) {
-            persistent_cache_set('OPTIONS', $CONFIG_OPTIONS_CACHE);
-        }
+        $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
 
         return $value;
     }
@@ -174,11 +202,6 @@ function get_option($name, $missing_ok = false)
     // Translated...
     $value = get_translated_text($option['c_value_trans']);
     $option['c_value_translated'] = $value;
-
-    global $CONFIG_OPTIONS_BEING_CACHED;
-    if ($CONFIG_OPTIONS_BEING_CACHED) {
-        persistent_cache_set('OPTIONS', $CONFIG_OPTIONS_CACHE);
-    }
 
     return $value;
 }
@@ -230,13 +253,22 @@ function set_long_value($name, $value)
  */
 function get_value($name, $default = null, $env_also = false)
 {
-    global $IN_MINIKERNEL_VERSION, $VALUE_OPTIONS_CACHE;
+    global $IN_MINIKERNEL_VERSION, $VALUE_OPTIONS_CACHE, $SMART_CACHE;
+
     if ($IN_MINIKERNEL_VERSION) {
         return $default;
     }
 
-    if (isset($VALUE_OPTIONS_CACHE[$name])) {
+    if (array_key_exists($name, $VALUE_OPTIONS_CACHE)) {
         return $VALUE_OPTIONS_CACHE[$name]['the_value'];
+    }
+
+    global $VALUES_FULLY_LOADED;
+    if (!$VALUES_FULLY_LOADED) {
+        load_value_options();
+        $ret = get_value($name, $default, $env_also);
+        $SMART_CACHE->append('VALUE_OPTIONS', $name); // Mark that we will need this in future, even if just null
+        return $ret;
     }
 
     if ($env_also) {
@@ -258,12 +290,25 @@ function get_value($name, $default = null, $env_also = false)
  */
 function get_value_newer_than($name, $cutoff)
 {
+    global $VALUE_OPTIONS_CACHE, $SMART_CACHE;
+
     $cutoff -= mt_rand(0, 200); // Bit of scattering to stop locking issues if lots of requests hit this at once in the middle of a hit burst (whole table is read each page requests, and mysql will lock the table on set_value - causes horrible out-of-control buildups)
 
-    global $VALUE_OPTIONS_CACHE;
-    if ((array_key_exists($name, $VALUE_OPTIONS_CACHE)) && ($VALUE_OPTIONS_CACHE[$name]['date_and_time'] > $cutoff)) {
-        return $VALUE_OPTIONS_CACHE[$name]['the_value'];
+    if (array_key_exists($name, $VALUE_OPTIONS_CACHE)) {
+        if ($VALUE_OPTIONS_CACHE[$name]['date_and_time'] > $cutoff) {
+            return $VALUE_OPTIONS_CACHE[$name]['the_value'];
+        }
+        return null;
     }
+
+    global $VALUES_FULLY_LOADED;
+    if (!$VALUES_FULLY_LOADED) {
+        load_value_options();
+        $ret = get_value_newer_than($name, $cutoff);
+        $SMART_CACHE->append('VALUE_OPTIONS', $name); // Mark that we will need this in future, even if just null
+        return $ret;
+    }
+
     return null;
 }
 

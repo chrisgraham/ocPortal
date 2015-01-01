@@ -859,6 +859,7 @@ function step_4()
     $options->attach(make_tick(do_lang_tempcode('SEND_ERROR_EMAILS_OCPRODUCTS'), example('', 'CONFIG_OPTION_send_error_emails_ocproducts'), 'allow_reports_default', 1));
     $options->attach(make_tick(do_lang_tempcode('MULTI_LANG_CONTENT'), example('', 'MULTI_LANG_CONTENT_TEXT'), 'multi_lang_content', 0));
     $sections->attach(do_template('INSTALLER_STEP_4_SECTION', array('_GUID' => 'f051465e86a7a53ec078e0d9de773993', 'HIDDEN' => $hidden, 'TITLE' => $title, 'TEXT' => $text, 'OPTIONS' => $options)));
+    $hidden->attach(form_input_hidden('self_learning_cache', '1'));
 
     // Database settings for forum (if applicable)
 
@@ -949,16 +950,16 @@ function step_4()
             $sections->attach(do_template('INSTALLER_STEP_4_SECTION', array('HIDDEN' => '', 'TITLE' => $title, 'TEXT' => $text, 'OPTIONS' => $options)));
 
             $js->attach('
-                    var gae_application=document.getElementById(\'gae_application\');
-                    gae_application.onchange=function () {
-                            var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
-                            gae_live_db_site.value=gae_live_db_site.value.replace(/(<application>|ocportal)/g,gae_application.value);
-                            var gae_live_db_site_host=document.getElementById(\'gae_live_db_site_host\');
-                            gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/(<application>|ocportal)/g,gae_application.value);
-                            var gae_bucket_name=document.getElementById(\'gae_bucket_name\');
-                            gae_bucket_name.value=gae_bucket_name.value.replace(/(<application>|ocportal)/g,gae_application.value);
-                    };
-                    gae_application.onchange();
+                var gae_application=document.getElementById(\'gae_application\');
+                gae_application.onchange=function () {
+                    var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
+                    gae_live_db_site.value=gae_live_db_site.value.replace(/(<application>|ocportal)/g,gae_application.value);
+                    var gae_live_db_site_host=document.getElementById(\'gae_live_db_site_host\');
+                    gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/(<application>|ocportal)/g,gae_application.value);
+                    var gae_bucket_name=document.getElementById(\'gae_bucket_name\');
+                    gae_bucket_name.value=gae_bucket_name.value.replace(/(<application>|ocportal)/g,gae_application.value);
+                };
+                gae_application.onchange();
             ');
         } else {
             $title = do_lang_tempcode((($forum_type == 'ocf' || $forum_type == 'none') && $use_msn == 0) ? 'DATABASE_SETTINGS' : 'OCPORTAL_SETTINGS');
@@ -1655,6 +1656,7 @@ if (appengine_is_live()) {
     //\$SITE_INFO['custom_base_url'] = 'http://localhost:8080/data/modules/google_appengine/cloud_storage_proxy.php?';
 }
 \$SITE_INFO['use_mem_cache'] = '1';
+\$SITE_INFO['self_learning_cache'] = '1';
 \$SITE_INFO['charset'] = 'utf-8';
 ";
         fwrite($config_file_handle, preg_replace('#^\t\t\t#m', '', $gae_live_code));

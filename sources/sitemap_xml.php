@@ -134,7 +134,6 @@ function _sitemap_xml_initialise($file_path)
     }
 
     // Load ALL guest permissions (for efficiency)
-    load_up_all_self_page_permissions(get_member());
     load_up_all_module_category_permissions(get_member());
 
     // Start of file

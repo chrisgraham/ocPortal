@@ -40,6 +40,7 @@ The ocPortal caches are:
  - [b]persistent cache[/b]: this is a very special cache that is explained in the next section
  - [b]advanced admin cache[/b]: this can be turned on in the Admin Zone configuration to let admins have cached pages on their computer that are immediately (without server communication) interstitially displayed (for roughly 1 second) whilst the server generates the up-to-date page
  - [b]fast spider cache[/b]: this can be turned on from the installation options editor to feed static pages to bots, to stop bots hurting site performance
+ - [b]self learning cache[/b]: this can be turned on from the installation options editor and allows pages to learn what resources they need, for efficient bulk loading of essentials while avoiding loading full resource sets upfront
 
 [box="Technical note for programmers"]
 ocPortal is not designed to "cache everything as it will be displayed" because the high dynamic nature of the system makes that impossible. Instead, Tempcode is typically cached against relevant parameters, which provides a "half way" between determined output and neutral data.

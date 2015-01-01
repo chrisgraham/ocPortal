@@ -1778,6 +1778,7 @@ class Hook_ocp_merge
             $GLOBALS['SITE_DB']->query_delete('theme_images', $row, '', 1);
             $GLOBALS['SITE_DB']->query_insert('theme_images', $row, false, true); // Allow failure if row already there
         }
+        Self_learning_cache::erase_smart_cache();
     }
 
     /**

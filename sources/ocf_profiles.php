@@ -73,8 +73,6 @@ function render_profile_tabset($title, $member_id_of, $member_id_viewing = null,
     require_javascript('profile');
     require_javascript('ajax');
 
-    load_up_all_self_page_permissions($member_id_viewing);
-
     $_tabs = array();
     $i = 0;
     foreach ($tabs as $hook => $tab) {
