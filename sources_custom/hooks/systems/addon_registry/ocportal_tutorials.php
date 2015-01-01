@@ -820,6 +820,8 @@ The documentation is primarily maintained on our website, and this archive is on
         	'themes/default/images_custom/tutorial_icons/web_hosting.png',
         	'themes/default/images_custom/tutorial_icons/web_standards_and_accessibility.png',
         	'themes/default/images_custom/tutorial_icons/wiki+.png',
+        	'themes/default/images_custom/tutorial_icons/internet_technology.png',
+        	'themes/default/images_custom/tutorial_icons/mobile.png',
             'themes/default/templates_custom/BLOCK_MAIN_TUTORIALS_CAROUSEL.tpl',
             'themes/default/templates_custom/BLOCK_MAIN_TUTORIAL_RATING.tpl',
             'themes/default/templates_custom/TUTORIAL_INDEX_SCREEN.tpl',
