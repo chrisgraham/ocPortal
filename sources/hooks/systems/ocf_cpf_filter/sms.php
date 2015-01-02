@@ -32,7 +32,7 @@ class Hook_ocf_cpf_filter_sms
     {
         $cpf = array();
         if (get_option('sms_username') != '') {
-            $cpf['mobile_phone_number'] = 1;
+            $cpf['mobile_phone_number'] = true;
         }
         return $cpf;
     }

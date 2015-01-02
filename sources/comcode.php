@@ -42,19 +42,19 @@ function init__comcode()
      * @global array $VALID_COMCODE_TAGS
      */
     $VALID_COMCODE_TAGS = array(
-        'samp' => 1, 'q' => 1, 'var' => 1, 'overlay' => 1, 'tooltip' => 1,
-        'section' => 1, 'section_controller' => 1,
-        'big_tab' => 1, 'big_tab_controller' => 1, 'tabs' => 1, 'tab' => 1,
-        'carousel' => 1, 'cite' => 1, 'ins' => 1, 'del' => 1, 'dfn' => 1, 'address' => 1, 'acronym' => 1, 'abbr' => 1, 'contents' => 1, 'concepts' => 1, 'list' => 1,
-        'flash' => 1, 'media_set' => 1, 'media' => 1, 'indent' => 1, 'staff_note' => 1, 'menu' => 1, 'b' => 1, 'i' => 1, 'u' => 1, 's' => 1, 'sup' => 1, 'sub' => 1,
-        'if_in_group' => 1, 'title' => 1, 'size' => 1, 'color' => 1, 'highlight' => 1, 'font' => 1, 'tt' => 1, 'box' => 1, 'img' => 1,
-        'url' => 1, 'email' => 1, 'reference' => 1, 'page' => 1, 'codebox' => 1, 'no_parse' => 1, 'code' => 1, 'hide' => 1,
-        'quote' => 1, 'block' => 1, 'semihtml' => 1, 'html' => 1, 'concept' => 1, 'thumb' => 1,
-        'attachment' => 1, 'attachment_safe' => 1, 'align' => 1, 'left' => 1, 'center' => 1, 'right' => 1,
-        'snapback' => 1, 'post' => 1, 'topic' => 1, 'include' => 1, 'random' => 1, 'ticker' => 1, 'jumping' => 1, 'surround' => 1, 'pulse' => 1, 'shocker' => 1,
+        'samp' => true, 'q' => true, 'var' => true, 'overlay' => true, 'tooltip' => true,
+        'section' => true, 'section_controller' => true,
+        'big_tab' => true, 'big_tab_controller' => true, 'tabs' => true, 'tab' => true,
+        'carousel' => true, 'cite' => true, 'ins' => true, 'del' => true, 'dfn' => true, 'address' => true, 'acronym' => true, 'abbr' => true, 'contents' => true, 'concepts' => true, 'list' => true,
+        'flash' => true, 'media_set' => true, 'media' => true, 'indent' => true, 'staff_note' => true, 'menu' => true, 'b' => true, 'i' => true, 'u' => true, 's' => true, 'sup' => true, 'sub' => true,
+        'if_in_group' => true, 'title' => true, 'size' => true, 'color' => true, 'highlight' => true, 'font' => true, 'tt' => true, 'box' => true, 'img' => true,
+        'url' => true, 'email' => true, 'reference' => true, 'page' => true, 'codebox' => true, 'no_parse' => true, 'code' => true, 'hide' => true,
+        'quote' => true, 'block' => true, 'semihtml' => true, 'html' => true, 'concept' => true, 'thumb' => true,
+        'attachment' => true, 'attachment_safe' => true, 'align' => true, 'left' => true, 'center' => true, 'right' => true,
+        'snapback' => true, 'post' => true, 'topic' => true, 'include' => true, 'random' => true, 'ticker' => true, 'jumping' => true, 'surround' => true, 'pulse' => true, 'shocker' => true,
     );
     //if (addon_installed('ecommerce')) {
-        $VALID_COMCODE_TAGS['currency'] = 1;
+        $VALID_COMCODE_TAGS['currency'] = true;
     //}
 }
 

@@ -443,6 +443,20 @@ function get_db_forums_password()
 }
 
 /**
+ * Find whether we are on a multi-site-network.
+ *
+ * @param  ?object                      $db The DB connection to check against (NULL: main active site database)
+ * @param  boolean                      Whether we are
+ */
+function is_on_multi_site_network($db = null)
+{
+	if ($db !== null) {
+		return ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write != $GLOBALS['FORUM_DB']->connection_write));
+	}
+	return ((get_db_site_host() != get_db_forums_host()) || (get_db_site() != get_db_forums()) || ($GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix() != get_table_prefix()));
+}
+
+/**
  * Database handling.
  * @package    core
  */

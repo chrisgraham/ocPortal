@@ -306,7 +306,7 @@ function member_personal_links_and_details($member_id)
     }
 
     // Conceded mode link
-    if (($GLOBALS['SESSION_CONFIRMED_CACHE'] == 1) && (get_option('show_conceded_mode_link') == '1')) {
+    if (($GLOBALS['SESSION_CONFIRMED_CACHE']) && (get_option('show_conceded_mode_link') == '1')) {
         $url = build_url(array('page' => 'login', 'type' => 'concede', 'redirect' => (get_page_name() == 'login') ? null : SELF_REDIRECT), get_module_zone('login'));
         $links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2', array('_GUID' => '81fa81cfd3130e42996bf72b0e03d8aa', 'POST' => true, 'NAME' => do_lang_tempcode('CONCEDED_MODE'), 'DESCRIPTION' => do_lang_tempcode('DESCRIPTION_CONCEDED_MODE'), 'URL' => $url)));
     }

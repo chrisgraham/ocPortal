@@ -265,7 +265,7 @@ function iframe_script()
     if ($zones[0]['zone_require_session'] == 1) {
         header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
     }
-    if (($zones[0]['zone_name'] != '') && (get_option('windows_auth_is_enabled') != '1') && ((get_session_id() == '') || ($GLOBALS['SESSION_CONFIRMED_CACHE'] == 0)) && (!is_guest()) && ($zones[0]['zone_require_session'] == 1)) {
+    if (($zones[0]['zone_name'] != '') && (get_option('windows_auth_is_enabled') != '1') && ((get_session_id() == '') || (!$GLOBALS['SESSION_CONFIRMED_CACHE'])) && (!is_guest()) && ($zones[0]['zone_require_session'] == 1)) {
         access_denied('ZONE_ACCESS_SESSION');
     }
     if (!has_actual_page_access(get_member(), $page, $zone)) {

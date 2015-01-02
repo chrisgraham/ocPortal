@@ -37,10 +37,10 @@ function init__site__pages__modules_custom__galleries($code)
             require_code(\'workflows\');
             require_lang(\'workflows\');
             // We need to find our ID first
-            $wf = get_workflow_of_content(\'image\',strval($row[\'id\']));
+            $wf = get_workflow_of_content(\'image\', strval($row[\'id\']));
             if (!is_null($wf)) {
-                    $workflow_content_id = get_workflow_content_id(\'image\',strval($row[\'id\']));
-                    if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
+                $workflow_content_id = get_workflow_content_id(\'image\', strval($row[\'id\']));
+                if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
             }
         }
         $current_entry = do_template(\'GALLERY_FLOW_MODE_IMAGE\'',
@@ -54,10 +54,10 @@ function init__site__pages__modules_custom__galleries($code)
             require_code(\'workflows\');
             require_lang(\'workflows\');
             // We need to find our ID first
-            $wf = get_workflow_of_content(\'video\',strval($row[\'id\']));
+            $wf = get_workflow_of_content(\'video\', strval($row[\'id\']));
             if (!is_null($wf)) {
-                    $workflow_content_id = get_workflow_content_id(\'video\',strval($row[\'id\']));
-                    if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
+                $workflow_content_id = get_workflow_content_id(\'video\', strval($row[\'id\']));
+                if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
             }
         }
         $current_entry = do_template(\'GALLERY_FLOW_MODE_VIDEO',
@@ -75,9 +75,9 @@ function init__site__pages__modules_custom__galleries($code)
         require_lang(\'workflows\');
         // We need to find our ID first
         // Hack to see whether we are an image or video
-        if (array_key_exists(\'image_views\',$myrow)) $content_type = \'image\';
-        if (array_key_exists(\'video_views\',$myrow)) $content_type = \'video\';
-        $workflow_content_id = get_workflow_content_id($content_type,strval($myrow[\'id\']));
+        if (array_key_exists(\'image_views\', $myrow)) $content_type = \'image\';
+        if (array_key_exists(\'video_views\', $myrow)) $content_type = \'video\';
+        $workflow_content_id = get_workflow_content_id($content_type, strval($myrow[\'id\']));
         if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
         } else $warning_details = new Tempcode();
 
@@ -93,7 +93,7 @@ function init__site__pages__modules_custom__galleries($code)
         'require_code(\'workflows\');
         require_lang(\'workflows\');
         // We need to find our ID first
-        $workflow_content_id = get_workflow_content_id(\'video\',strval($id));
+        $workflow_content_id = get_workflow_content_id(\'video\', strval($id));
         if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
         } else $warning_details = new Tempcode();
 
@@ -102,9 +102,9 @@ function init__site__pages__modules_custom__galleries($code)
     );
 
     // Add workflow handling to the end of the class definition
-    $code = str_replace('\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
+    $code = str_replace('\'MORE_URL\' => $more_url, \'CATEGORY_NAME\' => $category_name));
     }',
-        '\'MORE_URL\' => $more_url,\'CATEGORY_NAME\' => $category_name));
+        '\'MORE_URL\' => $more_url, \'CATEGORY_NAME\' => $category_name));
     }
         /**
          * Handler for workflow requests

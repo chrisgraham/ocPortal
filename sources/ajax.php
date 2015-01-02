@@ -324,7 +324,7 @@ function fractional_edit_script()
     $page = get_param('page');
 
     global $SESSION_CONFIRMED_CACHE;
-    if (($SESSION_CONFIRMED_CACHE == 0) && ($GLOBALS['SITE_DB']->query_select_value('zones', 'zone_require_session', array('zone_name' => $zone)) == 1)) {
+    if ((!$SESSION_CONFIRMED_CACHE) && ($GLOBALS['SITE_DB']->query_select_value('zones', 'zone_require_session', array('zone_name' => $zone)) == 1)) {
         return;
     }
 
@@ -563,7 +563,7 @@ function confirm_session_script()
 
     header('Content-type: text/plain; charset=' . get_charset());
     global $SESSION_CONFIRMED_CACHE;
-    if ($SESSION_CONFIRMED_CACHE == 0) {
+    if (!$SESSION_CONFIRMED_CACHE) {
         echo $GLOBALS['FORUM_DRIVER']->get_username(get_member());
     }
     echo '';
@@ -623,7 +623,7 @@ function snippet_script()
     prepare_for_known_ajax_response();
 
     header('Content-Type: text/plain; charset=' . get_charset());
-    convert_data_encodings(true,true);
+    convert_data_encodings(true);
     $hook = filter_naughty_harsh(get_param('snippet'));
     require_code('hooks/systems/snippets/' . $hook, true);
     $object = object_factory('Hook_snippet_' . $hook);

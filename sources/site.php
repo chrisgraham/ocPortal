@@ -146,7 +146,7 @@ function check_has_page_access()
     if ($ZONE['zone_require_session'] == 1) {
         header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
     }
-    if (($ZONE['zone_name'] != '') && (!is_httpauth_login()) && ((get_session_id() == '') || ($SESSION_CONFIRMED_CACHE == 0)) && ($ZONE['zone_require_session'] == 1) && (get_page_name() != 'login')) {
+    if (($ZONE['zone_name'] != '') && (!is_httpauth_login()) && ((get_session_id() == '') || (!$SESSION_CONFIRMED_CACHE)) && ($ZONE['zone_require_session'] == 1) && (get_page_name() != 'login')) {
         access_denied((($real_zone == 'data') || (has_zone_access(get_member(), $ZONE['zone_name']))) ? 'ZONE_ACCESS_SESSION' : 'ZONE_ACCESS', $ZONE['zone_name'], true);
     } else {
         if (($real_zone == 'data') || (has_zone_access(get_member(), $ZONE['zone_name']))) {
@@ -1404,7 +1404,12 @@ function _load_comcodes_page_from_cache($pages)
         }
     }
     if ($needs_query) {
-        $ret = array_merge($ret, $GLOBALS['SITE_DB']->query($sql, null, null, false, false, array('string_index' => 'LONG_TRANS__COMCODE', 'cc_page_title' => '?SHORT_TRANS')));
+        $_ret = $GLOBALS['SITE_DB']->query($sql, null, null, false, false, array('string_index' => 'LONG_TRANS__COMCODE', 'cc_page_title' => '?SHORT_TRANS'));
+        foreach ($_ret as $_page) {
+            $sz = serialize(array($_page['the_page'], $_page['the_zone'], $_page['the_theme']));
+            $cache[$sz] = $_page;
+            $ret[] = $_page;
+        }
     }
 
     return $ret;

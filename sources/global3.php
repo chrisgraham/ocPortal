@@ -373,8 +373,8 @@ function restore_output_state($just_tempcode = false, $merge_current = false, $k
         $keep = array();
     }
 
-    $mergeable_arrays = array('META_DATA' => 1, 'JAVASCRIPTS' => 1, 'CSSS' => 1, 'TEMPCODE_SETGET' => 1, 'CYCLES' => 1);
-    $mergeable_tempcode = array('EXTRA_HEAD' => 1, 'EXTRA_FOOT' => 1, 'JAVASCRIPT' => 1);
+    $mergeable_arrays = array('META_DATA' => true, 'JAVASCRIPTS' => true, 'CSSS' => true, 'TEMPCODE_SETGET' => true, 'CYCLES' => true);
+    $mergeable_tempcode = array('EXTRA_HEAD' => true, 'EXTRA_FOOT' => true, 'JAVASCRIPT' => true);
 
     $old_state = array_pop($OUTPUT_STATE_STACK);
     if ($old_state === null) {

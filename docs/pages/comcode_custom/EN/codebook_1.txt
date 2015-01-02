@@ -484,7 +484,7 @@ class Module_example
         // Bare essentials of this function only here because I'm keeping this
         // example as short as possible. We would normally expect this function
         // to be properly defined.
-        return array('version' => 1,'hack_version' => 1,'hacked_by' => 1);
+        return array('version' => 1,'hack_version' => 1,'hacked_by' => 'Bob');
     }
 
     // This is the function called when the module is loaded up to produce

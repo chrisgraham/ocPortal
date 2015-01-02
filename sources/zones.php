@@ -116,6 +116,26 @@ function init__zones()
 }
 
 /**
+ * Pre-load used blocks in bulk.
+ */
+function preload_block_internal_cacheing()
+{
+    global $SMART_CACHE;
+    if (has_block_cacheing()) {
+        $blocks_needed = $SMART_CACHE->get('blocks_needed');
+        if ($blocks_needed !== null && $blocks_needed !== false) {
+            $bulk = array();
+
+            foreach ($blocks_needed as $param => $_) {
+                $bulk[] = unserialize($param);
+            }
+
+            _get_cache_entries($bulk); // Will cache internally so that block loads super-quick
+        }
+    }
+}
+
+/**
  * Declare what security properties the programmer understands. i.e. Self-certification.
  * A good programmer will understand the correct data conversions to undergo in order to write secure/correct/reliable code.
  * A newbie programmer likely will not, sloppiness or a lack of understanding could lead to critical mistakes.
@@ -1009,7 +1029,7 @@ function do_block($codename, $map = null, $ttl = null)
                     $nql_backup = $GLOBALS['NO_QUERY_LIMIT'];
                     $GLOBALS['NO_QUERY_LIMIT'] = true;
 
-                    if ($object !== null) {
+                    if ($object === null) {
                         list($object, $new_security_scope) = do_block_hunt_file($codename, $map);
                     }
                     if (!is_object($object)) {

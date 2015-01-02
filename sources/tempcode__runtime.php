@@ -56,7 +56,7 @@ function init__tempcode__runtime()
     define('TC_DIRECTIVE', 4);
 
     global $PREPROCESSED_BLOCKS;
-    $PREPROCESSED_BLOCKS = array('BLOCK' => 1, 'LOAD_PANEL' => 1, 'LOAD_PAGE' => 1);
+    $PREPROCESSED_BLOCKS = array('BLOCK' => true, 'LOAD_PANEL' => true, 'LOAD_PAGE' => true);
 
     global $IS_TEMPLATE_PREVIEW_OP_CACHE;
     $IS_TEMPLATE_PREVIEW_OP_CACHE = array_key_exists('template_preview_op', $_POST) && ($_POST['template_preview_op'] == 1);
@@ -81,7 +81,7 @@ function init__tempcode__runtime()
     $SIMPLE_ESCAPED = array(ENTITY_ESCAPED);
 
     global $DIRECTIVES_NEEDING_VARS;
-    $DIRECTIVES_NEEDING_VARS = array('IF_PASSED' => 1, 'IF_NON_PASSED' => 1, 'IF_PASSED_AND_TRUE' => 1, 'IF_NON_PASSED_OR_FALSE' => 1, 'IN_ARRAY' => 1, 'IMPLODE' => 1, 'COUNT' => 1, 'IF_ARRAY_EMPTY' => 1, 'IF_ARRAY_NON_EMPTY' => 1, 'OF' => 1, 'INCLUDE' => 1, 'LOOP' => 1);
+    $DIRECTIVES_NEEDING_VARS = array('IF_PASSED' => true, 'IF_NON_PASSED' => true, 'IF_PASSED_AND_TRUE' => true, 'IF_NON_PASSED_OR_FALSE' => true, 'IN_ARRAY' => true, 'IMPLODE' => true, 'COUNT' => true, 'IF_ARRAY_EMPTY' => true, 'IF_ARRAY_NON_EMPTY' => true, 'OF' => true, 'INCLUDE' => true, 'LOOP' => true);
 
     global $PHP_REP_FROM, $PHP_REP_TO, $PHP_REP_TO_TWICE;
     $PHP_REP_FROM = array('\\', "\n", '$', '"');

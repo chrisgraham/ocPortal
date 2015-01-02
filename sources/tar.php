@@ -236,7 +236,7 @@ function tar_add_folder_incremental(&$resource, $logfile, $path, $threshold, $ma
  * @param  PATH                         $path The full path to the folder to add
  * @param  ?integer                     $max_size The maximum file size to add (null: no limit)
  * @param  PATH                         $subpath The subpath relative to the path (should be left as the default '', as this is used for the recursion to distinguish the adding base path from where it's currently looking)
- * @param  ?array                       $avoid_backing_up A map (filename=>1) of files to not back up (null: none)
+ * @param  ?array                       $avoid_backing_up A map (filename=>true) of files to not back up (null: none)
  * @param  ?array                       $root_only_dirs A list of directories ONLY to back up from the root (null: no restriction)
  * @param  boolean                      $tick Whether to output spaces as we go to keep the connection alive
  * @param  boolean                      $all_files Whether to not skip "special files" (ones not normally archive)

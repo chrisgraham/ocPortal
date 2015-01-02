@@ -117,7 +117,7 @@ class Hook_profiles_tabs_edit
         // Session ID check, if saving
         if ((count($_POST) != 0) && (count($tabs) != 0)) {
             global $SESSION_CONFIRMED_CACHE;
-            if (($SESSION_CONFIRMED_CACHE == 0) && ((post_param('edit_password', '') != '') || ($member_id_viewing != $member_id_of))) {
+            if ((!$SESSION_CONFIRMED_CACHE) && ((post_param('edit_password', '') != '') || ($member_id_viewing != $member_id_of))) {
                 access_denied('SESSION', '', true);
             }
         }

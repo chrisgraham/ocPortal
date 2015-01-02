@@ -28,13 +28,13 @@ class Hook_ocf_cpf_filter_customers
         require_lang('customers');
 
         $cpf = array();
-        $cpf['ftp_host'] = 1;
-        $cpf['ftp_path'] = 1;
-        $cpf['ftp_username'] = 1;
-        $cpf['ftp_password'] = 1;
-        $cpf['profession'] = 1;
-        $cpf['support_credits'] = 1;
-        $cpf['currency'] = 1;
+        $cpf['ftp_host'] = true;
+        $cpf['ftp_path'] = true;
+        $cpf['ftp_username'] = true;
+        $cpf['ftp_password'] = true;
+        $cpf['profession'] = true;
+        $cpf['support_credits'] = true;
+        $cpf['currency'] = true;
         return $cpf;
     }
 }

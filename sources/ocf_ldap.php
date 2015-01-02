@@ -689,7 +689,7 @@ function ocf_get_group_members_raw_ldap(&$members, $group_id, $include_primaries
  * (LDAP helper for ocf_get_members_groups) Get a list of the usergroups a member is in (keys say the usergroups, values are irrelevant).
  *
  * @param  ?MEMBER                      $member_id The member to find the usergroups of (null: current member).
- * @return array                        The list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)). The keys are all that matters, values are arbitrary.
+ * @return array                        Reverse list (e.g. array(1=>true,2=>true,3=>true) for someone in (1,2,3)).
  */
 function ocf_get_members_groups_ldap($member_id)
 {
@@ -708,7 +708,7 @@ function ocf_get_members_groups_ldap($member_id)
                 $group_cn = ocf_long_cn_to_short_cn(ldap_unescape($entry['dn']), 'dn');
                 $group_id = ocf_group_ldapcn_to_ocfid($group_cn);
                 if (!is_null($group_id)) {
-                    $groups[$group_id] = 1;
+                    $groups[$group_id] = true;
                 }
             }
 
@@ -725,7 +725,7 @@ function ocf_get_members_groups_ldap($member_id)
             $group_cn = ocf_long_cn_to_short_cn(ldap_unescape($entry[group_property()][0]), group_property());
             $group_id = ocf_group_ldapcn_to_ocfid($group_cn);
             if (!is_null($group_id)) {
-                $groups[$group_id] = 1;
+                $groups[$group_id] = true;
             }
         }
         ldap_free_result($results);
@@ -748,7 +748,7 @@ function ocf_get_members_groups_ldap($member_id)
         if (is_null($group_id_use)) {
             $group_id_use = get_first_default_group();
         }
-        $groups[$group_id_use] = 1;
+        $groups[$group_id_use] = true;
     } else {
         // Groups under member (Active Directory makes no distinction)
         $results = ldap_search($LDAP_CONNECTION, member_search_qualifier() . get_option('ldap_base_dn'), '(&(objectclass=' . get_member_class() . ')(' . member_property() . '=' . ldap_escape($cn) . '))', array('memberof'));
@@ -762,7 +762,7 @@ function ocf_get_members_groups_ldap($member_id)
 
                 $group_id = ocf_group_ldapcn_to_ocfid(ocf_long_cn_to_short_cn($group, group_property()));
                 if (!is_null($group_id)) {
-                    $groups[$group_id] = 1;
+                    $groups[$group_id] = true;
                 }
             }
         }

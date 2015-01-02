@@ -181,7 +181,7 @@ function do_access($given_password)
         'use_mem_cache' => '<em>Performance:</em> Whether persistent memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available).',
         'fast_spider_cache' => '<em>Performance:</em> The number of hours that the spider/bot cache lasts for (this sets both HTTP cacheing, and server retention of cached screens).',
         'any_guest_cached_too' => '<em>Performance:</em> Whether Guests are cached with the spider cache time too.',
-        'self_learning_cache' => '<em>Performance:</em> Whether to allow pages to learn what resources they need, for efficient bulk loading of essentials while avoiding loading full resource sets upfront. Stores copies of some resources within the self-learning cache itself.',
+        'self_learning_cache' => '<em>Performance:</em> Whether to allow pages to learn what resources they need, for efficient bulk loading of essentials while avoiding loading full resource sets upfront. Stores copies of some resources within the self-learning cache itself. If you disable this you should also disable the ocPortal "Output streaming" config option.',
 
         'disable_smart_decaching' => '<em>Tuning/Disk performance:</em> Don\'t check file times to check caches aren\'t stale.',
         'no_disk_sanity_checks' => '<em>Tuning/Disk performance:</em> Assume that there are no missing language directories, or other configured directories; things may crash horribly if they are missing and this is enabled.',

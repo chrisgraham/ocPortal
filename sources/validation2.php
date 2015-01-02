@@ -1442,7 +1442,7 @@ function _check_externals($tag, $attributes, $self_close, $close)
 
     $errors = array();
 
-    if (($tag == 'link') && ($GLOBALS['VALIDATION_CSS']) && ($GLOBALS['NO_XHTML_LINK_FOLLOW'] == 0) && (isset($attributes['href'])) && (isset($attributes['type'])) && ($attributes['type'] == 'text/css') && (!isset($VALIDATED_ALREADY[$attributes['href']]))) { // Validate CSS
+    if (($tag == 'link') && ($GLOBALS['VALIDATION_CSS']) && (!$GLOBALS['NO_XHTML_LINK_FOLLOW']) && (isset($attributes['href'])) && (isset($attributes['type'])) && ($attributes['type'] == 'text/css') && (!isset($VALIDATED_ALREADY[$attributes['href']]))) { // Validate CSS
         $VALIDATED_ALREADY[$attributes['href']] = 1;
         $url = qualify_url($attributes['href'], $GLOBALS['URL_BASE']);
         if ($url != '') {
@@ -1456,7 +1456,7 @@ function _check_externals($tag, $attributes, $self_close, $close)
         }
     }
 
-    if (($GLOBALS['VALIDATION_JAVASCRIPT']) && ($tag == 'script') && ($GLOBALS['NO_XHTML_LINK_FOLLOW'] == 0) && (isset($attributes['src'])) && (isset($attributes['type'])) && (($attributes['type'] == 'text/javascript') || ($attributes['type'] == 'application/x-javascript')) && (!isset($VALIDATED_ALREADY[$attributes['src']]))) { // Validate CSS
+    if (($GLOBALS['VALIDATION_JAVASCRIPT']) && ($tag == 'script') && (!$GLOBALS['NO_XHTML_LINK_FOLLOW']) && (isset($attributes['src'])) && (isset($attributes['type'])) && (($attributes['type'] == 'text/javascript') || ($attributes['type'] == 'application/x-javascript')) && (!isset($VALIDATED_ALREADY[$attributes['src']]))) { // Validate CSS
         $VALIDATED_ALREADY[$attributes['src']] = 1;
         $url = qualify_url($attributes['src'], $GLOBALS['URL_BASE']);
         if ($url != '') {
@@ -1479,7 +1479,7 @@ function _check_externals($tag, $attributes, $self_close, $close)
         }
     }
 
-    if (($tag == 'iframe') && (isset($attributes['src'])) && ($attributes['src'] != '') && ($GLOBALS['NO_XHTML_LINK_FOLLOW'] == 0) && (!isset($VALIDATED_ALREADY[$attributes['src']]))) { // Validate iframe's
+    if (($tag == 'iframe') && (isset($attributes['src'])) && ($attributes['src'] != '') && (!$GLOBALS['NO_XHTML_LINK_FOLLOW']) && (!isset($VALIDATED_ALREADY[$attributes['src']]))) { // Validate iframe's
         $VALIDATED_ALREADY[$attributes['src']] = 1;
         $url = qualify_url($attributes['src'], $GLOBALS['URL_BASE']);
         if ($url != '') {

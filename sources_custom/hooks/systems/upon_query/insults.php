@@ -26,7 +26,7 @@ class Hook_upon_query_insults
         if ($GLOBALS['IN_MINIKERNEL_VERSION']) {
             return;
         }
-        if ($GLOBALS['BOOTSTRAPPING'] == 1) {
+        if ($GLOBALS['BOOTSTRAPPING']) {
             return;
         }
 

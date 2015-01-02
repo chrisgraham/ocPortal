@@ -121,8 +121,10 @@ function block_menu__cache_on($map)
     $menu = array_key_exists('param', $map) ? $map['param'] : '';
     $page = get_page_name();
     $url_type = get_param('type', 'browse');
+    $groups = filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()));
+    asort($groups);
     return array(
-        $GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),
+        $groups,
         ((substr($menu, 0, 1) != '_') && (substr($menu, 0, 3) != '!!!') && (has_actual_page_access(get_member(), 'admin_menus'))),
         get_zone_name(),
         $page,

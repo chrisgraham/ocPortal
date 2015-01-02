@@ -136,7 +136,7 @@ function _get_details_comcode_tags()
                 $DANGEROUS_TAGS[$tag['tag_tag']] = 1;
             }
         }
-        if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['FORUM_DB']->connection_write)) {
+        if (is_on_multi_site_network()) {
             $custom_tags = $GLOBALS['SITE_DB']->query_select('custom_comcode', array('tag_title', 'tag_description', 'tag_example', 'tag_parameters', 'tag_replace', 'tag_tag', 'tag_dangerous_tag', 'tag_block_tag', 'tag_textual_tag'), array('tag_enabled' => 1));
             foreach ($custom_tags as $tag) {
                 $custom_tag_list[$tag['tag_tag']] = $tag;

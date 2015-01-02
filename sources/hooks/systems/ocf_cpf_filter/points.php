@@ -30,6 +30,6 @@ class Hook_ocf_cpf_filter_points
      */
     public function to_enable()
     {
-        return array('points_used' => 1, 'gift_points_used' => 1, 'points_gained_given' => 1, 'points_gained_visiting' => 1, 'points_gained_rating' => 1, 'points_gained_voting' => 1);
+        return array('points_used' => true, 'gift_points_used' => true, 'points_gained_given' => true, 'points_gained_visiting' => true, 'points_gained_rating' => true, 'points_gained_voting' => true);
     }
 }

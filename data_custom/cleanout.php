@@ -27,7 +27,7 @@ if (!is_file($FILE_BASE . '/sources/global.php')) {
 @chdir($FILE_BASE);
 
 global $NON_PAGE_SCRIPT;
-$NON_PAGE_SCRIPT = 1;
+$NON_PAGE_SCRIPT = true;
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST = false;
 global $EXTERNAL_CALL;

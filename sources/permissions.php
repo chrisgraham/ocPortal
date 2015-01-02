@@ -160,6 +160,9 @@ function has_zone_access($member, $zone)
         $test = array();
     }
     foreach ($test as $zone_access_needed => $_) {
+        if (is_integer($zone_access_needed)) {
+            $zone_access_needed = strval($zone_access_needed);
+        }
         $where .= ' OR ' . db_string_equal_to('zone_name', $zone_access_needed);
     }
     $where .= ')';
@@ -172,6 +175,9 @@ function has_zone_access($member, $zone)
 
     // We need to store negatives, so it can tell between "not loaded from DB" and "permission absent"
     foreach ($test as $zone_access_needed => $_) {
+        if (is_integer($zone_access_needed)) {
+            $zone_access_needed = strval($zone_access_needed);
+        }
         if (!isset($ZONE_ACCESS_CACHE[$member][$zone_access_needed])) {
             $ZONE_ACCESS_CACHE[$member][$zone_access_needed] = false;
         }
@@ -292,7 +298,7 @@ function has_page_access($member, $page, $zone, $at_now = false)
     $group_cnt = count($groups2);
 
     global $SMART_CACHE;
-    $where = ' AND (1=0';
+    $where = '1=0';
     $SMART_CACHE->append('page_access_needed', $page_access_needed, true);
     $test = $SMART_CACHE->get('page_access_needed');
     if ($test === null) {
@@ -301,21 +307,20 @@ function has_page_access($member, $page, $zone, $at_now = false)
     foreach ($test as $_page_access_needed => $_) {
         list($_zone, $_page) = explode(':', $_page_access_needed);
         $where .= ' OR ' . db_string_equal_to('zone_name', $_zone) . ' AND ' . db_string_equal_to('page_name', $_page);
-        $where .= ' OR page_name LIKE \'' . db_encode_like('\_WILD:' . $_page . ':%') . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like($_zone . ':' . $_page . ':%') . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like('\_WILD:\_WILD:%') . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like($_zone . ':\_WILD:%') . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like('\_WILD:' . $_page) . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like($_zone . ':' . $_page) . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like('\_WILD:\_WILD') . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like($_zone . ':\_WILD') . '\'';
-        $where .= ' OR page_name LIKE \'' . db_encode_like($_zone) . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like('\_WILD:' . $_page . ':%') . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like($_zone . ':' . $_page . ':%') . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like('\_WILD:\_WILD:%') . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like($_zone . ':\_WILD:%') . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like('\_WILD:' . $_page) . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like($_zone . ':' . $_page) . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like('\_WILD:\_WILD') . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like($_zone . ':\_WILD') . '\'';
+        $where .= ' OR ' . db_string_equal_to('zone_name', '/') . ' AND page_name LIKE \'' . db_encode_like($_zone) . '\'';
     }
-    $where .= ')';
 
     $sql = 'SELECT zone_name,page_name,group_id FROM ' . get_table_prefix() . 'group_page_access WHERE (' . $where . ') AND (' . $groups . ')';
     $sql .= ' UNION ';
-    $sql .= 'SELECT zone_name,page_name,NULL AS group_id FROM ' . get_table_prefix() . 'member_page_access WHERE (' . $where . ') AND (' . $groups . ') AND (member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . '))';
+    $sql .= 'SELECT zone_name,page_name,NULL AS group_id FROM ' . get_table_prefix() . 'member_page_access WHERE (' . $where . ') AND (member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . '))';
     $rows = $GLOBALS['SITE_DB']->query($sql, null, null, false, true);
     $rows_organised_for_groups = array();
     $rows_organised_for_member = array();
@@ -451,28 +456,36 @@ function has_category_access($member, $module, $category)
 
     global $SMART_CACHE;
     $where = ' AND (1=0';
-    $SMART_CACHE->append('category_access_needed', $category, true);
-    $test = $SMART_CACHE->get('category_access_needed');
-    if ($test === null) {
-        $test = array();
+    if (($module != 'forums') || (!is_on_multi_site_network())) {
+        $SMART_CACHE->append('category_access_needed', $module . '/' . $category, true);
+        $test = $SMART_CACHE->get('category_access_needed');
+        if ($test === null) {
+            $test = array();
+        }
+    } else {
+        $test = array($module . '/' . $category => true);
     }
-    foreach ($test as $category_access_needed => $_) {
-        $where .= ' OR ' . db_string_equal_to('category_name', $category_access_needed);
+    foreach ($test as $category_access_needed_parts => $_) {
+        list($module_access_needed, $category_access_needed) = explode('/', $category_access_needed_parts);
+        $where .= ' OR ' . db_string_equal_to('module_the_name', $module_access_needed) . ' AND ' . db_string_equal_to('category_name', $category_access_needed);
     }
     $where .= ')';
 
     $db = $GLOBALS[($module == 'forums') ? 'FORUM_DB' : 'SITE_DB'];
-    $sql = 'SELECT DISTINCT category_name FROM ' . $db->get_table_prefix() . 'group_category_access WHERE (' . db_string_equal_to('module_the_name', $module) . ') AND (' . $groups . ') ' . $where . ' UNION ALL SELECT DISTINCT category_name FROM ' . $db->get_table_prefix() . 'member_category_access WHERE (' . db_string_equal_to('module_the_name', $module) . ') AND (member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . '))' . $where;
+    $sql = 'SELECT DISTINCT category_name,module_the_name FROM ' . $db->get_table_prefix() . 'group_category_access WHERE (' . $groups . ') ' . $where;
+    $sql .= ' UNION ALL ';
+    $sql .= 'SELECT DISTINCT category_name,module_the_name FROM ' . $db->get_table_prefix() . 'member_category_access WHERE member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . ')' . $where;
     $rows = $db->query($sql, 1, null, false, true);
 
     foreach ($rows as $row) {
-        $CATEGORY_ACCESS_CACHE[$member][$module . '/' . $row['category_name']] = true;
+        $CATEGORY_ACCESS_CACHE[$member][$row['module_the_name'] . '/' . $row['category_name']] = true;
     }
 
     // We need to store negatives, so it can tell between "not loaded from DB" and "permission absent"
-    foreach ($test as $category_access_needed => $_) {
-        if (!isset($CATEGORY_ACCESS_CACHE[$member][$module . '/' . $category_access_needed])) {
-            $CATEGORY_ACCESS_CACHE[$member][$module . '/' . $category_access_needed] = false;
+    foreach ($test as $category_access_needed_parts => $_) {
+        list($module_access_needed, $category_access_needed) = explode('/', $category_access_needed_parts);
+        if (!isset($CATEGORY_ACCESS_CACHE[$member][$module_access_needed . '/' . $category_access_needed])) {
+            $CATEGORY_ACCESS_CACHE[$member][$module_access_needed . '/' . $category_access_needed] = false;
         }
     }
 
@@ -525,6 +538,10 @@ function _get_where_clause_groups($member, $consider_clubs = true)
  */
 function filter_group_permissivity($groups)
 {
+    if (count($groups) == 1) {
+        return $groups;
+    }
+
     if (get_forum_type() == 'ocf') {
         static $permissive_groups = null;
         if ($permissive_groups === null) {
@@ -710,11 +727,14 @@ function has_privilege($member, $permission, $page = null, $cats = null)
         $test = array();
     }
     foreach ($test as $privilege_needed => $_) {
+        if (is_integer($privilege_needed)) {
+            $privilege_needed = strval($privilege_needed);
+        }
         $where .= ' OR ' . db_string_equal_to('privilege', $privilege_needed);
     }
     $where .= ')';
     $perhaps = $GLOBALS['SITE_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_privileges WHERE (' . $groups . ')' . $where . ' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'member_privileges WHERE member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . ')' . $where, null, null, false, true);
-    if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['FORUM_DB']->connection_write) && (get_forum_type() == 'ocf')) {
+    if (is_on_multi_site_network() && (get_forum_type() == 'ocf')) {
         $perhaps = array_merge($perhaps, $GLOBALS['FORUM_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'group_privileges WHERE (' . $groups . ') AND ' . db_string_equal_to('module_the_name', 'forums') . $where . ' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'member_privileges WHERE ' . db_string_equal_to('module_the_name', 'forums') . ' AND member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . ')' . $where, null, null, false, true));
     }
     $PRIVILEGE_CACHE[$member] = array();
@@ -726,6 +746,9 @@ function has_privilege($member, $permission, $page = null, $cats = null)
 
     // We need to store negatives, so it can tell between "not loaded from DB" and "permission absent"
     foreach ($test as $privilege_needed => $_) {
+        if (is_integer($privilege_needed)) {
+            $privilege_needed = strval($privilege_needed);
+        }
         if (!isset($PRIVILEGE_CACHE[$member][$privilege_needed][''][''][''])) {
             $PRIVILEGE_CACHE[$member][$privilege_needed][''][''][''] = 0;
         }

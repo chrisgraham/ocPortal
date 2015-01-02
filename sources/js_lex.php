@@ -206,7 +206,7 @@ function js_lex($text)
     $char = '';
     $i = 0;
     $empty_array = array();
-    $numberic_chars = array('0' => 1, '1' => 1, '2' => 1, '3' => 1, '4' => 1, '5' => 1, '6' => 1, '7' => 1, '8' => 1, '9' => 1);
+    $numberic_chars = array('0' => true, '1' => true, '2' => true, '3' => true, '4' => true, '5' => true, '6' => true, '7' => true, '8' => true, '9' => true);
     while (true) {
         switch ($lex_state) {
             case LEXER_FREE:

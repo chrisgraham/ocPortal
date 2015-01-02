@@ -71,7 +71,7 @@ class Block_main_friends_list
         $dbsc = $GLOBALS['NO_DB_SCOPE_CHECK'];
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
 
-        $msn = ($GLOBALS['FORUM_DB']->connection_write != $GLOBALS['SITE_DB']->connection_write);
+        $msn = is_on_multi_site_network();
 
         if (!$mutual) {
             if (($friends_search != '') && (!$msn)) {

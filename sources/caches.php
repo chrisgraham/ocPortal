@@ -63,27 +63,29 @@ function init__caches()
      *
      * @global boolean $SMART_CACHE
      */
-    global $SMART_CACHE;
+    global $SMART_CACHE, $RELATIVE_PATH;
     if (running_script('index') || running_script('iframe')) {
+        $zone = $RELATIVE_PATH;
         $page = get_page_name();
         $screen = get_param('type', 'browse');
-        $psuedo_page = $page . '__' . $screen;
+        $bucket_name = $zone . ':' . $page . ':' . $screen;
         if ($page != 'topicview' && $screen == 'browse') {
-            $psuedo_page .= '__' . get_param('id', '');
+            $bucket_name .= ':' . get_param('id', '');
         }
     } else {
-        $psuedo_page = 'script__' . current_script();
+        $bucket_name = 'script__' . current_script();
     }
-    $SMART_CACHE = new Self_learning_cache($psuedo_page);
+    $SMART_CACHE = new Self_learning_cache($bucket_name);
 
     // Some loading from the smart cache
+    global $JAVASCRIPT, $CSSS;
     $test = $SMART_CACHE->get('JAVASCRIPT');
     if ($test !== null) {
-        $JAVASCRIPT = $test;
+        $JAVASCRIPT += $test;
     }
     $test = $SMART_CACHE->get('CSSS');
     if ($test !== null) {
-        $CSSS = $test;
+        $CSSS += $test;
     }
 }
 
@@ -110,7 +112,7 @@ function init__caches()
  */
 class Self_learning_cache
 {
-    private $page_name = null;
+    private $bucket_name = null;
     private $path = null;
     private $data = null; // null means "Nothing loaded"
     private $keys_inital = array();
@@ -118,12 +120,12 @@ class Self_learning_cache
     /**
      * Constructor. Initialise our cache.
      *
-     * @param  ID_TEXT $page_name Page/script name this cache object is for
+     * @param  ID_TEXT $bucket_name The identifier this cache object is for
      */
-    public function __construct($page_name)
+    public function __construct($bucket_name)
     {
-        $this->page_name = $page_name;
-        $this->path = get_custom_file_base() . '/caches/self_learning/' . filter_naughty($page_name) . '.gcd';
+        $this->bucket_name = $bucket_name;
+        $this->path = get_custom_file_base() . '/caches/self_learning/' . filter_naughty(str_replace(array('/', '\\', ':'), array('__', '__', '__'), $bucket_name)) . '.gcd';
         $this->load();
     }
 
@@ -132,7 +134,7 @@ class Self_learning_cache
      *
      * @return boolean                               Whether it is
      */
-    public function is_on()
+    public static function is_on()
     {
         static $is_on = null;
         if ($is_on !== null) {
@@ -144,7 +146,7 @@ class Self_learning_cache
     }
 
     /**
-     * Load the cache for the particular page this cache object is for.
+     * Load the cache for the particular bucket this cache object is for.
      */
     private function load()
     {
@@ -152,23 +154,22 @@ class Self_learning_cache
             return;
         }
 
-        $data = function_exists('persistent_cache_get') ? persistent_cache_get(array('SELF_LEARNING_CACHE', $this->page_name)) : null;
+        $data = function_exists('persistent_cache_get') ? persistent_cache_get(array('SELF_LEARNING_CACHE', $this->bucket_name)) : null;
         if ($data !== null) {
             $this->data = $data;
         } else {
             $_data = @file_get_contents($this->path);
             if ($_data !== false) {
-                $data = @unserialize($data);
-                if ($_data !== false) {
-                    $this->data = $data;
-                } else {
+                $this->data = @unserialize($_data);
+                if ($this->data === false) {
                     $this->invalidate(); // Corrupt
-                    $this->data = null;
                 }
+            } else {
+                $this->data = null;
             }
         }
 
-        if ($data !== null) {
+        if ($this->data !== null) {
             $this->keys_initial = array_flip(array_keys($this->data));
         }
     }
@@ -222,11 +223,11 @@ class Self_learning_cache
      */
     public function append($key, $value, $value_2 = true)
     {
-        if (!isset($this->data[$key][$value])) {
-            if (!isset($this->data[$key])) {
-                $this->data[$key] = array();
-            }
+        if (!isset($this->data[$key])) {
+            $this->data[$key] = array();
+        }
 
+        if (!array_key_exists($value, $this->data[$key]) || $this->data[$key][$value] !== $value_2) {
             $this->data[$key][$value] = $value_2;
 
             $this->save();
@@ -247,7 +248,7 @@ class Self_learning_cache
         }
 
         if (function_exists('persistent_cache_set')) {
-            persistent_cache_set(array('SELF_LEARNING_CACHE', $this->page_name), $this->data);
+            persistent_cache_set(array('SELF_LEARNING_CACHE', $this->bucket_name), $this->data);
         }
 
         if (!is_null($this->path)) {
@@ -297,7 +298,7 @@ class Self_learning_cache
      */
     public static function erase_smart_cache()
     {
-        if (!$this->is_on()) {
+        if (!Self_learning_cache::is_on()) {
             return;
         }
 
@@ -310,7 +311,11 @@ class Self_learning_cache
             }
             closedir($dh);
         }
-        $this->data = null;
+
+        global $SMART_CACHE;
+        if ($SMART_CACHE !== null) {
+            $SMART_CACHE->invalidate();
+        }
     }
 }
 
@@ -465,7 +470,17 @@ function find_cache_on($codename)
  */
 function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode = false, $caching_via_cron = false, $map = null)
 {
-    $ret = _get_cache_entries(array(array($codename, $cache_identifier, md5($cache_identifier), $ttl, $tempcode, $caching_via_cron, $map)));
+    $det = array($codename, $cache_identifier, md5($cache_identifier), $ttl, $tempcode, $caching_via_cron, $map);
+
+    global $SMART_CACHE;
+    $test = $SMART_CACHE->get('blocks_needed');
+    if (count($test) < 20) {
+        $SMART_CACHE->append('blocks_needed', serialize($det));
+    } else {
+        $SMART_CACHE->get('blocks_needed', false); // Disable it for this smart-cache bucket, we probably have some block(s) with the cache signature varying too much
+    }
+
+    $ret = _get_cache_entries(array($det));
     return $ret[0];
 }
 
@@ -487,7 +502,7 @@ function _get_cache_entries($dets)
 
     // Bulk load
     if ($GLOBALS['PERSISTENT_CACHE'] === null) {
-        $sql = 'SELECT the_value,date_and_time,dependencies FROM ' . get_table_prefix() . 'cache WHERE ' . db_string_equal_to('lang', user_lang()) . ' AND ' . db_string_equal_to('the_theme', $GLOBALS['FORUM_DRIVER']->get_theme()) . ' AND (1=0';
+        $sql = 'SELECT cached_for,identifier,the_value,date_and_time,dependencies FROM ' . get_table_prefix() . 'cache WHERE ' . db_string_equal_to('lang', user_lang()) . ' AND ' . db_string_equal_to('the_theme', $GLOBALS['FORUM_DRIVER']->get_theme()) . ' AND (1=0';
         foreach ($dets as $det) {
             list($codename, $cache_identifier, $md5_cache_identifier, $ttl, $tempcode, $caching_via_cron, $map) = $det;
             $sql .= ' OR ';

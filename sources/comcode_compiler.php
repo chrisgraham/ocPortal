@@ -41,38 +41,38 @@ function init__comcode_compiler()
     // If the tag is mapped to a string that provides a regexp to say when it is NOT reversible. Usually this is done for certain parameters.
     global $REVERSABLE_TAGS;
     $REVERSABLE_TAGS = array(
-        'surround' => 1, 'attachment_safe' => 1, 'cite' => 1, 'ins' => 1, 'del' => 1, 'dfn' => 1, 'address' => 1, 'abbr' => 1, 'acronym' => 1, 'list' => 1, 'highlight' => 1, 'indent' => 1, 'b' => 1, 'i' => 1, 'u' => 1, 's' => 1, 'sup' => 1, 'sub' => 1,
-        'title' => 1, 'size' => 1, 'color' => 1, 'font' => 1, 'tt' => 1, 'img' => '#\s(rollover|refresh\_time)=#', 'url' => 1, 'email' => 1,
-        'semihtml' => 1, 'html' => 1, 'align' => 1, 'left' => 1, 'center' => 1, 'right' => 1,
+        'surround' => true, 'attachment_safe' => true, 'cite' => true, 'ins' => true, 'del' => true, 'dfn' => true, 'address' => true, 'abbr' => true, 'acronym' => true, 'list' => true, 'highlight' => true, 'indent' => true, 'b' => true, 'i' => true, 'u' => true, 's' => true, 'sup' => true, 'sub' => true,
+        'title' => true, 'size' => true, 'color' => true, 'font' => true, 'tt' => true, 'img' => '#\s(rollover|refresh\_time)=#', 'url' => true, 'email' => true,
+        'semihtml' => true, 'html' => true, 'align' => true, 'left' => true, 'center' => true, 'right' => true,
 
         /*Handled in special way*/
-        'block' => 1, 'contents' => 1, 'concepts' => 1, 'attachment' => 1, 'flash' => 1, 'media' => 1, 'menu' => 1, 'reference' => 1, 'page' => 1, 'thumb' => 1, 'topic' => 1, 'include' => 1, 'random' => 1, 'jumping' => 1, 'shocker' => 1,
+        'block' => true, 'contents' => true, 'concepts' => true, 'attachment' => true, 'flash' => true, 'media' => true, 'menu' => true, 'reference' => true, 'page' => true, 'thumb' => true, 'topic' => true, 'include' => true, 'random' => true, 'jumping' => true, 'shocker' => true,
     );
     // These are not reversable, but we want them WYSIWYGABLE
     global $PUREHTML_TAGS;
     $PUREHTML_TAGS = array(/*'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
     // The following could conceivably not need to be reversed, as they're pure HTML. However, it's better not to let the WYSIWYG'd HTML get too complex.
-    // 'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'flash'=>1,'media'=>1,'hide'=>1,'quote'=>1,'ticker'=>1,'jumping'=>1
+    // 'tooltip' => true, 'section' => true, 'section_controller' => true, 'big_tab' => true, 'big_tab_controller' => true, 'tabs' => true, 'tab' => true, 'carousel' => true, 'flash' => true, 'media' => true, 'hide' => true, 'quote' => true, 'ticker' => true, 'jumping' => true
 
     // Any of these will cause free-for-all blacklist-filtered HTML to be disallowed, even if enabled via the hidden option
     global $POTENTIALLY_EMPTY_TAGS;
-    $POTENTIALLY_EMPTY_TAGS = array('concepts' => 1, 'staff_note' => 1, 'if_in_group' => 1, 'no_parse' => 1, 'concept' => 1, 'include' => 1, 'random' => 1, 'jumping' => 1);
+    $POTENTIALLY_EMPTY_TAGS = array('concepts' => true, 'staff_note' => true, 'if_in_group' => true, 'no_parse' => true, 'concept' => true, 'include' => true, 'random' => true, 'jumping' => true);
 
     // The contents of these tags is human readable text. It may be altered for reasons of bork, or word-wrapping, or textcode; they have hard white space
     global $TEXTUAL_TAGS;
-    $TEXTUAL_TAGS = array('overlay' => 1, 'tooltip' => 1, 'section' => 1, 'surround' => 1, 'if_in_group' => 1, 'cite' => 1, 'ins' => 1, 'del' => 1, 'dfn' => 1, 'address' => 1, 'abbr' => 1, 'acronym' => 1, 'list' => 1, 'indent' => 1, 'align' => 1, 'left' => 1, 'center' => 1, 'right' => 1, 'b' => 1, 'i' => 1, 'u' => 1, 's' => 1, 'sup' => 1, 'sub' => 1, 'title' => 1, 'size' => 1, 'color' => 1, 'highlight' => 1, 'font' => 1, 'box' => 1, 'hide' => 1, 'quote' => 1, 'tab' => 1, 'big_tab' => 1);
+    $TEXTUAL_TAGS = array('overlay' => true, 'tooltip' => true, 'section' => true, 'surround' => true, 'if_in_group' => true, 'cite' => true, 'ins' => true, 'del' => true, 'dfn' => true, 'address' => true, 'abbr' => true, 'acronym' => true, 'list' => true, 'indent' => true, 'align' => true, 'left' => true, 'center' => true, 'right' => true, 'b' => true, 'i' => true, 'u' => true, 's' => true, 'sup' => true, 'sub' => true, 'title' => true, 'size' => true, 'color' => true, 'highlight' => true, 'font' => true, 'box' => true, 'hide' => true, 'quote' => true, 'tab' => true, 'big_tab' => true);
 
     // These tags don't have <br />'s done right after them because they are their own block-end (like a paragraph). They may contain textcode lists and rules
     global $BLOCK_TAGS;
-    $BLOCK_TAGS = array('section' => 1, 'section_controller' => 1, 'tabs' => 1, 'tab' => 1, 'big_tab' => 1, 'big_tab_controller' => 1, 'carousel' => 1, 'surround' => 1, 'if_in_group' => 1, 'contents' => 1, 'concepts' => 1, 'codebox' => 1, 'code' => 1, 'list' => 1, 'indent' => 1, 'align' => 1, 'left' => 1, 'center' => 1, 'right' => 1, 'staff_note' => 1, 'reference' => 1, 'menu' => 1, 'title' => 1, 'box' => 1, 'quote' => 1, 'block' => 1, 'hide' => 1);
+    $BLOCK_TAGS = array('section' => true, 'section_controller' => true, 'tabs' => true, 'tab' => true, 'big_tab' => true, 'big_tab_controller' => true, 'carousel' => true, 'surround' => true, 'if_in_group' => true, 'contents' => true, 'concepts' => true, 'codebox' => true, 'code' => true, 'list' => true, 'indent' => true, 'align' => true, 'left' => true, 'center' => true, 'right' => true, 'staff_note' => true, 'reference' => true, 'menu' => true, 'title' => true, 'box' => true, 'quote' => true, 'block' => true, 'hide' => true);
 
     // These tags can only be used by privileged members
     global $DANGEROUS_TAGS;
-    $DANGEROUS_TAGS = array('overlay' => 1, 'if_in_group' => 1, 'concepts' => 1, 'random' => 1, 'include' => 1, 'block' => 1, 'menu' => 1); // Don't want people putting menus around, plus the captions aren't escaped
+    $DANGEROUS_TAGS = array('overlay' => true, 'if_in_group' => true, 'concepts' => true, 'random' => true, 'include' => true, 'block' => true, 'menu' => true); // Don't want people putting menus around, plus the captions aren't escaped
 
     // These tags have contents that are not interpreted as Comcode (so no HTML tags either), but are formatted for white-space
     global $CODE_TAGS;
-    $CODE_TAGS = array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/ 'flash' => 1, 'media' => 1, 'thumb' => 1, 'menu' => 1, 'no_parse' => 1, 'code' => 1, 'tt' => 1, 'samp' => 1, 'codebox' => 1, 'staff_note' => 1);
+    $CODE_TAGS = array(/*'img' => true - no, can be a symbol for legacy reasons,*/ 'flash' => true, 'media' => true, 'thumb' => true, 'menu' => true, 'no_parse' => true, 'code' => true, 'tt' => true, 'samp' => true, 'codebox' => true, 'staff_note' => true);
 
     // ALSO:
     // See $non_text_tags list in comcode_renderer.php
@@ -81,16 +81,16 @@ function init__comcode_compiler()
 
     // We're not allowed to specify any of these as entities
     global $POTENTIAL_JS_NAUGHTY_ARRAY;
-    $POTENTIAL_JS_NAUGHTY_ARRAY = array('d' => 1,/*'a'=>1,'t'=>1,'a'=>1,*/ 'j' => 1, 'a' => 1, 'v' => 1, 's' => 1, 'c' => 1, 'r' => 1, 'i' => 1, 'p' => 1, 't' => 1, 'J' => 1, 'A' => 1, 'V' => 1, 'S' => 1, 'C' => 1, 'R' => 1, 'I' => 1, 'P' => 1, 'T' => 1, ' ' => 1, "\t" => 1, "\n" => 1, "\r" => 1, ':' => 1, '/' => 1, '*' => 1, '\\' => 1);
-    $POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)] = 1;
+    $POTENTIAL_JS_NAUGHTY_ARRAY = array('d' => true, /*'a' => true, 't' => true, 'a' => true,*/ 'j' => true, 'a' => true, 'v' => true, 's' => true, 'c' => true, 'r' => true, 'i' => true, 'p' => true, 't' => true, 'J' => true, 'A' => true, 'V' => true, 'S' => true, 'C' => true, 'R' => true, 'I' => true, 'P' => true, 'T' => true, ' ' => true, "\t" => true, "\n" => true, "\r" => true, ':' => true, '/' => true, '*' => true, '\\' => true);
+    $POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)] = true;
 
     // Hehe
     global $LEET_FILTER;
     $LEET_FILTER = null;
 
     global $ALLOWED_ENTITIES;
-    //$ALLOWED_ENTITIES=array('raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'ndash'=>1,'mdash'=>1,'ldquo'=>1,'rdquo'=>1);
-    $ALLOWED_ENTITIES = array('OElig' => 1, 'oelig' => 1, 'Scaron' => 1, 'scaron' => 1, 'Yuml' => 1, 'circ' => 1, 'tilde' => 1, 'ensp' => 1, 'emsp' => 1, 'thinsp' => 1, 'zwnj' => 1, 'zwj' => 1, 'lrm' => 1, 'rlm' => 1, 'ndash' => 1, 'mdash' => 1, 'lsquo' => 1, 'rsquo' => 1, 'sbquo' => 1, 'ldquo' => 1, 'rdquo' => 1, 'bdquo' => 1, 'dagger' => 1, 'Dagger' => 1, 'hellip' => 1, 'permil' => 1, 'lsaquo' => 1, 'rsaquo' => 1, 'euro' => 1, 'Agrave' => 1, 'Aacute' => 1, 'Acirc' => 1, 'Atilde' => 1, 'Auml' => 1, 'Aring' => 1, 'AElig' => 1, 'Ccedil' => 1, 'Egrave' => 1, 'Eacute' => 1, 'Ecirc' => 1, 'Euml' => 1, 'Igrave' => 1, 'Iacute' => 1, 'Icirc' => 1, 'Iuml' => 1, 'ETH' => 1, 'Ntilde' => 1, 'Ograve' => 1, 'Oacute' => 1, 'Ocirc' => 1, 'Otilde' => 1, 'Ouml' => 1, 'Oslash' => 1, 'Ugrave' => 1, 'Uacute' => 1, 'Ucirc' => 1, 'Uuml' => 1, 'Yacute' => 1, 'THORN' => 1, 'szlig' => 1, 'agrave' => 1, 'aacute' => 1, 'acirc' => 1, 'atilde' => 1, 'auml' => 1, 'aring' => 1, 'aelig' => 1, 'ccedil' => 1, 'egrave' => 1, 'eacute' => 1, 'ecirc' => 1, 'euml' => 1, 'igrave' => 1, 'iacute' => 1, 'icirc' => 1, 'iuml' => 1, 'eth' => 1, 'ntilde' => 1, 'ograve' => 1, 'oacute' => 1, 'ocirc' => 1, 'otilde' => 1, 'ouml' => 1, 'oslash' => 1, 'ugrave' => 1, 'uacute' => 1, 'ucirc' => 1, 'uuml' => 1, 'yacute' => 1, 'thorn' => 1, 'yuml' => 1, 'nbsp' => 1, 'iexcl' => 1, 'curren' => 1, 'cent' => 1, 'pound' => 1, 'yen' => 1, 'brvbar' => 1, 'sect' => 1, 'uml' => 1, 'copy' => 1, 'ordf' => 1, 'laquo' => 1, 'not' => 1, 'shy' => 1, 'reg' => 1, 'trade' => 1, 'macr' => 1, 'deg' => 1, 'plusmn' => 1, 'sup2' => 1, 'sup3' => 1, 'acute' => 1, 'micro' => 1, 'para' => 1, 'middot' => 1, 'cedil' => 1, 'sup1' => 1, 'ordm' => 1, 'raquo' => 1, 'frac14' => 1, 'frac12' => 1, 'frac34' => 1, 'iquest' => 1, 'times' => 1, 'divide' => 1, 'amp' => 1, 'lt' => 1, 'gt' => 1, 'quot' => 1);
+    //$ALLOWED_ENTITIES = array('raquo' => true, 'frac14' => true, 'frac12' => true, 'frac34' => true, 'ndash' => true, 'mdash' => true, 'ldquo' => true, 'rdquo' => true);
+    $ALLOWED_ENTITIES = array('OElig' => true, 'oelig' => true, 'Scaron' => true, 'scaron' => true, 'Yuml' => true, 'circ' => true, 'tilde' => true, 'ensp' => true, 'emsp' => true, 'thinsp' => true, 'zwnj' => true, 'zwj' => true, 'lrm' => true, 'rlm' => true, 'ndash' => true, 'mdash' => true, 'lsquo' => true, 'rsquo' => true, 'sbquo' => true, 'ldquo' => true, 'rdquo' => true, 'bdquo' => true, 'dagger' => true, 'Dagger' => true, 'hellip' => true, 'permil' => true, 'lsaquo' => true, 'rsaquo' => true, 'euro' => true, 'Agrave' => true, 'Aacute' => true, 'Acirc' => true, 'Atilde' => true, 'Auml' => true, 'Aring' => true, 'AElig' => true, 'Ccedil' => true, 'Egrave' => true, 'Eacute' => true, 'Ecirc' => true, 'Euml' => true, 'Igrave' => true, 'Iacute' => true, 'Icirc' => true, 'Iuml' => true, 'ETH' => true, 'Ntilde' => true, 'Ograve' => true, 'Oacute' => true, 'Ocirc' => true, 'Otilde' => true, 'Ouml' => true, 'Oslash' => true, 'Ugrave' => true, 'Uacute' => true, 'Ucirc' => true, 'Uuml' => true, 'Yacute' => true, 'THORN' => true, 'szlig' => true, 'agrave' => true, 'aacute' => true, 'acirc' => true, 'atilde' => true, 'auml' => true, 'aring' => true, 'aelig' => true, 'ccedil' => true, 'egrave' => true, 'eacute' => true, 'ecirc' => true, 'euml' => true, 'igrave' => true, 'iacute' => true, 'icirc' => true, 'iuml' => true, 'eth' => true, 'ntilde' => true, 'ograve' => true, 'oacute' => true, 'ocirc' => true, 'otilde' => true, 'ouml' => true, 'oslash' => true, 'ugrave' => true, 'uacute' => true, 'ucirc' => true, 'uuml' => true, 'yacute' => true, 'thorn' => true, 'yuml' => true, 'nbsp' => true, 'iexcl' => true, 'curren' => true, 'cent' => true, 'pound' => true, 'yen' => true, 'brvbar' => true, 'sect' => true, 'uml' => true, 'copy' => true, 'ordf' => true, 'laquo' => true, 'not' => true, 'shy' => true, 'reg' => true, 'trade' => true, 'macr' => true, 'deg' => true, 'plusmn' => true, 'sup2' => true, 'sup3' => true, 'acute' => true, 'micro' => true, 'para' => true, 'middot' => true, 'cedil' => true, 'sup1' => true, 'ordm' => true, 'raquo' => true, 'frac14' => true, 'frac12' => true, 'frac34' => true, 'iquest' => true, 'times' => true, 'divide' => true, 'amp' => true, 'lt' => true, 'gt' => true, 'quot' => true);
 
     global $ADVERTISING_BANNERS_CACHE;
     $ADVERTISING_BANNERS_CACHE = null;
@@ -765,7 +765,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                         if (($pos <= $len) || (!$lax)) {
                                             $tag_output->attach($ret);
 
-											$ret->handle_symbol_preprocessing(); // In case there is a 'SET' in there that was intended for being known by PHP code
+                                            $ret->handle_symbol_preprocessing(); // In case there is a 'SET' in there that was intended for being known by PHP code
                                         }
                                     }
                                 } else {

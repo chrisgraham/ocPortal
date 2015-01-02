@@ -27,8 +27,8 @@ class Hook_ocf_cpf_filter_latitude
     {
         require_lang('google_map_users');
         $cpf = array();
-        $cpf['latitude'] = 1;
-        $cpf['longitude'] = 1;
+        $cpf['latitude'] = true;
+        $cpf['longitude'] = true;
         return $cpf;
     }
 }

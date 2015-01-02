@@ -32,7 +32,7 @@ function is_httpauth_login()
     $compat = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_password_compat_scheme');
     if (($compat == 'facebook') || ($compat == 'openid')) {
         global $SESSION_CONFIRMED_CACHE;
-        $SESSION_CONFIRMED_CACHE = 1;
+        $SESSION_CONFIRMED_CACHE = true;
     }
 
     return $ret;

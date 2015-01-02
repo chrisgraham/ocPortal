@@ -319,13 +319,13 @@ function ocf_get_best_group_property($groups, $property)
  * @param  boolean                      $skip_secret Whether to skip looking at secret usergroups.
  * @param  boolean                      $handle_probation Whether to take probation into account
  * @param  boolean                      $include_implicit Whether to include implicit groups
- * @return array                        Reverse list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)).
+ * @return array                        Reverse list (e.g. array(1=>true,2=>true,3=>true) for someone in (1,2,3)).
  */
 function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle_probation = true, $include_implicit = true)
 {
     if (is_guest($member_id)) {
         $ret = array();
-        $ret[db_get_first_id()] = 1;
+        $ret[db_get_first_id()] = true;
         return $ret;
     }
 
@@ -369,7 +369,7 @@ function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle
             $group_ids = $ob->get_bound_group_ids();
             foreach ($group_ids as $group_id) {
                 if ($ob->is_member_within($member_id, $group_id)) {
-                    $groups[$group_id] = 1;
+                    $groups[$group_id] = true;
                 }
             }
         }
@@ -379,7 +379,7 @@ function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle
     if ((!function_exists('ocf_is_ldap_member')/*can happen if said in safe mode and detecting safe mode when choosing whether to avoid a custom file via admin permission which requires this function to run*/) || (!ocf_is_ldap_member($member_id))) {
         $_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members m LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g ON g.id=m.gm_group_id', array('gm_group_id', 'g_hidden'), array('gm_member_id' => $member_id, 'gm_validated' => 1), 'ORDER BY g.g_order');
         foreach ($_groups as $group) {
-            $groups[$group['gm_group_id']] = 1;
+            $groups[$group['gm_group_id']] = true;
         }
         if (!isset($GLOBALS['OCF_DRIVER'])) { // We didn't init fully (MICRO_BOOTUP), but now we dug a hole - get out of it
             if (method_exists($GLOBALS['FORUM_DRIVER'], 'forum_layer_initialise')) {
@@ -390,9 +390,9 @@ function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle
         if (is_null($primary_group)) {
             $primary_group = db_get_first_id();
         }
-        $groups[$primary_group] = 1;
+        $groups[$primary_group] = true;
         foreach (array_keys($groups) as $group_id) {
-            $groups[$group_id] = 1;
+            $groups[$group_id] = true;
         }
 
         $GROUP_MEMBERS_CACHE[$member_id][false][$handle_probation] = $groups;

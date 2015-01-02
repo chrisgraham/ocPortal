@@ -133,7 +133,7 @@ function init__global2()
     $DIR_ARRAY = null;
 
     // Keep check of our bootstrapping
-    $BOOTSTRAPPING = 1;
+    $BOOTSTRAPPING = true;
     $CHECKING_SAFEMODE = false;
 
     // Initialise timezones
@@ -364,14 +364,14 @@ function init__global2()
 
         // Load requirements for admins
         if (has_zone_access(get_member(), 'adminzone')) {
-            $JAVASCRIPTS_DEFAULT['staff'] = 1;
-            $JAVASCRIPTS_DEFAULT['ajax'] = 1;
+            $JAVASCRIPTS_DEFAULT['staff'] = true;
+            $JAVASCRIPTS_DEFAULT['ajax'] = true;
             if (get_option('bottom_show_occle_button', true) === '1') {
-                $JAVASCRIPTS_DEFAULT['button_occle'] = 1;
+                $JAVASCRIPTS_DEFAULT['button_occle'] = true;
             }
         }
         if (get_option('bottom_show_realtime_rain_button', true) === '1') {
-            $JAVASCRIPTS_DEFAULT['button_realtime_rain'] = 1;
+            $JAVASCRIPTS_DEFAULT['button_realtime_rain'] = true;
         }
         $JAVASCRIPTS += $JAVASCRIPTS_DEFAULT;
     }
@@ -379,8 +379,11 @@ function init__global2()
     $func=get_defined_functions();
     print_r($func['user']);*/
 
+    // Pre-load used blocks in bulk
+    preload_block_internal_cacheing();
+
     // Okay, we've loaded everything critical. Don't need to tell ocPortal to be paranoid now.
-    $BOOTSTRAPPING = 0;
+    $BOOTSTRAPPING = false;
 
     if (($SEMI_DEV_MODE) && (!$MICRO_AJAX_BOOTUP)) { // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
         semi_dev_mode_startup();
@@ -707,7 +710,7 @@ function load_user_stuff()
          * @global object $FORUM_DRIVER
          */
         $FORUM_DRIVER = object_factory($class);
-        if (($SITE_INFO['forum_type'] == 'ocf') && (get_db_forums() == get_db_site()) && ($FORUM_DRIVER->get_drivered_table_prefix() == get_table_prefix()) && (!$GLOBALS['DEV_MODE'])) { // NB: In debug mode needs separating so we can properly test our boundaries
+        if (($SITE_INFO['forum_type'] == 'ocf') && (!is_on_multi_site_network()) && (!$GLOBALS['DEV_MODE'])) { // NB: In debug mode needs separating so we can properly test our boundaries
             $FORUM_DRIVER->connection = &$SITE_DB;
         } elseif ($SITE_INFO['forum_type'] != 'none') {
             $FORUM_DRIVER->connection = new Database_driver(get_db_forums(), get_db_forums_host(), get_db_forums_user(), get_db_forums_password(), $FORUM_DRIVER->get_drivered_table_prefix());
@@ -1486,7 +1489,7 @@ function __param($array, $name, $default, $integer = false, $posted = false)
         $val = stripslashes($val);
     }
 
-    if (($posted) && (count($_POST) != 0) && ($GLOBALS['BOOTSTRAPPING'] == 0) && (!$GLOBALS['MICRO_AJAX_BOOTUP'])) { // Check against fields.xml
+    if (($posted) && (count($_POST) != 0) && (!$GLOBALS['BOOTSTRAPPING']) && (!$GLOBALS['MICRO_AJAX_BOOTUP'])) { // Check against fields.xml
         require_code('input_filter');
         return check_posted_field($name, $val);
     }
@@ -1749,11 +1752,17 @@ function javascript_tempcode($position = null)
     if (isset($JAVASCRIPTS['global'])) {
         $arr_backup = $JAVASCRIPTS;
         $JAVASCRIPTS = array();
-        $JAVASCRIPTS[($grouping_codename == '') ? 'global' : $grouping_codename] = ($grouping_codename == '') ? 1 : 0;
+        $JAVASCRIPTS[($grouping_codename == '') ? 'global' : $grouping_codename] = ($grouping_codename == '');
         $JAVASCRIPTS += $arr_backup;
     }
 
-    $bottom_ones = array('staff' => 1, 'button_occle' => 1, 'button_realtime_rain' => 1, 'fractional_edit' => 1, 'transitions' => 1) + $JAVASCRIPT_BOTTOM; // These are all framework ones that add niceities
+    $bottom_ones = array(
+        'staff' => true,
+        'button_occle' => true,
+        'button_realtime_rain' => true,
+        'fractional_edit' => true,
+        'transitions' => true,
+    ) + $JAVASCRIPT_BOTTOM; // These are all framework ones that add niceities
     foreach ($JAVASCRIPTS as $j => $do_enforce) {
         if ($position !== null) {
             $bottom = (isset($bottom_ones[$j]));
@@ -1765,7 +1774,7 @@ function javascript_tempcode($position = null)
             }
         }
 
-        _javascript_tempcode($j, $js, $minify, $https, $mobile, $do_enforce == 1);
+        _javascript_tempcode($j, $js, $minify, $https, $mobile, $do_enforce);
     }
     if (!is_null($JAVASCRIPT)) {
         $js->attach($JAVASCRIPT);
@@ -1963,9 +1972,9 @@ function css_tempcode($inline = false, $only_global = false, $context = null, $t
     $css = new Tempcode();
     $css_need_inline = new Tempcode();
     if ($only_global) {
-        $css_to_do = array('global' => 1, 'no_cache' => 1);
+        $css_to_do = array('global' => true, 'no_cache' => true);
         if (isset($CSSS['email'])) {
-            $css_to_do['email'] = 1;
+            $css_to_do['email'] = true;
         }
     } else {
         $css_to_do = $CSSS;
@@ -1976,7 +1985,7 @@ function css_tempcode($inline = false, $only_global = false, $context = null, $t
             $c = strval($c);
         }
 
-        _css_tempcode($c, $css, $css_need_inline, $inline, $context, $theme, $seed, null, null, null, null, $do_enforce == 1);
+        _css_tempcode($c, $css, $css_need_inline, $inline, $context, $theme, $seed, null, null, null, null, $do_enforce);
     }
     $css_need_inline->attach($css);
     return $css_need_inline;
@@ -2238,7 +2247,7 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
             }
 
             if ($resources !== array()) {
-                $arr[$grouping_codename] = 0; // Add in merge one to load instead
+                $arr[$grouping_codename] = false; // Add in merge one to load instead
             }
 
             return $grouping_codename;

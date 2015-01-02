@@ -60,7 +60,7 @@ function init__validation()
     $VALIDATED_ALREADY = array();
 
     global $NO_XHTML_LINK_FOLLOW;
-    $NO_XHTML_LINK_FOLLOW = 0;
+    $NO_XHTML_LINK_FOLLOW = false;
 
     global $CSS_TAG_RANGES, $CSS_VALUE_RANGES;
     $CSS_TAG_RANGES = array();
@@ -68,66 +68,66 @@ function init__validation()
 
     global $ENTITIES;
     $ENTITIES = array(
-        'quot' => 1, 'amp' => 1, 'lt' => 1, 'gt' => 1, 'nbsp' => 1, 'iexcl' => 1, 'cent' => 1,
-        'pound' => 1, 'curren' => 1, 'yen' => 1, 'brvbar' => 1, 'sect' => 1, 'uml' => 1,
-        'copy' => 1, 'ordf' => 1, 'laquo' => 1, 'not' => 1, 'shy' => 1, 'reg' => 1, 'macr' => 1,
-        'deg' => 1, 'plusmn' => 1, 'sup2' => 1, 'sup3' => 1, 'acute' => 1, 'micro' => 1,
-        'para' => 1, 'middot' => 1, 'cedil' => 1, 'sup1' => 1, 'ordm' => 1, 'raquo' => 1,
-        'frac14' => 1, 'frac12' => 1, 'frac34' => 1, 'iquest' => 1,
-        'Agrave' => 1, 'Aacute' => 1, 'Acirc' => 1, 'Atilde' => 1, 'Auml' => 1, 'Aring' => 1,
-        'AElig' => 1, 'Ccedil' => 1, 'Egrave' => 1, 'Eacute' => 1,
-        'Ecirc' => 1, 'Euml' => 1, 'Igrave' => 1, 'Iacute' => 1, 'Icirc' => 1, 'Iuml' => 1,
-        'ETH' => 1, 'Ntilde' => 1, 'Ograve' => 1, 'Oacute' => 1, 'Ocirc' => 1,
-        'Otilde' => 1, 'Ouml' => 1, 'times' => 1, 'Oslash' => 1, 'Ugrave' => 1, 'Uacute' => 1,
-        'Ucirc' => 1, 'Uuml' => 1, 'Yacute' => 1, 'THORN' => 1,
-        'szlig' => 1, 'agrave' => 1, 'aacute' => 1, 'acirc' => 1, 'atilde' => 1, 'auml' => 1,
-        'aring' => 1, 'aelig' => 1, 'ccedil' => 1, 'egrave' => 1,
-        'eacute' => 1, 'ecirc' => 1, 'euml' => 1, 'igrave' => 1, 'iacute' => 1, 'icirc' => 1,
-        'iuml' => 1, 'eth' => 1, 'ntilde' => 1, 'ograve' => 1, 'oacute' => 1,
-        'ocirc' => 1, 'otilde' => 1, 'ouml' => 1, 'divide' => 1, 'oslash' => 1, 'ugrave' => 1,
-        'uacute' => 1, 'ucirc' => 1, 'uuml' => 1, 'yacute' => 1,
-        'thorn' => 1, 'yuml' => 1, 'fnof' => 1, 'Alpha' => 1, 'Beta' => 1, 'Gamma' => 1,
-        'Delta' => 1, 'Epsilon' => 1, 'Zeta' => 1, 'Eta' => 1, 'Theta' => 1, 'Iota' => 1,
-        'Kappa' => 1, 'Lambda' => 1, 'Mu' => 1, 'Nu' => 1, 'Xi' => 1, 'Omicron' => 1, 'Pi' => 1,
-        'Rho' => 1, 'Sigma' => 1, 'Tau' => 1, 'Upsilon' => 1, 'Phi' => 1, 'Chi' => 1,
-        'Psi' => 1, 'Omega' => 1, 'alpha' => 1, 'beta' => 1, 'gamma' => 1, 'delta' => 1,
-        'epsilon' => 1, 'zeta' => 1, 'eta' => 1, 'theta' => 1, 'iota' => 1, 'kappa' => 1,
-        'lambda' => 1, 'mu' => 1, 'nu' => 1, 'xi' => 1, 'omicron' => 1, 'pi' => 1, 'rho' => 1,
-        'sigmaf' => 1, 'sigma' => 1, 'tau' => 1, 'upsilon' => 1, 'phi' => 1, 'chi' => 1,
-        'psi' => 1, 'omega' => 1, 'thetasym' => 1, 'upsih' => 1, 'piv' => 1, 'bull' => 1,
-        'hellip' => 1, 'prime' => 1, 'Prime' => 1, 'oline' => 1, 'frasl' => 1,
-        'weierp' => 1, 'image' => 1, 'real' => 1, 'trade' => 1, 'alefsym' => 1, 'larr' => 1,
-        'uarr' => 1, 'rarr' => 1, 'darr' => 1, 'harr' => 1, 'crarr' => 1,
-        'lArr' => 1, 'uArr' => 1, 'rArr' => 1, 'dArr' => 1, 'hArr' => 1, 'forall' => 1,
-        'part' => 1, 'exist' => 1, 'empty' => 1, 'nabla' => 1, 'isin' => 1, 'notin' => 1,
-        'ni' => 1, 'prod' => 1, 'sum' => 1, 'minus' => 1, 'lowast' => 1, 'radic' => 1, 'prop' => 1,
-        'infin' => 1, 'ang' => 1, 'and' => 1, 'or' => 1, 'cap' => 1, 'cup' => 1, 'int' => 1,
-        'there4' => 1, 'sim' => 1, 'cong' => 1, 'asymp' => 1, 'ne' => 1, 'equiv' => 1, 'le' => 1,
-        'ge' => 1, 'sub' => 1, 'sup' => 1, 'nsub' => 1, 'sube' => 1, 'supe' => 1,
-        'oplus' => 1, 'otimes' => 1, 'perp' => 1, 'sdot' => 1, 'lceil' => 1, 'rceil' => 1,
-        'lfloor' => 1, 'rfloor' => 1, 'lang' => 1, 'rang' => 1, 'loz' => 1,
-        'spades' => 1, 'clubs' => 1, 'hearts' => 1, 'diams' => 1, 'OElig' => 1, 'oelig' => 1,
-        'Scaron' => 1, 'scaron' => 1, 'Yuml' => 1, 'circ' => 1, 'tidle' => 1,
-        'ensp' => 1, 'emsp' => 1, 'thinsp' => 1, 'zwnj' => 1, 'zwj' => 1, 'lrm' => 1, 'rlm' => 1,
-        'ndash' => 1, 'mdash' => 1, 'lsquo' => 1, 'rsquo' => 1, 'sbquo' => 1,
-        'ldquo' => 1, 'rdquo' => 1, 'bdquo' => 1, 'dagger' => 1, 'Dagger' => 1, 'permil' => 1,
-        'lsaquo' => 1, 'rsaquo' => 1, 'euro' => 1);
+        'quot' => true, 'amp' => true, 'lt' => true, 'gt' => true, 'nbsp' => true, 'iexcl' => true, 'cent' => true,
+        'pound' => true, 'curren' => true, 'yen' => true, 'brvbar' => true, 'sect' => true, 'uml' => true,
+        'copy' => true, 'ordf' => true, 'laquo' => true, 'not' => true, 'shy' => true, 'reg' => true, 'macr' => true,
+        'deg' => true, 'plusmn' => true, 'sup2' => true, 'sup3' => true, 'acute' => true, 'micro' => true,
+        'para' => true, 'middot' => true, 'cedil' => true, 'sup1' => true, 'ordm' => true, 'raquo' => true,
+        'frac14' => true, 'frac12' => true, 'frac34' => true, 'iquest' => true,
+        'Agrave' => true, 'Aacute' => true, 'Acirc' => true, 'Atilde' => true, 'Auml' => true, 'Aring' => true,
+        'AElig' => true, 'Ccedil' => true, 'Egrave' => true, 'Eacute' => true,
+        'Ecirc' => true, 'Euml' => true, 'Igrave' => true, 'Iacute' => true, 'Icirc' => true, 'Iuml' => true,
+        'ETH' => true, 'Ntilde' => true, 'Ograve' => true, 'Oacute' => true, 'Ocirc' => true,
+        'Otilde' => true, 'Ouml' => true, 'times' => true, 'Oslash' => true, 'Ugrave' => true, 'Uacute' => true,
+        'Ucirc' => true, 'Uuml' => true, 'Yacute' => true, 'THORN' => true,
+        'szlig' => true, 'agrave' => true, 'aacute' => true, 'acirc' => true, 'atilde' => true, 'auml' => true,
+        'aring' => true, 'aelig' => true, 'ccedil' => true, 'egrave' => true,
+        'eacute' => true, 'ecirc' => true, 'euml' => true, 'igrave' => true, 'iacute' => true, 'icirc' => true,
+        'iuml' => true, 'eth' => true, 'ntilde' => true, 'ograve' => true, 'oacute' => true,
+        'ocirc' => true, 'otilde' => true, 'ouml' => true, 'divide' => true, 'oslash' => true, 'ugrave' => true,
+        'uacute' => true, 'ucirc' => true, 'uuml' => true, 'yacute' => true,
+        'thorn' => true, 'yuml' => true, 'fnof' => true, 'Alpha' => true, 'Beta' => true, 'Gamma' => true,
+        'Delta' => true, 'Epsilon' => true, 'Zeta' => true, 'Eta' => true, 'Theta' => true, 'Iota' => true,
+        'Kappa' => true, 'Lambda' => true, 'Mu' => true, 'Nu' => true, 'Xi' => true, 'Omicron' => true, 'Pi' => true,
+        'Rho' => true, 'Sigma' => true, 'Tau' => true, 'Upsilon' => true, 'Phi' => true, 'Chi' => true,
+        'Psi' => true, 'Omega' => true, 'alpha' => true, 'beta' => true, 'gamma' => true, 'delta' => true,
+        'epsilon' => true, 'zeta' => true, 'eta' => true, 'theta' => true, 'iota' => true, 'kappa' => true,
+        'lambda' => true, 'mu' => true, 'nu' => true, 'xi' => true, 'omicron' => true, 'pi' => true, 'rho' => true,
+        'sigmaf' => true, 'sigma' => true, 'tau' => true, 'upsilon' => true, 'phi' => true, 'chi' => true,
+        'psi' => true, 'omega' => true, 'thetasym' => true, 'upsih' => true, 'piv' => true, 'bull' => true,
+        'hellip' => true, 'prime' => true, 'Prime' => true, 'oline' => true, 'frasl' => true,
+        'weierp' => true, 'image' => true, 'real' => true, 'trade' => true, 'alefsym' => true, 'larr' => true,
+        'uarr' => true, 'rarr' => true, 'darr' => true, 'harr' => true, 'crarr' => true,
+        'lArr' => true, 'uArr' => true, 'rArr' => true, 'dArr' => true, 'hArr' => true, 'forall' => true,
+        'part' => true, 'exist' => true, 'empty' => true, 'nabla' => true, 'isin' => true, 'notin' => true,
+        'ni' => true, 'prod' => true, 'sum' => true, 'minus' => true, 'lowast' => true, 'radic' => true, 'prop' => true,
+        'infin' => true, 'ang' => true, 'and' => true, 'or' => true, 'cap' => true, 'cup' => true, 'int' => true,
+        'there4' => true, 'sim' => true, 'cong' => true, 'asymp' => true, 'ne' => true, 'equiv' => true, 'le' => true,
+        'ge' => true, 'sub' => true, 'sup' => true, 'nsub' => true, 'sube' => true, 'supe' => true,
+        'oplus' => true, 'otimes' => true, 'perp' => true, 'sdot' => true, 'lceil' => true, 'rceil' => true,
+        'lfloor' => true, 'rfloor' => true, 'lang' => true, 'rang' => true, 'loz' => true,
+        'spades' => true, 'clubs' => true, 'hearts' => true, 'diams' => true, 'OElig' => true, 'oelig' => true,
+        'Scaron' => true, 'scaron' => true, 'Yuml' => true, 'circ' => true, 'tidle' => true,
+        'ensp' => true, 'emsp' => true, 'thinsp' => true, 'zwnj' => true, 'zwj' => true, 'lrm' => true, 'rlm' => true,
+        'ndash' => true, 'mdash' => true, 'lsquo' => true, 'rsquo' => true, 'sbquo' => true,
+        'ldquo' => true, 'rdquo' => true, 'bdquo' => true, 'dagger' => true, 'Dagger' => true, 'permil' => true,
+        'lsaquo' => true, 'rsaquo' => true, 'euro' => true);
 
     $strict_form_accessibility = false; // Form fields may not be empty with this strict rule
 
     global $POSSIBLY_EMPTY_TAGS;
     $POSSIBLY_EMPTY_TAGS = array(
-        'a' => 1, // When it's an anchor only - we will detect this with custom code
-        'div' => 1,
-        'span' => 1,
-        'td' => 1,
-        'th' => 1, // Only use for 'corner' ones
-        'textarea' => 1,
-        'button' => 1,
-        'script' => 1, // If we have one of these as self-closing in IE... it kills it!
-        'noscript' => 1,
-        'li' => 1,
-        'embed' => 1,
+        'a' => true, // When it's an anchor only - we will detect this with custom code
+        'div' => true,
+        'span' => true,
+        'td' => true,
+        'th' => true, // Only use for 'corner' ones
+        'textarea' => true,
+        'button' => true,
+        'script' => true, // If we have one of these as self-closing in IE... it kills it!
+        'noscript' => true,
+        'li' => true,
+        'embed' => true,
     );
     if ($strict_form_accessibility) {
         unset($POSSIBLY_EMPTY_TAGS['textarea']);
@@ -135,18 +135,18 @@ function init__validation()
 
     global $MUST_SELFCLOSE_TAGS;
     $MUST_SELFCLOSE_TAGS = array(
-        'img' => 1,
-        'hr' => 1,
-        'br' => 1,
-        'param' => 1,
-        'input' => 1,
-        'base' => 1,
-        'link' => 1,
-        'meta' => 1,
-        'area' => 1,
-        'col' => 1,
-        'source' => 1,
-        'nobr' => 1,
+        'img' => true,
+        'hr' => true,
+        'br' => true,
+        'param' => true,
+        'input' => true,
+        'base' => true,
+        'link' => true,
+        'meta' => true,
+        'area' => true,
+        'col' => true,
+        'source' => true,
+        'nobr' => true,
     );
 
     // B's may not appear under A
@@ -254,22 +254,22 @@ function init__validation()
 
     global $TEXT_NO_BLOCK;
     $TEXT_NO_BLOCK = array(
-        'table' => 1,
-        'tr' => 1,
-        'tfoot' => 1,
-        'thead' => 1,
-        'ul' => 1,
-        'ol' => 1,
-        'dl' => 1,
-        'optgroup' => 1,
-        'select' => 1,
-        'colgroup' => 1,
-        'map' => 1,
-        'body' => 1,
-        'form' => 1,
+        'table' => true,
+        'tr' => true,
+        'tfoot' => true,
+        'thead' => true,
+        'ul' => true,
+        'ol' => true,
+        'dl' => true,
+        'optgroup' => true,
+        'select' => true,
+        'colgroup' => true,
+        'map' => true,
+        'body' => true,
+        'form' => true,
     );
     $TEXT_NO_BLOCK += array(
-        'menu' => 1,
+        'menu' => true,
     );
 
     define('IN_XML_TAG', -3);
@@ -379,9 +379,9 @@ function check_xhtml($out, $well_formed_only = false, $is_fragment = false, $val
     $LEN = strlen($OUT);
     $level_ranges = array();
     $stack_size = 0;
-    $to_find = array('html' => 1, 'head' => 1, 'title' => 1/*,'meta'=>1*/);
+    $to_find = array('html' => true, 'head' => true, 'title' => true/*, 'meta' => true*/);
     $only_one_of_stack = array();
-    $only_one_of_template = array('title' => 1, 'head' => 1, 'body' => 1, 'base' => 1, 'thead' => 1, 'tfoot' => 1);
+    $only_one_of_template = array('title' => true, 'head' => true, 'body' => true, 'base' => true, 'thead' => true, 'tfoot' => true);
     $only_one_of = $only_one_of_template;
     $A_LINKS = array();
     $previous = '';
@@ -810,7 +810,7 @@ function _get_next_tag()
 
     $special_chars = null;
     if ($special_chars === null) {
-        $special_chars = array('=' => 1, '"' => 1, '&' => 1, '/' => 1, '<' => 1, '>' => 1, ' ' => 1, "\n" => 1, "\r" => 1);
+        $special_chars = array('=' => true, '"' => true, '&' => true, '/' => true, '<' => true, '>' => true, ' ' => true, "\n" => true, "\r" => true);
     }
 
     while ($POS < $LEN) {

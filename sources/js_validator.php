@@ -139,7 +139,7 @@ function init__js_validator()
 
                 $t = $details[0];
                 do {
-                    $JS_PROTOTYPES[$t][2] += array($prototype => 1);
+                    $JS_PROTOTYPES[$t][2] += array($prototype => true);
                     $t = isset($JS_PROTOTYPES[$t][3]) ? $JS_PROTOTYPES[$t][3] : $JS_PROTOTYPES[$t][0];
                 }
                 while (!is_null($t));
@@ -325,8 +325,8 @@ function js_check_variable_list($JS_LOCAL_VARIABLES)
 
                 $_t1 = ($t1[0] == '!') ? substr($t1, 1) : $t1;
                 $_t2 = ($t2[0] == '!') ? substr($t2, 1) : $t2;
-                $potentials1 = array($_t1 => 1);
-                $potentials2 = array($_t2 => 1);
+                $potentials1 = array($_t1 => true);
+                $potentials2 = array($_t2 => true);
                 if (($t1[0] == '!') && (isset($JS_PROTOTYPES[substr($t1, 1)][2]))) {
                     $potentials1 += $JS_PROTOTYPES[substr($t1, 1)][2];
                 }
@@ -1024,7 +1024,7 @@ function js_ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null)
     global $JS_PROTOTYPES;
 
     // Tidy up our allow list to be a nice map
-    $allowed_types = array('Undefined' => 1, 'Null' => 1);
+    $allowed_types = array('Undefined' => true, 'Null' => true);
     foreach ($_allowed_types as $type) {
         if ($type == '') {
             continue; // Weird
@@ -1032,9 +1032,9 @@ function js_ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null)
 
         if ($type[0] == '!') {
             $allowed_types += $JS_PROTOTYPES[substr($type, 1)][2];
-            $allowed_types[substr($type, 1)] = 1;
+            $allowed_types[substr($type, 1)] = true;
         } else {
-            $allowed_types[$type] = 1;
+            $allowed_types[$type] = true;
         }
     }
 

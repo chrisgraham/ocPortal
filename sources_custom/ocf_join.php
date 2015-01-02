@@ -9,13 +9,13 @@ function init__ocf_join($in = null)
     } else {
         $extra_code = '$hidden->attach(get_referrer_field(false));';
     }
-    $in = str_replace('list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups);', 'list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups); ' . $extra_code, $in);
+    $in = str_replace('list($fields, $_hidden) = ocf_get_member_fields(true, null, $groups);', 'list($fields, $_hidden) = ocf_get_member_fields(true, null, $groups); ' . $extra_code, $in);
 
     // Better referral detection, and proper qualification management
-    $in = str_replace("\$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>\$email_address,'i_taken'=>0),'',1);", 'set_from_referrer_field();', $in);
+    $in = str_replace("\$GLOBALS['FORUM_DB']->query_update('f_invites', array('i_taken' => 1), array('i_email_address' => \$email_address, 'i_taken' => 0) ,'', 1);", 'set_from_referrer_field();', $in);
 
     // Handle signup referrals
-    $in = str_replace('return array($message);', 'require_code(\'referrals\'); assign_referral_awards($member_id,\'join\'); return array($message);', $in);
+    $in = str_replace('return array($message);', 'require_code(\'referrals\'); assign_referral_awards($member_id, \'join\'); return array($message);', $in);
 
     return $in;
 }

@@ -65,7 +65,7 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
 
     if ($RECORD_THEME_IMAGES_CACHE) {
         global $RECORDED_THEME_IMAGES;
-        if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write !== $GLOBALS['FORUM_DB']->connection_write)) {
+        if (is_on_multi_site_network()) {
             $RECORDED_THEME_IMAGES[serialize(array($id, $theme, $lang))] = 1;
         }
     }
@@ -103,15 +103,18 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
                 }
             }
 
-            return cdn_filter($path);
+            $ret = cdn_filter($path);
+            if ($THEME_IMAGES_SMART_CACHE_LOAD >= 2) {
+                $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, $ret);
+            }
+            return $ret;
         }
     }
 
-    if ((!$pure_only) && ($site == 'site') && (!array_key_exists($id, $THEME_IMAGES_CACHE[$site]))) {
+    if ((!$pure_only) && ($site == 'site') && (!array_key_exists($id, $THEME_IMAGES_CACHE[$site])) && ($THEME_IMAGES_SMART_CACHE_LOAD < 2)) {
         // Smart cache update
         load_theme_image_cache($db, $site, $true_theme, $true_lang);
-        $ret = find_theme_image($id, true, true, $theme, $lang, $db, $pure_only);
-        $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, $ret);
+        find_theme_image($id, true, true, $theme, $lang, $db, $pure_only);
     }
 
     if (($pure_only) || (!isset($THEME_IMAGES_CACHE[$site][$id])) || (!$truism)) {
@@ -202,6 +205,9 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
                 require_code('site');
                 attach_message(do_lang_tempcode('NO_SUCH_IMAGE', escape_html($id)), 'warn');
             }
+            if ($THEME_IMAGES_SMART_CACHE_LOAD >= 2) {
+                $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, '');
+            }
             return '';
         }
         if ($truism) {
@@ -213,7 +219,11 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
         // Decache if file has disappeared
         if (($path != '') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching'] != '1')) && (url_is_local($path)) && ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks'] == '0')) && (!is_file(get_file_base() . '/' . rawurldecode($path))) && (!is_file(get_custom_file_base() . '/' . rawurldecode($path)))) { // Missing image, so erase to re-search for it
             unset($THEME_IMAGES_CACHE[$site][$id]);
-            return find_theme_image($id, $silent_fail, $leave_local, $theme, $lang, $db, $pure_only);
+            $ret = find_theme_image($id, $silent_fail, $leave_local, $theme, $lang, $db, $pure_only);
+            if ($THEME_IMAGES_SMART_CACHE_LOAD >= 2) {
+                $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, $ret);
+            }
+            return $ret;
         }
     }
 
@@ -226,7 +236,11 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
             $missing = (!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching'] != '1')) && (!is_file(get_custom_file_base() . '/' . rawurldecode($path))));
             if ((substr($path, 0, 22) == 'themes/default/images/') || ($missing) || ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks'] == '0')) && (!is_file(get_custom_file_base() . '/' . rawurldecode($path)))) { // Not found, so throw away custom theme image and look in default theme images to restore default
                 if (($missing) && (!is_file(get_file_base() . '/' . rawurldecode($path)))) {
-                    return find_theme_image($id, $silent_fail, $leave_local, $theme, $lang, $db, true);
+                    $ret = find_theme_image($id, $silent_fail, $leave_local, $theme, $lang, $db, true);
+                    if ($THEME_IMAGES_SMART_CACHE_LOAD >= 2) {
+                        $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, $ret);
+                    }
+                    return $ret;
                 }
 
                 $base_url = get_base_url();
@@ -238,7 +252,11 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
         $path = $base_url . '/' . $path;
     }
 
-    return cdn_filter($path);
+    $ret = cdn_filter($path);
+    if ($THEME_IMAGES_SMART_CACHE_LOAD >= 2) {
+        $SMART_CACHE->append('theme_images_' . $theme . '_' . $lang, $id, $ret);
+    }
+    return $ret;
 }
 
 /**

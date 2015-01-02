@@ -1075,17 +1075,16 @@ function ecv_REQUIRE_JAVASCRIPT($lang, $escaped, $param)
         if (!isset($JAVASCRIPTS[$param[0]])) {
             if ((isset($param[1])) && ($param[1] == '1')) {
                 global $JAVASCRIPT_BOTTOM;
-                $JAVASCRIPT_BOTTOM[$param[0]] = 1;
+                $JAVASCRIPT_BOTTOM[$param[0]] = true;
             }
 
             require_javascript($param[0]);
             /*// Has to do this inline, as you're not allowed to reference scripts outside head
-            if (!array_key_exists($param[0],$GLOBALS['JAVASCRIPTS']))
-            {
-                    $GLOBALS['JAVASCRIPTS'][$param[0]]=1;
-                    $file=javascript_enforce($param[0]);
-                    $_value=do_template('JAVASCRIPT_NEED_INLINE',array('_GUID'=>'d6c907e26c5a8dd8c65f1d36a1a674a9','CODE'=>file_get_contents($file)));
-                    $value=$_value->evaluate();
+            if (!array_key_exists($param[0], $GLOBALS['JAVASCRIPTS'])) {
+                    $GLOBALS['JAVASCRIPTS'][$param[0]] = true;
+                    $file = javascript_enforce($param[0]);
+                    $_value = do_template('JAVASCRIPT_NEED_INLINE', array('_GUID'=>'d6c907e26c5a8dd8c65f1d36a1a674a9', 'CODE'=>file_get_contents($file)));
+                    $value = $_value->evaluate();
             }*/
         }
     }

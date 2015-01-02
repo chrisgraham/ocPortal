@@ -173,7 +173,7 @@ class Hook_ocp_merge
         // Check actually is ocPortal file path (ERROR)
         if ((!file_exists($file_base . '/_config.php')) || (!file_exists($file_base . '/sources_custom'))) {
             attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_FILES'), 'warn');
-            if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write != $GLOBALS['FORUM_DB']->connection_write) && (!file_exists($file_base . '/_config.php'))) {
+            if ((is_on_multi_site_network($db)) && (!file_exists($file_base . '/_config.php'))) {
                 attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_LINKING_POSSIBLY'), 'warn');
             }
             $bad = true;
@@ -188,7 +188,7 @@ class Hook_ocp_merge
             if (is_null($SITE_INFO)) {
                 $SITE_INFO = $backup_site_info;
                 attach_message(do_lang_tempcode('ERROR_INACESSIBLE_DIR'), 'warn');
-                if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write != $GLOBALS['FORUM_DB']->connection_write)) {
+                if (is_on_multi_site_network($db)) {
                     attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_LINKING_POSSIBLY'), 'warn');
                 }
                 $bad = true;

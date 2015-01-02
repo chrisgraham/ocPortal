@@ -1008,7 +1008,7 @@ function _fatal_exit($text, $return = false)
 function relay_error_notification($text, $ocproducts = true, $notification_type = 'error_occurred')
 {
     // Make sure we don't send too many error emails
-    if ((function_exists('get_value')) && ($GLOBALS['BOOTSTRAPPING'] == 0) && (array_key_exists('SITE_DB', $GLOBALS)) && (!is_null($GLOBALS['SITE_DB']))) {
+    if ((function_exists('get_value')) && (!$GLOBALS['BOOTSTRAPPING']) && (array_key_exists('SITE_DB', $GLOBALS)) && (!is_null($GLOBALS['SITE_DB']))) {
         $num = intval(get_value('num_error_mails_' . date('Y-m-d'))) + 1;
         if ($num == 51) {
             return; // We've sent too many error mails today

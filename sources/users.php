@@ -39,7 +39,7 @@ function init__users()
     $ADMIN_GROUP_CACHE = null;
     $MODERATOR_GROUP_CACHE = null;
     $MEMBER_CACHED = null;
-    $SESSION_CONFIRMED_CACHE = 0;
+    $SESSION_CONFIRMED_CACHE = false;
     $GETTING_MEMBER = false;
     $USER_THEME_CACHE = null;
     $EMOTICON_SET_DIR = null;
@@ -72,7 +72,7 @@ function init__users()
             $where = ' WHERE ' . db_string_equal_to('the_session', get_session_id()) . ' OR ' . db_string_equal_to('ip', get_ip_address(3));
         }
         $SESSION_CACHE = array();
-        if ((get_forum_type() == 'ocf') && (get_db_site() == get_db_forums()) && (get_db_site_host() == get_db_forums_host())) {
+        if ((get_forum_type() == 'ocf') && (!is_on_multi_site_network())) {
             $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
             $_s = $GLOBALS['SITE_DB']->query('SELECT s.*,m.m_primary_group FROM ' . get_table_prefix() . 'sessions s LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'f_members m ON m.id=s.member_id' . $where, null, null, false, true);
             $SESSION_CACHE = list_to_map('the_session', $_s);
@@ -229,7 +229,7 @@ function get_member($quick_only = false)
                 }
             }
             global $SESSION_CONFIRMED_CACHE;
-            $SESSION_CONFIRMED_CACHE = $member_row['session_confirmed'];
+            $SESSION_CONFIRMED_CACHE = ($member_row['session_confirmed'] == 1);
 
             if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member)) && (!$GLOBALS['IS_VIA_BACKDOOR'])) { // All hands to the guns
                 warn_exit(do_lang_tempcode('MEMBER_BANNED'));

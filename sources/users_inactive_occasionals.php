@@ -172,7 +172,7 @@ function create_session($member, $session_confirmed = 0, $invisible = false)
         }
     }
 
-    $GLOBALS['SESSION_CONFIRMED_CACHE'] = $session_confirmed;
+    $GLOBALS['SESSION_CONFIRMED_CACHE'] = ($session_confirmed == 1);
 
     return $new_session;
 }

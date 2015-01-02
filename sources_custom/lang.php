@@ -21,7 +21,7 @@ if (!function_exists('_do_lang')) {
      */
     function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
     {
-        global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_LANG_LOADED;, $PAGE_CACHE_LAZY_LOAD, $SMART_CACHE, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
+        global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_LANG_LOADED, $PAGE_CACHE_LAZY_LOAD, $SMART_CACHE, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
 
         if ($lang === null) {
             $lang = ($USER_LANG_CACHED === null) ? user_lang() : $USER_LANG_CACHED;
@@ -65,7 +65,7 @@ if (!function_exists('_do_lang')) {
                     $ret = _do_lang($codename, $token1, $token2, $token3, $lang, $require_result);
                     if ($ret === null) {
                         $PAGE_CACHE_LANG_LOADED[$lang][$codename] = null;
-                        $SMART_CACHE->append('lang_strings', $codename, null);
+                        $SMART_CACHE->append('lang_strings_' . $lang, $codename, null);
                     }
                     return $ret;
                 }
@@ -121,7 +121,7 @@ if (!function_exists('_do_lang')) {
 
                 if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]))) {
                     $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $ret; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
-                    $SMART_CACHE->append('lang_strings', $ret, null);
+                    $SMART_CACHE->append('lang_strings_' . $lang, $codename, $ret);
                 }
 
                 return $ret;
@@ -129,7 +129,7 @@ if (!function_exists('_do_lang')) {
                 if ($require_result) {
                     global $USER_LANG_LOOP, $REQUIRE_LANG_LOOP;
                     //print_r(debug_backtrace());
-                    if ($USER_LANG_LOOP == 1) {
+                    if ($USER_LANG_LOOP) {
                         critical_error('RELAY', 'Missing language code: ' . escape_html($codename) . '. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/' . fallback_lang() . '/*.ini) for ocPortal on this website have been corrupted.');
                     }
                     if ($REQUIRE_LANG_LOOP >= 2) {
@@ -139,6 +139,8 @@ if (!function_exists('_do_lang')) {
                     erase_cached_language();
                     fatal_exit(do_lang_tempcode('MISSING_LANG_ENTRY', escape_html($codename)));
                 } else {
+                    $SMART_CACHE->append('lang_strings_' . $lang, $codename, null);
+
                     return null;
                 }
             }
@@ -146,7 +148,7 @@ if (!function_exists('_do_lang')) {
 
         if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename, $PAGE_CACHE_LANG_LOADED[$lang])))) {
             $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $LANGUAGE_STRINGS_CACHE[$lang][$codename];
-            $SMART_CACHE->append('lang_strings', $LANGUAGE_STRINGS_CACHE[$lang][$codename], null);
+            $SMART_CACHE->append('lang_strings_' . $lang, $codename, $LANGUAGE_STRINGS_CACHE[$lang][$codename]);
         }
 
         // Put in parameters

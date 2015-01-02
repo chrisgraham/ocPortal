@@ -854,7 +854,7 @@ class Module_admin_addons
      * (Recursively) find all files we can choose to export.
      *
      * @param  PATH                     $dir The directory to search
-     * @return array                    A map, path=>1 (inverted list)
+     * @return array                    A map, path=>true (inverted list)
      */
     public function do_dir($dir)
     {

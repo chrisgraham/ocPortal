@@ -30,6 +30,6 @@ class Hook_ocf_cpf_filter_points_wiki
      */
     public function to_enable()
     {
-        return array();//Actually, hide all these  array('points_gained_wiki'=>1);
+        return array();//Actually, hide all these  array('points_gained_wiki' => true);
     }
 }

@@ -331,7 +331,7 @@ function get_theme_img_code($type, $allow_skip = false, $field_file = 'file', $f
  *
  * @param  ID_TEXT                      $theme The theme
  * @param  string                       $subdir The subdirectory to search under
- * @param  array                        $langs A map (lang=>1) of the languages in the system, so the codes may be filtered out of the image codes in our result list
+ * @param  array                        $langs A map (lang=>true) of the languages in the system, so the codes may be filtered out of the image codes in our result list
  * @return array                        A map, theme-image-code=>URL
  */
 function find_images_do_dir($theme, $subdir, $langs)
@@ -400,7 +400,7 @@ function get_all_image_ids_type($type, $recurse = false, $db = null, $theme = nu
 
     $ids = array();
 
-    if ((!$db_only) && (($db->connection_write == $GLOBALS['SITE_DB']->connection_write) || ($dirs_only) || (get_db_forums() == get_db_site()))) {
+    if ((!$db_only) && (($db->connection_write == $GLOBALS['SITE_DB']->connection_write) || ($dirs_only) || (!is_on_multi_site_network()))) {
         _get_all_image_ids_type($ids, get_file_base() . '/themes/default/images/' . (($type == '') ? '' : ($type . '/')), $type, $recurse, $dirs_only, $skip);
         _get_all_image_ids_type($ids, get_file_base() . '/themes/default/images/' . get_site_default_lang() . '/' . (($type == '') ? '' : ($type . '/')), $type, $recurse, $dirs_only, $skip);
         if ($theme != 'default') {

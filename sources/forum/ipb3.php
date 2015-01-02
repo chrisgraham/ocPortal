@@ -578,7 +578,7 @@ class Forum_driver_ipb3 extends forum_driver_ipb_shared
                 $post = str_replace("class='quotemain'", "class='comcode_quote_inner'", $post);
 
                 // Attachments
-                $attachments = $this->connection->query_select('attachments', array('attach_member_id', 'attach_id', 'attach_file', 'attach_location', 'attach_thumb_location', 'attach_is_image', 'attach_filesize', 'attach_hits'), array('attach_post_key' => $fp_rows[0]['post_key']/*,'attach_approved'=>1 Gone in IPB3? */));
+                $attachments = $this->connection->query_select('attachments', array('attach_member_id', 'attach_id', 'attach_file', 'attach_location', 'attach_thumb_location', 'attach_is_image', 'attach_filesize', 'attach_hits'), array('attach_post_key' => $fp_rows[0]['post_key']/*, 'attach_approved' => true Gone in IPB3? */));
                 foreach ($attachments as $attachment) {
                     if (($attachment['attach_thumb_location'] != '') || ($attachment['attach_is_image'] == 0)) { // Not fully inline
                         $url = get_forum_base_url() . '/index.php?act=Attach&type=post&id=' . $attachment['attach_id'];

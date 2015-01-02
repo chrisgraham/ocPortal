@@ -29,33 +29,44 @@ function init__config()
 
     global $VALUE_OPTIONS_CACHE, $IN_MINIKERNEL_VERSION;
     if (!$IN_MINIKERNEL_VERSION) {
-        $CONFIG_OPTIONS_CACHE = $SMART_CACHE->get('CONFIG_OPTIONS');
-        if ($CONFIG_OPTIONS_CACHE === null) {
+        if (multi_lang_content()) {
+            load_config_options(); // Translation will be needed, so we won't put in the smart cache because we don't know the current language yet (chicken and egg)
+        } else {
             $CONFIG_OPTIONS_CACHE = array();
+            $_cache = $SMART_CACHE->get('CONFIG_OPTIONS');
+            if ($_cache !== null) {
+                foreach ($_cache as $c_key => $c_value) {
+                    $CONFIG_OPTIONS_CACHE[$c_key] = array('c_value_translated' => $c_value, 'c_value' => $c_value, 'c_needs_dereference' => false);
+                }
+            }
         }
 
         if ($PERSISTENT_CACHE === null) {
-            load_value_options();
-        } else {
             $test = $SMART_CACHE->get('VALUE_OPTIONS');
-            $or_list = '1=0';
-            foreach ($test as $key => $_) {
-                $or_list .= ' OR ' . db_string_equal_to('the_name', $key);
-            }
-            $_value_options = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'values WHERE ' . $or_list);
-            $VALUE_OPTIONS_CACHE = list_to_map('the_name', $_value_options);
-            foreach ($test as $key => $_) {
-                if (!isset($VALUE_OPTIONS_CACHE[$key])) {
-                    $VALUE_OPTIONS_CACHE[$key] = null;
+            if ($test !== null) {
+                $or_list = '1=0';
+                foreach ($test as $key => $_) {
+                    $or_list .= ' OR ' . db_string_equal_to('the_name', $key);
                 }
+                $_value_options = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'values WHERE ' . $or_list);
+                $VALUE_OPTIONS_CACHE = list_to_map('the_name', $_value_options);
+                foreach ($test as $key => $_) {
+                    if (!isset($VALUE_OPTIONS_CACHE[$key])) {
+                        $VALUE_OPTIONS_CACHE[$key] = null;
+                    }
+                }
+            } else {
+                $VALUE_OPTIONS_CACHE = array();
             }
+        } else {
+            load_value_options();
         }
     } else {
         $VALUE_OPTIONS_CACHE = array();
     }
 
     global $GET_OPTION_LOOP;
-    $GET_OPTION_LOOP = 0;
+    $GET_OPTION_LOOP = false;
 
     global $MULTI_LANG_CACHE;
     $MULTI_LANG_CACHE = null;
@@ -105,7 +116,7 @@ function multi_lang()
 /**
  * Load all config options.
  */
-function load_options()
+function load_config_options()
 {
     global $CONFIG_OPTIONS_CACHE, $CONFIG_OPTIONS_FULLY_LOADED;
 
@@ -158,9 +169,15 @@ function get_option($name, $missing_ok = false)
     // Maybe missing a DB row, or has an old NULL one, so we need to auto-create from hook
     if (!isset($CONFIG_OPTIONS_CACHE[$name]['c_value'])) {
         global $CONFIG_OPTIONS_FULLY_LOADED;
-        if (!$CONFIG_OPTIONS_FULLY_LOADED) {
-            load_options();
-            return get_option($name, $missing_ok);
+        if ((!$CONFIG_OPTIONS_FULLY_LOADED) && (!array_key_exists($name, $CONFIG_OPTIONS_CACHE))) {
+            load_config_options();
+
+            $value = get_option($name, $missing_ok);
+
+            global $SMART_CACHE;
+            $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
+
+            return $value;
         }
 
         if ((running_script('upgrader')) || (running_script('execute_temp'))) {
@@ -172,13 +189,13 @@ function get_option($name, $missing_ok = false)
         }
 
         global $GET_OPTION_LOOP;
-        $GET_OPTION_LOOP = 1;
+        $GET_OPTION_LOOP = true;
 
         require_code('config2');
         $value = get_default_option($name);
         set_option($name, $value, 0);
 
-        $GET_OPTION_LOOP = 0;
+        $GET_OPTION_LOOP = false;
     }
 
     // Load up row
@@ -189,10 +206,10 @@ function get_option($name, $missing_ok = false)
         return $option['c_value_translated'];
     }
 
+    global $SMART_CACHE;
+
     // Non-translated
     if ($option['c_needs_dereference'] == 0) {
-        global $SMART_CACHE;
-
         $value = $option['c_value'];
         $option['c_value_translated'] = $value; // Allows slightly better code path next time
 
@@ -204,6 +221,8 @@ function get_option($name, $missing_ok = false)
     // Translated...
     $value = get_translated_text($option['c_value_trans']);
     $option['c_value_translated'] = $value;
+
+    $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
 
     return $value;
 }
@@ -265,11 +284,12 @@ function get_value($name, $default = null, $env_also = false)
         return $VALUE_OPTIONS_CACHE[$name]['the_value'];
     }
 
+    $SMART_CACHE->append('VALUE_OPTIONS', $name); // Mark that we will need this in future, even if just null
+
     global $VALUES_FULLY_LOADED;
     if (!$VALUES_FULLY_LOADED) {
         load_value_options();
         $ret = get_value($name, $default, $env_also);
-        $SMART_CACHE->append('VALUE_OPTIONS', $name); // Mark that we will need this in future, even if just null
         return $ret;
     }
 
@@ -303,11 +323,12 @@ function get_value_newer_than($name, $cutoff)
         return null;
     }
 
+    $SMART_CACHE->append('VALUE_OPTIONS', $name); // Mark that we will need this in future, even if just null
+
     global $VALUES_FULLY_LOADED;
     if (!$VALUES_FULLY_LOADED) {
         load_value_options();
         $ret = get_value_newer_than($name, $cutoff);
-        $SMART_CACHE->append('VALUE_OPTIONS', $name); // Mark that we will need this in future, even if just null
         return $ret;
     }
 

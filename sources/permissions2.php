@@ -108,7 +108,7 @@ function has_privilege_group($group_id, $permission, $page = null, $cats = null)
     }
 
     $perhaps = $GLOBALS['SITE_DB']->query_select('group_privileges', array('*'), array('group_id' => $group_id));
-    if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['FORUM_DB']->connection_write) && (get_forum_type() == 'ocf')) {
+    if (is_on_multi_site_network() && (get_forum_type() == 'ocf')) {
         $perhaps = array_merge($perhaps, $GLOBALS['FORUM_DB']->query_select('group_privileges', array('*'), array('group_id' => $group_id, 'module_the_name' => 'forums')));
     }
     $GROUP_PRIVILEGE_CACHE[$group_id] = array();

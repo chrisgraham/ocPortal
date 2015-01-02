@@ -818,8 +818,6 @@ class Hook_addon_registry_core
             'caches/guest_pages/EN/index.html',
             'caches/self_learning/.htaccess',
             'caches/self_learning/index.html',
-            'caches/self_learning/EN/.htaccess',
-            'caches/self_learning/EN/index.html',
             'lang_custom/.htaccess',
             'lang_custom/EN/.htaccess',
             'lang_custom/EN/index.html',

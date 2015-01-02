@@ -462,7 +462,7 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
     $SHOW_EDIT_LINKS = false;
 
     global $XHTML_SPIT_OUT;
-    $XHTML_SPIT_OUT = 1;
+    $XHTML_SPIT_OUT = true;
 
     if (function_exists('set_time_limit')) {
         @set_time_limit(280);
