@@ -42,19 +42,6 @@ class Block_main_greeting
     }
 
     /**
-     * Find cacheing details for the block.
-     *
-     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
-     */
-    public function cacheing_environment()
-    {
-        $info = array();
-        $info['cache_on'] = 'is_guest()?null:array(get_member())';
-        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 24 * 7;
-        return $info;
-    }
-
-    /**
      * Execute the block.
      *
      * @param  array                    $map A map of parameters.

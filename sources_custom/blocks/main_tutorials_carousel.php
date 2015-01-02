@@ -44,8 +44,8 @@ class Block_main_tutorials_carousel
     function cacheing_environment()
     {
         $info=array();
-        $info['cache_on']='$map';
-        $info['ttl']=60;
+        $info['cache_on'] = '$map';
+        $info['ttl'] = 60;
         return $info;
     }
 

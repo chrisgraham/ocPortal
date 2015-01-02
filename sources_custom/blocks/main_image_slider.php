@@ -42,6 +42,20 @@ class Block_main_image_slider
     }
 
     /**
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (null: block is disabled).
+     */
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = '$map';
+        $info['special_cache_flags'] = CACHE_AGAINST_DEFAULT | CACHE_AGAINST_PERMISSIVE_GROUPS;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60;
+        return $info;
+    }
+
+    /**
      * Execute the block.
      *
      * @param  array                    $map A map of parameters.

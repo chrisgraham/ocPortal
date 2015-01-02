@@ -1,7 +1,7 @@
 <tr>
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<td class="ocf_forum_new_post_indicator ocf_column1">
-			<img title="{LANG_NEW_POST_OR_NOT*}" alt="{LANG_NEW_POST_OR_NOT*}" src="{$IMG*,ocf_general/{NEW_POST_OR_NOT*}}" />
+			<img width="32" height="32" title="{LANG_NEW_POST_OR_NOT*}" alt="{LANG_NEW_POST_OR_NOT*}" src="{$IMG*,ocf_general/{NEW_POST_OR_NOT*}}" />
 		</td>
 	{+END}
 	<td class="ocf_forum_in_category_forum ocf_column2">

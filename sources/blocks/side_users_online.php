@@ -50,7 +50,8 @@ class Block_side_users_online
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = 'array(get_member())';
+        $info['cache_on'] = 'array()';
+        $info['special_cache_flags'] = CACHE_AGAINST_DEFAULT | CACHE_AGAINST_MEMBER; // Showing friends birthdays, possibly
         $info['ttl'] = 3;
         return $info;
     }

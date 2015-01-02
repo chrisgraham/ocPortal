@@ -84,6 +84,7 @@ class Block_main_members
             array_key_exists(\'per_row\',$map)?intval($map[\'per_row\']):0,
             array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',
         )';
+        $info['special_cache_flags'] = CACHE_AGAINST_DEFAULT | CACHE_AGAINST_PERMISSIVE_GROUPS;
         $info['ttl'] = 60;
         return $info;
     }
@@ -321,12 +322,12 @@ class Block_main_members
 
         /*if (count($rows)==0)   We let our template control no-result output
         {
-            return do_template('BLOCK_NO_ENTRIES',array(
-                    'HIGH'=>false,
-                    'TITLE'=>do_lang_tempcode('RECENT',make_string_tempcode(integer_format($max)),do_lang_tempcode('MEMBERS')),
-                    'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
-                    'ADD_NAME'=>'',
-                    'SUBMIT_URL'=>'',
+            return do_template('BLOCK_NO_ENTRIES', array(
+                'HIGH' => false,
+                'TITLE' => do_lang_tempcode('RECENT', make_string_tempcode(integer_format($max)), do_lang_tempcode('MEMBERS')),
+                'MESSAGE' => do_lang_tempcode('NO_ENTRIES'),
+                'ADD_NAME' => '',
+                'SUBMIT_URL' => '',
             ));
         }*/
 

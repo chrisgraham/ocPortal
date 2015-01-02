@@ -53,7 +53,9 @@ function realtime_rain_button_load_handler()
 // Called to start the animation
 function start_realtime_rain()
 {
-	var news_ticker=document.getElementById('news_ticker');
+    register_mouse_listener();
+
+    var news_ticker=document.getElementById('news_ticker');
 	news_ticker.style.top='20px';
 	news_ticker.style.left=(get_window_width()/2-find_width(news_ticker)/2)+'px';
 

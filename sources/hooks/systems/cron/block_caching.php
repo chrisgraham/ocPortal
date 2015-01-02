@@ -55,7 +55,7 @@ class Hook_cron_block_caching
         }
 
         $where = array('c_theme' => $GLOBALS['FORUM_DRIVER']->get_theme(), 'c_lang' => user_lang());
-        $requests = $GLOBALS['SITE_DB']->query_select('cron_caching_requests', array('id', 'c_codename', 'c_map', 'c_timezone', 'c_is_bot', 'c_store_as_tempcode'), $where);
+        $requests = $GLOBALS['SITE_DB']->query_select('cron_caching_requests', array('*'), $where);
         foreach ($requests as $request) {
             $GLOBALS['NO_QUERY_LIMIT'] = true;
 
@@ -84,7 +84,8 @@ class Hook_cron_block_caching
                         $info = $object->cacheing_environment();
                     } else {
                         $info = array();
-                        $info['cache_on'] = 'array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))';
+                        $info['cache_on'] = 'array($map)';
+                        $info['special_cache_flags'] = CACHE_AGAINST_DEFAULT | CACHE_AGAINST_PERMISSIVE_GROUPS;
                         $info['ttl'] = 60 * 24;
                     }
                     $ttl = $info['ttl'];
@@ -104,15 +105,13 @@ class Hook_cron_block_caching
                             }
                         }
                     }
-                    $_cache_identifier[] = $request['c_timezone'];
-                    $_cache_identifier[] = $request['c_is_bot'] == 0;
                     $cache_identifier = serialize($_cache_identifier);
 
                     require_code('caches2');
                     if ($request['c_store_as_tempcode'] == 1) {
                         $cache = make_string_tempcode($cache->evaluate());
                     }
-                    put_into_cache($codename, $ttl, $cache_identifier, $cache, array_keys($LANGS_REQUESTED), array_keys($JAVASCRIPTS), array_keys($CSSS), true);
+                    put_into_cache($codename, $ttl, $cache_identifier, $request['c_staff_status'], $request['c_member'], $request['c_groups'], $request['c_is_bot'], $request['c_timezone'], $cache, array_keys($LANGS_REQUESTED), array_keys($JAVASCRIPTS), array_keys($CSSS), true);
                 }
                 $LANGS_REQUESTED += $backup_langs_requested;
                 restore_output_state(false, true);

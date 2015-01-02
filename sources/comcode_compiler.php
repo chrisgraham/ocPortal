@@ -1068,13 +1068,13 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                                 )));
                                                             }
                                                             $tag_output->attach(comcode_to_tempcode(rtrim($cell), $source_member, $as_admin, $wrap_pos, $pass_id, $connection, $semiparse_mode, $preparse_mode, $in_semihtml, $structure_sweep, $check_only, $highlight_bits, $on_behalf_of_member));
-                                                            $tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
+                                                            $tag_output->attach(do_template('COMCODE_FAKE_TABLE_END_CELL'));
                                                         }
                                                         $cell_i++;
                                                     }
                                                 }
 
-                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END_CELL'));
+                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END'));
                                             }
                                         } else {
                                             // Real table...

@@ -1018,13 +1018,14 @@ function do_block($codename, $map = null, $ttl = null)
         }
         if ($row !== null) {
             $cache_identifier = do_block_get_cache_identifier($row['cache_on'], $map);
+            $special_cache_flags = array_key_exists('special_cache_flags', $row) ? $row['special_cache_flags'] : CACHE_AGAINST_DEFAULT;
 
             // See if it actually is cached
             if ($cache_identifier !== null) {
                 if ($ttl === null) {
                     $ttl = $row['cache_ttl'];
                 }
-                $cache = get_cache_entry($codename, $cache_identifier, $ttl, true, $map['cache'] == '2', $map);
+                $cache = get_cache_entry($codename, $cache_identifier, $special_cache_flags, $ttl, true, $map['cache'] == '2', $map);
                 if ($cache === null) {
                     $nql_backup = $GLOBALS['NO_QUERY_LIMIT'];
                     $GLOBALS['NO_QUERY_LIMIT'] = true;
@@ -1074,7 +1075,13 @@ function do_block($codename, $map = null, $ttl = null)
                         if ((isset($map['quick_cache'])) && ($map['quick_cache'] == '1')/* && (has_cookies())*/) {
                             $cache = make_string_tempcode(preg_replace('#((\?)|(&(amp;)?))keep\_[^="]*=[^&"]*#', '\2', $cache->evaluate()));
                         }
-                        put_into_cache($codename, $ttl, $cache_identifier, $cache, array_keys($LANGS_REQUESTED), array_keys($JAVASCRIPTS), array_keys($CSSS), true);
+                        require_code('temporal');
+                        $staff_status = (($special_cache_flags & CACHE_AGAINST_STAFF_STATUS) != 0) ? $GLOBALS['FORUM_DRIVER']->is_staff(get_member()) : null;
+                        $member = (($special_cache_flags & CACHE_AGAINST_MEMBER) != 0) ? get_member() : null;
+                        $groups = (($special_cache_flags & CACHE_AGAINST_PERMISSIVE_GROUPS) != 0) ? implode(',', array_map('strval', filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))) : '';
+                        $is_bot = (($special_cache_flags & CACHE_AGAINST_BOT_STATUS) != 0) ? (is_null(get_bot_type()) ? 0 : 1) : null;
+                        $timezone = (($special_cache_flags & CACHE_AGAINST_TIMEZONE) != 0) ? get_users_timezone(get_member()) : '';
+                        put_into_cache($codename, $ttl, $cache_identifier, $staff_status, $member, $groups, $is_bot, $timezone, $cache, array_keys($LANGS_REQUESTED), array_keys($JAVASCRIPTS), array_keys($CSSS), true);
                     } elseif (($ttl != -1) && ($cache->is_empty())) { // Try again with no TTL, if we currently failed but did impose a TTL
                         $LANGS_REQUESTED += $backup_langs_requested;
                         if (!$GLOBALS['OUTPUT_STREAMING']) {
@@ -1133,10 +1140,23 @@ function do_block($codename, $map = null, $ttl = null)
         if ($info !== null) {
             $cache_identifier = do_block_get_cache_identifier($info['cache_on'], $map);
             if ($cache_identifier !== null) {
+                $special_cache_flags = array_key_exists('special_cache_flags', $info) ? $info['special_cache_flags'] : CACHE_AGAINST_DEFAULT;
+
                 require_code('caches2');
-                put_into_cache($codename, $info['ttl'], $cache_identifier, $cache, array_keys($LANGS_REQUESTED), $GLOBALS['OUTPUT_STREAMING'] ? array() : array_keys($JAVASCRIPTS), $GLOBALS['OUTPUT_STREAMING'] ? array() : array_keys($CSSS), true);
+                require_code('temporal');
+                $staff_status = (($special_cache_flags & CACHE_AGAINST_STAFF_STATUS) != 0) ? $GLOBALS['FORUM_DRIVER']->is_staff(get_member()) : null;
+                $member = (($special_cache_flags & CACHE_AGAINST_MEMBER) != 0) ? get_member() : null;
+                $groups = (($special_cache_flags & CACHE_AGAINST_PERMISSIVE_GROUPS) != 0) ? implode(',', array_map('strval', filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))) : '';
+                $is_bot = (($special_cache_flags & CACHE_AGAINST_BOT_STATUS) != 0) ? (is_null(get_bot_type()) ? 0 : 1) : null;
+                $timezone = (($special_cache_flags & CACHE_AGAINST_TIMEZONE) != 0) ? get_users_timezone(get_member()) : '';
+                put_into_cache($codename, $info['ttl'], $cache_identifier, $staff_status, $member, $groups, $is_bot, $timezone, $cache, array_keys($LANGS_REQUESTED), $GLOBALS['OUTPUT_STREAMING'] ? array() : array_keys($JAVASCRIPTS), $GLOBALS['OUTPUT_STREAMING'] ? array() : array_keys($CSSS), true);
                 if (!is_array($info['cache_on'])) {
-                    $GLOBALS['SITE_DB']->query_insert('cache_on', array('cached_for' => $codename, 'cache_on' => $info['cache_on'], 'cache_ttl' => $info['ttl']), false, true); // Allow errors in case of race conditions
+                    $GLOBALS['SITE_DB']->query_insert('cache_on', array(
+                        'cached_for' => $codename,
+                        'cache_on' => $info['cache_on'],
+                        'special_cache_flags' => $info['special_cache_flags'],
+                        'cache_ttl' => $info['ttl'],
+                    ), false, true); // Allow errors in case of race conditions
                 }
             }
         }
@@ -1348,11 +1368,6 @@ function do_block_get_cache_identifier($cache_on, $map)
             }
         }
     }
-
-    // NB: Don't extend this without thinking, see hard-coded in decache() function too
-    require_code('temporal');
-    $_cache_identifier[] = get_users_timezone(get_member());
-    $_cache_identifier[] = (get_bot_type() === null);
 
     $cache_identifier = serialize($_cache_identifier);
 

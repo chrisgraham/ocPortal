@@ -344,7 +344,7 @@ function get_value_newer_than($name, $cutoff)
 function set_value($name, $value)
 {
     global $VALUE_OPTIONS_CACHE;
-    $existed_before = array_key_exists($name, $VALUE_OPTIONS_CACHE);
+    $existed_before = isset($VALUE_OPTIONS_CACHE[$name]);
     $VALUE_OPTIONS_CACHE[$name]['the_value'] = $value;
     $VALUE_OPTIONS_CACHE[$name]['date_and_time'] = time();
     if ($existed_before) {

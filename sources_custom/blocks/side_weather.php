@@ -68,7 +68,8 @@ class Block_side_weather
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = 'array(isset($map[\'max_days\'])?intval($map[\'max_days\']):2,cron_installed()?null:$GLOBALS[\'FORUM_DRIVER\']->is_staff(get_member()),(array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+        $info['cache_on'] = 'array(isset($map[\'max_days\'])?intval($map[\'max_days\']):2,(array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+        $info['special_cache_flags'] = CACHE_AGAINST_DEFAULT | CACHE_AGAINST_STAFF_STATUS;
         $info['ttl'] = 60;
         return $info;
     }

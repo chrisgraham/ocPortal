@@ -398,8 +398,10 @@ function jumper_tick(id)
 
 function crazy_tick()
 {
-	if (typeof window.mouse_x=='undefined') return;
+    if (typeof window.mouse_x=='undefined') return;
 	if (typeof window.mouse_y=='undefined') return;
+
+    register_mouse_listener();
 
 	var e,i,s_width,biasx,biasy;
 	for (i=0;i<window.crazy_criters.length;i++)

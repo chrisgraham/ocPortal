@@ -318,12 +318,12 @@ Your code will follow a pattern like:
  */
 function info()
 {
-	$info=array();
+	$info = array();
 	...
-	$info['version']=2;
+	$info['version'] = 2;
 	// Setting 'update_require_upgrade' makes ocPortal realise it can do an upgrade
 	//  At run-time it will compare the version in the database, to the version above and auto-upgrade if required
-	$info['update_require_upgrade']=1;
+	$info['update_require_upgrade'] = 1;
 	...
 	return $info;
 }

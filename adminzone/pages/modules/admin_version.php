@@ -171,6 +171,7 @@ class Module_admin_version
             $GLOBALS['SITE_DB']->create_table('cache_on', array(
                 'cached_for' => '*ID_TEXT',
                 'cache_on' => 'LONG_TEXT',
+                'special_cache_flags' => 'INTEGER',
                 'cache_ttl' => 'INTEGER',
             ));
 
@@ -398,19 +399,23 @@ class Module_admin_version
         if ((is_null($upgrade_from)) || ($upgrade_from < 12)) {
             $GLOBALS['SITE_DB']->drop_table_if_exists('cache');
             $GLOBALS['SITE_DB']->create_table('cache', array(
-                'cached_for' => '*ID_TEXT',
-                'identifier' => '*MINIID_TEXT',
+                'id' => '*AUTO',
+                'cached_for' => 'ID_TEXT',
+                'identifier' => 'MINIID_TEXT',
+                'the_theme' => 'MINIID_TEXT', // *Always* set
+                'staff_status' => '?BINARY', // May be null
+                'the_member' => '?MEMBER', // May be null
+                'groups' => 'SHORT_TEXT', // May be blank
+                'is_bot' => '?BINARY', // May be null
+                'timezone' => 'MINIID_TEXT', // May be blank
+                'lang' => 'LANGUAGE_NAME', // *Always* set
                 'the_value' => 'LONG_TEXT',
+                'dependencies' => 'LONG_TEXT',
                 'date_and_time' => 'TIME',
-                'the_theme' => '*ID_TEXT',
-                'lang' => '*LANGUAGE_NAME',
-                'dependencies' => 'LONG_TEXT'
             ));
             $GLOBALS['SITE_DB']->create_index('cache', 'cached_ford', array('date_and_time'));
             $GLOBALS['SITE_DB']->create_index('cache', 'cached_fore', array('cached_for'));
-            $GLOBALS['SITE_DB']->create_index('cache', 'cached_fore2', array('cached_for', 'identifier'));
-            $GLOBALS['SITE_DB']->create_index('cache', 'cached_forf', array('lang'));
-            $GLOBALS['SITE_DB']->create_index('cache', 'cached_forg', array('identifier'));
+            $GLOBALS['SITE_DB']->create_index('cache', 'cached_forf', array('cached_for', 'identifier', 'the_theme', 'lang', 'staff_status', 'the_member', 'groups', 'is_bot', 'timezone'));
             $GLOBALS['SITE_DB']->create_index('cache', 'cached_forh', array('the_theme'));
         }
 
@@ -452,11 +457,14 @@ class Module_admin_version
                 'id' => '*AUTO',
                 'c_codename' => 'ID_TEXT',
                 'c_map' => 'LONG_TEXT',
-                'c_timezone' => 'ID_TEXT',
-                'c_is_bot' => 'BINARY',
-                'c_store_as_tempcode' => 'BINARY',
                 'c_lang' => 'LANGUAGE_NAME',
                 'c_theme' => 'ID_TEXT',
+                'c_staff_status' => '?BINARY',
+                'c_member' => '?MEMBER',
+                'c_groups' => 'SHORT_TEXT',
+                'c_is_bot' => '?BINARY',
+                'c_timezone' => 'MINIID_TEXT',
+                'c_store_as_tempcode' => 'BINARY',
             ));
             $GLOBALS['SITE_DB']->create_index('cron_caching_requests', 'c_compound', array('c_codename', 'c_theme', 'c_lang', 'c_timezone'));
             $GLOBALS['SITE_DB']->create_index('cron_caching_requests', 'c_is_bot', array('c_is_bot'));
@@ -648,10 +656,6 @@ class Module_admin_version
 
             $GLOBALS['SITE_DB']->rename_table('security_images', 'captchas');
 
-            $GLOBALS['SITE_DB']->alter_table_field('cache', 'langs_required', 'LONG_TEXT', 'dependencies');
-
-            $GLOBALS['SITE_DB']->add_table_field('url_id_monikers', 'm_manually_chosen', 'BINARY');
-
             $GLOBALS['SITE_DB']->change_primary_key('member_privileges', array('member_id', 'privilege', 'the_page', 'module_the_name', 'category_name'));
             $GLOBALS['SITE_DB']->change_primary_key('member_zone_access', array('member_id', 'zone_name'));
             $GLOBALS['SITE_DB']->change_primary_key('member_page_access', array('member_id', 'page_name', 'zone_name'));
@@ -667,6 +671,62 @@ class Module_admin_version
             $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'notifications_enabled SET l_setting=l_setting+' . strval(A_WEB_NOTIFICATION) . ' WHERE l_setting<>0');
             $GLOBALS['SITE_DB']->create_index('digestives_tin', 'd_read', array('d_read'));
             $GLOBALS['SITE_DB']->create_index('digestives_tin', 'unread', array('d_to_member_id', 'd_read'));
+
+            rename_config_option('ocp_show_conceded_mode_link', 'show_conceded_mode_link');
+            rename_config_option('ocp_show_personal_adminzone_link', 'show_personal_adminzone_link');
+            rename_config_option('ocp_show_personal_last_visit', 'show_personal_last_visit');
+            rename_config_option('ocp_show_personal_sub_links', 'show_personal_sub_links');
+            rename_config_option('ocp_show_personal_usergroup', 'show_personal_usergroup');
+            rename_config_option('ocp_show_staff_page_actions', 'show_staff_page_actions');
+            rename_config_option('ocp_show_su', 'show_su');
+            rename_config_option('ocp_show_avatar', 'show_avatar');
+
+            $GLOBALS['SITE_DB']->add_table_field('logged_mail_messages', 'm_extra_cc_addresses', 'LONG_TEXT', serialize(array()));
+            $GLOBALS['SITE_DB']->add_table_field('logged_mail_messages', 'm_extra_bcc_addresses', 'LONG_TEXT', serialize(array()));
+            $GLOBALS['SITE_DB']->add_table_field('logged_mail_messages', 'm_join_time', '?TIME');
+
+            $GLOBALS['SITE_DB']->query_delete('url_title_cache');
+            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_meta_title', 'LONG_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_keywords', 'LONG_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_description', 'LONG_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_image_url', 'URLPATH');
+            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_mime_type', 'ID_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_json_discovery', 'URLPATH');
+            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_xml_discovery', 'URLPATH');
+
+            $GLOBALS['SITE_DB']->add_table_field('menu_items', 'i_include_sitemap', 'SHORT_INTEGER', 0);
+
+            $GLOBALS['SITE_DB']->delete_table_field('zones', 'zone_displayed_in_menu');
+            $GLOBALS['SITE_DB']->delete_table_field('zones', 'zone_wide');
+
+            $GLOBALS['SITE_DB']->add_table_field('url_id_monikers', 'm_manually_chosen', 'BINARY');
+            $GLOBALS['SITE_DB']->add_table_field('url_id_monikers', 'm_moniker_reversed', 'SHORT_TEXT');
+            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'url_id_monikers SET m_moniker_reversed=REVERSE(m_moniker)');
+            $GLOBALS['SITE_DB']->create_index('url_id_monikers', 'uim_monrev', array('m_moniker_reversed'));
+
+            $GLOBALS['SITE_DB']->alter_table_field('captchas', 'si_session_id', '*ID_TEXT');
+            $GLOBALS['SITE_DB']->alter_table_field('captchas', 'si_code', 'ID_TEXT');
+            $GLOBALS['SITE_DB']->alter_table_field('messages_to_render', 'r_session_id', 'ID_TEXT');
+            $GLOBALS['SITE_DB']->alter_table_field('temp_block_permissions', 'p_session_id', 'ID_TEXT');
+
+            $GLOBALS['SITE_DB']->delete_index_if_exists('cache', 'cached_fore2');
+            $GLOBALS['SITE_DB']->delete_index_if_exists('cache', 'cached_forf');
+            $GLOBALS['SITE_DB']->delete_index_if_exists('cache', 'cached_forg');
+            $GLOBALS['SITE_DB']->alter_table_field('cache', 'langs_required', 'LONG_TEXT', 'dependencies');
+            $GLOBALS['SITE_DB']->add_table_field('cache', 'id', 'AUTO');
+            $GLOBALS['SITE_DB']->add_table_field('cache', 'staff_status', '?BINARY');
+            $GLOBALS['SITE_DB']->add_table_field('cache', 'the_member', '?MEMBER');
+            $GLOBALS['SITE_DB']->add_table_field('cache', 'groups', 'SHORT_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('cache', 'is_bot', '?BINARY');
+            $GLOBALS['SITE_DB']->add_table_field('cache', 'timezone', 'MINIID_TEXT');
+            $GLOBALS['SITE_DB']->change_primary_key('cache', array('id'));
+
+            $GLOBALS['SITE_DB']->add_table_field('cron_caching_requests', 'c_staff_status', '?BINARY');
+            $GLOBALS['SITE_DB']->add_table_field('cron_caching_requests', 'c_member', '?MEMBER');
+            $GLOBALS['SITE_DB']->add_table_field('cron_caching_requests', 'c_groups', 'SHORT_TEXT');
+            $GLOBALS['SITE_DB']->alter_table_field('cron_caching_requests', 'c_is_bot', '?BINARY');
+
+            $GLOBALS['SITE_DB']->add_table_field('cache_on', 'special_cache_flags', 'INTEGER');
         }
 
         if ((is_null($upgrade_from)) || ($upgrade_from < 17)) {
@@ -751,44 +811,6 @@ class Module_admin_version
             ));
 
             $GLOBALS['SITE_DB']->create_index('cached_comcode_pages', '#page_search__combined', array('cc_page_title', 'string_index'));
-        }
-
-        if ((!is_null($upgrade_from)) && ($upgrade_from < 17)) {
-            rename_config_option('ocp_show_conceded_mode_link', 'show_conceded_mode_link');
-            rename_config_option('ocp_show_personal_adminzone_link', 'show_personal_adminzone_link');
-            rename_config_option('ocp_show_personal_last_visit', 'show_personal_last_visit');
-            rename_config_option('ocp_show_personal_sub_links', 'show_personal_sub_links');
-            rename_config_option('ocp_show_personal_usergroup', 'show_personal_usergroup');
-            rename_config_option('ocp_show_staff_page_actions', 'show_staff_page_actions');
-            rename_config_option('ocp_show_su', 'show_su');
-            rename_config_option('ocp_show_avatar', 'show_avatar');
-
-            $GLOBALS['SITE_DB']->add_table_field('logged_mail_messages', 'm_extra_cc_addresses', 'LONG_TEXT', serialize(array()));
-            $GLOBALS['SITE_DB']->add_table_field('logged_mail_messages', 'm_extra_bcc_addresses', 'LONG_TEXT', serialize(array()));
-            $GLOBALS['SITE_DB']->add_table_field('logged_mail_messages', 'm_join_time', '?TIME');
-
-            $GLOBALS['SITE_DB']->query_delete('url_title_cache');
-            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_meta_title', 'LONG_TEXT');
-            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_keywords', 'LONG_TEXT');
-            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_description', 'LONG_TEXT');
-            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_image_url', 'URLPATH');
-            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_mime_type', 'ID_TEXT');
-            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_json_discovery', 'URLPATH');
-            $GLOBALS['SITE_DB']->add_table_field('url_title_cache', 't_xml_discovery', 'URLPATH');
-
-            $GLOBALS['SITE_DB']->add_table_field('menu_items', 'i_include_sitemap', 'SHORT_INTEGER', 0);
-
-            $GLOBALS['SITE_DB']->delete_table_field('zones', 'zone_displayed_in_menu');
-            $GLOBALS['SITE_DB']->delete_table_field('zones', 'zone_wide');
-
-            $GLOBALS['SITE_DB']->add_table_field('url_id_monikers', 'm_moniker_reversed', 'SHORT_TEXT');
-            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'url_id_monikers SET m_moniker_reversed=REVERSE(m_moniker)');
-            $GLOBALS['SITE_DB']->create_index('url_id_monikers', 'uim_monrev', array('m_moniker_reversed'));
-
-            $GLOBALS['SITE_DB']->alter_table_field('captchas', 'si_session_id', '*ID_TEXT');
-            $GLOBALS['SITE_DB']->alter_table_field('captchas', 'si_code', 'ID_TEXT');
-            $GLOBALS['SITE_DB']->alter_table_field('messages_to_render', 'r_session_id', 'ID_TEXT');
-            $GLOBALS['SITE_DB']->alter_table_field('temp_block_permissions', 'p_session_id', 'ID_TEXT');
         }
     }
 

@@ -49,7 +49,8 @@ class Block_main_quotes
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = 'array(array_key_exists(\'title\',$map)?$map[\'title\']:\'-\',has_actual_page_access(get_member(),\'quotes\',\'adminzone\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'quotes\')';
+        $info['cache_on'] = 'array(array_key_exists(\'title\',$map)?$map[\'title\']:\'-\',array_key_exists(\'param\',$map)?$map[\'param\']:\'quotes\')';
+        $info['special_cache_flags'] = CACHE_AGAINST_DEFAULT | CACHE_AGAINST_PERMISSIVE_GROUPS;
         $info['ttl'] = 5;
         return $info;
     }

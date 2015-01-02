@@ -1764,6 +1764,10 @@ function javascript_tempcode($position = null)
         'transitions' => true,
     ) + $JAVASCRIPT_BOTTOM; // These are all framework ones that add niceities
     foreach ($JAVASCRIPTS as $j => $do_enforce) {
+        if ($do_enforce === null) {
+            continue; // Has already been included in a merger
+        }
+
         if ($position !== null) {
             $bottom = (isset($bottom_ones[$j]));
             if (($position == 'header') && ($bottom)) {
@@ -1838,7 +1842,7 @@ function require_javascript($javascript)
 {
     global $JAVASCRIPTS, $SMART_CACHE;
 
-    if (isset($JAVASCRIPTS[$javascript])) {
+    if (array_key_exists($javascript, $JAVASCRIPTS)) {
         return;
     }
 
@@ -1851,7 +1855,9 @@ function require_javascript($javascript)
 
     $JAVASCRIPTS[$javascript] = true;
 
-    $SMART_CACHE->append('JAVASCRIPTS', $javascript);
+    if (strpos($javascript, 'merged__') === false) {
+        $SMART_CACHE->append('JAVASCRIPTS', $javascript);
+    }
 }
 
 /**
@@ -1979,8 +1985,11 @@ function css_tempcode($inline = false, $only_global = false, $context = null, $t
     } else {
         $css_to_do = $CSSS;
     }
-
     foreach ($css_to_do as $c => $do_enforce) {
+        if ($do_enforce === null) {
+            continue; // Has already been included in a merger
+        }
+
         if (is_integer($c)) {
             $c = strval($c);
         }
@@ -2090,7 +2099,7 @@ function require_css($css)
 {
     global $CSSS, $SMART_CACHE;
 
-    if (isset($CSSS[$css])) {
+    if (array_key_exists($css, $CSSS)) {
         return;
     }
 
@@ -2103,7 +2112,9 @@ function require_css($css)
 
     $CSSS[$css] = true;
 
-    $SMART_CACHE->append('CSSS', $css);
+    if (strpos($css, 'merged__') === false) {
+        $SMART_CACHE->append('CSSS', $css);
+    }
 }
 
 /**
@@ -2234,15 +2245,19 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
         }
 
         if ($good_to_go) {
+            $arr_cnt = count($arr);
+
             foreach ($resources as $resource) {
                 if ($resource == 'no_cache') {
                     continue;
                 }
 
-                unset($arr[$resource]); // Don't load up if unit already individually requested
+                // Know we don't load up if unit already individually requested
+                $arr_cnt--;
+                $arr[$resource] = null;
             }
 
-            if ((count($arr) == 0) && (running_script('snippet'))) {
+            if (($arr_cnt == 0) && (running_script('snippet'))) {
                 return null; // No need to load up merged, as we already have the merged one loaded; but we did successfully also skip loading was that were included in that merge
             }
 

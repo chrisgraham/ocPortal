@@ -205,6 +205,8 @@ function _parse_command_actual($no_term_needed = false)
 {
     // Choice{"FUNCTION" | variable "DEC" | variable "INC" | target assignment_operator expression | function "BRACKET_OPEN" comma_expressions "BRACKET_CLOSE" | "IF" expression command if_rest? | "SWITCH" expression "CURLY_OPEN" cases "CURLY_CLOSE" | "FOREACH" "BRACKET_OPEN" expression "AS" _foreach "BRACKET_CLOSE" command | "FOR" "BRACKET_OPEN" command expression command "BRACKET_CLOSE" command | "DO" command "WHILE" "BRACKET_OPEN" expression "BRACKET_CLOSE" | "WHILE" "BRACKET_OPEN" expression "BRACKET_CLOSE" command | "RETURN" | "CONTINUE" | "BREAK" | "BREAK" expression | "CONTINUE" expression | "RETURN" expression | "GLOBAL" comma_variables | "ECHO" expression}
 
+    $is_static = false;
+
     $next = pparse__parser_peek(true);
     $suppress_error = ($next[0] == 'SUPPRESS_ERROR');
     if ($suppress_error) {
@@ -240,6 +242,7 @@ function _parse_command_actual($no_term_needed = false)
 
         case 'STATIC': // Moves past
             pparse__parser_next();
+            $is_static = true;
 
         case 'variable':
             $target = _parse_target();
@@ -269,6 +272,9 @@ function _parse_command_actual($no_term_needed = false)
                     if (in_array(pparse__parser_peek(), array('EQUAL', 'CONCAT_EQUAL', 'DIV_EQUAL', 'MINUS_EQUAL', 'MUL_EQUAL', 'PLUS_EQUAL', 'BOR_EQUAL'), true)) {
                         $assignment = _parse_assignment_operator();
                         $expression = _parse_expression();
+                        if ($is_static && $expression[0] != 'LITERAL' && $expression[0] != 'CREATE_ARRAY') {
+                            parser_error('Can only use static with a literal (scalar) expression.');
+                        }
                         $command = array('ASSIGNMENT', $assignment, $command, $expression, $GLOBALS['I']);
                     }
                     break;

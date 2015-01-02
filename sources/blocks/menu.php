@@ -51,6 +51,7 @@ class Block_menu
         /* Ideally we would not cache as we would need to cache for all screens due to context sensitive link display (either you're here or match key filtering). However in most cases that only happens per page, so we will cache per page -- and people can turn off cacheing via the standard block parameter for that if needed.*/
         $info = array();
         $info['cache_on'] = array('block_menu__cache_on');
+        $info['special_cache_flags'] = CACHE_AGAINST_DEFAULT | CACHE_AGAINST_PERMISSIVE_GROUPS;
         $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 24 * 140;
         return $info;
     }
@@ -121,10 +122,7 @@ function block_menu__cache_on($map)
     $menu = array_key_exists('param', $map) ? $map['param'] : '';
     $page = get_page_name();
     $url_type = get_param('type', 'browse');
-    $groups = filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()));
-    asort($groups);
     return array(
-        $groups,
         ((substr($menu, 0, 1) != '_') && (substr($menu, 0, 3) != '!!!') && (has_actual_page_access(get_member(), 'admin_menus'))),
         get_zone_name(),
         $page,

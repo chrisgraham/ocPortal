@@ -26,6 +26,17 @@ function init__caches()
     global $BLOCK_CACHE_ON_CACHE;
     $BLOCK_CACHE_ON_CACHE = null;
 
+    // These are ways we might enhance block caching with standardised (queryable) additional caching restraints
+    define('CACHE_AGAINST_NOTHING_SPECIAL', 0);
+    // -
+    define('CACHE_AGAINST_STAFF_STATUS', 1);
+    define('CACHE_AGAINST_MEMBER', 2);
+    define('CACHE_AGAINST_PERMISSIVE_GROUPS', 4);
+    define('CACHE_AGAINST_BOT_STATUS', 8);
+    define('CACHE_AGAINST_TIMEZONE', 16);
+    // -
+    define('CACHE_AGAINST_DEFAULT', CACHE_AGAINST_BOT_STATUS | CACHE_AGAINST_TIMEZONE);
+
     global $PERSISTENT_CACHE, $SITE_INFO;
     /** The persistent cache access object (NULL if there is no persistent cache).
      *
@@ -120,7 +131,7 @@ class Self_learning_cache
     /**
      * Constructor. Initialise our cache.
      *
-     * @param  ID_TEXT $bucket_name The identifier this cache object is for
+     * @param  ID_TEXT                               $bucket_name The identifier this cache object is for
      */
     public function __construct($bucket_name)
     {
@@ -137,11 +148,14 @@ class Self_learning_cache
     public static function is_on()
     {
         static $is_on = null;
+        if ($is_on === null) {
+            $is_on = mixed(); // For CQC
+        }
         if ($is_on !== null) {
             return $is_on;
         }
         global $SITE_INFO;
-        $is_on = isset($SITE_INFO['self_learning_cache']) && $SITE_INFO['self_learning_cache'] == '1';
+        $is_on = (isset($SITE_INFO['self_learning_cache']) && $SITE_INFO['self_learning_cache'] == '1');
         return $is_on;
     }
 
@@ -177,8 +191,8 @@ class Self_learning_cache
     /**
      * Get a cache key.
      *
-     * @param  ID_TEXT $key Cache key
-     * @return ?mixed                               The value (null: not in cache - needs to be learnt)
+     * @param  ID_TEXT                           $key Cache key
+     * @return ?mixed                            The value (null: not in cache - needs to be learnt)
      */
     public function get($key)
     {
@@ -192,7 +206,7 @@ class Self_learning_cache
      * See if a cache key was initially set.
      *
      * @param  ID_TEXT $key Cache key
-     * @return boolean                               Whether it was
+     * @return boolean                           Whether it was
      */
     public function get_initial_status($key)
     {
@@ -202,8 +216,8 @@ class Self_learning_cache
     /**
      * Set a cache key.
      *
-     * @param  ID_TEXT $key Cache key
-     * @param  mixed   $value Value. Should not be null, as that is reserved for "not in cache"
+     * @param  ID_TEXT                           $key Cache key
+     * @param  mixed                             $value Value. Should not be null, as that is reserved for "not in cache"
      */
     public function set($key, $value)
     {
@@ -216,9 +230,9 @@ class Self_learning_cache
      * Add something to a list entry in the cache. Uses keys to set the value, then assigns $value_2 to the key.
      * This is efficient for duplication prevention.
      *
-     * @param  ID_TEXT $key Cache key
-     * @param  mixed   $value Value to append (must not be an object or array, so you may need to pre-serialize)
-     * @param  mixed   $value_2 Secondary value to attach to appended value (optional)
+     * @param  ID_TEXT                           $key Cache key
+     * @param  mixed                             $value Value to append (must not be an object or array, so you may need to pre-serialize)
+     * @param  mixed                             $value_2 Secondary value to attach to appended value (optional)
      * @return boolean                           Whether the value was appended (false if it was already there)
      */
     public function append($key, $value, $value_2 = true)
@@ -344,9 +358,9 @@ function persistent_cache_get($key, $min_cache_date = null)
 /**
  * Put data into the persistent cache.
  *
- * @param  mixed   $key Key
- * @param  mixed   $data The data
- * @param  boolean $server_wide Whether it is server-wide data
+ * @param  mixed                        $key Key
+ * @param  mixed                        $data The data
+ * @param  boolean                      $server_wide Whether it is server-wide data
  * @param  ?integer                     $expire_secs The expiration time in seconds. (null: Default expiry in 60 minutes, or never if it is server-wide).
  */
 function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = null)
@@ -364,8 +378,8 @@ function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = 
 /**
  * Delete data from the persistent cache.
  *
- * @param  mixed   $key Key name
- * @param  boolean $substring Whether we are deleting via substring
+ * @param  mixed                        $key Key name
+ * @param  boolean                      $substring Whether we are deleting via substring
  */
 function persistent_cache_delete($key, $substring = false)
 {
@@ -421,7 +435,7 @@ function erase_persistent_cache()
 /**
  * Remove an item from the general cache (most commonly used for blocks).
  *
- * @param  mixed $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
+ * @param  mixed                        $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array                       $identifier A map of identifiying characteristics (null: no identifying characteristics, decache all)
  */
 function decache($cached_for, $identifier = null)
@@ -437,7 +451,7 @@ function decache($cached_for, $identifier = null)
 /**
  * Find the cache-on parameters for 'codename's cacheing style (prevents us needing to load up extra code to find it).
  *
- * @param  ID_TEXT $codename The codename of what will be checked for cacheing
+ * @param  ID_TEXT                      $codename The codename of what will be checked for cacheing
  * @return ?array                       The cached result (null: no cached result)
  */
 function find_cache_on($codename)
@@ -460,17 +474,18 @@ function find_cache_on($codename)
 /**
  * Find the cached result of what is named by codename and the further constraints.
  *
- * @param  ID_TEXT   $codename The codename to check for cacheing
- * @param  LONG_TEXT $cache_identifier The further restraints (a serialized map)
- * @param  integer   $ttl The TTL for the cache entry. Defaults to a very big ttl
- * @param  boolean   $tempcode Whether we are cacheing Tempcode (needs special care)
- * @param  boolean   $caching_via_cron Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
+ * @param  ID_TEXT                      $codename The codename to check for cacheing
+ * @param  LONG_TEXT                    $cache_identifier The further restraints (a serialized map)
+ * @param  integer                      $special_cache_flags Special cache flags
+ * @param  integer                      $ttl The TTL for the cache entry. Defaults to a very big ttl
+ * @param  boolean                      $tempcode Whether we are cacheing Tempcode (needs special care)
+ * @param  boolean                      $caching_via_cron Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
  * @param  ?array                       $map Parameters to call up block with if we have to defer caching (null: none)
  * @return ?mixed                       The cached result (null: no cached result)
  */
-function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode = false, $caching_via_cron = false, $map = null)
+function get_cache_entry($codename, $cache_identifier, $special_cache_flags, $ttl = 10000, $tempcode = false, $caching_via_cron = false, $map = null)
 {
-    $det = array($codename, $cache_identifier, md5($cache_identifier), $ttl, $tempcode, $caching_via_cron, $map);
+    $det = array($codename, $cache_identifier, md5($cache_identifier), $special_cache_flags, $ttl, $tempcode, $caching_via_cron, $map);
 
     global $SMART_CACHE;
     $test = $SMART_CACHE->get('blocks_needed');
@@ -502,9 +517,24 @@ function _get_cache_entries($dets)
 
     // Bulk load
     if ($GLOBALS['PERSISTENT_CACHE'] === null) {
-        $sql = 'SELECT cached_for,identifier,the_value,date_and_time,dependencies FROM ' . get_table_prefix() . 'cache WHERE ' . db_string_equal_to('lang', user_lang()) . ' AND ' . db_string_equal_to('the_theme', $GLOBALS['FORUM_DRIVER']->get_theme()) . ' AND (1=0';
+        require_code('temporal');
+        $staff_status = $GLOBALS['FORUM_DRIVER']->is_staff(get_member());
+        $the_member = get_member();
+        $groups = implode(',', array_map('strval', filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()))));
+        $is_bot = is_null(get_bot_type()) ? 0 : 1;
+        $timezone = get_users_timezone(get_member());
+
+        $sql = 'SELECT cached_for,identifier,the_value,date_and_time,dependencies FROM ' . get_table_prefix() . 'cache WHERE ';
+        $sql .= db_string_equal_to('the_theme', $GLOBALS['FORUM_DRIVER']->get_theme());
+        $sql .= ' AND (staff_status=' . strval($staff_status) . ' OR staff_status IS NULL)';
+        $sql .= ' AND (the_member=' . strval($the_member) . ' OR the_member IS NULL)';
+        $sql .= ' AND (' . db_string_equal_to('groups', $groups) . ' OR ' . db_string_equal_to('groups', '') . ')';
+        $sql .= ' AND (is_bot=' . strval($is_bot) . ' OR is_bot IS NULL)';
+        $sql .= ' AND (' . db_string_equal_to('timezone', $timezone) . ' OR ' . db_string_equal_to('timezone', '') . ')';
+        $sql .= ' AND ' . db_string_equal_to('lang', user_lang());
+        $sql .= ' AND (1=0';
         foreach ($dets as $det) {
-            list($codename, $cache_identifier, $md5_cache_identifier, $ttl, $tempcode, $caching_via_cron, $map) = $det;
+            list($codename, $cache_identifier, $md5_cache_identifier, $special_cache_flags, $ttl, $tempcode, $caching_via_cron, $map) = $det;
             $sql .= ' OR ';
             $sql .= db_string_equal_to('cached_for', $codename) . ' AND ' . db_string_equal_to('identifier', $md5_cache_identifier);
         }
@@ -514,7 +544,7 @@ function _get_cache_entries($dets)
 
     // Each requested entry
     foreach ($dets as $det) {
-        list($codename, $cache_identifier, $md5_cache_identifier, $ttl, $tempcode, $caching_via_cron, $map) = $det;
+        list($codename, $cache_identifier, $md5_cache_identifier, $special_cache_flags, $ttl, $tempcode, $caching_via_cron, $map) = $det;
 
         $sz = serialize(array($codename, $cache_identifier));
         if (isset($cache[$sz])) { // Already cached
@@ -530,7 +560,7 @@ function _get_cache_entries($dets)
             if ($cache_row === null) { // No
                 if ($caching_via_cron) {
                     require_code('caches2');
-                    request_via_cron($codename, $map, $tempcode);
+                    request_via_cron($codename, $map, $special_cache_flags, $tempcode);
                     $ret = paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'), '', 'nothing_here');
                 } else {
                     $ret = null;
@@ -552,7 +582,7 @@ function _get_cache_entries($dets)
             if ($cache_row === null) { // No
                 if ($caching_via_cron) {
                     require_code('caches2');
-                    request_via_cron($codename, $map, $tempcode);
+                    request_via_cron($codename, $map, $special_cache_flags, $tempcode);
                     $ret = paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'), '', 'nothing_here');
                 } else {
                     $ret = null;
@@ -589,7 +619,7 @@ function _get_cache_entries($dets)
             }
 
             require_code('caches2');
-            request_via_cron($codename, $map, $tempcode);
+            request_via_cron($codename, $map, $special_cache_flags, $tempcode);
         }
 
         // We can use directly...
@@ -606,7 +636,7 @@ function _get_cache_entries($dets)
             if (isset($bits[1])) {
                 $javascripts_required = explode(':', $bits[1]);
                 foreach ($javascripts_required as $javascript) {
-                    if ($javascript != '') {
+                    if (($javascript != '') && (strpos($javascript, 'merged__') === false)) {
                         require_javascript($javascript);
                     }
                 }
@@ -614,7 +644,7 @@ function _get_cache_entries($dets)
             if (isset($bits[2])) {
                 $csss_required = explode(':', $bits[2]);
                 foreach ($csss_required as $css) {
-                    if ($css != '') {
+                    if (($css != '') && (strpos($css, 'merged__') === false)) {
                         require_css($css);
                     }
                 }

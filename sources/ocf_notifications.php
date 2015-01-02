@@ -169,7 +169,7 @@ function ocf_get_pp_rows($limit = 5, $unread = true, $include_inline = true, $ti
  */
 function generate_notifications($member_id)
 {
-    $cache_identifier = serialize(array($member_id));
+    $cache_identifier = serialize(array());
 
     static $notifications_cache = null;
     if (isset($notifications_cache[$cache_identifier])) {
@@ -180,7 +180,7 @@ function generate_notifications($member_id)
 
     $notifications = mixed();
     if ($do_cacheing) {
-        $_notifications = get_cache_entry('_new_pp', $cache_identifier, 10000);
+        $_notifications = get_cache_entry('_new_pp', $cache_identifier, CACHE_AGAINST_NOTHING_SPECIAL, 10000);
 
         if (!is_null($_notifications)) {
             list($__notifications, $num_unread_pps) = $_notifications;
@@ -257,7 +257,7 @@ function generate_notifications($member_id)
 
         if ($do_cacheing) {
             require_code('caches2');
-            put_into_cache('_new_pp', 60 * 60 * 24, $cache_identifier, array($notifications->to_assembly(), $num_unread_pps));
+            put_into_cache('_new_pp', 60 * 60 * 24, $cache_identifier, null, get_member(), '', is_null(get_bot_type()) ? 0 : 1, get_users_timezone(get_member()), array($notifications->to_assembly(), $num_unread_pps));
         }
 
         $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;

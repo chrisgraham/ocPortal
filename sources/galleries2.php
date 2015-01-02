@@ -481,6 +481,7 @@ function add_image($title, $cat, $description, $url, $thumb_url, $validated, $al
     decache('main_personal_galleries_list');
     decache('main_gallery_embed');
     decache('main_image_fader');
+    decache('main_image_slider');
 
     require_code('member_mentions');
     dispatch_member_mention_notifications('image', strval($id), $submitter);
@@ -593,6 +594,7 @@ function edit_image($id, $title, $cat, $description, $url, $thumb_url, $validate
     seo_meta_set_for_explicit('image', strval($id), $meta_keywords, $meta_description);
 
     decache('main_image_fader');
+    decache('main_image_slider');
 
     require_lang('galleries');
     require_code('feedback');
@@ -650,6 +652,7 @@ function delete_image($id, $delete_full = true)
     decache('main_personal_galleries_list');
     decache('main_gallery_embed');
     decache('main_image_fader');
+    decache('main_image_slider');
 
     log_it('DELETE_IMAGE', strval($id), get_translated_text($title));
 

@@ -89,11 +89,11 @@ function script_load_stuff()
 	// Mouse/keyboard listening
 	window.mouse_x=0;
 	window.mouse_y=0;
+	window.mouse_listener_enabled=false;
 	window.ctrl_pressed=false;
 	window.alt_pressed=false;
 	window.meta_pressed=false;
 	window.shift_pressed=false;
-	add_event_listener_abstract(document.body,'mousemove',get_mouse_xy);
 	if (typeof window.addEventListener!='undefined')
 		window.addEventListener('click',capture_click_key_states,true); // Workaround for a dodgy firefox extension
 
@@ -1577,6 +1577,14 @@ function change_class(box,theId,to,from)
 }
 
 /* Dimension functions */
+function register_mouse_listener()
+{
+    if (!window.mouse_listener_enabled)
+    {
+    	window.mouse_listener_enabled=true;
+    	add_event_listener_abstract(document.body,'mousemove',get_mouse_xy);
+    }
+}
 function get_mouse_xy(e,win)
 {
 	if (typeof win=='undefined') win=window;
@@ -1894,6 +1902,8 @@ function activate_tooltip(ac,event,tooltip,width,pic,height,bottom,no_delay,ligh
 
 	if (!page_loaded) return;
 	if ((typeof tooltip!='function') && (tooltip=='')) return;
+
+    register_mouse_listener();
 
 	// Delete other tooltips, which due to browser bugs can get stuck
 	var existing_tooltips=get_elements_by_class_name(document.body,'tooltip');

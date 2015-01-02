@@ -542,6 +542,8 @@ function filter_group_permissivity($groups)
         return $groups;
     }
 
+    asort($groups);
+
     if (get_forum_type() == 'ocf') {
         static $permissive_groups = null;
         if ($permissive_groups === null) {

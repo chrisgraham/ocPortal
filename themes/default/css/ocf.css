@@ -498,6 +498,10 @@ hr.ocf_sig_barrier {
 	margin-{!en_left}: 0.5em;
 }
 
+.ocf_forum_grouping_toggleable_tray_button .toggleable_tray_button img {
+	padding-right: 0 !important;
+}
+
 .ocf_topic_list, .ocf_forum_grouping {
 	table-layout: fixed;
 }

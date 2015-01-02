@@ -232,6 +232,8 @@ Sphere.prototype = new DisplayObject3D();
 
 function load_tag_cloud(container)
 {
+    register_mouse_listener();
+
 	var width=find_width(container);
 	var height=find_height(container);
 
