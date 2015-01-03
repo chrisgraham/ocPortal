@@ -23,8 +23,9 @@
  *
  * @param  mixed                        $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array                       $identifier A map of identifiying characteristics (null: no identifying characteristics, decache all)
+ * @param  ?MEMBER                      $member Member to only decache for (null: no limit)
  */
-function _decache($cached_for, $identifier = null)
+function _decache($cached_for, $identifier = null, $member = null)
 {
     if (!is_array($cached_for)) {
         $cached_for = array($cached_for);
@@ -65,6 +66,9 @@ function _decache($cached_for, $identifier = null)
         $where .= db_string_equal_to('cached_for', $_cached_for);
         if ($_identifier !== null) {
             $where .= ' AND ' . db_string_equal_to('identifier', md5(serialize($_identifier)));
+        }
+        if ($member !== null) {
+            $where .= ' AND the_member=' . strval($member);
         }
     }
 

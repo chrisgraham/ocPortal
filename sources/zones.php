@@ -1135,7 +1135,7 @@ function do_block($codename, $map = null, $ttl = null)
     }
 
     // May it be added to cache_on?
-    if ((!$DO_NOT_CACHE_THIS) && (method_exists($object, 'cacheing_environment')) && ((get_option('is_on_block_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache_blocks', 0) == 1) || (get_param_integer('cache', 0) == 1)) && ((get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache_blocks', null) !== 0) && (get_param_integer('cache', null) !== 0))) {
+    if ((!$DO_NOT_CACHE_THIS) && (method_exists($object, 'cacheing_environment')) && (has_block_cacheing())) {
         $info = $object->cacheing_environment($map);
         if ($info !== null) {
             $cache_identifier = do_block_get_cache_identifier($info['cache_on'], $map);
@@ -1150,14 +1150,6 @@ function do_block($codename, $map = null, $ttl = null)
                 $is_bot = (($special_cache_flags & CACHE_AGAINST_BOT_STATUS) != 0) ? (is_null(get_bot_type()) ? 0 : 1) : null;
                 $timezone = (($special_cache_flags & CACHE_AGAINST_TIMEZONE) != 0) ? get_users_timezone(get_member()) : '';
                 put_into_cache($codename, $info['ttl'], $cache_identifier, $staff_status, $member, $groups, $is_bot, $timezone, $cache, array_keys($LANGS_REQUESTED), $GLOBALS['OUTPUT_STREAMING'] ? array() : array_keys($JAVASCRIPTS), $GLOBALS['OUTPUT_STREAMING'] ? array() : array_keys($CSSS), true);
-                if (!is_array($info['cache_on'])) {
-                    $GLOBALS['SITE_DB']->query_insert('cache_on', array(
-                        'cached_for' => $codename,
-                        'cache_on' => $info['cache_on'],
-                        'special_cache_flags' => $info['special_cache_flags'],
-                        'cache_ttl' => $info['ttl'],
-                    ), false, true); // Allow errors in case of race conditions
-                }
             }
         }
     }
@@ -1323,12 +1315,24 @@ function get_block_info_row($codename, $map)
             $info = $object->cacheing_environment($map);
             if ($info !== null) {
                 $row = array('cached_for' => $codename, 'cache_on' => $info['cache_on'], 'cache_ttl' => $info['ttl']);
+
+                if (!is_array($info['cache_on'])) {
+                    $special_cache_flags = array_key_exists('special_cache_flags', $info) ? $info['special_cache_flags'] : CACHE_AGAINST_DEFAULT;
+
+                    $GLOBALS['SITE_DB']->query_insert('cache_on', array(
+                        'cached_for' => $codename,
+                        'cache_on' => $info['cache_on'],
+                        'special_cache_flags' => $special_cache_flags,
+                        'cache_ttl' => $info['ttl'],
+                    ), false, true); // Allow errors in case of race conditions
+                }
             }
         }
     }
     if (($row === null) && (isset($map['quick_cache'])) && ($map['quick_cache'] == '1')) {
         $row = array('cached_for' => $codename, 'cache_on' => 'array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))', 'cache_ttl' => 60);
     }
+
     $cache[$sz] = $row;
     return $row;
 }

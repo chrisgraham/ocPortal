@@ -136,8 +136,12 @@ function ocf_edit_topic($topic_id, $description = null, $emoticon = null, $valid
         require_code('ocf_posts_action');
         ocf_decache_ocp_blocks($forum_id);
     } else {
-        decache('side_ocf_private_topics');
-        decache('_new_pp');
+        decache('side_ocf_private_topics', null, $info[0]['t_pt_from']);
+        decache('_new_pp', null, $info[0]['t_pt_from']);
+        decache('_get_pts', null, $info[0]['t_pt_from']);
+        decache('side_ocf_private_topics', null, $info[0]['t_pt_to']);
+        decache('_new_pp', null, $info[0]['t_pt_to']);
+        decache('_get_pts', null, $info[0]['t_pt_to']);
     }
 }
 
@@ -272,8 +276,12 @@ function ocf_delete_topic($topic_id, $reason = '', $post_target_topic_id = null,
         require_code('ocf_posts_action');
         ocf_decache_ocp_blocks($forum_id);
     } else {
-        decache('side_ocf_private_topics');
-        decache('_new_pp');
+        decache('side_ocf_private_topics', null, $info[0]['t_pt_from']);
+        decache('_new_pp', null, $info[0]['t_pt_from']);
+        decache('_get_pts', null, $info[0]['t_pt_from']);
+        decache('side_ocf_private_topics', null, $info[0]['t_pt_to']);
+        decache('_new_pp', null, $info[0]['t_pt_to']);
+        decache('_get_pts', null, $info[0]['t_pt_to']);
     }
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
@@ -439,8 +447,18 @@ function ocf_move_topics($from, $to, $topics = null, $check_perms = true) // NB:
     if (!is_null($from)) {
         ocf_decache_ocp_blocks($from);
     } else {
-        decache('side_ocf_private_topics');
-        decache('_new_pp');
+        if (count($topics) == 1) {
+            decache('side_ocf_private_topics', null, $topic_info[0]['t_pt_from']);
+            decache('_new_pp', null, $topic_info[0]['t_pt_from']);
+            decache('_get_pts', null, $topic_info[0]['t_pt_from']);
+            decache('side_ocf_private_topics', null, $topic_info[0]['t_pt_to']);
+            decache('_new_pp', null, $topic_info[0]['t_pt_to']);
+            decache('_get_pts', null, $topic_info[0]['t_pt_to']);
+        } else {
+            decache('side_ocf_private_topics');
+            decache('_new_pp');
+            decache('_get_pts');
+        }
     }
     ocf_decache_ocp_blocks($to, $forum_name);
 

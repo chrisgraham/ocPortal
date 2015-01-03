@@ -180,7 +180,7 @@ function generate_notifications($member_id)
 
     $notifications = mixed();
     if ($do_cacheing) {
-        $_notifications = get_cache_entry('_new_pp', $cache_identifier, CACHE_AGAINST_NOTHING_SPECIAL, 10000);
+        $_notifications = get_cache_entry('_new_pp', $cache_identifier, CACHE_AGAINST_MEMBER, 10000);
 
         if (!is_null($_notifications)) {
             list($__notifications, $num_unread_pps) = $_notifications;

@@ -1261,6 +1261,10 @@ function ocf_edit_custom_field($id, $name, $description, $default, $public_view,
 
     $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_back;
 
+    if (function_exists('persistent_cache_delete')) {
+        persistent_cache_delete('CUSTOM_FIELD_CACHE');
+    }
+
     decache('main_members');
 }
 
@@ -1298,6 +1302,10 @@ function ocf_delete_custom_field($id)
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
         expunge_resourcefs_moniker('cpf', strval($id));
+    }
+
+    if (function_exists('persistent_cache_delete')) {
+        persistent_cache_delete('CUSTOM_FIELD_CACHE');
     }
 
     if (function_exists('decache')) {

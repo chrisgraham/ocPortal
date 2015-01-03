@@ -574,6 +574,10 @@ function ocf_make_custom_field($name, $locked = 0, $description = '', $default =
         decache('main_members');
     }
 
+    if (function_exists('persistent_cache_delete')) {
+        persistent_cache_delete('CUSTOM_FIELD_CACHE');
+    }
+
     $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_back;
     return $id;
 }

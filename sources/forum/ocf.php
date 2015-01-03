@@ -1319,7 +1319,17 @@ class Forum_driver_ocf extends Forum_driver_base
      */
     protected function _get_super_admin_groups()
     {
-        return collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_admin' => 1)));
+        $ret = function_exists('persistent_cache_get') ? persistent_cache_get(array('SUPER_ADMIN_GROUPS')) : null;
+
+        if ($ret === null) {
+            $ret = collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_admin' => 1)));
+
+            if (function_exists('persistent_cache_set')) {
+                persistent_cache_set('SUPER_ADMIN_GROUPS', $ret);
+            }
+        }
+
+        return $ret;
     }
 
     /**
@@ -1330,7 +1340,17 @@ class Forum_driver_ocf extends Forum_driver_base
      */
     protected function _get_moderator_groups()
     {
-        return collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_moderator' => 1)));
+        $ret = function_exists('persistent_cache_get') ? persistent_cache_get(array('SUPER_MODERATOR_GROUPS')) : null;
+
+        if ($ret === null) {
+            $ret = collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_moderator' => 1)));
+
+            if (function_exists('persistent_cache_set')) {
+                persistent_cache_set('SUPER_MODERATOR_GROUPS', $ret);
+            }
+        }
+
+        return $ret;
     }
 
     /**

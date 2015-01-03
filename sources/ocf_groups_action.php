@@ -170,6 +170,8 @@ function ocf_make_group($name, $is_default = 0, $is_super_admin = 0, $is_super_m
     persistent_cache_delete('GROUPS_COUNT_PO');
     persistent_cache_delete('GROUPS');
     persistent_cache_delete('GROUPS_PO');
+    persistent_cache_delete('SUPER_ADMIN_GROUPS');
+    persistent_cache_delete('SUPER_MODERATOR_GROUPS');
 
     require_code('member_mentions');
     dispatch_member_mention_notifications('group', strval($group_id));

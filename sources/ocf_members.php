@@ -25,10 +25,19 @@ function init__ocf_members()
 {
     global $CUSTOM_FIELD_CACHE;
     $CUSTOM_FIELD_CACHE = array();
+    if (function_exists('persistent_cache_get')) {
+        $test = persistent_cache_get('CUSTOM_FIELD_CACHE');
+        if (is_array($test)) {
+            $CUSTOM_FIELD_CACHE = $test;
+        }
+    }
+
     global $MEMBER_CACHE_FIELD_MAPPINGS;
     $MEMBER_CACHE_FIELD_MAPPINGS = array();
+
     global $PRIMARY_GROUP_MEMBERS_CACHE;
     $PRIMARY_GROUP_MEMBERS_CACHE = array();
+
     global $MAY_WHISPER_CACHE;
     $MAY_WHISPER_CACHE = array();
 }
@@ -185,6 +194,10 @@ function ocf_get_all_custom_fields_match($groups = null, $public_view = null, $o
         }
 
         $CUSTOM_FIELD_CACHE[$x] = $result;
+
+        if (function_exists('persistent_cache_set')) {
+            persistent_cache_set('CUSTOM_FIELD_CACHE', $CUSTOM_FIELD_CACHE);
+        }
     }
 
     $result2 = array();

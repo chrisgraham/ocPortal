@@ -51,27 +51,32 @@ class Hook_cron_notification_digests
                         'd_to_member_id' => $to_member_id,
                         'd_frequency' => $frequency,
                     ), 'ORDER BY d_date_and_time');
-                    $GLOBALS['SITE_DB']->query_delete('digestives_tin', array(
-                        'd_to_member_id' => $to_member_id,
-                        'd_frequency' => $frequency,
-                    ));
 
-                    $_message = '';
-                    foreach ($messages as $message) {
-                        if ($message['d_read'] == 0) {
-                            if ($_message != '') {
-                                $_message .= "\n";
+                    if (count($messages) > 0) {
+                        $GLOBALS['SITE_DB']->query_delete('digestives_tin', array(
+                            'd_to_member_id' => $to_member_id,
+                            'd_frequency' => $frequency,
+                        ));
+
+                        $_message = '';
+                        foreach ($messages as $message) {
+                            if ($message['d_read'] == 0) {
+                                if ($_message != '') {
+                                    $_message .= "\n";
+                                }
+                                $_message .= do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP', comcode_escape($message['d_subject']), get_translated_text($message['d_message']), array(comcode_escape(get_site_name()), get_timezoned_date($message['d_date_and_time'])));
                             }
-                            $_message .= do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP', comcode_escape($message['d_subject']), get_translated_text($message['d_message']), array(comcode_escape(get_site_name()), get_timezoned_date($message['d_date_and_time'])));
+                            delete_lang($message['d_message']);
                         }
-                        delete_lang($message['d_message']);
-                    }
-                    if ($_message != '') {
-                        $wrapped_subject = do_lang('DIGEST_EMAIL_SUBJECT_' . strval($frequency), comcode_escape(get_site_name()));
-                        $wrapped_message = do_lang('DIGEST_EMAIL_MESSAGE_WRAP', $_message, comcode_escape(get_site_name()));
+                        if ($_message != '') {
+                            $wrapped_subject = do_lang('DIGEST_EMAIL_SUBJECT_' . strval($frequency), comcode_escape(get_site_name()));
+                            $wrapped_message = do_lang('DIGEST_EMAIL_MESSAGE_WRAP', $_message, comcode_escape(get_site_name()));
 
-                        require_code('mail');
-                        mail_wrap($wrapped_subject, $wrapped_message, array($to_email), $to_name, get_option('staff_address'), get_site_name(), 3, null, true, A_FROM_SYSTEM_UNPRIVILEGED, false, false, false, 'MAIL', false, null, null, $join_time);
+                            require_code('mail');
+                            mail_wrap($wrapped_subject, $wrapped_message, array($to_email), $to_name, get_option('staff_address'), get_site_name(), 3, null, true, A_FROM_SYSTEM_UNPRIVILEGED, false, false, false, 'MAIL', false, null, null, $join_time);
+                        }
+
+                        decache('_get_notifications', null, $to_member_id);
                     }
 
                     $GLOBALS['SITE_DB']->query_update('digestives_consumed', array(

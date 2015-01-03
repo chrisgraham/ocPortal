@@ -173,6 +173,8 @@ function ocf_edit_group($group_id, $name, $is_default, $is_super_admin, $is_supe
 
     persistent_cache_delete('GROUPS');
     persistent_cache_delete('GROUPS_PO');
+    persistent_cache_delete('SUPER_ADMIN_GROUPS');
+    persistent_cache_delete('SUPER_MODERATOR_GROUPS');
 }
 
 /**
@@ -238,6 +240,8 @@ function ocf_delete_group($group_id, $target_group = null)
     persistent_cache_delete('GROUPS_COUNT_PO');
     persistent_cache_delete('GROUPS');
     persistent_cache_delete('GROUPS_PO');
+    persistent_cache_delete('SUPER_ADMIN_GROUPS');
+    persistent_cache_delete('SUPER_MODERATOR_GROUPS');
 }
 
 /**

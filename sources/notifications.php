@@ -530,6 +530,8 @@ function _dispatch_notification_to_member($to_member_id, $setting, $notification
                 'c_frequency' => $frequency,
                 'c_time' => time(),
             ), false, true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
+
+            decache('_get_notifications', null, $to_member_id);
         }
     }
 

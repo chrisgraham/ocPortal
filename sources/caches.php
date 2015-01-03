@@ -437,15 +437,16 @@ function erase_persistent_cache()
  *
  * @param  mixed                        $cached_for The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array                       $identifier A map of identifiying characteristics (null: no identifying characteristics, decache all)
+ * @param  ?MEMBER                      $member Member to only decache for (null: no limit)
  */
-function decache($cached_for, $identifier = null)
+function decache($cached_for, $identifier = null, $member = null)
 {
     if (get_mass_import_mode()) {
         return;
     }
 
     require_code('caches2');
-    _decache($cached_for, $identifier);
+    _decache($cached_for, $identifier, $member);
 }
 
 /**
@@ -524,6 +525,8 @@ function _get_cache_entries($dets)
         $is_bot = is_null(get_bot_type()) ? 0 : 1;
         $timezone = get_users_timezone(get_member());
 
+        $do_query = false;
+
         $sql = 'SELECT cached_for,identifier,the_value,date_and_time,dependencies FROM ' . get_table_prefix() . 'cache WHERE ';
         $sql .= db_string_equal_to('the_theme', $GLOBALS['FORUM_DRIVER']->get_theme());
         $sql .= ' AND (staff_status=' . strval($staff_status) . ' OR staff_status IS NULL)';
@@ -535,18 +538,27 @@ function _get_cache_entries($dets)
         $sql .= ' AND (1=0';
         foreach ($dets as $det) {
             list($codename, $cache_identifier, $md5_cache_identifier, $special_cache_flags, $ttl, $tempcode, $caching_via_cron, $map) = $det;
+
+            $sz = serialize(array($codename, $md5_cache_identifier));
+            if (isset($cache[$sz])) { // Already cached
+                $rets[] = $cache[$sz];
+                continue;
+            }
+
             $sql .= ' OR ';
             $sql .= db_string_equal_to('cached_for', $codename) . ' AND ' . db_string_equal_to('identifier', $md5_cache_identifier);
+
+            $do_query = true;
         }
         $sql .= ')';
-        $cache_rows = $GLOBALS['SITE_DB']->query($sql);
+        $cache_rows = $do_query ? $GLOBALS['SITE_DB']->query($sql) : array();
     }
 
     // Each requested entry
     foreach ($dets as $det) {
         list($codename, $cache_identifier, $md5_cache_identifier, $special_cache_flags, $ttl, $tempcode, $caching_via_cron, $map) = $det;
 
-        $sz = serialize(array($codename, $cache_identifier));
+        $sz = serialize(array($codename, $md5_cache_identifier));
         if (isset($cache[$sz])) { // Already cached
             $rets[] = $cache[$sz];
             continue;

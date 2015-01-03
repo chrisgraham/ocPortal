@@ -53,6 +53,8 @@ function notification_script()
 function notification_mark_all_read_script()
 {
     $GLOBALS['SITE_DB']->query_update('digestives_tin', array('d_read' => 1), array('d_read' => 0, 'd_to_member_id' => get_member()));
+
+    decache('_get_notifications', null, get_member());
 }
 
 /**
@@ -123,10 +125,15 @@ function notification_poller_script()
         // Only keep around for X days
         $sql = 'd_frequency=' . strval(A_WEB_NOTIFICATION) . ' AND d_date_and_time<' . strval(time() - 60 * 60 * 24 * intval(get_option('notification_keep_days')));
         $rows = $GLOBALS['SITE_DB']->query('SELECT d_message FROM ' . get_table_prefix() . 'digestives_tin WHERE ' . $sql);
-        foreach ($rows as $row) {
-            delete_lang($row['d_message']);
+        if (count($rows) > 0) {
+            foreach ($rows as $row) {
+                delete_lang($row['d_message']);
+            }
+
+            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'digestives_tin WHERE ' . $sql);
+
+            decache('_get_notifications', null, get_member());
         }
-        $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'digestives_tin WHERE ' . $sql);
     }
 
     // Private topics
@@ -144,9 +151,9 @@ function notification_poller_script()
                 if (!is_null($max)) {
                     list($display, $unread) = get_pts($max);
                     $xml .= '
-                                        <display_pts>' . $display->evaluate() . '</display_pts>
-                                        <unread_pts>' . strval($unread) . '</unread_pts>
-                            ';
+                        <display_pts>' . $display->evaluate() . '</display_pts>
+                        <unread_pts>' . strval($unread) . '</unread_pts>
+                    ';
                 }
             }
         }
@@ -170,6 +177,13 @@ function get_web_notifications($max = null, $start = 0)
 {
     if (is_guest()) {
         return array(new Tempcode(), 0);
+    }
+
+    if ($start == 0) {
+        $test = get_cache_entry('_get_notifications', serialize(array($max)), CACHE_AGAINST_MEMBER, 10000);
+        if ($test !== null) {
+            return $test;
+        }
     }
 
     $where = array(
@@ -222,7 +236,14 @@ function get_web_notifications($max = null, $start = 0)
 
     $max_rows = $GLOBALS['SITE_DB']->query_select_value('digestives_tin', 'COUNT(*)', $where + array('d_read' => 0));
 
-    return array($out, $max_rows);
+    $ret = array($out, $max_rows);
+
+    if ($start == 0) {
+    	require_code('caches2');
+    	put_into_cache('_get_notifications', 60 * 60 * 24, serialize(array($max)), null, get_member(), '', is_null(get_bot_type()) ? 0 : 1, get_users_timezone(get_member()), $ret);
+    }
+
+    return $ret;
 }
 
 /**
@@ -295,6 +316,13 @@ function get_pts($max = null, $start = 0)
         return array(new Tempcode(), 0);
     }
 
+    if ($start == 0) {
+        $test = get_cache_entry('_get_pts', serialize(array($max)), CACHE_AGAINST_MEMBER, 10000);
+        if ($test !== null) {
+            return $test;
+        }
+    }
+
     ocf_require_all_forum_stuff();
 
     require_code('ocf_notifications');
@@ -339,7 +367,14 @@ function get_pts($max = null, $start = 0)
         }
     }
 
-    return array($out, $max_rows);
+    $ret = array($out, $max_rows);
+
+    if ($start == 0) {
+    	require_code('caches2');
+    	put_into_cache('_get_pts', 60 * 60 * 24, serialize(array($max)), null, get_member(), '', is_null(get_bot_type()) ? 0 : 1, get_users_timezone(get_member()), $ret);
+    }
+
+    return $ret;
 }
 
 /**

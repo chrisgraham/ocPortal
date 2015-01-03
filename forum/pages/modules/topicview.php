@@ -308,8 +308,10 @@ class Module_topicview
             $posts = new Tempcode();
             $replied = false;
             if (is_null($topic_info['forum_id'])) {
-                decache('side_ocf_private_topics', array(get_member()));
-                decache('_new_pp', array(get_member()));
+                // Has now read
+                decache('side_ocf_private_topics', null, get_member());
+                decache('_new_pp', null, get_member());
+                decache('_get_pts', null, get_member());
             }
             $second_poster = $topic_info['first_poster'];
             $poster_details_cache = array();
@@ -433,8 +435,10 @@ class Module_topicview
                 $post_url = $GLOBALS['FORUM_DRIVER']->post_url($_postdetails['id'], is_null($topic_info['forum_id']) ? '' : strval($topic_info['forum_id']), true);
 
                 if ((array_key_exists('intended_solely_for', $_postdetails)) && ($_postdetails['intended_solely_for'] == get_member())) {
-                    decache('side_ocf_private_topics', array(get_member()));
-                    decache('_new_pp', array(get_member()));
+                    // Has now read
+                    decache('side_ocf_private_topics', null, get_member());
+                    decache('_new_pp', null, get_member());
+                    decache('_get_pts', null, get_member());
                 }
 
                 $emphasis = ocf_get_post_emphasis($_postdetails);

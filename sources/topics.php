@@ -892,8 +892,10 @@ class OCP_Topic
             }
 
             if (array_key_exists('intended_solely_for', $post)) {
-                decache('side_ocf_personal_topics', array(get_member()));
-                decache('_new_pp', array(get_member()));
+                // Has now read
+                decache('side_ocf_personal_topics', null, get_member());
+                decache('_new_pp', null, get_member());
+                decache('_get_pts', null, get_member());
             }
 
             // Make sure that pre-processing happens to pick up meta data 'image' for post attachment -- but only for the first post

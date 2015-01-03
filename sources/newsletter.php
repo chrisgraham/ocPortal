@@ -421,6 +421,9 @@ function add_newsletter($title, $description)
     $map += insert_lang('description', $description, 2);
     $id = $GLOBALS['SITE_DB']->query_insert('newsletters', $map, true);
     log_it('ADD_NEWSLETTER', strval($id), $title);
+
+    decache('main_newsletter_signup');
+
     return $id;
 }
 
@@ -440,6 +443,8 @@ function edit_newsletter($id, $title, $description)
     $map += lang_remap('description', $_description, $description);
     $GLOBALS['SITE_DB']->query_update('newsletters', $map, array('id' => $id), '', 1);
     log_it('EDIT_NEWSLETTER', strval($id), $_title);
+
+    decache('main_newsletter_signup');
 }
 
 /**
@@ -456,4 +461,6 @@ function delete_newsletter($id)
     $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe', array('newsletter_id' => $id));
     delete_lang($_title);
     delete_lang($_description);
+
+    decache('main_newsletter_signup');
 }

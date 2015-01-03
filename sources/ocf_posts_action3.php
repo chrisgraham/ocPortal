@@ -228,7 +228,7 @@ function ocf_edit_post($post_id, $validated, $title, $post, $skip_sig, $is_empha
 function ocf_delete_posts_topic($topic_id, $posts, $reason = '', $check_perms = true, $cleanup = true)
 {
     // Info about source
-    $info = $GLOBALS['FORUM_DB']->query_select('f_topics', array('t_forum_id'), array('id' => $topic_id), '', 1);
+    $info = $GLOBALS['FORUM_DB']->query_select('f_topics', array('t_forum_id', 't_pt_from', 't_pt_to'), array('id' => $topic_id), '', 1);
     if (!array_key_exists(0, $info)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
@@ -332,8 +332,12 @@ function ocf_delete_posts_topic($topic_id, $posts, $reason = '', $check_perms = 
     if (!is_null($forum_id)) {
         ocf_decache_ocp_blocks($forum_id);
     } else {
-        decache('side_ocf_private_topics');
-        decache('_new_pp');
+        decache('side_ocf_private_topics', null, $info[0]['t_pt_from']);
+        decache('_new_pp', null, $info[0]['t_pt_from']);
+        decache('_get_pts', null, $info[0]['t_pt_from']);
+        decache('side_ocf_private_topics', null, $info[0]['t_pt_to']);
+        decache('_new_pp', null, $info[0]['t_pt_to']);
+        decache('_get_pts', null, $info[0]['t_pt_to']);
     }
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
