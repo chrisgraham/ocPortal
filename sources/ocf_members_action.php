@@ -576,6 +576,7 @@ function ocf_make_custom_field($name, $locked = 0, $description = '', $default =
 
     if (function_exists('persistent_cache_delete')) {
         persistent_cache_delete('CUSTOM_FIELD_CACHE');
+        persistent_cache_delete('LIST_CPFS');
     }
 
     $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_back;

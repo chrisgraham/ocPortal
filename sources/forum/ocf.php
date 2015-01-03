@@ -1319,7 +1319,7 @@ class Forum_driver_ocf extends Forum_driver_base
      */
     protected function _get_super_admin_groups()
     {
-        $ret = function_exists('persistent_cache_get') ? persistent_cache_get(array('SUPER_ADMIN_GROUPS')) : null;
+        $ret = function_exists('persistent_cache_get') ? persistent_cache_get('SUPER_ADMIN_GROUPS') : null;
 
         if ($ret === null) {
             $ret = collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_admin' => 1)));
@@ -1340,7 +1340,7 @@ class Forum_driver_ocf extends Forum_driver_base
      */
     protected function _get_moderator_groups()
     {
-        $ret = function_exists('persistent_cache_get') ? persistent_cache_get(array('SUPER_MODERATOR_GROUPS')) : null;
+        $ret = function_exists('persistent_cache_get') ? persistent_cache_get('SUPER_MODERATOR_GROUPS') : null;
 
         if ($ret === null) {
             $ret = collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_moderator' => 1)));
@@ -1691,10 +1691,16 @@ class Forum_driver_ocf extends Forum_driver_base
             return $this->MEMBER_ROWS_CACHED[$member];
         }
 
-        $rows = $this->connection->query_select('f_members', array('*'), array('id' => $member), '', 1);
+        $rows = $this->connection->query_select('f_members m LEFT JOIN ' . $this->connection->get_table_prefix() . 'f_member_custom_fields f ON m.id=f.mf_member_id', array('*'), array('id' => $member), '', 1);
         if (!array_key_exists(0, $rows)) {
             $this->MEMBER_ROWS_CACHED[$member] = null;
             return null;
+        }
+        if ($this->connection == $GLOBALS['FORUM_DB'] && !multi_lang_content()) {
+            // Optimisation
+            require_code('ocf_members');
+            global $MEMBER_CACHE_FIELD_MAPPINGS;
+            $MEMBER_CACHE_FIELD_MAPPINGS[$member] = $rows[0];
         }
         $this->MEMBER_ROWS_CACHED[$member] = $rows[0];
         return $this->MEMBER_ROWS_CACHED[$member];

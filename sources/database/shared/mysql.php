@@ -196,9 +196,9 @@ class Database_super_mysql
             $type = isset($type_remap[$type]) ? $type_remap[$type] : $type;
 
             $_fields .= '    ' . $name . ' ' . $type;
-            if (substr($name, -13) == '__text_parsed') {
+            /*if (substr($name, -13) == '__text_parsed') {    BLOB/TEXT column 'description__text_parsed' can't have a default value
                 $_fields .= ' DEFAULT \'\'';
-            } elseif (substr($name, -13) == '__source_user') {
+            } else*/if (substr($name, -13) == '__source_user') {
                 $_fields .= ' DEFAULT ' . strval(db_get_first_id());
             }
             $_fields .= ' ' . $perhaps_null . ',' . "\n";

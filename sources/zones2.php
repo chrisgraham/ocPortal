@@ -300,6 +300,7 @@ function upgrade_module($zone, $module)
         $info['installed_hacked_by'] = '';
     }
     $GLOBALS['SITE_DB']->query_update('modules', array('module_version' => $info['version'], 'module_hack_version' => $info['hack_version'], 'module_hacked_by' => is_null($info['hacked_by']) ? '' : $info['hacked_by']), array('module_the_name' => $module), '', 1);
+    persistent_cache_delete('MODULES');
 
     return $ret;
 }
@@ -363,6 +364,9 @@ function reinstall_module($zone, $module)
         }
     }
     $GLOBALS['SITE_DB']->query_insert('modules', array('module_the_name' => $module, 'module_author' => $info['author'], 'module_organisation' => $info['organisation'], 'module_hacked_by' => is_null($info['hacked_by']) ? '' : $info['hacked_by'], 'module_hack_version' => $info['hack_version'], 'module_version' => $info['version']));
+
+    persistent_cache_delete('MODULES');
+
     return (!is_null($functions[1]));
 }
 
@@ -383,6 +387,8 @@ function uninstall_module($zone, $module)
     $GLOBALS['SITE_DB']->query_delete('modules', array('module_the_name' => $module), '', 1);
     $GLOBALS['SITE_DB']->query_delete('group_page_access', array('page_name' => $module)); // As some modules will try and install this themselves. Entry point permissions they won't.
     $GLOBALS['SITE_DB']->query_delete('group_privileges', array('the_page' => $module)); // Ditto
+
+    persistent_cache_delete('MODULES');
 
     if (file_exists($module_path)) {
         $functions = extract_module_functions($module_path, array('uninstall'));

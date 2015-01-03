@@ -1263,6 +1263,7 @@ function ocf_edit_custom_field($id, $name, $description, $default, $public_view,
 
     if (function_exists('persistent_cache_delete')) {
         persistent_cache_delete('CUSTOM_FIELD_CACHE');
+        persistent_cache_delete('LIST_CPFS');
     }
 
     decache('main_members');
@@ -1306,6 +1307,7 @@ function ocf_delete_custom_field($id)
 
     if (function_exists('persistent_cache_delete')) {
         persistent_cache_delete('CUSTOM_FIELD_CACHE');
+        persistent_cache_delete('LIST_CPFS');
     }
 
     if (function_exists('decache')) {

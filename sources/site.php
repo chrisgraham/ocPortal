@@ -181,7 +181,18 @@ function load_zone_data()
         $ZONE = persistent_cache_get(array('ZONE', $real_zone));
 
         if ($ZONE === null) {
+            find_all_zones(); // Optimisation, this will load up our zone list which *usually* includes cacheing of current zone, as this likely is needed somewhere anyway
+
+            global $ALL_ZONES_TITLED_CACHE;
+            if (isset($ALL_ZONES_TITLED_CACHE[$real_zone][3])) {
+                $ZONE = $ALL_ZONES_TITLED_CACHE[$real_zone][3];
+            }
+        }
+
+        if ($ZONE === null) {
             $zones = $GLOBALS['SITE_DB']->query_select('zones', array('*'), array('zone_name' => $real_zone), '', 1);
+
+            // Auto-create zone
             if ((!array_key_exists(0, $zones)) && (is_dir(get_file_base() . '/' . $real_zone . '/' . 'pages'))) {
                 $map = array(
                     'zone_name' => $real_zone,
@@ -194,10 +205,13 @@ function load_zone_data()
                 $GLOBALS['SITE_DB']->query_insert('zones', $map);
                 $zones = $GLOBALS['SITE_DB']->query_select('zones', array('*'), array('zone_name' => $real_zone), '', 1);
             }
+
             if (array_key_exists(0, $zones)) {
                 $ZONE = $zones[0];
                 persistent_cache_set(array('ZONE', $real_zone), $ZONE);
             }
+
+            // Missing zone
             if ($ZONE === null) {
                 $zones = $GLOBALS['SITE_DB']->query_select('zones', array('*'), array('zone_name' => ''), '', 1);
                 $ZONE = $zones[0];

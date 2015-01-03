@@ -27,6 +27,8 @@
 			<td>
 				<strong>{TOTAL_TIME}</strong>
 			</td>
+			<td>
+			</td>
 		</tr>
 	</tfoot>
 

@@ -60,6 +60,16 @@ class Hook_implicit_usergroups_under18s
      */
     public function is_member_within($member_id, $group_id)
     {
-        return !is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE (' . $this->_where() . ') AND id=' . strval($member_id)));
+        if ($member_id == get_member()) {
+            $eago = intval(date('Y')) - 18;
+            $row = $GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
+            $dob_year = $row['m_dob_year'];
+            $dob_month = $row['m_dob_month'];
+            $dob_day = $row['m_dob_day'];
+            return $dob_year > $eago || $dob_year == $eago && ($dob_month > intval(date('m')) || $dob_month == intval(date('m')) && $dob_day >= intval(date('d')));
+        }
+
+        $sql = 'SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE (' . $this->_where() . ') AND id=' . strval($member_id);
+        return !is_null($GLOBALS['FORUM_DB']->query_value_if_there($sql));
     }
 }

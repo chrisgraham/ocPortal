@@ -389,11 +389,11 @@ function ocf_get_custom_field_mappings($member_id)
 
     global $MEMBER_CACHE_FIELD_MAPPINGS;
     if (!isset($MEMBER_CACHE_FIELD_MAPPINGS[$member_id])) {
-        $query = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields', array('*'), array('mf_member_id' => $member_id), '', 1);
+        $row = array('mf_member_id' => $member_id);
+
+        $query = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields', array('*'), $row, '', 1);
         if (!isset($query[0])) { // Repair
             $value = mixed();
-
-            $row = array('mf_member_id' => $member_id);
 
             $all_fields_regardless = $GLOBALS['FORUM_DB']->query_select('f_custom_fields', array('id', 'cf_type'));
             foreach ($all_fields_regardless as $field) {

@@ -160,7 +160,11 @@ function create_session($member, $session_confirmed = 0, $invisible = false)
     // New sessions=Login points
     if ((!is_null($member)) && (!is_guest($member)) && (addon_installed('points')) && (addon_installed('stats'))) {
         // See if this is the first visit today
-        $test = $GLOBALS['SITE_DB']->query_select_value('stats', 'MAX(date_and_time)', array('member_id' => $member));
+        global $SESSION_CACHE;
+        $test = isset($SESSION_CACHE[get_session_id()]['last_activity']) ? $SESSION_CACHE[get_session_id()]['last_activity'] : null;
+        if ($test === null) {
+            $test = $GLOBALS['SITE_DB']->query_select_value('stats', 'MAX(date_and_time)', array('member_id' => $member));
+        }
         if (!is_null($test)) {
             if (date('d/m/Y', tz_time($test, get_site_timezone())) != date('d/M/Y', tz_time(time(), get_site_timezone()))) {
                 require_code('points');

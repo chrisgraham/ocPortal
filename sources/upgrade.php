@@ -1508,6 +1508,7 @@ function version_specific()
             foreach ($modules_renamed as $from => $to) {
                 $GLOBALS['SITE_DB']->query_update('modules', array('module_the_name' => $to), array('module_the_name' => $from), '', 1);
             }
+            persistent_cache_delete('MODULES');
 
             $GLOBALS['SITE_DB']->alter_table_field('msp', 'specific_permission', 'ID_TEXT', 'privilege');
             $GLOBALS['SITE_DB']->alter_table_field('gsp', 'specific_permission', 'ID_TEXT', 'privilege');

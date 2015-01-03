@@ -267,6 +267,8 @@ function _helper_create_index($this_ref, $table_name, $index_name, $fields, $uni
 
     $ok_to_create = true;
 
+    reload_lang_fields(true);
+
     $_fields = '';
     foreach ($fields as $field) {
         if ($_fields != '') {

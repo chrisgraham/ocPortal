@@ -35,11 +35,19 @@ function init__urls()
     global $URL_REMAPPINGS;
     $URL_REMAPPINGS = null;
 
-    global $CONTENT_OBS, $LOADED_MONIKERS_CACHE;
+    global $CONTENT_OBS;
     $CONTENT_OBS = null;
-    $LOADED_MONIKERS_CACHE = persistent_cache_get('LOADED_MONIKERS_CACHE');
-    if ($LOADED_MONIKERS_CACHE === null) {
+
+    global $SMART_CACHE, $LOADED_MONIKERS_CACHE;
+    $test = $SMART_CACHE->get('NEEDED_MONIKERS');
+    if ($test === null) {
         $LOADED_MONIKERS_CACHE = array();
+    } else {
+        foreach ($test as $c => $_) {
+            list($url_parts, $zone, $effective_id) = unserialize($c);
+
+            $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id] = true;
+        }
     }
 
     global $SELF_URL_CACHED;
@@ -350,8 +358,7 @@ function build_page_link($vars, $zone_name = '', $skip = null, $hash = '')
 {
     $id = isset($vars['id']) ? $vars['id'] : null;
 
-    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/
-        ($vars['page']);
+    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/($vars['page']);
     if ((isset($vars['type'])) || (array_key_exists('type', $vars))) {
         if (is_object($vars['type'])) {
             $page_link .= ':';
@@ -1151,7 +1158,8 @@ function find_id_moniker($url_parts, $zone)
     }
 
     if ($ob_info['support_url_monikers']) {
-        $loaded_a_page_one = false;
+        global $SMART_CACHE;
+        $SMART_CACHE->append('NEEDED_MONIKERS', serialize(array($url_parts, $zone, $effective_id)));
 
         // Has to find existing if already there
         global $LOADED_MONIKERS_CACHE;
@@ -1186,9 +1194,6 @@ function find_id_moniker($url_parts, $zone)
                     $GLOBALS['NO_DB_SCOPE_CHECK'] = $bak;
                     foreach ($results as $result) {
                         $LOADED_MONIKERS_CACHE[$result['m_resource_type']][$result['m_resource_page']][$result['m_resource_id']] = $result['m_moniker'];
-                        if ($result['m_resource_type'] == '') {
-                            $loaded_a_page_one = true;
-                        }
                     }
                     foreach ($LOADED_MONIKERS_CACHE as $type => &$pages) {
                         foreach ($pages as $page => &$ids) {
@@ -1220,14 +1225,7 @@ function find_id_moniker($url_parts, $zone)
                 $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id] = $test;
             } else {
                 $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id] = false;
-                if ($url_parts['type'] == '') {
-                    $loaded_a_page_one = true;
-                }
             }
-        }
-
-        if ($loaded_a_page_one) {
-            persistent_cache_set('LOADED_MONIKERS_CACHE', array('' => $LOADED_MONIKERS_CACHE['']));
         }
 
         if (is_string($test)) {

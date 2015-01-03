@@ -25,13 +25,21 @@ class Hook_implicit_usergroups_usergroup_field_match
         }
 
         $out = array();
-        $_groups = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), array('g_open_membership' => 1));
+        $_groups = persistent_cache_get('OPEN_GROUPS');
+        if ($_groups === null) {
+            $_groups = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), array('g_open_membership' => 1));
+            persistent_cache_set('OPEN_GROUPS', $_groups);
+        }
         $groups = array();
         foreach ($_groups as $g) {
             $groups[get_translated_text($g['g_name'], $GLOBALS['FORUM_DB'])] = $g['id'];
         }
 
-        $list_cpfs = $GLOBALS['FORUM_DB']->query_select('f_custom_fields', array('id', 'cf_default'), array('cf_type' => 'list'));
+        $list_cpfs = persistent_cache_get('LIST_CPFS');
+        if ($list_cpfs === null) {
+            $list_cpfs = $GLOBALS['FORUM_DB']->query_select('f_custom_fields', array('id', 'cf_default'), array('cf_type' => 'list'));
+            persistent_cache_set('LIST_CPFS', $list_cpfs);
+        }
         foreach ($list_cpfs as $c) {
             $values = explode('|', $c['cf_default']);
             foreach ($values as $v) {

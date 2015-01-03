@@ -2589,10 +2589,11 @@ function ecv_NOTIFICATIONS_AVAILABLE($lang, $escaped, $param)
 {
     $value = '1';
     if (isset($param[0])) {
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown', 'l_setting', array(
-            'l_notification_code' => $param[0],
-        ));
-        if ($test === 0) {
+        $notification_code = $param[0];
+
+        require_code('notifications');
+
+        if (notification_locked_down($notification_code)) {
             $value = '0';
         }
     }

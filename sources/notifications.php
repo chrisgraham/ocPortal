@@ -682,6 +682,28 @@ function notifications_enabled($notification_code, $notification_category, $memb
 }
 
 /**
+ * Find whether a notification is locked-down (i.e. cannot be set).
+ *
+ * @param  ID_TEXT                      $notification_code The notification code to check
+ * @return boolean                      Whether it is
+ */
+function notification_locked_down($notification_code)
+{
+    static $notifications_available = array();
+    if (isset($notifications_available[$notification_code])) {
+        return $notifications_available[$notification_code];
+    }
+
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown', 'l_setting', array(
+        'l_notification_code' => substr($notification_code, 0, 80),
+    ));
+
+    $notifications_available[$notification_code] = !is_null($test);
+
+    return $notifications_available[$notification_code];
+}
+
+/**
  * Find how notifications are enabled for a member on a notification type+category. Does not check security (must go through notification object for that).
  *
  * @param  ID_TEXT                      $notification_code The notification code to check
@@ -708,10 +730,7 @@ function notifications_setting($notification_code, $notification_category, $memb
 
     $db = (substr($notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown', 'l_setting', array(
-        'l_notification_code' => substr($notification_code, 0, 80),
-    ));
-    if ($test === null) {
+    if (!notification_locked_down($notification_code)) {
         $test = $db->query_select_value_if_there('notifications_enabled', 'l_setting', $specific_where);
 
         if (($test === null) && ($notification_category !== null)) {

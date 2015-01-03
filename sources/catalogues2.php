@@ -284,6 +284,10 @@ function actual_add_catalogue($name, $title, $description, $display_type, $is_tr
     require_code('member_mentions');
     dispatch_member_mention_notifications('catalogue', $name);
 
+    if (substr($name, 0, 1) == '_') {
+        persistent_cache_delete('CONTENT_TYPE_HAS_CUSTOM_FIELDS_CACHE');
+    }
+
     return $name;
 }
 
@@ -471,6 +475,10 @@ function actual_edit_catalogue($old_name, $name, $title, $description, $display_
         }
     }
 
+    if (substr($name, 0, 1) == '_') {
+        persistent_cache_delete('CONTENT_TYPE_HAS_CUSTOM_FIELDS_CACHE');
+    }
+
     return $name;
 }
 
@@ -527,6 +535,10 @@ function actual_delete_catalogue($name)
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
         expunge_resourcefs_moniker('catalogue', $name);
+    }
+
+    if (substr($name, 0, 1) == '_') {
+        persistent_cache_delete('CONTENT_TYPE_HAS_CUSTOM_FIELDS_CACHE');
     }
 }
 

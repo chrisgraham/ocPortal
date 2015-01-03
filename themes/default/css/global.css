@@ -1928,6 +1928,9 @@ table.scrollable_inside {
 .results_table>tbody>tr:last-child>td, .results_table>tbody>tr:last-child>th {
 	border-bottom: 1px solid {$GET,standard_border};
 }
+.results_table>tfoot>tr>td, .results_table>tfoot>tr>th {
+	border-bottom: 1px solid {$GET,standard_border};
+}
 
 .results_table>*>.zebra_0>th, .results_table>*>.zebra_0>td, div.zebra_0 {
 	background-color: {$GET,area_zebra_background} !important;

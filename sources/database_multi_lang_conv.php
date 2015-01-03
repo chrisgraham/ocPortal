@@ -65,6 +65,8 @@ function disable_content_translation()
         @set_time_limit(0);
     }
 
+    reload_lang_fields(true);
+
     $db = $GLOBALS['SITE_DB'];
 
     $type_remap = $db->static_ob->db_get_type_remap();
@@ -114,7 +116,7 @@ function disable_content_translation()
         // Create fulltext search index
         $GLOBALS['SITE_DB']->create_index($field['m_table'], '#' . $field['m_name'], array($field['m_name']));
 
-        reload_lang_fields();
+        reload_lang_fields(true);
     }
 
     global $HAS_MULTI_LANG_CONTENT;
@@ -146,6 +148,8 @@ function enable_content_translation()
     if (function_exists('set_time_limit')) {
         @set_time_limit(0);
     }
+
+    reload_lang_fields(true);
 
     $db = $GLOBALS['SITE_DB'];
 
@@ -220,7 +224,7 @@ function enable_content_translation()
             $db->_query($query);
         }
 
-        reload_lang_fields();
+        reload_lang_fields(true);
     }
 
     global $HAS_MULTI_LANG_CONTENT;

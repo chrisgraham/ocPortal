@@ -164,11 +164,10 @@ function load_value_options()
  */
 function get_option($name, $missing_ok = false)
 {
-    global $CONFIG_OPTIONS_CACHE;
+    global $CONFIG_OPTIONS_CACHE, $CONFIG_OPTIONS_FULLY_LOADED, $SMART_CACHE;
 
     // Maybe missing a DB row, or has an old NULL one, so we need to auto-create from hook
     if (!isset($CONFIG_OPTIONS_CACHE[$name]['c_value'])) {
-        global $CONFIG_OPTIONS_FULLY_LOADED;
         if ((!$CONFIG_OPTIONS_FULLY_LOADED) && (!array_key_exists($name, $CONFIG_OPTIONS_CACHE))) {
             load_config_options();
 
@@ -203,17 +202,23 @@ function get_option($name, $missing_ok = false)
 
     // The master of redundant quick exit points
     if (isset($option['c_value_translated'])) {
-        return $option['c_value_translated'];
-    }
+        $value = $option['c_value_translated'];
 
-    global $SMART_CACHE;
+        if ($CONFIG_OPTIONS_FULLY_LOADED) {
+            $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
+        }
+
+        return $value;
+    }
 
     // Non-translated
     if ($option['c_needs_dereference'] == 0) {
         $value = $option['c_value'];
         $option['c_value_translated'] = $value; // Allows slightly better code path next time
 
-        $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
+        if ($CONFIG_OPTIONS_FULLY_LOADED) {
+            $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
+        }
 
         return $value;
     }
@@ -222,7 +227,9 @@ function get_option($name, $missing_ok = false)
     $value = get_translated_text($option['c_value_trans']);
     $option['c_value_translated'] = $value;
 
-    $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
+    if ($CONFIG_OPTIONS_FULLY_LOADED) {
+        $SMART_CACHE->append('CONFIG_OPTIONS', $name, $value);
+    }
 
     return $value;
 }

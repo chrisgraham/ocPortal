@@ -123,13 +123,21 @@ function _general_db_init()
 
 /**
  * Reload language fields from the database.
+ *
+ * @param boolean                      Whether we need to know about non-Comcode language fields
  */
-function reload_lang_fields()
+function reload_lang_fields($full = false)
 {
     global $TABLE_LANG_FIELDS_CACHE;
     $TABLE_LANG_FIELDS_CACHE = array();
 
-    $_table_lang_fields = $GLOBALS['SITE_DB']->query('SELECT m_name,m_table,m_type FROM ' . get_table_prefix() . 'db_meta WHERE m_type LIKE \'' . db_encode_like('%_TRANS%') . '\'', null, null, true);
+    if (multi_lang_content() || $full) {
+        $like = db_string_equal_to('m_type', 'SHORT_TRANS__COMCODE') . ' OR ' . db_string_equal_to('m_type', 'LONG_TRANS__COMCODE') . ' OR ' . db_string_equal_to('m_type', 'SHORT_TRANS') . ' OR ' . db_string_equal_to('m_type', 'LONG_TRANS');
+    } else {
+        $like = db_string_equal_to('m_type', 'SHORT_TRANS__COMCODE') . ' OR ' . db_string_equal_to('m_type', 'LONG_TRANS__COMCODE');
+    }
+    $sql = 'SELECT m_name,m_table,m_type FROM ' . get_table_prefix() . 'db_meta WHERE ' . $like;
+    $_table_lang_fields = $GLOBALS['SITE_DB']->query($sql, null, null, true);
     if ($_table_lang_fields !== null) {
         foreach ($_table_lang_fields as $lang_field) {
             if (!isset($TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']])) {

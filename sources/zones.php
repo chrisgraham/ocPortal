@@ -634,12 +634,16 @@ function load_module_page($string, $codename, &$out = null)
 
     // Get info about what is installed and what is on disk
     if (get_value('assume_modules_correct') !== '1') {
-        $rows = $GLOBALS['SITE_DB']->query_select('modules', array('*'), array('module_the_name' => $codename), '', 1);
-        if (array_key_exists(0, $rows)) {
+        $rows = persistent_cache_get('MODULES');
+        if ($rows === null) {
+            $rows = list_to_map('module_the_name', $GLOBALS['SITE_DB']->query_select('modules', array('*'), is_null($GLOBALS['PERSISTENT_CACHE']) ? array('module_the_name' => $codename) : null));
+            persistent_cache_set('MODULES', $rows);
+        }
+        if (array_key_exists($codename, $rows)) {
             $info = $object->info();
-            $installed_version = $rows[0]['module_version'];
-            $installed_hack_version = $rows[0]['module_hack_version'];
-            $installed_hacked_by = $rows[0]['module_hacked_by'];
+            $installed_version = $rows[$codename]['module_version'];
+            $installed_hack_version = $rows[$codename]['module_hack_version'];
+            $installed_hacked_by = $rows[$codename]['module_hacked_by'];
             if (is_null($installed_hacked_by)) {
                 $installed_hacked_by = '';
             }
@@ -657,6 +661,8 @@ function load_module_page($string, $codename, &$out = null)
                 require_code('menus2');
                 $GLOBALS['SITE_DB']->query_update('modules', array('module_version' => $this_version, 'module_hack_version' => $this_hack_version, 'module_hacked_by' => $this_hacked_by), array('module_the_name' => $codename), '', 1); // Happens first so if there is an error it won't loop (if we updated install code manually there will be an error)
                 $object->install($installed_version, $installed_hack_version, $installed_hacked_by);
+
+                persistent_cache_delete('MODULES');
             } elseif (($installed_hack_version < $this_hack_version) && (array_key_exists('hack_require_upgrade', $info))) {
                 require_code('database_action');
                 require_code('config2');
@@ -668,6 +674,8 @@ function load_module_page($string, $codename, &$out = null)
 
                 $GLOBALS['SITE_DB']->query_update('modules', array('module_version' => $this_version, 'module_hack_version' => $this_hack_version, 'module_hacked_by' => $this_hacked_by), array('module_the_name' => $codename), '', 1);
                 $object->install($installed_version, $installed_hack_version, $installed_hacked_by);
+
+                persistent_cache_delete('MODULES');
             }
         } else {
             require_code('zones2');
@@ -781,9 +789,9 @@ function find_all_zones($search = false, $get_titles = false, $force_all = false
         }
     }
 
-    $rows = $GLOBALS['SITE_DB']->query_select('zones', array('*', 'zone_title AS _zone_title'), null, 'ORDER BY zone_name', $force_all ? null : $max, $start);
+    $rows = $GLOBALS['SITE_DB']->query_select('zones', array('*'), null, 'ORDER BY zone_name', $force_all ? null : $max, $start);
     if ((!$force_all) && (count($rows) == $max)) {
-        $rows = $GLOBALS['SITE_DB']->query_select('zones', array('*', 'zone_title AS _zone_title'), null, 'ORDER BY zone_title', $max/*reasonable limit; zone_title is sequential for default zones*/);
+        $rows = $GLOBALS['SITE_DB']->query_select('zones', array('*'), null, 'ORDER BY zone_title', $max/*reasonable limit; zone_title is sequential for default zones*/);
     }
     $zones_titled = array();
     $zones = array();
@@ -792,12 +800,12 @@ function find_all_zones($search = false, $get_titles = false, $force_all = false
             continue;
         }
 
-        $zone['zone_title'] = get_translated_text($zone['_zone_title']);
+        $zone['_zone_title'] = get_translated_text($zone['zone_title']);
 
         $folder = get_file_base() . '/' . $zone['zone_name'] . '/pages';
         if (((isset($SITE_INFO['no_disk_sanity_checks'])) && ($SITE_INFO['no_disk_sanity_checks'] == '1')) || (is_file(get_file_base() . '/' . $zone['zone_name'] . '/index.php'))) {
             $zones[] = $zone['zone_name'];
-            $zones_titled[$zone['zone_name']] = array($zone['zone_name'], $zone['zone_title'], $zone['zone_default_page'], $zone);
+            $zones_titled[$zone['zone_name']] = array($zone['zone_name'], $zone['_zone_title'], $zone['zone_default_page'], $zone);
         }
 
         $ZONE_DEFAULT_PAGES_CACHE[$zone['zone_name']] = $zone['zone_default_page'];
@@ -1318,13 +1326,16 @@ function get_block_info_row($codename, $map)
 
                 if (!is_array($info['cache_on'])) {
                     $special_cache_flags = array_key_exists('special_cache_flags', $info) ? $info['special_cache_flags'] : CACHE_AGAINST_DEFAULT;
-
-                    $GLOBALS['SITE_DB']->query_insert('cache_on', array(
+                    $map = array(
                         'cached_for' => $codename,
                         'cache_on' => $info['cache_on'],
                         'special_cache_flags' => $special_cache_flags,
                         'cache_ttl' => $info['ttl'],
-                    ), false, true); // Allow errors in case of race conditions
+                    );
+                    $GLOBALS['SITE_DB']->query_insert('cache_on', $map, false, true); // Allow errors in case of race conditions
+                    global $BLOCK_CACHE_ON_CACHE;
+                    $BLOCK_CACHE_ON_CACHE[$codename] = $map;
+                    persistent_cache_set('BLOCK_CACHE_ON_CACHE', $BLOCK_CACHE_ON_CACHE);
                 }
             }
         }

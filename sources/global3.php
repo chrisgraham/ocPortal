@@ -2613,7 +2613,7 @@ function get_zone_default_page($zone_name)
                 if ($temp !== null) {
                     $_zone_default_page = array();
                     foreach ($temp as $_temp) {
-                        list($_zone_name, , , $zone_default_page) = $_temp;
+                        list($_zone_name, , $zone_default_page) = $_temp;
                         $_zone_default_page[] = array('zone_name' => $_zone_name, 'zone_default_page' => $zone_default_page);
                     }
                 }
