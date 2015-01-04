@@ -97,7 +97,7 @@ function init__tempcode()
      */
     global $OUTPUT_STREAMING;
     $OUTPUT_STREAMING = (function_exists('get_option')) && (get_option('output_streaming') == '1') && (get_param_integer('keep_no_output_streaming', 0) == 0);
-    if ($GLOBALS['SMART_CACHE'] === null) {
+    if ($GLOBALS['SMART_CACHE'] === null || !$GLOBALS['SMART_CACHE']->get_initial_status('CSSS')) {
         $OUTPUT_STREAMING = false;
     } elseif (get_param('special_page_type', 'view') != 'view') {
         $OUTPUT_STREAMING = false;

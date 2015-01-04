@@ -78,7 +78,7 @@ function load_breadcrumb_substitutions($segments)
     }
 
     if ($done_one) {
-        return load_breadcrumb_substitutions($segments_new, $data); // Try a new sweep
+        return load_breadcrumb_substitutions($segments_new); // Try a new sweep
     }
 
     return $segments_new;
