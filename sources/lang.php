@@ -778,7 +778,7 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
         ocp_mark_as_escaped($out);
     }
     if ($token1 !== null) {
-        if (((is_object($token1)) && ($token2 === null)) || (($token2 !== null) && (is_object($token2)))) { // Tempcode only supported in first two
+        if (((isset($token1->codename)/*faster than is_object*/) && ($token2 === null)) || (($token2 !== null) && (isset($token2->codename)/*faster than is_object*/))) { // Tempcode only supported in first two
             $bits = preg_split('#\{\d[^\}]*\}#', $out, 2, PREG_SPLIT_OFFSET_CAPTURE);
 
             $ret = new Tempcode();

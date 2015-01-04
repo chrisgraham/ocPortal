@@ -28,7 +28,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 				{+END}
 
 				{$,The main logo}
-				<h1 class="logo_outer"><a target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$?*,{$MOBILE},{$IMG,logo/standalone_logo},{$LOGO_URL}}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!HOME}" alt="{$SITE_NAME*}" /></a></h1>
+				<h1 class="logo_outer"><a target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$?*,{$MOBILE},{$IMG,logo/standalone_logo},{$LOGO_URL}}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL},1}" height="{$IMG_HEIGHT*,{$LOGO_URL},1}"{+END} title="{!HOME}" alt="{$SITE_NAME*}" /></a></h1>
 
 				{$,Main menu}
 				<div class="global_navigation">

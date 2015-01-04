@@ -171,8 +171,13 @@ function is_suexec_like()
         return false;
     }
 
-    return (((function_exists('posix_getuid')) && (strpos(@ini_get('disable_functions'), 'posix_getuid') === false) && (!isset($_SERVER['HTTP_X_MOSSO_DT'])) && (is_integer(@posix_getuid())) && (@posix_getuid() == @fileowner(get_file_base() . '/' . (running_script('install') ? 'install.php' : 'index.php'))))
+    static $answer = null;
+    if ($answer !== null) {
+        return $answer;
+    }
+    $answer = (((function_exists('posix_getuid')) && (strpos(@ini_get('disable_functions'), 'posix_getuid') === false) && (!isset($_SERVER['HTTP_X_MOSSO_DT'])) && (is_integer(@posix_getuid())) && (@posix_getuid() == @fileowner(get_file_base() . '/' . (running_script('install') ? 'install.php' : 'index.php'))))
         || (is_writable_wrap(get_file_base() . '/' . (running_script('install') ? 'install.php' : 'index.php'))));
+    return $answer;
 }
 
 /**
@@ -2070,7 +2075,7 @@ function get_num_users_peak()
 function escape_html($string)
 {
     //   if ($string==='') return $string; // Optimisation, but doesn't work well
-    if (is_object($string)) {
+    if (isset($string->codename)/*faster than is_object*/) {
         return $string;
     }
 
@@ -2209,9 +2214,6 @@ function browser_matches($code)
 function is_mobile($user_agent = null, $truth = false)
 {
     $user_agent_given = ($user_agent !== null);
-    if ($user_agent === null) {
-        $user_agent = ocp_srv('HTTP_USER_AGENT');
-    }
 
     global $IS_MOBILE_CACHE, $IS_MOBILE_TRUTH_CACHE;
 
@@ -2225,6 +2227,10 @@ function is_mobile($user_agent = null, $truth = false)
         $IS_MOBILE_CACHE = false;
         $IS_MOBILE_TRUTH_CACHE = false;
         return false;
+    }
+
+    if ($user_agent === null) {
+        $user_agent = ocp_srv('HTTP_USER_AGENT');
     }
 
     global $SITE_INFO;

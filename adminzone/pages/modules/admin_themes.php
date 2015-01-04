@@ -2263,8 +2263,8 @@ class Module_admin_themes
         }
 
         Self_learning_cache::erase_smart_cache();
-
         erase_cached_templates();
+        persistent_cache_delete('IMAGE_DIMS');
 
         return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $theme, $lang, 'image', $id);
     }

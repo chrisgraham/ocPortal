@@ -316,7 +316,7 @@ class Database_Static_mysql extends Database_super_mysql
                         if (($v === null) || ($v === '')) { // Roadsend returns empty string instead of NULL
                             $newrow[$name] = null;
                         } else {
-                            if ((!isset($v[1])) && (ord($v[0]) <= 1)) {
+                            if ($v == "\0" || $v == "\1") {
                                 $newrow[$name] = ord($v); // 0/1 char for BIT field
                             } else {
                                 $_v = intval($v);
@@ -331,7 +331,7 @@ class Database_Static_mysql extends Database_super_mysql
 
                     case 'unknown':
                         if (is_string($v)) {
-                            if ((!isset($v[1])) && (ord($v[0]) <= 1)) {
+                            if ($v == "\0" || $v == "\1") {
                                 $newrow[$name] = ord($v); // 0/1 char for BIT field
                             } else {
                                 $newrow[$name] = intval($v);

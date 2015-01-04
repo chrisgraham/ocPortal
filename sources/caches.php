@@ -172,7 +172,14 @@ class Self_learning_cache
         if ($data !== null) {
             $this->data = $data;
         } else {
-            $_data = @file_get_contents($this->path);
+            $_data = '';
+            $myfile = @fopen($this->path, 'rb');
+            if ($myfile !== false) {
+                @flock($myfile, LOCK_SH);
+                while (!feof($myfile)) {
+                    $_data .= fread($myfile, 1024);
+                }
+            }
             if ($_data !== false) {
                 $this->data = @unserialize($_data);
                 if ($this->data === false) {
@@ -241,7 +248,7 @@ class Self_learning_cache
             $this->data[$key] = array();
         }
 
-        if (!array_key_exists($value, $this->data[$key]) || $this->data[$key][$value] !== $value_2) {
+        if ((!isset($this->data[$key][$value])) && !array_key_exists($value, $this->data[$key]) || $this->data[$key][$value] !== $value_2) {
             $this->data[$key][$value] = $value_2;
 
             $this->save();

@@ -292,7 +292,7 @@ function db_has_expression_ordering($db)
  */
 function db_escape_string($string)
 {
-    if (count($GLOBALS['SITE_DB']->connection_read) > 4) { // Okay, we can't be lazy anymore
+    if (isset($GLOBALS['SITE_DB']->connection_read[4])) { // Okay, we can't be lazy anymore
         $GLOBALS['SITE_DB']->connection_read = call_user_func_array(array($GLOBALS['DB_STATIC_OBJECT'], 'db_get_connection'), $GLOBALS['SITE_DB']->connection_read);
         _general_db_init();
     }

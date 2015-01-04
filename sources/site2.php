@@ -90,7 +90,7 @@ function get_staff_actions_list()
             if ($started_opt_group) {
                 $staff_actions .= '</optgroup>';
             }
-            $staff_actions .= '<optgroup label="' . (is_object($text) ? $text->evaluate() : escape_html($text)) . '">';
+            $staff_actions .= '<optgroup label="' . (isset($text->codename)/*faster than is_object*/ ? $text->evaluate() : escape_html($text)) . '">';
             $started_opt_group = true;
         }
         $staff_actions .= '<option' . (($staff_actions == '') ? ' disabled="disabled" class="label"' : '') . ' ' . (($name == $special_page_type) ? 'selected="selected" ' : '') . 'value="' . escape_html($name) . '">' . (is_object($text) ? $text->evaluate() : escape_html($text)) . '</option>'; // XHTMLXHTML

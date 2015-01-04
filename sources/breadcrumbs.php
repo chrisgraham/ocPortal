@@ -22,16 +22,34 @@
  * Load all breadcrumb substitutions and return them.
  *
  * @param  array                        $segments The default breadcrumb segments
- * @param  string                       $data The breadcrumb XML data
  * @return array                        The adjusted breadcrumb segments
  */
-function load_breadcrumb_substitutions($segments, $data)
+function load_breadcrumb_substitutions($segments)
 {
     static $substitutions = null;
     if ($substitutions === null) {
+        $substitutions = persistent_cache_get('BREADCRUMBS_CACHE');
+    }
+    if ($substitutions === null) {
+        $data = @file_get_contents(get_custom_file_base() . '/data_custom/breadcrumbs.xml');
+        if (($data === false) && (get_custom_file_base() != get_file_base())) {
+            $data = @file_get_contents(get_file_base() . '/data_custom/breadcrumbs.xml');
+        }
+        if ($data === false) {
+            $data = '';
+        }
+
+        if (trim($data) == '') {
+            persistent_cache_set('BREADCRUMBS_CACHE', array());
+
+            return $segments;
+        }
+
         $loader = new Breadcrumb_substitution_loader();
         $loader->go($data);
         $substitutions = $loader->substitutions;
+
+        persistent_cache_set('BREADCRUMBS_CACHE', $substitutions);
     }
 
     $segments_new = array();

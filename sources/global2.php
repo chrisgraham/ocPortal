@@ -846,7 +846,7 @@ function is_browser_decacheing()
         return false; // Decaching by mistake is real-bad when Google Cloud Storage is involved
     }
 
-    if (is_null(get_value('ran_once'))) { // Track whether ocPortal has run at least once
+    if (get_value('ran_once') === null) { // Track whether ocPortal has run at least once
         set_value('ran_once', '1');
         return true;
     }

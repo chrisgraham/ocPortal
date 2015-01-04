@@ -80,8 +80,12 @@ function get_self_url_easy()
  */
 function get_self_url($evaluate = false, $root_if_posted = false, $extra_params = null, $posted_too = false, $avoid_remap = false)
 {
+    if ($extra_params === null) {
+        $extra_params = array();
+    }
+
     global $SELF_URL_CACHED;
-    $cacheable = ($evaluate) && (!$root_if_posted) && ($extra_params === null) && (!$posted_too) && (!$avoid_remap);
+    $cacheable = ($evaluate) && (!$root_if_posted) && ($extra_params === array()) && (!$posted_too) && (!$avoid_remap);
     if (($cacheable) && ($SELF_URL_CACHED !== null)) {
         return $SELF_URL_CACHED;
     }
@@ -90,9 +94,6 @@ function get_self_url($evaluate = false, $root_if_posted = false, $extra_params 
         return get_self_url_easy();
     }
 
-    if ($extra_params === null) {
-        $extra_params = array();
-    }
     if ($posted_too) {
         static $mq = null;
         if ($mq === null) {
@@ -591,7 +592,7 @@ function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $av
                 continue; // NULL means skip
             }
 
-            if (!is_string($key)) {
+            if (!isset($key[0]/*Faster than is_string*/)) {
                 $key = strval($key);
             }
 
@@ -599,13 +600,8 @@ function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $av
                 $val = get_self_url(true, true);
             }
 
-            if (!is_string($key)) {
-                $key = strval($key);
-            }
-
             // Add in
-            $url .= $symbol . $key . '=' . (is_integer($val) ? strval($val) :/*ocp_*/
-                    urlencode($val/*,false*/));
+            $url .= $symbol . $key . '=' . (is_integer($val) ? strval($val) :/*ocp_*/urlencode($val/*,false*/));
             $symbol = '&';
         }
     } else {
@@ -1159,7 +1155,7 @@ function find_id_moniker($url_parts, $zone)
 
     if ($ob_info['support_url_monikers']) {
         global $SMART_CACHE;
-        $SMART_CACHE->append('NEEDED_MONIKERS', serialize(array($url_parts, $zone, $effective_id)));
+        $SMART_CACHE->append('NEEDED_MONIKERS', serialize(array(array('page' => $url_parts['page'], 'type' => $url_parts['type']), $zone, $effective_id)));
 
         // Has to find existing if already there
         global $LOADED_MONIKERS_CACHE;

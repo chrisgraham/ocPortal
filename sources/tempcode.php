@@ -84,7 +84,8 @@ function init__tempcode()
     require_code('symbols');
 
     global $FULL_RESET_VAR_CODE, $RESET_VAR_CODE;
-    $FULL_RESET_VAR_CODE = 'foreach(array_keys(get_defined_vars()) as $x) { if ($x[0]==\'b\' && substr($x,0,6)==\'bound_\') unset($$x); } extract($parameters,EXTR_PREFIX_ALL,\'bound\');';
+    // && substr($x,0,6)==\'bound_\' removed from the below for performance, not really needed
+    $FULL_RESET_VAR_CODE = 'foreach(get_defined_vars() as $x => $_) { if ($x[0]==\'b\' && $x[1]==\'o\') unset($$x); } extract($parameters,EXTR_PREFIX_ALL,\'bound\');';
     $RESET_VAR_CODE = 'extract($parameters,EXTR_PREFIX_ALL,\'bound\');';
 
     global $IS_TEMPLATE_PREVIEW_OP_CACHE;
@@ -230,7 +231,7 @@ function build_closure_tempcode($type, $name, $parameters, $escaping = null)
 
     $has_tempcode = false;
     foreach ($parameters as $parameter) {
-        if (is_object($parameter)) {
+        if (isset($parameter->codename)/*faster than is_object*/) {
             $has_tempcode = true;
         }
     }
@@ -486,7 +487,7 @@ function apply_tempcode_escaping($escaped, &$value)
     global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $ESCAPE_HTML_OUTPUT;
     foreach ($escaped as $escape) {
         if ($escape == ENTITY_ESCAPED) {
-            if ((has_solemnly_declared(I_UNDERSTAND_XSS)) || (!isset($ESCAPE_HTML_OUTPUT[$value])/*not already auto-escaped once*/)) {
+            if ((!isset($ESCAPE_HTML_OUTPUT[$value])/*not already auto-escaped once*/) || (has_solemnly_declared(I_UNDERSTAND_XSS)/*no auto-escape*/)) {
                 $value = str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $value);
             }
         } elseif ($escape == FORCIBLY_ENTITY_ESCAPED) {
@@ -536,7 +537,7 @@ function apply_tempcode_escaping_inline($escaped, $value)
     global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $ESCAPE_HTML_OUTPUT;
     foreach ($escaped as $escape) {
         if ($escape == ENTITY_ESCAPED) {
-            if ((has_solemnly_declared(I_UNDERSTAND_XSS)) || (!isset($ESCAPE_HTML_OUTPUT[$value])/*not already auto-escaped once*/)) {
+            if ((!isset($ESCAPE_HTML_OUTPUT[$value])/*not already auto-escaped once*/) || (has_solemnly_declared(I_UNDERSTAND_XSS)/*no auto-escape*/)) {
                 $value = str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $value);
             }
         } elseif ($escape == FORCIBLY_ENTITY_ESCAPED) {
@@ -1317,7 +1318,7 @@ class Tempcode
 
         $this->cached_output = null;
 
-        if (is_object($attach)) { // Consider it another piece of Tempcode
+        if (isset($attach->codename)/*faster than is_object*/) { // Consider it another piece of Tempcode
             foreach ($attach->seq_parts as $seq_part_group) {
                 $this->seq_parts[] = $seq_part_group;
             }

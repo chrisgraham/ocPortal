@@ -904,6 +904,7 @@ msgstr ""
         require_code('caches3');
         erase_cached_language();
         erase_cached_templates();
+        persistent_cache_delete('LANGS_LIST');
 
         // Show it worked / Refresh
         $url = build_url(array('page' => '_SELF', 'type' => 'browse'), '_SELF');
@@ -978,6 +979,7 @@ msgstr ""
         require_code('caches3');
         erase_cached_language();
         erase_cached_templates();
+        persistent_cache_delete('LANGS_LIST');
 
         // Show it worked / Refresh
         $url = post_param('redirect', '');

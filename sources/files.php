@@ -442,15 +442,18 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
         ));
     }
 
-    if (isset($ignore_filenames_and_dir_names[strtolower($filename)])) {
-        if (preg_match('#^' . $ignore_filenames_and_dir_names[strtolower($filename)] . '$#i', $dir) != 0) {
+    $filename_lower = strtolower($filename);
+
+    if (isset($ignore_filenames_and_dir_names[$filename_lower])) {
+        if (preg_match('#^' . $ignore_filenames_and_dir_names[$filename_lower] . '$#i', $dir) != 0) {
             return true; // Check dir context
         }
     }
 
     $extension = get_file_extension($filename);
-    if (isset($ignore_extensions[strtolower($extension)])) {
-        if (preg_match('#^' . $ignore_extensions[strtolower($extension)] . '$#i', $dir) != 0) {
+    $extension_lower = strtolower($extension);
+    if (isset($ignore_extensions[$extension_lower])) {
+        if (preg_match('#^' . $ignore_extensions[$extension_lower] . '$#i', $dir) != 0) {
             return true; // Check dir context
         }
     }
@@ -463,7 +466,7 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
         }
     }
 
-    if (($dir != '') && (is_dir(get_file_base() . '/' . $filepath)) && (file_exists(get_file_base() . '/' . $filepath . '/sources_custom'))) { // ocPortal dupe (e.g. backup) install
+    if (($dir != '') && (is_dir(get_file_base() . '/' . $filepath)) && (is_dir(get_file_base() . '/' . $filepath . '/sources_custom'))) { // ocPortal dupe (e.g. backup) install
         return true;
     }
 
@@ -474,7 +477,7 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
     }
 
     if (($bitmask & IGNORE_CUSTOM_ZONES) != 0) {
-        if ((is_dir(get_file_base() . '/' . $filepath)) && (file_exists(get_file_base() . '/' . $filepath . '/index.php')) && (file_exists(get_file_base() . '/' . $filepath . '/pages')) && (!in_array(strtolower($filename), array('adminzone', 'collaboration', 'cms', 'forum', 'site')))) {
+        if ((is_dir(get_file_base() . '/' . $filepath)) && (is_file(get_file_base() . '/' . $filepath . '/index.php')) && (is_dir(get_file_base() . '/' . $filepath . '/pages')) && (!in_array($filename_lower, array('adminzone', 'collaboration', 'cms', 'forum', 'site')))) {
             return true;
         }
     }
@@ -520,7 +523,7 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
 
     if (($bitmask & IGNORE_NON_EN_SCATTERED_LANGS) != 0) {
         // Wrong lang packs
-        if (((strlen($filename) == 2) && (strtoupper($filename) == $filename) && (strtolower($filename) != $filename) && ($filename != 'EN')) || ($filename == 'EN_us') || ($filename == 'ZH-TW') || ($filename == 'ZH-CN')) {
+        if (((strlen($filename) == 2) && (strtoupper($filename) == $filename) && ($filename_lower != $filename) && ($filename != 'EN')) || ($filename == 'EN_us') || ($filename == 'ZH-TW') || ($filename == 'ZH-CN')) {
             return true;
         }
     }

@@ -40,7 +40,7 @@ class Persistent_cacheing_filecache
      */
     public function load_objects_list()
     {
-        if (is_null($this->objects_list)) {
+        if ($this->objects_list === null) {
             $this->objects_list = $this->get('PERSISTENT_CACHE_OBJECTS');
             if ($this->objects_list === null) {
                 $this->objects_list = array();
@@ -58,11 +58,16 @@ class Persistent_cacheing_filecache
      */
     public function get($key, $min_cache_date = null)
     {
+        static $cache = array();
+        if ($min_cache_date !== null && isset($cache[$key])) {
+            return $cache[$key];
+        }
+
         $myfile = @fopen(get_custom_file_base() . '/caches/persistent/' . md5($key) . '.gcd', 'rb');
         if ($myfile === false) {
             return null;
         }
-        if (!is_null($min_cache_date)) { // Code runs here as we know file exists at this point
+        if ($min_cache_date !== null) { // Code runs here as we know file exists at this point
             if (filemtime(get_custom_file_base() . '/caches/persistent/' . md5($key) . '.gcd') < $min_cache_date) {
                 fclose($myfile);
                 return null;
@@ -78,6 +83,8 @@ class Persistent_cacheing_filecache
 
         @flock($myfile, LOCK_UN);
         fclose($myfile);
+
+        $cache[$key] = $ret;
 
         return $ret;
     }

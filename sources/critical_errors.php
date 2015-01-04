@@ -18,33 +18,35 @@
  * @package    core
  */
 
-$cli = ((function_exists('php_sapi_name')) && (strpos(@ini_get('disable_functions'), 'php_sapi_name') === false) && (php_sapi_name() == 'cli') && (empty($_SERVER['REMOTE_ADDR'])) && (empty($_ENV['REMOTE_ADDR'])));
-if (($cli) && (strpos($_SERVER['argv'][0], 'critical_errors.php') !== false)) {
-    // Critical error monitoring mode
-    chdir(dirname(dirname(__FILE__)));
-    if (is_dir('critical_errors')) {
-        if (function_exists('set_time_limit')) {
-            @set_time_limit(0);
-        }
-        require_once('_config.php');
-        global $SITE_INFO;
-        $email_to = isset($SITE_INFO['email_to']) ? $SITE_INFO['email_to'] : ('webmaster@' . $SITE_INFO['domain']);
-        echo 'Monitoring for logged critical errors; we will email ' . $email_to . ' if we find anything.' . "\n";
-        $last_run = time();
-        while (true) {
-            $dh = opendir('critical_errors');
-            while (($f = readdir($dh)) !== false) {
-                if (substr($f, -4) == '.log') {
-                    if (filemtime('critical_errors/' . $f) >= $last_run) {
-                        echo 'Found and emailing error ' . $f . "\n";
-                        mail($email_to, 'Critical error logged', 'Critical error logged -- see critical_errors/' . $f . ' on the server.');
-                        break; // Enough, don't send more than once per 10 seconds
+if (strpos($_SERVER['argv'][0], 'critical_errors.php') !== false) {
+    $cli = ((function_exists('php_sapi_name')) && (strpos(@ini_get('disable_functions'), 'php_sapi_name') === false) && (php_sapi_name() == 'cli') && (empty($_SERVER['REMOTE_ADDR'])) && (empty($_ENV['REMOTE_ADDR'])));
+    if ($cli) {
+        // Critical error monitoring mode
+        chdir(dirname(dirname(__FILE__)));
+        if (is_dir('critical_errors')) {
+            if (function_exists('set_time_limit')) {
+                @set_time_limit(0);
+            }
+            require_once('_config.php');
+            global $SITE_INFO;
+            $email_to = isset($SITE_INFO['email_to']) ? $SITE_INFO['email_to'] : ('webmaster@' . $SITE_INFO['domain']);
+            echo 'Monitoring for logged critical errors; we will email ' . $email_to . ' if we find anything.' . "\n";
+            $last_run = time();
+            while (true) {
+                $dh = opendir('critical_errors');
+                while (($f = readdir($dh)) !== false) {
+                    if (substr($f, -4) == '.log') {
+                        if (filemtime('critical_errors/' . $f) >= $last_run) {
+                            echo 'Found and emailing error ' . $f . "\n";
+                            mail($email_to, 'Critical error logged', 'Critical error logged -- see critical_errors/' . $f . ' on the server.');
+                            break; // Enough, don't send more than once per 10 seconds
+                        }
                     }
                 }
+                closedir($dh);
+                $last_run = time();
+                sleep(10);
             }
-            closedir($dh);
-            $last_run = time();
-            sleep(10);
         }
     }
 }

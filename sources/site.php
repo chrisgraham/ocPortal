@@ -415,22 +415,8 @@ function breadcrumbs($show_self = true)
 
     // Substitutions
     if ((addon_installed('breadcrumbs')) && (function_exists('xml_parser_create'))) {
-        $data = persistent_cache_get('BREADCRUMBS');
-        if ($data === null) {
-            $data = @file_get_contents(get_custom_file_base() . '/data_custom/breadcrumbs.xml');
-            if (($data === false) && (get_custom_file_base() != get_file_base())) {
-                $data = @file_get_contents(get_file_base() . '/data_custom/breadcrumbs.xml');
-            }
-            if ($data === false) {
-                $data = '';
-            }
-
-            persistent_cache_set('BREADCRUMBS', $data);
-        }
-        if (trim($data) != '') {
-            require_code('breadcrumbs');
-            $BREADCRUMB_SET_PARENTS = load_breadcrumb_substitutions($BREADCRUMB_SET_PARENTS, $data);
-        }
+        require_code('breadcrumbs');
+        $BREADCRUMB_SET_PARENTS = load_breadcrumb_substitutions($BREADCRUMB_SET_PARENTS);
     }
 
     // Render

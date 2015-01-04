@@ -34,17 +34,27 @@ function _symbol_image_dims($param)
 
     $value = array('', '');
     if (isset($param[0])) {
+        $path = $param[0];
+        $cacheable = (isset($param[1]) && $param[1] == '1');
+
+        if ($cacheable) {
+            $cache = persistent_cache_get('IMAGE_DIMS');
+            if (isset($cache[$path])) {
+                return $cache[$path];
+            }
+        }
+
         $base_url = get_custom_base_url();
-        if ((function_exists('getimagesize')) && (strpos($param[0], '.php') === false) && (substr($param[0], 0, strlen($base_url)) == $base_url) && (is_image($param[0]))) {
-            $details = @getimagesize(get_custom_file_base() . '/' . urldecode(substr($param[0], strlen($base_url) + 1)));
+        if ((function_exists('getimagesize')) && (strpos($path, '.php') === false) && (substr($path, 0, strlen($base_url)) == $base_url) && (is_image($path))) {
+            $details = @getimagesize(get_custom_file_base() . '/' . urldecode(substr($path, strlen($base_url) + 1)));
             if ($details !== false) {
                 $value = array(strval($details[0]), strval($details[1]));
             }
         } else {
-            $from_file = http_download_file($param[0], 1024 * 1024 * 20/*reasonable limit*/, false);
+            $from_file = http_download_file($path, 1024 * 1024 * 20/*reasonable limit*/, false);
             $source = @imagecreatefromstring($from_file);
             if ($source !== false) {
-                if (get_file_extension($param[0]) == 'gif') {
+                if (get_file_extension($path) == 'gif') { // Workaround problem with animated gifs
                     $header = unpack('@6/' . 'vwidth/' . 'vheight', $from_file);
                     $sx = $header['width'];
                     $sy = $header['height'];
@@ -56,6 +66,11 @@ function _symbol_image_dims($param)
                 $value = array(strval($sx), strval($sy));
                 imagedestroy($source);
             }
+        }
+
+        if ($cacheable) {
+            $cache[$path] = $value;
+            persistent_cache_set('IMAGE_DIMS', $cache);
         }
     }
     return $value;

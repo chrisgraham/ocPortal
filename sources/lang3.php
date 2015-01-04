@@ -88,6 +88,11 @@ function _find_all_langs($even_empty_langs = false)
 
     $_langs = array();
     if (!in_safe_mode()) {
+        $test = persistent_cache_get('LANGS_LIST');
+        if ($test !== null) {
+            return $test;
+        }
+
         $_dir = @opendir(get_custom_file_base() . '/lang_custom/');
         if ($_dir !== false) {
             while (false !== ($file = readdir($_dir))) {
@@ -145,6 +150,10 @@ function _find_all_langs($even_empty_langs = false)
             }
         }
         closedir($_dir);
+    }
+
+    if (!in_safe_mode()) {
+        persistent_cache_set('LANGS_LIST', $_langs);
     }
 
     return $_langs;

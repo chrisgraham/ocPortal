@@ -525,16 +525,22 @@ function ecv($lang, $escaped, $type, $name, $param)
 function ecv_PAGE_LINK($lang, $escaped, $param)
 {
     if (isset($param[0])) {
-        list($zone, $map, $hash) = page_link_decode(is_object($param[0]) ? $param[0]->evaluate() : $param[0]);
+        list($zone, $map, $hash) = page_link_decode(isset($param[0]->codename)/*faster than is_object*/ ? $param[0]->evaluate() : $param[0]);
 
         $skip = null;
-        if (isset($param[4])) {
-            $skip = array_flip(explode('|', $param[4]));
-        }
 
-        $avoid_remap = isset($param[1]) && ($param[1] == '1');
-        $skip_keep = isset($param[2]) && ($param[2] == '1');
-        $keep_all = isset($param[3]) && ($param[3] == '1');
+        if (isset($param[1])) {
+            $avoid_remap = ($param[1] == '1');
+            $skip_keep = isset($param[2]) && ($param[2] == '1');
+            $keep_all = isset($param[3]) && ($param[3] == '1');
+            if (isset($param[4])) {
+                $skip = array_flip(explode('|', $param[4]));
+            }
+        } else {
+            $avoid_remap = false;
+            $skip_keep = false;
+            $keep_all = false;
+        }
 
         $value = _build_url($map, $zone, $skip, $keep_all, $avoid_remap, $skip_keep, $hash);
     } else {
@@ -589,12 +595,12 @@ function ecv_SET($lang, $escaped, $param)
 
     if (isset($param[1])) {
         global $TEMPCODE_SETGET;
-        if (isset($param[1]) && is_object($param[1])) {
+        if (isset($param[1]) && isset($param[1]->codename)/*faster than is_object*/) {
             $TEMPCODE_SETGET[$param[0]] = $param[1];
         } else {
             $param_copy = $param;
             unset($param_copy[0]);
-            $TEMPCODE_SETGET[$param[0]] = implode(',', $param_copy);
+            $TEMPCODE_SETGET[$param[0]] = isset($param_copy[1]/*optimisation*/) ? implode(',', $param_copy) : $param_copy;
         }
     }
 
@@ -622,7 +628,7 @@ function ecv_GET($lang, $escaped, $param)
     if (isset($param[0])) {
         global $TEMPCODE_SETGET;
         if (isset($TEMPCODE_SETGET[$param[0]])) {
-            if (is_object($TEMPCODE_SETGET[$param[0]])) {
+            if (isset($TEMPCODE_SETGET[$param[0]]->codename)/*faster than is_object*/) {
                 if ((array_key_exists(1, $param)) && ($param[1] == '1')) { // no-cache
                     $TEMPCODE_SETGET[$param[0]]->decache();
                     $value = $TEMPCODE_SETGET[$param[0]]->evaluate();
