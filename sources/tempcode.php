@@ -134,7 +134,7 @@ function static_evaluate_tempcode($ob)
 function php_addslashes_twice($in)
 {
     $in2 = php_addslashes($in);
-    return ($in == $in2) ? $in : php_addslashes($in2);
+    return ($in === $in2) ? $in : php_addslashes($in2);
 
     // This code does not work, provides awfully confusing Tempcode errors...
 
@@ -238,7 +238,7 @@ function build_closure_tempcode($type, $name, $parameters, $escaping = null)
 
     $myfunc = 'do_runtime_' . $generator_base . '_' . strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/
     ;
-    if ($name == '?' && $type == TC_SYMBOL) {
+    if ($name === '?' && $type == TC_SYMBOL) {
         $name = 'TERNARY';
     }
 
@@ -377,7 +377,7 @@ function closure_loop($param, $args, $main_function)
                         ocp_mark_as_escaped($key);
                         ocp_mark_as_escaped($val);
                     }
-                    if ($key == '' && isset($array[$key])) {
+                    if ($key === '' && isset($array[$key])) {
                         $array[] = $val; // Empty keys: which are done to allow "="s in strings by putting in an empty key
                     } else {
                         $array[$key] = $val;
@@ -456,7 +456,7 @@ function closure_loop($param, $args, $main_function)
 /**
  * Convert a string to Tempcode.
  *
- * @param  string $string String
+ * @param  string                       $string String
  * @return tempcode                     Tempcode
  */
 function make_string_tempcode($string)
@@ -478,12 +478,19 @@ function make_string_tempcode($string)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array  $escaped A list of escaping to do
- * @param  string $value The string to apply the escapings to
+ * @param  array                        $escaped A list of escaping to do
+ * @param  string                       $value The string to apply the escapings to
  * @return string                       Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
  */
 function apply_tempcode_escaping($escaped, &$value)
 {
+    if (isset($escaped[0]) && $escaped[0] == ENTITY_ESCAPED && strpos($value, '&') === false && strpos($value, '"') === false && strpos($value, '\'') === false && strpos($value, '<') === false && strpos($value, '>') === false) {
+        if ($GLOBALS['XSS_DETECT']) {
+            ocp_mark_as_escaped($value);
+        }
+        return $value;
+    }
+
     global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $ESCAPE_HTML_OUTPUT;
     foreach ($escaped as $escape) {
         if ($escape == ENTITY_ESCAPED) {
@@ -528,12 +535,19 @@ function apply_tempcode_escaping($escaped, &$value)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array  $escaped A list of escaping to do
- * @param  string $value The string to apply the escapings to
+ * @param  array                        $escaped A list of escaping to do
+ * @param  string                       $value The string to apply the escapings to
  * @return string                       Output string
  */
 function apply_tempcode_escaping_inline($escaped, $value)
 {
+    if (isset($escaped[0]) && $escaped[0] == ENTITY_ESCAPED && strpos($value, '&') === false && strpos($value, '"') === false && strpos($value, '\'') === false && strpos($value, '<') === false && strpos($value, '>') === false) {
+        if ($GLOBALS['XSS_DETECT']) {
+            ocp_mark_as_escaped($value);
+        }
+        return $value;
+    }
+
     global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $ESCAPE_HTML_OUTPUT;
     foreach ($escaped as $escape) {
         if ($escape == ENTITY_ESCAPED) {
@@ -1541,7 +1555,6 @@ class Tempcode
         $out = new Tempcode();
         $out->codename = $codename;
         $out->code_to_preexecute = $this->code_to_preexecute;
-        $out->preprocessable_bits = array();
         if (!$GLOBALS['OUTPUT_STREAMING']) {
             foreach ($this->preprocessable_bits as $preprocessable_bit) {
                 foreach ($preprocessable_bit[3] as $i => $param) {
@@ -1568,9 +1581,9 @@ class Tempcode
         }
         foreach ($parameters as $key => $parameter) {
             $p_type = gettype($parameter);
-            if ($p_type == 'string') {
+            if ($p_type === 'string') {
                 // Performance, this is most likely
-            } elseif ($p_type == 'object') {
+            } elseif ($p_type === 'object') {
                 if (isset($parameter->preprocessable_bits[0])) {
                     if (!$GLOBALS['OUTPUT_STREAMING']) {
                         foreach ($parameter->preprocessable_bits as $b) {
@@ -1580,7 +1593,7 @@ class Tempcode
                 } elseif ($parameter->is_empty_shell()) {
                     $parameters[$key] = ''; // Little optimisation to save memory
                 }
-            } elseif ($p_type == 'boolean') {
+            } elseif ($p_type === 'boolean') {
                 $parameters[$key] = $parameter ? '1' : '0';
             } elseif (($p_type != 'array') && ($p_type != 'NULL')) {
                 warn_exit(do_lang_tempcode('NO_INTEGERS_TEMPLATE', escape_html($key)));
@@ -1760,7 +1773,7 @@ class Tempcode
         if ($XSS_DETECT) {
             safe_ini_set('ocproducts.xss_detect', $before);
         }
-        $ret = ($tmp == '');
+        $ret = ($tmp === '');
         $this->is_empty = $ret;
         return $ret;
     }
@@ -1867,7 +1880,7 @@ class Tempcode
      */
     public function evaluate_echo($current_lang = null, $stop_if_stuck = false)
     {
-        if (ocp_srv('REQUEST_METHOD') == 'HEAD') {
+        if (ocp_srv('REQUEST_METHOD') === 'HEAD') {
             return '';
         }
 
