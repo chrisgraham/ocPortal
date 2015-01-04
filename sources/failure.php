@@ -308,7 +308,7 @@ function _sanitise_error_msg($text)
  *
  * @param  mixed                        $text The error message (string or tempcode)
  * @param  ID_TEXT                      $template Name of the terminal page template
- * @param  boolean $support_match_key_messages ?Whether match key messages / redirects should be supported (null: detect)
+ * @param  boolean                      $support_match_key_messages ?Whether match key messages / redirects should be supported (null: detect)
  * @return mixed                        Never returns (i.e. exits)
  */
 function _generic_exit($text, $template, $support_match_key_messages = false)

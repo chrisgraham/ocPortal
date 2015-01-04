@@ -131,7 +131,7 @@ class Self_learning_cache
     /**
      * Constructor. Initialise our cache.
      *
-     * @param  ID_TEXT                               $bucket_name The identifier this cache object is for
+     * @param  ID_TEXT                          $bucket_name The identifier this cache object is for
      */
     public function __construct($bucket_name)
     {
@@ -143,7 +143,7 @@ class Self_learning_cache
     /**
      * Find whether the smart cache is on.
      *
-     * @return boolean                               Whether it is
+     * @return boolean                          Whether it is
      */
     public static function is_on()
     {
@@ -198,8 +198,8 @@ class Self_learning_cache
     /**
      * Get a cache key.
      *
-     * @param  ID_TEXT                           $key Cache key
-     * @return ?mixed                            The value (null: not in cache - needs to be learnt)
+     * @param  ID_TEXT                          $key Cache key
+     * @return ?mixed                           The value (null: not in cache - needs to be learnt)
      */
     public function get($key)
     {
@@ -212,8 +212,8 @@ class Self_learning_cache
     /**
      * See if a cache key was initially set.
      *
-     * @param  ID_TEXT $key Cache key
-     * @return boolean                           Whether it was
+     * @param  ID_TEXT                          $key Cache key
+     * @return boolean                          Whether it was
      */
     public function get_initial_status($key)
     {
@@ -223,8 +223,8 @@ class Self_learning_cache
     /**
      * Set a cache key.
      *
-     * @param  ID_TEXT                           $key Cache key
-     * @param  mixed                             $value Value. Should not be null, as that is reserved for "not in cache"
+     * @param  ID_TEXT                          $key Cache key
+     * @param  mixed                            $value Value. Should not be null, as that is reserved for "not in cache"
      */
     public function set($key, $value)
     {
@@ -239,10 +239,10 @@ class Self_learning_cache
      * Add something to a list entry in the cache. Uses keys to set the value, then assigns $value_2 to the key.
      * This is efficient for duplication prevention.
      *
-     * @param  ID_TEXT                           $key Cache key
-     * @param  mixed                             $value Value to append (must not be an object or array, so you may need to pre-serialize)
-     * @param  mixed                             $value_2 Secondary value to attach to appended value (optional)
-     * @return boolean                           Whether the value was appended (false if it was already there)
+     * @param  ID_TEXT                          $key Cache key
+     * @param  mixed                            $value Value to append (must not be an object or array, so you may need to pre-serialize)
+     * @param  mixed                            $value_2 Secondary value to attach to appended value (optional)
+     * @return boolean                          Whether the value was appended (false if it was already there)
      */
     public function append($key, $value, $value_2 = true)
     {
@@ -347,7 +347,7 @@ class Self_learning_cache
 /**
  * Get data from the persistent cache.
  *
- * @param  mixed $key Key
+ * @param  mixed                        $key Key
  * @param  ?TIME                        $min_cache_date Minimum timestamp that entries from the cache may hold (null: don't care)
  * @return ?mixed                       The data (null: not found / NULL entry)
  */
@@ -524,7 +524,7 @@ function get_cache_entry($codename, $cache_identifier, $special_cache_flags, $tt
 /**
  * Ability to do multiple get_cache_entry at once, for performance reasons.
  *
- * @param  array $dets An array of tuples of parameters (as per get_cache_entry, almost)
+ * @param  array                        $dets An array of tuples of parameters (as per get_cache_entry, almost)
  * @return array                        Array of results
  */
 function _get_cache_entries($dets)

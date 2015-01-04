@@ -38,9 +38,9 @@ function init__templates()
  * @param  mixed                        $title The title of the standard box, string or Tempcode (blank: titleless standard box)
  * @param  ID_TEXT                      $type The type of the box. Refers to a template (STANDARDBOX_type)
  * @param  string                       $width The CSS width
- * @param  string $options '|' separated list of options (meaning dependant upon templates interpretation)
- * @param  string $meta '|' separated list of meta information (key|value|key|value|...)
- * @param  string $links '|' separated list of link information (linkhtml|...)
+ * @param  string                       $options '|' separated list of options (meaning dependant upon templates interpretation)
+ * @param  string                       $meta '|' separated list of meta information (key|value|key|value|...)
+ * @param  string                       $links '|' separated list of link information (linkhtml|...)
  * @param  string                       $top_links Link to be added to the header of the box
  * @return tempcode                     The contents, put inside a standard box, according to the other parameters
  */

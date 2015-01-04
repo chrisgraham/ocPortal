@@ -1279,8 +1279,8 @@ function chat_get_room_content($room_id, $_rooms, $cutoff = null, $dereference =
  *
  * @param  string                       $text The text we are using
  * @param  string                       $tag The tag name we are parsing
- * @param  string $pm_user 1st param
- * @param  string $pm_message 2nd param
+ * @param  string                       $pm_user 1st param
+ * @param  string                       $pm_message 2nd param
  * @param  SHORT_TEXT                   $username The username of who made this chatcode
  * @param  ?integer                     $cutoff The maximum number of messages to be returned (null: no maximum)
  * @param  ID_TEXT                      $zone The zone that our chat module is in

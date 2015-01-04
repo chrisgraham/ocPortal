@@ -30,8 +30,8 @@ function init__ocf_posts()
 /**
  * Find whether a member may post in a certain topic.
  *
- * @param  AUTO_LINK $forum_id The forum ID of the forum the topic is in.
- * @param  AUTO_LINK $topic_id The topic ID is in.
+ * @param  AUTO_LINK                    $forum_id The forum ID of the forum the topic is in.
+ * @param  AUTO_LINK                    $topic_id The topic ID is in.
  * @param  ?MEMBER                      $last_member_id The last poster in the topic (null: do not check for double posting).
  * @param  ?MEMBER                      $member_id The member (null: current member).
  * @return boolean                      The answer.
@@ -129,7 +129,7 @@ function ocf_may_edit_post_by($post_id, $post_time, $resource_owner, $forum_id, 
 /**
  * Find whether a member may delete the detailed post.
  *
- * @param  AUTO_LINK $post_id The post ID.
+ * @param  AUTO_LINK                    $post_id The post ID.
  * @param  ?TIME                        $post_time The time of the post (null: lookup).
  * @param  ?MEMBER                      $resource_owner The owner of the post (null: lookup).
  * @param  ?AUTO_LINK                   $forum_id The forum the post is in (null: is a Private Topic, unless $post_time is NULL in which case we look this up too).
@@ -186,8 +186,8 @@ function ocf_may_delete_post_by($post_id, $post_time = null, $resource_owner, $f
 /**
  * Try and make a spacer post look nicer on OCF than it automatically would.
  *
- * @param  ID_TEXT $linked_type Content type.
- * @param  ID_TEXT $linked_id Content ID.
+ * @param  ID_TEXT                      $linked_type Content type.
+ * @param  ID_TEXT                      $linked_id Content ID.
  * @return array                        A pair: better description (may be NULL), better post (may be NULL).
  */
 function ocf_display_spacer_post($linked_type, $linked_id)

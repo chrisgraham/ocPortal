@@ -1533,12 +1533,12 @@ function adjust_event_dates_for_a_recurrence($day, $event)
 /**
  * An event moved from 'a' to 'b' may have an hour/minute shift due to a DST.
  *
- * @param  integer $a_year 'A' year
- * @param  integer $a_month 'A' month
- * @param  integer $a_day 'A' day
- * @param  integer $b_year 'B' year
- * @param  integer $b_month 'B' month
- * @param  integer $b_day 'B' day
+ * @param  integer                      $a_year 'A' year
+ * @param  integer                      $a_month 'A' month
+ * @param  integer                      $a_day 'A' day
+ * @param  integer                      $b_year 'B' year
+ * @param  integer                      $b_month 'B' month
+ * @param  integer                      $b_day 'B' day
  * @param  ID_TEXT                      $timezone The timezone
  * @return array                        A pair: shift in hours, shift in minutes
  */
