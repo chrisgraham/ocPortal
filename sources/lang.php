@@ -459,60 +459,38 @@ function require_lang($codename, $lang = null, $type = null, $ignore_errors = fa
     $cache_path = $cfb . '/caches/lang/' . $lang . '/' . $codename . '.lcd';
 
     // Try language cache
-    if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
-        $desire_cache = true;
-        global $SITE_INFO;
-        $support_smart_decaching = (!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching'] != '1');
-        if ($support_smart_decaching) {
-            $lang_file = $fb . '/lang/' . $lang . '/' . $codename . '.ini';
+    $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1)) && (get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache', null) !== 0);
+    if ($desire_cache) {
+        $cache_path = $cfb . '/caches/lang/' . $lang . '/' . $codename . '.lcd';
+        $lang_file_default = $fb . '/lang/' . $lang . '/' . $codename . '.ini';
+        if (!is_file($lang_file_default)) {
+            $lang_file_default = $fb . '/lang/' . fallback_lang() . '/' . $codename . '.ini';
+        }
+        $lang_file = $fb . '/lang_custom/' . $lang . '/' . $codename . '.ini';
+        if (!is_file($lang_file)) {
+            $lang_file = $fb . '/lang_custom/' . $lang . '/' . $codename . '.po';
             if (!is_file($lang_file)) {
-                $lang_file = $fb . '/lang/' . $lang . '/' . $codename . '.po';
+                $lang_file = $fb . '/lang_custom/' . $lang . '/' . $codename . '-' . strtolower($lang) . '.po';
                 if (!is_file($lang_file)) {
-                    $lang_file = $fb . '/lang/' . $lang . '/' . $codename . '-' . strtolower($lang) . '.po';
+                    $lang_file = $lang_file_default;
                 }
             }
-            $pcache = persistent_cache_get(array('LANG', $lang, $codename), is_file($lang_file) ? filemtime($lang_file) : null);
-        } else {
-            $pcache = persistent_cache_get(array('LANG', $lang, $codename));
         }
-        if (is_array($pcache)) {
-            $LANGUAGE_STRINGS_CACHE[$lang] += $pcache;
-            $done = true;
+
+        if (!is_file($lang_file_default)) {
+            $lang_file_default = $lang_file;
         }
-    } else {
-        $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1)) && (get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache', null) !== 0);
-        if ($desire_cache) {
-            $cache_path = $cfb . '/caches/lang/' . $lang . '/' . $codename . '.lcd';
-            $lang_file_default = $fb . '/lang/' . $lang . '/' . $codename . '.ini';
-            if (!is_file($lang_file_default)) {
-                $lang_file_default = $fb . '/lang/' . fallback_lang() . '/' . $codename . '.ini';
-            }
-            $lang_file = $fb . '/lang_custom/' . $lang . '/' . $codename . '.ini';
-            if (!is_file($lang_file)) {
-                $lang_file = $fb . '/lang_custom/' . $lang . '/' . $codename . '.po';
-                if (!is_file($lang_file)) {
-                    $lang_file = $fb . '/lang_custom/' . $lang . '/' . $codename . '-' . strtolower($lang) . '.po';
-                    if (!is_file($lang_file)) {
-                        $lang_file = $lang_file_default;
-                    }
-                }
-            }
 
-            if (!is_file($lang_file_default)) {
-                $lang_file_default = $lang_file;
-            }
-
-            if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/
-                            filemtime($cache_path) > filemtime($lang_file)) && (@/*race conditions*/
-                            filemtime($cache_path) > filemtime($lang_file_default))))
-            ) {
-                $tmp = @file_get_contents($cache_path);
-                if ($tmp != '') {
-                    $unserialized = @unserialize($tmp);
-                    if ($unserialized !== false) {
-                        $LANGUAGE_STRINGS_CACHE[$lang] += $unserialized;
-                        $done = true;
-                    }
+        if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/
+                        filemtime($cache_path) > filemtime($lang_file)) && (@/*race conditions*/
+                        filemtime($cache_path) > filemtime($lang_file_default))))
+        ) {
+            $tmp = @file_get_contents($cache_path);
+            if ($tmp != '') {
+                $unserialized = @unserialize($tmp);
+                if ($unserialized !== false) {
+                    $LANGUAGE_STRINGS_CACHE[$lang] += $unserialized;
+                    $done = true;
                 }
             }
         }

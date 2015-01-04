@@ -168,7 +168,7 @@ class Self_learning_cache
             return;
         }
 
-        $data = function_exists('persistent_cache_get') ? persistent_cache_get(array('SELF_LEARNING_CACHE', $this->bucket_name)) : null;
+        $data = persistent_cache_get(array('SELF_LEARNING_CACHE', $this->bucket_name));
         if ($data !== null) {
             $this->data = $data;
         } else {
@@ -228,9 +228,11 @@ class Self_learning_cache
      */
     public function set($key, $value)
     {
-        $this->data[$key] = $value;
+        if (!isset($this->data[$key]) || $this->data[$key] !== $value) {
+            $this->data[$key] = $value;
 
-        $this->save();
+            $this->save();
+        }
     }
 
     /**
@@ -268,8 +270,9 @@ class Self_learning_cache
             return;
         }
 
-        if (function_exists('persistent_cache_set')) {
+        if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
             persistent_cache_set(array('SELF_LEARNING_CACHE', $this->bucket_name), $this->data);
+            return;
         }
 
         if (!is_null($this->path)) {
@@ -311,6 +314,7 @@ class Self_learning_cache
         } else {
             fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
+
         $this->data = null;
     }
 
@@ -350,15 +354,18 @@ class Self_learning_cache
 function persistent_cache_get($key, $min_cache_date = null)
 {
     global $PERSISTENT_CACHE;
-    //if (($GLOBALS['DEV_MODE']) && (mt_rand(0,3)==1)) return NULL;  Annoying when doing performance tests, but you can enable to test persistent cache more
+    //if (($GLOBALS['DEV_MODE']) && (mt_rand(0,3) == 1)) return NULL;  Annoying when doing performance tests, but you can enable to test persistent cache more
     if ($PERSISTENT_CACHE === null) {
         return null;
     }
+
     $test = $PERSISTENT_CACHE->get(get_file_base() . serialize($key), $min_cache_date); // First we'll try specifically for site
     if ($test !== null) {
         return $test;
     }
-    $test = $PERSISTENT_CACHE->get(('ocp' . float_to_raw_string(ocp_version_number())) . serialize($key), $min_cache_date); // And last we'll try server-wide
+    if (!is_a($PERSISTENT_CACHE, 'Persistent_cacheing_filecache')) {
+        $test = $PERSISTENT_CACHE->get(('ocp' . float_to_raw_string(ocp_version_number())) . serialize($key), $min_cache_date); // And last we'll try server-wide
+    }
     return $test;
 }
 
@@ -379,6 +386,11 @@ function persistent_cache_set($key, $data, $server_wide = false, $expire_secs = 
     if ($expire_secs === null) {
         $expire_secs = $server_wide ? 0 : (60 * 60);
     }
+
+    if (is_a($PERSISTENT_CACHE, 'Persistent_cacheing_filecache')) {
+        $server_wide = false;
+    }
+
     $PERSISTENT_CACHE->set(($server_wide ? ('ocp' . float_to_raw_string(ocp_version_number())) : get_file_base()) . serialize($key), $data, 0, $expire_secs);
 }
 
@@ -410,7 +422,9 @@ function persistent_cache_delete($key, $substring = false)
         }
     } else {
         $PERSISTENT_CACHE->delete(get_file_base() . serialize($key));
-        $PERSISTENT_CACHE->delete('ocp' . float_to_raw_string(ocp_version_number()) . serialize($key));
+        if (!is_a($PERSISTENT_CACHE, 'Persistent_cacheing_filecache')) {
+            $PERSISTENT_CACHE->delete('ocp' . float_to_raw_string(ocp_version_number()) . serialize($key));
+        }
     }
 }
 
@@ -467,7 +481,7 @@ function find_cache_on($codename)
     // See if we have it cached
     global $BLOCK_CACHE_ON_CACHE;
     if ($BLOCK_CACHE_ON_CACHE === null) {
-        $BLOCK_CACHE_ON_CACHE = function_exists('persistent_cache_get') ? persistent_cache_get('BLOCK_CACHE_ON_CACHE') : null;
+        $BLOCK_CACHE_ON_CACHE = persistent_cache_get('BLOCK_CACHE_ON_CACHE');
         if ($BLOCK_CACHE_ON_CACHE === null) {
             $BLOCK_CACHE_ON_CACHE = list_to_map('cached_for', $GLOBALS['SITE_DB']->query_select('cache_on', array('*')));
             persistent_cache_set('BLOCK_CACHE_ON_CACHE', $BLOCK_CACHE_ON_CACHE);

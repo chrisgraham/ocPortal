@@ -933,7 +933,7 @@ function find_all_hooks($type, $entry)
     }
 
     if (function_exists('persistent_cache_set')) {
-        persistent_cache_set('HOOKS', $HOOKS_CACHE, true);
+        persistent_cache_set('HOOKS', $HOOKS_CACHE);
     }
 
     return $out;
@@ -1252,7 +1252,7 @@ function do_block_hunt_file($codename, $map = null)
         if (!isset($BLOCKS_AT_CACHE[$codename])) {
             $BLOCKS_AT_CACHE[$codename] = 'sources_custom/blocks';
             if (function_exists('persistent_cache_set')) {
-                persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE, true);
+                persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE);
             }
         }
 
@@ -1266,7 +1266,7 @@ function do_block_hunt_file($codename, $map = null)
         if (!isset($BLOCKS_AT_CACHE[$codename])) {
             $BLOCKS_AT_CACHE[$codename] = 'sources/blocks';
             if (function_exists('persistent_cache_set')) {
-                persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE, true);
+                persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE);
             }
         }
     } else {
@@ -1276,7 +1276,7 @@ function do_block_hunt_file($codename, $map = null)
             if (!isset($BLOCKS_AT_CACHE[$codename])) {
                 $BLOCKS_AT_CACHE[$codename] = 'sources_custom/miniblocks';
                 if (function_exists('persistent_cache_set')) {
-                    persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE, true);
+                    persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE);
                 }
             }
 
@@ -1287,7 +1287,7 @@ function do_block_hunt_file($codename, $map = null)
             if (!isset($BLOCKS_AT_CACHE[$codename])) {
                 $BLOCKS_AT_CACHE[$codename] = 'sources/miniblocks';
                 if (function_exists('persistent_cache_set')) {
-                    persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE, true);
+                    persistent_cache_set('BLOCKS_AT', $BLOCKS_AT_CACHE);
                 }
             }
         } elseif (($map === null) || (!isset($map['failsafe'])) || ($map['failsafe'] != '1')) {

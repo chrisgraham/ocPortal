@@ -676,8 +676,10 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             fatal_exit('Template names should be in upper case, and the files should be stored in upper case (' . $codename . ').');
         }
 
-        if ((substr($codename, -7) == '_SCREEN') || (substr($codename, -8) == '_OVERLAY') || ($codename == 'POOR_XHTML_WRAPPER')) {
-            $GLOBALS['SCREEN_TEMPLATE_CALLED'] = $codename;
+        if ($codename !== 'MENU_BRANCH_dropdown'/*optimisation*/) {
+            if ((substr($codename, -7) == '_SCREEN') || (substr($codename, -8) == '_OVERLAY') || ($codename == 'POOR_XHTML_WRAPPER')) {
+                $GLOBALS['SCREEN_TEMPLATE_CALLED'] = $codename;
+            }
         }
     }
 
@@ -864,7 +866,7 @@ function handle_symbol_preprocessing($seq_part, &$children)
             $param = $seq_part[3];
 
             if (isset($param[0])) {
-                if (is_object($param[0])) {
+                if (isset($param[0]->codename/*faster than is_object*/)) {
                     $param[0] = $param[0]->evaluate();
                 }
 
@@ -930,10 +932,10 @@ function handle_symbol_preprocessing($seq_part, &$children)
                 $param_copy = array();
                 foreach ($param as $i => $x) {
                     if ($i != 0) {
-                        $param_copy[] = is_object($x) ? $x->evaluate() : $x;
+                        $param_copy[] = isset($x->codename/*faster than is_object*/) ? $x->evaluate() : $x;
                     }
                 }
-                $TEMPCODE_SETGET[is_object($param[0]) ? $param[0]->evaluate() : $param[0]] = implode(',', $param_copy);
+                $TEMPCODE_SETGET[isset($param[0]->codename/*faster than is_object*/) ? $param[0]->evaluate() : $param[0]] = implode(',', $param_copy);
                 if (($GLOBALS['RECORD_TEMPLATES_TREE']) && (is_object($param[1]))) {
                     $children[] = array(':set: ' . (is_object($param[0]) ? $param[0]->evaluate() : $param[0]), isset($param[1]->children) ? $param[1]->children : array(), isset($param[1]->fresh) ? $param[1]->fresh : false);
                 }
@@ -944,7 +946,7 @@ function handle_symbol_preprocessing($seq_part, &$children)
             $param = $seq_part[3];
 
             foreach ($param as $i => $p) {
-                if (is_object($p)) {
+                if (isset($p->codename/*faster than is_object*/)) {
                     $param[$i] = $p->evaluate();
                 }
             }
@@ -1290,7 +1292,7 @@ class Tempcode
         foreach ($this->seq_parts as &$seq_parts_group) {
             foreach ($seq_parts_group as &$seq_part) {
                 foreach ($seq_part[1] as $val) {
-                    if (is_object($val)) {
+                    if (isset($val->codename/*faster than is_object*/)) {
                         $val->decache();
                     }
                 }
@@ -1558,7 +1560,7 @@ class Tempcode
         if (!$GLOBALS['OUTPUT_STREAMING']) {
             foreach ($this->preprocessable_bits as $preprocessable_bit) {
                 foreach ($preprocessable_bit[3] as $i => $param) {
-                    if ((($preprocessable_bit[2] != 'SET') || (($i >= 1))) && (is_object($param))) {
+                    if ((($preprocessable_bit[2] != 'SET') || (($i >= 1))) && (isset($param->codename/*faster than is_object*/))) {
                         $preprocessable_bit[3][$i] = $param->bind($parameters, '<' . $codename . '>');
                     }
                 }

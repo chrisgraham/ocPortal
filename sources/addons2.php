@@ -737,7 +737,7 @@ function uninstall_addon($addon)
     global $ADDON_INSTALLED_CACHE;
     unset($ADDON_INSTALLED_CACHE[$addon_info['name']]);
     if (function_exists('persistent_cache_set')) {
-        persistent_cache_set('ADDONS_INSTALLED', $ADDON_INSTALLED_CACHE, true);
+        persistent_cache_set('ADDONS_INSTALLED', $ADDON_INSTALLED_CACHE);
     }
 
     log_it('UNINSTALL_ADDON', $addon_info['name']);

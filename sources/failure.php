@@ -976,6 +976,7 @@ function _fatal_exit($text, $return = false)
     $title = get_screen_title('ERROR_OCCURRED');
 
     if (get_param_integer('keep_fatalistic', 0) == 0) {
+        require_code('urls');
         $php_error_label = (is_object($text) ? $text->evaluate() : $text) . ' @ ' . get_self_url_easy();
         if ((function_exists('syslog')) && (GOOGLE_APPENGINE)) {
             syslog(LOG_ERR, $php_error_label);

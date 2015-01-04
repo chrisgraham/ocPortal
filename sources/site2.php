@@ -93,7 +93,7 @@ function get_staff_actions_list()
             $staff_actions .= '<optgroup label="' . (isset($text->codename)/*faster than is_object*/ ? $text->evaluate() : escape_html($text)) . '">';
             $started_opt_group = true;
         }
-        $staff_actions .= '<option' . (($staff_actions == '') ? ' disabled="disabled" class="label"' : '') . ' ' . (($name == $special_page_type) ? 'selected="selected" ' : '') . 'value="' . escape_html($name) . '">' . (is_object($text) ? $text->evaluate() : escape_html($text)) . '</option>'; // XHTMLXHTML
+        $staff_actions .= '<option' . (($staff_actions == '') ? ' disabled="disabled" class="label"' : '') . ' ' . (($name == $special_page_type) ? 'selected="selected" ' : '') . 'value="' . escape_html($name) . '">' . (isset($text->codename/*faster than is_object*/) ? $text->evaluate() : escape_html($text)) . '</option>'; // XHTMLXHTML
         //$staff_actions.=static_evaluate_tempcode(form_input_list_entry($name,($name==$special_page_type),$text,false,$disabled)); Disabled 'proper' way for performance reasons
     }
     if ($started_opt_group) {

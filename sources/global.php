@@ -82,7 +82,7 @@ function require_code($codename, $light_exit = false)
             $has_original = is_file($path_b);
             $CODE_OVERRIDES[$codename] = $has_override;
             $CODE_OVERRIDES['!' . $codename] = $has_original;
-            persistent_cache_set('CODE_OVERRIDES', $CODE_OVERRIDES, true);
+            persistent_cache_set('CODE_OVERRIDES', $CODE_OVERRIDES);
         }
     } else {
         $has_override = is_file($path_a);

@@ -134,36 +134,32 @@ function require_lang_compile($codename, $lang, $type, $cache_path, $ignore_erro
         }
     }
 
-    if (is_null($GLOBALS['PERSISTENT_CACHE'])) {
-        // Cache
-        if ($desire_cache) {
-            if (!file_exists(dirname($cache_path))) {
-                require_code('files2');
-                make_missing_directory(dirname($cache_path));
-            }
+    // Cache
+    if ($desire_cache) {
+        if (!file_exists(dirname($cache_path))) {
+            require_code('files2');
+            make_missing_directory(dirname($cache_path));
+        }
 
-            $file = @fopen($cache_path, GOOGLE_APPENGINE ? 'wb' : 'ab'); // Will fail if cache dir missing .. e.g. in quick installer
-            if ($file !== false) {
-                @flock($file, LOCK_EX);
-                if (!GOOGLE_APPENGINE) {
-                    ftruncate($file, 0);
-                }
-                if (fwrite($file, serialize($load_target)) > 0) {
-                    // Success
-                    @flock($file, LOCK_UN);
-                    fclose($file);
-                    require_code('files');
-                    fix_permissions($cache_path);
-                } else {
-                    // Failure
-                    @flock($file, LOCK_UN);
-                    fclose($file);
-                    @unlink($cache_path);
-                }
+        $file = @fopen($cache_path, GOOGLE_APPENGINE ? 'wb' : 'ab'); // Will fail if cache dir missing .. e.g. in quick installer
+        if ($file !== false) {
+            @flock($file, LOCK_EX);
+            if (!GOOGLE_APPENGINE) {
+                ftruncate($file, 0);
+            }
+            if (fwrite($file, serialize($load_target)) > 0) {
+                // Success
+                @flock($file, LOCK_UN);
+                fclose($file);
+                require_code('files');
+                fix_permissions($cache_path);
+            } else {
+                // Failure
+                @flock($file, LOCK_UN);
+                fclose($file);
+                @unlink($cache_path);
             }
         }
-    } else {
-        persistent_cache_set(array('LANG', $lang, $codename), $load_target, !$dirty);
     }
 
     if ($desire_cache) {

@@ -361,7 +361,7 @@ function build_page_link($vars, $zone_name = '', $skip = null, $hash = '')
 
     $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/($vars['page']);
     if ((isset($vars['type'])) || (array_key_exists('type', $vars))) {
-        if (is_object($vars['type'])) {
+        if (isset($vars['type']->codename/*faster than is_object*/)) {
             $page_link .= ':';
             $page_link .= $vars['type']->evaluate();
         } else {
@@ -371,7 +371,7 @@ function build_page_link($vars, $zone_name = '', $skip = null, $hash = '')
         if ((isset($id)) || (array_key_exists('id', $vars))) {
             if (is_integer($id)) {
                 $page_link .= ':' . strval($id);
-            } elseif (is_object($id)) {
+            } elseif (isset($id->codename/*faster than is_object*/)) {
                 $page_link .= ':';
                 $page_link .= $id->evaluate();
             } else {
@@ -397,7 +397,7 @@ function build_page_link($vars, $zone_name = '', $skip = null, $hash = '')
                 $key = strval($key);
             }
 
-            if (is_object($val)) {
+            if (isset($val->codename/*faster than is_object*/)) {
                 $page_link .= ':' . $key . '=';
                 $page_link .= $val->evaluate();
             } else {

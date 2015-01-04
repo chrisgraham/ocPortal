@@ -93,9 +93,10 @@ class Module_cms_galleries extends Standard_crud_module
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
      *
      * @param  boolean                  $top_level Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 $type The screen type to consider for meta-data purposes (null: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (null: none).
      */
-    public function pre_run($top_level = true)
+    public function pre_run($top_level = true, $type = null)
     {
         $this->cat_crud_module = class_exists('Mx_cms_galleries_cat') ? new Mx_cms_galleries_cat() : new Module_cms_galleries_cat();
         $this->alt_crud_module = class_exists('Mx_cms_galleries_alt') ? new Mx_cms_galleries_alt() : new Module_cms_galleries_alt();

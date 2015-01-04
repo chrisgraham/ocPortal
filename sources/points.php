@@ -180,7 +180,7 @@ function point_info($member)
 
     $POINT_INFO_CACHE[$member] = array();
     foreach ($values as $key => $val) {
-        if (!is_object($val)) {
+        if (!isset($val->codename/*faster than is_object*/)) {
             $POINT_INFO_CACHE[$member][$key] = intval($val);
         }
     }

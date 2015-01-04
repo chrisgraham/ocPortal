@@ -388,7 +388,7 @@ function restore_output_state($just_tempcode = false, $merge_current = false, $k
         foreach ($old_state as $var => $val) {
             if ((!$just_tempcode) || ($var == 'CYCLES') || ($var == 'TEMPCODE_SETGET')) {
                 $merge_array = (($merge_current) && (is_array($val)) && (array_key_exists($var, $mergeable_arrays)));
-                $merge_tempcode = (($merge_current) && (is_object($val)) && (array_key_exists($var, $mergeable_tempcode)));
+                $merge_tempcode = (($merge_current) && (isset($val->codename/*faster than is_object*/)) && (array_key_exists($var, $mergeable_tempcode)));
                 $mergeable = $merge_array || $merge_tempcode;
                 if ((!in_array($var, $keep)) || ($mergeable)) {
                     if ($merge_array) {
@@ -951,7 +951,7 @@ function addon_installed($addon, $non_bundled_too = false)
     }
     $ADDON_INSTALLED_CACHE[$addon] = $answer;
     if (function_exists('persistent_cache_set')) {
-        persistent_cache_set('ADDONS_INSTALLED', $ADDON_INSTALLED_CACHE, true);
+        persistent_cache_set('ADDONS_INSTALLED', $ADDON_INSTALLED_CACHE);
     }
     return $answer;
 }
@@ -2602,10 +2602,10 @@ function get_zone_default_page($zone_name)
         $zone_name = get_zone_name();
     }
 
-    $p_test = function_exists('persistent_cache_get') ? persistent_cache_get(array('ZONE', $zone_name)) : null;
+    /*$p_test = function_exists('persistent_cache_get') ? persistent_cache_get(array('ZONE', $zone_name)) : null;       Better to get from ALL_ZONES_TITLED, less cache volume
     if ($p_test !== null) {
         return $p_test['zone_default_page'];
-    }
+    }*/
 
     global $ZONE;
     if (($ZONE['zone_name'] == $zone_name) && ($ZONE['zone_default_page'] !== null)) {

@@ -1180,7 +1180,7 @@ function find_script($name, $append_keep = false, $base_url_code = 0)
                 $ret = get_base_url() . '/' . $zone . (($zone != '') ? '/' : '') . $name . '.php';
                 $FIND_SCRIPT_CACHE[$name][$append_keep][$base_url_code] = $ret;
                 if (function_exists('persistent_cache_set')) {
-                    persistent_cache_set('SCRIPT_PLACES', $FIND_SCRIPT_CACHE, true);
+                    persistent_cache_set('SCRIPT_PLACES', $FIND_SCRIPT_CACHE);
                 }
                 return $ret . $append;
             }
@@ -1189,7 +1189,7 @@ function find_script($name, $append_keep = false, $base_url_code = 0)
     $ret = get_base_url(($base_url_code == 0) ? null : ($base_url_code == 2)) . '/site/' . $name . '.php';
     $FIND_SCRIPT_CACHE[$name][$append_keep][$base_url_code] = $ret;
     if (function_exists('persistent_cache_set')) {
-        persistent_cache_set('SCRIPT_PLACES', $FIND_SCRIPT_CACHE, true);
+        persistent_cache_set('SCRIPT_PLACES', $FIND_SCRIPT_CACHE);
     }
     return $ret . $append;
 }

@@ -29,6 +29,9 @@ class Persistent_cacheing_filecache
     public function __construct()
     {
         require_code('files');
+
+        global $PC_FC_CACHE;
+        $PC_FC_CACHE = array();
     }
 
     public $objects_list = null;
@@ -58,9 +61,9 @@ class Persistent_cacheing_filecache
      */
     public function get($key, $min_cache_date = null)
     {
-        static $cache = array();
-        if ($min_cache_date !== null && isset($cache[$key])) {
-            return $cache[$key];
+        global $PC_FC_CACHE;
+        if ($min_cache_date === null && isset($cache[$key])) {
+            return $PC_FC_CACHE[$key];
         }
 
         $myfile = @fopen(get_custom_file_base() . '/caches/persistent/' . md5($key) . '.gcd', 'rb');
@@ -76,7 +79,7 @@ class Persistent_cacheing_filecache
         @flock($myfile, LOCK_SH);
         $contents = '';
         while (!feof($myfile)) {
-            $contents .= fread($myfile, 1024);
+            $contents .= fread($myfile, 32768);
         }
 
         $ret = @unserialize($contents);
@@ -84,7 +87,7 @@ class Persistent_cacheing_filecache
         @flock($myfile, LOCK_UN);
         fclose($myfile);
 
-        $cache[$key] = $ret;
+        $PC_FC_CACHE[$key] = $ret;
 
         return $ret;
     }
@@ -99,6 +102,9 @@ class Persistent_cacheing_filecache
      */
     public function set($key, $data, $flags = 0, $expire_secs = null)
     {
+        global $PC_FC_CACHE;
+        $PC_FC_CACHE[$key] = $data;
+
         if ($key !== 'PERSISTENT_CACHE_OBJECTS') {
             // Update list of persistent-objects
             $objects_list = $this->load_objects_list();
