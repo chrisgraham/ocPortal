@@ -146,6 +146,7 @@ class Hook_fields_multilist
 		{
 			return ($editing && (is_null(post_param('require__field_'.strval($field['id']),NULL))))?STRING_MAGIC_NULL:'';
 		}
+		if (!is_array($_POST[$tmp_name])) return post_param($tmp_name,''); // Weird, but seein in the wild
 		return implode(chr(10),$_POST[$tmp_name]);
 	}
 
