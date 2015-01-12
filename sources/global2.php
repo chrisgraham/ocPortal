@@ -745,7 +745,7 @@ function get_charset()
 		$attempt=do_lang('charset',NULL,NULL,NULL,NULL,false);
 		if ($attempt!==NULL)
 		{
-			$CHARSET=$attempt;
+			$CHARSET=trim($attempt);
 			return $attempt;
 		}
 	}

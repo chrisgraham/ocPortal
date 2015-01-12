@@ -128,7 +128,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	// Make tracker comment with fix link
 	$tracker_comment_message='';
 	if ($git_commit_id!==NULL)
-		$tracker_comment_message.='Fixed in git commit '.escape_html($git_commit_id).' ('.escape_html($git_url).' - link will become active once code pushed)'."\n\n";
+		$tracker_comment_message.='Fixed in git commit '.escape_html($git_commit_id).' ('.escape_html($git_url).' - link will become active once code pushed to github)'."\n\n";
 	$tracker_comment_message.='A hotfix (a TAR of files to upload) have been uploaded to this issue. These files are made to the latest intra-version state (i.e. may roll in earlier fixes too if made to the same files) - so only upload files newer than what you have already. Always take backups of files you are replacing or keep a copy of the manual installer for your version, and only apply fixes you need. These hotfixes are not necessarily reliable or well supported. Not sure how to extract TAR files to your Windows computer? Try 7-zip (http://www.7-zip.org/).';
 	create_tracker_post($tracker_id,$tracker_comment_message);
 	// A tar of fixed files is uploaded to the tracker issue (correct relative file paths intact)

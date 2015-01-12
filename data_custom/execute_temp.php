@@ -55,4 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	set_option('enable_https','1');
 }
