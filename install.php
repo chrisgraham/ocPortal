@@ -2589,6 +2589,9 @@ php_value suhosin.post.max_totalname_length "10000"
 php_value suhosin.request.max_totalname_length "10000"
 php_flag suhosin.cookie.encrypt off
 php_flag suhosin.sql.union off
+php_flag suhosin.sql.comment off
+php_flag suhosin.sql.multiselect off
+php_flag suhosin.upload.remove_binary off
 END;
 
 if ($php_value_ok) $clauses[]=<<<END

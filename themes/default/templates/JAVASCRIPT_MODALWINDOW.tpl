@@ -440,7 +440,7 @@ function ModalWindow()
 					'left': '0',
 					'top': '0',
 					'width': '100%',
-					'height': ((dim.pageHeight>dim.windowHeight)?dim.pageHeight:dim.windowHeight)+'px'
+					'height': (browser_matches('android') || browser_matches('ios'))?'auto':(((dim.pageHeight>dim.windowHeight)?dim.pageHeight:dim.windowHeight)+'px')
 				}
 			});
 
@@ -448,7 +448,8 @@ function ModalWindow()
 				'class': 'box overlay',
 				'role': 'dialog',
 				'styles' : {
-					'position': 'fixed'
+					'position': (browser_matches('android') || browser_matches('ios'))?'static':'fixed',
+					'margin': '0 auto' // Centering for iOS/Android which is statically positioned (so the container height as auto can work)
 				}
 			}));
 

@@ -49,7 +49,7 @@ function init__tempcode()
 	global $XHTML_SPIT_OUT,$NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$CACHED_FOUND,$REQUEST_BLOCK_NEST_LEVEL,$LOADED_TPL_CACHE;
 	$XHTML_SPIT_OUT=NULL;
 	$NO_EVAL_CACHE=false;
-	$MEMORY_OVER_SPEED=false;
+	$MEMORY_OVER_SPEED=(get_param_integer('keep_memory_over_speed',0)==1);
 	$CACHED_FOUND=array();
 	$REQUEST_BLOCK_NEST_LEVEL=0;
 	$LOADED_TPL_CACHE=array();

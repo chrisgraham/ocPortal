@@ -321,6 +321,9 @@ suhosin.post.max_totalname_length="10000"
 suhosin.request.max_totalname_length="10000"
 suhosin.cookie.encrypt="off"
 suhosin.sql.union=off
+suhosin.sql.comment=off
+suhosin.sql.multiselect=off
+suhosin.upload.remove_binary=off
 
 
 ; Sandbox ocPortal to it's own directory

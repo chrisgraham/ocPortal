@@ -462,7 +462,7 @@ function comcode_helper_script()
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_ADVANCED'),'',$descriptiont));
 
 						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'');
-						if (!array_key_exists($param,$defaults))
+						if ((!array_key_exists($param,$defaults)) && ($default==''))
 						{
 							$matches=array();
 							if (preg_match('#'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\']#Ui',$descriptiont,$matches)!=0)
