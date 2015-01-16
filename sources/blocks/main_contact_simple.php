@@ -69,6 +69,16 @@ class Block_main_contact_simple
 			require_code('mail');
 
 			$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
+
+			if ($email_from!='')
+			{
+				require_code('type_validation');
+				if (!is_valid_email_address($email_from))
+				{
+					warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+				}
+			}
+
 			mail_wrap(post_param('title'),$post,array($to),NULL,$email_from,$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 
 			if ($email_from!='')

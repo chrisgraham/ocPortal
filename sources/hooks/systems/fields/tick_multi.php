@@ -92,8 +92,8 @@ class Hook_fields_tick_multi
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=explode(chr(10),$ev);
-		foreach (explode('|',$field['cf_default']) as $option)
+		$exploded=($ev=='')?array():explode(chr(10),$ev);
+		foreach (($field['cf_default']=='')?array():explode('|',$field['cf_default']) as $option)
 		{
 			$all[]=array('OPTION'=>$option,'HAS'=>in_array($option,$exploded));
 		}

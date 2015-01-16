@@ -1668,6 +1668,9 @@ table.scrollable_inside {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		table-layout: fixed;
 	{+END}
+	{+START,IF,{$MOBILE}}
+		overflow-x: scroll;
+	{+END}
 }
 
 .spaced_table th, .spaced_table td {

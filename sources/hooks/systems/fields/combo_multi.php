@@ -92,8 +92,8 @@ class Hook_fields_combo_multi
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded_inbuilt=explode('|',$field['cf_default']);
-		$exploded_chosen=explode(chr(10),$ev);
+		$exploded_inbuilt=($field['cf_default']=='')?array():explode('|',$field['cf_default']);
+		$exploded_chosen=($ev=='')?array():explode(chr(10),$ev);
 		foreach ($exploded_inbuilt as $option)
 		{
 			$all[]=array('OPTION'=>$option,'HAS'=>in_array($option,$exploded_chosen));

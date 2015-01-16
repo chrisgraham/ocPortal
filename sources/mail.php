@@ -245,7 +245,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 	if (is_null($bypass_queue))
 	{
-		$bypass_queue=($priority<3);
+		$bypass_queue=(($priority<3) || (strpos(serialize($attachments),'tmpfile')!==false));
 	}
 
 	global $EMAIL_ATTACHMENTS;

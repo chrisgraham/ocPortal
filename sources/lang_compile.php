@@ -102,6 +102,8 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 				$lang_file=get_custom_file_base().'/lang_custom/'.$lang.'/'.$codename.'.po';
 				if (!file_exists($lang_file))
 					$lang_file=get_file_base().'/lang_custom/'.$lang.'/'.$codename.'-'.strtolower($lang).'.po';
+				if (!file_exists($lang_file))
+					$lang_file=get_file_base().'/lang_custom/'.$lang.'/'.$codename.'_'.strtolower($lang).'.po';
 			}
 		}
 		if (($type!='lang') && (file_exists($lang_file)))

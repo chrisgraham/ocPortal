@@ -83,6 +83,17 @@ class Block_main_feedback
 				$title=post_param('title','');
 				if ($post!='')
 				{
+					$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
+
+					if ($email_from!='')
+					{
+						require_code('type_validation');
+						if (!is_valid_email_address($email_from))
+						{
+							warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+						}
+					}
+
 					require_code('notifications');
 					dispatch_notification(
 						'new_feedback',
@@ -91,7 +102,6 @@ class Block_main_feedback
 						do_lang('NEW_FEEDBACK_MESSAGE',$post,NULL,NULL,get_site_default_lang())
 					);
 
-					$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
 					if ($email_from!='')
 					{
 						require_code('mail');

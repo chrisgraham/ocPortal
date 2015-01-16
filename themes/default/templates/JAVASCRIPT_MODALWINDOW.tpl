@@ -417,8 +417,11 @@ function ModalWindow()
 
 			if (((boxHeight=='auto') && ('{$MOBILE}'==1)) || (height>dim.windowHeight))
 			{
-				this.box.childNodes[0].style.position='absolute';
-				this.box.childNodes[0].style.top='0';
+				if (!browser_matches('ios') && !browser_matches('android'))
+				{
+					this.box.childNodes[0].style.position='absolute';
+					this.box.childNodes[0].style.top='0';
+				} // iOS/Android uses static anyway
 
 				try
 				{
