@@ -165,7 +165,10 @@ class breadcrumb_substitution_loader
 				}
 				$_source_url=build_url($attributes,$zone,NULL,false,false,true,$hash);
 				$source_url=$_source_url->evaluate();
-				$source_url=str_replace('\\','/',$source_url); // Should not be needed, but can happen on misconfiguration and cause an error
+				if (strpos(get_base_url(),'\\')!==false)
+				{
+					$source_url=str_replace('\\','/',$source_url); // Should not be needed, but can happen on misconfiguration and cause an error
+				}
 				$source_url=urldecode(urldecode($source_url)); // urldecode because we don't want our regexp syntax mangled. Highly unlikely our sub's are going to really use special characters as parts of the URL
 				if ((strpos($source_url,'.htm')===false) && (strpos($source_url,'.php')===false))
 					$source_url.='(?:/index\.php)?';
