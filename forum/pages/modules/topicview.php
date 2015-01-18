@@ -109,18 +109,24 @@ class Module_topicview
 
 		$view_poll_results=get_param_integer('view_poll_results',0);
 
-		// Mark as read
-		if (!is_null($id))
-		{
-			$this->id=$id;
-			register_shutdown_function(array($this,'_update_read_status')); // done at end after output in case of locking (don't make the user wait)
-		}
-
 		// Load up topic info
 		$topic_info=ocf_read_in_topic($id,$start,$max,$view_poll_results==1);
 		$GLOBALS['META_DATA']+=$topic_info['meta_data'];
 		global $SEO_TITLE;
 		$SEO_TITLE=do_lang('_VIEW_TOPIC',$topic_info['title']);
+
+		// Mark as read
+		if (!is_null($id))
+		{
+			$this->id=$id;
+			if (is_null($topic_info['forum_id']))
+			{
+				$this->_update_read_status(); // Done early because we need to have updated read status set when the pt_notifications show up
+			} else
+			{
+				register_shutdown_function(array($this,'_update_read_status')); // done at end after output in case of locking (don't make the user wait)
+			}
+		}
 
 		// Render posts according to whether threaded or not
 		$threaded=($topic_info['is_threaded']==1);
