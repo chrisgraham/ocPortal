@@ -556,7 +556,7 @@ class Module_calendar
 		{
 			$previous_no_follow=false;
 		}
-		$next_no_follow=($next_timestamp>time()+60*60*24*31);
+		$next_no_follow=($next_timestamp>time()+60*60*24*31*6/*So can see 6 months of recurrences/empty space*/);
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'calendar_events WHERE e_start_year='.date('Y',$next_timestamp).' AND e_start_month>='.date('m',$next_timestamp).' OR e_start_year>'.date('Y',$next_timestamp));
 		if (!is_null($test)) // if there really are events after, this takes priority
 		{
@@ -571,7 +571,7 @@ class Module_calendar
 			{
 				$past_no_follow=false;
 			}
-			$future_no_follow=($timestamp>time()+60*60*24*31);
+			$future_no_follow=($timestamp>time()+60*60*24*31*6/*So can see 6 months of recurrences/empty space*/);
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'calendar_events WHERE e_start_year='.date('Y',$timestamp).' AND e_start_month>='.date('m',$timestamp).' OR e_start_year>'.date('Y',$timestamp));
 			if (!is_null($test)) // if there really are events after, this takes priority
 			{
@@ -586,7 +586,7 @@ class Module_calendar
 				{
 					if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 401 Unauthorized'); // Stop spiders ever storing the URL that caused this
 				}
-				access_denied('NOT_AS_GUEST');
+				access_denied('NOT_AS_GUEST_CALENDAR_PERFORMANCE');
 			}
       }
 
