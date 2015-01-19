@@ -550,8 +550,45 @@ class Module_calendar
 		}
 
 		// Nofollow stuff
-		$previous_no_follow=($previous_timestamp<filectime(get_file_base().'/info.php'));
-		$next_no_follow=($next_timestamp>time());
+		$previous_no_follow=($previous_timestamp<time()-60*60*24*31);
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'calendar_events WHERE e_start_year='.date('Y',$next_timestamp).' AND e_start_month<='.date('m',$next_timestamp).' OR e_start_year<'.date('Y',$next_timestamp));
+		if (!is_null($test)) // if there really are events before, this takes priority
+		{
+			$previous_no_follow=false;
+		}
+		$next_no_follow=($next_timestamp>time()+60*60*24*31);
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'calendar_events WHERE e_start_year='.date('Y',$next_timestamp).' AND e_start_month>='.date('m',$next_timestamp).' OR e_start_year>'.date('Y',$next_timestamp));
+		if (!is_null($test)) // if there really are events after, this takes priority
+		{
+			$next_no_follow=false;
+		}
+		if (get_bot_type()!==null && is_guest())
+		{
+			// Some bots ignore nofollow, so let's be more forceful
+			$past_no_follow=($timestamp<time()-60*60*24*31);
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'calendar_events WHERE e_start_year='.date('Y',$timestamp).' AND e_start_month<='.date('m',$timestamp).' OR e_start_year<'.date('Y',$timestamp));
+			if (!is_null($test)) // if there really are events before, this takes priority
+			{
+				$past_no_follow=false;
+			}
+			$future_no_follow=($timestamp>time()+60*60*24*31);
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'calendar_events WHERE e_start_year='.date('Y',$timestamp).' AND e_start_month>='.date('m',$timestamp).' OR e_start_year>'.date('Y',$timestamp));
+			if (!is_null($test)) // if there really are events after, this takes priority
+			{
+				$future_no_follow=false;
+			}
+			if ($past_no_follow || $future_no_follow)
+			{
+				global $EXTRA_HEAD;
+				$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+				$GLOBALS['HTTP_STATUS_CODE']='401';
+				if (!headers_sent())
+				{
+					if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 401 Unauthorized'); // Stop spiders ever storing the URL that caused this
+				}
+				access_denied('NOT_AS_GUEST');
+			}
+      }
 
 		$map=array_merge($filter,array('page'=>'_SELF','view'=>$view,'id'=>$previous));
 		if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
