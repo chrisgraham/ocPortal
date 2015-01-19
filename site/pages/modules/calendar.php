@@ -562,7 +562,7 @@ class Module_calendar
 		{
 			$next_no_follow=false;
 		}
-		if (get_bot_type()!==null && is_guest())
+		if (/*get_bot_type()!==null Actually we can't rely on bot detection, so let's just tie to guest && */is_guest())
 		{
 			// Some bots ignore nofollow, so let's be more forceful
 			$past_no_follow=($timestamp<time()-60*60*24*31);
