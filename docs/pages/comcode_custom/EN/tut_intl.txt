@@ -17,8 +17,8 @@ ocPortal has support for internationalisation, including:
 [title="2"]Time zones[/title]
 
 In ocPortal, time zones can be adjusted in two ways:
- - adjusting the site time-zone relative to server time (this is a site configuration option). This is convenient if the server is located in a different time-zone to the site (e.g. A British website using an American hosting company)
- - adjusting member time-zones, relative to the site time-zone ([concept]OCF[/concept] only)
+ - adjusting the site time-zone (this is a site configuration option).
+ - adjusting member time-zones in their account settings ([concept]Conversr[/concept] only)
 
 [title="2"]ocProducts relationship with translations[/title]
 

@@ -3,6 +3,11 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+.access_restricted_in_list {
+	font-style: italic;
+	color: red;
+}
+
 .ocf_edit_forum_category {
 	background-color: {$GET,box_title_background};
 }
