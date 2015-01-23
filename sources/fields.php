@@ -72,7 +72,8 @@ function get_fields_hook($type)
 		}
 	}
 	require_code($path);
-	$ob=object_factory('Hook_fields_'.filter_naughty($type));
+	$ob=object_factory('Hook_fields_'.filter_naughty($type),true);
+	if (is_null($ob)) return get_fields_hook('short_text');
 	$fields_hook_cache[$type]=$ob;
 	return $ob;
 }
