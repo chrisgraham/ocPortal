@@ -130,13 +130,17 @@ function fractional_edit_script()
 
 	$_POST['fractional_edit']='1';
 
-	global $SESSION_CONFIRMED;
-	if ($SESSION_CONFIRMED==0)
+	$zone=get_param('zone');
+
+	if ($GLOBALS['SITE_DB']->query_value('zones','zone_require_session',array('zone_name'=>$zone))==1)
 	{
-		return;
+		global $SESSION_CONFIRMED;
+		if ($SESSION_CONFIRMED==0)
+		{
+			return;
+		}
 	}
 
-	$zone=get_param('zone');
 	$page=get_param('page');
 	if (!has_actual_page_access(get_member(),$page,$zone))
 		access_denied('ZONE_ACCESS');

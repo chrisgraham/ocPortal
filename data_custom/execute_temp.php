@@ -55,5 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	set_option('enable_https','1');
+	return do_template('CHRIS_TEST',array('_TYPE'=>array('a','b','c')));
 }

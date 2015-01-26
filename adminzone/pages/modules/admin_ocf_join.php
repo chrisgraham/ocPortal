@@ -1019,6 +1019,7 @@ class Module_admin_ocf_join
 					$parts=explode('/',$line['Usergroup']);
 					foreach ($parts as $p)
 					{
+						$p=trim($p);
 						if (!array_key_exists($p,$all_groups))
 						{
 							require_code('ocf_groups_action');

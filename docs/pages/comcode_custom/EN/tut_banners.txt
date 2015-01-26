@@ -56,6 +56,10 @@ In order to use banners from an existing banner network, you often are asked to 
 If you are using Google Adsense and don't see any banners, [url="http://yurko.net/blog/2010/03/website-related/white-space-instead-adsense-ads.html"]consider whether your account is set up correctly[/url].
 [/surround]
 
+Banners are shared on a site network using an iframe going to a URL like:
+[tt]http://centralsite/banner.php?source=sitename&b_type=bannertype[/tt]
+This code is given out when you add a banner. The 'source' comes from the name of the banner you added, which for purposes of a banner network, is considered also as the name of the site also showing banners in the network. A source site won't be shown its own banners. If you wish you may just strip out the source parameter if you don't need such a restriction -- if, for example, you are just using the banner sharing code all within your own site.
+
 [title="2"]Permissions[/title]
 
 [title="3"]Who may view what[/title]

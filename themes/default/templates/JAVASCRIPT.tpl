@@ -203,8 +203,8 @@ function new_html__initialise(element)
 					span.style.whiteSpace='nowrap';
 					span.style.paddingRight='0.5em';
 					element.parentNode.style.textAlign='left';
+					element.parentNode.style.overflow='hidden'; // Needed due to https://bugzilla.mozilla.org/show_bug.cgi?id=456497
 					element.parentNode.style.verticalAlign='top';
-					//element.parentNode.parentNode.parentNode.parentNode.parentNode.style.overflowX='hidden';		Scrollbar is incorrect, but we do need it :S
 					set_inner_html(span,escape_html(element.alt));
 					element.parentNode.insertBefore(span,element);
 					window.setTimeout(function() {

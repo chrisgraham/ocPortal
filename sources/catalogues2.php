@@ -871,7 +871,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	$_fields=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
 	$fields=collapse_2d_complexity('id','cf_type',$_fields);
 
-	$original_submitter=$GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_submitter',array('id'=>$id));
+	$original_submitter=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','ce_submitter',array('id'=>$id));
+	if (is_null($original_submitter)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	$old_category_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$id));
 

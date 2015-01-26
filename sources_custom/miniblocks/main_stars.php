@@ -33,7 +33,7 @@ foreach ($gifts as $gift)
 		{
 			$avatar='<img style="max-width: 100%" alt="" src="'.escape_html($avatar_url).'" />';
 		}
-		echo '<tr><td>'.$avatar.'</td><td>Username: <a href="'.escape_html($link).'">'.escape_html($username).'</a><br /><br />Role points: '.integer_format($points).'<br /><br />Rank: '.$rank.'</td><td style="font-size: 0.8em;">'.$signature->evaluate().'</td></td>';
+		echo '<tr><td>'.$avatar.'</td><td>Username: <a href="'.escape_html($link).'">'.escape_html($username).'</a><br /><br />Role points: '.integer_format($points).'<br /><br />Rank: '.$rank.'</td><td style="font-size: 0.8em;">'.$signature->evaluate().'</td></tr>';
 
 		$count++;
 	}

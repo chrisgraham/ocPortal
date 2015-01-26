@@ -177,12 +177,12 @@ class Module_admin_config
 			add_config_option('COUNT_TOPICSCOUNT','forum_show_personal_stats_topics','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('ADMIN_ZONE_LINK','ocp_show_personal_adminzone_link','tick','return \'1\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('CONCEDED_MODE_LINK','ocp_show_conceded_mode_link','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('SU','ocp_show_su','tick','return has_no_forum()?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('SU','ocp_show_su','tick','return (get_forum_type()==\'none\')?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('PAGE_ACTIONS','ocp_show_staff_page_actions','tick','return \'1\';','THEME','GENERAL');
-			add_config_option('MY_PROFILE_LINK','ocf_show_profile_link','tick','return has_no_forum()?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('_USERGROUP','ocp_show_personal_usergroup','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('MY_PROFILE_LINK','ocf_show_profile_link','tick','return (get_forum_type()==\'none\')?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('_USERGROUP','ocp_show_personal_usergroup','tick','return (get_forum_type()==\'none\')?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('LAST_HERE','ocp_show_personal_last_visit','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('AVATAR','ocp_show_avatar','tick','return (has_no_forum() || ((get_forum_type()==\'ocf\') && (!addon_installed(\'ocf_member_avatars\'))))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('AVATAR','ocp_show_avatar','tick','return ((get_forum_type()==\'none\') || ((get_forum_type()==\'ocf\') && (!addon_installed(\'ocf_member_avatars\'))))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('ROOT_ZONE_LOGIN_THEME','root_zone_login_theme','tick','return \'0\';','THEME','GENERAL');
 			add_config_option('SHOW_DOCS','show_docs','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('CAPTCHA_NOISE','captcha_noise','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SPAMMER_DETECTION');

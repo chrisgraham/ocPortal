@@ -676,7 +676,7 @@ function ocp_tempnam($prefix)
 	if ((($tempnam===false) || ($tempnam==''/*Should not be blank, but seen in the wild*/)) && (!$problem_saving))
 	{
 		$problem_saving=true;
-		$tempnam=tempnam($local_path,$prefix);
+		$tempnam=tempnam($local_path,'tmpfile__'.$prefix);
 	}
 	return $tempnam;
 }

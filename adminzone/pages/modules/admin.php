@@ -120,6 +120,9 @@ class Module_admin
 	function _synonyms()
 	{
 		return array(
+			array('maximum','limit','total','max'),
+			array('characters','words','bytes'),
+
 			array('multi-moderation','multimoderation'),
 			array('invitation','invite'),
 			array('banner','advert','advertising','advertise'),
@@ -129,13 +132,14 @@ class Module_admin
 			array('uninstall','disable','remove'),
 			array('pruning','prune','lurkers'),
 			array('colour','color','css','font','background'),
-			array('dob','date of birth'),
+			array('dob','date of birth','age'),
 			array('sef','seo','google','search engine','search-engine-friendly','search-engine-optimisation'),
 			array('ban','suspend','suspension','probation','warn','punish','punitive'),
 			array('staff','moderator','admin', 'administrator','operator'),
 			array('open','closed','live','activate','activation',/*'enable',*/'turn'),
 			array('iotd','potd','image of the day'),
-			array('import','convert','migrate','upload'),
+			array('import','convert','migrate'),
+			array('attachment','upload'),
 			array('export','download'),
 			array('email','e-mail'),
 			array('center','centre'),
@@ -155,7 +159,7 @@ class Module_admin
 			array('usergroup','group','promote','rank'),
 			array('member','user'),
 			array('profile','account','memberaccount'),
-			array('permission','privilege','authorisation','authorization','right'),
+			array('permission','privilege','authorisation','authorization','right','grant','assign'),
 			array('overlay','popup','dialog','window'),
 			array('option','setting','value'),
 			array('configure','setup','install'),
