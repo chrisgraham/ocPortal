@@ -181,10 +181,49 @@ function new_html__initialise(element)
 	switch (element.nodeName.toLowerCase())
 	{
 		case 'img':
+			/* GD text maybe can do with transforms */
+			if (element.className=='gd_text')
+			{
+				var span=document.createElement('span');
+				if (typeof span.style.msTransform=='string' || typeof span.style.webkitTransform=='string' || typeof span.style.MozTransform=='string' || typeof span.style.transform=='string')
+				{
+					element.style.display='none';
+					span.style.msTransform='rotate(90deg)';
+					span.style.webkitTransform='rotate(90deg)';
+					span.style.MozTransform='rotate(90deg)';
+					span.style.transform='rotate(90deg)';
+					span.style.msTransformOrigin='bottom left';
+					span.style.webkitTransformOrigin='bottom left';
+					span.style.MozTransformOrigin='bottom left';
+					span.style.transformOrigin='bottom left';
+					span.style.top='-1em';
+					span.style.left='0.5em';
+					span.style.position='relative';
+					span.style.display='inline-block';
+					span.style.whiteSpace='nowrap';
+					span.style.paddingRight='0.5em';
+					element.parentNode.style.textAlign='left';
+					element.parentNode.style.verticalAlign='top';
+					//element.parentNode.parentNode.parentNode.parentNode.parentNode.style.overflowX='hidden';		Scrollbar is incorrect, but we do need it :S
+					set_inner_html(span,escape_html(element.alt));
+					element.parentNode.insertBefore(span,element);
+					window.setTimeout(function() {
+						if (element.parentNode.nodeName.toLowerCase()=='th' || element.parentNode.nodeName.toLowerCase()=='td')
+						{
+							element.parentNode.style.height=find_width(span)+'px';
+						} else
+						{
+							element.parentNode.style.minHeight=find_width(span)+'px';
+						}
+					},0);
+				}
+			}
+
 			/* Convert a/img title attributes into ocPortal tooltips */
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
 				convert_tooltip(element);
 			{+END}
+
 			break;
 
 		case 'a':
@@ -308,6 +347,14 @@ add_event_listener_abstract(window,'unload',function() { window.unloaded=true; }
 function staff_unload_action()
 {
 	undo_staff_unload_action();
+
+	if (document.activeElement && typeof document.activeElement.href!='undefined' && document.activeElement.href!=null)
+	{
+		var url=document.activeElement.href.replace(/.*:\/\/[^\/:]+/,'');
+		if (url.indexOf('download')!=-1 || url.indexOf('export')!=-1)
+			return;
+	}
+
 	var bi=document.getElementById('main_website_inner');
 	if (bi)
 	{

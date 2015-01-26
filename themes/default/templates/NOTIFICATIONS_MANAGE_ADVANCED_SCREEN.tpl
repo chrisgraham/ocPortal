@@ -20,7 +20,7 @@
 						<th></th>
 						{+START,LOOP,NOTIFICATION_TYPES_TITLES}
 							<th>
-								<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
+								<img class="gd_text" src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
 							</th>
 						{+END}
 					</tr>

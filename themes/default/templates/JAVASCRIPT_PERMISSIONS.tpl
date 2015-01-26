@@ -360,7 +360,7 @@ function update_permission_box(setting)
 								row=matrix.getElementsByTagName('tr')[0];
 								new_cell=row.insertBefore(document.createElement('th'),row.cells[row.cells.length-1]);
 								new_cell.className='sp_header';
-								set_inner_html(new_cell,'<img src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+window.column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
+								set_inner_html(new_cell,'<img class="gd_text" src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+window.column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
 
 								num_sp_total++;
 							}

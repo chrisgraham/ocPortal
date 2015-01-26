@@ -31,7 +31,17 @@ function gd_text_script()
 
 	$font_size=array_key_exists('size',$_GET)?intval($_GET['size']):8;
 
-	$font=get_param('font',get_file_base().'/data/fonts/'.filter_naughty(get_param('font','FreeMonoBoldOblique')).'.ttf');
+	$default_font='Courier New Bold Italic'; // Support ideal font if it is there (we cannot distribute)
+	if (!is_file(get_file_base().'/data_custom/fonts/'.filter_naughty($default_font).'.ttf'))
+	{
+		$default_font='FreeMonoBoldOblique'; // Fallback to distributed
+	}
+	$_font=get_param('font',$default_font);
+	$font=get_file_base().'/data_custom/fonts/'.filter_naughty($_font).'.ttf';
+	if (!is_file($font))
+	{
+		$font=get_file_base().'/data/fonts/'.filter_naughty($_font).'.ttf';
+	}
 
 	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')===false) || (strlen($text)==0))
 	{
