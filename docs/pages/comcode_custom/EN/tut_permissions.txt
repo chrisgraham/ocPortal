@@ -92,6 +92,10 @@ Note that privileges are not inherited through category trees, so setting privil
 
 Similarly, you do not need view permissiosn on parent categories to view child categories, although it would be hard to find a category if you did not have access to view it's parents.
 
+[title="2"]Usergroup settings[/title]
+
+Usergroups have a number of settings that are "privilege"-like. They're not actual privileges only because they aren't binary on/off, they take a value. This includes maximum post lengths, upload/attachment quotas, avatar sizing, and flood control settings. These settings are accessed by adding/editing usergroups.
+
 [title="2"]Testing access and privileges[/title]
 
 [exp_thumb="The SU feature is incredibly quick and easy: just enter a name and click a button" float="left"]permissions_Su[/exp_thumb]

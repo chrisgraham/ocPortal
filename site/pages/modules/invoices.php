@@ -151,7 +151,7 @@ class Module_invoices
 	{
 		$id=get_param_integer('id');
 
-		if (((ocp_srv('HTTPS')=='') || (ocp_srv('HTTPS')=='off')) && (!ecommerce_test_mode()))
+		if ((!tacit_https()) && (!ecommerce_test_mode()))
 		{
 			warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 		}

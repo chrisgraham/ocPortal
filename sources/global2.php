@@ -474,7 +474,7 @@ function init__global2()
 	$func=get_defined_functions();
 	print_r($func['user']);*/
 
-	if (((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off')) && (((!defined('HIPHOP_PHP')) || (tacit_https()) || (is_page_https(get_zone_name(),get_page_name()))))) // Fix IE bug
+	if ((tacit_https()) || (is_page_https(get_zone_name(),get_page_name()))) // Fix IE bug
 	{
 		@header('Cache-Control: private');
 		@header('Pragma: private');

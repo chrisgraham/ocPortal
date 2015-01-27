@@ -120,11 +120,12 @@ class Module_admin
 	function _synonyms()
 	{
 		return array(
-			array('maximum','limit','total','max'),
+			array('maximum','limit','total','max','increase','long'),
 			array('characters','words','bytes'),
 
 			array('multi-moderation','multimoderation'),
 			array('invitation','invite'),
+			array('social','forum'),
 			array('banner','advert','advertising','advertise'),
 			array('news','blogs','press release'),
 			array('check-in','workflow','validation','valid','approval','approved','live','accept','posted','online','active','activate','activation'),
@@ -172,9 +173,9 @@ class Module_admin
 			array('html','xhtml'),
 			array('addon','add-on','mod','hack','extension','plugin','module','system'),
 			array('cedi','wiki','seedy'),
-			array('name','title'),
+			array('name','title','label',''/*May be a stop word*/),
 			array('analytics','statistics','hits'),
-			array('newsletter','mass-mail','mass-mailing','bulletin','mail-merge'),
+			array('newsletter','mass-mail','mass-mailing','bulletin','mail-merge','announcement'),
 			array('description','caption','summary'),
 			array('choose','set'),
 			array('add','submit','create','make'),
@@ -334,12 +335,12 @@ class Module_admin
 		{
 			return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>true,'ARRAY'=>true,'CONTENT'=>'','PRE'=>'','POST'=>''));
 		}
-		$keywords=array();
+		$keywords=array(); // Keyword groups
 		$synonym_rows=$this->_synonyms(); // Only in English by default. To do for another language, override this file using inheritance
 		$section_limitations=array();
 		foreach ($_keywords as $xi=>$keyword)
 		{
-			$_keywords=array();
+			$__keywords=array();
 			$keyword=trim($keyword);
 			if ($keyword=='') continue;
 
@@ -353,12 +354,24 @@ class Module_admin
 			{
 				if ((in_array(strtolower($keyword),$synonyms)) || ((array_key_exists($xi+1,$_keywords)) && (in_array(strtolower($_keywords[$xi].' '.$_keywords[$xi+1]),$synonyms))))
 				{
-					$_keywords=array_merge($_keywords,$synonyms);
+					if (in_array('',$synonyms))
+					{
+						foreach ($synonyms as $synonym)
+						{
+							if (($synonym!='') || (count($_keywords)>2/*Stop word only if longish search*/))
+							{
+								$__keywords[]=$synonym;
+							}
+						}
+					} else
+					{
+						$__keywords=array_merge($__keywords,$synonyms);
+					}
 				}
 			}
 
-			$_keywords[]=$keyword;
-			$keywords[]=$_keywords;
+			$__keywords[]=$keyword;
+			$keywords[]=$__keywords;
 		}
 
 		// Stemming, if available (needs Stemmer class like http://www.chuggnutt.com/stemmer-source.php which we can't redistribute due to it being GPL not LGPL)
@@ -536,12 +549,15 @@ class Module_admin
 					}
 
 					$n=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
-					if (($this->_keyword_match($n)) && (has_actual_page_access(get_member(),$page,$zone)))
+					if (!is_null($n))
 					{
-						$_url=build_url(array('page'=>$page),$zone);
-						$site_tree_editor_url=build_url(array('page'=>'admin_sitetree','type'=>'site_tree','id'=>$zone.':'.$page),'adminzone');
-						$permission_tree_editor_url=build_url(array('page'=>'admin_permissions','id'=>$zone.':'.$page),'adminzone');
-						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>do_lang_tempcode('FIND_IN_SITE_TREE_EDITOR',escape_html($site_tree_editor_url->evaluate()),escape_html($permission_tree_editor_url->evaluate())))));
+						if (($this->_keyword_match($n)) && (has_actual_page_access(get_member(),$page,$zone)))
+						{
+							$_url=build_url(array('page'=>$page),$zone);
+							$site_tree_editor_url=build_url(array('page'=>'admin_sitetree','type'=>'site_tree','id'=>$zone.':'.$page),'adminzone');
+							$permission_tree_editor_url=build_url(array('page'=>'admin_permissions','id'=>$zone.':'.$page),'adminzone');
+							$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>do_lang_tempcode('FIND_IN_SITE_TREE_EDITOR',escape_html($site_tree_editor_url->evaluate()),escape_html($permission_tree_editor_url->evaluate())))));
+						}
 					}
 				}
 			}

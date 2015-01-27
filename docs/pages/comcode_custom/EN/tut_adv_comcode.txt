@@ -73,6 +73,7 @@ To add a custom tag, do as follows:
  - Click the 'Add custom Comcode tag' button
 Your tag will be shown in your local copy of the Comcode tutorial, with your title, description and usage example.
 
+[box="Tip" width="25em" float="right"]If you want to let users use some specific "dangerous" Comcode (such as Tempcode symbols, or an iframe), wrapping it up within a Custom Comcode tag is a great solution. As long as a user has permission to the tag itself (i.e. it's not added as dangerous), they can indirectly do what code it contains regardless of the nature of that code.[/box]
 Note that Comcode is cached, and if you edit a tag after adding Comcode using it, it won't be updated until you edit that content (or the Comcode field precalculation cache is emptied).
 
 [title="2"]Semi-HTML[/title]

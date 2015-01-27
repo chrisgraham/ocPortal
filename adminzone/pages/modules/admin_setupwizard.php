@@ -119,7 +119,8 @@ class Module_admin_setupwizard
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF',array('keep_theme_seed','keep_theme_dark','keep_theme_source','keep_theme_algorithm'));
 		$text=new ocp_tempcode();
-		$text->attach(paragraph(do_lang_tempcode($done_once?'SETUP_WIZARD_1_DESCRIBE_ALT':'SETUP_WIZARD_1_DESCRIBE')));
+		$addons_url=build_url(array('page'=>'admin_addons'),get_module_zone('admin_addons'));
+		$text->attach(paragraph(do_lang_tempcode($done_once?'SETUP_WIZARD_1_DESCRIBE_ALT':'SETUP_WIZARD_1_DESCRIBE',escape_html($addons_url->evaluate()))));
 		$rescue_url=build_url(array('page'=>'','keep_safe_mode'=>'1'),'');
 		$text->attach(paragraph(do_lang_tempcode('SETUP_WIZARD_SAFE_MODE',escape_html($rescue_url->evaluate()),escape_html(find_theme_image('footer/ocpchat')))));
 		$submit_name=do_lang_tempcode('PROCEED');

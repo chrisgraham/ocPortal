@@ -22,7 +22,7 @@ The LDAP standard is more concerned with protocol and structure than the actual 
 [title="3"]Active Directory[/title]
 
 [exp_thumb="Adding a user to Active Directory" float="right"]ldap_adduser[/exp_thumb]
-Active Directory is a fundamental part of post-NT Windows networking (at the time of writing, Windows 2000, Windows XP and Windows Server 2003). It resides on the [concept]domain controller[/concept](s) of the network, and is an LDAP based system that includes a lot of information, especially users and usergroups.
+Active Directory is a fundamental part of Windows networking. It resides on the [concept]domain controller[/concept](s) of the network, and is an LDAP based system that includes a lot of information, especially users and usergroups.
 
 As Active Directory is so standard across Windows, ocPortal has good support for its schema.
 

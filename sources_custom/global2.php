@@ -4,7 +4,7 @@ function require_javascript($javascript)
 {
 	if (($javascript=='javascript_swfupload') && (!in_safe_mode()))
 	{
-		if ((ocp_srv('HTTPS')=='') || (ocp_srv('HTTPS')=='off'))
+		if (!function_exists('tacit_https') || !tacit_https())
 		{
 			global $EXTRA_HEAD;
 			$EXTRA_HEAD->attach('

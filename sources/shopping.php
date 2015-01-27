@@ -445,7 +445,7 @@ function payment_form()
 
 	} else // Handle the transaction internally
 	{
-		if (((ocp_srv('HTTPS')=='') || (ocp_srv('HTTPS')=='off')) && (!ecommerce_test_mode()))
+		if ((!tacit_https()) && (!ecommerce_test_mode()))
 		{
 			warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 		}
