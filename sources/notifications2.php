@@ -285,7 +285,16 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 		}
 	}
 
-	$tree=_notifications_build_category_tree($_notification_types,$notification_code,$ob,NULL);
+	$done_get_change=false;
+	$tree=_notifications_build_category_tree($_notification_types,$notification_code,$ob,NULL,0,NULL,$done_get_change);
+	$notification_category_being_changed=get_param('id',NULL);
+	if ($notification_category_being_changed!==null && !$done_get_change) {
+		// The tree has been pruned due to over-sizeness issue (too much content to list), so we have to set a notification here rather than during render.
+		enable_notifications($notification_code,$notification_category_being_changed);
+
+		// Re-render too
+		$tree=_notifications_build_category_tree($_notification_types,$notification_code,$ob,NULL,0,NULL,$done_get_change);
+	}
 
 	$notification_types_titles=array();
 	foreach ($_notification_types as $possible=>$ntype)
@@ -328,12 +337,11 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
  * @param  ?ID_TEXT		Category we're looking under (NULL: root)
  * @param  integer		Recursion depth
  * @param  ?boolean		Value to change setting to (NULL: do not change)
+ * @param  boolean		Whether we have made a change to the settings
  * @return tempcode		UI
  */
-function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0,$force_change_children_to=NULL)
+function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth,$force_change_children_to,&$done_get_change)
 {
-	static $done_get_change=false;
-
 	$_notification_categories=$ob->create_category_tree($notification_code,$id);
 
 	$statistical_notification_type=_find_member_statistical_notification_type(get_member());
@@ -353,15 +361,14 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 			{
 				if (($force_change_children_to===false/*If recursively disabling*/) || (($force_change_children_to===NULL) && ($current_setting!=A_NA)/*If explicitly toggling this one to disabled*/))
 				{
-					$done_get_change=true;
 					enable_notifications($notification_code,$notification_category,NULL,A_NA);
 					$force_change_children_to_children=false;
 				} else
 				{
-					$done_get_change=true;
 					enable_notifications($notification_code,$notification_category);
 					$force_change_children_to_children=true;
 				}
+				$done_get_change=true;
 			} else
 			{
 				$force_change_children_to_children=false;
@@ -406,7 +413,7 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		$children=new ocp_tempcode();
 		if ((array_key_exists('num_children',$c)) && ($c['num_children']!=0))
 		{
-			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1,$force_change_children_to_children);
+			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1,$force_change_children_to_children,$done_get_change);
 		}
 
 		$notification_categories[]=array(
@@ -424,21 +431,6 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		'NOTIFICATION_CODE'=>$notification_code,
 		'NOTIFICATION_CATEGORIES'=>$notification_categories,
 	));
-
-	if ($depth==0)
-	{
-		$notification_category_being_changed=get_param('id',null);
-		if ($notification_category_being_changed!==null && !$done_get_change)
-		{
-			// The tree has been pruned due to over-sizeness issue (too much content to list), so we have to set a notification here rather than during render.
-			enable_notifications($notification_code,$notification_category_being_changed);
-
-			unset($_GET['id']); // Stop loops
-
-			// Re-render too
-			return _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth,$force_change_children_to);
-		}
-	}
 
 	return $tree;
 }

@@ -66,7 +66,7 @@ There are a number of different features in ocPortal which can be used for datab
 
 If you would like to create a formal catalogue, head over to 'Content Management' and you will see an icon for it.
 
-If you'd like to add to Wiki+, you can choose it from your menus of your main website and begin to edit the tree structure to create new pages, and then edit them and post within them, as required. You should read the [page="_SELF:tut_cedi"]Wiki+ tutorial[/page] for more information.
+If you'd like to add to Wiki+, you can choose it from your menus of your main website and begin to edit the tree structure to create new pages, and then edit them and post within them, as required. You should read the [page="_SEARCH:tut_cedi"]Wiki+ tutorial[/page] for more information.
 
 If you desire integration of an existing system into your website, you should [page="site:support"]contact ocProducts[/page].
 

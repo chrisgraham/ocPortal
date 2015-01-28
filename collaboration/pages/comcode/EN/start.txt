@@ -2,7 +2,7 @@
 
 The Collaboration Zone is the exclusive collaboration area for {$SITE_NAME*} super-members.
 
-For more info about the Collaboration Zone, see [page="_SELF:about"]the about page[/page].
+For more info about the Collaboration Zone, see [page="collaboration:about"]the about page[/page].
 
 {+START,IF,{$ADDON_INSTALLED,forum_blocks}}[block="Super-members only" failsafe="1"]main_forum_topics[/block]{+END}
 

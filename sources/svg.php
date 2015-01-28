@@ -66,7 +66,7 @@ function init__svg()
 function _draw_segment($colour,$angle,$radius,$start_x,$start_y,$end_x,$end_y)
 {
 	if ($angle==360) return '<circle cx="'.float_to_raw_string(X_PADDING+floatval($radius)).'" cy="'.float_to_raw_string(Y_PADDING+floatval($radius)).'" r="'.float_to_raw_string(floatval($radius)).'" style="fill: #'.($colour).';" class="pie_chart" />'.chr(10);
-	else return '<path d="M'.float_to_raw_string(X_PADDING+floatval($radius)).','.float_to_raw_string(Y_PADDING+floatval($radius)).' L'.float_to_raw_string(X_PADDING+floatval($start_x)).','.float_to_raw_string(Y_PADDING+floatval($start_y)).' A'.float_to_raw_string(floatval($radius)).','.float_to_raw_string(floatval($radius)).' 0 '.float_to_raw_string(($angle>180)?1.0:0.0).',1,'.float_to_raw_string(X_PADDING+floatval($end_x)).','.float_to_raw_string(Y_PADDING+floatval($end_y)).' Z" style="fill: #'.($colour).';" class="pie_chart" />'.chr(10);
+	else return '<path d="M'.float_to_raw_string(X_PADDING+floatval($radius)).','.float_to_raw_string(Y_PADDING+floatval($radius)).' L'.float_to_raw_string(X_PADDING+floatval($start_x)).','.float_to_raw_string(Y_PADDING+floatval($start_y)).' A'.float_to_raw_string(floatval($radius)).','.float_to_raw_string(floatval($radius)).' 0 '.strval(($angle>180)?1:0).',1 '.float_to_raw_string(X_PADDING+floatval($end_x)).','.float_to_raw_string(Y_PADDING+floatval($end_y)).' Z" style="fill: #'.($colour).';" class="pie_chart" />'.chr(10);
 }
 
 /**
@@ -161,7 +161,7 @@ function _start_svg()
 	return '<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>
 <'.'?xml-stylesheet href="'.escape_html($css_file).'" type="text/css"?'.'>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 '.float_to_raw_string(VIEWPORT_WIDTH).' '.float_to_raw_string(VIEWPORT_HEIGHT).'" preserveAspectRatio="XMinYMin meet" width="'.float_to_raw_string(SVG_WIDTH).'" height="'.float_to_raw_string(SVG_HEIGHT).'" version="1.1">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 '.float_to_raw_string(VIEWPORT_WIDTH).' '.float_to_raw_string(VIEWPORT_HEIGHT).'" preserveAspectRatio="xMinYMin meet" width="'.float_to_raw_string(SVG_WIDTH).'" height="'.float_to_raw_string(SVG_HEIGHT).'" version="1.1">
 <script type="text/javascript">// <![CDATA[
 if (typeof window.addEventListenerAbstract==\'undefined\') addEventListenerAbstract=function(element,the_event,command,capture)
 {
@@ -311,6 +311,7 @@ function create_bar_chart($data,$x_label='X axis',$y_label='Y axis',$x_units='',
 	$labels='';
 	foreach ($data as $key=>$value)
 	{
+		if (is_integer($key)) $key=strval($key);
 		if (is_array($value)) $value=array_shift($value);
 
 		$x=Y_LABEL_WIDTH+Y_AXIS_WIDTH+X_PADDING+$i*(X_PADDING+BAR_WIDTH);
@@ -464,7 +465,7 @@ function create_pie_chart($data)
 		$_max_degrees+=$value;
 	}
 	$max_degrees=round($_max_degrees);
-	if (($max_degrees<355.0) || ($max_degrees>365.0)) fatal_exit(do_lang_tempcode('_BAD_INPUT',float_format($max_degrees)));
+	//if (($max_degrees<355.0) || ($max_degrees>365.0)) fatal_exit(do_lang_tempcode('_BAD_INPUT',float_format($max_degrees)));	Could be rounding error
 
 	// Start of output
 	$output=_start_svg();

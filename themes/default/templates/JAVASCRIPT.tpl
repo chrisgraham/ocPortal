@@ -185,6 +185,14 @@ function new_html__initialise(element)
 			if (element.className=='gd_text')
 			{
 				var span=document.createElement('span');
+				if (typeof span.style.writingMode=='string') // IE (which has buggy rotation space reservation, but a decent writing-mode instead)
+				{
+					element.style.display='none';
+					span.style.writingMode='tb-lr';
+					span.style.whiteSpace='nowrap';
+					set_inner_html(span,escape_html(element.alt));
+					element.parentNode.insertBefore(span,element);
+				} else
 				if (typeof span.style.msTransform=='string' || typeof span.style.webkitTransform=='string' || typeof span.style.MozTransform=='string' || typeof span.style.transform=='string')
 				{
 					element.style.display='none';
@@ -203,6 +211,7 @@ function new_html__initialise(element)
 					span.style.whiteSpace='nowrap';
 					span.style.paddingRight='0.5em';
 					element.parentNode.style.textAlign='left';
+					element.parentNode.style.width='1em';
 					element.parentNode.style.overflow='hidden'; // Needed due to https://bugzilla.mozilla.org/show_bug.cgi?id=456497
 					element.parentNode.style.verticalAlign='top';
 					set_inner_html(span,escape_html(element.alt));

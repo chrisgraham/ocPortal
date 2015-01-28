@@ -2,4 +2,4 @@
 
 Welcome to ocWorld, an addon for ocPortal.
 
-[page="_SELF:ocworld"]Enter/Return[/page] to the ocWorld multi-user dungeon.
+[page="ocworld:ocworld"]Enter/Return[/page] to the ocWorld multi-user dungeon.

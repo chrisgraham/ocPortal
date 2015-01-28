@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Localisation and internationalisation[/title]
 
-This tutorial is designed as a comprehensive guide to ocPortal's translation features, written for people wanting to make a complete ocPortal translation and understand the full technical details. We also have a [page="_SELF:tut_intl_users"]simpler tutorial[/page].
+This tutorial is designed as a comprehensive guide to ocPortal's translation features, written for people wanting to make a complete ocPortal translation and understand the full technical details. We also have a [page="_SEARCH:tut_intl_users"]simpler tutorial[/page].
 
 ocPortal has support for internationalisation, including:
  - time zones

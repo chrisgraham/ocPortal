@@ -1,6 +1,6 @@
 [title sub="Written by Steve Jarvis, ocProducts"]ocPortal Tutorial: Translating ocPortal[/title]
 
-This tutorial covers how to translate your (ocPortal-powered) website into different languages. It is designed for the more casual webmaster who is not seeking to create a complete ocPortal translation. We also have a [page="_SELF:tut_intl"]more thorough tutorial[/page].
+This tutorial covers how to translate your (ocPortal-powered) website into different languages. It is designed for the more casual webmaster who is not seeking to create a complete ocPortal translation. We also have a [page="_SEARCH:tut_intl"]more thorough tutorial[/page].
 
 We will show you how to add a second language or even multiple languages onto your website. There are three main stages included within this guide. These are:
 1) Using Launchpad

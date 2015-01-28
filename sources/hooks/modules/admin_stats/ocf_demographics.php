@@ -115,7 +115,7 @@ class Hook_admin_stats_ocf_demographics
 					$age_string=strval($age);
 				}
 
-				$demographics[$age_string]++;
+				$demographics[$age_string]+=array_key_exists('cnt',$row)?$row['cnt']:1;
 			} else
 			{
 				$demographics[do_lang('UNKNOWN')]+=array_key_exists('cnt',$row)?$row['cnt']:1;
@@ -132,6 +132,7 @@ class Hook_admin_stats_ocf_demographics
 		$i=0;
 		foreach ($demographics as $age=>$value)
 		{
+			if (is_integer($age)) $age=strval($age);
 			$percent=round(100.0*floatval($value)/floatval(count($rows)),2);
 			$fields->attach(results_entry(array(escape_html($age),integer_format($value).' ('.float_format($percent).'%)')));
 			$i++;

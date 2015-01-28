@@ -39,7 +39,7 @@ News entries may be in multiple news categories, but a user needs access to the 
 
 [title="3"]Scheduled news / Manual date selection[/title]
 
-See the [page="_SELF:tut_configuration"]basic configuration[/page] tutorial for information on setting up the scheduler.
+See the [page="_SEARCH:tut_configuration"]basic configuration[/page] tutorial for information on setting up the scheduler.
 
 You will see an advance scheduling option once the scheduler is enabled (requires the ocPortal 'calendar' addon to be installed also).
 You may choose dates in the past also, if you wish to back-date your posts.

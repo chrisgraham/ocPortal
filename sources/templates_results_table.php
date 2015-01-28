@@ -63,7 +63,7 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 			foreach ($sortables as $_sortable=>$text)
 			{
 				if (is_object($text)) $text=$text->evaluate();
-				if ($text==do_lang('DATE_TIME'))
+				if ($text==do_lang('DATE_TIME') && strpos($fields->evaluate(),'<a ')!==false)
 				{
 					$message=paragraph(do_lang_tempcode('CLICK_DATE_FOR_MORE'));
 				}
