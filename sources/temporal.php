@@ -644,7 +644,7 @@ function get_timezone_list()
 		$hours=intval(floor($offset));
 		$new.=str_pad(strval($hours),2,'0',STR_PAD_LEFT);
 		$new.=':';
-		$new.=str_pad(strval(intval(floor(($hours-$offset)*60))),2,'0',STR_PAD_LEFT);
+		$new.=str_pad(strval(intval(($hours-$offset)*60)),2,'0',STR_PAD_LEFT);
 		$new.=') ';
 		$title=preg_replace('#^\(UTC[+-]\d\d:\d\d\) #',$new,$title);
 		$ret[$zone]=$title;

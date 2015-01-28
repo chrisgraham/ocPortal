@@ -363,9 +363,10 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 
 			$marker_matches=array();
 			$part=substr($original_comcode,0,$attachment['marker']);
-			if (strrpos($part,'[attachment')!==false)
+			if (strpos($part,'[attachment')!==false)
 			{
-				$part=substr($part,strrpos($part,'[attachment'));
+				// TODO: Use this in v10 $part=substr($part,strrpos($part,'[attachment'));
+				$part=substr($part,strlen($part)-strpos(strrev($part),strrev('[attachment'))-strlen('[attachment'));
 			}
 			preg_match('#new_(\d+)[\[<]#',$part,$marker_matches);
 			$marker_id=array_key_exists(1,$marker_matches)?intval($marker_matches[1]):strval($i+1); // Should always exist, but if not (some weird internal Comcode parsing error -- this stuff is complex) then pick a sensible default

@@ -107,7 +107,7 @@ function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false
 	$THEME_WIZARD_IMAGES=explode(',',$map['theme_wizard_images']);
 	$THEME_WIZARD_IMAGES_NO_WILD=explode(',',$map['theme_wizard_images_no_wild']);
 
-    // Remove gifs if we do not support them
+	// Remove gifs if we do not support them
 	if (!function_exists('imagecreatefromgif'))
 	{
 		global $IMG_CODES;

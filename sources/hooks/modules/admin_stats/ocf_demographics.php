@@ -130,11 +130,11 @@ class Hook_admin_stats_ocf_demographics
 		$fields_title=results_field_title(array(do_lang_tempcode('AGE'),do_lang_tempcode('COUNT_TOTAL')),$sortables);
 		$fields=new ocp_tempcode();
 		$i=0;
-		foreach ($demographics as $age=>$value)
+		foreach ($demographics as $_age=>$value)
 		{
-			if (is_integer($age)) $age=strval($age);
+			if (is_integer($_age)) $_age=strval($_age);
 			$percent=round(100.0*floatval($value)/floatval(count($rows)),2);
-			$fields->attach(results_entry(array(escape_html($age),integer_format($value).' ('.float_format($percent).'%)')));
+			$fields->attach(results_entry(array(escape_html($_age),integer_format($value).' ('.float_format($percent).'%)')));
 			$i++;
 		}
 		$list=results_table(do_lang_tempcode('DEMOGRAPHICS'),$start,'start',$max,'max',count($demographics),$fields_title,$fields,$sortables,'','','sort',new ocp_tempcode());

@@ -229,7 +229,7 @@ class Hook_search_ocf_members
 				{
 					$temp='?='.float_to_raw_string(floatval($param));
 				}
-				elseif ($type=='list' || $type=='combo')
+				elseif ($row['cf_type']=='list' || $row['cf_type']=='combo')
 				{
 					$temp=db_string_equal_to('?',$param);
 				}
