@@ -115,6 +115,12 @@ If you already know which template you intend to edit, you can do it directly th
 [title="3"]Understanding Templates Code (Tempcode)[/title]
 There are many sections of code in your templates that you'll need to be aware of in order to be effective in your editing. The code is written in our templating language, which is known as Tempcode. For more information see the "Tempcode programming" tutorial.
 
+[title="4"]Screen previews[/title]
+
+For templates of bundled functionality, the template editor will show a 'Preview' button. The button invokes the screen preview that covers the particular template, but incorporating any live changes you're making in the editor. The screen previews are a Lorem Ipsum sandbox that works regardless of the content on the actual website.
+
+It's a very useful feature.
+
 [title="3"]Images[/title]
 
 [exp_thumb="The \"Add Image\" page" float="right"]themes_add_image[/exp_thumb]

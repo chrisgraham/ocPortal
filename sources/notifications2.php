@@ -425,6 +425,21 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		'NOTIFICATION_CATEGORIES'=>$notification_categories,
 	));
 
+	if ($depth==0)
+	{
+		$notification_category_being_changed=get_param('id',null);
+		if ($notification_category_being_changed!==null && !$done_get_change)
+		{
+			// The tree has been pruned due to over-sizeness issue (too much content to list), so we have to set a notification here rather than during render.
+			enable_notifications($notification_code,$notification_category_being_changed);
+
+			unset($_GET['id']); // Stop loops
+
+			// Re-render too
+			return _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth,$force_change_children_to);
+		}
+	}
+
 	return $tree;
 }
 

@@ -826,6 +826,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 			foreach ($_groups as $group)
 			{
+				$group=trim($group);
 				$not=(substr($group,0,1)=='!');
 				if ($not) $group=substr($group,1);
 				$find=array_search($group,$all_groups);
