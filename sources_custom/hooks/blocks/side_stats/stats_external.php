@@ -47,13 +47,13 @@ function getAlexaRank($url)
 	require_code('files');
 	$p=array();
 	$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url='.urlencode($url),NULL,false);
-	if (preg_match('#<POPULARITY URL="(.*?)" TEXT="([0-9]+)"#si',$result,$p)!=0)
-		$rank=integer_format(intval($p[2]));
-	else $rank='0';
-	if (preg_match('#<LINKSIN NUM="([0-9]+){1,}"/>#si',$result,$p)!=0)
+	if (preg_match('#<POPULARITY [^<>]*TEXT="([0-9]+){1,}"#si',$result,$p)!=0)
+		$rank=integer_format(intval($p[1]));
+	else $rank=do_lang('NA');
+	if (preg_match('#<LINKSIN [^<>]*NUM="([0-9]+){1,}"#si',$result,$p)!=0)
 		$links=integer_format(intval($p[1]));
 	else $links='0';
-	if (preg_match('#<SPEED TEXT="[^"]*" PCT="([0-9]+){1,}"/>#si',$result,$p)!=0)
+	if (preg_match( '#<SPEED [^<>]*PCT="([0-9]+){1,}"#si',$result,$p)!=0)
 		$speed='Top '.integer_format(100-intval($p[1])).'%';
 	else $speed='?';
 

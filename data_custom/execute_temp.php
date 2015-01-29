@@ -55,14 +55,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$type='';
-	$value[$type]='Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0;  Trident/5.0)';
-	$value[$type]=preg_replace('#[/ ]\d+\.\d+(\.\d+)+#','',$value[$type]);
-	$value[$type]=preg_replace('#[/ ]\d+\.\d\d+#','',$value[$type]);
-	$value[$type]=preg_replace('#/\d\d\d\d\d+#','',$value[$type]);
-	for ($i=0;$i<10;$i++)
-		$value[$type]=preg_replace('#; \.NET .*([;\)])#U','$1',$value[$type]);
-	$value[$type]=preg_replace('# \((Windows|Linux|Macintosh).*\)#U','',$value[$type]);
-	$value[$type]=preg_replace('#; (Windows|Linux|Macintosh).*\)#U',')',$value[$type]);
-	@print($value[$type]);
 }

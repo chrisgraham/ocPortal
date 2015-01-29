@@ -225,6 +225,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	if (!is_null($test)) warn_exit(do_lang_tempcode('NOTIFICATION_CODE_LOCKED_DOWN'));
 
 	$ob=_get_notification_ob_for_code($notification_code);
+	if (is_null($ob)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	$info_details=$ob->list_handled_codes();
 
 	$title=get_screen_title('NOTIFICATION_MANAGEMENT_FOR',true,array(escape_html($info_details[$notification_code][1])));
