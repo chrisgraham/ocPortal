@@ -482,12 +482,17 @@ function regenerate_event_reminder_jobs($id,$force=false)
  * Create a neatly human-readable date range, using various user-friendly readability tricks.
  *
  * @param  TIME				From time in user time
- * @param  TIME				To time in user time
+ * @param  ?TIME				To time in user time (NULL: no actual to time)
  * @param  boolean			Whether time is included in this date range
  * @return string				Textual specially-formatted range
  */
 function date_range($from,$to,$do_time=true)
 {
+	if (is_null($to))
+	{
+		return get_timezoned_date($from,true,true,false,true);
+	}
+
 	if (($to-$from>60*60*24) || (!$do_time))
 	{
 		$days=($to-$from)/(60*60*24.0);

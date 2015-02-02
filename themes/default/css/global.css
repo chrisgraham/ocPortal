@@ -219,6 +219,9 @@ input[type="text"], input[type="password"], input[type="color"], input[type="ema
 	background-color: {$GET,native_ui_background};
 	color: {$GET,native_ui_foreground};
 }
+input[type="text"]:disabled, input[type="password"]:disabled, input[type="color"]:disabled, input[type="email"]:disabled, input[type="number"]:disabled, input[type="range"]:disabled, input[type="search"]:disabled, input[type="tel"]:disabled, input[type="url"]:disabled, textarea:disabled, select:disabled {
+	color: gray;
+}
 
 a, .button_hyperlink {
 	color: {$GET,a.link};
