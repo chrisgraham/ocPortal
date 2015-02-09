@@ -78,7 +78,7 @@ function generate_text_summary($_temp_summary,$words_searched)
 				$last_gt=strrpos(substr($_temp_summary,0,$content_bit_pos),'>');
 				$last_lt=strrpos(substr($_temp_summary,0,$content_bit_pos),'<');
 
-				if (($last_gt!==false) && ($last_gt>$last_lt))
+				if (($last_gt===false) || ($last_gt>$last_lt))
 				{
 					$extra_pre='<span class="comcode_highlight">';
 					$extra_post='</span>';
@@ -571,7 +571,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 				if (strpos($orig_table_clause,$tc_add)!==false) $tc_add='';
 
-				if (($only_titles) && ($i!=0)) break;
+				if (($only_titles) && ($i!=0) && (strpos($where_clause,'t'.strval($i).'.text_original')===false/*Check it's not a template search in which case we must ignore the only titles option to avoid a crash*/)) break;
 
 				$where_clause_2=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where);
 				$where_clause_2=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$where_clause_2); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.

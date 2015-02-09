@@ -168,7 +168,7 @@ class Hook_search_comcode_pages
 			{
 				if (!has_zone_access(get_member(),$zone)) continue;
 
-				$pages=find_all_pages($zone,'comcode/'.user_lang(),'txt')+find_all_pages($zone,'comcode_custom/'.user_lang(),'txt')+find_all_pages($zone,'comcode/'.get_site_default_lang(),'txt')+find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt');
+				$pages=find_all_pages_wrap($zone,false,false,FIND_ALL_PAGES__PERFORMANT,'comcode');
 				foreach ($pages as $page=>$dir)
 				{
 					if (!is_string($page)) $page=strval($page);
@@ -282,6 +282,7 @@ class Hook_search_comcode_pages
 				$GLOBALS['OVERRIDE_SELF_ZONE']=$zone;
 				$backup_search__contents_bits=$SEARCH__CONTENT_BITS;
 				$SEARCH__CONTENT_BITS=NULL; // We do not want highlighting, as it'll result in far too much Comcode being parsed (ok for short snippets, not many full pages!)
+				$GLOBALS['TEMPCODE_SETGET']['no_comcode_page_edit_links']='1';
 				$temp_summary=request_page($page,true,$zone,strpos($comcode_file,'/comcode_custom/')?'comcode_custom':'comcode',true);
 				$SEARCH__CONTENT_BITS=$backup_search__contents_bits;
 				$GLOBALS['OVERRIDE_SELF_ZONE']=NULL;
@@ -291,6 +292,8 @@ class Hook_search_comcode_pages
 				$LOADED_PAGES=array(); // Decache this, or we'll eat up a tonne of RAM
 
 				$summary=generate_text_summary($_temp_summary,is_null($SEARCH__CONTENT_BITS)?array():$SEARCH__CONTENT_BITS);
+
+				$GLOBALS['TEMPCODE_SETGET']['no_comcode_page_edit_links']='0';
 			}
 		}
 

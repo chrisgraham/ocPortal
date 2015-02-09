@@ -39,7 +39,7 @@
 			{+END}
 		{+END}
 
-		{+START,IF,{$NOT,{IS_PANEL}}}
+		{+START,IF,{$NOR,{IS_PANEL},{$GET,no_comcode_page_edit_links}}}
 			{+START,INCLUDE,STAFF_ACTIONS}
 				1_URL={EDIT_URL*}
 				1_TITLE={$?,{BEING_INCLUDED},&uarr; {!EDIT},{!EDIT_PAGE}}
