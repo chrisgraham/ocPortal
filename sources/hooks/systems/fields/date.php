@@ -98,7 +98,6 @@ class Hook_fields_date
 				if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
 				if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
 				$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
-				$time=utctime_to_usertime($time);
 			}
 			$ev=get_timezoned_date($time,true,false,true,true);
 		}
@@ -179,7 +178,7 @@ class Hook_fields_date
 		$hour=post_param_integer($stub.'_hour',0);
 		$minute=post_param_integer($stub.'_minute',0);
 
-		return str_pad(strval($year),4,'0',STR_PAD_LEFT).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT).' '.strval($hour).':'.strval($minute);
+		return str_pad(strval($year),4,'0',STR_PAD_LEFT).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT).' '.strval($hour).':'.str_pad(strval($minute),2,'0',STR_PAD_LEFT);
 
 		/*$temp=get_input_date($tmp_name);
 		if (is_null($temp)) return $editing?STRING_MAGIC_NULL:'';
