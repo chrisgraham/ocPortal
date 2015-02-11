@@ -923,7 +923,8 @@ function disable_preview_scripts(under)
 		if ((elements[i].getAttribute('type')=='button') || (elements[i].getAttribute('type')=='image')) elements[i].onclick=no_go;
 	elements=under.getElementsByTagName('a');
 	for (i=0;i<elements.length;i++)
-		elements[i].target='false_blank'; // Real _blank would trigger annoying CSS. This is better anyway.
+		if ((!elements[i].href) || (elements[i].href.toLowerCase().indexOf('javascript:')!=0)) // guard due to weird Firefox bug, JS actions still opening new window
+			elements[i].target='false_blank'; // Real _blank would trigger annoying CSS. This is better anyway.
 }
 
 function _set_up_change_monitor(container,input,container2)

@@ -33,8 +33,10 @@ class Hook_reset
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('reset',array('h'),array()),'','');
 		else
 		{
-			ocp_eatcookie('occle_dir');
-			ocp_eatcookie('occle_state');
+			ocp_eatcookie('occle_dir_b64');
+			ocp_eatcookie('occle_state_b64');
+			ocp_eatcookie('occle_state_code_b64');
+			ocp_eatcookie('occle_state_lang_b64');
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}

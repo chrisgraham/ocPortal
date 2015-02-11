@@ -189,8 +189,18 @@ function new_html__initialise(element)
 				{
 					element.style.display='none';
 					span.style.writingMode='tb-lr';
+					if (span.style.writingMode!='tb-lr')
+						span.style.writingMode='vertical-lr';
+					span.style.webkitWritingMode='vertical-lr';
+					span.style.mozWritingMode='vertical-lr';
 					span.style.whiteSpace='nowrap';
-					set_inner_html(span,escape_html(element.alt));
+					if (typeof span.textContent!='undefined')
+					{
+						span.textContent=element.alt;
+					} else
+					{
+						set_inner_html(span,escape_html(element.alt));
+					}
 					element.parentNode.insertBefore(span,element);
 				} else
 				if (typeof span.style.msTransform=='string' || typeof span.style.webkitTransform=='string' || typeof span.style.MozTransform=='string' || typeof span.style.transform=='string')
@@ -214,7 +224,13 @@ function new_html__initialise(element)
 					element.parentNode.style.width='1em';
 					element.parentNode.style.overflow='hidden'; // Needed due to https://bugzilla.mozilla.org/show_bug.cgi?id=456497
 					element.parentNode.style.verticalAlign='top';
-					set_inner_html(span,escape_html(element.alt));
+					if (typeof span.textContent!='undefined')
+					{
+						span.textContent=element.alt;
+					} else
+					{
+						set_inner_html(span,escape_html(element.alt));
+					}
 					element.parentNode.insertBefore(span,element);
 					window.setTimeout(function() {
 						if (element.parentNode.nodeName.toLowerCase()=='th' || element.parentNode.nodeName.toLowerCase()=='td')
@@ -1078,13 +1094,16 @@ function find_url_tab()
 	{
 		var tab=window.location.hash.replace(/^#/,'').replace(/^tab\_\_/,'');
 
-		if (tab.indexOf('__')!=-1)
-		{
-			if (document.getElementById('g_'+tab.substr(0,tab.indexOf('__'))))
-				select_tab('g',tab.substr(0,tab.indexOf('__')));
-		}
 		if (document.getElementById('g_'+tab))
+		{
 			select_tab('g',tab);
+		}
+		else if ((tab.indexOf('__')!=-1) && (document.getElementById('g_'+tab.substr(0,tab.indexOf('__')))))
+		{
+			var old=window.location.hash;
+			select_tab('g',tab.substr(0,tab.indexOf('__')));
+			window.location.hash=old;
+		}
 	}
 }
 function select_tab(id,tab,automated)
@@ -2672,7 +2691,8 @@ function set_inner_html(element,tHTML,append)
 
 			window.setTimeout(function() {
 				var elements=element.getElementsByTagName('*');
-				for (var i=already_offset;i<elements.length;i++)
+				var length=elements.length;
+				for (var i=already_offset;i<length;i++)
 				{
 					new_html__initialise(elements[i]);
 				}
@@ -2772,8 +2792,9 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 			bit.onclick=function(i) {
 				return function()	{
 					var template='';
+					var bit=document.getElementById('rating_bar_'+i+'__'+content_type+'__'+type+'__'+id);
 					var replace_spot=bit;
-					while (replace_spot!==null)
+					while ((replace_spot!==null) && (replace_spot.className))
 					{
 						replace_spot=replace_spot.parentNode;
 						if (replace_spot.className.match(/^RATING_BOX( |$)/))

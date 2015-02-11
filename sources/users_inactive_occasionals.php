@@ -142,6 +142,8 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 			$test=$GLOBALS['SITE_DB']->query_value('stats','MAX(date_and_time)',array('the_user'=>$member));
 			if (!is_null($test))
 			{
+				require_code('temporal');
+				require_code('tempcode');
 				if (date('d/m/Y',tz_time($test,get_site_timezone()))!=date('d/M/Y',tz_time(time(),get_site_timezone())))
 				{
 					require_code('points');

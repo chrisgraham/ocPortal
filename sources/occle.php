@@ -1203,26 +1203,23 @@ class virtual_bash
 		//NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
 		if (get_file_base()==get_custom_file_base())
 		{
-			if (array_key_exists('occle_state',$_COOKIE))
+			if (array_key_exists('occle_state_b64',$_COOKIE))
 			{
-				if (get_magic_quotes_gpc()) $_COOKIE['occle_state']=stripslashes($_COOKIE['occle_state']);
-				$occle_state_diff=@unserialize($_COOKIE['occle_state']);
+				$occle_state_diff=@unserialize(base64_decode($_COOKIE['occle_state_b64']));
 				if (!is_array($occle_state_diff)) $occle_state_diff=array();
 			}
 			else $occle_state_diff=array();
 
-			if (array_key_exists('occle_state_lang',$_COOKIE))
+			if (array_key_exists('occle_state_lang_b64',$_COOKIE))
 			{
-				if (get_magic_quotes_gpc()) $_COOKIE['occle_state_lang']=stripslashes($_COOKIE['occle_state_lang']);
-				$occle_state_lang_diff=@unserialize($_COOKIE['occle_state_lang']);
+				$occle_state_lang_diff=@unserialize(base64_decode($_COOKIE['occle_state_lang_b64']));
 				if (!is_array($occle_state_lang_diff)) $occle_state_lang_diff=array();
 			}
 			else $occle_state_lang_diff=array();
 
-			if (array_key_exists('occle_state_code',$_COOKIE))
+			if (array_key_exists('occle_state_code_b64',$_COOKIE))
 			{
-				if (get_magic_quotes_gpc()) $_COOKIE['occle_state_code']=stripslashes($_COOKIE['occle_state_code']);
-				$occle_state_code_diff=@unserialize($_COOKIE['occle_state_code']);
+				$occle_state_code_diff=@unserialize(base64_decode($_COOKIE['occle_state_code_b64']));
 				if (!is_array($occle_state_code_diff)) $occle_state_code_diff=array();
 			}
 			else $occle_state_code_diff=array();
@@ -1245,6 +1242,7 @@ class virtual_bash
 					require_lang($occle_lang,NULL,NULL,true);
 			}
 
+			$already_required=array_keys($GLOBALS['_REQUIRED_CODE']);
 			foreach ($occle_state_code_diff as $occle_code)
 			{
 				if ((file_exists(get_file_base().'/sources_custom/'.$occle_code.'.php')) || (file_exists(get_file_base().'/sources/'.$occle_code.'.php')))
@@ -1280,9 +1278,10 @@ class virtual_bash
 					$occle_state_diff[$occle_change]=$occle_env_after[$occle_change];
 			}
 
-			ocp_setcookie('occle_state',serialize($occle_state_diff));
-			ocp_setcookie('occle_state_code',serialize(array_keys($GLOBALS['_REQUIRED_CODE'])));
-			ocp_setcookie('occle_state_lang',serialize(array_keys($GLOBALS['LANGS_REQUESTED'])));
+			ocp_setcookie('occle_state_b64',base64_encode(serialize($occle_state_diff)));
+			ocp_setcookie('occle_state_code_b64',base64_encode(serialize(array_diff(array_keys($GLOBALS['_REQUIRED_CODE']),$already_required))));
+			ocp_setcookie('occle_state_lang_b64',base64_encode(serialize(array_keys($GLOBALS['LANGS_REQUESTED']))));
+			// ^ We use base64 encoding to work around inane modsecurity restrictions. We can't always work around modsecurity (GET/POST encoding would be too messy), but for cookies it is an easy win
 		}
 		else
 		{
@@ -1336,6 +1335,11 @@ class virtual_bash
  */
 class virtual_fs
 {
+	var $virtual_fs;
+	var $pwd;
+	var $current_meta;
+	var $current_meta_pwd;
+
 	/**
 	 * Constructor function. Setup a virtual filesystem, but do nothing with it.
 	 */
@@ -1391,15 +1395,14 @@ class virtual_fs
 	function _start_pwd()
 	{
 		//Fetch the pwd from a cookie, or generate a new one
-		if (array_key_exists('occle_dir',$_COOKIE))
+		if (array_key_exists('occle_dir_b64',$_COOKIE))
 		{
-			if (get_magic_quotes_gpc()) $_COOKIE['occle_dir']=stripslashes($_COOKIE['occle_dir']);
-			return $this->_pwd_to_array($_COOKIE['occle_dir']);
+			return $this->_pwd_to_array(@strval(base64_decode($_COOKIE['occle_dir_b64'])));
 		}
 		else
 		{
 			$default_dir=array();
-			ocp_setcookie('occle_dir',$this->_pwd_to_string($default_dir));
+			ocp_setcookie('occle_dir_b64',base64_encode($this->_pwd_to_string($default_dir)));
 			return $default_dir;
 		}
 	}
@@ -1740,7 +1743,7 @@ class virtual_fs
 		if ($this->_is_dir($target_directory))
 		{
 			$this->pwd=$target_directory;
-			ocp_setcookie('occle_dir',$this->_pwd_to_string($target_directory));
+			ocp_setcookie('occle_dir_b64',base64_encode($this->_pwd_to_string($target_directory)));
 
 			return true;
 		}

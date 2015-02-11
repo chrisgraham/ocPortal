@@ -292,8 +292,6 @@ function _log_it($type,$a=NULL,$b=NULL)
 {
 	if (!function_exists('get_member')) return; // If this is during installation
 
-	if ((get_option('site_closed')=='1') && (get_option('no_stats_when_closed',true)==='1')) return;
-
 	// Run hooks, if any exist
 	$hooks=find_all_hooks('systems','upon_action_logging');
 	foreach (array_keys($hooks) as $hook)
@@ -304,8 +302,11 @@ function _log_it($type,$a=NULL,$b=NULL)
 		$ob->run($type,$a,$b);
 	}
 
-	$ip=get_ip_address();
-	$GLOBALS['SITE_DB']->query_insert('adminlogs',array('the_type'=>$type,'param_a'=>is_null($a)?'':substr($a,0,80),'param_b'=>is_null($b)?'':substr($b,0,80),'date_and_time'=>time(),'the_user'=>get_member(),'ip'=>$ip));
+	if ((get_option('site_closed')=='0') || (get_option('no_stats_when_closed',true)!=='1'))
+	{
+		$ip=get_ip_address();
+		$GLOBALS['SITE_DB']->query_insert('adminlogs',array('the_type'=>$type,'param_a'=>is_null($a)?'':substr($a,0,80),'param_b'=>is_null($b)?'':substr($b,0,80),'date_and_time'=>time(),'the_user'=>get_member(),'ip'=>$ip));
+	}
 
 	decache('side_tag_cloud');
 	decache('main_staff_actions');

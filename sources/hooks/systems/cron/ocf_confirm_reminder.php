@@ -30,6 +30,7 @@ class Hook_cron_ocf_confirm_reminder
 
 		$time=time();
 		$last_time=intval(get_value('last_confirm_reminder_time'));
+		if ($last_time==0) $last_time=time();
 		if ($last_time>time()-24*60*60*2) return;
 		set_value('last_confirm_reminder_time',strval($time));
 
@@ -37,7 +38,7 @@ class Hook_cron_ocf_confirm_reminder
 		require_lang('ocf');
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_validated_email_confirm_code','').' AND m_join_time>'.strval($last_time));
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_validated_email_confirm_code','').' AND m_join_time>'.strval($last_time-24*60*60*2).' AND m_join_time<='.strval($last_time));
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 		foreach ($rows as $row)
 		{

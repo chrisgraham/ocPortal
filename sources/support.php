@@ -433,7 +433,7 @@ function addon_installed($addon,$non_bundled_too=false)
 		if (function_exists('persistent_cache_get')) $ADDON_INSTALLED_CACHE=persistent_cache_get('ADDONS_INSTALLED');
 	}
 	if (isset($ADDON_INSTALLED_CACHE[$addon])) return $ADDON_INSTALLED_CACHE[$addon];
-	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.filter_naughty($addon).'.php');
+	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty($addon).'.php');
 	if ((!$answer) && ($non_bundled_too))
 	{
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$addon));

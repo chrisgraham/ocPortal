@@ -611,12 +611,30 @@ function comcode_helper_script()
 				if (is_null($descriptiont)) $descriptiont='';
 				$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 				$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
-				if ($supports_comcode)
+				$is_advanced=(strpos($descriptiont,do_lang('BLOCK_IND_ADVANCED'))!==false);
+				$descriptiont=trim(str_replace(do_lang('BLOCK_IND_ADVANCED'),'',$descriptiont));
+
+				$field_title=do_lang('COMCODE_TAG_'.$tag.'_EMBED_FIELD_TITLE',NULL,NULL,NULL,NULL,false);
+				if (is_null($field_title)) $field_title=do_lang('TAG_CONTENTS');
+
+				if ($is_advanced)
 				{
-					$fields->attach(form_input_line_comcode(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+					if ($supports_comcode)
+					{
+						$fields_advanced->attach(form_input_line_comcode($field_title,protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+					} else
+					{
+						$fields_advanced->attach(form_input_line($field_title,protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+					}
 				} else
 				{
-					$fields->attach(form_input_line(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+					if ($supports_comcode)
+					{
+						$fields->attach(form_input_line_comcode($field_title,protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+					} else
+					{
+						$fields->attach(form_input_line($field_title,protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+					}
 				}
 			}
 		}

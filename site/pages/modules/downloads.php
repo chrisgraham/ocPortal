@@ -445,7 +445,7 @@ class Module_downloads
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
 			'type'=>'Download category',
-			'title'=>$title_to_use,
+			'title'=>comcode_escape($title_to_use),
 			'identifier'=>'_SEARCH:downloads:misc:'.strval($id),
 			'description'=>get_translated_text($category['description']),
 		);
@@ -724,7 +724,7 @@ class Module_downloads
 			'publisher'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
 			'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
 			'type'=>'Download',
-			'title'=>get_translated_text($myrow['name']),
+			'title'=>comcode_escape(get_translated_text($myrow['name'])),
 			'identifier'=>'_SEARCH:downloads:view:'.strval($id),
 			'description'=>get_translated_text($myrow['description']),
 			'image'=>$image_url,

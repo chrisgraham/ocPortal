@@ -428,8 +428,11 @@ body#main_website {
 }
 
 body#main_website #main_website_inner {
-	min-height: 450px;
 	overflow: hidden;
+}
+
+body#main_website #main_website_inner .global_middle_outer {
+	min-height: 350px;
 }
 
 /* If not #main_website, it'll be one of these (the names correspond to the templates used) */

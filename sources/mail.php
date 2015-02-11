@@ -848,6 +848,10 @@ function filter_css($c,$theme,$context)
 	// Strip comments from CSS. This optimises, and also avoids us needing to do a sophisticated parse
 	$css=preg_replace('#/\*.*\*/#Us','',$css);
 
+	// Strip all media rules, we don't support parsing it, and e-mails will not be that complex
+	$middle_regexp='[^\{\}]*'.'\{[^\{\}]*\}'.'[^\{\}]*';
+	$css=preg_replace('#@media[^\{\}]*\{('.$middle_regexp.')*\}#s','',$css);
+
 	// Find and process each CSS selector block
 	$stack=array();
 	$css_new='';
@@ -873,7 +877,6 @@ function filter_css($c,$theme,$context)
 					{
 						$selector=trim($selector);
 
-						if (strpos($selector,'@media print')!==false) break;
 						if (strpos($selector,'::selection')!==false) continue;
 						if (strpos($selector,'a[href^="mailto:"]')!==false) continue;
 						if (strpos($selector,'a[target="_blank"]')!==false) continue;

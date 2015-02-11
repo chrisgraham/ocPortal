@@ -562,7 +562,9 @@ class Hook_ocp_merge
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'attachment_refs',200,$row_start);
 			foreach ($rows as $row)
 			{
-				$id_new=import_id_remap_get($row['r_referer_type'],$row['r_referer_id'],true);
+				$import_type_fixed=$row['r_referer_type'];
+				if ($import_type_fixed=='ocf_post') $import_type_fixed='post';
+				$id_new=import_id_remap_get($import_type_fixed,$row['r_referer_id'],true);
 				if (is_null($id_new)) $id_new=$row['r_referer_id'];
 				$aid=import_id_remap_get('attachment',$row['a_id'],true);
 				if (!is_null($aid))
@@ -1555,6 +1557,8 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'theme_images WHERE path LIKE \''.db_encode_like('%/images_custom/%').'\'');
 		foreach ($rows as $row)
 		{
+			if (!is_dir(get_file_base().'/themes/'.$row['theme']) && !is_dir(get_custom_file_base().'/themes/'.$row['theme'])) continue;
+
 			$GLOBALS['SITE_DB']->query_delete('theme_images',$row,'',1);
 			$GLOBALS['SITE_DB']->query_insert('theme_images',$row,false,true); // Allow failure if row already there
 		}
@@ -1678,6 +1682,8 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
+			if (import_check_if_imported('catalogue',$row['c_name'])) continue;
+
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$row['c_name']));
 			if (is_null($test))
 			{
@@ -1692,6 +1698,7 @@ class Hook_ocp_merge
 				if (!array_key_exists('c_send_view_reports',$row)) $row['c_send_view_reports']=0;
 				unset($row['c_own_template']);
 				$GLOBALS['SITE_DB']->query_insert('catalogues',$row);
+				import_id_remap_put('catalogue',$row['c_name'],$row['c_name']);
 
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'catalogue_fields WHERE '.db_string_equal_to('c_name',$row['c_name']));
 				foreach ($rows2 as $row2)
@@ -1747,7 +1754,8 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			if (is_null(import_id_remap_get('catalogue_entry',strval($row['id']),true))) continue;
+			if (!is_null(import_id_remap_get('catalogue_entry',strval($row['id']),true))) continue;
+
 			$category_id=import_id_remap_get('catalogue_category',$row['cc_id'],true);
 			if (is_null($category_id)) continue;
 			$map=array();
@@ -1850,6 +1858,8 @@ class Hook_ocp_merge
 		{
 			$member_blocker=import_id_remap_get('member',$row['member_blocker'],true);
 			$member_blocked=import_id_remap_get('member',$row['member_blocked'],true);
+			if (is_null($member_blocker)) continue;
+			if (is_null($member_blocked)) continue;
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_blocking','member_blocker',array('member_blocker'=>$member_blocker,'member_blocked'=>$member_blocked));
 			if (!is_null($test)) continue;
 			$GLOBALS['SITE_DB']->query_insert('chat_blocking',array('member_blocker'=>$member_blocker,'member_blocked'=>$member_blocked,'date_and_time'=>$row['date_and_time']));
@@ -1860,8 +1870,8 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			$member_likes=import_id_remap_get('member',$row['member_likes'],true);
-			if (is_null($member_likes)) continue;
 			$member_liked=import_id_remap_get('member',$row['member_liked'],true);
+			if (is_null($member_likes)) continue;
 			if (is_null($member_liked)) continue;
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_likes',array('member_likes'=>$member_likes,'member_liked'=>$member_liked));
 			if (!is_null($test)) continue;
@@ -2315,49 +2325,43 @@ class Hook_ocp_merge
 			{
 				if (import_check_if_imported('member',strval($row['id']))) continue;
 
-				$test=$GLOBALS['OCF_DRIVER']->get_member_from_username($row['m_username']);
-				if (!is_null($test))
+				$id_new=$GLOBALS['OCF_DRIVER']->get_member_from_username($row['m_username']);
+				if (is_null($id_new))
 				{
-					// Fix usergroup leadership
-					$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>$test),array('g_group_leader'=>-$row['id']));
+					$primary_group=import_id_remap_get('group',strval($row['m_primary_group']),true);
 
-					import_id_remap_put('member',strval($row['id']),$test);
-					continue;
-				}
-
-				$primary_group=import_id_remap_get('group',strval($row['m_primary_group']),true);
-
-				$custom_fields=array();
-				$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-				$timezone=$row['m_timezone_offset'];
-				if (is_integer($timezone)) $timezone=strval($timezone);
-				if (!isset($row['m_auto_monitor_contrib_content'])) $row['m_auto_monitor_contrib_content']=$row['m_track_contributed_topics'];
-				$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_auto_monitor_contrib_content'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_notes'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_zone_wide'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:0,array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'');
-				$rows2=$db->query('SELECT * FROM '.$table_prefix.'f_member_custom_fields WHERE mf_member_id='.strval((integer)$row['id']),1);
-				if (array_key_exists(0,$rows2))
-				{
-					$row2=array();
-					foreach ($rows2[0] as $key=>$val)
+					$custom_fields=array();
+					$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
+					$timezone=$row['m_timezone_offset'];
+					if (is_integer($timezone)) $timezone=strval($timezone);
+					if (!isset($row['m_auto_monitor_contrib_content'])) $row['m_auto_monitor_contrib_content']=$row['m_track_contributed_topics'];
+					$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_auto_monitor_contrib_content'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_notes'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_zone_wide'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:0,array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'');
+					$rows2=$db->query('SELECT * FROM '.$table_prefix.'f_member_custom_fields WHERE mf_member_id='.strval((integer)$row['id']),1);
+					if (array_key_exists(0,$rows2))
 					{
-						if (is_null($val)) $val='';
-						if (substr($key,0,6)=='field_')
+						$row2=array();
+						foreach ($rows2[0] as $key=>$val)
 						{
-							$cpf_id=import_id_remap_get('cpf',substr($key,6),true);
-							if (is_null($cpf_id)) continue;
-							$cpf_type=$cpf_types[$cpf_id];
-							if (($cpf_type=='short_trans') || ($cpf_type=='long_trans'))
-								$val=strval(insert_lang($this->get_lang_string($db,intval($val)),3));
-							$row2['field_'.strval($cpf_id)]=$val;
+							if (is_null($val)) $val='';
+							if (substr($key,0,6)=='field_')
+							{
+								$cpf_id=import_id_remap_get('cpf',substr($key,6),true);
+								if (is_null($cpf_id)) continue;
+								$cpf_type=$cpf_types[$cpf_id];
+								if (($cpf_type=='short_trans') || ($cpf_type=='long_trans'))
+									$val=strval(insert_lang($this->get_lang_string($db,intval($val)),3));
+								$row2['field_'.strval($cpf_id)]=$val;
+							}
 						}
+						$GLOBALS['SITE_DB']->query_update('f_member_custom_fields',$row2,array('mf_member_id'=>$id_new),'',1);
 					}
-					$GLOBALS['SITE_DB']->query_update('f_member_custom_fields',$row2,array('mf_member_id'=>$id_new),'',1);
 				}
+
+				import_id_remap_put('member',strval($row['id']),$id_new);
 
 				// Fix some tricky dependences that we shoved to one side
 				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>$id_new),array('g_group_leader'=>-$row['id']));
 				$GLOBALS['SITE_DB']->query_update('attachments',array('a_member_id'=>$id_new),array('a_member_id'=>-$row['id']));
-
-				import_id_remap_put('member',strval($row['id']),$id_new);
 			}
 
 			$row_start+=200;
@@ -2433,7 +2437,7 @@ class Hook_ocp_merge
 
 			$name=$this->get_lang_string($db,$row['cf_name']);
 			$existing=$GLOBALS['FORUM_DB']->query_select('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id',array('f.id','cf_type'),array('text_original'=>$name),'',1);
-			if ((!array_key_exists(0,$existing)) || ($existing[0]['cf_type']!=$row['cf_type']))
+			if ((!array_key_exists(0,$existing)) || ($existing[0]['cf_type']!=$row['cf_type']) && (substr($name,0,4)!='ocp_'))
 			{
 				$only_group=$row['cf_only_group'];
 				if ($only_group!='')
@@ -2550,7 +2554,7 @@ class Hook_ocp_merge
 				import_id_remap_put('forum',strval(db_get_first_id()),db_get_first_id());
 				continue;
 			}
-			if ($row['f_name']==$comments_forum)
+			if (($row['f_name']==$comments_forum) && (!is_null($comments_forum_id)))
 			{
 				import_id_remap_put('forum',strval($row['id']),$comments_forum_id);
 				continue;
@@ -2985,6 +2989,8 @@ class Hook_ocp_merge
 
 			$row['i_caption']=$this->get_lang_string($db,$row['i_caption']);
 			$row['i_caption_long']=$this->get_lang_string($db,$row['i_caption_long']);
+
+			if (!array_key_exists('i_theme_img_code',$row)) $row['i_theme_img_code']='';
 
 			$id_new=$GLOBALS['SITE_DB']->query_insert('menu_items',$row,true);
 			import_id_remap_put('menu_item',$id_old,$id_new);

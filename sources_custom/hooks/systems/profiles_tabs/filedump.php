@@ -38,8 +38,6 @@ class Hook_Profiles_Tabs_filedump
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
-		enforce_personal_access($member_id_of,NULL,NULL,$member_id_viewing);
-
 		require_lang('filedump');
 
 		$title=do_lang_tempcode('FILE_DUMP');

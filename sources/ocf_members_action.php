@@ -311,6 +311,9 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	if ($check_correctness)
 	{
 		if (function_exists('decache')) decache('side_stats');
+
+		delete_value('ocf_newest_member_id');
+		delete_value('ocf_newest_member_username');
 	}
 
 	return $member_id;

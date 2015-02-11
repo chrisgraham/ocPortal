@@ -1402,7 +1402,7 @@ class Module_calendar
 			'publisher'=>'', // blank means same as creator
 			'modified'=>is_null($event['e_edit_date'])?'':date('Y-m-d',$event['e_edit_date']),
 			'type'=>'Calendar event',
-			'title'=>get_translated_text($event['e_title']),
+			'title'=>comcode_escape(get_translated_text($event['e_title'])),
 			'identifier'=>'_SEARCH:calendar:view:'.strval($id),
 			'description'=>get_translated_text($event['e_content']),
 			'image'=>find_theme_image('bigicons/calendar'),

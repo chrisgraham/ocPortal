@@ -649,12 +649,12 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 {
 	global $LANGS_REQUESTED,$JAVASCRIPTS,$CSSS,$DO_NOT_CACHE_THIS;
 
-	$DO_NOT_CACHE_THIS=false;
-
 	if (is_null($map)) $map=array();
 
 	if (!array_key_exists('cache',$map))
 		$map['cache']=block_cache_default($codename);
+
+	$DO_NOT_CACHE_THIS=($map['cache']=='0');
 
 	$object=NULL;
 	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)) && (strpos(get_param('special_page_type',''),'t')===false))

@@ -48,7 +48,7 @@ class Module_join
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'_JOIN');
+		return (get_forum_type()!='ocf')?array():array('misc'=>'_JOIN');
 	}
 
 	/**

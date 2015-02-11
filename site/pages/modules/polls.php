@@ -360,7 +360,7 @@ class Module_polls
 			'publisher'=>'', // blank means same as creator
 			'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
 			'type'=>'Poll',
-			'title'=>$_title,
+			'title'=>comcode_escape($_title),
 			'identifier'=>'_SEARCH:polls:view:'.strval($id),
 			'description'=>'',
 			'image'=>find_theme_image('bigicons/polls'),

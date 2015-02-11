@@ -431,7 +431,7 @@ function update_permission_box(setting)
 				}
 			} else
 			{
-				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'<div>{!GROUP;^}</div><br /><div>{!permissions:PINTERFACE_PRESETS;^}</div>');
+				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'<span class="heading_group">{!GROUP;^}</span> <span class="heading_presets">{!permissions:PINTERFACE_PRESETS;^}</span>');
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='block';
@@ -449,6 +449,14 @@ function update_permission_box(setting)
 				else if (!copy_permission_presets('access_'+group,'1',true)) list.selectedIndex=list.options.length-3;
 				else if (!copy_permission_presets('access_'+group,'2',true)) list.selectedIndex=list.options.length-2;
 				else if (!copy_permission_presets('access_'+group,'3',true)) list.selectedIndex=list.options.length-1;
+			}
+		}
+
+		// Set correct admin colspan
+		for (var i=0;i<matrix.rows.length;i++)
+		{
+			if (matrix.rows[i].cells.length==3) {
+				matrix.rows[i].cells[2].colSpan=num_sp_total+1;
 			}
 		}
 

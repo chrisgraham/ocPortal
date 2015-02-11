@@ -39,6 +39,10 @@ gibberish
 php.ini
 /*.shtml
 /.project
+uploads/auto_thumbs/*
+*__*.png
+*__*.jpg
+*__*.jpeg
 
 ; These files should be banned for the main ocPortal dev repository but not for ocP projects
 .idea

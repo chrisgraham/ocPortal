@@ -737,7 +737,9 @@ function do_site()
 	}
 	if (in_safe_mode())
 	{
-		$disable_safe_mode_url=get_self_url(true,true,array('keep_safe_mode'=>NULL));
+		global $SITE_INFO;
+		$safe_mode_via_config=(isset($SITE_INFO['safe_mode'])) && ($SITE_INFO['safe_mode']=='1');
+		$disable_safe_mode_url=get_self_url(true,true,array('keep_safe_mode'=>$safe_mode_via_config?0:NULL));
 		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_SAFE_MODE',escape_html($disable_safe_mode_url)),'notice');
 	}
 	if (get_param_integer('keep_fatalistic',0)==1)
@@ -1387,7 +1389,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			'publisher'=>'', // blank means same as creator
 			'modified'=>($comcode_page_row['p_edit_date']===NULL)?'':date('Y-m-d',$comcode_page_row['p_edit_date']),
 			'type'=>'Comcode page',
-			'title'=>$title_to_use,
+			'title'=>'[semihtml]'.$title_to_use.'[/semihtml]',
 			'identifier'=>$zone.':'.$codename,
 			'description'=>'',
 		);

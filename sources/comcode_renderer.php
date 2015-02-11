@@ -603,6 +603,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$params='';
 			foreach ($attributes as $key=>$val)
 			{
+				if (is_integer($key)) $key=strval($key);
 				$params.=' '.$key.'="'.str_replace('"','\"',$val).'"';
 			}
 			if (($tag!='block') || (!is_file(get_file_base().'/sources_custom/miniblocks/'.$embed->evaluate().'.php'/*Won't have a defined editing UI*/)))
@@ -1296,7 +1297,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$attachment=$_attachment[0];
 
 				$already_referenced=array_key_exists($__id,$GLOBALS['ATTACHMENTS_ALREADY_REFERENCED']);
-				if (($already_referenced) || ($as_admin) || (/*(!is_guest($source_member)) && */($source_member===$owner)) || (((has_specific_permission($source_member,'reuse_others_attachments')) || ($owner==$source_member)) && (has_attachment_access($source_member,$__id))))
+				if (($already_referenced) || ($as_admin) || (/*(!is_guest($source_member)) && */($source_member===$owner)) || ((has_specific_permission($source_member,'reuse_others_attachments')) && (has_attachment_access($source_member,$__id))))
 				{
 					if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
 					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment['a_add_time'],'type'=>'existing','id'=>$__id,'attachmenttype'=>$attributes['type'],'marker'=>$marker,'comcode'=>$comcode);
@@ -2314,6 +2315,8 @@ function _do_contents_level($tree_structure,$list_types,$base,$the_level=0)
 
 		$lines->attach(do_template('COMCODE_CONTENTS_LINE',array('_GUID'=>'f6891cb85d93facbc37f7fd3ef403950','LINE'=>$_line)));
 	}
+
+	if ($lines->is_empty()) return new ocp_tempcode();
 
 	return do_template('COMCODE_CONTENTS_LEVEL',array('_GUID'=>'cd2811bf69387ca05bf9612319db956b','TYPE'=>$list_types[max($the_level-$base+1/*because $base counts from 1 not 0*/,0)],'LINES'=>$lines));
 }

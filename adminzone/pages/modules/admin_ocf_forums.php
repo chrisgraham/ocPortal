@@ -416,6 +416,14 @@ class Module_admin_ocf_forums extends standard_aed_module
 		if ($id==db_get_first_id()) return false;
 
 		$fname=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$id));
+
+		$cnt=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)',array('f_name'=>$fname));
+		if ($cnt>1)
+		{
+			// We have duplication
+			return true;
+		}
+
 		$all_configured_forums=$GLOBALS['SITE_DB']->query_select('config',array('*'),array('the_type'=>'forum'));
 		foreach ($all_configured_forums as $f)
 		{

@@ -48,6 +48,7 @@ class Module_members
 	 */
 	function get_entry_points()
 	{
+		if (get_forum_type()!='ocf') return array();
 		$ret=array('misc'=>'MEMBERS');
 		if (!is_guest()) $ret['view']='MY_PROFILE';
 		return $ret;

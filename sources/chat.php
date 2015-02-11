@@ -995,6 +995,7 @@ function get_chatters_in_room_tpl($users)
 		if (!member_blocked(get_member(),$member_id))
 		{
 			$some_users=true;
+			if (!$usernames->is_empty()) $usernames->attach(escape_html(', '));
 			if (!is_guest($member_id))
 			{
 				if (get_forum_type()=='ocf')
@@ -1010,7 +1011,6 @@ function get_chatters_in_room_tpl($users)
 				}
 			} else
 			{
-				if (!$usernames->is_empty()) $usernames->attach(escape_html(', ')); // NB: OCF_USER_MEMBER would have auto-added comma
 				$usernames->attach(escape_html(do_lang('GUEST')));
 			}
 		}
@@ -1074,7 +1074,14 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 		$time_last_message=NULL;
 	} else
 	{
-		$time_last_message=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','MAX(date_and_time)',array('user_id'=>get_member(),'system_message'=>0));
+		if (is_guest())
+		{
+			$time_last_map=array('ip_address'=>get_ip_address(),'system_message'=>0);
+		} else
+		{
+			$time_last_map=array('user_id'=>get_member(),'system_message'=>0);
+		}
+		$time_last_message=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','MAX(date_and_time)',$time_last_map);
 		if (!is_null($time_last_message)) $time_left=$time_last_message-time()+intval(get_option('chat_flood_timelimit'));
 	}
 	if ((is_null($time_last_message)) || ($time_left<=0))
@@ -1395,7 +1402,7 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
 		} else
 		{
 			// Display the message
-			$private_code=do_template('CHAT_PRIVATE',array('_GUID'=>'96ef50f1442b319b034fe6f68ca50c12','SYSTEM_MESSAGE'=>strval($system_message),'MESSAGE'=>$pm_message,'USER'=>do_lang_tempcode('CHAT_PRIVATE_TITLE',escape_html($username))));
+			$private_code=do_template('CHAT_PRIVATE',array('_GUID'=>'96ef50f1442b319b034fe6f68ca50c12','SYSTEM_MESSAGE'=>strval($system_message),'MESSAGE'=>$pm_message,'USER'=>do_lang_tempcode('CHAT_PRIVATE_TITLE',($username==$pm_user)?do_lang('USER_SYSTEM'):escape_html($username))));
 			$text=preg_replace('#\[private=&quot;([^&]*)&quot;\]([^\[]*)\[/private\]#',$private_code->evaluate(),$text,1);
 		}
 	} else // No we are not...

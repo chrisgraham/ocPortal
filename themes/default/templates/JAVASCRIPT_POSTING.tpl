@@ -361,7 +361,7 @@ function do_input_thumb(field_name,va)
 								{
 									if (is_comcode_xml(element))
 									{
-										insert_textbox(element,'<img url=\"'+escape_html(va)+'\">'+escape_html(vc)+'</img>');
+										insert_textbox(element,'<img url=\"'+escape_html(va)+'\" />'+escape_html(vc)+'</img>');
 									} else
 									{
 										insert_textbox(element,'[img=\"'+escape_comcode(vc)+'\"]'+escape_comcode(va)+'[/img]');

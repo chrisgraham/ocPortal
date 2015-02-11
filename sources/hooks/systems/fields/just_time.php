@@ -155,7 +155,7 @@ class Hook_fields_just_time
 		$hour=post_param_integer($stub.'_hour',0);
 		$minute=post_param_integer($stub.'_minute',0);
 
-		return strval($hour).':'.strval($minute);
+		return strval($hour).':'.str_pad(strval($minute),2,'0',STR_PAD_LEFT);
 
 		/*$temp=get_input_date($tmp_name);
 		if (is_null($temp)) return $editing?STRING_MAGIC_NULL:'';

@@ -7,7 +7,7 @@
 		<thead>
 			<tr>
 				<th>
-					{!GROUP} &amp; {!PINTERFACE_PRESETS}
+					<span class="heading_group">{!GROUP}</span> <span class="heading_presets">{!PINTERFACE_PRESETS}</span>
 				</th>
 
 				<th class="view_header">

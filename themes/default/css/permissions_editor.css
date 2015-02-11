@@ -20,3 +20,14 @@
 .match_key_name_column {
 	width: 15em;
 }
+
+.heading_group {
+	display: block;
+	text-align: right;
+}
+
+.heading_presets {
+	margin-top: 0.5em;
+	display: block;
+	text-align: left;
+}

@@ -192,7 +192,14 @@ if (!function_exists('require_lang_compile'))
 
 				if (($codename!='critical_error') || ($lang!=get_site_default_lang()))
 				{
-					fatal_exit(do_lang_tempcode('MISSING_LANG_FILE',escape_html($codename),escape_html($lang)));
+					$error_msg=do_lang_tempcode('MISSING_LANG_FILE',escape_html($codename),escape_html($lang));
+					if (get_page_name()=='admin_themes')
+					{
+						warn_exit($error_msg);
+					} else
+					{
+						fatal_exit($error_msg);
+					}
 				} else
 				{
 					critical_error('CRIT_LANG');

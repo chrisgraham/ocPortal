@@ -335,8 +335,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 								$META_DATA[$param[0]]=$param[1];
 							} else
 							{
-								$value=isset($META_DATA[$param[0]])?strip_comcode($META_DATA[$param[0]]):'';
+								$value=isset($META_DATA[$param[0]])?$META_DATA[$param[0]]:'';
 								if ($value===NULL) $value='';
+								if ($param[0]=='title' || $param[0]=='description')
+								{
+									$value=strip_comcode($value);
+								}
 							}
 					}
 				}

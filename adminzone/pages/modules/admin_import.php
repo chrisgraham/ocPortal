@@ -135,6 +135,8 @@ class Module_admin_import
 		require_code('import');
 		load_import_deps();
 
+		$GLOBALS['LAX_COMCODE']=true;
+
 		set_mass_import_mode();
 
 		// Decide what we're doing

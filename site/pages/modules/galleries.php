@@ -682,7 +682,7 @@ class Module_galleries
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
 			'type'=>'Gallery',
-			'title'=>$fullname,
+			'title'=>comcode_escape($fullname),
 			'identifier'=>'_SEARCH:galleries:misc:'.$cat,
 			'description'=>get_translated_text($myrow['description']),
 		);

@@ -932,6 +932,9 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_email_address'=>$old_email_address),array('i_email_address'=>$email_address));
 	}
 
+	delete_value('ocf_newest_member_id');
+	delete_value('ocf_newest_member_username');
+
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
@@ -1007,6 +1010,9 @@ function ocf_delete_member($member_id)
 	{
 		update_catalogue_content_ref('member',strval($member_id),'');
 	}
+
+	delete_value('ocf_newest_member_id');
+	delete_value('ocf_newest_member_username');
 
 	log_it('DELETE_MEMBER',strval($member_id),$username);
 }
@@ -1523,7 +1529,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	}
 
 	// Find photo URL
-	$urls=get_url($param_name,$upload_name,file_exists(get_custom_file_base().'/uploads/photos')?'uploads/photos':'uploads/ocf_photos',0,OCP_UPLOAD_IMAGE,true,'thumb_'.$param_name,$upload_name.'2');
+	$urls=get_url($param_name,$upload_name,file_exists(get_custom_file_base().'/uploads/photos')?'uploads/photos':'uploads/ocf_photos',0,OCP_UPLOAD_IMAGE,true,'thumb_'.$param_name,$upload_name.'2',false,true);
 	if (!(strlen($urls[0])>1))
 	{
 		$urls[1]='';

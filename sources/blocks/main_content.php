@@ -309,7 +309,7 @@ class Block_main_content
 	function build_filter($filter,$info,$category_field_filter,$category_is_string)
 	{
 		$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];
-		$parent_field_name=array_key_exists('parent_field_name',$info)?$info['parent_field_name']:NULL;
+		$parent_field_name=array_key_exists('parent_field_name',$info)?('r.'.$info['parent_field_name']):NULL;
 		$parent_spec__parent_name=array_key_exists('parent_spec__parent_name',$info)?$info['parent_spec__parent_name']:NULL;
 		$parent_spec__field_name=array_key_exists('parent_spec__field_name',$info)?$info['parent_spec__field_name']:NULL;
 		require_code('ocfiltering');

@@ -28,7 +28,8 @@ class Hook_Preview_download
 	 */
 	function applies()
 	{
-		$applies=(get_param('page','')=='cms_downloads');
+		$type=get_param('type','');
+		$applies=(get_param('page','')=='cms_downloads') && (($type=='ad') || ($type=='_ed'));
 		return array($applies,NULL,false);
 	}
 

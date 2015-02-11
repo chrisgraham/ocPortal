@@ -948,7 +948,7 @@ class Module_catalogues
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
 			'type'=>get_translated_text($catalogue['c_title']).' category',
-			'title'=>$_title,
+			'title'=>comcode_escape($_title),
 			'identifier'=>'_SEARCH:catalogues:category:'.strval($id),
 			'description'=>get_translated_text($category['cc_description']),
 		);
@@ -1182,7 +1182,7 @@ class Module_catalogues
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
 			'type'=>'Catalogue',
-			'title'=>get_translated_text($catalogue['c_title']),
+			'title'=>comcode_escape(get_translated_text($catalogue['c_title'])),
 			'identifier'=>'_SEARCH:catalogues:index:'.$catalogue_name,
 			'description'=>$description_2,
 		);

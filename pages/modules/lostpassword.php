@@ -66,7 +66,7 @@ class Module_lostpassword
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array('misc'=>'RESET_PASSWORD'):array();
+		return (is_guest() && get_forum_type()=='ocf')?array('misc'=>'RESET_PASSWORD'):array();
 	}
 
 	/**
@@ -139,8 +139,12 @@ class Module_lostpassword
 		$is_httpauth=ocf_is_httpauth_member($member);
 		if (($is_ldap)/* || ($is_httpauth  Actually covered more explicitly above - over mock-httpauth, like Facebook, may have passwords reset to break the integrations)*/) warn_exit(do_lang_tempcode('EXT_NO_PASSWORD_CHANGE'));
 
-		$code=mt_rand(0,mt_getrandmax());
-		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>strval($code)),array('id'=>$member),'',1);
+		$code=intval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_change_code')); // Re-use existing code if possible, so that overlapping reset emails don't cause chaos
+		if ($code==0)
+		{
+			$code=mt_rand(0,mt_getrandmax());
+			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>strval($code)),array('id'=>$member),'',1);
+		}
 
 		log_it('RESET_PASSWORD',strval($member),strval($code));
 

@@ -48,7 +48,7 @@ class Module_onlinemembers
 	 */
 	function get_entry_points()
 	{
-		return (get_value('session_prudence')==='1')?array():array('!'=>'USERS_ONLINE'); // TODO: update in v10
+		return (get_value('session_prudence')==='1' || get_forum_type()!='ocf')?array():array('!'=>'USERS_ONLINE'); // TODO: update in v10
 	}
 
 	/**

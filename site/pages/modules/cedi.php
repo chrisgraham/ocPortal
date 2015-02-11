@@ -545,7 +545,7 @@ class Module_cedi
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
 			'type'=>'Wiki+ Page',
-			'title'=>get_translated_text($page['title']),
+			'title'=>comcode_escape(get_translated_text($page['title'])),
 			'identifier'=>'_SEARCH:cedi:misc:'.strval($page['id']),
 			'description'=>get_translated_text($page['description']),
 			'numposts'=>strval($num_posts),

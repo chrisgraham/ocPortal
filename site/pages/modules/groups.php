@@ -48,7 +48,7 @@ class Module_groups
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'USERGROUPS');
+		return (get_forum_type()!='ocf')?array():array('misc'=>'USERGROUPS');
 	}
 
 	/**
@@ -484,7 +484,7 @@ class Module_groups
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
 			'type'=>'Usergroup',
-			'title'=>$group_name,
+			'title'=>comcode_escape($group_name),
 			'identifier'=>'_SEARCH:groups:view:'.strval($id),
 			'description'=>'',
 			'image'=>find_theme_image('bigicons/usergroups'),

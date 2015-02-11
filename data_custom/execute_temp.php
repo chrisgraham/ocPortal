@@ -55,4 +55,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	set_option('site_closed','1');
+	@print('x'.http_download_file(get_base_url().'/sitemap.htm',NULL,false,true).'x');
 }

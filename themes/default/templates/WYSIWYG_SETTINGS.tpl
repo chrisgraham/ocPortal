@@ -27,11 +27,13 @@ if (use_ocportal_toolbar)
 
 var editor_settings={
 	enterMode : window.CKEDITOR.ENTER_BR,
+	shiftEnterMode : window.CKEDITOR.ENTER_P,
 	uiColor : wysiwyg_color,
 	fontSize_sizes : '0.6em;0.85em;1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;2em',
 	removePlugins: '',
 	//removePlugins: 'contextmenu,liststyle,tableresize,tabletools', to restore the native context menu, with spellcheck/working-copy&paste
 	extraPlugins: ''+(use_ocportal_toolbar?'ocportal':''),
+	removeButtons: 'PasteFromWord', // Paste from Word doesn't actually need separate button (http://dev.ckeditor.com/ticket/12908#comment:2)
 	customConfig : '',
 	bodyId : 'htmlarea',
 	baseHref : get_base_url()+'/',

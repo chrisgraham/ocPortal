@@ -43,6 +43,12 @@ OcCLE will attempt to store variables and included files between command request
 
 SQL queries can also be executed by OcCLE, simply by prefixing the query to be executed with an 'at' symbol ("@"). As with PHP commands, the query results will be outputted in an appropriate manner.
 
+Separating multiple queries using semicolons is [i]not[/i] supported.
+
+Even though OcCLE commands are single-line, pasting multi-line commands in usually works. The only exception would be if the line breaks are a part of strings within the query, in which case they would end up replaced by spaces.
+
+You are allowed to do non-read queries, such as INSERTs and DELETEs, but you'll be told "Error: Your search yielded no results.". Ignore that, it's just a generic messages to tell you explicitly that no results were shown.
+
 [title="2"]Meta-filesystems[/title]
 
 One of the main features of OcCLE is the fact that various facets of ocPortal can be manipulated through meta-filesystems. There are several included by default, but it is quite simple to write more as hooks if you know how to program. There are several different meta-filesystems for accessing the real file structure of the ocPortal installation, one for manipulating members (if you have OCF installed), one for manipulating the database, and a couple of others.

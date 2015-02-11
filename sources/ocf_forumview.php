@@ -885,7 +885,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		'publisher'=>'', // blank means same as creator
 		'modified'=>'',
 		'type'=>'Forum',
-		'title'=>$forum_info[0]['f_name'],
+		'title'=>comcode_escape($forum_info[0]['f_name']),
 		'identifier'=>'_SEARCH:forumview:misc:'.strval($forum_id),
 		'description'=>$description_text,
 		'image'=>find_theme_image('bigicons/forums'),

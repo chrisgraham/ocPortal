@@ -74,7 +74,7 @@ foreach ($rows as $row)
 
 	echo '
 		<div>
-			<a href="'.escape_html($url).'"><img src="'.escape_html($avatar_url).'"></a><br />
+			<a href="'.escape_html($url).'"><img src="'.escape_html($avatar_url).'" /></a><br />
 
 			<a href="'.escape_html($url).'" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!=\'undefined\') activate_tooltip(this,event,\''.escape_html(str_replace(chr(10),'\n',addslashes($tooltip))).'\',\'auto\');">'.escape_html($username).'</a><br />
 		</div>

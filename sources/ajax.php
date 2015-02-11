@@ -291,11 +291,11 @@ function comcode_convert_script()
 
 		if (preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$new))!=preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$out)))
 		{
-			/*$myfile=fopen(get_file_base().'/a','wb');
+			/*$myfile=fopen(get_file_base().'/b','wb');
 			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',chr(10),$new)));
 			fclose($myfile);
 
-			$myfile=fopen(get_file_base().'/b','wb');
+			$myfile=fopen(get_file_base().'/a','wb');
 			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',chr(10),$out)));
 			fclose($myfile);*/
 

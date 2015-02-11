@@ -253,7 +253,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			if (substr($trans,0,4)=='ocp_')
 			{
 				// See if it gets filtered
-				if (!array_key_exists(substr($trans,4),$to_keep)) $used=false;
+				if ((!array_key_exists(substr($trans,4),$to_keep)) && (get_param_integer('edit_unused',0)!=1)) $used=false;
 
 				$test=do_lang('SPECIAL_CPF__'.$trans,NULL,NULL,NULL,NULL,false);
 				if (!is_null($test)) $trans=$test;

@@ -1350,6 +1350,9 @@ class database_driver
 
 		if (substr(get_db_type(),0,5)!='mysql') return false;
 
+		static $cache=array();
+		if (isset($cache[$table])) return $cache[$table];
+
 		$tries=0;
 		do
 		{
@@ -1372,6 +1375,7 @@ class database_driver
 			}
 		}
 		while (($locked) && ($tries<5));
+		$cache[$table]=$locked;
 		return $locked;
 	}
 

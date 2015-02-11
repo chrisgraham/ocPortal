@@ -37,11 +37,12 @@ function get_staff_actions_list()
 			'templates'=>do_lang_tempcode('TEMPLATES'),
 			'theme_images'=>do_lang_tempcode('THEME_IMAGE_EDITING'),
 			'code'=>do_lang_tempcode('VALIDATION'),
-			'site_tree'=>do_lang_tempcode('FIND_IN_SITE_TREE'),
 	);
 	require_code('lang2');
 	$list+=array(
-		'spacer_2'=>do_lang_tempcode('LANGUAGE'),
+		'spacer_2'=>do_lang_tempcode('PAGE'),
+		'site_tree'=>do_lang_tempcode('FIND_IN_SITE_TREE'),
+		'spacer_3'=>do_lang_tempcode('LANGUAGE'),
 	);
 	$all_langs=multi_lang()?find_all_langs():array(user_lang()=>'lang_custom');
 	$tcode=do_lang('lang:TRANSLATE_CODE');
@@ -60,7 +61,7 @@ function get_staff_actions_list()
 		}
 	}
 	$list+=array(
-		'spacer_3'=>do_lang_tempcode('DEVELOPMENT_VIEWS'),
+		'spacer_4'=>do_lang_tempcode('DEVELOPMENT_VIEWS'),
 			'query'=>do_lang_tempcode('VIEW_PAGE_QUERIES'),
 			'ide_linkage'=>do_lang_tempcode('IDE_LINKAGE'),
 	);
@@ -83,6 +84,7 @@ function get_staff_actions_list()
 			if ($started_opt_group) $staff_actions.='</optgroup>';
 			$staff_actions.='<optgroup label="'.(is_object($text)?$text->evaluate():escape_html($text)).'">';
 			$started_opt_group=true;
+			continue;
 		}
 		$staff_actions.='<option'.(($staff_actions=='')?' disabled="disabled" class="label"':'').' '.(($name==$special_page_type)?'selected="selected" ':'').'value="'.escape_html($name).'">'.(is_object($text)?$text->evaluate():escape_html($text)).'</option>'; // XHTMLXHTML
 		//$staff_actions.=static_evaluate_tempcode(form_input_list_entry($name,($name==$special_page_type),$text,false,$disabled));	Disabled 'proper' way for performance reasons

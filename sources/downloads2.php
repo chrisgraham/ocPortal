@@ -587,7 +587,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 			}
 			break;
 		case 'pdf':
-			if ((ini_get('safe_mode')!='1') && (strpos(@ini_get('disable_functions'),'shell_exec')===false) && (!is_null($tmp_file)))
+			if ((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))!='1') && (strpos(@ini_get('disable_functions'),'shell_exec')===false) && (!is_null($tmp_file)))
 			{
 				$enc=(get_charset()=='utf-8')?' -enc UTF-8':'';
 				$path='pdftohtml -i -noframes -stdout -hidden'.$enc.' -q -xml '.@escapeshellarg($tmp_file);
