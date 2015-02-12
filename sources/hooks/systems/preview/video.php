@@ -29,7 +29,7 @@ class Hook_Preview_video
 	function applies()
 	{
 		require_code('uploads');
-		$applies=(get_param('page','')=='cms_galleries') && ((get_param('type')=='_ev') || (get_param('type')=='av')) && ((is_swf_upload()) ||  (count($_FILES)!=0));
+		$applies=(get_param('page','')=='cms_galleries') && ((get_param('type','')=='av') || (get_param('type','')=='_ev')) && ((is_swf_upload()) ||  (count($_FILES)!=0));
 		return array($applies,NULL,false);
 	}
 

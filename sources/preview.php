@@ -289,7 +289,7 @@ function build_preview($multi_return=false)
 			{
 				$map_table_fields->attach(map_table_field($key,$val,true));
 			}
-			$output=do_template('MAP_TABLE',array('_GUID'=>'3f548883b9eb37054c500d1088d9efa3','WIDTH'=>'170','FIELDS'=>$map_table_fields));
+			$output=do_template('MAP_TABLE',array('_GUID'=>'3f548883b9eb37054c500d1088d9efa3','FIELDS'=>$map_table_fields));
 		}
 	}
 

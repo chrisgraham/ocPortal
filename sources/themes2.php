@@ -33,7 +33,7 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 	if ($old_id!=$id)
 	{
 		$where_map=array('theme'=>$theme,'id'=>$id);
-		if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
+		if ($lang!='') $where_map['lang']=$lang;
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','id',$where_map);
 		if (!is_null($test))
 		{
@@ -50,7 +50,7 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 			if (($theme=='default') || (strpos($old_url,'themes/default/')===false))
 			{
 				$where_map=array('theme'=>$theme,'id'=>$id);
-				if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
+				if ($lang!='') $where_map['lang']=$lang;
 				$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
 
 				require_code('themes3');
@@ -68,7 +68,7 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 	}
 
 	$where_map=array('theme'=>$theme,'id'=>$id);
-	if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
+	if ($lang!='') $where_map['lang']=$lang;
 	$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
 
 	foreach ($langs as $lang)

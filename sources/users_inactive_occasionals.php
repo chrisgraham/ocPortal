@@ -326,7 +326,7 @@ function try_cookie_login()
 				if (array_key_exists($real_member_cookie,$unserialize))
 				{
 					$the_member=$unserialize[$real_member_cookie];
-					if (get_magic_quotes_gpc()) $the_member=addslashes($the_member);
+					if (get_magic_quotes_gpc()) $the_member=addslashes(@strval($the_member));
 					$_COOKIE[get_member_cookie()]=$the_member;
 				}
 				if (array_key_exists($real_pass_cookie,$unserialize))

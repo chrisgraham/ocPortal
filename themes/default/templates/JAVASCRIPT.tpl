@@ -22,12 +22,12 @@ function script_load_stuff()
 	/* Dynamic images need preloading */
 	var preloader=new Image();
 	var images=[];
-	images[0]='{$IMG;,menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol);
-	images[1]='{$IMG;,menus/menu_bullet_expand_hover}'.replace(/^http:/,window.location.protocol);
-	images[2]='{$IMG;,expand}'.replace(/^http:/,window.location.protocol);
-	images[3]='{$IMG;,contract}'.replace(/^http:/,window.location.protocol);
-	images[4]='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
-	images[5]='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
+	images[0]='{$IMG;,menus/menu_bullet_hover}'.replace(/^https?:/,window.location.protocol);
+	images[1]='{$IMG;,menus/menu_bullet_expand_hover}'.replace(/^https?:/,window.location.protocol);
+	images[2]='{$IMG;,expand}'.replace(/^https?:/,window.location.protocol);
+	images[3]='{$IMG;,contract}'.replace(/^https?:/,window.location.protocol);
+	images[4]='{$IMG;,exp_con}'.replace(/^https?:/,window.location.protocol);
+	images[5]='{$IMG;,loading}'.replace(/^https?:/,window.location.protocol);
 	for (i=0;i<images.length;i++) preloader.src=images[i];
 
 	/* Textarea scroll support */
@@ -396,7 +396,7 @@ function staff_unload_action()
 	div.style.position='absolute';
 	div.style.zIndex=10000;
 	div.style.textAlign='center';
-	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
+	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG;,loading}'.replace(/^https?:/,window.location.protocol)+'" /></span>');
 	window.setTimeout( function() { if (document.getElementById('loading_image')) document.getElementById('loading_image').src+=''; } , 100); // Stupid workaround for Google Chrome not loading an image on unload even if in cache
 	document.body.appendChild(div);
 	if (typeof window.scrollTo!='undefined')
@@ -748,7 +748,7 @@ function help_panel(show)
 		}
 		if (read_cookie('hide_help_panel')=='1') set_cookie('hide_help_panel','0',100);
 		helper_panel_toggle.onclick=function() { return help_panel(false); };
-		helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_hide}'.replace(/^http:/,window.location.protocol));
+		helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_hide}'.replace(/^https?:/,window.location.protocol));
 	} else
 	{
 		if (read_cookie('hide_help_panel')=='')
@@ -774,7 +774,7 @@ function _hide_help_panel(middles,panel_right,global_message,helper_panel_conten
 	helper_panel_contents.style.display='none';
 	set_cookie('hide_help_panel','1',100);
 	helper_panel_toggle.onclick=function() { return help_panel(true); };
-	helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_show}'.replace(/^http:/,window.location.protocol));
+	helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_show}'.replace(/^https?:/,window.location.protocol));
 }
 
 /* Find the size of a dimensions in pixels without the px (not general purpose, just to simplify code) */
@@ -1217,7 +1217,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 	{
 		pic=document.getElementById('e_'+element.id);
 	}
-	if ((pic) && (pic.src=='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol))) return; // Currently in action
+	if ((pic) && (pic.src=='{$IMG;,exp_con}'.replace(/^https?:/,window.location.protocol))) return; // Currently in action
 
 	element.setAttribute('aria-expanded',(type=='none')?'false':'true');
 
@@ -1231,7 +1231,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 			element.style.position='absolute'; /* So things do not just around now it is visible */
 			if (pic)
 			{
-				pic.src='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
+				pic.src='{$IMG;,exp_con}'.replace(/^https?:/,window.location.protocol);
 			}
 			window.setTimeout(function() { begin_toggleable_tray_animation(element,20,70,-1,pic); } ,20);
 		} else
@@ -1244,7 +1244,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 
 			if (pic)
 			{
-				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
+				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,contract}').replace(/^https?:/,window.location.protocol);
 			}
 		}
 	} else
@@ -1253,14 +1253,14 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 		{
 			if (pic)
 			{
-				pic.src='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
+				pic.src='{$IMG;,exp_con}'.replace(/^https?:/,window.location.protocol);
 			}
 			window.setTimeout(function() { begin_toggleable_tray_animation(element,-20,70,0,pic); } ,20);
 		} else
 		{
 			if (pic)
 			{
-				pic.src=((pic.src.indexOf("themewizard.php")!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
+				pic.src=((pic.src.indexOf("themewizard.php")!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^https?:/,window.location.protocol);
 				pic.setAttribute('alt',pic.getAttribute('alt').replace('{!CONTRACT;}','{!EXPAND;}'));
 				pic.title='{!EXPAND;}'; // Needs doing because convert_tooltip may not have run yet
 				pic.ocp_tooltip_title='{!EXPAND;}';
@@ -1333,7 +1333,7 @@ function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,
 		element.style.outline='0';
 		if (pic)
 		{
-			pic.src=((animate_dif<0)?'{$IMG;,expand}':'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
+			pic.src=((animate_dif<0)?'{$IMG;,expand}':'{$IMG;,contract}').replace(/^https?:/,window.location.protocol);
 			pic.setAttribute('alt',pic.getAttribute('alt').replace((animate_dif<0)?'{!CONTRACT;}':'{!EXPAND;}',(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}'));
 			pic.ocp_tooltip_title=(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}';
 		}
@@ -1419,7 +1419,7 @@ function illustrate_frame_load(pf,frame)
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
 		{
-			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body"><div class="spaced"><div class="ajax_tree_list_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div><\/body>');
+			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body"><div class="spaced"><div class="ajax_tree_list_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG*;,loading}'.replace(/^https?:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div><\/body>');
 		} else
 		{
 			body[0].className='website_body';
@@ -1433,7 +1433,7 @@ function illustrate_frame_load(pf,frame)
 
 			if (de.getElementsByTagName('style').length==0) /* The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice */
 				set_inner_html(head_element,head);
-			set_inner_html(body[0],'<div aria-busy="true" class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="vertical_alignment" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div>');
+			set_inner_html(body[0],'<div aria-busy="true" class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="vertical_alignment" src="'+'{$IMG*;,loading}'.replace(/^https?:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div>');
 		}
 		var the_frame=window.frames[frame];
 		window.setTimeout( // Stupid workaround for Google Chrome not loading an image on unload even if in cache

@@ -258,7 +258,7 @@ class Database_Static_mysql extends Database_super_mysql
 			}
 		}
 
-		if (($results!==true) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')) && ($results!==false))
+		if (($results!==true) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') || (strtoupper(substr($query,0,8))=='EXPLAIN ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}

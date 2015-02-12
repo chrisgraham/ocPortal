@@ -15,7 +15,7 @@ window.tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all
 	this.use_server_id=use_server_id;
 
 	var element=document.getElementById('tree_list__root_'+name);
-	set_inner_html(element,'<div class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> <span>{!LOADING;^}</span></div>');
+	set_inner_html(element,'<div class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^https?:/,window.location.protocol)+'" alt="" /> <span>{!LOADING;^}</span></div>');
 
 	// Initial rendering
 	do_ajax_request('{$BASE_URL_NOHTTP;}/'+hook+'&id='+window.encodeURIComponent(root_id)+'&options='+options+'&default='+window.encodeURIComponent(document.getElementById(name).value),this,false);
@@ -225,7 +225,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				if (node.getAttribute('description')) description=escape_html('. '+node.getAttribute('description'));
 				description_in_use=escaped_title+': {!TREE_LIST_SELECT*;^}'+description+((node.getAttribute('serverid')=='')?(' ('+escape_html(node.getAttribute('serverid'))+')'):'');
 			}
-			set_inner_html(node_self,'<div><input class="ajax_tree_expand_icon"'+(this.tabindex?(' tabindex="'+this.tabindex+'"'):'')+' type="image" alt="'+((!initially_expanded)?'{!EXPAND;^}':'{!CONTRACT;^}')+': '+escaped_title+'" title="'+((!initially_expanded)?'{!EXPAND;^}':'{!CONTRACT;^}')+'" id="'+this.name+'texp_c_'+node.getAttribute('id')+'" src="'+((!initially_expanded)?'{$IMG*;,treefield/plus}':'{$IMG*;,treefield/minus}').replace(/^http:/,window.location.protocol)+'" /> <img class="ajax_tree_cat_icon" alt="{!CATEGORY;^}" src="'+'{$IMG*;,treefield/category}'.replace(/^http:/,window.location.protocol)+'" /> <label id="'+this.name+'tsel_c_'+node.getAttribute('id')+'" for="'+this.name+'tsel_r_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivate_tooltip!=\'undefined\') deactivate_tooltip(this,event);" onmousemove="if (typeof window.activate_tooltip!=\'undefined\') reposition_tooltip(this,event);" onmouseover="if (typeof window.activate_tooltip!=\'undefined\') activate_tooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(this.childNodes[0].title),\'auto\');" class="ajax_tree_magic_button '+colour+'"><input '+(this.tabindex?('tabindex="'+this.tabindex+'" '):'')+'id="'+this.name+'tsel_r_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" name="_'+this.name+'" value="1" title="'+description_in_use+'" />'+escaped_title+'</label> <span id="'+this.name+'extra_'+node.getAttribute('id')+'">'+extra+'</span></div>');
+			set_inner_html(node_self,'<div><input class="ajax_tree_expand_icon"'+(this.tabindex?(' tabindex="'+this.tabindex+'"'):'')+' type="image" alt="'+((!initially_expanded)?'{!EXPAND;^}':'{!CONTRACT;^}')+': '+escaped_title+'" title="'+((!initially_expanded)?'{!EXPAND;^}':'{!CONTRACT;^}')+'" id="'+this.name+'texp_c_'+node.getAttribute('id')+'" src="'+((!initially_expanded)?'{$IMG*;,treefield/plus}':'{$IMG*;,treefield/minus}').replace(/^https?:/,window.location.protocol)+'" /> <img class="ajax_tree_cat_icon" alt="{!CATEGORY;^}" src="'+'{$IMG*;,treefield/category}'.replace(/^https?:/,window.location.protocol)+'" /> <label id="'+this.name+'tsel_c_'+node.getAttribute('id')+'" for="'+this.name+'tsel_r_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivate_tooltip!=\'undefined\') deactivate_tooltip(this,event);" onmousemove="if (typeof window.activate_tooltip!=\'undefined\') reposition_tooltip(this,event);" onmouseover="if (typeof window.activate_tooltip!=\'undefined\') activate_tooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(this.childNodes[0].title),\'auto\');" class="ajax_tree_magic_button '+colour+'"><input '+(this.tabindex?('tabindex="'+this.tabindex+'" '):'')+'id="'+this.name+'tsel_r_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" name="_'+this.name+'" value="1" title="'+description_in_use+'" />'+escaped_title+'</label> <span id="'+this.name+'extra_'+node.getAttribute('id')+'">'+extra+'</span></div>');
 			var expand_button=node_self.getElementsByTagName('input')[0];
 			var _this=this;
 			expand_button.oncontextmenu=function() { return false; };
@@ -314,7 +314,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 
 			// Render self
 			initially_expanded=false;
-			set_inner_html(node_self,'<div><img alt="{!ENTRY;^}" src="'+'{$IMG*;,treefield/entry}'.replace(/^http:/,window.location.protocol)+'" style="width: 14px; height: 14px; padding-left: 16px" /> <label id="'+this.name+'tsel_e_'+node.getAttribute('id')+'" class="ajax_tree_magic_button '+colour+'" for="'+this.name+'tsel_s_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivate_tooltip!=\'undefined\') deactivate_tooltip(this,event);" onmousemove="if (typeof window.activate_tooltip!=\'undefined\') reposition_tooltip(this,event);" onmouseover="if (typeof window.activate_tooltip!=\'undefined\') activate_tooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(\''+(description_in_use.replace(/\n/g,'').replace(/'/g,'\\'+'\''))+'\'),\'800px\');"><input'+(this.tabindex?(' tabindex="'+this.tabindex+'"'):'')+' id="'+this.name+'tsel_s_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" name="_'+this.name+'" value="1" />'+escaped_title+'</label>'+extra+'</div>');
+			set_inner_html(node_self,'<div><img alt="{!ENTRY;^}" src="'+'{$IMG*;,treefield/entry}'.replace(/^https?:/,window.location.protocol)+'" style="width: 14px; height: 14px; padding-left: 16px" /> <label id="'+this.name+'tsel_e_'+node.getAttribute('id')+'" class="ajax_tree_magic_button '+colour+'" for="'+this.name+'tsel_s_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivate_tooltip!=\'undefined\') deactivate_tooltip(this,event);" onmousemove="if (typeof window.activate_tooltip!=\'undefined\') reposition_tooltip(this,event);" onmouseover="if (typeof window.activate_tooltip!=\'undefined\') activate_tooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(\''+(description_in_use.replace(/\n/g,'').replace(/'/g,'\\'+'\''))+'\'),\'800px\');"><input'+(this.tabindex?(' tabindex="'+this.tabindex+'"'):'')+' id="'+this.name+'tsel_s_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" name="_'+this.name+'" value="1" />'+escaped_title+'</label>'+extra+'</div>');
 			var a=node_self.getElementsByTagName('label')[0];
 			a.handle_selection=this.handle_selection;
 			a.childNodes[0].onfocus=function() { this.parentNode.style.outline='1px dotted'; };
@@ -490,7 +490,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 			var url='{$BASE_URL_NOHTTP;}/'+this.object.hook+'&id='+window.encodeURIComponent(real_clicked_id)+'&options='+this.object.options+'&default='+window.encodeURIComponent(element.value);
 			var ob=this.object;
 			do_ajax_request(url,function (ajax_result_frame,ajax_result) { set_inner_html(html_node,''); ob.response(ajax_result_frame,ajax_result,clicked_id); });
-			set_inner_html(html_node,'<div aria-busy="true" class="vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> <span>{!LOADING;^}</span></div>');
+			set_inner_html(html_node,'<div aria-busy="true" class="vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^https?:/,window.location.protocol)+'" alt="" /> <span>{!LOADING;^}</span></div>');
 			var container=document.getElementById('tree_list__root_'+ob.name);
 			window.setTimeout(function() {
 				var container=document.getElementById('tree_list__root_'+ob.name);
@@ -511,7 +511,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 			fade_transition(html_node,100,30,4);
 		}
 
-		expand_button.src='{$IMG;,treefield/minus}'.replace(/^http:/,window.location.protocol);
+		expand_button.src='{$IMG;,treefield/minus}'.replace(/^https?:/,window.location.protocol);
 		expand_button.title=expand_button.title.replace('{!EXPAND;^}','{!CONTRACT;^}');
 		expand_button.alt=expand_button.alt.replace('{!EXPAND;^}','{!CONTRACT;^}');
 	} else
@@ -526,7 +526,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 
 		html_node.style.display='none';
 
-		expand_button.src='{$IMG;,treefield/plus}'.replace(/^http:/,window.location.protocol);
+		expand_button.src='{$IMG;,treefield/plus}'.replace(/^https?:/,window.location.protocol);
 		expand_button.title=expand_button.title.replace('{!CONTRACT;^}','{!EXPAND;^}');
 		expand_button.alt=expand_button.alt.replace('{!CONTRACT;^}','{!EXPAND;^}');
 	}

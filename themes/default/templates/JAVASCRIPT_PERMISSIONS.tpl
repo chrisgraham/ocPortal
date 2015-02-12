@@ -360,7 +360,7 @@ function update_permission_box(setting)
 								row=matrix.getElementsByTagName('tr')[0];
 								new_cell=row.insertBefore(document.createElement('th'),row.cells[row.cells.length-1]);
 								new_cell.className='sp_header';
-								set_inner_html(new_cell,'<img class="gd_text" src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+window.column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
+								set_inner_html(new_cell,'<img class="gd_text" src="'+'{$BASE_URL*;,0}'.replace(/^https?:/,window.location.protocol)+'/data/gd_text.php?color='+window.column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
 
 								num_sp_total++;
 							}
@@ -571,24 +571,24 @@ function permissions_img_func_1_b(node,id)
 	if (((window.attributes_full[id]['gsp_delete_highrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_delete_midrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_delete_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/3}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_3;^}');
+			return Array('{$IMG;,permlevels/3}'.replace(/^https?:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_3;^}');
 	else
 	if (((window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/2}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_2;^}');
+			return Array('{$IMG;,permlevels/2}'.replace(/^https?:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_2;^}');
 	else
 	if (((window.attributes_full[id]['gsp_submit_highrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_submit_midrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_submit_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/1}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_1;^}');
+			return Array('{$IMG;,permlevels/1}'.replace(/^https?:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_1;^}');
 	else
 	if (window.attributes_full[id]['inherits_something'])
-			return Array('{$IMG;,permlevels/inherit}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_GLOBAL;^}');
+			return Array('{$IMG;,permlevels/inherit}'.replace(/^https?:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_GLOBAL;^}');
 	else
-	if (window.attributes_full[id]['no_sps']) return Array('{$IMG;,blank}'.replace(/^http:/,window.location.protocol),'');
+	if (window.attributes_full[id]['no_sps']) return Array('{$IMG;,blank}'.replace(/^https?:/,window.location.protocol),'');
 
-	return Array('{$IMG;,permlevels/0}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_0;^}');
+	return Array('{$IMG;,permlevels/0}'.replace(/^https?:/,window.location.protocol),'{!permissions:PINTERFACE_LEVEL_0;^}');
 }
 
 function permissions_img_func_2(node,id)
@@ -606,8 +606,8 @@ function permissions_img_func_2_b(node,id)
 	var group=document.getElementById('group').value;
 
 	if (node.getAttribute('g_view_'+group)=='true')
-		return Array('{$IMG;,led_on}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_VIEW;^}');
-	return Array('{$IMG;,led_off}'.replace(/^http:/,window.location.protocol),'{!permissions:PINTERFACE_VIEW_NO;^}');
+		return Array('{$IMG;,led_on}'.replace(/^https?:/,window.location.protocol),'{!permissions:PINTERFACE_VIEW;^}');
+	return Array('{$IMG;,led_off}'.replace(/^https?:/,window.location.protocol),'{!permissions:PINTERFACE_VIEW_NO;^}');
 }
 
 function update_group_displayer(setting)

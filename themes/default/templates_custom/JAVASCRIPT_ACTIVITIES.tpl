@@ -36,7 +36,7 @@ function s_update_get_data()
 						post_val=post_val+'&member_ids='+window.activities_member_ids;
 
 					jQuery.ajax({
-						url: url.replace(/^http:/,window.location.protocol),
+						url: url.replace(/^https?:/,window.location.protocol),
 						type: 'POST',
 						data: post_val,
 						cache: false,
@@ -126,7 +126,7 @@ function s_update_remove(event,id)
 			{
 				var url='{$BASE_URL;,0}/data_custom/activities_removal.php'+keep_stub(true);
 				jQuery.ajax({
-					url: url.replace(/^http:/,window.location.protocol),
+					url: url.replace(/^https?:/,window.location.protocol),
 					type: 'POST',
 					data: 'removal_id='+id,
 					cache: false,

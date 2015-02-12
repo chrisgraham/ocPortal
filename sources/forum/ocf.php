@@ -1323,6 +1323,7 @@ class forum_driver_ocf extends forum_driver_base
 			}
 		} else
 		{
+			$rows=array();
 			$rows[0]=$this->get_member_row($userid);
 		}
 

@@ -693,7 +693,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 	div.className='im_event';
 	div.style.zIndex=topZIndex++;
 	var imgclose=document.createElement('img');
-	imgclose.setAttribute('src','{$IMG;,tableitem/delete}'.replace(/^http:/,window.location.protocol));
+	imgclose.setAttribute('src','{$IMG;,tableitem/delete}'.replace(/^https?:/,window.location.protocol));
 	imgclose.className='im_popup_close_button blend';
 	imgclose.onclick=close_popup;
 	div.appendChild(imgclose);
@@ -844,7 +844,7 @@ function deinvolve_im(room,logs,is_not_window)
 		if (typeof body[0]!='undefined')
 		{
 			body[0].className+=' site_unloading';
-			set_inner_html(body[0],'<div class="spaced"><div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span>{!LOADING;^}<\/span><\/div><\/div>');
+			set_inner_html(body[0],'<div class="spaced"><div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^https?:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span>{!LOADING;^}<\/span><\/div><\/div>');
 		}
 	}
 
@@ -944,7 +944,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 	} else
 	{
 		// Open popup
-		var new_window=window.open('{$BASE_URL;,0}'.replace(/^http:/,window.location.protocol)+'/data/empty.html','room_'+room_id,'width=370,height=415,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2));
+		var new_window=window.open('{$BASE_URL;,0}'.replace(/^https?:/,window.location.protocol)+'/data/empty.html','room_'+room_id,'width=370,height=415,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2));
 		window.setTimeout(function() // Needed for Safari to set the right domain
 		{
 			opened_popups['room_'+room_id]=new_window;

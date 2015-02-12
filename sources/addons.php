@@ -184,7 +184,7 @@ function find_installed_addons($just_non_bundled=false)
 				'addon_organisation'=>'ocProducts',
 				'addon_version'=>($version==ocp_version_number())?ocp_version_pretty():float_format($version,1),
 				'addon_description'=>$description,
-				'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$hook.'.php'),
+				'addon_install_time'=>filemtime($path),
 				'addon_files'=>implode(chr(10),make_global_file_list($file_list)),
 			);
 		}
@@ -326,14 +326,14 @@ function read_addon_info($name)
 		$addon_row['addon_dependencies_on_this']=find_addon_dependencies_on($name);
 	} else
 	{
-		if (!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php'))
+		$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php';
+		if (!file_exists($path))
+			$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php';
+
+		if (!file_exists($path))
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
-
-		$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($name).'.php';
-		if (!file_exists($path))
-			$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name).'.php';
 
 		$_hook_bits=extract_module_functions($path,array('get_dependencies','get_version','get_description','get_file_list'));
 		if (is_null($_hook_bits[0]))
@@ -359,7 +359,7 @@ function read_addon_info($name)
 			'addon_organisation'=>'ocProducts',
 			'addon_version'=>float_to_raw_string($version,2,true),
 			'addon_description'=>$description,
-			'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php'),
+			'addon_install_time'=>filemtime($path),
 			'addon_files'=>make_global_file_list($file_list),
 			'addon_dependencies'=>$dep['requires'],
 			'addon_dependencies_on_this'=>find_addon_dependencies_on($name),
@@ -968,7 +968,8 @@ function has_feature($dependency)
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$dependency));
 	if (!is_null($test)) return true;
 
-	// Bundled addon
+	// Bundled/new-style addon
+	if (file_exists(get_file_base().'/sources_custom/hooks/systems/addon_registry/'.$dependency.'.php')) return true;
 	if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$dependency.'.php')) return true;
 
 	// Some other features

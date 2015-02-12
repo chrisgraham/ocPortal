@@ -28,7 +28,7 @@ class Hook_Preview_banner
 	 */
 	function applies()
 	{
-		$applies=(get_param('page','')=='cms_banners') && ((get_param('type')=='_ed') || (get_param('type')=='ad'));
+		$applies=(get_param('page','')=='cms_banners') && ((get_param('type','')=='ad') || (get_param('type','')=='_ed'));
 		return array($applies,NULL,false);
 	}
 

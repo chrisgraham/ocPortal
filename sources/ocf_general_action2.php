@@ -112,7 +112,8 @@ function ocf_edit_emoticon($old_code,$code,$theme_img_code,$relevance_level,$use
 		if (!is_null($test)) warn_exit(do_lang_tempcode('CONFLICTING_EMOTICON_CODE',escape_html($code)));
 	}
 
-	$old_theme_img_code=$GLOBALS['FORUM_DB']->query_value('f_emoticons','e_theme_img_code',array('e_code'=>$old_code));
+	$old_theme_img_code=$GLOBALS['FORUM_DB']->query_value_null_ok('f_emoticons','e_theme_img_code',array('e_code'=>$old_code));
+	if (is_null($old_theme_img_code)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	$GLOBALS['FORUM_DB']->query_update('f_emoticons',array(
 		'e_code'=>$code,
@@ -135,7 +136,8 @@ function ocf_edit_emoticon($old_code,$code,$theme_img_code,$relevance_level,$use
  */
 function ocf_delete_emoticon($code)
 {
-	$old_theme_img_code=$GLOBALS['FORUM_DB']->query_value('f_emoticons','e_theme_img_code',array('e_code'=>$code));
+	$old_theme_img_code=$GLOBALS['FORUM_DB']->query_value_null_ok('f_emoticons','e_theme_img_code',array('e_code'=>$code));
+	if (is_null($old_theme_img_code)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	$GLOBALS['FORUM_DB']->query_delete('f_emoticons',array('e_code'=>$code),'',1);
 
@@ -157,7 +159,8 @@ function ocf_delete_emoticon($code)
  */
 function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter)
 {
-	$_subject=$GLOBALS['SITE_DB']->query_value('f_welcome_emails','w_subject',array('id'=>$id));
+	$_subject=$GLOBALS['SITE_DB']->query_value_null_ok('f_welcome_emails','w_subject',array('id'=>$id));
+	if (is_null($_subject)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$_text=$GLOBALS['SITE_DB']->query_value('f_welcome_emails','w_text',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_update('f_welcome_emails',array('w_name'=>$name,'w_newsletter'=>$newsletter,'w_subject'=>lang_remap($_subject,$subject),'w_text'=>lang_remap($_text,$text),'w_send_time'=>$send_time),array('id'=>$id),'',1);
 	log_it('EDIT_WELCOME_EMAIL',strval($id),get_translated_text($_subject));
@@ -170,7 +173,8 @@ function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter)
  */
 function ocf_delete_welcome_email($id)
 {
-	$_subject=$GLOBALS['SITE_DB']->query_value('f_welcome_emails','w_subject',array('id'=>$id));
+	$_subject=$GLOBALS['SITE_DB']->query_value_null_ok('f_welcome_emails','w_subject',array('id'=>$id));
+	if (is_null($_subject)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$_text=$GLOBALS['SITE_DB']->query_value('f_welcome_emails','w_text',array('id'=>$id));
 	log_it('DELETE_WELCOME_EMAIL',strval($id),get_translated_text($_subject));
 	$GLOBALS['SITE_DB']->query_delete('f_welcome_emails',array('id'=>$id),'',1);

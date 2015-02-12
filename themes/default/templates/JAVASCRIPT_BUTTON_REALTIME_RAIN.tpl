@@ -13,7 +13,7 @@ function load_realtime_rain()
 		var img=document.getElementById('realtime_rain_img');
 		img.className='footer_button_loading';
 		var tmp_element=document.createElement('img');
-		tmp_element.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
+		tmp_element.src='{$IMG;,loading}'.replace(/^https?:/,window.location.protocol);
 		tmp_element.style.position='absolute';
 		tmp_element.style.left=find_pos_x(img)+'px';
 		tmp_element.style.top=find_pos_y(img)+'px';

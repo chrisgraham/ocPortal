@@ -31,7 +31,7 @@ function find_addon_icon($hook)
 	static $addon_icons_cache=array();
 	if (isset($addon_icons_cache[$hook])) return $addon_icons_cache[$hook];
 
-	$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
+	$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
 	if (!file_exists($path))
 	{
 		$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';

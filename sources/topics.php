@@ -185,7 +185,7 @@ class OCP_Topic
 			}
 
 			// Direct links to forum
-			$forum_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic_id,$forum_name,true);
+			$forum_url=is_null($topic_id)?'':$GLOBALS['FORUM_DRIVER']->topic_url($topic_id,$forum_name,true);
 			if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) || ($forum_name==get_option('comments_forum_name')))
 			{
 				$authorised_forum_url=$forum_url;

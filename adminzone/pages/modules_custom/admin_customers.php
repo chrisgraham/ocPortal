@@ -96,6 +96,8 @@ class Module_admin_customers
 	{
 		require_lang('customers');
 
+		if (get_forum_type()!='ocf') return; // OCF only
+
 		/* CPFs */
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');

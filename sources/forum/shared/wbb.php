@@ -880,10 +880,11 @@ class forum_driver_wbb_shared extends forum_driver_base
 			}
 		} else
 		{
+			$rows=array();
 			$rows[0]=$this->get_member_row($memberid);
 		}
 
-		if (!array_key_exists(0,$rows)) // All hands to lifeboats
+		if (!array_key_exists(0,$rows) || $rows[0]==null) // All hands to lifeboats
 		{
 			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
 			return $out;

@@ -238,6 +238,9 @@ class virtual_bash
 		@ob_end_clean(); // Cleanup any output that may have somehow leaked to this point
 
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
+<!DOCTYPE response [
+<!ENTITY rarr "&#8594;" >
+]>
 <response>
 	<result>
 		<command>'.xmlentities($this->current_input).'</command>
@@ -1005,11 +1008,11 @@ class virtual_bash
 		{
 			//SQL command
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-			$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],NULL,NULL,true);
+			$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],NULL,NULL,true,true);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 			if (count($occle_output)>100)
 			{
-				$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],100,NULL,true);
+				$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],100,NULL,true,true);
 				$occle_output[]=array('...'=>'...');
 			}
 

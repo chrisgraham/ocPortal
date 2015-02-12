@@ -381,6 +381,7 @@ class Module_admin_addons
 				$name=$passed;
 
 				if (
+					(!file_exists(get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php')) &&
 					(!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php')) &&
 					(is_null($GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$name))))
 				)
@@ -389,7 +390,7 @@ class Module_admin_addons
 				$addon_row=read_addon_info($name);
 
 				// Archive it off to exports/addons
-				if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
+				if (file_exists(get_file_base().'/sources_custom/hooks/systems/addon_registry/'.$name.'.php') || file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
 				{
 					$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
 				} else // Traditional ocPortal style
@@ -519,7 +520,7 @@ class Module_admin_addons
 		$addon_row=read_addon_info($name);
 
 		// Archive it off to exports/addons
-		if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
+		if (file_exists(get_file_base().'/sources_custom/hooks/systems/addon_registry/'.$name.'.php') || file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
 		{
 			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
 		} else // Traditional ocPortal style

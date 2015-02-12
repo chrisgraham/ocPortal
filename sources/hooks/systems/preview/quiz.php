@@ -28,7 +28,7 @@ class Hook_Preview_quiz
 	 */
 	function applies()
 	{
-		$applies=(get_param('page','')=='cms_quiz') && ((get_param('type')=='_ed') || (get_param('type')=='ad'));
+		$applies=(get_param('page','')=='cms_quiz') && ((get_param('type','')=='ad') || (get_param('type','')=='_ed'));
 		return array($applies,NULL,false);
 	}
 

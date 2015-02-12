@@ -900,6 +900,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(get_option('send_error_emails_ocproducts',true)=='1') && 
 		(!running_script('cron_bridge')) && 
 		(strpos($text,'_custom/')===false) && 
+		(strpos($text,'_custom\\')===false) && 
 		(strpos($text,'data/occle.php')===false) && 
 		(strpos($text,'/mini')===false) && 
 		(strpos($text,'A transaction for the wrong IPN e-mail went through')===false) && 

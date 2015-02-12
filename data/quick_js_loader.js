@@ -31,7 +31,7 @@ function loaded()
 				img.style.top='3px'; \
 				img.id='quick_js_loader'; \
 				img.title=img.alt='Refreshing from cache'; \
-				img.src=base+'themes/default/images/loading.gif'.replace(/^http:/,window.location.protocol); \
+				img.src=base+'themes/default/images/loading.gif'.replace(/^https?:/,window.location.protocol); \
 				document.body.appendChild(img); \
 				var last_values=find_form_values(false); \
 				 \

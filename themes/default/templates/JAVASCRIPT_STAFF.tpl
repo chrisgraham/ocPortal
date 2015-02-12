@@ -455,13 +455,13 @@ function load_management_menu(type,no_confirm_needed)
 
 	if (type=='management')
 	{
-		on_url='{$IMG;,footer/managementmenu}'.replace(/^http:/,window.location.protocol);
-		off_url='{$IMG;,footer/managementmenu}'.replace(/^http:/,window.location.protocol);
+		on_url='{$IMG;,footer/managementmenu}'.replace(/^https?:/,window.location.protocol);
+		off_url='{$IMG;,footer/managementmenu}'.replace(/^https?:/,window.location.protocol);
 	} else
 	{
 		{+START,IF,{$ADDON_INSTALLED,bookmarks}}
-			on_url='{$IMG;,footer/bookmarksmenu}'.replace(/^http:/,window.location.protocol);
-			off_url='{$IMG;,footer/bookmarksmenu}'.replace(/^http:/,window.location.protocol);
+			on_url='{$IMG;,footer/bookmarksmenu}'.replace(/^https?:/,window.location.protocol);
+			off_url='{$IMG;,footer/bookmarksmenu}'.replace(/^https?:/,window.location.protocol);
 		{+END}
 	}
 
@@ -498,7 +498,7 @@ function load_management_menu(type,no_confirm_needed)
 		//tmp_element.style.top=find_pos_y(img)+'px'; Doesn't apply because the bottom is absolutely positioned itself (and hence, the reference point)
 		tmp_element.style.top='9px';
 		tmp_element.id=type+'_menu_img_loader';
-		tmp_element.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
+		tmp_element.src='{$IMG;,loading}'.replace(/^https?:/,window.location.protocol);
 		img.parentNode.appendChild(tmp_element);
 
 		require_javascript('javascript_ajax');

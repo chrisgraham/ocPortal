@@ -177,12 +177,12 @@ class Block_main_sitemap
 									{
 										$title_portion=str_replace($matches[0],do_lang($matches[1]),$title_portion);
 									}
-									if (preg_match('#^[^\[\{\&]*$#',$title_portion,$matches)!=0)
+									if (preg_match('#^[^<>\[\{\&]*$#',$title_portion,$matches)!=0)
 									{
 										$title=$matches[0];
 									} elseif (!$low_memory)
 									{
-										$_title=comcode_to_tempcode($title_portion,NULL,true);
+										$_title=comcode_to_tempcode($title_portion);
 										$title=strip_tags(@html_entity_decode($_title->evaluate(),ENT_QUOTES,get_charset()));
 									}
 								}

@@ -14,7 +14,7 @@ function load_occle()
 		var img=document.getElementById('occle_img');
 		img.className='footer_button_loading';
 		var tmp_element=document.createElement('img');
-		tmp_element.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
+		tmp_element.src='{$IMG;,loading}'.replace(/^https?:/,window.location.protocol);
 		tmp_element.style.position='absolute';
 		tmp_element.style.left=find_pos_x(img)+'px';
 		tmp_element.style.top=find_pos_y(img)+'px';
@@ -66,7 +66,7 @@ function load_occle()
 
 					if (img)
 					{
-						img.src='{$IMG;,footer/occle_off}'.replace(/^http:/,window.location.protocol);
+						img.src='{$IMG;,footer/occle_off}'.replace(/^https?:/,window.location.protocol);
 						img.className='';
 					}
 
@@ -96,7 +96,7 @@ function load_occle()
 				{
 					if (img)
 					{
-						img.src='{$IMG;,footer/occle}'.replace(/^http:/,window.location.protocol);
+						img.src='{$IMG;,footer/occle}'.replace(/^https?:/,window.location.protocol);
 						set_opacity(img,1.0);
 					}
 

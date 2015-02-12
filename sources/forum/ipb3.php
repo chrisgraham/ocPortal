@@ -914,10 +914,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 			}
 		} else
 		{
+			$rows=array();
 			$rows[0]=$this->get_member_row($userid);
 		}
 
-		if (!array_key_exists(0,$rows)) // All hands to lifeboats
+		if (!array_key_exists(0,$rows) || $rows[0]==null) // All hands to lifeboats
 		{
 			$out['error']=do_lang_tempcode('_USER_NO_EXIST',$username);
 			return $out;

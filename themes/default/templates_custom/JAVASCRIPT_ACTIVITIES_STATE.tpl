@@ -65,7 +65,7 @@ function s_update_submit(event)
 		var url='{$BASE_URL;,0}/data_custom/activities_handler.php'+keep_stub(true);
 
 		jQuery.ajax({
-			url: url.replace(/^http:/,window.location.protocol),
+			url: url.replace(/^https?:/,window.location.protocol),
 			type: 'POST',
 			data: jQuery('#fp_status_form').serialize(),
 			cache: false,

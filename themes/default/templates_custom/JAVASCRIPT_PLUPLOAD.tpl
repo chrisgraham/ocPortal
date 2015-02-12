@@ -5813,7 +5813,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	//newClearBtn.type='image';
 	newClearBtn.type='button';
 	newClearBtn.className='button_micro';
-	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
+	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^https?:/,window.location.protocol));
 	newClearBtn.style.marginLeft='8px';
 	newClearBtn.style.verticalAlign='top';
 	newClearBtn.alt='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD;^} {+END}{!CLEAR;^}';

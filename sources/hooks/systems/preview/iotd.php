@@ -29,7 +29,7 @@ class Hook_Preview_iotd
 	function applies()
 	{
 		require_code('uploads');
-		$applies=(get_param('page','')=='cms_iotds') && ((get_param('type')=='_ed') || (get_param('type')=='ad')) && ((is_swf_upload()) || (count($_FILES)!=0));
+		$applies=(get_param('page','')=='cms_iotds') && ((get_param('type','')=='ad') || (get_param('type','')=='_ed')) && ((is_swf_upload()) || (count($_FILES)!=0));
 		return array($applies,NULL,false);
 	}
 

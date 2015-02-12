@@ -2,7 +2,7 @@
 
 "use strict";
 
-new Image().src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
+new Image().src='{$IMG;,loading}'.replace(/^https?:/,window.location.protocol);
 
 function password_strength(ob)
 {
@@ -830,7 +830,7 @@ function toggle_subordinate_fields(pic,help_id)
 
 	if (((!next) && (pic.src.indexOf('expand')!=-1)) || ((next) && (next.style.display=='none'))) /* Expanding now */
 	{
-		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
+		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,contract}').replace(/^https?:/,window.location.protocol);
 		pic.setAttribute('alt','{!CONTRACT;}');
 		pic.setAttribute('title','{!CONTRACT;}');
 		new_state=(field_input.nodeName.toLowerCase()=='tr')?'table-row':'block';
@@ -838,7 +838,7 @@ function toggle_subordinate_fields(pic,help_id)
 		new_state_3='1px dashed';
 	} else /* Contracting now */
 	{
-		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
+		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^https?:/,window.location.protocol);
 		pic.setAttribute('alt','{!EXPAND;}');
 		pic.setAttribute('title','{!EXPAND;}');
 		new_state='none';

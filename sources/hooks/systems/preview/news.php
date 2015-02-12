@@ -28,7 +28,7 @@ class Hook_Preview_news
 	 */
 	function applies()
 	{
-		$applies=(get_param('page','')=='cms_news') || (get_param('page','')=='cms_blogs');
+		$applies=((get_param('page','')=='cms_news') || (get_param('page','')=='cms_blogs')) && ((get_param('type','')=='ad') || (get_param('type','')=='_ed'));
 		return array($applies,'news',false);
 	}
 
@@ -57,7 +57,7 @@ class Hook_Preview_news
 		{
 			$map_table_fields->attach(map_table_field($key,$val,true));
 		}
-		$output=do_template('MAP_TABLE',array('_GUID'=>'780aeedc08a960750fa4634e26db56d5','WIDTH'=>'170','FIELDS'=>$map_table_fields));
+		$output=do_template('MAP_TABLE',array('_GUID'=>'780aeedc08a960750fa4634e26db56d5','FIELDS'=>$map_table_fields));
 
 		return array($output,$post_comcode);
 	}

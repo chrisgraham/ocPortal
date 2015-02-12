@@ -28,7 +28,7 @@ class Hook_Preview_calendar_type
 	 */
 	function applies()
 	{
-		$applies=(get_param('page','')=='cms_calendar') && ((get_param('type')=='_ec') || (get_param('type')=='ac'));
+		$applies=(get_param('page','')=='cms_calendar') && ((get_param('type','')=='ac') || (get_param('type','')=='_ec'));
 		return array($applies,NULL,false);
 	}
 
