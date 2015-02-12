@@ -84,8 +84,6 @@ class Module_admin_lookup
 			$post_url=build_url(array('page'=>'_SELF'),'_SELF',NULL,false,true);
 			$fields=form_input_line(do_lang_tempcode('DETAILS'),do_lang_tempcode('DESCRIPTION_INVESTIGATE'),'param','',false);
 
-			breadcrumb_set_self(do_lang_tempcode('SEARCH'));
-
 			return do_template('FORM_SCREEN',array('_GUID'=>'9cc407037ec01a8f3483746a22889471','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'URL'=>$post_url));
 
 		} else
@@ -235,7 +233,7 @@ class Module_admin_lookup
 				}
 			}
 
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('SEARCH'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('INVESTIGATE_USER'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
 			return do_template(

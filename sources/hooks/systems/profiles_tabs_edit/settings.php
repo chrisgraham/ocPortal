@@ -181,9 +181,10 @@ class Hook_Profiles_Tabs_Edit_settings
 
 				require_code('ocf_groups_action2');
 				$members_groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id_of);
+				$old_primary_group=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id_of,'m_primary_group');
 				$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
 				$groups=list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club'=>0):NULL));
-				foreach ($_POST['secondary_groups'] as $group_id)
+				foreach ($_POST['secondary_groups'] as $group_id) // Add to new secondary groups
 				{
 					$group=$groups[intval($group_id)];
 
@@ -194,7 +195,7 @@ class Hook_Profiles_Tabs_Edit_settings
 						ocf_add_member_to_group($member_id_of,$group['id']);
 					}
 				}
-				foreach ($members_groups as $group_id)
+				foreach ($members_groups as $group_id) // Remove from old secondary groups that member is no longer in
 				{
 					if (!in_array(strval($group_id),$_POST['secondary_groups']))
 					{

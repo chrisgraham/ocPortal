@@ -348,7 +348,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
 	 * @param  integer		The topic ID
-	 * @param string			The forum ID
+	 * @param  string			The forum ID
 	 * @return URLPATH		The URL to the topic
 	 */
 	function topic_url($id,$forum)
@@ -361,7 +361,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * Get a URL to the specified post id.
 	 *
 	 * @param  integer		The post id
-	 * @param string			The forum ID
+	 * @param  string			The forum ID
 	 * @return URLPATH		The URL to the post
 	 */
 	function post_url($id,$forum)
