@@ -166,7 +166,7 @@ function set_font_size(size)
 {
 	var old_size=read_cookie('font_size');
 	var old_sizer=document.getElementById('font_size_'+old_size);
-	if (old_sizer) old_sizer.className=old_sizer.className.replace(' selected','');
+	if (old_sizer) old_sizer.className=old_sizer.className.replace(/ selected/g,'');
 
 	document.body.style.fontSize=size+'px';
 	set_cookie('font_size',size,120);
@@ -427,7 +427,7 @@ function undo_staff_unload_action()
 			window.clearTimeout(window.fade_transition_timers[bi.fader_key]);
 			window.fade_transition_timers[bi.fader_key]=null;
 		}
-		bi.className=bi.className.replace(' site_unloading','');
+		bi.className=bi.className.replace(/ site_unloading/g,'');
 	}
 }
 
@@ -737,7 +737,7 @@ function help_panel(show)
 	var i;
 	if (show)
 	{
-		panel_right.className=panel_right.className.replace(' helper_panel_hidden','');
+		panel_right.className=panel_right.className.replace(/ helper_panel_hidden/g,'');
 
 		helper_panel_contents.setAttribute('aria-expanded','true');
 		helper_panel_contents.style.display='block';
@@ -1168,7 +1168,7 @@ function select_tab(id,tab,automated)
 		if (element)
 		{
 			if (element.className.indexOf('tab_active')!=-1)
-				element.className=element.className.replace(' tab_active','');
+				element.className=element.className.replace(/ tab_active/g,'');
 			if (tabs[i]==tab)	element.className+=' tab_active';
 		}
 	}
@@ -2794,23 +2794,26 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 					var template='';
 					var bit=document.getElementById('rating_bar_'+i+'__'+content_type+'__'+type+'__'+id);
 					var replace_spot=bit;
-					while ((replace_spot!==null) && (replace_spot.className))
+					while (replace_spot!==null)
 					{
 						replace_spot=replace_spot.parentNode;
-						if (replace_spot.className.match(/^RATING_BOX( |$)/))
+						if (replace_spot!==null && replace_spot.className)
 						{
-							template='RATING_BOX';
-							break;
-						}
-						if (replace_spot.className.match(/^RATING_INLINE_STATIC( |$)/))
-						{
-							template='RATING_INLINE_STATIC';
-							break;
-						}
-						if (replace_spot.className.match(/^RATING_INLINE_DYNAMIC( |$)/))
-						{
-							template='RATING_INLINE_DYNAMIC';
-							break;
+							if (replace_spot.className.match(/^RATING_BOX( |$)/))
+							{
+								template='RATING_BOX';
+								break;
+							}
+							if (replace_spot.className.match(/^RATING_INLINE_STATIC( |$)/))
+							{
+								template='RATING_INLINE_STATIC';
+								break;
+							}
+							if (replace_spot.className.match(/^RATING_INLINE_DYNAMIC( |$)/))
+							{
+								template='RATING_INLINE_DYNAMIC';
+								break;
+							}
 						}
 					}
 					var snippet_request='rating&type='+window.encodeURIComponent(type)+'&id='+window.encodeURIComponent(id)+'&content_type='+window.encodeURIComponent(content_type)+'&template='+window.encodeURIComponent(template)+'&content_url='+window.encodeURIComponent(content_url)+'&content_title='+window.encodeURIComponent(content_title);

@@ -25,14 +25,14 @@ There is a major problem with identifying users by IP address, and that is one o
 [title="2"]Tools at your disposal[/title]
 
 [exp_thumb="Tools available in the Admin Zone security section" float="right"]trace_menu[/exp_thumb]
-[exp_thumb="Tools available in the Admin Zone usage section" float="right"]trace_menu2[/exp_thumb]
+[exp_thumb="Tools available in the Admin Zone Audit section" float="right"]trace_menu2[/exp_thumb]
 ocPortal provides a number of features for tracking IP addresses:
  - When a guest makes a post on [concept]OCF[/concept], the IP address is viewable by putting the mouse over the listed name of the guest poster (where the user-name of a real member usually resides). If you click it, it'll do an investigate-user operation on the IP address
  - For every page view, the IP address of the page viewer is stored. This allows detection of what areas of the site a viewer has visited, and in what order
  - Whenever a submission is made, the IP address is stored. The submitter banning management interface shows these IP addresses in its drop-down list
 ocPortal provides modules for working with IP addresses:
- - The 'Investigate user' module is the main tool for finding information about an IP address (access it from the Usage section of the Admin Zone)
- - The 'Action Log' module (access it from the Usage section of the Admin Zone, under the 'Actions' icon) can be used to quickly find out information from a submit that wasn't immediately available (for example, if a user submitted something without being logged-in and hence was not identified, but if by an IP address scan, they were in-fact identifiable). The module can also be used to ban or unban a submitter, based on both member (prevents the member submitting again) and IP address (prevents the IP address being used to access the site)
+ - The 'Investigate user' module is the main tool for finding information about an IP address (access it from the Audit section of the Admin Zone)
+ - The 'Action Log' module (access it from the Audit section of the Admin Zone, under the 'Actions' icon) can be used to quickly find out information from a submit that wasn't immediately available (for example, if a user submitted something without being logged-in and hence was not identified, but if by an IP address scan, they were in-fact identifiable). The module can also be used to ban or unban a submitter, based on both member (prevents the member submitting again) and IP address (prevents the IP address being used to access the site)
  - The 'Banned IP addresses' (access it from the Security section of the Admin Zone) module can be used to enter IP addresses for banning, along with free-form notes
 
 [exp_thumb="Managing banned IP addresses" float="right"]trace_ip_bans[/exp_thumb]

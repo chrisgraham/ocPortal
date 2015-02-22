@@ -891,7 +891,7 @@ function choose_picture(id,ob,name,event)
 		{
 			if (img.parentNode.className.indexOf(' selected')!=-1)
 			{
-				img.parentNode.className=img.parentNode.className.replace(' selected','');
+				img.parentNode.className=img.parentNode.className.replace(/ selected/g,'');
 				img.style.outline='0';
 				if (!browser_matches('ie8+')) img.style.background='none';
 			}

@@ -238,6 +238,7 @@ function comcode_convert_script()
 		$fields->attach(form_input_tick('Lax mode (less parse rules)','','lax',false));
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('to_comcode_xml',strval(either_param_integer('to_comcode_xml',0))));
+		$hidden->attach(form_input_hidden('keep_skip_rubbish',strval(either_param_integer('keep_skip_rubbish',0))));
 		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'dd82970fa1196132e07049871c51aab7','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('VIEW'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('comcode_convert',true),'FIELDS'=>$fields)),NULL,'',true);
 		$out2->evaluate_echo();
 		return;

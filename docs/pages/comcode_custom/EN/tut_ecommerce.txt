@@ -201,7 +201,7 @@ Subscriptions and invoices have some custom handling. Subscriptions can also end
 
 Normally a transaction would go through via PayPal/WorldPay/SecPay. i.e. ocPortal sends a user off to PayPal, and then PayPal calls back saying the transaction has happened.
 However, we've designed it to be modular. In ocPortal another method of doing a transaction is the 'manual transaction'. The manual transaction form just allows you to simulate a transaction; the idea is that you've received a cheque (or SMS payment, or whatever) and are manually telling ocPortal about it so that ocPortal can dispatch the sale. To perform a manual transaction you need to:
-1) access the manual transaction screen (Admin Zone > Usage menu > eCommerce link > Manual transaction icon).
+1) access the manual transaction screen (Admin Zone > Audit menu > eCommerce link > Manual transaction icon).
 2) select the right product
 3) enter the correct ID number that the product will use to dispatch for this sale
 4) enter the sale amount that the product expects to be receiving (which you can leave blank for it to work this out itself).
@@ -222,7 +222,7 @@ You can add as many usergroup subscriptions as you like. For example, [by adding
 [title="2"]Invoices[/title]
 [surround]
 [exp_thumb="Invoicing a member" float="right"]ecommerce_invoice[/exp_thumb]
-Members may be invoiced by the staff. To do this, go to the Usage section of the Admin Zone, then the eCommerce icon, then the Create invoice icon.
+Members may be invoiced by the staff. To do this, go to the Audit section of the Admin Zone, then the eCommerce icon, then the Create invoice icon.
 
 Members may view their invoicing history and staff may quickly locate unpaid invoices and invoices for which the work has not yet been fulfilled.
 [/surround]

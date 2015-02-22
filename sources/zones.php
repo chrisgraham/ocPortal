@@ -171,13 +171,32 @@ function get_zone_name()
 	{
 		$VIRTUALISED_ZONES=false;
 		$url_path=dirname(ocp_srv('REQUEST_URI'));
+		$host=preg_replace('#:\d+$#','',ocp_srv('HTTP_HOST'));
 		foreach ($SITE_INFO as $key=>$val)
 		{
 			if (($key[0]=='Z') && (substr($key,0,13)=='ZONE_MAPPING_') && (is_array($val)))
 			{
 				$VIRTUALISED_ZONES=true;
-				if ((preg_replace('#:\d+$#','',ocp_srv('HTTP_HOST'))==$val[0]) && (preg_match('#^'.(($val[1]=='')?'':('/'.preg_quote($val[1]))).'(/|$)#',$url_path)!=0))
+				if (($host==$val[0]) && (preg_match('#^'.(($val[1]=='')?'':('/'.preg_quote($val[1]))).'(/|$)#',$url_path)!=0))
 					return substr($key,13);
+			}
+		}
+		if (($VIRTUALISED_ZONES) && (substr($host,0,4)=='www.'))
+		{
+			$host=substr($host,4);
+			foreach ($SITE_INFO as $key=>$val)
+			{
+				if (($key[0]=='Z') && (substr($key,0,13)=='ZONE_MAPPING_') && (is_array($val)))
+				{
+					if (($host==$val[0]) && (preg_match('#^'.(($val[1]=='')?'':('/'.preg_quote($val[1]))).'(/|$)#',$url_path)!=0))
+					{
+						require_code('urls');
+						$GLOBALS['HTTP_STATUS_CODE']='301';
+						header('HTTP/1.0 301 Moved Permanently');
+						header('Location: '.str_replace('://www.','://',get_self_url_easy(true)));
+						exit();
+					}
+				}
 			}
 		}
 	}

@@ -59,7 +59,7 @@ ini_set('sendmail_path','whatever.your.sendmail.path.is');
 [/code]
 This will override PHP's value for ocPortal without you needing to reset anything or change anything you might not have access to.
 
-ocPortal's SMTP-connection code is configured from the Configuration module (Admin Zone, Settings section, Configuration icon, Site options). If the SMTP server hostname is left blank (the default), ocPortal relies on PHP's SMTP-connection code.
+ocPortal's SMTP-connection code is configured from the Configuration module (Admin Zone, Setup section, Configuration icon, Site options). If the SMTP server hostname is left blank (the default), ocPortal relies on PHP's SMTP-connection code.
 
 [title="2"]Avoid getting spam-blocked[/title]
 

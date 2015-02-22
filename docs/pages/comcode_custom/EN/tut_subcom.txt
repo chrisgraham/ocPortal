@@ -35,7 +35,6 @@ ocPortal zones are sub-directories of your site, that operate with different set
  - Site ([tt]/site[/tt]) -- Where the majority of the ocPortal modules are, by default
  - Docs ([tt]/docs[/tt]) -- Documentation
  - CMS ([tt]/cms[/tt])
- - Account ([tt]/personalzone[/tt]) -- For [concept]OCF[/concept] users only
  - Forum ([tt]/forum[/tt]) -- For OCF users only
 [surround]
 [exp_thumb="Viewing our zone (in its custom theme)" float="left"]subcom_church_santa[/exp_thumb]

@@ -63,8 +63,8 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	{
 		$matches=array();
 		$matches2=array();
-		$num_matches=preg_match_all('#<img (alt="" )?src="data:image/\w+;base64,([^"]*)" (title="" )?/?'.'>#',$original_comcode,$matches);
-		$num_matches2=preg_match_all('#\[img param=""\]data:image/\w+;base64,([^"]*)\[/img\]#',$original_comcode,$matches2);
+		$num_matches=preg_match_all('#<img[^<>]*src="data:image/\w+;base64,([^"]*)"[^<>]*>#',$original_comcode,$matches);
+		$num_matches2=preg_match_all('#\[img[^\[\]]*\]data:image/\w+;base64,([^"]*)\[/img\]#',$original_comcode,$matches2);
 		for ($i=0;$i<$num_matches2;$i++)
 		{
 			$matches[0][$num_matches]=$matches2[0][$i];

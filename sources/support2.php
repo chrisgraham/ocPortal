@@ -40,7 +40,13 @@ function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=fa
 		$members_viewing=new ocp_tempcode();
 		if (!isset($members[get_member()]))
 		{
-			$members[get_member()]=array('mt_cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			if (is_guest())
+			{
+				$members[get_member()]=1;
+			} else
+			{
+				$members[get_member()]=array('mt_cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			}
 		}
 		foreach ($members as $member_id=>$at_details)
 		{
@@ -48,7 +54,7 @@ function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=fa
 
 			if (is_guest($member_id))
 			{
-				$num_guests++;
+				$num_guests+=$at_details/*is integer for guest*/;
 			} else
 			{
 				$num_members++;

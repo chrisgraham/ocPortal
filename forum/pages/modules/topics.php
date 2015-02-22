@@ -140,6 +140,7 @@ class Module_topics
 			'birthday',
 			'make_personal',
 			'_make_personal',
+			'validate_topics',
 			'pin_topics',
 			'unpin_topics',
 			'sink_topics',
@@ -599,6 +600,32 @@ class Module_topics
 		}
 
 		return $this->redirect_to_forum('MARK_UNREAD',$forum_id);
+	}
+
+	/**
+	 * The actualiser to validate topics.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function validate_topics() // Type
+	{
+		require_code('ocf_topics_action');
+		require_code('ocf_topics_action2');
+
+		$topics=$this->get_markers();
+		if (count($topics)==0) warn_exit(do_lang_tempcode('NO_MARKERS_SELECTED'));
+
+		$forum_id=NULL;
+		foreach ($topics as $i=>$topic_id)
+		{
+			if ($i==0)
+			{
+				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
+			}
+			ocf_edit_topic($topic_id,NULL,NULL,true,NULL,NULL,NULL,NULL,'');
+		}
+
+		return $this->redirect_to_forum('VALIDATE_TOPICS',$forum_id);
 	}
 
 	/**

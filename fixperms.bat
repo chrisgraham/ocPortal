@@ -63,9 +63,6 @@ cacls pages\comcode_custom\EN\* /e /g %user%:F
 cacls forum\pages\comcode_custom /e /g %user%:F
 cacls forum\pages\comcode_custom\* /e /g %user%:F
 cacls forum\pages\comcode_custom\EN\* /e /g %user%:F
-cacls personalzone\pages\comcode_custom /e /g %user%:F
-cacls personalzone\pages\comcode_custom\* /e /g %user%:F
-cacls personalzone\pages\comcode_custom\EN\* /e /g %user%:F
 cacls cms\pages\comcode_custom /e /g %user%:F
 cacls cms\pages\comcode_custom\* /e /g %user%:F
 cacls cms\pages\comcode_custom\EN\* /e /g %user%:F
@@ -88,9 +85,6 @@ cacls pages\html_custom\EN\* /e /g %user%:F
 cacls forum\pages\html_custom /e /g %user%:F
 cacls forum\pages\html_custom\* /e /g %user%:F
 cacls forum\pages\html_custom\EN\* /e /g %user%:F
-cacls personalzone\pages\html_custom /e /g %user%:F
-cacls personalzone\pages\html_custom\* /e /g %user%:F
-cacls personalzone\pages\html_custom\EN\* /e /g %user%:F
 cacls cms\pages\html_custom /e /g %user%:F
 cacls cms\pages\html_custom\* /e /g %user%:F
 cacls cms\pages\html_custom\EN\* /e /g %user%:F
@@ -110,8 +104,6 @@ cacls pages\modules_custom /e /g %user%:F
 cacls pages\modules_custom\* /e /g %user%:F
 cacls forum\pages\modules_custom /e /g %user%:F
 cacls forum\pages\modules_custom\* /e /g %user%:F
-cacls personalzone\pages\modules_custom /e /g %user%:F
-cacls personalzone\pages\modules_custom\* /e /g %user%:F
 cacls cms\pages\modules_custom /e /g %user%:F
 cacls cms\pages\modules_custom\* /e /g %user%:F
 cacls docs\pages\modules_custom /e /g %user%:F
@@ -126,8 +118,6 @@ cacls pages\minimodules_custom /e /g %user%:F
 cacls pages\minimodules_custom\* /e /g %user%:F
 cacls forum\pages\minimodules_custom /e /g %user%:F
 cacls forum\pages\minimodules_custom\* /e /g %user%:F
-cacls personalzone\pages\minimodules_custom /e /g %user%:F
-cacls personalzone\pages\minimodules_custom\* /e /g %user%:F
 cacls cms\pages\minimodules_custom /e /g %user%:F
 cacls cms\pages\minimodules_custom\* /e /g %user%:F
 cacls docs\pages\minimodules_custom /e /g %user%:F
@@ -204,9 +194,6 @@ icacls pages\comcode_custom\EN\* /grant %user%:(M)
 icacls forum\pages\comcode_custom /grant %user%:(M)
 icacls forum\pages\comcode_custom\* /grant %user%:(M)
 icacls forum\pages\comcode_custom\EN\* /grant %user%:(M)
-icacls personalzone\pages\comcode_custom /grant %user%:(M)
-icacls personalzone\pages\comcode_custom\* /grant %user%:(M)
-icacls personalzone\pages\comcode_custom\EN\* /grant %user%:(M)
 icacls cms\pages\comcode_custom /grant %user%:(M)
 icacls cms\pages\comcode_custom\* /grant %user%:(M)
 icacls cms\pages\comcode_custom\EN\* /grant %user%:(M)
@@ -229,9 +216,6 @@ icacls pages\html_custom\EN\* /grant %user%:(M)
 icacls forum\pages\html_custom /grant %user%:(M)
 icacls forum\pages\html_custom\* /grant %user%:(M)
 icacls forum\pages\html_custom\EN\* /grant %user%:(M)
-icacls personalzone\pages\html_custom /grant %user%:(M)
-icacls personalzone\pages\html_custom\* /grant %user%:(M)
-icacls personalzone\pages\html_custom\EN\* /grant %user%:(M)
 icacls cms\pages\html_custom /grant %user%:(M)
 icacls cms\pages\html_custom\* /grant %user%:(M)
 icacls cms\pages\html_custom\EN\* /grant %user%:(M)
@@ -251,8 +235,6 @@ icacls pages\modules_custom /grant %user%:(M)
 icacls pages\modules_custom\* /grant %user%:(M)
 icacls forum\pages\modules_custom /grant %user%:(M)
 icacls forum\pages\modules_custom\* /grant %user%:(M)
-icacls personalzone\pages\modules_custom /grant %user%:(M)
-icacls personalzone\pages\modules_custom\* /grant %user%:(M)
 icacls cms\pages\modules_custom /grant %user%:(M)
 icacls cms\pages\modules_custom\* /grant %user%:(M)
 icacls docs\pages\modules_custom /grant %user%:(M)
@@ -267,8 +249,6 @@ icacls pages\minimodules_custom /grant %user%:(M)
 icacls pages\minimodules_custom\* /grant %user%:(M)
 icacls forum\pages\minimodules_custom /grant %user%:(M)
 icacls forum\pages\minimodules_custom\* /grant %user%:(M)
-icacls personalzone\pages\minimodules_custom /grant %user%:(M)
-icacls personalzone\pages\minimodules_custom\* /grant %user%:(M)
 icacls cms\pages\minimodules_custom /grant %user%:(M)
 icacls cms\pages\minimodules_custom\* /grant %user%:(M)
 icacls docs\pages\minimodules_custom /grant %user%:(M)

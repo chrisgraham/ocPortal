@@ -171,7 +171,7 @@ Avatar size is limited by the maximum size determined by any of their usergroups
 
 It is beyond the scope of this tutorial how to create avatars. However, avatars are images no different than the theme images in ocPortal (and the default avatars are theme images), so whatever applies to editing theme images also applies to avatars.
 
-Our default avatars may not be appropriate for some sites, but they can be changed. This can be done using the theme image manager. To actual get rid of the existing default avatars, you will need to delete the files from your web-space using an FTP program, and then to clear the theme image cache using the ocPortal Caches module in the Admin Zone.
+Our default avatars may not be appropriate for some sites, but they can be changed. This can be done using the theme image manager. To actual get rid of the existing default avatars, you will need to delete the files from your web-space using an FTP program, and then to clear the theme image cache using the ocPortal Website cleanup tools module in the Admin Zone.
 To add new avatars, you need to add new theme images. You can add whole sets of avatar this way. The easiest way to add theme images in bulk is just to use FTP, uploading them to:
 [tt]themes/default/images/ocf_default_avatars/<packname>[/tt]
 You can also do it using the Theme management tools, making sure the theme image names have a prefix of [tt]ocf_default_avatars/<packname>[/tt].

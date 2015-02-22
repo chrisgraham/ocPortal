@@ -65,6 +65,7 @@ It is possible to configure where a value for a custom profile field for members
  - if 'show in post previews' is selected, it will also be visible when displaying a member sub-gallery in a list of sub-galleries
 
 If you have more than 60 textual CPFs (except Comcode ones), any ones created after the 60th will not be included for searching on the search module's member search form. This is due to a limitation in MySQL.
+Additionally, you could run into problems with large numbers of CPFs on some servers. Some servers limit the number of request variables, either using a PHP setting, the unofficial Suhosin addon, or through other means that may not even be visible. If you notice field values disappearing, or WYSIWYG-edited fields showing in raw HTML after editing, it is likely caused by a server limitation.
 [/surround]
 
 [title="3"]Display rules[/title]

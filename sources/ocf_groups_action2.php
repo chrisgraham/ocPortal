@@ -235,9 +235,13 @@ function ocf_member_leave_group($group_id,$member_id=NULL)
 	$group_leader=$GLOBALS['FORUM_DB']->query_value('f_groups','g_group_leader',array('id'=>$group_id));
 	if ($group_leader==$member_id) $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>NULL),array('id'=>$group_id),'',1);
 
-	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
+	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_group_members','gm_group_id',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id));
+	if (!is_null($test))
+	{
+		$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
 
-	log_it('MEMBER_REMOVED_FROM_GROUP',strval($member_id),strval($group_id));
+		log_it('MEMBER_REMOVED_FROM_GROUP',strval($member_id),strval($group_id));
+	}
 }
 
 /**

@@ -11,7 +11,7 @@ Running an online helpdesk is something many companies will want to do. It allow
 
 [title="3"]Adding a multi-moderation[/title]
 
-To add a multi-moderation, go to the 'Add multi-moderation' screen (Go to the Setup section of the Admin Zone, then the Multi-moderations icon). Fill out all the fields on the form as required. Try to make the post sound as professional as possible (if the multi-moderation is for making a formal response). Submit the form, and the multi-moderation will be available for use in all the specified forums (from the drop down list of topic actions that you see when viewing a topic).
+To add a multi-moderation, go to the 'Add multi-moderation' screen (Go to the Structure section of the Admin Zone, then the Forums icon, then the Multi-moderations icon). Fill out all the fields on the form as required. Try to make the post sound as professional as possible (if the multi-moderation is for making a formal response). Submit the form, and the multi-moderation will be available for use in all the specified forums (from the drop down list of topic actions that you see when viewing a topic).
 
 [title="3"]Using a multi-moderation[/title]
 

@@ -60,7 +60,7 @@
 					//]]></script>
 				{+END}
 				{+START,IF_PASSED,DEFAULT_PARSED}
-					<textarea cols="1" rows="1" style="display: none" readonly="readonly" name="edit_{ID*;}_textarea_parsed">{DEFAULT_PARSED*}</textarea>
+					<textarea cols="1" rows="1" style="display: none" readonly="readonly" disabled="disabled" name="edit_{ID*;}_textarea_parsed">{DEFAULT_PARSED*}</textarea>
 				{+END}
 			</div>
 		</form>

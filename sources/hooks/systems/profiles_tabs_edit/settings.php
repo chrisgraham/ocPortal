@@ -181,7 +181,6 @@ class Hook_Profiles_Tabs_Edit_settings
 
 				require_code('ocf_groups_action2');
 				$members_groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id_of);
-				$old_primary_group=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id_of,'m_primary_group');
 				$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
 				$groups=list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club'=>0):NULL));
 				foreach ($_POST['secondary_groups'] as $group_id) // Add to new secondary groups

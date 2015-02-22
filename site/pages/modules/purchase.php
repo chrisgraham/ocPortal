@@ -268,7 +268,7 @@ class Module_purchase
 				$price=currency_convert(floatval($details[1]),$currency,NULL,true);
 
 				$description=$details[4];
-				if (strpos($details[4],(strpos($details[4],'.')===false)?preg_replace('#\.00($|[^\d])#','',$price):$price)===false)
+				if ($price!='' && strpos($details[4],(strpos($details[4],'.')===false)?preg_replace('#\.00($|[^\d])#','',$price):$price)===false)
 					$description.=(' ('.$price.')');
 				$list->attach(form_input_list_entry($product,false,protect_from_escaping($description)));
 			}

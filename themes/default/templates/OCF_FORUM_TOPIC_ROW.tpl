@@ -56,8 +56,8 @@
 		{LAST_POST}
 	</td>
 
-	{+START,IF,{$NOT,{$MOBILE}}}
+	{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$NOT,{$_GET,overlay}}}
 		{MARKER}
-	{+END}
+	{+END}{+END}
 </tr>
 

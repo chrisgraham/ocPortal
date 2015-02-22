@@ -79,8 +79,6 @@ class Block_main_custom_gfx
 		{
 			// Ok so not cached yet
 
-			$pos_x=intval(array_key_exists('x',$map)?$map['x']:'0');
-			$pos_y=intval(array_key_exists('y',$map)?$map['y']:'12');
 			$_color=array_key_exists('color',$map)?$map['color']:'FFFFFF';
 			if (substr($_color,0,1)=='#') $_color=substr($_color,1);
 			$font=array_key_exists('font',$map)?$map['font']:'Vera';
@@ -99,32 +97,43 @@ class Block_main_custom_gfx
 			imagealphablending($img,true);
 			imagesavealpha($img,true);
 
-			list(,,,,$width,,,)=imagettfbbox(floatval($map['font_size']),0.0,$file_base.$font.'.ttf',$map['data']);
-
 			$colour=imagecolorallocate($img,hexdec(substr($_color,0,2)),hexdec(substr($_color,2,2)),hexdec(substr($_color,4,2)));
-			$width=max($width,-$width);
-			if ($center) $pos_x+=intval(imagesx($img)/2-$width/2);
-			if ($pos_x<0) $pos_x=0;
-			$pos_x--;
+
+			$pos_y=intval(array_key_exists('y',$map)?$map['y']:'12');
+
 			require_code('character_sets');
 			$text=foxy_utf8_to_nce($map['data']);
-			if (strpos($text,'&#')===false)
+			foreach (explode("\n",$text) as $line)
 			{
-				$previous=mixed();
-				$nxpos=0;
-				for ($i=0;$i<strlen($text);$i++)
+				if ($line=='') $line=' '; // Otherwise our algorithm breaks
+
+				list(,,,,$width,,,)=imagettfbbox(floatval($map['font_size']),0.0,$file_base.$font.'.ttf',$line);
+				$pos_x=intval(array_key_exists('x',$map)?$map['x']:'0');
+				$width=max($width,-$width);
+				if ($center) $pos_x+=intval(imagesx($img)/2-$width/2);
+				if ($pos_x<0) $pos_x=0;
+				$pos_x--;
+
+				if (strpos($text,'&#')===false)
 				{
-					if (!is_null($previous)) // check for existing previous character
+					$previous=mixed();
+					$nxpos=0;
+					for ($i=0;$i<strlen($line);$i++)
 					{
-						list(,,$rx1,,$rx2)=imagettfbbox(floatval($map['font_size']),0.0,$file_base.$font.'.ttf',$previous);
-						$nxpos+=max($rx1,$rx2)+1;
+						list(,,$rx1,$ry1,$rx2,$ry2)=imagettfbbox(floatval($map['font_size']),0.0,$file_base.$font.'.ttf',$previous);
+						if (!is_null($previous)) // check for existing previous character
+						{
+							$nxpos+=max($rx1,$rx2)+1;
+						}
+						imagettftext($img,floatval($map['font_size']),0.0,$pos_x+$nxpos,$pos_y,$colour,$file_base.$font.'.ttf',$line[$i]);
+						$previous=$line[$i];
 					}
-					imagettftext($img,floatval($map['font_size']),0.0,$pos_x+$nxpos,$pos_y,$colour,$file_base.$font.'.ttf',$text[$i]);
-					$previous=$text[$i];
+				} else
+				{
+					imagettftext($img,floatval($map['font_size']),0.0,$pos_x,$pos_y,$colour,$file_base.$font.'.ttf',$text);
 				}
-			} else
-			{
-				imagettftext($img,floatval($map['font_size']),0.0,$pos_x,$pos_y,$colour,$file_base.$font.'.ttf',$text);
+
+				$pos_y+=($ry1-$ry2)+5;
 			}
 
 			imagepng($img,get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png');

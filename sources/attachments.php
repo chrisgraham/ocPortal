@@ -463,7 +463,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 				$temp_tpl=do_template('ATTACHMENT_SWF',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				break;
 			}
-			elseif ((addon_installed('jwplayer')) && (($mime_type=='video/x-flv') || ($mime_type=='audio/x-mpeg') || ($mime_type=='video/mp4') || ($mime_type=='video/webm')))
+			elseif ((addon_installed('jwplayer')) && (($mime_type=='video/x-flv') || ($mime_type=='audio/mpeg') || ($mime_type=='video/mp4') || ($mime_type=='video/webm')))
 			{
 				$temp_tpl=do_template('ATTACHMENT_FLV',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				break;

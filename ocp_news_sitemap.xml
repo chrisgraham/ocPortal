@@ -2,32 +2,18 @@
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 	
 				<url>
-					<loc>http://192.168.1.100/ocportal/site/index.php?page=news&amp;type=view&amp;id=art%2Ffdggfd</loc>
+					<loc>http://192.168.1.100/ocportal/site/index.php?page=news&amp;type=view&amp;id=art%2Fhfggf</loc>
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>
 							<news:language>en</news:language>
 						</news:publication>
 			
+						<news:access>Registration</news:access>
+					
 						<news:genres></news:genres>
-						<news:publication_date>2015-02-09T23:20:24+00:00</news:publication_date>
-						<news:title>fdggfd</news:title>
-						<news:keywords></news:keywords>
-			
-					</news:news>
-			  </url>
-			
-				<url>
-					<loc>http://192.168.1.100/ocportal/site/index.php?page=news&amp;type=view&amp;id=art%2Fthis-is-an-ordinary-test</loc>
-					<news:news>
-						<news:publication>
-							<news:name>(unnamed)</news:name>
-							<news:language>en</news:language>
-						</news:publication>
-			
-						<news:genres></news:genres>
-						<news:publication_date>2015-02-05T01:27:03+00:00</news:publication_date>
-						<news:title>this is an ordinary test</news:title>
+						<news:publication_date>2015-02-20T14:08:54+00:00</news:publication_date>
+						<news:title>hfggf</news:title>
 						<news:keywords></news:keywords>
 			
 					</news:news>
@@ -41,8 +27,10 @@
 							<news:language>en</news:language>
 						</news:publication>
 			
+						<news:access>Registration</news:access>
+					
 						<news:genres></news:genres>
-						<news:publication_date>2015-01-27T13:37:12+00:00</news:publication_date>
+						<news:publication_date>2015-02-14T18:40:06+00:00</news:publication_date>
 						<news:title>test</news:title>
 						<news:keywords></news:keywords>
 			

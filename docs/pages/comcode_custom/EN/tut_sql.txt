@@ -16,7 +16,7 @@ phpMyAdmin is powerful web application for managing databases and database conte
 [title="2"]Corrupted databases[/title]
 
 [exp_thumb="Repairing tables" float="left"]sql_repair[/exp_thumb]
-mySQL has an unfortunate tendency to corrupt when a server crashes, or is stopped abruptly. ocPortal does provide an interface to the repair mechanism as an option in the caches module of the Admin Zone, but if corruption is bad, you may not be able to reach it. In this case, you will need to use phpMyAdmin, as shown in the screen-shot.
+mySQL has an unfortunate tendency to corrupt when a server crashes, or is stopped abruptly. ocPortal does provide an interface to the repair mechanism as an option in the Website cleanup tools module of the Admin Zone, but if corruption is bad, you may not be able to reach it. In this case, you will need to use phpMyAdmin, as shown in the screen-shot.
 
 Note that if it looks like corruption has happened due to a physical disk problem, then it is absolutely crucial you back up ocPortal (and anything else on the server) as soon as humanely possible and make sure the server gets a disk scan, and if necessary, a new hard disk. Disk issues tend to spread, and files that touch the damaged area are 'scarred': an initially small problem could quickly irreparably destroy all your data.
 

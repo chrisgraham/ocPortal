@@ -87,6 +87,10 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 		$update['t_cache_first_title']=$title;
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_title'=>$title),array('id'=>$info[0]['t_cache_first_post_id']),'',1);
 	}
+	if ((!is_null($validated)) && ($validated))
+	{
+		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_validated'=>1),array('id'=>$info[0]['t_cache_first_post_id']),'',1); // Auto-validate first post, if topic validated
+	}
 
 	require_code('submit');
 	$just_validated=(!content_validated('topic',strval($topic_id))) && ($validated==1);

@@ -873,7 +873,7 @@ function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filenam
 				break;
 			case 'video/x-flv':
 			case 'video/mp4':
-			case 'audio/x-mpeg':
+			case 'audio/mpeg':
 			case 'video/webm':
 				if (addon_installed('jwplayer'))
 				{

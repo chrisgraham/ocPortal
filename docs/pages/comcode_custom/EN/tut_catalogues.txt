@@ -65,7 +65,7 @@ You may also specify which fields may be used to search the catalogue (searching
 
 [exp_thumb="A non-tree catalogue uses an index" float="right"]catalogues_view_index[/exp_thumb]
 There are two options to set how a catalogue may display:
- - 'Display type' -- you can display entries in categories as lists, "field-maps" or in a table (full customisation is possible via templating).
+ - 'Display type' -- you can display entries in categories as title lists, field-maps, tabular listings, or in a grid of images (full customisation is possible via templating).
  - 'Is tree' -- a tree catalogue has a full hierarchical category tree, much like the download system does; a non-tree catalogue just shows the categories from a single catalogue index.
 
 Note that if you set all fields of your catalogue to "Display in category-views" and disable comments and ratings and trackbacks, there will be no links to the entry view screen. This is due to there being little purpose in this screen because everything already displays on categories.
@@ -75,6 +75,50 @@ Note that if you set all fields of your catalogue to "Display in category-views"
 [exp_thumb="A catalogue without 'own pages' enabled" float="left"]catalogues_not_own_pages[/exp_thumb]
 [exp_thumb="Viewing a catalogue entry" float="right"]catalogues_view_entry[/exp_thumb]
 [/surround]
+
+[title="3"]Display type[/title]
+
+[title="4"]Title lists[/title]
+
+Title lists are very simple lists of links. Each link links through to the full entry screen.
+
+Templates:
+ - [tt]CATALOGUE_*_TITLELIST_ENTRY.tpl[/tt]
+ - [tt]CATALOGUE_*_TITLELIST_WRAP.tpl[/tt]
+
+[title="4"]Field-maps[/title]
+
+Field-maps are the most flexible display type because they can easily and automatically expand to show as much field data within the category view as you want.
+
+Templates:
+ - [tt]CATALOGUE_*_FIELDMAP_ENTRY_WRAP.tpl[/tt]
+ - [tt]CATALOGUE_*_FIELDMAP_ENTRY_FIELD.tpl[/tt]
+
+[title="4"]Tabular listings[/title]
+
+Tabular listings will show your entries in columns. This works well if the data within any particular category-displayed field is short, and if there aren't too many of them.
+
+Templates:
+ - [tt]CATALOGUE_*_TABULAR_ENTRY_WRAP.tpl[/tt]
+ - [tt]CATALOGUE_*_TABULAR_ENTRY_FIELD.tpl[/tt]
+ - [tt]CATALOGUE_*_TABULAR_HEADCELL.tpl[/tt]
+ - [tt]CATALOGUE_*_TABULAR_WRAP.tpl[/tt]
+
+[title="4"]Grid of images[/title]
+
+This is probably the most attractive display, and works well if you only really need to show a title and a thumbnail on the category screen.
+
+The default template ([tt]CATALOGUE_DEFAULT_GRID_ENTRY_WRAP.tpl[/tt]) assumes the first field is the title and the second field is the picture.
+You therefore need to either:
+1) Follow this convention
+2) Create [tt]CATALOGUE_yournewcatalogue_GRID_ENTRY_WRAP.tpl[/tt] such that it references a different field sequence number (replace [tt]FIELD_1_THUMB[/tt], noting that we're counting field sequence numbers starting from zero)
+
+However there is an important exception to the above. The products catalogue already is bundled with a custom template set which is already referencing a different picture field. You also are not supposed to rearrange the first few fields in the products catalogue because they have a hard-coded meaning.
+
+Templates:
+ - [tt]CATALOGUE_*_GRID_ENTRY_WRAP.tpl[/tt]
+ - [tt]CATALOGUE_*_GRID_ENTRY_FIELD.tpl[/tt]
+
 [title="2"]Creating a tree catalogue, fast[/title]
 
 There is a special feature on the screen to add a catalogue with a category tree constructed automatically for it.
@@ -158,6 +202,14 @@ For a full table of fields you can use, put [samp]{+START,PARAM_INFO}{+END}[/sam
 
 With some file system manipulation, you may make use of the 'custom template sets' feature. You then need to go to the themes/default/templates directory in ocPortal and copy all the [tt]CATALOGUE_DEFAULT_*.tpl[/tt] files to [tt]CATALOGUE_<your-catalogue-codename>_*.tpl[/tt].
 You would then customise these templates.
+
+When we talk about default catalogue template set, we are referring to the [tt]CATALOGUE_DEFAULT_*.tpl[/tt] files rather than referring to the default theme or the default versions within that theme. It is possible for custom themes to have their own versions of the default catalogue template set, and also per-catalogue versions.
+We're using the word default in different contexts, so to clarify:
+ - [tt]themes/default/templates/CATALOGUE_DEFAULT_*.tpl[/tt] -- the default theme's default default template set
+ - [tt]themes/default/templates_custom/CATALOGUE_DEFAULT_*.tpl[/tt] -- the default theme's overridden default template set (i.e. a site's owner has decided to override it but not on a per-theme basis)
+ - [tt]themes/default/templates_custom/CATALOGUE_somecatalogue_*.tpl[/tt] -- the default theme's custom template set for the [tt]somecatalogue[/tt] catalogue
+ - [tt]themes/mytheme/templates_custom/CATALOGUE_DEFAULT_*.tpl[/tt] -- the [tt]mytheme[/tt] theme's overridden default template set
+ - [tt]themes/mytheme/templates_custom/CATALOGUE_somecatalogue_*.tpl[/tt] -- the [tt]mytheme[/tt] theme's custom template set for the [tt]somecatalogue[/tt] catalogue
 
 We intentionally did not provide a highly user-friendly interface for enabling custom template sets because the process of working with multiple sets of templates is inherently difficult, and by setting it up manually you will get a better feeling for what ocPortal does.
 

@@ -47,7 +47,7 @@ class Hook_addon_registry_jwplayer
 	 */
 	function get_description()
 	{
-		return 'An integrated version of the jwplayer video player (provided under ocProducts\' redistribution license). Handles FLV files, h.264 files (mp4), and WebM files.';
+		return 'An integrated version of the jwplayer video player (provided under ocProducts\' redistribution license). Handles FLV files, h.264 files (mp4), mp3 files, and WebM files.';
 	}
 
 	/**

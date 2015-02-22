@@ -16,7 +16,9 @@ This should work well, however we aren't able to regularly test it as it is very
 
 If you'd like to use Microsoft Web Platform, proceed to the [url="Web Platform website"]http://www.microsoft.com/web/downloads/platform.aspx[/url].
 
-One small note -- if you are developing locally, then choose to use WebMatrix to push a local site live, make sure you adjust the base URL setting in your info.php file to reflect your live URL.
+You may want to set full permissions on the install directory, at least initially, as this will be required for addon management (which the Setup Wizard does). Assign full write permissions to 'IIS_IUSRS' and 'IUSR'.
+
+One small note -- if you are developing locally, then choose to use WebMatrix to push a local site live, make sure you adjust the base URL setting in your [tt]info.php[/tt] file to reflect your live URL.
 
 [title="2"]Web server[/title]
 
@@ -56,6 +58,7 @@ Because you are unlikely to have an account based FTP/HTTP set-up like web-hosts
 Before you extract the files, you must make sure that the web directory, or sub-directory thereof, has been configured to have the right file permissions.
 
 If you are running [concept]IIS[/concept]: Give 'Full control' to 'IIS_WPG' and 'IUSR_<computer-name>', as demonstrated in the screen-shot.
+On Windows Server 2008+ these may be called 'IIS_IUSRS' and 'IUSR'.
 
 If you are running Apache: Apache is probably running with the credentials of your own user account, and hence special permissions are not required.
 

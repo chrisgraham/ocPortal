@@ -9,9 +9,9 @@
 			<col class="ocf_forum_topic_wrapper_column_column4" />
 			<col class="ocf_forum_topic_wrapper_column_column5" />
 			<col class="ocf_forum_topic_wrapper_column_column6{$?,{$MATCH_KEY_MATCH,_WILD:members},_shorter}" />
-			{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
+			{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}{+START,IF,{$NOT,{$_GET,overlay}}}
 				<col class="ocf_forum_topic_wrapper_column_column7" />
-			{+END}
+			{+END}{+END}
 		</colgroup>
 	{+END}
 
@@ -56,9 +56,9 @@
 			{+END}
 			<td class="ocf_column1{+START,IF,{$OR,{$MOBILE},{$IS_EMPTY,{MODERATOR_ACTIONS}}}} ocf_forum_box_bright{+END}"></td>
 			{+START,IF,{$NOT,{$MOBILE}}}
-				{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
+				{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}{+START,IF,{$NOT,{$_GET,overlay}}}
 					<td class="ocf_column1 ocf_forum_box_bright"></td>
-				{+END}
+				{+END}{+END}
 			{+END}
 		</tr>
 	</tbody>

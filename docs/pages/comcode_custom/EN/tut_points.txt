@@ -24,7 +24,7 @@ Methods of earning points include:
  - Being given them (this is described in a later section)
  - Earning them from selling a download (this is described in a later section)
  - Earning them in the ocWorld addon (this is described in a later section)
-Most methods of earning points may be altered in the configuration (Admin Zone, Settings section, Configuration icon, Points options), so that the number of points earned from various activities is appropriate for your web site.
+Most methods of earning points may be altered in the configuration (Admin Zone, Setup section, Configuration icon, Points options), so that the number of points earned from various activities is appropriate for your web site.
 
 [title="3"]A note about how points are calculated[/title]
 
@@ -45,7 +45,7 @@ The main ramification of this is that if posts are deleted, the point count goes
 [surround]
 [exp_thumb="Gift transactions should be monitored so as to pick up on cheating (mutual giving for example)" float="left"]points_admin_monitor[/exp_thumb]
 [exp_thumb="Those who give may get rewarded by the system (this encourages an active community)" float="right"]points_lucky[/exp_thumb]
-Gift points are useless unless spent, so the only advantage to hoarding them is to give a large amount in some kind of special situation being awaited; once given, the gift point receiver has the total added to their actual point count. Obviously members could abuse this, by giving points to each other in some form of reciprocal arrangement ("you pat my back I'll pat yours"): this is why there is an admin interface to monitor all gift transactions for fraud (and selectively reverse transactions). You can reach this interface from the 'Usage' section of the Admin Zone.
+Gift points are useless unless spent, so the only advantage to hoarding them is to give a large amount in some kind of special situation being awaited; once given, the gift point receiver has the total added to their actual point count. Obviously members could abuse this, by giving points to each other in some form of reciprocal arrangement ("you pat my back I'll pat yours"): this is why there is an admin interface to monitor all gift transactions for fraud (and selectively reverse transactions). You can reach this interface from the 'Audit' section of the Admin Zone.
 [/surround]
 [title="2"]The Point Store[/title]
 

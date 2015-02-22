@@ -149,7 +149,7 @@ ocPortal supports clean URLs in Apache. These clean URLs can improve your search
 Perform the following steps:
 1) If you haven't already got a working ocPortal [tt].htaccess[/tt] file (the quick installer may have made it for you automatically), rename [tt]recommended.htaccess[/tt] to [tt].htaccess[/tt]. If your site gives errors after doing this, try [tt]simple.htaccess[/tt] instead. If you still get errors, your server probably doesn't have mod_rewrite available, which is required for this functionality to work.
 2) If things go wrong, you can disable clean URLs via an emergency shut off option in the [tt]config_editor.php[/tt] script. Make sure you see where it is before proceeding to the next step.
-3) Enable clean URLs from your site options (Settings section of the Admin Zone, Configuration icon, Site options, Advanced box).
+3) Enable clean URLs from your site options (Setup section of the Admin Zone, Configuration icon, Site options, Advanced box).
 
 [title="3"]IIS6 and below[/title]
 
@@ -202,17 +202,17 @@ RewriteRule ^/([^=]*)pg/([^/\&\?\.]*)&(.*)$ /$1index.php\?$3&page=$2 [L,U]
 
 # These have a specially reduced form (no need to make it too explicit that these are Wiki+)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/s/([^&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=cedi&id=$2&$4 [L,U]
+RewriteRule ^/(docs|site|forum|adminzone|cms|collaboration)/s/([^&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=cedi&id=$2&$4 [L,U]
 
 # These have a specially reduce form (wide is implied)
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/galleries/image/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=galleries&type=image&id=$2&wide=1&$4 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/galleries/video/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=galleries&type=video&id=$2&wide=1&$4 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/iotds/view/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=iotds&type=view&id=$2&wide=1$4 [L,U]
+RewriteRule ^/(docs|site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=galleries&type=image&id=$2&wide=1&$4 [L,U]
+RewriteRule ^/(docs|site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=galleries&type=video&id=$2&wide=1&$4 [L,U]
+RewriteRule ^/(docs|site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=iotds&type=view&id=$2&wide=1$4 [L,U]
 
 # These are standard patterns
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=$2&type=$3&id=$4&$6 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=$2&type=$3&$5 [L,U]
-RewriteRule ^/(docs|site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)\.htm(\?(.*))?$ /$1/index.php\?page=$2&$4 [L,U]
+RewriteRule ^/(docs|site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=$2&type=$3&id=$4&$6 [L,U]
+RewriteRule ^/(docs|site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm(\?(.*))?$ /$1/index.php\?page=$2&type=$3&$5 [L,U]
+RewriteRule ^/(docs|site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm(\?(.*))?$ /$1/index.php\?page=$2&$4 [L,U]
 RewriteRule ^/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?(.*))?$ /index.php\?page=$1&type=$2&id=$3&$5 [L,U]
 RewriteRule ^/([^/\&\?]+)/([^/\&\?]*)\.htm(\?(.*))?$ /index.php\?page=$1&type=$2&$4 [L,U]
 RewriteRule ^/([^/\&\?]+)\.htm(\?(.*))?$ /index.php\?page=$1&$3 [L,U]
@@ -374,20 +374,6 @@ sites/www/pages/html_custom/EN
 sites/www/pages/html_custom/EN/.htaccess
 sites/www/pages/html_custom/EN/index.html
 sites/www/pages/html_custom/index.html
-sites/www/personalzone
-sites/www/personalzone/pages
-sites/www/personalzone/pages/comcode_custom
-sites/www/personalzone/pages/comcode_custom/.htaccess
-sites/www/personalzone/pages/comcode_custom/EN
-sites/www/personalzone/pages/comcode_custom/EN/.htaccess
-sites/www/personalzone/pages/comcode_custom/EN/index.html
-sites/www/personalzone/pages/comcode_custom/index.html
-sites/www/personalzone/pages/html_custom
-sites/www/personalzone/pages/html_custom/.htaccess
-sites/www/personalzone/pages/html_custom/EN
-sites/www/personalzone/pages/html_custom/EN/.htaccess
-sites/www/personalzone/pages/html_custom/EN/index.html
-sites/www/personalzone/pages/html_custom/index.html
 sites/www/site
 sites/www/site/pages
 sites/www/site/pages/comcode_custom

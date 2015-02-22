@@ -348,7 +348,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			Drag.init(node_self,null,find_pos_x(master_html,true),find_pos_x(master_html,true)+find_width(master_html)-find_width(node_self)-5,find_pos_y(master_html,true));
 			node_self.onDragEnd=function(x,y)
 				{
-					this.className=this.className.replace(' being_dragged','');
+					this.className=this.className.replace(/ being_dragged/g,'');
 					this.style.position='static';
 					//set_opacity(this,1.0);
 
@@ -662,7 +662,7 @@ tree_list.prototype.make_element_look_selected=function(target,selected)
 	if (!target) return;
 	if (!selected)
 	{
-		target.className=target.className.replace(' native_ui_selected','');
+		target.className=target.className.replace(/ native_ui_selected/g,'');
 	} else
 	{
 		target.className+=' native_ui_selected';

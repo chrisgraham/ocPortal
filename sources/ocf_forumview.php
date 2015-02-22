@@ -87,8 +87,6 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	if ($type=='pt') $forum_name=do_lang('PRIVATE_TOPICS');
 	else $forum_name=$details['name'];
 
-	$may_mass_moderate=(array_key_exists('may_move_topics',$details)) || (array_key_exists('may_delete_topics',$details));
-
 	// Find categories
 	$categories=new ocp_tempcode();
 	if ($type!='pt')
@@ -260,13 +258,20 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	}
 
 	// Mass moderation
-	if ($may_mass_moderate)
+	if (array_key_exists('may_move_topics',$details))
 	{
 		$moderator_actions.='<option value="move_topics">'.do_lang('MOVE_TOPICS').'</option>';
+	}
+	if (array_key_exists('may_delete_topics',$details))
+	{
 		if (has_specific_permission(get_member(),'delete_midrange_content','topics',array('forums',$id)))
 		{
 			$moderator_actions.='<option value="delete_topics">'.do_lang('DELETE_TOPICS').'</option>';
 		}
+	}
+	require_code('ocf_forums');
+	if (ocf_may_moderate_forum($id))
+	{
 		$moderator_actions.='<option value="pin_topics">'.do_lang('PIN_TOPIC').'</option>';
 		$moderator_actions.='<option value="unpin_topics">'.do_lang('UNPIN_TOPIC').'</option>';
 		$moderator_actions.='<option value="sink_topics">'.do_lang('SINK_TOPIC').'</option>';
@@ -275,16 +280,17 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		$moderator_actions.='<option value="uncascade_topics">'.do_lang('UNCASCADE_TOPIC').'</option>';
 		$moderator_actions.='<option value="open_topics">'.do_lang('OPEN_TOPIC').'</option>';
 		$moderator_actions.='<option value="close_topics">'.do_lang('CLOSE_TOPIC').'</option>';
-		if (!is_null($id))
+		$moderator_actions.='<option value="validate_topics">'.do_lang('VALIDATE_TOPICS').'</option>';
+	}
+	if ((!is_null($id)) && (ocf_may_perform_multi_moderation($id)))
+	{
+		$multi_moderations=ocf_list_multi_moderations($id);
+		if (count($multi_moderations)!=0)
 		{
-			$multi_moderations=ocf_list_multi_moderations($id);
-			if (count($multi_moderations)!=0)
-			{
-				$moderator_actions.='<optgroup label="'.do_lang('MULTI_MODERATIONS').'">';
-				foreach ($multi_moderations as $mm_id=>$mm_name)
-					$moderator_actions.='<option value="mmt_'.strval($mm_id).'">'.$mm_name.'</option>';
-				$moderator_actions.='</optgroup>';
-			}
+			$moderator_actions.='<optgroup label="'.do_lang('MULTI_MODERATIONS').'">';
+			foreach ($multi_moderations as $mm_id=>$mm_name)
+				$moderator_actions.='<option value="mmt_'.strval($mm_id).'">'.$mm_name.'</option>';
+			$moderator_actions.='</optgroup>';
 		}
 	}
 

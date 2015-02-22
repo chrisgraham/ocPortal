@@ -49,7 +49,7 @@ If you use the punishment system to put a user in probation, ocPortal automatica
 
 [exp_thumb="Banning a member" float="right"]censor_member[/exp_thumb]
 There are many methods for banning an ocPortal user:
- - banning member submission. This is useful if you only want to ban a member from making submissions, and not the whole site; it is done from the Action Logs module (accessed from the Usage section of the Admin Zone). This feature is also useful if you are not using [concept]OCF[/concept], and want to ban a member in ocPortal, but not in the forum.
+ - banning member submission. This is useful if you only want to ban a member from making submissions, and not the whole site; it is done from the Action Logs module (accessed from the Audit section of the Admin Zone). This feature is also useful if you are not using [concept]OCF[/concept], and want to ban a member in ocPortal, but not in the forum.
  - banning an IP address, or IP address range. {!submitban:DOC_IPBAN}
  - banning a member via editing their member-profile. This is perhaps the most useful method of banning. Note that there is no way to prevent a user re-joining with a new username.
  - banning a member via changing their usergroup to one with virtually no privileges. This is useful if you want to reduce access in a highly customised fashion.
