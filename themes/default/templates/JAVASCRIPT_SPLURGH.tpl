@@ -33,10 +33,10 @@ function splurgh(save_to,key_name,url_stub,range_a,range_b,level,data,chain,not_
 	contents+='<a id=\"'+anchor_reference+'\" name=\"'+anchor_reference+'\"></a>\n';
 	if (url_stub.indexOf('cedi')==-1)
 	{
-		contents+='<a href=\"'+escape_html(url_stub)+((url_stub.indexOf('?')==-1)?'?':'&amp;')+'chain='+chain+'&amp;'+key_name+'='+anchor_reference+'\">'+next_title+'</a>\n';
+		contents+='<a href=\"'+escape_html(url_stub)+((url_stub.indexOf('?')==-1)?'?':'&amp;')+'chain='+chain+'&amp;'+key_name+'='+anchor_reference+'\">'+escape_html(next_title)+'</a>\n';
 	} else
 	{
-		contents+='<a href=\"'+escape_html(url_stub)+((url_stub.indexOf('?')==-1)?'?':'&amp;')+key_name+'='+chain.replace(/~/g,'/').replace(/^\//,'')+'/'+anchor_reference+'\">'+next_title+'</a>\n';
+		contents+='<a href=\"'+escape_html(url_stub)+((url_stub.indexOf('?')==-1)?'?':'&amp;')+key_name+'='+chain.replace(/~/g,'/').replace(/^\//,'')+'/'+anchor_reference+'\">'+escape_html(next_title)+'</a>\n';
 	}
 
 	if (to+1<data.length)

@@ -12,6 +12,7 @@
 			imp_db_user varchar(80) NOT NULL,
 			imp_hook varchar(80) NOT NULL,
 			imp_db_table_prefix varchar(80) NOT NULL,
+			imp_db_host varchar(80) NOT NULL,
 			imp_refresh_time integer NOT NULL,
 			imp_session integer NULL,
 			PRIMARY KEY (imp_session)

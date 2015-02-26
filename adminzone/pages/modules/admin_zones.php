@@ -539,7 +539,6 @@ class Module_admin_zones
 				$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('ACCESS_FOR',escape_html($name)),do_lang_tempcode('DESCRIPTION_ACCESS_FOR',escape_html($name)),'access_'.strval($id),!is_null($perhaps)));
 			}
 		}
-
 		return array(make_string_tempcode($fields),$hidden,$javascript);
 	}
 
@@ -689,7 +688,7 @@ class Module_admin_zones
 				($remaining_row['zone_wide']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 				($remaining_row['zone_require_session']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 				protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,$zone_name)),
-			)),true);
+			),true));
 		}
 
 		$table=results_table(do_lang('ZONES'),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);

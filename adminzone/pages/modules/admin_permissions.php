@@ -36,7 +36,7 @@ class Module_admin_permissions
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=7;
+		$info['version']=8;
 		$info['update_require_upgrade']=1;
 		$info['locked']=true;
 		return $info;
@@ -74,6 +74,7 @@ class Module_admin_permissions
 		delete_specific_permission('see_software_docs');
 		delete_specific_permission('bypass_validation_lowrange_content');
 		delete_specific_permission('may_enable_staff_notifications');
+		delete_specific_permission('unfiltered_input');
 
 		$false_permissions=get_false_permissions();
 		foreach ($false_permissions as $permission)
@@ -97,6 +98,11 @@ class Module_admin_permissions
 				'k_message'=>'LONG_TRANS',
 				'k_match_key'=>'SHORT_TEXT'
 			));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<8))
+		{
+			add_specific_permission('SUBMISSION','unfiltered_input',false);
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))

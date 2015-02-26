@@ -8,7 +8,7 @@
 			<!-- List put in here -->
 		</div>
 		<script type="text/javascript">// <![CDATA[
-			new tree_list('{NAME;}','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1{+START,IF_PASSED,PAGE_TYPE}&page_type={PAGE_TYPE;}{+END}{+START,IF_PASSED,CONTENT_CENTRIC}&content_centric=1{+END}','','',false,null,false,true);
+			new tree_list('{NAME;/}','data/site_tree.php?get_perms=0{$KEEP;/}&start_links=1{+START,IF_PASSED,PAGE_TYPE}&page_type={PAGE_TYPE;/}{+END}{+START,IF_PASSED,CONTENT_CENTRIC}&content_centric=1{+END}','','',false,null,false,true);
 		//]]></script>
 
 		<p class="associated_details">

@@ -143,7 +143,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			{+START,IF,{$DEV_MODE}}
 				<script type="text/javascript">// <![CDATA[
 					try { window.scrollTo(0,1000000); } catch (e) {};
-					window.fauxmodal_alert('{!PLEASE_REVIEW_ERRORS_AT_BOTTOM;}'); // Before Firefox dies with an XHTML error, let the developer see what is wrong
+					window.fauxmodal_alert('{!PLEASE_REVIEW_ERRORS_AT_BOTTOM;/}'); // Before Firefox dies with an XHTML error, let the developer see what is wrong
 				//]]></script>
 			{+END}
 		{+END}

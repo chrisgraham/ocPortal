@@ -176,11 +176,12 @@ function xhtmlise_html($html,$definitely_want=false)
 			{
 				$token=_get_next_tag();
 				$temp.=$INBETWEEN_TEXT;
+				if (is_null($token)) break;
 				if ($token[0]!='</'.$treat_as_cdata.'>')
 				{
-					$temp.=$token[0];
+					if (!is_null($token[0]))
+						$temp.=$token[0];
 				} else break;
-				if (is_null($token)) break;
 			}
 			if ($temp!='')
 			{

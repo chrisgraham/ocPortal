@@ -323,7 +323,7 @@ class Module_booking
 				'BOOKABLE_ID'=>strval($bookable['id']),
 				'BOOKABLE_QUANTITY_AVAILABLE'=>strval($quantity_available),
 				'BOOKABLE_MESSAGES'=>$messages,
-				'BOOKABLE_TITLE'=>get_translated_tempcode($bookable['title']),
+				'BOOKABLE_TITLE'=>get_translated_text($bookable['title']),
 				'BOOKABLE_DESCRIPTION'=>$description,
 				'BOOKABLE_PRICE'=>float_format($bookable['price']),
 				'BOOKABLE_PRICE_RAW'=>float_to_raw_string($bookable['price']),

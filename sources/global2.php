@@ -1225,7 +1225,7 @@ function get_site_name()
 function in_safe_mode()
 {
 	global $SITE_INFO;
-	if ((isset($SITE_INFO['safe_mode'])) && ($SITE_INFO['safe_mode']=='1')) return true; // Useful for testing HPHP support
+	if ((isset($SITE_INFO['safe_mode'])) && ($SITE_INFO['safe_mode']=='1') && (!isset($_GET['keep_safe_mode']))) return true;
 
 	global $CHECKING_SAFEMODE;
 	if ($CHECKING_SAFEMODE) return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
@@ -1408,15 +1408,17 @@ function get_complex_base_url($at)
  */
 function either_param($name,$default=false)
 {
-	$a=__param(array_merge($_POST,$_GET),$name,$default,false,NULL);
-	if ($a===NULL) return NULL;
+	$ret=__param(array_merge($_POST,$_GET),$name,$default);
+	if ($ret===NULL) return NULL;
 
-	if ($a!==$default) // Check input field security
-	{
-		require_code('input_filter');
-		check_input_field($name,$a);
-	}
-	return function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
+	if ($ret===$default) return $ret;
+
+	require_code('input_filter');
+	check_input_field_string($name,$ret);
+
+	if (strpos($ret,':')!==false)
+		$ret=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($ret):$ret;
+	return $ret;
 }
 
 /**
@@ -1430,50 +1432,63 @@ function either_param($name,$default=false)
  */
 function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 {
-	$a=__param($_POST,$name,$default,false,true);
+	$ret=__param($_POST,$name,$default,false,true);
 
-	if ($a===NULL) return NULL;
-	if ((trim($a)=='') && ($default!=='') && (array_key_exists('require__'.$name,$_POST)) && ($_POST['require__'.$name]!='0'))
+	if ($ret===NULL) return NULL;
+	if ((trim($ret)=='') && ($default!=='') && (array_key_exists('require__'.$name,$_POST)) && ($_POST['require__'.$name]!='0'))
 	{
 		require_code('failure');
 		improperly_filled_in_post($name);
 	}
 
-	if (($a!='') && (addon_installed('wordfilter')))
+	if (($ret!='') && (addon_installed('wordfilter')))
 	{
 		if ($name!='password')
 		{
 			require_code('word_filter');
-			if ($a!==$default) $a=check_word_filter($a,$name);
+			if ($ret!==$default) $ret=check_word_filter($ret,$name);
 		}
 	}
-	if ($a!==NULL) $a=unixify_line_format($a,NULL,$html);
+	if ($ret!==NULL) $ret=unixify_line_format($ret,NULL,$html);
 
 	if ((isset($_POST[$name.'__is_wysiwyg'])) && ($_POST[$name.'__is_wysiwyg']=='1') && ($conv_from_wysiwyg))
 	{
-		if (trim($a)=='')
+		if (trim($ret)=='')
 		{
-			$a='';
+			$ret='';
 		} else
 		{
 			require_code('comcode_from_html');
-			$a=trim(semihtml_to_comcode($a));
+			$ret=trim(semihtml_to_comcode($ret));
 		}
 	} else
 	{
-		if ((substr($a,0,10)=='[semihtml]') && (substr(trim($a),-11)=='[/semihtml]'))
+		if ((substr($ret,0,10)=='[semihtml]') && (substr(trim($ret),-11)=='[/semihtml]'))
 		{
-			$_a=trim($a);
-			$_a=substr($_a,10,strlen($_a)-11-10);
-			if (strpos($_a,'[semihtml')===false)
+			$_ret=trim($ret);
+			$_ret=substr($_ret,10,strlen($_ret)-11-10);
+			if (strpos($_ret,'[semihtml')===false)
 			{
 				require_code('comcode_from_html');
-				$a=trim(semihtml_to_comcode($_a));
+				$ret=trim(semihtml_to_comcode($_ret));
 			}
 		}
 	}
 
-	return function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
+	require_code('input_filter');
+
+	if (($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0))
+	{
+		check_posted_field($name,$ret);
+	}
+
+	if ($ret===$default) return $ret;
+
+	check_input_field_string($name,$ret);
+
+	if (strpos($ret,':')!==false)
+		$ret=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($ret):$ret;
+	return $ret;
 }
 
 /**
@@ -1481,13 +1496,13 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
  *
  * @param  ID_TEXT		The name of the parameter to get
  * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
- * @param  boolean		Whether to skip the security check
+ * @param  boolean		Whether to skip the security check. This currently does not do anything, it used to check for field length, but this was problematic in many situations without really raising security.
  * @return ?string		The parameter value (NULL: missing)
  */
 function get_param($name,$default=false,$no_security=false)
 {
-	$a=__param($_GET,$name,$default);
-	if (($a=='') && (isset($_GET['require__'.$name])) && ($default!==$a) && ($_GET['require__'.$name]!='0'))
+	$ret=__param($_GET,$name,$default);
+	if (($ret=='') && (isset($_GET['require__'.$name])) && ($default!==$ret) && ($_GET['require__'.$name]!='0'))
 	{
 		// We didn't give some required input
 		$GLOBALS['HTTP_STATUS_CODE']='400';
@@ -1497,34 +1512,15 @@ function get_param($name,$default=false,$no_security=false)
 		}
 		warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 	}
-	if ($a===$default) return $a;
 
-	if (strpos($a,':')!==false)
-		$a=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
+	if ($ret===$default) return $ret;
 
-	// Security check
-	$is_url=($name=='from') || ($name=='preview_url') || ($name=='redirect') || ($name=='redirect_passon') || ($name=='url');
-	if (($is_url) || ($no_security))
-	{
-		if ($is_url)
-		{
-			if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0)
-			{
-				if ($name=='page') $_GET[$name]=''; // Stop loops
-				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
-			}
+	require_code('input_filter');
+	check_input_field_string($name,$ret);
 
-			$bu=get_base_url(false);
-			$_a=str_replace('https://','http://',$a);
-			if ((looks_like_url($_a)) && (substr($_a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
-			{
-				$a=get_base_url(false);
-			}
-		}
-	}
-
-	if ($a===NULL) return NULL;
-	return $a;
+	if (strpos($ret,':')!==false)
+		$ret=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($ret):$ret;
+	return $ret;
 }
 
 /**
@@ -1550,12 +1546,6 @@ function __param($array,$name,$default,$integer=false,$posted=false)
 	$val=$array[$name];
 	if (is_array($val)) $val=implode(',',$val);
 	if (get_magic_quotes_gpc()) $val=stripslashes($val);
-
-	if (($posted) && (count($_POST)!=0) && ($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0)) // Check against fields.xml
-	{
-		require_code('input_filter');
-		return check_posted_field($name,$val);
-	}
 
 	return $val;
 }
@@ -1586,8 +1576,10 @@ function simulated_wildcard_match($context,$word,$full_cover=false)
  */
 function either_param_integer($name,$default=false)
 {
-	$ret=__param(array_merge($_POST,$_GET),$name,($default===false)?$default:(($default===NULL)?'':strval($default)),true,NULL); // $_REQUEST contains cookies too, so can't use
+	$ret=__param(array_merge($_POST,$_GET),$name,($default===false)?$default:(($default===NULL)?'':strval($default)),true); // $_REQUEST contains cookies too, so can't use
+
 	if (($default===NULL) && ($ret==='')) return NULL;
+
 	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
@@ -1595,11 +1587,13 @@ function either_param_integer($name,$default=false)
 		$ret=_param_invalid($name,$ret,true);
 	}
 	$reti=intval($ret);
-	if (($reti>2147483647) || ($reti<-2147483648))
+	$retf=floatval($reti);
+	if (($retf>2147483647.0) || ($retf<-2147483648.0))
 	{
 		require_code('failure');
 		_param_invalid($name,NULL,true);
 	}
+
 	return $reti;
 }
 
@@ -1613,7 +1607,14 @@ function either_param_integer($name,$default=false)
 function post_param_integer($name,$default=false)
 {
 	$ret=__param($_POST,$name,($default===false)?$default:(($default===NULL)?'':strval($default)),true,true);
+
+	if (($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0))
+	{
+		check_posted_field($name,$ret);
+	}
+
 	if (($default===NULL) && ($ret==='')) return NULL;
+
 	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
@@ -1632,6 +1633,7 @@ function post_param_integer($name,$default=false)
 			_param_invalid($name,NULL,true);
 		}
 	}
+
 	return $reti;
 }
 
@@ -1647,7 +1649,9 @@ function get_param_integer($name,$default=false,$not_string_ok=false)
 {
 	$m_default=($default===false)?false:(isset($default)?(($default==0)?'0':strval($default)):'');
 	$ret=__param($_GET,$name,$m_default,true); // do not set $ret to mixed(), breaks bootstrapping
+
 	if ((!isset($default)) && ($ret==='')) return NULL;
+
 	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
@@ -1675,6 +1679,7 @@ function get_param_integer($name,$default=false,$not_string_ok=false)
 		require_code('failure');
 		_param_invalid($name,NULL,false);
 	}
+
 	return $reti;
 }
 

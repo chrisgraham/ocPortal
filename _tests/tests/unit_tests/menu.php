@@ -27,16 +27,13 @@ class menu_test_set extends ocp_test_case
 
 		$this->menu_id=add_menu_item('Test',1,NULL,'testing menu','www.ocportal.com',1,'downloads',0,1,'testing');
 
-		// Test the forum was actually created
 		$this->assertTrue('Test'==$GLOBALS['SITE_DB']->query_value('menu_items','i_menu',array('id'=>$this->menu_id)));
 	}
 
 	function testEditmenu()
 	{
-		// Test the forum edits
 		edit_menu_item($this->menu_id,'Service',2,NULL,'Serv','www.google.com',0,'catalogues',1,0,'tested','');
 
-		// Test the forum was actually created
 		$this->assertTrue('Service'==$GLOBALS['SITE_DB']->query_value('menu_items','i_menu',array('id'=>$this->menu_id)));
 	}
 

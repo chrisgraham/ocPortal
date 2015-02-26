@@ -793,7 +793,7 @@ class Module_admin_themes
 	{
 		$file=filter_naughty(get_param('file','global.css'));
 
-		$title=get_screen_title('_EDIT_CSS',true,array($file));
+		$title=get_screen_title('_EDIT_CSS',true,array(escape_html($file)));
 
 		if (get_option('editarea')=='1')
 		{

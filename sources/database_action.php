@@ -330,6 +330,9 @@ function set_specific_permission($group_id,$permission,$value,$page=NULL,$catego
 
 	$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>$permission,'group_id'=>$group_id,'the_page'=>$page,'module_the_name'=>$category_type,'category_name'=>$category_name),'',1);
 	$GLOBALS['SITE_DB']->query_insert('gsp',array('specific_permission'=>$permission,'group_id'=>$group_id,'the_page'=>$page,'module_the_name'=>$category_type,'category_name'=>$category_name,'the_value'=>$value?1:0));
+
+	global $PRIVILEGE_CACHE;
+	$PRIVILEGE_CACHE=array();
 }
 
 /**

@@ -624,6 +624,9 @@ function ocf_require_all_forum_stuff()
  */
 function globalise($middle,$message=NULL,$type='',$include_header_and_footer=false)
 {
+	global $EXITING;
+	$EXITING++;
+
 	if (!$include_header_and_footer) $_GET['wide_high']='1'; // HACKHACK
 
 	require_code('site');
@@ -2192,6 +2195,8 @@ function titleify($boring)
 {
 	$ret=ucwords(str_replace('_',' ',$boring));
 	$ret=str_replace('Ocportal','ocPortal',$ret);
+	$ret=preg_replace('#(^|\s)Url(\s|$)#','$1URL$2',$ret);
+	$ret=preg_replace('#(^|\s)Id(\s|$)#','$1ID$2',$ret);
 	if (substr($ret,0,3)=='Oc ') $ret='oc'.str_replace(' ','',substr($ret,3));
 	return $ret;
 }

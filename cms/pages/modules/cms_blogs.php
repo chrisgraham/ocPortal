@@ -146,7 +146,7 @@ class Module_cms_blogs extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$fr=array();
-			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news')),get_translated_text($row['title'])));
+			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news')),get_translated_text($row['title']),false,true));
 			$fr[]=get_timezoned_date($row['date_and_time']);
 			$fr[]=integer_format($row['news_views']);
 			if (addon_installed('unvalidated'))

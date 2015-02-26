@@ -1308,6 +1308,7 @@ oc_whitelist
  - adminzone/pages/comcode_custom/EN/comcode_whitelist.txt
  - sources_custom/comcode_renderer.php
  - sources_custom/comcode_text.php
+ - sources_custom/input_filter.php
  - sources_custom/hooks/systems/do_next_menus/comcode_whitelist.php
  - text_custom/comcode_whitelist.txt
 
@@ -4112,6 +4113,7 @@ testing_platform
  - _tests/tests/unit_tests/installsql.php
  - _tests/tests/unit_tests/installer.php
  - _tests/tests/unit_tests/override_issues.php
+ - _tests/tests/unit_tests/xss.php
 
 youtube_channel_integration_block
 ---------------------------------

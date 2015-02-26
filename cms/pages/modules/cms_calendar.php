@@ -275,7 +275,7 @@ class Module_cms_calendar extends standard_aed_module
 			$time_raw=mktime($row['e_start_hour'],$row['e_start_minute'],0,$row['e_start_month'],$start_day_of_month,$row['e_start_year']);
 			$date=get_timezoned_date($time_raw,!is_null($row['e_start_hour']));
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),get_module_zone('calendar')),get_translated_text($row['e_title']))),$date,$type,($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),get_module_zone('calendar')),get_translated_text($row['e_title']),false,true)),$date,$type,($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		$search_url=build_url(array('page'=>'search','id'=>'calendar'),get_module_zone('search'));
@@ -1193,7 +1193,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 
 			$total=$GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)',array('e_type'=>$row['id']));
 
-			$fields->attach(results_entry(array(get_translated_text($row['t_title']),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(get_translated_text($row['t_title']),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		$search_url=NULL;

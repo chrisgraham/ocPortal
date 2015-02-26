@@ -49,7 +49,7 @@
 				</div>
 				<script type="text/javascript">// <![CDATA[
 					var current_selection='';
-					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1','','',false,null,false,true);
+					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;/}&start_links=1','','',false,null,false,true);
 				//]]></script>
 
 				<p class="associated_details">

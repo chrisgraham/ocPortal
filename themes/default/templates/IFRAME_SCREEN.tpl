@@ -6,7 +6,7 @@
 		if (typeof window.soundManager!='undefined')
 		{
 			soundManager.onload=function() {
-				soundManager.createSound('message_received','{$BASE_URL;}/data/sounds/message_received.mp3');
+				soundManager.createSound('message_received','{$BASE_URL;/}/data/sounds/message_received.mp3');
 			}
 		}
 	// ]]>
@@ -18,7 +18,7 @@
 			window.detect_interval=window.setInterval(
 				function() {
 					{+START,IF_PASSED,CHANGE_DETECTION_URL}
-						if ((window.detect_change) && (detect_change('{CHANGE_DETECTION_URL;}','{REFRESH_IF_CHANGED;}')) && ((!top.frames['iframe_page'].document.getElementById('post')) || (top.frames['iframe_page'].document.getElementById('post').value=='')))
+						if ((window.detect_change) && (detect_change('{CHANGE_DETECTION_URL;/}','{REFRESH_IF_CHANGED;/}')) && ((!top.frames['iframe_page'].document.getElementById('post')) || (top.frames['iframe_page'].document.getElementById('post').value=='')))
 					{+END}
 							top.frames['iframe_page'].location.reload();
 				},

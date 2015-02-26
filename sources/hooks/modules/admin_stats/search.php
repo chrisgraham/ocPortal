@@ -100,7 +100,7 @@ class Hook_admin_stats_search
 				$i++; continue;
 			} elseif ($i>=$start+$max) break;
 			if ($keyword=='') $link=do_lang_tempcode('SEARCH_STATS_ADVANCED'); else $link=protect_from_escaping(escape_html($keyword));
-			$fields->attach(results_entry(array($link,integer_format($views))));
+			$fields->attach(results_entry(array($link,integer_format($views)),true));
 
 			//if ($done<20)
 			//{

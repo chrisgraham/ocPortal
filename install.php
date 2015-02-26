@@ -2611,7 +2611,7 @@ php_value open_basedir "{$file_base}"
 END;
 */
 $clauses[]=<<<END
-Options +FollowSymLinks
+Options +FollowSymLinks -MultiViews
 END;
 
 $clauses[]=<<<END

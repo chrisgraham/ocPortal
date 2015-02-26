@@ -6,7 +6,7 @@
 			the_user integer NOT NULL,
 			date_and_time integer unsigned NOT NULL,
 			referer varchar(255) NOT NULL,
-			get varchar(255) NOT NULL,
+			s_get varchar(255) NOT NULL,
 			post longtext NOT NULL,
 			browser varchar(255) NOT NULL,
 			milliseconds integer NOT NULL,

@@ -22,8 +22,8 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-	window.activities_mode='{MODE;}';
-	window.activities_member_ids='{MEMBER_IDS;}';
+	window.activities_mode='{MODE;/}';
+	window.activities_member_ids='{MEMBER_IDS;/}';
 
 	{+START,IF_PASSED,MAX}
 		// "Grow" means we should keep stacking new content on top of old. If not

@@ -316,8 +316,6 @@
 			c_map longtext NOT NULL,
 			c_timezone varchar(80) NOT NULL,
 			c_is_bot tinyint(1) NOT NULL,
-			c_in_panel tinyint(1) NOT NULL,
-			c_interlock tinyint(1) NOT NULL,
 			c_store_as_tempcode tinyint(1) NOT NULL,
 			c_lang varchar(5) NOT NULL,
 			c_theme varchar(80) NOT NULL,
@@ -398,6 +396,7 @@
 		(
 			id integer auto_increment NULL,
 			a_member_id integer NULL,
+			a_also_involving integer NOT NULL,
 			a_language_string_code varchar(80) NULL,
 			a_label_1 varchar(255) NOT NULL,
 			a_label_2 varchar(255) NOT NULL,
@@ -509,6 +508,10 @@
 			booked_at integer unsigned NOT NULL,
 			paid_at integer unsigned NOT NULL,
 			paid_trans_id integer NOT NULL,
+			customer_name varchar(255) NOT NULL,
+			customer_email varchar(255) NOT NULL,
+			customer_mobile varchar(255) NOT NULL,
+			customer_phone varchar(255) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -547,6 +550,28 @@
 			PRIMARY KEY (the_name)
 		) TYPE=InnoDB;
 
+		CREATE TABLE ocp_credit_charge_log
+		(
+			id integer auto_increment NULL,
+			member_id integer NOT NULL,
+			charging_member_id integer NOT NULL,
+			num_credits integer NOT NULL,
+			date_and_time integer unsigned NOT NULL,
+			reason varchar(255) NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_credit_purchases
+		(
+			purchase_id integer auto_increment NULL,
+			member_id integer NOT NULL,
+			num_credits integer NOT NULL,
+			date_and_time integer unsigned NOT NULL,
+			purchase_validated tinyint(1) NOT NULL,
+			is_manual tinyint(1) NOT NULL,
+			PRIMARY KEY (purchase_id)
+		) TYPE=InnoDB;
+
 		CREATE TABLE ocp_diseases
 		(
 			id integer auto_increment NULL,
@@ -571,6 +596,14 @@
 			PRIMARY KEY (module_the_name,category_name,group_id)
 		) TYPE=InnoDB;
 
+		CREATE TABLE ocp_group_points
+		(
+			p_group_id integer NULL,
+			p_points_one_off integer NOT NULL,
+			p_points_per_month integer NOT NULL,
+			PRIMARY KEY (p_group_id)
+		) TYPE=InnoDB;
+
 		CREATE TABLE ocp_gsp
 		(
 			group_id integer NULL,
@@ -580,6 +613,26 @@
 			category_name varchar(80) NULL,
 			the_value tinyint(1) NOT NULL,
 			PRIMARY KEY (group_id,specific_permission,the_page,module_the_name,category_name)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_logged
+		(
+			id integer auto_increment NULL,
+			website_url varchar(255) NOT NULL,
+			website_name varchar(255) NOT NULL,
+			is_registered tinyint(1) NOT NULL,
+			log_key integer NOT NULL,
+			expire integer NOT NULL,
+			l_version varchar(80) NOT NULL,
+			hittime integer unsigned NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_mayfeature
+		(
+			id integer auto_increment NULL,
+			url varchar(255) NOT NULL,
+			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
 		CREATE TABLE ocp_members_diseases
@@ -653,6 +706,48 @@
 			PRIMARY KEY (the_session)
 		) TYPE=InnoDB;
 
+		CREATE TABLE ocp_sites
+		(
+			s_codename varchar(80) NULL,
+			s_name varchar(255) NOT NULL,
+			s_description longtext NOT NULL,
+			s_category varchar(255) NOT NULL,
+			s_domain_name varchar(255) NOT NULL,
+			s_server varchar(80) NOT NULL,
+			s_member_id integer NOT NULL,
+			s_add_time integer unsigned NOT NULL,
+			s_last_backup_time integer unsigned NOT NULL,
+			s_subscribed tinyint(1) NOT NULL,
+			s_sponsored_in_category tinyint(1) NOT NULL,
+			s_show_in_directory tinyint(1) NOT NULL,
+			s_sent_expire_message tinyint(1) NOT NULL,
+			PRIMARY KEY (s_codename)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_sites_advert_pings
+		(
+			id integer auto_increment NULL,
+			s_codename varchar(80) NOT NULL,
+			s_time integer unsigned NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_sites_deletion_codes
+		(
+			s_codename varchar(80) NULL,
+			s_code varchar(80) NOT NULL,
+			s_time integer unsigned NOT NULL,
+			PRIMARY KEY (s_codename)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_sites_email
+		(
+			s_codename varchar(80) NULL,
+			s_email_from varchar(80) NULL,
+			s_email_to varchar(255) NOT NULL,
+			PRIMARY KEY (s_codename,s_email_from)
+		) TYPE=InnoDB;
+
 		CREATE TABLE ocp_sp_list
 		(
 			p_section varchar(80) NOT NULL,
@@ -697,7 +792,7 @@
 			id integer auto_increment NULL,
 			workflow_content_id integer NOT NULL,
 			workflow_approval_name integer NOT NULL,
-			status_code integer NOT NULL,
+			status_code tinyint NOT NULL,
 			approved_by integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
@@ -803,6 +898,7 @@
 			p_last_edit_by integer NOT NULL,
 			p_is_emphasised tinyint(1) NOT NULL,
 			p_skip_sig tinyint(1) NOT NULL,
+			p_parent_id integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -871,6 +967,44 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
+		CREATE TABLE ocp_calendar_types
+		(
+			id integer auto_increment NULL,
+			t_title integer NOT NULL,
+			t_logo varchar(255) NOT NULL,
+			t_external_feed varchar(255) NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_transactions
+		(
+			id varchar(80) NULL,
+			purchase_id varchar(80) NOT NULL,
+			status varchar(255) NOT NULL,
+			reason varchar(255) NOT NULL,
+			amount varchar(255) NOT NULL,
+			t_currency varchar(80) NOT NULL,
+			linked varchar(80) NOT NULL,
+			t_time integer unsigned NULL,
+			item varchar(255) NOT NULL,
+			pending_reason varchar(255) NOT NULL,
+			t_memo longtext NOT NULL,
+			t_via varchar(80) NOT NULL,
+			PRIMARY KEY (id,t_time)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_gifts
+		(
+			id integer auto_increment NULL,
+			date_and_time integer unsigned NOT NULL,
+			amount integer NOT NULL,
+			gift_from integer NOT NULL,
+			gift_to integer NOT NULL,
+			reason integer NOT NULL,
+			anonymous tinyint(1) NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
+
 		CREATE TABLE ocp_f_forums
 		(
 			id integer auto_increment NULL,
@@ -893,6 +1027,7 @@
 			f_cache_last_forum_id integer NOT NULL,
 			f_redirection varchar(255) NOT NULL,
 			f_order varchar(80) NOT NULL,
+			f_is_threaded tinyint(1) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -1031,10 +1166,13 @@
 		ALTER TABLE ocp_f_group_member_timeouts ADD FOREIGN KEY `f_group_member_timeouts.group_id` (group_id) REFERENCES ocp_f_groups (id);
 
 		CREATE INDEX `temp_block_permissions.p_session_id` ON ocp_temp_block_permissions(p_session_id);
-		ALTER TABLE ocp_temp_block_permissions ADD FOREIGN KEY `temp_block_permissions.p_session_id` (p_session_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_temp_block_permissions ADD FOREIGN KEY `temp_block_permissions.p_session_id` (p_session_id) REFERENCES ocp_sessions (id);
 
 		CREATE INDEX `notifications_enabled.l_member_id` ON ocp_notifications_enabled(l_member_id);
 		ALTER TABLE ocp_notifications_enabled ADD FOREIGN KEY `notifications_enabled.l_member_id` (l_member_id) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `digestives_tin.d_from_member_id` ON ocp_digestives_tin(d_from_member_id);
+		ALTER TABLE ocp_digestives_tin ADD FOREIGN KEY `digestives_tin.d_from_member_id` (d_from_member_id) REFERENCES ocp_f_members (id);
 
 		CREATE INDEX `digestives_tin.d_to_member_id` ON ocp_digestives_tin(d_to_member_id);
 		ALTER TABLE ocp_digestives_tin ADD FOREIGN KEY `digestives_tin.d_to_member_id` (d_to_member_id) REFERENCES ocp_f_members (id);
@@ -1063,6 +1201,9 @@
 		CREATE INDEX `activities.a_member_id` ON ocp_activities(a_member_id);
 		ALTER TABLE ocp_activities ADD FOREIGN KEY `activities.a_member_id` (a_member_id) REFERENCES ocp_f_members (id);
 
+		CREATE INDEX `activities.a_also_involving` ON ocp_activities(a_also_involving);
+		ALTER TABLE ocp_activities ADD FOREIGN KEY `activities.a_also_involving` (a_also_involving) REFERENCES ocp_f_members (id);
+
 		CREATE INDEX `bookable.title` ON ocp_bookable(title);
 		ALTER TABLE ocp_bookable ADD FOREIGN KEY `bookable.title` (title) REFERENCES ocp_translate (id);
 
@@ -1073,7 +1214,7 @@
 		ALTER TABLE ocp_bookable ADD FOREIGN KEY `bookable.categorisation` (categorisation) REFERENCES ocp_translate (id);
 
 		CREATE INDEX `bookable.calendar_type` ON ocp_bookable(calendar_type);
-		ALTER TABLE ocp_bookable ADD FOREIGN KEY `bookable.calendar_type` (calendar_type) REFERENCES ocp_ ();
+		ALTER TABLE ocp_bookable ADD FOREIGN KEY `bookable.calendar_type` (calendar_type) REFERENCES ocp_calendar_types (id);
 
 		CREATE INDEX `bookable.submitter` ON ocp_bookable(submitter);
 		ALTER TABLE ocp_bookable ADD FOREIGN KEY `bookable.submitter` (submitter) REFERENCES ocp_f_members (id);
@@ -1082,46 +1223,58 @@
 		ALTER TABLE ocp_bookable_blacked ADD FOREIGN KEY `bookable_blacked.blacked_explanation` (blacked_explanation) REFERENCES ocp_translate (id);
 
 		CREATE INDEX `bookable_blacked_for.bookable_id` ON ocp_bookable_blacked_for(bookable_id);
-		ALTER TABLE ocp_bookable_blacked_for ADD FOREIGN KEY `bookable_blacked_for.bookable_id` (bookable_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_bookable_blacked_for ADD FOREIGN KEY `bookable_blacked_for.bookable_id` (bookable_id) REFERENCES ocp_bookable (id);
 
 		CREATE INDEX `bookable_blacked_for.blacked_id` ON ocp_bookable_blacked_for(blacked_id);
-		ALTER TABLE ocp_bookable_blacked_for ADD FOREIGN KEY `bookable_blacked_for.blacked_id` (blacked_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_bookable_blacked_for ADD FOREIGN KEY `bookable_blacked_for.blacked_id` (blacked_id) REFERENCES ocp_bookable_codes (code);
 
 		CREATE INDEX `bookable_codes.bookable_id` ON ocp_bookable_codes(bookable_id);
-		ALTER TABLE ocp_bookable_codes ADD FOREIGN KEY `bookable_codes.bookable_id` (bookable_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_bookable_codes ADD FOREIGN KEY `bookable_codes.bookable_id` (bookable_id) REFERENCES ocp_bookable (id);
 
 		CREATE INDEX `bookable_supplement.title` ON ocp_bookable_supplement(title);
 		ALTER TABLE ocp_bookable_supplement ADD FOREIGN KEY `bookable_supplement.title` (title) REFERENCES ocp_translate (id);
 
 		CREATE INDEX `bookable_supplement_for.supplement_id` ON ocp_bookable_supplement_for(supplement_id);
-		ALTER TABLE ocp_bookable_supplement_for ADD FOREIGN KEY `bookable_supplement_for.supplement_id` (supplement_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_bookable_supplement_for ADD FOREIGN KEY `bookable_supplement_for.supplement_id` (supplement_id) REFERENCES ocp_bookable_supplement (id);
 
 		CREATE INDEX `bookable_supplement_for.bookable_id` ON ocp_bookable_supplement_for(bookable_id);
-		ALTER TABLE ocp_bookable_supplement_for ADD FOREIGN KEY `bookable_supplement_for.bookable_id` (bookable_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_bookable_supplement_for ADD FOREIGN KEY `bookable_supplement_for.bookable_id` (bookable_id) REFERENCES ocp_bookable (id);
 
 		CREATE INDEX `booking.bookable_id` ON ocp_booking(bookable_id);
-		ALTER TABLE ocp_booking ADD FOREIGN KEY `booking.bookable_id` (bookable_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_booking ADD FOREIGN KEY `booking.bookable_id` (bookable_id) REFERENCES ocp_bookable (id);
 
 		CREATE INDEX `booking.member_id` ON ocp_booking(member_id);
 		ALTER TABLE ocp_booking ADD FOREIGN KEY `booking.member_id` (member_id) REFERENCES ocp_f_members (id);
 
 		CREATE INDEX `booking.paid_trans_id` ON ocp_booking(paid_trans_id);
-		ALTER TABLE ocp_booking ADD FOREIGN KEY `booking.paid_trans_id` (paid_trans_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_booking ADD FOREIGN KEY `booking.paid_trans_id` (paid_trans_id) REFERENCES ocp_transactions (id);
 
 		CREATE INDEX `booking_supplement.booking_id` ON ocp_booking_supplement(booking_id);
-		ALTER TABLE ocp_booking_supplement ADD FOREIGN KEY `booking_supplement.booking_id` (booking_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_booking_supplement ADD FOREIGN KEY `booking_supplement.booking_id` (booking_id) REFERENCES ocp_booking (id);
 
 		CREATE INDEX `booking_supplement.supplement_id` ON ocp_booking_supplement(supplement_id);
-		ALTER TABLE ocp_booking_supplement ADD FOREIGN KEY `booking_supplement.supplement_id` (supplement_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_booking_supplement ADD FOREIGN KEY `booking_supplement.supplement_id` (supplement_id) REFERENCES ocp_bookable_supplement (id);
 
 		CREATE INDEX `classifieds_prices.c_label` ON ocp_classifieds_prices(c_label);
 		ALTER TABLE ocp_classifieds_prices ADD FOREIGN KEY `classifieds_prices.c_label` (c_label) REFERENCES ocp_translate (id);
+
+		CREATE INDEX `credit_charge_log.member_id` ON ocp_credit_charge_log(member_id);
+		ALTER TABLE ocp_credit_charge_log ADD FOREIGN KEY `credit_charge_log.member_id` (member_id) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `credit_charge_log.charging_member_id` ON ocp_credit_charge_log(charging_member_id);
+		ALTER TABLE ocp_credit_charge_log ADD FOREIGN KEY `credit_charge_log.charging_member_id` (charging_member_id) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `credit_purchases.member_id` ON ocp_credit_purchases(member_id);
+		ALTER TABLE ocp_credit_purchases ADD FOREIGN KEY `credit_purchases.member_id` (member_id) REFERENCES ocp_f_members (id);
 
 		CREATE INDEX `group_category_access.category_name` ON ocp_group_category_access(category_name);
 		ALTER TABLE ocp_group_category_access ADD FOREIGN KEY `group_category_access.category_name` (category_name) REFERENCES ocp_anything (id);
 
 		CREATE INDEX `group_category_access.group_id` ON ocp_group_category_access(group_id);
 		ALTER TABLE ocp_group_category_access ADD FOREIGN KEY `group_category_access.group_id` (group_id) REFERENCES ocp_f_groups (id);
+
+		CREATE INDEX `group_points.p_group_id` ON ocp_group_points(p_group_id);
+		ALTER TABLE ocp_group_points ADD FOREIGN KEY `group_points.p_group_id` (p_group_id) REFERENCES ocp_f_groups (id);
 
 		CREATE INDEX `gsp.specific_permission` ON ocp_gsp(specific_permission);
 		ALTER TABLE ocp_gsp ADD FOREIGN KEY `gsp.specific_permission` (specific_permission) REFERENCES ocp_sp_list (the_name);
@@ -1136,7 +1289,7 @@
 		ALTER TABLE ocp_members_diseases ADD FOREIGN KEY `members_diseases.user_id` (user_id) REFERENCES ocp_f_members (id);
 
 		CREATE INDEX `members_diseases.disease_id` ON ocp_members_diseases(disease_id);
-		ALTER TABLE ocp_members_diseases ADD FOREIGN KEY `members_diseases.disease_id` (disease_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_members_diseases ADD FOREIGN KEY `members_diseases.disease_id` (disease_id) REFERENCES ocp_diseases (id);
 
 		CREATE INDEX `members_gifts.to_user_id` ON ocp_members_gifts(to_user_id);
 		ALTER TABLE ocp_members_gifts ADD FOREIGN KEY `members_gifts.to_user_id` (to_user_id) REFERENCES ocp_f_members (id);
@@ -1145,16 +1298,19 @@
 		ALTER TABLE ocp_members_gifts ADD FOREIGN KEY `members_gifts.from_user_id` (from_user_id) REFERENCES ocp_f_members (id);
 
 		CREATE INDEX `members_gifts.gift_id` ON ocp_members_gifts(gift_id);
-		ALTER TABLE ocp_members_gifts ADD FOREIGN KEY `members_gifts.gift_id` (gift_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_members_gifts ADD FOREIGN KEY `members_gifts.gift_id` (gift_id) REFERENCES ocp_gifts (id);
 
 		CREATE INDEX `members_gifts.topic_id` ON ocp_members_gifts(topic_id);
-		ALTER TABLE ocp_members_gifts ADD FOREIGN KEY `members_gifts.topic_id` (topic_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_members_gifts ADD FOREIGN KEY `members_gifts.topic_id` (topic_id) REFERENCES ocp_f_topics (id);
 
 		CREATE INDEX `reported_content.r_session_id` ON ocp_reported_content(r_session_id);
 		ALTER TABLE ocp_reported_content ADD FOREIGN KEY `reported_content.r_session_id` (r_session_id) REFERENCES ocp_sessions (id);
 
 		CREATE INDEX `sessions.the_user` ON ocp_sessions(the_user);
 		ALTER TABLE ocp_sessions ADD FOREIGN KEY `sessions.the_user` (the_user) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `sites.s_member_id` ON ocp_sites(s_member_id);
+		ALTER TABLE ocp_sites ADD FOREIGN KEY `sites.s_member_id` (s_member_id) REFERENCES ocp_f_members (id);
 
 		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
 		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
@@ -1216,6 +1372,9 @@
 		CREATE INDEX `f_posts.p_last_edit_by` ON ocp_f_posts(p_last_edit_by);
 		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_last_edit_by` (p_last_edit_by) REFERENCES ocp_f_members (id);
 
+		CREATE INDEX `f_posts.p_parent_id` ON ocp_f_posts(p_parent_id);
+		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_parent_id` (p_parent_id) REFERENCES ocp_f_posts (id);
+
 		CREATE INDEX `f_topics.t_forum_id` ON ocp_f_topics(t_forum_id);
 		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_forum_id` (t_forum_id) REFERENCES ocp_f_forums (id);
 
@@ -1254,6 +1413,18 @@
 
 		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
 		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
+
+		CREATE INDEX `calendar_types.t_title` ON ocp_calendar_types(t_title);
+		ALTER TABLE ocp_calendar_types ADD FOREIGN KEY `calendar_types.t_title` (t_title) REFERENCES ocp_translate (id);
+
+		CREATE INDEX `gifts.gift_from` ON ocp_gifts(gift_from);
+		ALTER TABLE ocp_gifts ADD FOREIGN KEY `gifts.gift_from` (gift_from) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `gifts.gift_to` ON ocp_gifts(gift_to);
+		ALTER TABLE ocp_gifts ADD FOREIGN KEY `gifts.gift_to` (gift_to) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `gifts.reason` ON ocp_gifts(reason);
+		ALTER TABLE ocp_gifts ADD FOREIGN KEY `gifts.reason` (reason) REFERENCES ocp_translate (id);
 
 		CREATE INDEX `f_forums.f_description` ON ocp_f_forums(f_description);
 		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_description` (f_description) REFERENCES ocp_translate (id);

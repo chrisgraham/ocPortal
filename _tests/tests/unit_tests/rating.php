@@ -32,7 +32,6 @@ class rating_test_set extends ocp_test_case
 		}
 		$data=$GLOBALS['SITE_DB']->query_select('rating',array('rating '),array('rating_for_id'=>$this->event_id,'rating_member'=>get_member()));
 		$rating=$data[0]['rating'];
-		// Test the forum was actually created
 		$this->assertTrue(4==$rating);
 	}
 

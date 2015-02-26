@@ -410,8 +410,8 @@ class Module_cms_booking_supplements extends standard_aed_module
 				'supports_quantities'=>0,
 				'title'=>NULL,
 				'promo_code'=>'',
-				'supports_notes'=>'BINARY',
-				'sort_order'=>'INTEGER',
+				'supports_notes'=>1,
+				'sort_order'=>0,
 			);
 
 			$bookables=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('bookable',array('id')));
@@ -972,14 +972,14 @@ class Module_cms_booking_bookings extends standard_aed_module
 				$notes=$details['supplements'][$supplement_row['id']]['notes'];
 			}
 
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SUPPLEMENT',get_translated_tempcode($supplement_row['title'])))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SUPPLEMENT',escape_html(get_translated_text($supplement_row['title']))))));
 
 			if ($supplement_row['supports_quantities']==1)
 			{
 				$fields->attach(form_input_integer(do_lang_tempcode('QUANTITY'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity,true));
 			} else
 			{
-				$fields->attach(form_input_tick(get_translated_tempcode($supplement_row['title']),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity==1));
+				$fields->attach(form_input_tick(get_translated_text($supplement_row['title']),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity==1));
 			}
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_notes',$notes,false));
 		}
@@ -1030,6 +1030,11 @@ class Module_cms_booking_bookings extends standard_aed_module
 		$request=get_booking_request_from_form();
 		$request=save_booking_form_to_db($request,array(),$member_id);
 
+		if (is_null($request))
+		{
+			warn_exit(do_lang_tempcode('ERROR_OCCURRED'));
+		}
+
 		// Find $i by loading all member requests and finding which one this is contained in
 		$request=get_member_booking_request($member_id);
 		foreach ($request as $i=>$r)
@@ -1071,6 +1076,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 		}
 
 		$request=get_booking_request_from_form();
+
 		$test=check_booking_dates_available($request,$ignore_bookings);
 		if (!is_null($test)) warn_exit($test);
 

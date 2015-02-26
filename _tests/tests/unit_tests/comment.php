@@ -53,15 +53,12 @@ class comment_test_set extends ocp_test_case
 		}
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT p_title FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE t.text_original NOT LIKE \'%'.db_encode_like(do_lang('SPACER_POST_MATCHER','','','',get_site_default_lang()).'%').'\' AND ( p.id='.strval($this->post_id).') ORDER BY p.id');
 		$title=$rows[0]['p_title'];
-		// Test the forum was actually created
 		$this->assertTrue('test_comment1'==$title);
 	}
 
 	function testEditComment()
 	{
-		// Test the forum edits
 		edit_calendar_event($this->event_id,8,'',NULL,0,'test_event1','',3,1,2010,1,10,'day_of_month',10,15,2010,1,19,'day_of_month',0,0,get_users_timezone(),1,'','',1,1,1,1,'');
-		// Test the forum was actually created
 		$this->assertTrue('test_event1'==get_translated_text($GLOBALS['FORUM_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id)),$GLOBALS['FORUM_DB']));
 	}
 

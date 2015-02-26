@@ -6,7 +6,7 @@
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script type="text/javascript">// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput('upload_multi','{NAME_STUB;}{I}',null,null,'{FILTER;}');
+			preinitFileInput('upload_multi','{NAME_STUB;/}{I}',null,null,'{FILTER;/}');
 		} );
 	//]]></script>
 {+END}{+END}

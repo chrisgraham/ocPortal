@@ -503,7 +503,7 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 
 			$title=$orphan['text_original'];
 			//$out->attach(form_input_list_entry(strval($orphan['id']),($select==$orphan['id']),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'e3eb3decfac32382cdcb5b745ef0ad7e','BREADCRUMBS'=>'?','TITLE'=>$title,'ID'=>$orphan['id']))));
-//			$out.='<option value="'.$orphan['id'].'"> ? '.$title.'</option>';
+			//$out.='<option value="'.$orphan['id'].'"> ? '.escape_html($title).'</option>';
 			$out->attach(form_input_list_entry($ins_format?(strval($orphan['id']).'!'.$title):strval($orphan['id']),false,do_lang('CEDI_ORPHANED').' > '.$title));
 		}
 	}

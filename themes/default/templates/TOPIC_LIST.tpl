@@ -1,6 +1,6 @@
 <div class="topic_list_topic">
 	<div class="topic_list_title">
-		<a title="{!POST_PLU,{NUM_POSTS*}}, {TITLE*~}" href="{TOPIC_URL*}">{$TRUNCATE_LEFT,{TITLE},30,0,1}</a>
+		<a title="{!POST_PLU,{NUM_POSTS*}}, {TITLE*~}" href="{TOPIC_URL*}">{$TRUNCATE_LEFT,{TITLE},30}</a>
 	</div>
 
 	<ul class="topic_list_meta horizontal_meta_details">

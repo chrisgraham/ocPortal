@@ -207,7 +207,7 @@ class Module_filedump
 					$filesize[$i]=do_lang_tempcode('NA_EM');
 				}
 				$dbrows=$GLOBALS['SITE_DB']->query_select('filedump',array('description','the_member'),array('name'=>$file,'path'=>$place));
-				if (!array_key_exists(0,$dbrows)) $description[$i]=($directory[$i])?do_lang_tempcode('NA_EM'):do_lang_tempcode('NONE_EM'); else $description[$i]=make_string_tempcode(get_translated_text($dbrows[0]['description']));
+				if (!array_key_exists(0,$dbrows)) $description[$i]=($directory[$i])?do_lang_tempcode('NA_EM'):do_lang_tempcode('NONE_EM'); else $description[$i]=make_string_tempcode(escape_html(get_translated_text($dbrows[0]['description'])));
 				if ($description[$i]->is_empty()) $description[$i]=do_lang_tempcode('NONE_EM');
 				$deletable[$i]=(array_key_exists(0,$dbrows) && ($dbrows[0]['the_member']==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump'));
 				if ($directory[$i])

@@ -14,7 +14,7 @@
 			{+START,IF,{$JS_ON}}
 				<ol id="staff_links_list{$GET,RAND}" class="spaced_list">
 					{+START,LOOP,FORMATTED_LINKS}
-						<li><a target="_blank" title="{TITLE*}: {!LINK_NEW_WINDOW}" href="{URL}">{TITLE*}</a></li>
+						<li><a target="_blank" title="{TITLE*}: {!LINK_NEW_WINDOW}" href="{URL*}">{TITLE*}</a></li>
 					{+END}
 				</ol>
 			{+END}

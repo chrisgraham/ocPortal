@@ -183,7 +183,7 @@ class Module_cms_news extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$fr=array();
-			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news')),get_translated_text($row['title'])));
+			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news')),get_translated_text($row['title']),false,true));
 			if (array_key_exists($row['news_category'],$news_cat_titles))
 			{
 				$nc_title=$news_cat_titles[$row['news_category']];
@@ -710,7 +710,7 @@ class Module_cms_news_cat extends standard_aed_module
 			$total=$GLOBALS['SITE_DB']->query_value('news','COUNT(*)',array('news_category'=>$row['id']));
 			$total+=$GLOBALS['SITE_DB']->query_value('news_category_entries','COUNT(*)',array('news_entry_category'=>$row['id']));
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'misc','filter'=>$row['id']),get_module_zone('news')),get_translated_text($row['nc_title']))),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'misc','filter'=>$row['id']),get_module_zone('news')),get_translated_text($row['nc_title']),false,true)),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);

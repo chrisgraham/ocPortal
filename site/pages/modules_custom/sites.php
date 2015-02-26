@@ -113,7 +113,7 @@ class Module_sites
 	 */
 	function get_entry_points()
 	{
-		return array('add'=>'MO_ADD_SITE','misc'=>'OC_DOWNLOAD_NOW');
+		return array('myocp'=>'MO_ADD_SITE','misc'=>'OC_DOWNLOAD_NOW');
 	}
 
 	/**
@@ -405,7 +405,7 @@ class Module_sites
 	 */
 	function myocp()
 	{
-		require_lang('myocp');
+		require_lang('sites');
 
 		$title=get_screen_title('MO_ADD_SITE');
 
@@ -430,7 +430,7 @@ class Module_sites
 	 */
 	function _myocp()
 	{
-		require_lang('myocp');
+		require_lang('sites');
 
 		$title=get_screen_title('MO_ADD_SITE');
 

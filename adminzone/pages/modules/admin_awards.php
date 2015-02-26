@@ -211,7 +211,7 @@ class Module_admin_awards extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$fr=array();
-			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'awards','type'=>'award','id'=>$row['id']),get_module_zone('awards')),get_translated_text($row['a_title'])));
+			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'awards','type'=>'award','id'=>$row['id']),get_module_zone('awards')),get_translated_text($row['a_title']),false,true));
 			if (addon_installed('points'))
 				$fr[]=integer_format($row['a_points']);
 			$hooks=find_all_hooks('systems','awards');

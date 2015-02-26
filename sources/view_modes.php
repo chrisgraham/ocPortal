@@ -259,7 +259,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			}
 		}
 		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NOTHING_TO_TRANSLATE'));
-		$title=get_screen_title('__TRANSLATE_CONTENT',true,array($lang_name));
+		$title=get_screen_title('__TRANSLATE_CONTENT',true,array(escape_html($lang_name)));
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_content','contextual'=>1),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());
@@ -301,7 +301,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 				$fields->attach(form_input_text($key,$description,'l_'.$key,str_replace('\n',chr(10),$value_found),false));
 			}
 		}
-		$title=get_screen_title('__TRANSLATE_CODE',true,array($lang_name));
+		$title=get_screen_title('__TRANSLATE_CODE',true,array(escape_html($lang_name)));
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_code2'),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());

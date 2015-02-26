@@ -41,7 +41,7 @@ function _get_details_comcode_tags()
 		'center'=>array(),
 		'right'=>array(),
 		'abbr'=>array('param'),
-		'box'=>array('float','dimensions','type','options','param'),
+		'box'=>array('float','width','type','options','param'),
 		'quote'=>array('param','saidless','cite'),
 		'cite'=>array(),
 		'samp'=>array(),
@@ -284,7 +284,7 @@ function comcode_helper_script()
 		$tag=$actual_tag;
 		if ($tag=='attachment_safe') $tag='attachment';
 
-		$title=get_screen_title('_COMCODE_HELPER',true,array($tag));
+		$title=get_screen_title('_COMCODE_HELPER',true,array(escape_html($tag)));
 
 		$fields=new ocp_tempcode();
 		$fields_advanced=new ocp_tempcode();
@@ -488,7 +488,7 @@ function comcode_helper_script()
 							} elseif ((substr($descriptiont,-1)!='.') && (strpos($descriptiont,'|')!==false))
 							{
 								$list=new ocp_tempcode();
-								if (substr($descriptiont,0,1)!='=')
+								if (substr($descriptiont,0,1)!='=' && substr($descriptiont,0,1)!='|')
 									$list->attach(form_input_list_entry(''));
 								foreach (explode('|',$descriptiont) as $item)
 								{
@@ -517,7 +517,7 @@ function comcode_helper_script()
 									}
 								}
 								$field=form_input_list($parameter_name,'',$param,$list,NULL,false,false);
-							} elseif ($param=='width' || $param=='height')
+							} elseif (($param=='width' || $param=='height') && ((is_null($default)) || (is_numeric($default))))
 							{
 								$field=form_input_integer($parameter_name,protect_from_escaping($descriptiont),$param,($default=='')?NULL:intval($default),false);
 							} else
@@ -553,7 +553,7 @@ function comcode_helper_script()
 		} else
 		{
 			$_params=$custom_tag_list[$tag];
-			$params=explode(',',$_params['tag_parameters']);
+			$params=($_params['tag_parameters']=='')?array():explode(',',$_params['tag_parameters']);
 			foreach ($params as $param)
 			{
 				$description=new ocp_tempcode();
@@ -673,7 +673,7 @@ function comcode_helper_script()
 
 		$field_name=get_param('field_name');
 		$tag=post_param('tag');
-		$title=get_screen_title('_COMCODE_HELPER',true,array($tag));
+		$title=get_screen_title('_COMCODE_HELPER',true,array(escape_html($tag)));
 
 		if (get_option('eager_wysiwyg')=='0')
 		{
@@ -805,7 +805,7 @@ function _get_preview_environment_comcode($tag)
 			{
 				$def=' default="1"';
 			}
-			$comcode.="[section=\"$name\"$def]".$content."[/section]";
+			$comcode.='[section="'.comcode_escape($name).'"'.$def.']'.$content.'[/section]';
 			$controller[]=$name;
 			$bparameters.="<section=\"$name\"$def>".$content."</section>";
 			$i++;
@@ -829,7 +829,7 @@ function _get_preview_environment_comcode($tag)
 			{
 				$def=' default="1"';
 			}
-			$comcode.="[big_tab=\"$name\"$def]".$content."[/big_tab]";
+			$comcode.='[big_tab="'.comcode_escape($name).'"'.$def.']'.$content.'[/big_tab]';
 			$controller[]=$name;
 			$bparameters.="<big_tab=\"$name\"$def>".$content."</big_tab>";
 			$i++;
@@ -852,12 +852,12 @@ function _get_preview_environment_comcode($tag)
 			{
 				$def=' default="1"';
 			}
-			$comcode.="[tab=\"$name\"$def]".$content."[/tab]";
+			$comcode.='[tab="'.comcode_escape($name).'"'.$def.']'.$content.'[/tab]';
 			$controller[]=$name;
 			$bparameters.="<tab=\"$name\"$def>".$content."</tab>";
 			$i++;
 		}
-		$comcode='[tabs="'.implode(',',$controller).'"]'.$comcode.'[/tabs]';
+		$comcode='[tabs="'.comcode_escape(implode(',',$controller)).'"]'.$comcode.'[/tabs]';
 		$bparameters='<tabs="'.implode(',',$controller).'">'.$bparameters.'</tabs>';
 	}
 	elseif ($tag=='list')

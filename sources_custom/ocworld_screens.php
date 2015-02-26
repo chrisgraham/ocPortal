@@ -81,7 +81,7 @@ function output_inventory_screen($member_id)
 	{
 		$username=$GLOBALS['SITE_DB']->query_value('w_realms','troll_name',array('id'=>(-$member_id-1)));
 	}
-	$title=get_screen_title('W_INVENTORY_OF',true,array($username));
+	$title=get_screen_title('W_INVENTORY_OF',true,array(escape_html($username)));
 	$health=$GLOBALS['SITE_DB']->query_value('w_members','health',array('id'=>$member_id));
 
 	$rows=$GLOBALS['SITE_DB']->query_select('w_inventory',array('*'),array('item_owner'=>$member_id));

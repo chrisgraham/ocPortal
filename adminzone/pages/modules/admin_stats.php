@@ -1359,6 +1359,7 @@ class Module_admin_stats
 		while ((!feof($file)) && ($i<($position+$lines)))
 		{
 			$data=fgets($file,1024);
+			if ($data===false) continue;
 			if ($i>=$position)
 			{
 				$_data=explode(',',$data);

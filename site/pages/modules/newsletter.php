@@ -251,7 +251,7 @@ class Module_newsletter
 	 */
 	function newsletter_form()
 	{
-		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(escape_html(get_option('newsletter_title'))));
 
 		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
 		if (count($newsletters)==0) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
@@ -295,6 +295,7 @@ class Module_newsletter
 		{
 			$newsletter_title=get_translated_text($newsletter['title']);
 			$newsletter_description=get_translated_text($newsletter['description']);
+			$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=true;
 			if (get_option('interest_levels')=='1')
 			{
 				$fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR',make_string_tempcode(escape_html($newsletter_title))),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL',escape_html($newsletter_description)),'level'.strval($newsletter['id']),$l));
@@ -335,7 +336,7 @@ class Module_newsletter
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
 
-		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(escape_html(get_option('newsletter_title'))));
 
 		// Add
 		$email=trim(post_param('email'));

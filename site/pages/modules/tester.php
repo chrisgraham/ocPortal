@@ -507,7 +507,7 @@ class Module_tester
 			$matches=array();
 			if (preg_match('#add_(\d+)_test#A',$key,$matches)!=0)
 			{
-				$id=$matches[1];
+				$id=intval($matches[1]);
 
 				$assigned_to=post_param_integer('add_'.strval($id).'_assigned_to');
 				if ($assigned_to==-1) $assigned_to=NULL;

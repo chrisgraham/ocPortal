@@ -23,9 +23,9 @@
 				</div>
 			</form>
 			<script type="text/javascript">// <![CDATA[
-				var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
+				var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;/}','','',false,null,true);
 
-				var actions_tpl='{!ACTIONS;}:<ul role="navigation" class="actions_list">[1]<\/ul>';
+				var actions_tpl='{!ACTIONS;/}:<ul role="navigation" class="actions_list">[1]<\/ul>';
 				var actions_tpl_item='<li><a href="[2]">[1]<\/a><\/li>';
 
 				var info_tpl='<div class="wide_table_wrap"><table class="results_table wide_table autosized_table" summary="{!MAP_TABLE;}"><tbody>[1]<\/tbody><\/table><\/div>';

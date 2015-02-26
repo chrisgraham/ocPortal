@@ -51,7 +51,7 @@
 			d_from_email varchar(255) NOT NULL,
 			d_from_name varchar(255) NOT NULL,
 			d_priority tinyint NOT NULL,
-			d_mail_template varchar(80) NOT NULL,
+			d_template varchar(80) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 

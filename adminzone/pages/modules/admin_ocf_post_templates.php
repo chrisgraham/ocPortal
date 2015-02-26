@@ -56,6 +56,8 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/posttemplates';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_forum_helpdesk';
 
+		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+
 		$this->add_one_label=do_lang_tempcode('ADD_POST_TEMPLATE');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_POST_TEMPLATE');
 		$this->edit_one_label=do_lang_tempcode('EDIT_POST_TEMPLATE');
@@ -120,7 +122,7 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$fields->attach(results_entry(array($row['t_title'],protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array($row['t_title'],protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		$search_url=NULL;

@@ -1822,7 +1822,7 @@ function convert_tooltip(element)
 			// And now define nice listeners for it all...
 			var win=get_main_ocp_window(true);
 
-			element.ocp_tooltip_title=title;
+			element.ocp_tooltip_title=escape_html(title);
 
 			win.add_event_listener_abstract(
 				element,

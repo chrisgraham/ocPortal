@@ -1286,7 +1286,7 @@ function monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_s
 
 		$month_name=locale_filter(date('M',$timestamp));
 
-		$text=do_lang_tempcode('CALENDAR_MONTHLY_RECURRENCE_CONCRETE_'.$monthly_spec_type,$nth,$dow,$month_name);
+		$text=do_lang_tempcode('CALENDAR_MONTHLY_RECURRENCE_CONCRETE_'.$monthly_spec_type,escape_html($nth),escape_html($dow),escape_html($month_name));
 		$description=do_lang_tempcode('CALENDAR_MONTHLY_RECURRENCE_'.$monthly_spec_type);
 
 		$radios->attach(form_input_radio_entry('monthly_spec_type',$monthly_spec_type,$monthly_spec_type==$default_monthly_spec_type,$text,NULL,$description));

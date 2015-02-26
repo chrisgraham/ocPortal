@@ -794,6 +794,7 @@ function block_helper_script()
 				elseif (preg_match('#'.do_lang('BLOCK_IND_EITHER').' (.+)#i',$description,$matches)!=0) // list
 				{
 					$description=preg_replace('# \('.do_lang('BLOCK_IND_EITHER').'.*\)#U','',$description);
+					$description=preg_replace('# '.do_lang('BLOCK_IND_EITHER').'.*$#Ui','',$description);
 
 					$list=new ocp_tempcode();
 					$matches2=array();

@@ -87,7 +87,7 @@ class Module_admin_setupwizard
 	 */
 	function step1()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(1),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(1)),escape_html(integer_format(10))));
 
 		require_code('form_templates');
 
@@ -139,7 +139,7 @@ class Module_admin_setupwizard
 	 */
 	function step2()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(2),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(2)),escape_html(integer_format(10))));
 
 		require_code('form_templates');
 
@@ -158,7 +158,7 @@ class Module_admin_setupwizard
 	 */
 	function step3()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(3),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(3)),escape_html(integer_format(10))));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step4'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_3_DESCRIBE');
@@ -227,7 +227,7 @@ class Module_admin_setupwizard
 	 */
 	function step4()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(4),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(4)),escape_html(integer_format(10))));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step5'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_4_DESCRIBE');
@@ -351,7 +351,7 @@ class Module_admin_setupwizard
 	 */
 	function step5()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(5),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(5)),escape_html(integer_format(10))));
 
 		require_lang('menus');
 
@@ -419,7 +419,7 @@ class Module_admin_setupwizard
 	 */
 	function step6()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(6),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(6)),escape_html(integer_format(10))));
 
 		require_all_lang();
 
@@ -549,7 +549,7 @@ class Module_admin_setupwizard
 	 */
 	function step7()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(7),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(7)),escape_html(integer_format(10))));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>(addon_installed('themewizard') && (function_exists('imagepng')))?'step8':'step9'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_7_DESCRIBE');
@@ -588,7 +588,7 @@ class Module_admin_setupwizard
 	 */
 	function step8()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(8),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(8)),escape_html(integer_format(10))));
 
 		require_lang('themes');
 		require_code('themewizard');
@@ -614,7 +614,7 @@ class Module_admin_setupwizard
 	 */
 	function step9()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(9),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(9)),escape_html(integer_format(10))));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step10'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_9_DESCRIBE');
@@ -639,7 +639,7 @@ class Module_admin_setupwizard
 	 */
 	function step10()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(10)),escape_html(integer_format(10))));
 
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -959,7 +959,7 @@ class Module_admin_setupwizard
 	 */
 	function step11()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
+		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(escape_html(integer_format(10)),escape_html(integer_format(10))));
 
 		require_code('templates_donext');
 

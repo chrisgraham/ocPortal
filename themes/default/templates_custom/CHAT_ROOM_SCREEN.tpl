@@ -52,9 +52,9 @@ function on_login_completed_room()
 	set_inner_html(messages,'');
 
 	chat_load('{ROOM_ID%}');
-	window.con.jid='{$REPLACE*;, ,.,{$USERNAME}}@{$DOMAIN*;}';
-	window.room=mucMan.getRoom( "{ROOM_ID*}" ).createState();
-	window.room.join('{$REPLACE*;, ,.,{$USERNAME}}');
+	window.con.jid='{$REPLACE;/, ,.,{$USERNAME}}@{$DOMAIN*;/}';
+	window.room=mucMan.getRoom('{ROOM_ID;/}').createState();
+	window.room.join('{$REPLACE;/, ,.,{$USERNAME}}');
 	function loadRoomMembers()
 	{
 		window.room.getParticipants(

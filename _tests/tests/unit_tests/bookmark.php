@@ -25,15 +25,12 @@ class bookmark_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('bookmarks');
 		$this->bookmark_id=add_bookmark(4,"xyz","abc","www.xyz.com");
-		// Test the forum was actually created
 		$this->assertTrue('abc'==$GLOBALS['SITE_DB']->query_value('bookmarks','b_title ',array('id'=>$this->bookmark_id)));
 	}
 
 	function testEditBookmark()
 	{
-		// Test the forum edits
 		edit_bookmark($this->bookmark_id,4,"nnnnn","www.xyz.com");
-		// Test the forum was actually created
 		$this->assertTrue('nnnnn'==$GLOBALS['SITE_DB']->query_value('bookmarks','b_title ',array('id'=>$this->bookmark_id)));
 	}
 

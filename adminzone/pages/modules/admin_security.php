@@ -150,7 +150,7 @@ class Module_admin_security
 		{
 			$time=get_timezoned_date($row['date_and_time']);
 			$lookup_url=build_url(array('page'=>'admin_lookup','param'=>$row['ip']),'_SELF');
-			$fields->attach(results_entry(array(escape_html($row['failed_account']),escape_html($time),hyperlink($lookup_url,$row['ip']))));
+			$fields->attach(results_entry(array(escape_html($row['failed_account']),escape_html($time),hyperlink($lookup_url,escape_html($row['ip'])))));
 		}
 		$failed_logins=results_table(do_lang_tempcode('FAILED_LOGINS'),$start,'failed_start',$max,'failed_max',$max_rows,$fields_title,$fields,$sortables,$_sortable,$sort_order,'failed_sort',new ocp_tempcode());
 

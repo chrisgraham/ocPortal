@@ -392,7 +392,7 @@ class Module_downloads
 			require_code('awards');
 			$awards=find_awards_for('download_category',strval($id));
 		} else $awards=array();
-		$title=get_screen_title('_DOWNLOAD_CATEGORY',true,array($title_to_use),NULL,$awards);
+		$title=get_screen_title('_DOWNLOAD_CATEGORY',true,array(escape_html($title_to_use)),NULL,$awards);
 
 		$breadcrumbs=download_breadcrumbs($id,$root,true,get_zone_name());
 		if (!$breadcrumbs->is_empty())

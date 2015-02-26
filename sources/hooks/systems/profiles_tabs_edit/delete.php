@@ -64,7 +64,7 @@ class Hook_Profiles_Tabs_Edit_delete
 		// UI fields
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 
-		$text=paragraph(do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==$member_id_viewing)?'_SUICIDAL':''),$username));
+		$text=paragraph(do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==$member_id_viewing)?'_SUICIDAL':''),escape_html($username)));
 
 		if ($member_id_of!=$member_id_viewing)
 		{

@@ -132,7 +132,7 @@ class Module_admin_ocf_categories extends standard_aed_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$fields->attach(results_entry(array($row['c_title'],($row['c_expanded_by_default']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array($row['c_title'],($row['c_expanded_by_default']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		$search_url=NULL;

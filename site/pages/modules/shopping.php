@@ -633,7 +633,7 @@ class Module_shopping
 	{
 		$id=get_param_integer('id');
 
-		$title=get_screen_title('_MY_ORDER_DETAILS',true,array($id));
+		$title=get_screen_title('_MY_ORDER_DETAILS',true,array(escape_html(strval($id))));
 
 		$products=array();
 

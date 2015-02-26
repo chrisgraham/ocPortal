@@ -154,7 +154,7 @@
 		{+END}
 	{+END}
 	{+START,IF,{$NOT,{$BROWSER_MATCHES,ie}}}{+START,IF,{$HAS_PRIVILEGE,sees_javascript_error_alerts}}window.take_errors=true;{+END}{+END}
-	var {+START,IF,{$CONFIG_OPTION,is_on_timezone_detection}}server_timestamp={$FROM_TIMESTAMP%},{+END}ocp_lang='{$LANG;}',ocp_theme='{$THEME;}',ocp_username='{$USERNAME;}'{+START,IF,{$IS_STAFF}},ocp_is_staff=true{+END};
+	var {+START,IF,{$CONFIG_OPTION,is_on_timezone_detection}}server_timestamp={$FROM_TIMESTAMP%},{+END}ocp_lang='{$LANG;/}',ocp_theme='{$THEME;/}',ocp_username='{$USERNAME;/}'{+START,IF,{$IS_STAFF}},ocp_is_staff=true{+END};
 //]]></script>
 
 {$,If the page is doing a refresh include the markup for that}

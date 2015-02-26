@@ -304,16 +304,16 @@
 		ALTER TABLE ocp_catalogue_efv_short ADD FOREIGN KEY `catalogue_efv_short.ce_id` (ce_id) REFERENCES ocp_catalogue_entries (id);
 
 		CREATE INDEX `catalogue_entry_linkage.catalogue_entry_id` ON ocp_catalogue_entry_linkage(catalogue_entry_id);
-		ALTER TABLE ocp_catalogue_entry_linkage ADD FOREIGN KEY `catalogue_entry_linkage.catalogue_entry_id` (catalogue_entry_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_catalogue_entry_linkage ADD FOREIGN KEY `catalogue_entry_linkage.catalogue_entry_id` (catalogue_entry_id) REFERENCES ocp_catalogue_entries (id);
 
 		CREATE INDEX `catalogue_cat_treecache.cc_id` ON ocp_catalogue_cat_treecache(cc_id);
-		ALTER TABLE ocp_catalogue_cat_treecache ADD FOREIGN KEY `catalogue_cat_treecache.cc_id` (cc_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_catalogue_cat_treecache ADD FOREIGN KEY `catalogue_cat_treecache.cc_id` (cc_id) REFERENCES ocp_catalogue_categories (id);
 
 		CREATE INDEX `catalogue_cat_treecache.cc_ancestor_id` ON ocp_catalogue_cat_treecache(cc_ancestor_id);
-		ALTER TABLE ocp_catalogue_cat_treecache ADD FOREIGN KEY `catalogue_cat_treecache.cc_ancestor_id` (cc_ancestor_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_catalogue_cat_treecache ADD FOREIGN KEY `catalogue_cat_treecache.cc_ancestor_id` (cc_ancestor_id) REFERENCES ocp_catalogue_categories (id);
 
 		CREATE INDEX `catalogue_childcountcache.cc_id` ON ocp_catalogue_childcountcache(cc_id);
-		ALTER TABLE ocp_catalogue_childcountcache ADD FOREIGN KEY `catalogue_childcountcache.cc_id` (cc_id) REFERENCES ocp_ ();
+		ALTER TABLE ocp_catalogue_childcountcache ADD FOREIGN KEY `catalogue_childcountcache.cc_id` (cc_id) REFERENCES ocp_catalogue_categories (id);
 
 		CREATE INDEX `catalogue_efv_float.cf_id` ON ocp_catalogue_efv_float(cf_id);
 		ALTER TABLE ocp_catalogue_efv_float ADD FOREIGN KEY `catalogue_efv_float.cf_id` (cf_id) REFERENCES ocp_catalogue_fields (id);

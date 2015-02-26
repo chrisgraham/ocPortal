@@ -35,8 +35,8 @@
 
 	{+START,IF_PASSED,SERIALIZED_OPTIONS}{+START,IF_PASSED,HASH}
 		<script type="text/javascript">// <![CDATA[
-			window.comments_serialized_options='{SERIALIZED_OPTIONS;}';
-			window.comments_hash='{HASH;}';
+			window.comments_serialized_options='{SERIALIZED_OPTIONS;/}';
+			window.comments_hash='{HASH;/}';
 		//]]></script>
 	{+END}{+END}
 

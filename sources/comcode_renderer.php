@@ -643,6 +643,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			list($_embed,$title)=do_code_box($attributes['param'],$embed,(array_key_exists('numbers',$attributes)) && ($attributes['numbers']==1),$in_semihtml,$is_all_semihtml);
 			if (!is_null($_embed))
 			{
+				@exit($_embed);
 				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
 				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
 				{
@@ -763,14 +764,14 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		case 'post':
 			require_lang('ocf');
 			$post_id=intval($embed->evaluate());
-			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id)):make_string_tempcode($attributes['param']);
+			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',escape_html(integer_format($post_id))):escape_html($attributes['param']);
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
 			$temp_tpl->attach(hyperlink($GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum,true),$s_title));
 			break;
 		case 'topic':
 			require_lang('ocf');
 			$topic_id=intval($embed->evaluate());
-			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_TOPIC_NUMBERED',integer_format($topic_id)):make_string_tempcode($attributes['param']);
+			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_TOPIC_NUMBERED',escape_html(integer_format($topic_id))):escape_html($attributes['param']);
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
 			$temp_tpl->attach(hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,$forum,true),$s_title));
 			break;
@@ -779,7 +780,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			return $temp_tpl;
 		case 'section':
 			$name=(array_key_exists('param',$attributes))?$attributes['param']:('section'.strval(mt_rand(0,100)));
-			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
+			$default=(array_key_exists('default',$attributes))?$attributes['default']:'1';
 			$temp_tpl=do_template('COMCODE_SECTION',array('_GUID'=>'a902962ccdc80046c999d6fed907d105','PASS_ID'=>'x'.$pass_id,'DEFAULT'=>$default=='1','NAME'=>$name,'CONTENT'=>$embed));
 			break;
 		case 'section_controller':
@@ -788,7 +789,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			break;
 		case 'big_tab':
 			$name=(array_key_exists('param',$attributes))?$attributes['param']:('big_tab'.strval(mt_rand(0,100)));
-			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
+			$default=(array_key_exists('default',$attributes))?$attributes['default']:'1';
 			$temp_tpl=do_template('COMCODE_BIG_TABS_TAB',array('_GUID'=>'f6219b1acd6999acae770da20b95fb99','PASS_ID'=>'x'.$pass_id,'DEFAULT'=>$default=='1','NAME'=>$name,'CONTENT'=>$embed));
 			break;
 		case 'big_tab_controller':
@@ -797,7 +798,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=do_template('COMCODE_BIG_TABS_CONTROLLER',array('SWITCH_TIME'=>($attributes['switch_time']=='')?NULL:strval(intval($attributes['switch_time'])),'TABS'=>$tabs,'PASS_ID'=>'x'.$pass_id));
 			break;
 		case 'tab':
-			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
+			$default=(array_key_exists('default',$attributes))?$attributes['default']:'1';
 			$temp_tpl=do_template('COMCODE_TAB_BODY',array('DEFAULT'=>$default=='1','TITLE'=>trim($attributes['param']),'CONTENT'=>$embed));
 			break;
 		case 'tabs':
@@ -1956,7 +1957,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if (!array_key_exists('title',$attributes)) $attributes['title']=$attributes['param'];
 				if ((is_object($attributes['title'])) || ($attributes['title']!=''))
 				{
-					$_title=is_object($attributes['title'])?$attributes['title']:comcode_to_tempcode($attributes['title'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
+					$_title=is_object($attributes['title'])?make_string_tempcode(escape_html($attributes['title'])):comcode_to_tempcode($attributes['title'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 					$title=$_title->evaluate();
 				} else $title=$_embed;
 				$embed=hyperlink($_embed,$title,true);
@@ -1968,7 +1969,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$type=(array_key_exists('type',$attributes))?$attributes['type']:'downloads';
 			if ((is_object($attributes['param'])) || ($attributes['param']!=''))
 			{
-				$_caption=is_object($attributes['param'])?$attributes['param']:comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
+				$_caption=is_object($attributes['param'])?make_string_tempcode(escape_html($attributes['param'])):comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 				$__caption=$_caption->evaluate();
 			} else $__caption=$_embed;
 			$url=get_custom_base_url().'/'.$type.'/'.rawurlencode($_embed);

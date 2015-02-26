@@ -9,4 +9,3 @@
 		{FIELDS}
 	</tbody>
 </table></div>
-

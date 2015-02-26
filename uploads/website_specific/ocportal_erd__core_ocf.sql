@@ -9,8 +9,6 @@
 
 		CREATE TABLE ocp_f_custom_fields
 		(
-			cf_owner_set tinyint(1) NOT NULL,
-			cf_type varchar(80) NOT NULL,
 			id integer auto_increment NULL,
 			cf_locked tinyint(1) NOT NULL,
 			cf_name integer NOT NULL,
@@ -18,6 +16,8 @@
 			cf_default longtext NOT NULL,
 			cf_public_view tinyint(1) NOT NULL,
 			cf_owner_view tinyint(1) NOT NULL,
+			cf_owner_set tinyint(1) NOT NULL,
+			cf_type varchar(80) NOT NULL,
 			cf_required tinyint(1) NOT NULL,
 			cf_show_in_posts tinyint(1) NOT NULL,
 			cf_show_in_post_previews tinyint(1) NOT NULL,
@@ -60,6 +60,7 @@
 			f_cache_last_forum_id integer NOT NULL,
 			f_redirection varchar(255) NOT NULL,
 			f_order varchar(80) NOT NULL,
+			f_is_threaded tinyint(1) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -189,9 +190,9 @@
 			mf_member_id integer NULL,
 			field_1 integer NOT NULL,
 			field_2 varchar(255) NOT NULL,
-			field_3 integer NOT NULL,
-			field_4 integer NOT NULL,
-			field_5 integer NOT NULL,
+			field_3 varchar(255) NOT NULL,
+			field_4 varchar(255) NOT NULL,
+			field_5 varchar(255) NOT NULL,
 			field_6 integer NOT NULL,
 			field_7 varchar(255) NOT NULL,
 			field_8 varchar(255) NOT NULL,
@@ -199,31 +200,38 @@
 			field_10 varchar(255) NOT NULL,
 			field_11 varchar(255) NOT NULL,
 			field_12 varchar(255) NOT NULL,
-			field_13 longtext NOT NULL,
+			field_13 varchar(255) NOT NULL,
 			field_14 varchar(255) NOT NULL,
-			field_15 longtext NOT NULL,
-			field_16 varchar(255) NOT NULL,
+			field_15 varchar(255) NOT NULL,
+			field_16 longtext NOT NULL,
 			field_17 varchar(255) NOT NULL,
 			field_18 varchar(255) NOT NULL,
-			field_19 varchar(255) NOT NULL,
+			field_19 longtext NOT NULL,
 			field_20 varchar(255) NOT NULL,
-			field_21 varchar(255) NOT NULL,
+			field_21 longtext NOT NULL,
 			field_22 varchar(255) NOT NULL,
-			field_23 longtext NOT NULL,
+			field_23 varchar(255) NOT NULL,
 			field_24 varchar(255) NOT NULL,
 			field_25 varchar(255) NOT NULL,
 			field_26 varchar(255) NOT NULL,
-			field_27 longtext NOT NULL,
+			field_27 varchar(255) NOT NULL,
 			field_28 varchar(255) NOT NULL,
-			field_29 varchar(255) NOT NULL,
+			field_29 longtext NOT NULL,
 			field_30 varchar(255) NOT NULL,
 			field_31 varchar(255) NOT NULL,
 			field_32 varchar(255) NOT NULL,
-			field_33 varchar(255) NOT NULL,
+			field_33 longtext NOT NULL,
 			field_34 varchar(255) NOT NULL,
 			field_35 varchar(255) NOT NULL,
 			field_36 varchar(255) NOT NULL,
 			field_37 varchar(255) NOT NULL,
+			field_38 varchar(255) NOT NULL,
+			field_39 varchar(255) NOT NULL,
+			field_40 varchar(255) NOT NULL,
+			field_41 varchar(255) NOT NULL,
+			field_42 varchar(255) NOT NULL,
+			field_43 varchar(255) NOT NULL,
+			field_44 longtext NOT NULL,
 			PRIMARY KEY (mf_member_id)
 		) TYPE=InnoDB;
 
@@ -250,7 +258,7 @@
 		CREATE TABLE ocp_f_multi_moderations
 		(
 			id integer auto_increment NULL,
-			mm_name integer NULL,
+			mm_name integer NOT NULL,
 			mm_post_text longtext NOT NULL,
 			mm_move_to integer NOT NULL,
 			mm_pin_state tinyint(1) NOT NULL,
@@ -258,7 +266,7 @@
 			mm_open_state tinyint(1) NOT NULL,
 			mm_forum_multi_code varchar(255) NOT NULL,
 			mm_title_suffix varchar(255) NOT NULL,
-			PRIMARY KEY (id,mm_name)
+			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
 		CREATE TABLE ocp_f_polls
@@ -308,6 +316,7 @@
 			p_last_edit_by integer NOT NULL,
 			p_is_emphasised tinyint(1) NOT NULL,
 			p_skip_sig tinyint(1) NOT NULL,
+			p_parent_id integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -500,15 +509,6 @@
 		CREATE INDEX `f_member_custom_fields.field_1` ON ocp_f_member_custom_fields(field_1);
 		ALTER TABLE ocp_f_member_custom_fields ADD FOREIGN KEY `f_member_custom_fields.field_1` (field_1) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_member_custom_fields.field_3` ON ocp_f_member_custom_fields(field_3);
-		ALTER TABLE ocp_f_member_custom_fields ADD FOREIGN KEY `f_member_custom_fields.field_3` (field_3) REFERENCES ocp_translate (id);
-
-		CREATE INDEX `f_member_custom_fields.field_4` ON ocp_f_member_custom_fields(field_4);
-		ALTER TABLE ocp_f_member_custom_fields ADD FOREIGN KEY `f_member_custom_fields.field_4` (field_4) REFERENCES ocp_translate (id);
-
-		CREATE INDEX `f_member_custom_fields.field_5` ON ocp_f_member_custom_fields(field_5);
-		ALTER TABLE ocp_f_member_custom_fields ADD FOREIGN KEY `f_member_custom_fields.field_5` (field_5) REFERENCES ocp_translate (id);
-
 		CREATE INDEX `f_member_custom_fields.field_6` ON ocp_f_member_custom_fields(field_6);
 		ALTER TABLE ocp_f_member_custom_fields ADD FOREIGN KEY `f_member_custom_fields.field_6` (field_6) REFERENCES ocp_translate (id);
 
@@ -553,6 +553,9 @@
 
 		CREATE INDEX `f_posts.p_last_edit_by` ON ocp_f_posts(p_last_edit_by);
 		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_last_edit_by` (p_last_edit_by) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `f_posts.p_parent_id` ON ocp_f_posts(p_parent_id);
+		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_parent_id` (p_parent_id) REFERENCES ocp_f_posts (id);
 
 		CREATE INDEX `f_post_history.h_owner_member_id` ON ocp_f_post_history(h_owner_member_id);
 		ALTER TABLE ocp_f_post_history ADD FOREIGN KEY `f_post_history.h_owner_member_id` (h_owner_member_id) REFERENCES ocp_f_members (id);

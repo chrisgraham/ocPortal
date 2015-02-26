@@ -3,6 +3,8 @@
 			id integer auto_increment NULL,
 			c_title integer NOT NULL,
 			c_description integer NOT NULL,
+			c_mail_subject integer NOT NULL,
+			c_mail_body integer NOT NULL,
 			c_enabled tinyint(1) NOT NULL,
 			c_cost integer NOT NULL,
 			c_one_per_member tinyint(1) NOT NULL,
@@ -14,6 +16,8 @@
 			id integer auto_increment NULL,
 			p_title integer NOT NULL,
 			p_description integer NOT NULL,
+			p_mail_subject integer NOT NULL,
+			p_mail_body integer NOT NULL,
 			p_enabled tinyint(1) NOT NULL,
 			p_cost integer NOT NULL,
 			p_hours integer NOT NULL,
@@ -179,11 +183,23 @@
 		CREATE INDEX `pstore_customs.c_description` ON ocp_pstore_customs(c_description);
 		ALTER TABLE ocp_pstore_customs ADD FOREIGN KEY `pstore_customs.c_description` (c_description) REFERENCES ocp_translate (id);
 
+		CREATE INDEX `pstore_customs.c_mail_subject` ON ocp_pstore_customs(c_mail_subject);
+		ALTER TABLE ocp_pstore_customs ADD FOREIGN KEY `pstore_customs.c_mail_subject` (c_mail_subject) REFERENCES ocp_translate (id);
+
+		CREATE INDEX `pstore_customs.c_mail_body` ON ocp_pstore_customs(c_mail_body);
+		ALTER TABLE ocp_pstore_customs ADD FOREIGN KEY `pstore_customs.c_mail_body` (c_mail_body) REFERENCES ocp_translate (id);
+
 		CREATE INDEX `pstore_permissions.p_title` ON ocp_pstore_permissions(p_title);
 		ALTER TABLE ocp_pstore_permissions ADD FOREIGN KEY `pstore_permissions.p_title` (p_title) REFERENCES ocp_translate (id);
 
 		CREATE INDEX `pstore_permissions.p_description` ON ocp_pstore_permissions(p_description);
 		ALTER TABLE ocp_pstore_permissions ADD FOREIGN KEY `pstore_permissions.p_description` (p_description) REFERENCES ocp_translate (id);
+
+		CREATE INDEX `pstore_permissions.p_mail_subject` ON ocp_pstore_permissions(p_mail_subject);
+		ALTER TABLE ocp_pstore_permissions ADD FOREIGN KEY `pstore_permissions.p_mail_subject` (p_mail_subject) REFERENCES ocp_translate (id);
+
+		CREATE INDEX `pstore_permissions.p_mail_body` ON ocp_pstore_permissions(p_mail_body);
+		ALTER TABLE ocp_pstore_permissions ADD FOREIGN KEY `pstore_permissions.p_mail_body` (p_mail_body) REFERENCES ocp_translate (id);
 
 		CREATE INDEX `pstore_permissions.p_specific_permission` ON ocp_pstore_permissions(p_specific_permission);
 		ALTER TABLE ocp_pstore_permissions ADD FOREIGN KEY `pstore_permissions.p_specific_permission` (p_specific_permission) REFERENCES ocp_sp_list (the_name);

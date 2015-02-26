@@ -294,16 +294,38 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 	function add_actualisation()
 	{
 		$name=post_param('name','');
-		$image=post_param('image','');
 		$cure=post_param('cure','');
-		$cure_price=post_param('cure_price',0);
+		$cure_price=post_param_integer('cure_price',0);
 		$immunization=post_param('immunization','');
-		$immunization_price=post_param('immunization_price',0);
-		$spread_rate=post_param('spread_rate',12);
-		$points_per_spread=post_param('points_per_spread',10);
-		$enabled=post_param('enabled',0);
+		$immunization_price=post_param_integer('immunization_price',0);
+		$spread_rate=post_param_integer('spread_rate',12);
+		$points_per_spread=post_param_integer('points_per_spread',10);
+		$enabled=post_param_integer('enabled',0);
 
-		$id=$GLOBALS['SITE_DB']->query_insert('diseases',array('name'=>$name,'image'=>$image,'cure'=>$cure,'cure_price'=>$cure_price,'immunisation'=>$immunization,'immunisation_price'=>$immunization_price,'spread_rate'=>$spread_rate,'points_per_spread'=>$points_per_spread,'last_spread_time'=>0,'enabled'=>$enabled),true);
+		require_code('uploads');
+		$urls=get_url('url','image','uploads/diseases_addon',0,OCP_UPLOAD_IMAGE,false,'','');
+		if ($urls[0]=='')
+		{
+			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+		}
+
+		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
+			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
+
+		$url=$urls[0];
+
+		$id=$GLOBALS['SITE_DB']->query_insert('diseases',array(
+			'name'=>$name,
+			'image'=>$url,
+			'cure'=>$cure,
+			'cure_price'=>$cure_price,
+			'immunisation'=>$immunization,
+			'immunisation_price'=>$immunization_price,
+			'spread_rate'=>$spread_rate,
+			'points_per_spread'=>$points_per_spread,
+			'last_spread_time'=>0,
+			'enabled'=>$enabled,
+		),true);
 
 		return strval($id);
 	}
@@ -319,17 +341,15 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		$id=intval($id);
 		$name=post_param('name','');
 		$cure=post_param('cure','');
-		$cure_price=post_param('cure_price',0);
+		$cure_price=post_param_integer('cure_price',0);
 		$immunization=post_param('immunization','');
-		$immunization_price=post_param('immunization_price',0);
-		$spread_rate=post_param('spread_rate',12);
-		$points_per_spread=post_param('points_per_spread',10);
-		$enabled=post_param('enabled',0);
+		$immunization_price=post_param_integer('immunization_price',0);
+		$spread_rate=post_param_integer('spread_rate',12);
+		$points_per_spread=post_param_integer('points_per_spread',10);
+		$enabled=post_param_integer('enabled',0);
 
 		require_code('uploads');
-
 		$urls=get_url('url','image','uploads/diseases_addon',0,OCP_UPLOAD_IMAGE,false,'','');
-
 		if ($urls[0]=='')
 		{
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));

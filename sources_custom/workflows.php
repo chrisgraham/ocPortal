@@ -1290,7 +1290,7 @@ function workflow_choose_ui($include_inherit=false,$include_current=false)
 	}
 	elseif (count($all_workflows)==1)
 	{
-		return form_input_hidden('workflow','wf_'.current(array_keys($all_workflows)));
+		return form_input_hidden('workflow','wf_'.strval(current(array_keys($all_workflows))));
 	}
 	else
 	{

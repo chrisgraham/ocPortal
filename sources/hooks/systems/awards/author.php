@@ -58,7 +58,7 @@ class Hook_awards_author
 	{
 		$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),$zone);
 
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['author'],'SUMMARY'=>get_translated_text($row['description']),'URL'=>$url));
+		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['author'],'SUMMARY'=>get_translated_tempcode($row['description']),'URL'=>$url));
 	}
 
 }

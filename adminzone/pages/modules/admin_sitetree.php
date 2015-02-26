@@ -164,7 +164,7 @@ class Module_admin_sitetree
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addpagewizard';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_comcode_pages';
 
-		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(1),integer_format(3)));
+		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(escape_html(integer_format(1)),escape_html(integer_format(3))));
 
 		require_code('form_templates');
 		require_code('zones2');
@@ -191,7 +191,7 @@ class Module_admin_sitetree
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addpagewizard';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_comcode_pages';
 
-		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(2),integer_format(3)));
+		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(escape_html(integer_format(2)),escape_html(integer_format(3))));
 
 		breadcrumb_set_parents(array(/*array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),*/array('_SELF:_SELF:pagewizard',do_lang_tempcode('PAGE_WIZARD'))));
 		breadcrumb_set_self(do_lang_tempcode('DETAILS'));

@@ -165,7 +165,7 @@ class Module_cms_polls extends standard_aed_module
 			$used=($total_votes!=0);
 			$current=($row['is_current']==1);
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'polls','type'=>'view','id'=>$row['id']),get_module_zone('polls')),get_translated_text($row['question']))),get_timezoned_date($row['add_time']),$current?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($used || $current)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$username,integer_format($row['poll_views']),do_lang_tempcode('VOTES',escape_html(integer_format($total_votes))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'polls','type'=>'view','id'=>$row['id']),get_module_zone('polls')),get_translated_text($row['question']),false,true)),get_timezoned_date($row['add_time']),$current?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($used || $current)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$username,integer_format($row['poll_views']),do_lang_tempcode('VOTES',escape_html(integer_format($total_votes))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		$search_url=build_url(array('page'=>'search','id'=>'polls'),get_module_zone('search'));

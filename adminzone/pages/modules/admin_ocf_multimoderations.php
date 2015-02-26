@@ -55,6 +55,8 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/multimoderations';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_forum_helpdesk';
 
+		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');
@@ -212,7 +214,7 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$fields->attach(results_entry(array(get_translated_text($row['mm_name'],$GLOBALS['FORUM_DB']),$destination,$pin_state,$open_state,$sink_state,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(get_translated_text($row['mm_name'],$GLOBALS['FORUM_DB']),$destination,$pin_state,$open_state,$sink_state,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);

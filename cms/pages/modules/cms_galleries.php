@@ -1640,7 +1640,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	var $award_type='gallery';
 	var $menu_label='GALLERIES';
 	var $table='galleries';
-	var $javascript="var fn=document.getElementById('fullname'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";
+	var $javascript="var fn=document.getElementById('fullname'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,'').substr(0,80); }; }";
 
 	/**
 	 * Standard aed_module list function.

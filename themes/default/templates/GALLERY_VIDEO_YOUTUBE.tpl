@@ -20,7 +20,7 @@
 	add_event_listener_abstract(window,'real_load',function () {
 		if (document.getElementById('next_slide'))
 		{
-			stop_slideshow_timer('{!STOPPED;}');
+			stop_slideshow_timer('{!STOPPED;/}');
 			window.setTimeout(function() {
 				document.getElementById('{$GET;,player_id}').addEventListener('onStateChange','youtubeStateChanged');
 				document.getElementById('{$GET;,player_id}').playVideo();

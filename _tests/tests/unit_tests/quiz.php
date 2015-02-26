@@ -28,16 +28,13 @@ class quiz_test_set extends ocp_test_case
 
 		$this->quiz_id=add_quiz('Quiz1',15,'Begin','End','','somethng',60,time(),NULL,1,0,'TEST',1,'Questions',NULL,0,NULL);
 
-		// Test the forum was actually created
 		$this->assertTrue('Quiz1'==get_translated_text($GLOBALS['FORUM_DB']->query_value('quizzes','q_name',array('id'=>$this->quiz_id))));
 	}
 
 	function testEditQuiz()
 	{
-		// Test the forum edits
 		edit_quiz($this->quiz_id,'Quiz2',10,'Go','Stop','','Nothing',50,time(),NULL,3,0,'TEST',1,'Questions','Nothing','',0,NULL);
 
-		// Test the forum was actually created
 		$this->assertTrue('Quiz2'==get_translated_text($GLOBALS['FORUM_DB']->query_value('quizzes','q_name',array('id'=>$this->quiz_id))));
 	}
 

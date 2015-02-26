@@ -33,7 +33,7 @@
 		var data=[
 			{+START,LOOP,DATA}
 				{+START,IF,{$NEQ,{_loop_key},0}},{+END}
-				['{ENTRY_TITLE;^}',{LATITUDE},{LONGITUDE},{CC_ID},{ID},'{ENTRY_CONTENT;^}',{STAR}]
+				['{ENTRY_TITLE;^/}',{LATITUDE},{LONGITUDE},{CC_ID},{ID},'{ENTRY_CONTENT;^/}',{STAR}]
 			{+END}
 		];
 

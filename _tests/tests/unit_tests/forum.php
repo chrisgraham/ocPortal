@@ -32,7 +32,6 @@ class forum_test_set extends ocp_test_case
 		$this->access_mapping=array(db_get_first_id()=>4);
 		$this->forum_id=ocf_make_forum('TestAdd','Test',db_get_first_id(),$this->access_mapping,db_get_first_id(),1,1,0,'','','','last_post');
 
-		// Test the forum was actually created
 		$this->assertTrue('TestAdd'==$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$this->forum_id)));
 	}
 
@@ -45,7 +44,6 @@ class forum_test_set extends ocp_test_case
 
 	function testEditForum()
 	{
-		// Test the forum edits
 		ocf_edit_forum($this->forum_id,'TestEdit','Test',db_get_first_id(),db_get_first_id(),1,1,0,'','','','last_post',0,false);
 		$this->assertTrue('TestEdit'==$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$this->forum_id)));
 	}

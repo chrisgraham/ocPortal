@@ -39,7 +39,6 @@ class posts_test_set extends ocp_test_case
 
 		$this->post_id=ocf_make_post($this->topic_id,$title='welcome',$post='welcome to the posts',$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false);
 
-		// Test the forum was actually created
 		$this->assertTrue('welcome'==$GLOBALS['FORUM_DB']->query_value('f_posts','p_title ',array('id'=>$this->post_id)));
 	}
 
@@ -47,10 +46,8 @@ class posts_test_set extends ocp_test_case
 	{
 		$this->establish_admin_session();
 
-		// Test the forum edits
 		ocf_edit_post($post_id=$this->post_id,$validated=1,$title='take care',$post='the post editing',$skip_sig=0,$is_emphasised=0,$intended_solely_for=NULL,$show_as_edited=1,$mark_as_unread=0,$reason='Nothing');
 
-		// Test the forum was actually created
 		$this->assertTrue('take care'==$GLOBALS['FORUM_DB']->query_value('f_posts','p_title ',array('id'=>$this->post_id)));
 	}
 

@@ -55,6 +55,8 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/customprofilefields';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_members';
 
+		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
@@ -78,8 +80,6 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 	 */
 	function misc()
 	{
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
-
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('CUSTOM_PROFILE_FIELDS'),comcode_lang_string('DOC_CUSTOM_PROFILE_FIELDS'),
 					array(
@@ -466,6 +466,9 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			if (!is_null($row[$f_name]))
 			{
 				$val=$row[$f_name];
+
+				if ($val==STRING_MAGIC_NULL) continue;
+
 				$lines->attach(do_template('OCF_CPF_STATS_LINE',array('CNT'=>integer_format($row['cnt']),'VAL'=>is_integer($val)?integer_format($val):$val)));
 			}
 		}

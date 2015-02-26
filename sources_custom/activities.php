@@ -30,6 +30,8 @@ function get_activity_querying_sql($viewer_id,$mode,$member_ids)
 {
 	$proceed_selection=true; // There are some cases in which even glancing at the database is a waste of precious time.
 
+	require_all_lang();
+
 	/*if (isset($member_ids[0])) // Useful for testing
 		$viewer_id=$member_ids[0];*/
 

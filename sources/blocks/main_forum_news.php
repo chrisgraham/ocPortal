@@ -145,7 +145,7 @@ class Block_main_forum_news
 			$date=get_timezoned_date($myrow[$date_key]);
 			$author_url=(((array_key_exists('member_based',$map)) && ($map['member_based']=='1')) || (!addon_installed('authors')))?new ocp_tempcode():build_url(array('page'=>'authors','type'=>'misc','author'=>$myrow['firstusername']),get_module_zone('authors'));
 			$author=$myrow['firstusername'];
-			$news_title=$myrow['title'];
+			$news_title=escape_html($myrow['title']);
 			$news=is_object($myrow['firstpost'])?$myrow['firstpost']:make_string_tempcode(xhtmlise_html($myrow['firstpost']));
 			if (is_null($news)) $news='';
 			$full_url=$GLOBALS['FORUM_DRIVER']->topic_url($id,'',true);

@@ -386,6 +386,11 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 		));
 	}
 
+	foreach ($codes as $i=>$code)
+	{
+		$codes[$i]=substr($code,0,80);
+	}
+	$codes=array_unique($codes);
 	foreach ($codes as $code)
 	{
 		$GLOBALS['SITE_DB']->query_insert('bookable_codes',array(
@@ -443,6 +448,11 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 	$GLOBALS['SITE_DB']->query_update('bookable',$bookable_details,array('id'=>$bookable_id),'',1);
 
 	$GLOBALS['SITE_DB']->query_delete('bookable_codes',array('bookable_id'=>$bookable_id));
+	foreach ($codes as $i=>$code)
+	{
+		$codes[$i]=substr($code,0,80);
+	}
+	$codes=array_unique($codes);
 	foreach ($codes as $code)
 	{
 		$GLOBALS['SITE_DB']->query_insert('bookable_codes',array(

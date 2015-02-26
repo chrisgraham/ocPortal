@@ -27,6 +27,7 @@ if (!running_script('tracker'))
 		$params.=($params=='')?'?':'&';
 		$params.=$key.='='.urlencode($val);
 	}
+	$params.=static_evaluate_tempcode(symbol_tempcode('KEEP'));
 	$frame_name='frame_'.uniqid('',true);
 	echo '
 		<div style="padding: 1em">

@@ -31,16 +31,13 @@ class user_test_set extends ocp_test_case
 
 		$this->user_id=ocf_make_member('testuser','123456','test@test.com',array(),10,1,1980,array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',true,NULL,'',1,NULL,NULL,0,'*','');
 
-		// Test the forum was actually created
 		$this->assertTrue('testuser'==$GLOBALS['FORUM_DB']->query_value('f_members','m_username',array('id'=>$this->user_id)));
 	}
 
 	function testEdituser()
 	{
-		// Test the forum edits
 		ocf_edit_member($this->user_id,'testing@test.com',0,25,12,1975,NULL,NULL,array(),'',0,0,0,NULL,1,1,NULL,NULL,NULL,1,NULL,'*','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,false);
 
-		// Test the forum was actually created
 		$this->assertTrue('testing@test.com'==$GLOBALS['FORUM_DB']->query_value('f_members','m_email_address ',array('id'=>$this->user_id)));
 	}
 

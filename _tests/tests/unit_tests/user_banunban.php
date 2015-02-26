@@ -30,16 +30,13 @@ class user_banunban_test_set extends ocp_test_case
 
 		ocf_ban_member(3);
 
-		// Test the forum was actually created
 		$this->assertTrue(1==$GLOBALS['FORUM_DB']->query_value('f_members','m_is_perm_banned',array('id'=>3)));
 	}
 
 	function testEdituser_banunban()
 	{
-		// Test the forum edits
 		ocf_unban_member(3);
 
-		// Test the forum was actually created
 		$this->assertTrue(0==$GLOBALS['FORUM_DB']->query_value('f_members','m_is_perm_banned ',array('id'=>3)));
 	}
 

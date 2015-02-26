@@ -132,7 +132,7 @@
 			<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
 
 			<script type="text/javascript">// <![CDATA[
-				initialise_dragdrop_upload('container_for_{NAME*;}','{NAME*;}');
+				initialise_dragdrop_upload('container_for_{NAME;/}','{NAME;/}');
 			//]]></script>
 		</td>
 	</tr>

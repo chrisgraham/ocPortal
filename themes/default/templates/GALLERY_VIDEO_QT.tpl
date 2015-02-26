@@ -21,7 +21,7 @@
 	add_event_listener_abstract(window,'real_load',function () {
 		if (document.getElementById('next_slide'))
 		{
-			stop_slideshow_timer('{!STOPPED;}');
+			stop_slideshow_timer('{!STOPPED;/}');
 			window.setTimeout(function() {
 				add_event_listener_abstract(document.getElementById('{$GET;,player_id}'),'qt_ended',function() { playerStopped(); } );
 				document.getElementById('{$GET;,player_id}').Play();

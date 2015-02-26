@@ -71,6 +71,7 @@
 			f_cache_last_forum_id integer NOT NULL,
 			f_redirection varchar(255) NOT NULL,
 			f_order varchar(80) NOT NULL,
+			f_is_threaded tinyint(1) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -162,6 +163,7 @@
 			p_last_edit_by integer NOT NULL,
 			p_is_emphasised tinyint(1) NOT NULL,
 			p_skip_sig tinyint(1) NOT NULL,
+			p_parent_id integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -296,6 +298,9 @@
 
 		CREATE INDEX `f_posts.p_last_edit_by` ON ocp_f_posts(p_last_edit_by);
 		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_last_edit_by` (p_last_edit_by) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `f_posts.p_parent_id` ON ocp_f_posts(p_parent_id);
+		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_parent_id` (p_parent_id) REFERENCES ocp_f_posts (id);
 
 		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
 		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);

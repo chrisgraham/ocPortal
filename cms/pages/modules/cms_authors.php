@@ -164,7 +164,7 @@ class Module_cms_authors
 			$title=get_screen_title('DEFINE_AUTHOR');
 		} else
 		{
-			$title=get_screen_title('_DEFINE_AUTHOR',true,array($author));
+			$title=get_screen_title('_DEFINE_AUTHOR',true,array(escape_html($author)));
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__ad','author'=>$author),'_SELF');
@@ -186,7 +186,7 @@ class Module_cms_authors
 			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_ID'),do_lang_tempcode('DESCRIPTION_MEMBER_ID'),'forum_handle',is_null($handle)?'':$GLOBALS['FORUM_DRIVER']->get_username(intval($handle)),false));
 		} else
 		{
-			$hidden->attach(form_input_hidden('forum_handle',strval($handle)));
+			$hidden->attach(form_input_hidden('forum_handle',$handle));
 		}
 
 		require_code('fields');

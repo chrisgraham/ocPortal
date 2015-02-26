@@ -222,11 +222,11 @@ class Module_admin_workflow extends standard_aed_module
 
 		if (count($workflow_names) > 0)
 		{
-			$defined_names=do_lang('DEFINED_WORKFLOWS', implode(', ', $workflow_names));
+			$defined_names=do_lang_tempcode('DEFINED_WORKFLOWS', escape_html(implode(', ', $workflow_names)));
 		}
 		else
 		{
-			$defined_names=do_lang('NO_DEFINED_WORKFLOWS');
+			$defined_names=do_lang_tempcode('NO_DEFINED_WORKFLOWS');
 		}
 
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('WORKFLOW_NAME_DESCRIPTION', $defined_names),'name',$name_string,true));
@@ -249,11 +249,11 @@ class Module_admin_workflow extends standard_aed_module
 
 		if ($points_text==array())
 		{
-			$points_list=do_lang('APPROVAL_POINTS_DESCRIPTION_EMPTY_LIST');
+			$points_list=do_lang_tempcode('APPROVAL_POINTS_DESCRIPTION_EMPTY_LIST');
 		}
 		else
 		{
-			$points_list=do_lang('APPROVAL_POINTS_DESCRIPTION_LIST', implode(', ', $points_text));
+			$points_list=do_lang_tempcode('APPROVAL_POINTS_DESCRIPTION_LIST', escape_html(implode(', ', $points_text)));
 		}
 
 		// Now add the approval point lines
@@ -860,8 +860,8 @@ class Module_admin_workflow extends standard_aed_module
 		{
 			if (!in_array($p,$all_points) &&												// This point has not been defined previously...
 				(
-					!in_array($p,$_POST) ||													// ... and we are not defining it now...
-					($_POST['points']==$p && count(array_keys($_POST,$p))==1)	// ... or our definition is restricted to just the approval point list
+					!@in_array(get_magic_quotes_gpc()?addslashes($p):$p,$_POST) ||													// ... and we are not defining it now...
+					($_POST['points']==get_magic_quotes_gpc()?addslashes($p):$p && count(array_keys($_POST,get_magic_quotes_gpc()?addslashes($p):$p))==1)	// ... or our definition is restricted to just the approval point list
 				)
 			)
 			{
@@ -949,8 +949,8 @@ class Module_admin_workflow extends standard_aed_module
 		if (count($clarify_points) > 0)
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-				'TITLE'=>do_lang('DEFINE_WORKFLOW_POINTS'),
-				'HELP'=>do_lang_tempcode('DEFINE_WORKFLOW_POINTS_HELP',implode(', ',$clarify_points)),
+				'TITLE'=>do_lang_tempcode('DEFINE_WORKFLOW_POINTS'),
+				'HELP'=>do_lang_tempcode('DEFINE_WORKFLOW_POINTS_HELP',escape_html(implode(', ',$clarify_points))),
 			)));
 			$counter=0;
 			foreach ($clarify_points as $p)
@@ -966,9 +966,9 @@ class Module_admin_workflow extends standard_aed_module
 				}
 				$fields->attach(form_input_various_ticks(
 					$content,
-					do_lang('WORKFLOW_POINT_GROUPS_DESC',$p),
+					do_lang_tempcode('WORKFLOW_POINT_GROUPS_DESC',escape_html($p)),
 					NULL,
-					do_lang('WORKFLOW_POINT_GROUPS',$p),
+					do_lang_tempcode('WORKFLOW_POINT_GROUPS',escape_html($p)),
 					true
 				));
 				$counter++;
@@ -978,8 +978,8 @@ class Module_admin_workflow extends standard_aed_module
 		if (count($redefine_points) > 0)
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-				'TITLE'=>do_lang('REDEFINE_WORKFLOW_POINTS'),
-				'HELP'=>do_lang('REDEFINE_WORKFLOW_POINTS_HELP'),
+				'TITLE'=>do_lang_tempcode('REDEFINE_WORKFLOW_POINTS'),
+				'HELP'=>do_lang_tempcode('REDEFINE_WORKFLOW_POINTS_HELP'),
 			)));
 
 			// These points already exist, so look them up
@@ -1001,9 +1001,9 @@ class Module_admin_workflow extends standard_aed_module
 				}
 				$fields->attach(form_input_various_ticks(
 					$content,
-					do_lang('WORKFLOW_POINT_GROUPS_DESC',$p),
+					do_lang_tempcode('WORKFLOW_POINT_GROUPS_DESC',escape_html($p)),
 					NULL,
-					do_lang('WORKFLOW_POINT_GROUPS',$p),
+					do_lang_tempcode('WORKFLOW_POINT_GROUPS',escape_html($p)),
 					true
 				));
 			}

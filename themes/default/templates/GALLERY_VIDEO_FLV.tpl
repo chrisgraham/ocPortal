@@ -35,7 +35,7 @@
 			provider: '{$?,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},sound,video}',
 			events: {
 				onComplete: function() { if (document.getElementById('next_slide')) playerStopped(); },
-				onReady: function() { if (document.getElementById('next_slide')) { stop_slideshow_timer('{!STOPPED;}'); jwplayer("flv_container_{$GET%,rand_id}").play(true); } }
+				onReady: function() { if (document.getElementById('next_slide')) { stop_slideshow_timer('{!STOPPED;/}'); jwplayer("flv_container_{$GET%,rand_id}").play(true); } }
 			}
 		});
 	} );

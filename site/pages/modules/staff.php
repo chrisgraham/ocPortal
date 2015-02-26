@@ -121,7 +121,7 @@ class Module_staff
 			if (!$GLOBALS['FORUM_DRIVER']->is_staff($id)) continue;
 			$name=$row_staff['name'];
 			$url=build_url(array('page'=>'_SELF','id'=>$name,'type'=>'view'),'_SELF');
-			$role=get_ocp_cpf('role',$id);
+			$role=escape_html(get_ocp_cpf('role',$id));
 			if (is_null($role))
 			{
 				$description=''; // Null should not happen, but sometimes things corrupt

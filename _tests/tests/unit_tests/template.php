@@ -26,15 +26,12 @@ class template_test_set extends ocp_test_case
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');
 		$this->template_id=ocf_make_post_template('test_template','test','+1',1);
-		// Test the forum was actually created
 		$this->assertTrue('test_template'==$GLOBALS['FORUM_DB']->query_value('f_post_templates','t_title ',array('id'=>$this->template_id)));
 	}
 
 	function testEditPostTemplate()
 	{
-		// Test the forum edits
 		ocf_edit_post_template($this->template_id,'test_template2','test','+1',1);
-		// Test the forum was actually created
 		$this->assertTrue('test_template2'==$GLOBALS['FORUM_DB']->query_value('f_post_templates','t_title ',array('id'=>$this->template_id)));
 	}
 

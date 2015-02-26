@@ -507,15 +507,15 @@ class Module_admin_ecommerce extends standard_aed_module
 			{
 				$product=$invoice['i_type_code'];
 
-				$types['CLOSING']['AMOUNT']+=$invoice['i_amount'];
+				$types['CLOSING']['AMOUNT']+=intval($invoice['i_amount']);
 
 				if ($invoice['i_time']<$from)
 				{
-					$types['OPENING']['AMOUNT']+=$invoice['i_amount'];
+					$types['OPENING']['AMOUNT']+=intval($invoice['i_amount']);
 					continue;
 				}
 
-				$types[$product]['AMOUNT']+=$invoice['amount'];
+				$types[$product]['AMOUNT']+=intval($invoice['i_amount']);
 			}
 		}
 
@@ -726,7 +726,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$r['id']),'_SELF');
 
-			$fields->attach(results_entry(array(get_translated_text($r['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),$r['s_cost'],do_lang('_LENGTH_UNIT_'.$r['s_length_units'],integer_format($r['s_length'])),ocf_get_group_name($r['s_group_id']),($r['s_enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($r['id']))))),true);
+			$fields->attach(results_entry(array(get_translated_text($r['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),$r['s_cost'],do_lang('_LENGTH_UNIT_'.$r['s_length_units'],integer_format($r['s_length'])),ocf_get_group_name($r['s_group_id']),($r['s_enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($r['id'])))),true));
 		}
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);

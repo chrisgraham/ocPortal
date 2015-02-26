@@ -355,7 +355,7 @@ function get_charset()
 /**
  * Echo an error message, and a debug back-trace of the current execution stack. Use this for debugging purposes.
  *
- * @param  string			An error message
+ * @param  mixed			An error message
  */
 function die_html_trace($message)
 {

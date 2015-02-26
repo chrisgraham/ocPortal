@@ -496,7 +496,7 @@
 		// If this is a contextual edit, start talking to the parent window
 		if ((window.opener) && (window.opener.document))
 		{
-			load_contextual_css_editor('{FILE*;}');
+			load_contextual_css_editor('{FILE;/}');
 			{+START,IF,{$NOT,{$VALUE_OPTION,no_frames}}}
 				document.getElementById('save_button').style.display='none';
 			{+END}

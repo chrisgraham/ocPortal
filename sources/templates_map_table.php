@@ -32,7 +32,7 @@ function map_table($title,$fields)
 	{
 		if (!is_array($val))
 		{
-			$raw=true;
+			$raw=is_object($val);
 		} else
 		{
 			list($val,$raw)=$val;

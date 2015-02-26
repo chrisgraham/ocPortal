@@ -20,10 +20,10 @@
 			{
 				//set_cookie('js_on',1,120);
 
-				var none=document.getElementById('{DEFAULT_FORUM;}');
+				var none=document.getElementById('{DEFAULT_FORUM;/}');
 				if (none) none.checked=true;
 
-				if (('{DEFAULT_FORUM;}'!='none') && ('{DEFAULT_FORUM;}'!='ocf'))
+				if (('{DEFAULT_FORUM;/}'!='none') && ('{DEFAULT_FORUM;/}'!='ocf'))
 				{
 					var d=document.getElementById('forum_path');
 					if (d) d.style.display='block';
@@ -37,12 +37,12 @@
 			{
 				if ((form.elements['board_prefix']) && (form.elements['board_prefix'].type!='hidden') && (form.elements['board_prefix'].value==form.elements['base_url'].value))
 				{
-					window.alert('{!FORUM_BASE_URL_INVALID;}');
+					window.alert('{!FORUM_BASE_URL_INVALID;/}');
 					return false;
 				}
 				if ((form.elements['board_prefix']) && (form.elements['board_prefix'].type!='hidden') && (form.elements['board_prefix'].value.substr(-7)=='/forums') && (!form.elements['board_prefix'].changed))
 				{
-					if (!window.confirm('{!FORUM_BASE_URL_UNCHANGED;}')) return false;
+					if (!window.confirm('{!FORUM_BASE_URL_UNCHANGED;/}')) return false;
 				}
 
 				var i;
@@ -50,7 +50,7 @@
 				{
 					if ((form.elements[i].className.indexOf('required1')!=-1) && (form.elements[i].value==''))
 					{
-						window.alert('{!IMPROPERLY_FILLED_IN;}');
+						window.alert('{!IMPROPERLY_FILLED_IN;/}');
 						return false;
 					}
 				}
@@ -112,11 +112,11 @@
 				if (itm.style.display=='none')
 				{
 					itm.style.display='block';
-					if (img) img.src='{$BASE_URL;}/install.php?type=contract';
+					if (img) img.src='{$BASE_URL;/}/install.php?type=contract';
 				} else
 				{
 					itm.style.display='none';
-					if (img) img.src='{$BASE_URL;}/install.php?type=expand';
+					if (img) img.src='{$BASE_URL;/}/install.php?type=expand';
 				}
 			}
 
@@ -128,7 +128,7 @@
 				{
 					if (form.elements['ocf_admin_password_confirm'].value!=form.elements['ocf_admin_password'].value)
 					{
-						window.alert('{!PASSWORDS_DO_NOT_MATCH;}');
+						window.alert('{!PASSWORDS_DO_NOT_MATCH;/}');
 						return false;
 					}
 				}
@@ -136,16 +136,16 @@
 				{
 					if (form.elements['admin_password_confirm'].value!=form.elements['admin_password'].value)
 					{
-						window.alert('{!PASSWORDS_DO_NOT_MATCH;}');
+						window.alert('{!PASSWORDS_DO_NOT_MATCH;/}');
 						return false;
 					}
 				}
 
-				window.alert('{PASSWORD_PROMPT;}','');
+				window.alert('{PASSWORD_PROMPT;/}','');
 
 				if (form.elements['admin_password'].value.length<5)
 				{
-					return window.confirm('{!ADMIN_PASSWORD_INSECURE;}');
+					return window.confirm('{!ADMIN_PASSWORD_INSECURE;/}');
 				}
 				return true;
 			}

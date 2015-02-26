@@ -173,7 +173,7 @@ class Block_main_forum_topics
 					{
 						$topic_url_unread=build_url(array('page'=>'topicview','id'=>$topic['id'],'type'=>'first_unread'),get_module_zone('topicview'),NULL,false,false,false,'first_unread');
 					}
-					$title=$topic['title'];
+					$title=escape_html($topic['title']);
 					$date=get_timezoned_date($topic[$date_key]);
 					$username=$topic[$username_key];
 					$member_id=array_key_exists($memberid_key,$topic)?$topic[$memberid_key]:NULL;

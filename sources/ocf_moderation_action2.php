@@ -254,6 +254,7 @@ function ocf_edit_warning($warning_id,$explanation,$is_warning=1)
  * Delete a formal warning.
  *
  * @param  AUTO_LINK  The ID of the formal warning we are deleting.
+ * @return AUTO_LINK	 The member ID the warning was for.
  */
 function ocf_delete_warning($warning_id)
 {
@@ -266,6 +267,8 @@ function ocf_delete_warning($warning_id)
 
 	$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_is_warning'=>1,'w_member_id'=>$member_id));
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member_id),'',1);
+
+	return $member_id;
 }
 
 

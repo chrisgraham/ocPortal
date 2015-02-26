@@ -24,13 +24,13 @@ Most security logs are accidental (caused by mistyped URLs, or buggy software) o
 
 At the time of writing, the following types of alert are defined:
  - [b]DODGY_GET_HACK[/b], A suspicious URL was given that includes characters looking like they may be there to do dodgy things. As URLs are generally clean of symbols, it is safe for ocPortal to detect dangerous looking ones, such as file system paths, new line characters, and HTML symbols
- - [b]REFERRER_IFRAME_HACK[/b], It looks like someone tried to abuse an iframe in ocPortal, where the iframe URL was given by the main page URL. By doing this, social engineering, or referrer faking, might be achievable
- - [b]EVIL_POSTED_FORM_HACK[/b], This may be due to a social engineering attack, where a logged in administrator has been tricked into filling in a form targeted to delete something from the website
+ - [s][b]REFERRER_IFRAME_HACK[/b], It looks like someone tried to abuse an iframe in ocPortal, where the iframe URL was given by the main page URL. By doing this, social engineering, or referrer faking, might be achievable[/s] -- [i]not currently in use, we now use alternative and more reliable CSRF-prevention methods[/i]
+ - [b]EVIL_POSTED_FORM_HACK[/b], This may be due to a social engineering attack, where a logged in administrator has been tricked into filling in a form targeted to delete something from the website (CSRF)
  - [b]VOTE_CHEAT[/b], The user tried to vote outside the allowed range of options (e.g. 11 or -2). I can think of no way this could be done accidentally
  - [b]SCRIPT_UPLOAD_HACK[/b], The user tried to upload a PHP script. This may well be innocent (if they are uploading a saved web-page with .php in the URL for example, or if they are uploading a script they expect people to be able to download in raw form)
- - [b]ASCII_ENTITY_URL_HACK[/b], The user introduced HTML into a Comcode HTML tag that used ascii-encoded entities. This is likely to be innocent, but is blocked because it can be used to trick Javascript filtration
+ - [b]ASCII_ENTITY_URL_HACK[/b], The user introduced HTML into a Comcode HTML tag that used ASCII-encoded entities. This is likely to be innocent, but is blocked because it can be used to trick Javascript filtration
  - [b]SCRIPT_TAG_HACK[/b], The user tried to introduce a script tag. This would be likely to be a hack attempt if it wasn't for the fact that by default, ordinary members cannot submit any HTML at all; it is therefore likely that a privileged user has out-stepped the norm, or a privileged member is not to be trusted
- - [b]SCRIPT_URL_HACK[/b], This is highly likely to be a hack attempt, as a user explicitly specified a URL which was code and not a real URL
+ - [b]SCRIPT_URL_HACK[/b] / [b]SCRIPT_URL_HACK_2[/tt], This is highly likely to be a hack attempt, as a user explicitly specified a URL which was code and not a real URL
  - [b]LAME_SPAM_HACK[/b], This is a blocked spam attempt, where a Guest user posted with the terms [tt][link[/tt] and [tt]<a [/tt] within a single post, almost certainly a common kind of "try everything" attempt to get spam links posted (ocPortal does not even support a 'link' bbcode tag)
  - [b]TRY_TO_DOWNLOAD_SCRIPT[/b], The user tried to add a download with a manual URL that links to private files that are not meant to be downloadable. This may be an honest mistake -- but if it is [tt]info.php[/tt], then it is very likely to be a hack attempt. A more detailed explanation follows further in this tutorial
  - [b]TICKET_OTHERS_HACK[/b], The user tried to access support tickets from another user. This is either a bug (we know of no way it would happen normally), or a hack attempt
@@ -43,6 +43,42 @@ At the time of writing, the following types of alert are defined:
  - [b]ADMINCENTRE_ACCESS_DENIED[/b], The user tried to access a secured zone without permission. This is unlikely to be a serious attack, as the user may just have been following a misplaced URL, or messing about. This error is not enabled by default on ocPortal because we found that Google ads triggered it massively!
  - [b]PHP_DOWNLOAD_INNOCENT[/b], Somehow a PHP file got referenced in the download system. This should have been filtered by 'TRY_TO_DOWNLOAD_SCRIPT', but was not. This is a serious security breach if it happens
  - [b]BRUTEFORCE_LOGIN_HACK[/b], Someone gave incorrect login details 30 times over a 15 minute period (brute-force attack)
+
+[title="2"]Input filtering[/title]
+
+We have 4 privileges relating to input filtering:
+1) Avoid broad input filtering security layer
+2) Use dangerous Comcode
+3) Use potentially-troublesome Comcode
+4) Subject to a more liberal HTML filter
+
+"Avoid broad input filtering security layer" turns on filtering that may result in some data loss, but gives an additional level of security in case we have an actual security hole at another layer.
+This generally protects against:
+ - Request parameters that look like the file paths of particularly sensitive files
+ - Request parameters that look like particularly dangerous HTML, or miscellaneous vectors for injecting CSS or JavaScript code
+It is generally a good idea to not given untrusted users this privilege, as the need for such users to be able to post text that looks like file paths, dangerous HTML, or JavaScript, is not very high.
+
+"Use dangerous Comcode" should only be granted to trusted staff. Users with this permission can effectively exert full control over the site, via placement of advanced blocks.
+
+"Use potentially-troublesome Comcode" is fairly safe to give. Without it we will try and filter out certain stuff that may be annoying (such as particular interactive interfaces), but not an actual security risk.
+
+"Subject to a more liberal HTML filter" is fairly safe to give, but for high security sites best avoided. If granted, users can basically use whatever HTML they want, if we don't see that HTML as a security risk (insecure HTML will be cleaned up automatically). Without this, there's a particular white-list of allowed HTML (not specifically tags, but tag patterns), corresponding to HTML created directly within the WYSIWYG editor. Users may get confused why content they paste into the WYSIWYG editor comes out a mess, as pasted content is unlikely to use only white-listed HTML segments.
+
+We also have of internal checks that always run, many related to "Alert types" (see above), including:
+a) Constraining of input parameters for filename-only scenarios ([tt]filter_naughty[/tt], [tt]PATH_HACK[/tt])
+b) Constraining of input parameters for codename-only scenarios ([tt]filter_naughty_harsh[/tt], [tt]EVAL_HACK[/tt])
+c) Checks for URL fields, e.g. making sure "data:" URLs are not submitted, or special characters that could allow interference with HTTP headers ([tt]DODGY_GET_HACK[/tt])
+d) Checks for posted JavaScript URLs ("javascript:"), anywhere ([tt]SCRIPT_URL_HACK_2[/tt])
+e) Referrer checks, to make sure POST requests aren't being made from non-trusted sites (i.e. CSRF-prevention, [tt]EVIL_POSTED_FORM_HACK[/tt])
+f) [s]Input field length, so that strangely long parameter inputs are not accepted in most cases[/s] ([i]this was removed, it didn't raise security, and created bugs[/i])
+g) External redirections, so that hackers can't create URLs linking to your site that immediately redirect you to an unsafe third-party site (this kind of thing can trick users into thinking they have clicked onto your site, when they're not there anymore). This isn't logged as a hack-attack, as it can happen too innocently, but it is filtered out.
+h) Obvious spamming (some common spam patterns are so obvious, we can just route them direct to [tt]LAME_SPAM_HACK[/tt])
+i) Click-jacking frame protection, using standard [tt]X-Frame-Options[/tt] functionality
+j) Generally making sure things are filled in when required, and expected numbers really are numbers
+
+We also have standard output escaping mechanisms so that attempts to inject bad data does not lead to bad outcomes.
+
+In summary, we have defense across a number of layers, and code without making poor assumptions. This is called "defense in depth" -- programmers are fallible, so it's best to have multiple lines of defense.
 
 [title="2"]Anti-spam measures[/title]
 
@@ -163,7 +199,7 @@ If you run a website with particularly privileged information, or security is cr
 The main issue with shared hosting, is that, unless either:
 [list="1"]
 [*]the environment for hosting accounts is restricted to being PHP-only, with safe-mode (which limits PHP and hence ocPortal in a negative way) or open_base_dir (which we advise) enabled
-[*]or, the server is set to run web scripts on different hosting accounts using the account holder user-names (this is very rare)
+[*]or, the server is set to run web scripts on different hosting accounts using the account holder user-names
 [/list]
 then every web-server-created/writeable file, and your database, is fully writeable to by any other account holder.
 

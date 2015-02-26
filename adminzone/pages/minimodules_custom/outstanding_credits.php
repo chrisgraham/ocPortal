@@ -100,7 +100,7 @@ if(!is_null($field_id)){
 		}
 
 		$member_linked = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id);
-		$fields_values->attach(results_entry(array($member_linked,integer_format($credits),$member_join_date,$member_visit_date)));
+		$fields_values->attach(results_entry(array($member_linked,integer_format($credits),$member_join_date,$member_visit_date),true));
 		$total+=$credits;
 		$i++;
 	}

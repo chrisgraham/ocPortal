@@ -320,7 +320,7 @@ class Module_admin_actionlog
 				$mode=array_key_exists('l_reason',$myrow)?'ocf':'ocp';
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$myrow['id'],'mode'=>$mode),'_SELF');
 				$mode_nice=($mode=='ocp')?'ocPortal':'OCF';
-				$date=hyperlink($url,get_timezoned_date($myrow['date_and_time']),false,false,$mode_nice.'/'.$row['the_type'].'/'.strval($myrow['id']),NULL,NULL,NULL,'_top');
+				$date=hyperlink($url,get_timezoned_date($myrow['date_and_time']),false,true,$mode_nice.'/'.$row['the_type'].'/'.strval($myrow['id']),NULL,NULL,NULL,'_top');
 
 				if (!is_null($myrow['param_a'])) $a=$myrow['param_a']; else $a='';
 				if (!is_null($myrow['param_b'])) $b=$myrow['param_b']; else $b='';

@@ -674,7 +674,7 @@ foreach ($featuretree as $t)
 
 // Columns
 echo '<div class="feature_columns_a"><div class="feature_columns_b"><div class="feature_columns_c"><div class="feature_columns float_surrounder_hidden">'.chr(10);
-foreach (explode(',',$map['param']) as $i=>$column)
+foreach (($map['param']=='')?array():explode(',',$map['param']) as $i=>$column)
 {
 	echo '<div class="column column'.strval($i).'">';
 	

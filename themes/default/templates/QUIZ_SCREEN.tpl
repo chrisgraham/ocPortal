@@ -19,7 +19,7 @@
 
 {+START,IF_NON_EMPTY,{TIMEOUT}}
 	<script type="text/javascript">// <![CDATA[
-		setTimeout(function() { window.fauxmodal_alert('{!OUT_OF_TIME;;}',function() { document.getElementById('quiz_form').submit(); } ); }, {TIMEOUT%}*1000);
+		setTimeout(function() { window.fauxmodal_alert('{!OUT_OF_TIME;/}',function() { document.getElementById('quiz_form').submit(); } ); }, {TIMEOUT%}*1000);
 		setInterval(function() { var st=document.getElementById('survey_timer'); var new_value=window.parseInt(get_inner_html(st))-1; if (new_value>=0) set_inner_html(st,new_value); }, 1000);
 	//]]></script>
 

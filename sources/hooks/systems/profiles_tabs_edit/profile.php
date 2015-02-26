@@ -69,6 +69,8 @@ class Hook_Profiles_Tabs_Edit_profile
 
 		// UI
 
+		require_code('form_templates');
+
 		$title=do_lang_tempcode('PROFILE');
 
 		$custom_fields=ocf_get_custom_fields_member($member_id_of);

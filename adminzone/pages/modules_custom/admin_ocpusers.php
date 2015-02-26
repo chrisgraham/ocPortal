@@ -77,7 +77,7 @@ class Module_admin_ocpusers
 	 */
 	function get_entry_points()
 	{
-		return array('users'=>'OC_SITES_INSTALLED');
+		return array('misc'=>'OC_SITES_INSTALLED');
 	}
 
 	/**

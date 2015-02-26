@@ -434,18 +434,6 @@ class Module_warnings extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
-	function may_delete_this($_id)
-	{
-		unset($_id);
-		return false;
-	}
-
-	/**
 	 * Standard aed_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
@@ -501,7 +489,7 @@ class Module_warnings extends standard_aed_module
 
 			$map[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
 
-			$fields->attach(results_entry($map),true);
+			$fields->attach(results_entry($map,true));
 		}
 
 		$search_url=NULL;
@@ -736,6 +724,12 @@ class Module_warnings extends standard_aed_module
 			}
 		}
 
+		if (get_param('redirect','')=='')
+		{
+			require_code('site2');
+			assign_refresh($GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),0.0);
+		}
+
 		return strval($warning_id);
 	}
 
@@ -747,6 +741,12 @@ class Module_warnings extends standard_aed_module
 	function edit_actualisation($id)
 	{
 		ocf_edit_warning(intval($id),post_param('explanation'),post_param_integer('is_warning',0));
+
+		if (get_param('redirect','')=='')
+		{
+			require_code('site2');
+			assign_refresh($GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),0.0);
+		}
 	}
 
 	/**
@@ -769,7 +769,13 @@ class Module_warnings extends standard_aed_module
 	 */
 	function delete_actualisation($id)
 	{
-		ocf_delete_warning(intval($id));
+		$member_id=ocf_delete_warning(intval($id));
+
+		if (get_param('redirect','')=='')
+		{
+			require_code('site2');
+			assign_refresh($GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),0.0);
+		}
 	}
 }
 
