@@ -56,7 +56,7 @@
 			<div class="comment_wrapper">
 				<meta itemprop="interactionCount" content="UserComments:{$META_DATA*,numcomments}" />
 
-				{COMMENTS`}
+				{COMMENTS}
 
 				{+START,IF_EMPTY,{$TRIM,{COMMENTS}}}
 					<p class="nothing_here">{!NO_COMMENTS}</p>

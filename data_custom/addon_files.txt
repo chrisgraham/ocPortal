@@ -319,7 +319,6 @@ justgiving
 ----------
  - sources_custom/blocks/side_justgiving_donate.php
  - lang_custom/EN/justgiving_donate.ini
- - themes/default/templates_custom/BLOCK_MAIN_JUSTGIVING_DONATE.tpl
  - themes/default/templates_custom/BLOCK_SIDE_JUSTGIVING_DONATE.tpl
 
 lastfm

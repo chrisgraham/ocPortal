@@ -19,7 +19,7 @@
 {+END}
 
 <section class="box box___block_main_download_category"><div class="box_inner">
-	{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
+	{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE*}</h3>{+END}
 
 	{$GET,DC_CONTENT}
 </div></section>

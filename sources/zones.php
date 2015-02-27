@@ -367,7 +367,9 @@ function load_minimodule_page($string)
 	ob_start();
 	require_code(filter_naughty($string));
 	$out=new ocp_tempcode();
-	$out->attach(ob_get_contents());
+	$c=ob_get_contents();
+	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($c);
+	$out->attach($c);
 	ob_end_clean();
 
 	restrictify();
@@ -890,6 +892,7 @@ function do_block_hunt_file($codename,$map=NULL)
 				require($file_base.'/sources_custom/miniblocks/'.$codename.'.php');
 			}
 			$object=ob_get_contents();
+			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($object);
 			ob_end_clean();
 			restrictify();
 
@@ -912,6 +915,7 @@ function do_block_hunt_file($codename,$map=NULL)
 				require($file_base.'/sources/miniblocks/'.$codename.'.php');
 			}
 			$object=ob_get_contents();
+			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($object);
 			ob_end_clean();
 			restrictify();
 

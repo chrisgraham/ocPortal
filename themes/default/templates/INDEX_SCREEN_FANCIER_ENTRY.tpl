@@ -7,7 +7,7 @@
 
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}
 		<div class="index_screen_fancier_entry_description">
-			{DESCRIPTION`}
+			{DESCRIPTION}
 		</div>
 	{+END}
 

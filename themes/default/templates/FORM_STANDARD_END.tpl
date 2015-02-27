@@ -14,12 +14,12 @@
 				{+END}
 				{+START,IF,{$CONFIG_OPTION,enable_spell_check}}
 					<p>
-						<label for="perform_spellcheck"><span class="field_name">{!SPELLCHECK}:</span> <input title="{$STRIP_TAGS`,{!SPELLCHECK}}" type="checkbox" checked="checked" name="perform_spellcheck" value="1" id="perform_spellcheck" /></label>
+						<label for="perform_spellcheck"><span class="field_name">{!SPELLCHECK}:</span> <input title="{$STRIP_TAGS,{!SPELLCHECK}}" type="checkbox" checked="checked" name="perform_spellcheck" value="1" id="perform_spellcheck" /></label>
 					</p>
 				{+END}
 				{+START,IF,{$CONFIG_OPTION,enable_keyword_density_check}}{+START,IF,{$HAS_PRIVILEGE,perform_keyword_check}}
 					<p>
-						<label for="perform_keywordcheck"><span class="field_name">{!KEYWORDCHECK}:</span> <input title="{$STRIP_TAGS`,{!KEYWORDCHECK}}" type="checkbox" name="perform_keywordcheck" value="1" id="perform_keywordcheck" /></label>
+						<label for="perform_keywordcheck"><span class="field_name">{!KEYWORDCHECK}:</span> <input title="{$STRIP_TAGS,{!KEYWORDCHECK}}" type="checkbox" name="perform_keywordcheck" value="1" id="perform_keywordcheck" /></label>
 					</p>
 				{+END}{+END}
 			</div></section>
@@ -47,7 +47,7 @@
 <script type="text/javascript">// <![CDATA[
 	add_event_listener_abstract(window,"load",function() {
 		{+START,IF_PASSED,JAVASCRIPT}
-			{JAVASCRIPT`}
+			{JAVASCRIPT/}
 		{+END}
 		{+START,IF_NON_PASSED_OR_FALSE,SECONDARY_FORM}
 			if (typeof window.fix_form_enter_key!='undefined') fix_form_enter_key(document.getElementById('submit_button').form);

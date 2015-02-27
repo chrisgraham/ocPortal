@@ -2198,6 +2198,9 @@ function titleify($boring)
 	$ret=preg_replace('#(^|\s)Url(\s|$)#','$1URL$2',$ret);
 	$ret=preg_replace('#(^|\s)Id(\s|$)#','$1ID$2',$ret);
 	if (substr($ret,0,3)=='Oc ') $ret='oc'.str_replace(' ','',substr($ret,3));
+
+	if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($boring)) ocp_mark_as_escaped($ret);
+
 	return $ret;
 }
 

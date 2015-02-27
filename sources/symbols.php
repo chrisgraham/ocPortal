@@ -1806,11 +1806,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'PREG_REPLACE':
 				if (isset($param[2]))
 				{
-					if ($GLOBALS['XSS_DETECT'])
-					{
-						$is_escaped=ocp_is_escaped($value);
-					}
-
 					$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 					$value=preg_replace('#'.str_replace('#','\#',$param[0]).'#'.(isset($param[3])?str_replace('e','',$param[3]):''),$param[1],$param[2]);
 					$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
@@ -1819,10 +1814,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						attach_message($php_errormsg,'warn');
 					}
 
-					if ($GLOBALS['XSS_DETECT'])
-					{
-						if ($is_escaped) ocp_mark_as_escaped($value);
-					}
+					if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($param[0])) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -1919,17 +1911,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'REPLACE':
 				if (isset($param[2]))
 				{
-					if ($GLOBALS['XSS_DETECT'])
-					{
-						$is_escaped=ocp_is_escaped($value);
-					}
-
 					$value=str_replace($param[0],$param[1],$param[2]);
-
-					if ($GLOBALS['XSS_DETECT'])
-					{
-						if ($is_escaped) ocp_mark_as_escaped($value);
-					}
+					if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($param[0])) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -1983,6 +1966,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$value=ocp_mb_substr($param[0],intval($param[1]),isset($param[2])?intval($param[2]):strlen($param[0]));
+					if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($param[0])) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -1998,6 +1982,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$cut=isset($param[3]) && ($param[3]=='1');
 					$value=wordwrap($param[0],intval($param[1]),isset($param[2])?$param[2]:'<br />',$cut);
+					if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($param[0])) ocp_mark_as_escaped($value);
 				}
 				break;
 

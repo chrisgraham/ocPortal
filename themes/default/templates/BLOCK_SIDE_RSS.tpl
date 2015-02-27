@@ -1,7 +1,7 @@
 {+START,IF,{$NOT,{TICKER}}}
 	<section id="tray_{TITLE|}" class="box box___block_side_rss">
 		<h3 class="toggleable_tray_title">
-			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{TITLE|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{TITLE}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{TITLE|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{TITLE`}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
 
 			{+START,IF_NON_EMPTY,{TITLE}}
 				<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{TITLE|}');">{TITLE`}</a>
@@ -31,7 +31,7 @@
 	{$SET,side_news_id,{$RAND}}
 
 	<section class="box box___block_side_rss"><div class="box_inner">
-		{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
+		{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE`}</h3>{+END}
 
 		{+START,IF_EMPTY,{CONTENT}}
 			<p class="nothing_here">{!NO_NEWS}</p>

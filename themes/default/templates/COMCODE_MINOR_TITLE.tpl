@@ -2,6 +2,6 @@
 <h3>{TITLE}</h3>
 {+START,IF_PASSED,SUB}
 	<div class="title_tagline">
-		{SUB`}
+		{SUB}
 	</div>
 {+END}

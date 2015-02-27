@@ -339,7 +339,9 @@ function comcode_helper_script()
 				$default_embed=array_key_exists('',$defaults)?($defaults['']):get_param('default','');
 				$fields->attach(form_input_float(do_lang_tempcode('AMOUNT'),do_lang_tempcode('COMCODE_TAG_currency_EMBED'),'tag_contents',floatval($default_embed),true));
 				$default=array_key_exists('bracket',$defaults)?$defaults['bracket']:get_param('default_bracket','');
-				$fields->attach(form_input_tick(titleify('bracket'),protect_from_escaping(ucfirst(substr(do_lang('COMCODE_TAG_currency_PARAM_bracket'),12))),'bracket',$default=='1'));
+				$descriptiont=ucfirst(substr(do_lang('COMCODE_TAG_currency_PARAM_bracket'),12));
+				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($descriptiont);
+				$fields->attach(form_input_tick(titleify('bracket'),protect_from_escaping($descriptiont),'bracket',$default=='1'));
 				$done_tag_contents=true;
 			}
 			elseif ($tag=='include')
@@ -455,6 +457,8 @@ function comcode_helper_script()
 						$parameter_name=do_lang('COMCODE_TAG_'.$tag.'_NAME_OF_PARAM_'.$param,NULL,NULL,NULL,NULL,false);
 						if (is_null($parameter_name)) $parameter_name=titleify($param);
 
+						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($parameter_name);
+
 						$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 						$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
@@ -472,6 +476,8 @@ function comcode_helper_script()
 						}
 						$descriptiont=preg_replace('#\s*'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\'](?-U)\.?(?U)#Ui','',$descriptiont);
 
+						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($descriptiont);
+
 						if (($tag=='page') && ($param=='param') && (substr_count($default,':')==1))
 						{
 							$fields->attach(form_input_page_link($parameter_name,protect_from_escaping($descriptiont),$param,$default,true,NULL));
@@ -484,7 +490,11 @@ function comcode_helper_script()
 						{
 							if (substr($descriptiont,0,12)=='0|1 &ndash; ')
 							{
-								$field=form_input_tick($parameter_name,protect_from_escaping(ucfirst(substr($descriptiont,12))),$param,$default=='1');
+								$descriptiont=ucfirst(substr($descriptiont,12));
+
+								if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($descriptiont);
+
+								$field=form_input_tick($parameter_name,protect_from_escaping($descriptiont),$param,$default=='1');
 							} elseif ((substr($descriptiont,-1)!='.') && (strpos($descriptiont,'|')!==false))
 							{
 								$list=new ocp_tempcode();
@@ -560,8 +570,8 @@ function comcode_helper_script()
 				$fields->attach(form_input_line(preg_replace('#=.*$#','',ucwords(str_replace('_',' ',$param))),protect_from_escaping($description),preg_replace('#=.*$#','',$param),preg_replace('#^.*=#U','',$param),false));
 			}
 			$tag_description=new ocp_tempcode();
-			$tag_description->attach(is_integer($_params['tag_description'])?get_translated_text($_params['tag_description']):$_params['tag_description']);
-			$tag_description->attach(paragraph(is_integer($_params['tag_example'])?get_translated_text($_params['tag_example']):$_params['tag_example']));
+			$tag_description->attach(is_integer($_params['tag_description'])?escape_html(get_translated_text($_params['tag_description'])):escape_html($_params['tag_description']));
+			$tag_description->attach(paragraph(is_integer($_params['tag_example'])?escape_html(get_translated_text($_params['tag_example'])):escape_html($_params['tag_example'])));
 		}
 
 		if ($tag=='attachment')
@@ -614,8 +624,12 @@ function comcode_helper_script()
 				$is_advanced=(strpos($descriptiont,do_lang('BLOCK_IND_ADVANCED'))!==false);
 				$descriptiont=trim(str_replace(do_lang('BLOCK_IND_ADVANCED'),'',$descriptiont));
 
+				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($descriptiont);
+
 				$field_title=do_lang('COMCODE_TAG_'.$tag.'_EMBED_FIELD_TITLE',NULL,NULL,NULL,NULL,false);
 				if (is_null($field_title)) $field_title=do_lang('TAG_CONTENTS');
+
+				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($field_title);
 
 				if ($is_advanced)
 				{
@@ -741,7 +755,7 @@ function _get_preview_environment_comcode($tag)
 		while (post_param('x_key_'.strval($i),'')!='')
 		{
 			$key=str_replace('"','\"',post_param('x_key_'.strval($i)));
-			$value=str_replace('"','\"',post_param('x_value_'.strval($i)));
+			$value=str_replace('"','\"',post_param('x_value_'.strval($i),''));
 			$bparameters.=' '.strval($i+1).'_key="'.$key.'"';
 			$bparameters.=' '.strval($i+1).'_value="'.$value.'"';
 

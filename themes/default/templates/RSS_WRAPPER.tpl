@@ -8,14 +8,14 @@
 		<title>{$SITE_NAME*}: {MODE_NICE*}</title>
 		<link>{$BASE_URL*}</link>
 		<language>{$LANG*}</language>
-		<copyright>{COPYRIGHT`}</copyright>
-		<description>{ABOUT`}</description>
+		<copyright>{COPYRIGHT}</copyright>
+		<description>{ABOUT}</description>
 		{+START,IF,{$NOT,{$BROWSER_MATCHES,itunes}}}
 			<managingEditor>{$STAFF_ADDRESS} ({$SITE_NAME*})</managingEditor>
 			<docs>http://blogs.law.harvard.edu/tech/rss</docs>
 			<category>{$SITE_SCOPE*}</category>
 			{RSS_CLOUD}
-			<image><url>{LOGO_URL`}</url><title>{$SITE_NAME*}</title><link>{$BASE_URL*}</link></image>
+			<image><url>{LOGO_URL}</url><title>{$SITE_NAME*}</title><link>{$BASE_URL*}</link></image>
 		{+END}
 		{+START,IF,{$BROWSER_MATCHES,itunes}}
 			<itunes:summary>{ABOUT}</itunes:summary>

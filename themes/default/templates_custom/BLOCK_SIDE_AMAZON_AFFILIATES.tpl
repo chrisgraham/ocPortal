@@ -2,6 +2,6 @@
 	{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
 
 	<div style="width:100%; height:100%; text-align:center">
-		{CONTENT}
+		{CONTENT`}
 	</div>
 </div></section>

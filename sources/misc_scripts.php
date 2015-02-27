@@ -511,7 +511,7 @@ function block_helper_script()
 			{
 				$url.='&save_to_id='.urlencode(get_param('save_to_id'));
 			}
-			$link_caption=do_lang_tempcode('NICE_BLOCK_NAME',escape_html(cleanup_block_name($block)),$block);
+			$link_caption=do_lang_tempcode('NICE_BLOCK_NAME',escape_html(cleanup_block_name($block)),escape_html($block));
 			$usage=array_key_exists($block,$block_usage)?$block_usage[$block]:array();
 
 			$block_types[$this_block_type]->attach(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('_GUID'=>'079e9b37fc142d292d4a64940243178a','USAGE'=>$usage,'DESCRIPTION'=>$descriptiont,'URL'=>$url,'LINK_CAPTION'=>$link_caption)));

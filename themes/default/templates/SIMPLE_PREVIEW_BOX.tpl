@@ -1,7 +1,7 @@
 {+START,SET,PREVIEW_CONTENTS}
 	{+START,IF_NON_EMPTY,{SUMMARY}}
 		<div class="float_surrounder">
-			{SUMMARY`}
+			{SUMMARY}
 		</div>
 	{+END}
 	{+START,IF_EMPTY,{SUMMARY}}
