@@ -157,7 +157,7 @@ class Module_admin_messaging
 	{
 		$title=get_screen_title('CONTACT_US_MESSAGING');
 
-		$id=get_param('id');
+		$id=get_param('id',false,true);
 		$message_type=get_param('message_type');
 
 		require_css('messaging');
@@ -232,7 +232,7 @@ class Module_admin_messaging
 	{
 		$title=get_screen_title('CONTACT_US_MESSAGING');
 
-		$id=get_param('id');
+		$id=get_param('id',false,true);
 		$message_type=get_param('message_type');
 
 		// Save as responsibility taken
