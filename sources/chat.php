@@ -1402,7 +1402,7 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
 		} else
 		{
 			// Display the message
-			$private_code=do_template('CHAT_PRIVATE',array('_GUID'=>'96ef50f1442b319b034fe6f68ca50c12','SYSTEM_MESSAGE'=>strval($system_message),'MESSAGE'=>$pm_message,'USER'=>do_lang_tempcode('CHAT_PRIVATE_TITLE',($username==$pm_user)?do_lang('USER_SYSTEM'):escape_html($username))));
+			$private_code=do_template('CHAT_PRIVATE',array('_GUID'=>'96ef50f1442b319b034fe6f68ca50c12','SYSTEM_MESSAGE'=>strval($system_message),'MESSAGE'=>$pm_message,'USER'=>do_lang_tempcode('CHAT_PRIVATE_TITLE',($username==$pm_user)?do_lang_tempcode('USER_SYSTEM'):make_string_tempcode(escape_html($username)))));
 			$text=preg_replace('#\[private=&quot;([^&]*)&quot;\]([^\[]*)\[/private\]#',$private_code->evaluate(),$text,1);
 		}
 	} else // No we are not...

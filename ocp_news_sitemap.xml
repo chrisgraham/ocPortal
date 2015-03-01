@@ -2,7 +2,7 @@
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 	
 				<url>
-					<loc>http://192.168.1.100/ocportal/site/index.php?page=news&amp;type=view&amp;id=art%2F-img-script-alert</loc>
+					<loc>http://192.168.1.100/ocportal/site/news/view/art/-img-script-alert.htm</loc>
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>
@@ -20,7 +20,7 @@
 			  </url>
 			
 				<url>
-					<loc>http://192.168.1.100/ocportal/site/index.php?page=news&amp;type=view&amp;id=art%2Fhfggf</loc>
+					<loc>http://192.168.1.100/ocportal/site/news/view/art/hfggf.htm</loc>
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>
@@ -38,7 +38,7 @@
 			  </url>
 			
 				<url>
-					<loc>http://192.168.1.100/ocportal/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest</loc>
+					<loc>http://192.168.1.100/ocportal/site/news/view/art/test.htm</loc>
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>

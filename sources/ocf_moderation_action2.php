@@ -235,6 +235,7 @@ function ocf_make_warning($member_id,$explanation,$by=NULL,$time=NULL,$is_warnin
  * @param  AUTO_LINK		The ID of the formal warning we are editing.
  * @param  LONG_TEXT		An explanation for why the member is being warned.
  * @param  BINARY			Whether this counts as a warning
+ * @return AUTO_LINK	 The member ID the warning was for.
  */
 function ocf_edit_warning($warning_id,$explanation,$is_warning=1)
 {
@@ -248,6 +249,8 @@ function ocf_edit_warning($warning_id,$explanation,$is_warning=1)
 	$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$warning_id));
 	$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_is_warning'=>1,'w_member_id'=>$member_id));
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member_id),'',1);
+
+	return $member_id;
 }
 
 /**

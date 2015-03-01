@@ -740,7 +740,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function edit_actualisation($id)
 	{
-		ocf_edit_warning(intval($id),post_param('explanation'),post_param_integer('is_warning',0));
+		$member_id=ocf_edit_warning(intval($id),post_param('explanation'),post_param_integer('is_warning',0));
 
 		if (get_param('redirect','')=='')
 		{

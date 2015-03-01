@@ -622,7 +622,7 @@ class Module_topics
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
-			ocf_edit_topic($topic_id,NULL,NULL,true,NULL,NULL,NULL,NULL,'');
+			ocf_edit_topic($topic_id,NULL,NULL,1,NULL,NULL,NULL,NULL,'');
 		}
 
 		return $this->redirect_to_forum('VALIDATE_TOPICS',$forum_id);

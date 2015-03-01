@@ -103,11 +103,6 @@ function init__comcode_text()
 	// See non_text_tags in JAVASCRIPT_EDITING.tpl
 	// See _get_details_comcode_tags function in comcode_add.php
 
-	// We're not allowed to specify any of these as entities
-	global $POTENTIAL_JS_NAUGHTY_ARRAY;
-	$POTENTIAL_JS_NAUGHTY_ARRAY=array(/*'v'=>1,*/'b'=>1,/*'V'=>1,*/'B'=>1,'d'=>1,'D'=>1,/*'a'=>1,'t'=>1,'a'=>1,*/'j'=>1,'a'=>1,'v'=>1,'s'=>1,'c'=>1,'r'=>1,'i'=>1,'p'=>1,'t'=>1,'J'=>1,'A'=>1,'V'=>1,'S'=>1,'C'=>1,'R'=>1,'I'=>1,'P'=>1,'T'=>1,' '=>1,"\t"=>1,"\n"=>1,"\r"=>1,':'=>1,'/'=>1,'*'=>1,'\\'=>1);
-	$POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)]=1;
-
 	// Hehe
 	global $LEET_FILTER;
 	$LEET_FILTER=NULL;
@@ -1987,7 +1982,7 @@ function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_
 		$ahead=substr($comcode,$pos,$ahead_end-$pos);
 
 		require_code('input_filter');
-		hard_filter_input_data__html(&$ahead);
+		hard_filter_input_data__html($ahead);
 
 		// Tidy up
 		$comcode=substr($comcode,0,$pos).$ahead.substr($comcode,$ahead_end);

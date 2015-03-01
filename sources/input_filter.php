@@ -157,6 +157,8 @@ function hard_filter_input_data__filesystem(&$val)
  */
 function hard_filter_input_data__html(&$val)
 {
+	require_code('comcode');
+
 	global $POTENTIAL_JS_NAUGHTY_ARRAY;
 
 	// Null vector
