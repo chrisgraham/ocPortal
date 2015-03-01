@@ -100,7 +100,7 @@ class Module_awards
 			}
 		}
 
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+		breadcrumb_set_self(do_lang_tempcode('AWARDS'));
 
 		$add_url=new ocp_tempcode();
 		if (has_actual_page_access(get_member(),'admin_awards'))
@@ -176,7 +176,7 @@ class Module_awards
 	 */
 	function award()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AWARDS'))));
 
 		require_css('awards');
 

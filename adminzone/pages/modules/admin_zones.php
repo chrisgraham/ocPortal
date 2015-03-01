@@ -150,6 +150,8 @@ class Module_admin_zones
 
 		$title=get_screen_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
 
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES')),array('_SELF:_SELF:editor',do_lang_tempcode('CHOOSE'))));
+
 		$lang=choose_language($title,true);
 		if (is_object($lang)) return $lang;
 
@@ -324,7 +326,6 @@ class Module_admin_zones
 			$editor[$for]=static_evaluate_tempcode(do_template('ZONE_EDITOR_PANEL',array('_GUID'=>'f32ac84fe18b90497acd4afa27698bf0','DEFAULT_PARSED'=>$default_parsed,'CLASS'=>$class,'CURRENT_ZONE'=>$current_zone,'ZONES'=>$zone_list,'COMCODE'=>$comcode,'PREVIEW'=>$_preview,'ZONE'=>$id,'ID'=>$for,'IS_PANEL'=>$is_panel,'TYPE'=>$type,'EDIT_URL'=>$edit_url,'SETTINGS'=>$settings,'COMCODE_EDITOR'=>$comcode_editor)));
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:editor',do_lang_tempcode('CHOOSE'))));
 		breadcrumb_set_self($nice_zone_name);
 
 		list($warning_details,$ping_url)=handle_conflict_resolution($id);

@@ -295,7 +295,7 @@ echo <<<END
 
 		<div>
 			<label for="tracker_id">Tracker ID to attach to <span style="font-size: 0.8em">(if not entered a new one will be made)</span></label>
-			<input onchange="this.form.elements['post_to_bug_catalogue'].checked=false;" name="tracker_id" id="tracker_id" type="number" value="" placeholder="optional" />
+			<input name="tracker_id" id="tracker_id" type="number" value="" placeholder="optional" />
 		</div>
 
 		<div>

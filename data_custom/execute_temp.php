@@ -55,7 +55,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$test=array();
-	$test['x']='';//uniqid('');
-	print_r($test);
+	$_postdetails['message']=comcode_to_tempcode('test<SCRIPT>');
+	$x=$_postdetails['message']->evaluate(); echo $x;
 }

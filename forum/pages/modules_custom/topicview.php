@@ -18,6 +18,8 @@ function init__forum__pages__modules_custom__topicview($in=NULL)
 
 function ocjester_filtering_wrap($in)
 {
+	$orig=$in;
+
 	$in='<div>'.$in.'</div>';
 	$matches=array();
 	$num_matches=preg_match_all('#(>)([^<>]+)(<)#Us',$in,$matches,PREG_SET_ORDER);
@@ -32,6 +34,11 @@ function ocjester_filtering_wrap($in)
 		$after=$matches[$i][3];
 		$x2=ocjester_filtering_wrap_2($x1);
 		$in=str_replace($before.$x1.$after,$before.$x2.$after,$in);
+	}
+
+	if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($orig))
+	{
+		ocp_mark_as_escaped($in);
 	}
 
 	return $in;

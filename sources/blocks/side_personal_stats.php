@@ -71,18 +71,12 @@ class Block_side_personal_stats
 		{
 			$title=do_lang_tempcode('NOT_LOGGED_IN');
 
-			if ((get_page_name()!='join') && (get_page_name()!='login'))
+			if (count($_POST)>0 || (get_page_name()=='join') || (get_page_name()=='login'))
 			{
-				if (count($_POST)>0)
-				{
-					$_this_url=build_url(array('page'=>''),'',array('keep_session'=>1,'redirect'=>1));
-				} else
-				{
-					$_this_url=build_url(array('page'=>'_SELF'),'_SELF',array('keep_session'=>1,'redirect'=>1),true);
-				}
+				$_this_url=build_url(array('page'=>''),'_SELF',array('keep_session'=>1,'redirect'=>1));
 			} else
 			{
-				$_this_url=build_url(array('page'=>''),'',array('keep_session'=>1,'redirect'=>1));
+				$_this_url=build_url(array('page'=>'_SELF'),'_SELF',array('keep_session'=>1,'redirect'=>1),true);
 			}
 			$this_url=$_this_url->evaluate();
 			$login_url=build_url(array('page'=>'login','type'=>'login','redirect'=>$this_url),get_module_zone('login'));

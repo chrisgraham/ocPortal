@@ -186,8 +186,6 @@ class Module_cms_galleries extends standard_aed_module
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES'))));
 
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-
 		$condition='only_member_galleries_of_id';
 		$member_id=get_param_integer('id',-1);
 		if ($member_id==-1)
@@ -489,7 +487,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		$title=get_screen_title('GALLERY_IMPORT');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('GALLERY_IMPORT')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('DETAILS'))));
 
 		if (!is_null(get_param('redirect',NULL)))
 		{
@@ -599,7 +597,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		$title=get_screen_title('GALLERY_IMPORT');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('GALLERY_IMPORT')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('DETAILS'))));
 
 		return $this->cat_aed_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
 	}

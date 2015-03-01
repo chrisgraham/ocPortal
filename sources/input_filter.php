@@ -63,19 +63,22 @@ function check_input_field_string($name,&$val)
 		}
 	}
 
-	// Quickly depose of common spam attacks. Not really security, just a sensible barrier
-	if (((!function_exists('is_guest')) || (is_guest())) && ((strpos($val,'[url=http://')!==false) || (strpos($val,'[link')!==false)) && (strpos($val,'<a ')!==false)) // Combination of non-ocPortal-supporting bbcode and HTML, almost certainly a bot trying too hard to get link through
+	if ($GLOBALS['BOOTSTRAPPING']==0)
 	{
-		log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
-	}
-
-	// Additional checks for non-privileged users
-	if (function_exists('has_specific_permission') && $name!='page'/*Too early in boot if 'page'*/)
-	{
-		if (!has_specific_permission(get_member(),'unfiltered_input') || $GLOBALS['FORCE_INPUT_FILTER_FOR_ALL'])
+		// Quickly depose of common spam attacks. Not really security, just a sensible barrier
+		if (((!function_exists('is_guest')) || (is_guest())) && ((strpos($val,'[url=http://')!==false) || (strpos($val,'[link')!==false)) && (strpos($val,'<a ')!==false)) // Combination of non-ocPortal-supporting bbcode and HTML, almost certainly a bot trying too hard to get link through
 		{
-			hard_filter_input_data__html($val);
-			hard_filter_input_data__filesystem($val);
+			log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
+		}
+
+		// Additional checks for non-privileged users
+		if (function_exists('has_specific_permission') && $name!='page'/*Too early in boot if 'page'*/)
+		{
+			if (!has_specific_permission(get_member(),'unfiltered_input') || $GLOBALS['FORCE_INPUT_FILTER_FOR_ALL'])
+			{
+				hard_filter_input_data__html($val);
+				hard_filter_input_data__filesystem($val);
+			}
 		}
 	}
 }

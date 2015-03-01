@@ -750,6 +750,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case '_POSTED':
+				$value=(count($_POST)==0)?'0':'1';
+				break;
+
 			case 'STAFF_ACTIONS':
 				if (!is_guest())
 				{
@@ -765,7 +769,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'TRIM':
 				if (isset($param[0]))
 				{
-					$value=ocp_trim($param[0],isset($param[1]) && $param[1]=='1');
+					$value=ocp_trim($param[0],!isset($param[1]) || $param[1]=='1');
 				}
 				break;
 
@@ -3021,7 +3025,7 @@ function keep_symbol($param)
  * @param  boolean		Whether to keep doing it, while it changes (if complex mixtures are on the end).
  * @return string			The result text.
  */
-function ocp_trim($text,$try_hard=false)
+function ocp_trim($text,$try_hard=true)
 {
 	if (memory_get_usage()>1024*1024*40) return trim($text); // Don't have enough memory
 
@@ -3030,10 +3034,26 @@ function ocp_trim($text,$try_hard=false)
 		$is_escaped=ocp_is_escaped($text);
 	}
 
+	// Intentionally not using regexps, as actually using substr is a lot faster and uses much less memory
+
 	do
 	{
 		$before=$text;
-		$text=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>\s*)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>\s*)+$#','#(&nbsp;)+$#'),array('','','','','',''),$text);
+		if (strtolower(substr($text,0,6))=='<br />') $text=substr($text,6);
+		if (strtolower(substr($text,0,5))=='<br/>') $text=substr($text,5);
+		if (strtolower(substr($text,0,4))=='<br>') $text=substr($text,4);
+		if (strtolower(substr($text,0,6))=='&nbsp;') $text=substr($text,6);
+		$text=ltrim($text);
+	}
+	while (($try_hard) && ($before!=$text));
+	do
+	{
+		$before=$text;
+		if (strtolower(substr($text,-6))=='<br />') $text=substr($text,0,-6);
+		if (strtolower(substr($text,-5))=='<br/>') $text=substr($text,0,-5);
+		if (strtolower(substr($text,-4))=='<br>') $text=substr($text,0,-4);
+		if (strtolower(substr($text,-6))=='&nbsp;') $text=substr($text,0,-6);
+		$text=rtrim($text);
 	}
 	while (($try_hard) && ($before!=$text));
 

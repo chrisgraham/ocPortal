@@ -237,7 +237,7 @@ class Module_cms_cedi
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_page'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('CHOOSE');
 
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+		breadcrumb_set_self(do_lang_tempcode('CEDI'));
 
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_CEDI');
 
@@ -337,7 +337,7 @@ class Module_cms_cedi
 
 		$breadcrumbs=cedi_breadcrumbs(get_param('id',false,true),NULL,true,true);
 		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('CEDI_EDIT_PAGE').'</span>'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CHOOSE'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CEDI'))));
 
 		return do_template('POSTING_SCREEN',array('_GUID'=>'de53b8902ab1431e0d2d676f7d5471d3','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'REVISION_HISTORY'=>$revision_history,'POSTING_FORM'=>$posting_form,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('CEDI_EDIT_PAGE_TEXT'))));
 	}

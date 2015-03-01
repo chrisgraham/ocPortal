@@ -865,7 +865,6 @@ class Module_admin_addons
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ADDONS'))));
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'43cc3d9031a3094b62e78461eb99fb5d','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('CHOOSE_ZONE_OF_MODULES'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
@@ -976,7 +975,7 @@ class Module_admin_addons
 			$tpl_modules->attach(do_template('MODULE_SCREEN_MODULE',array('_GUID'=>'cf19adfd129c44a7ef1d6789002c6535','STATUS'=>$status,'NAME'=>$module,'AUTHOR'=>$author,'ORGANISATION'=>$organisation,'VERSION'=>strval($version),'HACKED_BY'=>$hacked_by,'HACK_VERSION'=>$hack_version,'ACTIONS'=>$actions)));
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ADDONS')),array('_SELF:_SELF:modules',do_lang_tempcode('CHOOSE'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ADDONS')),array('_SELF:_SELF:modules',do_lang_tempcode('MODULE_MANAGEMENT'))));
 
 		return do_template('MODULE_SCREEN',array('_GUID'=>'132b23107b49a23e0b11db862de1dd56','TITLE'=>$title,'MODULES'=>$tpl_modules));
 	}

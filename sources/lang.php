@@ -1338,5 +1338,7 @@ function choose_language($title,$tip=false,$allow_all_selection=false)
 	$hidden=build_keep_post_fields();
 	$url=get_self_url();
 
+	breadcrumb_set_self(do_lang_tempcode('LANGUAGE'));
+
 	return do_template('FORM_SCREEN',array('_GUID'=>'1a2823d450237aa299c095bf9c689a2a','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'TEXT'=>$text));
 }

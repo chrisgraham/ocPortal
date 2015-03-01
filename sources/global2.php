@@ -1413,11 +1413,12 @@ function either_param($name,$default=false)
 
 	if ($ret===$default) return $ret;
 
+	if (strpos($ret,':')!==false && function_exists('ocp_url_decode_post_process'))
+		$ret=ocp_url_decode_post_process($ret);
+
 	require_code('input_filter');
 	check_input_field_string($name,$ret);
 
-	if (strpos($ret,':')!==false)
-		$ret=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($ret):$ret;
 	return $ret;
 }
 
@@ -1484,10 +1485,11 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 
 	if ($ret===$default) return $ret;
 
+	if (strpos($ret,':')!==false && function_exists('ocp_url_decode_post_process'))
+		$ret=ocp_url_decode_post_process($ret);
+
 	check_input_field_string($name,$ret);
 
-	if (strpos($ret,':')!==false)
-		$ret=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($ret):$ret;
 	return $ret;
 }
 
@@ -1515,11 +1517,12 @@ function get_param($name,$default=false,$no_security=false)
 
 	if ($ret===$default) return $ret;
 
+	if (strpos($ret,':')!==false && function_exists('ocp_url_decode_post_process'))
+		$ret=ocp_url_decode_post_process($ret);
+
 	require_code('input_filter');
 	check_input_field_string($name,$ret);
 
-	if (strpos($ret,':')!==false)
-		$ret=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($ret):$ret;
 	return $ret;
 }
 
