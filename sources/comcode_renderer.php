@@ -780,7 +780,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			return $temp_tpl;
 		case 'section':
 			$name=(array_key_exists('param',$attributes))?$attributes['param']:('section'.strval(mt_rand(0,100)));
-			$default=(array_key_exists('default',$attributes))?$attributes['default']:'1';
+			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
 			$temp_tpl=do_template('COMCODE_SECTION',array('_GUID'=>'a902962ccdc80046c999d6fed907d105','PASS_ID'=>'x'.$pass_id,'DEFAULT'=>$default=='1','NAME'=>$name,'CONTENT'=>$embed));
 			break;
 		case 'section_controller':
@@ -789,7 +789,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			break;
 		case 'big_tab':
 			$name=(array_key_exists('param',$attributes))?$attributes['param']:('big_tab'.strval(mt_rand(0,100)));
-			$default=(array_key_exists('default',$attributes))?$attributes['default']:'1';
+			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
 			$temp_tpl=do_template('COMCODE_BIG_TABS_TAB',array('_GUID'=>'f6219b1acd6999acae770da20b95fb99','PASS_ID'=>'x'.$pass_id,'DEFAULT'=>$default=='1','NAME'=>$name,'CONTENT'=>$embed));
 			break;
 		case 'big_tab_controller':
@@ -798,7 +798,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=do_template('COMCODE_BIG_TABS_CONTROLLER',array('SWITCH_TIME'=>($attributes['switch_time']=='')?NULL:strval(intval($attributes['switch_time'])),'TABS'=>$tabs,'PASS_ID'=>'x'.$pass_id));
 			break;
 		case 'tab':
-			$default=(array_key_exists('default',$attributes))?$attributes['default']:'1';
+			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
 			$temp_tpl=do_template('COMCODE_TAB_BODY',array('DEFAULT'=>$default=='1','TITLE'=>trim($attributes['param']),'CONTENT'=>$embed));
 			break;
 		case 'tabs':
