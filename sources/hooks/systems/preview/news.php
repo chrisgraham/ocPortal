@@ -48,7 +48,7 @@ class Hook_Preview_news
 
 		$map_table_map=array();
 		$map_table_map[post_param('label_for__title')]=escape_html(post_param('title'));
-		$map_table_map[post_param('label_for__post')]=escape_html($post_html);
+		$map_table_map[post_param('label_for__post')]=$post_html;
 		$map_table_map[post_param('label_for__news')]=comcode_to_tempcode(post_param('news',''));
 
 		require_code('templates_map_table');
