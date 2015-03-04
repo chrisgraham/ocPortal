@@ -221,8 +221,13 @@ function hard_filter_input_data__html(&$val)
 	$val=preg_replace('#(b[\\\\\s]*e[\\\\\s]*h[\\\\\s]*a[\\\\\s]*v[\\\\\s]*i[\\\\\s]*o[\\\\\s]*r[\\\\\s]*):#i','${1};',$val);
 
 	// Event vectors (anything that *might* have got into a tag context, or out of an attribute context, that looks like it could potentially be a JS attribute -- intentionally broad as invalid-but-working HTML can trick regexps)
-	$val=preg_replace('#([<"\'].*\s)o([nN])(.*=)#s','${1}&#111;${2}${3}',$val);
-	$val=preg_replace('#([<"\'].*\s)O([nN])(.*=)#s','${1}&#79;${2}${3}',$val);
+	do
+	{
+		$before=$val;
+		$val=preg_replace('#([<"\'].*\s)o([nN])(.*=)#s','${1}&#111;${2}${3}',$val);
+		$val=preg_replace('#([<"\'].*\s)O([nN])(.*=)#s','${1}&#79;${2}${3}',$val);
+	}
+	while ($before!=$val);
 
 	// Check tag balancing (we don't want to allow partial tags to compound together against separately checked chunks)
 	$len=strlen($val);
