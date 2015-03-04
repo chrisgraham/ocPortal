@@ -643,7 +643,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			list($_embed,$title)=do_code_box($attributes['param'],$embed,(array_key_exists('numbers',$attributes)) && ($attributes['numbers']==1),$in_semihtml,$is_all_semihtml);
 			if (!is_null($_embed))
 			{
-				@exit($_embed);
 				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
 				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
 				{

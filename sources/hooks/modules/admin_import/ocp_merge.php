@@ -1536,7 +1536,7 @@ class Hook_ocp_merge
 				unset($row['id']);
 
 				// Code for compatibility with old version
-				$row['s_get']=isset($row['get'])?$row['get']:'';
+				$row['s_get']=isset($row['get'])?$row['get']:$row['s_get'];
 				unset($row['get']);
 				$GLOBALS['SITE_DB']->query_insert('stats',$row);
 			}

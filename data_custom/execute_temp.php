@@ -55,6 +55,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$_postdetails['message']=comcode_to_tempcode('test<SCRIPT>');
-	$x=$_postdetails['message']->evaluate(); echo $x;
 }

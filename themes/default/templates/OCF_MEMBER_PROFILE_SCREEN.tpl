@@ -35,7 +35,7 @@
 								window['load_tab__{TAB_CODE%}'].done=true;
 
 								load_snippet('profile_tab&tab={TAB_CODE%}&member_id={MEMBER_ID%}'+window.location.search.replace('?','&'),null,function(result) {
-									set_inner_html(document.getElementById('g_{TAB_CODE*}'),result.responseText);
+									set_inner_html(document.getElementById('g_{TAB_CODE%}'),result.responseText);
 
 									find_url_tab();
 								} );

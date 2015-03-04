@@ -561,7 +561,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 
 	// Work out what we'll be doing
 	$url_parts=@parse_url($url);
-	if ($url_parts===false)
+	if ($url_parts===false || !isset($url_parts['host']))
 	{
 		if ($trigger_error)
 			warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_BAD_URL',escape_html($url)));

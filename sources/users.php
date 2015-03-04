@@ -260,8 +260,9 @@ function get_member($quick_only=false)
 	foreach (array_keys($hooks) as $hook)
 	{
 		require_code('hooks/systems/login_providers/'.$hook);
-		$ob=object_factory('Hook_login_provider_'.$hook);
-		$member=$ob->try_login($member);
+		$ob=object_factory('Hook_login_provider_'.$hook,true);
+		if (!is_null($ob))
+			$member=$ob->try_login($member);
 	}
 
 	// Guest or banned
