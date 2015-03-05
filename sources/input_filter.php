@@ -31,9 +31,10 @@ function init__input_filter()
  * Check an input field isn't 'evil'.
  *
  * @param  string			The name of the parameter
+ * @param  ?boolean		Whether the parameter is a POST parameter (NULL: undetermined)
  * @param  string			The value retrieved
  */
-function check_input_field_string($name,&$val)
+function check_input_field_string($name,&$val,$posted=false)
 {
 	// Security for URL context (not only things that are specifically known URL parameters)
 	if ((preg_match('#^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#i',$val)!=0) && ($name!='value')/*Don't want autosave triggering this*/)
@@ -54,11 +55,30 @@ function check_input_field_string($name,&$val)
 			}
 
 			// Don't allow external redirections
-			$bu=get_base_url(false);
-			$_val=str_replace('https://','http://',$val);
-			if ((looks_like_url($_val)) && (substr($_val,0,strlen($bu))!=$bu) && (substr($val,0,strlen(get_forum_base_url()))!=get_forum_base_url()))
+			if (!$posted)
 			{
-				$val=get_base_url(false);
+				$_val=str_replace('https://','http://',$val);
+				if (looks_like_url($_val))
+				{
+					$bus=array(
+						get_base_url(false),
+						get_forum_base_url(),
+						'http://ocportal.com/',
+					);
+					$ok=false;
+					foreach ($bus as $bu)
+					{
+						if (substr($_val,0,strlen($bu))==$bu)
+						{
+							$ok=true;
+							break;
+						}
+					}
+					if (!$ok)
+					{
+						$val=get_base_url(false);
+					}
+				}
 			}
 		}
 	}

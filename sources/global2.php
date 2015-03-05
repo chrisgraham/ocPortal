@@ -1488,7 +1488,7 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 	if (strpos($ret,':')!==false && function_exists('ocp_url_decode_post_process'))
 		$ret=ocp_url_decode_post_process($ret);
 
-	check_input_field_string($name,$ret);
+	check_input_field_string($name,$ret,true);
 
 	return $ret;
 }
