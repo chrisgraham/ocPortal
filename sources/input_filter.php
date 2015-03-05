@@ -31,8 +31,8 @@ function init__input_filter()
  * Check an input field isn't 'evil'.
  *
  * @param  string			The name of the parameter
- * @param  ?boolean		Whether the parameter is a POST parameter (NULL: undetermined)
  * @param  string			The value retrieved
+ * @param  ?boolean		Whether the parameter is a POST parameter (NULL: undetermined)
  */
 function check_input_field_string($name,&$val,$posted=false)
 {
