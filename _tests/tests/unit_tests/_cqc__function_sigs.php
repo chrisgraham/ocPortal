@@ -16,7 +16,7 @@
 /**
  * ocPortal test case class (unit testing).
  */
-class cqc__function_sigs_test_set extends ocp_test_case
+class _cqc__function_sigs_test_set extends ocp_test_case
 {
 	function testAdminZone()
 	{

@@ -16,7 +16,7 @@
 /**
  * ocPortal test case class (unit testing).
  */
-class installer_test_set extends ocp_test_case
+class _installer_test_set extends ocp_test_case
 {
 	function testQuickInstaller()
 	{

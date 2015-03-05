@@ -16,7 +16,7 @@
 /**
  * ocPortal test case class (unit testing).
  */
-class bash_parser_test_set extends ocp_test_case
+class _bash_parser_test_set extends ocp_test_case
 {
 	function testValidCode()
 	{
