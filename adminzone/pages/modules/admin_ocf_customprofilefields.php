@@ -466,6 +466,9 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			if (!is_null($row[$f_name]))
 			{
 				$val=$row[$f_name];
+
+				if ($val==STRING_MAGIC_NULL) continue;
+
 				$lines->attach(do_template('OCF_CPF_STATS_LINE',array('CNT'=>integer_format($row['cnt']),'VAL'=>is_integer($val)?integer_format($val):$val)));
 			}
 		}

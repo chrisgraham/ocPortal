@@ -49,10 +49,10 @@ class Hook_rss_tickets
 			foreach ($ticket_types as $ticket_type)
 			{
 				if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type))) continue;
-				$rows=array_merge($rows,get_tickets(get_member(),$ticket_type));
+				$rows=array_merge($rows,get_tickets(get_member(),$ticket_type,false,false,true));
 			}
 		}
-		else $rows=get_tickets(get_member());
+		else $rows=get_tickets(get_member(),NULL,false,false,true);
 
 		require_code('feedback');
 

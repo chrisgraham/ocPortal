@@ -28,7 +28,7 @@ class Hook_Preview_news
 	 */
 	function applies()
 	{
-		$applies=(get_param('page','')=='cms_news') || (get_param('page','')=='cms_blogs');
+		$applies=((get_param('page','')=='cms_news') || (get_param('page','')=='cms_blogs')) && ((get_param('type','')=='ad') || (get_param('type','')=='_ed'));
 		return array($applies,'news',false);
 	}
 
@@ -47,7 +47,7 @@ class Hook_Preview_news
 		$post_html=$post_bits['tempcode'];
 
 		$view_space_map=array();
-		$view_space_map[post_param('label_for__title')]=post_param('title');
+		$view_space_map[post_param('label_for__title')]=escape_html(post_param('title'));
 		$view_space_map[post_param('label_for__post')]=$post_html;
 		$view_space_map[post_param('label_for__news')]=comcode_to_tempcode(post_param('news',''));
 

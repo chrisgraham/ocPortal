@@ -20,13 +20,13 @@
 {+END}
 
 {+START,IF,{$GET,in_panel}}
-	{+START,BOX,{TITLE},,panel}
+	{+START,BOX,{TITLE*},,panel}
 		{$GET,DC_CONTENT}
 	{+END}
 {+END}
 
 {+START,IF,{$NOT,{$GET,in_panel}}}
-	<h2>{TITLE}</h2>
+	<h2>{TITLE*}</h2>
 
 	{$GET,DC_CONTENT}
 {+END}

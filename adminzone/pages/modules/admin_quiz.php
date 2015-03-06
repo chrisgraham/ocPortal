@@ -179,7 +179,7 @@ class Module_admin_quiz
 		$fields->attach(form_input_list(do_lang_tempcode('QUIZ'),'','id',$entries,NULL,true));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_find_winner'),'_SELF');
-		$submit_name=do_lang_tempcode('CHOOSE_WINNERS');
+		$submit_name=do_lang_tempcode('PROCEED');
 		$text=do_lang_tempcode('CHOOSE_WINNERS');
 
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));

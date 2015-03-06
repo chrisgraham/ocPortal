@@ -167,7 +167,7 @@ class Hook_pointstore_custom
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$c_title=get_translated_text($rows[0]['c_title']);
-		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array($c_title));
+		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array(escape_html($c_title)));
 
 		$cost=$rows[0]['c_cost'];
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class,'sub_id'=>$id),'_SELF');
@@ -199,7 +199,7 @@ class Hook_pointstore_custom
 		$cost=$rows[0]['c_cost'];
 
 		$c_title=get_translated_text($rows[0]['c_title']);
-		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array($c_title));
+		$title=get_page_title('PURCHASE_SOME_PRODUCT',true,array(escape_html($c_title)));
 
 		// Check points
 		$points_left=available_points(get_member());

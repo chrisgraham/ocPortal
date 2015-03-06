@@ -68,7 +68,7 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 				$current=array(
 					'type'=>'blank',
 					'caption'=>NULL,
-					'special'=>NULL,
+					'special'=>'',
 					'children'=>NULL,
 					'only_on_page'=>NULL,
 					'modifiers'=>array()
@@ -154,7 +154,7 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 			$current_level=array(
 				'type'=>'drawer',
 				'caption'=>$caption,
-				'special'=>NULL,
+				'special'=>'',
 				'children'=>array(),
 				'only_on_page'=>NULL,
 				'modifiers'=>$modifiers

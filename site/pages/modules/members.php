@@ -48,6 +48,7 @@ class Module_members
 	 */
 	function get_entry_points()
 	{
+		if (get_forum_type()!='ocf') return array();
 		$ret=array('misc'=>'MEMBERS'/*,'remote'=>'LEARN_ABOUT_REMOTE_LOGINS'*/);
 		if (!is_guest()) $ret['view']='MY_PROFILE';
 		return $ret;
@@ -178,7 +179,7 @@ class Module_members
 		if ($group_filter!='')
 		{
 			if (is_numeric($group_filter))
-				$title=get_page_title('USERGROUP',true,array($usergroups[intval($group_filter)]['USERGROUP']));
+				$title=get_page_title('USERGROUP',true,array(escape_html($usergroups[intval($group_filter)]['USERGROUP'])));
 
 			require_code('ocfiltering');
 			$filter=ocfilter_to_sqlfragment($group_filter,'m_primary_group','f_groups',NULL,'m_primary_group','id');
@@ -213,7 +214,7 @@ class Module_members
 			$member_primary_group=ocf_get_member_primary_group($row['id']);
 			$primary_group=ocf_get_group_link($member_primary_group);
 
-			$members->attach(results_entry(array($link,$primary_group,integer_format($row['m_cache_num_posts']),escape_html(get_timezoned_date($row['m_join_time'])))));
+			$members->attach(results_entry(array($link,$primary_group,escape_html(integer_format($row['m_cache_num_posts'])),escape_html(get_timezoned_date($row['m_join_time'])))));
 
 			$member_boxes[]=ocf_show_member_box($row['id'],true);
 		}

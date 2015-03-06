@@ -149,6 +149,8 @@ class Module_admin_import
 		// Decide what we're doing
 		$type=get_param('type','misc');
 
+		$GLOBALS['LAX_COMCODE']=true;
+
 		if ($type=='misc') return $this->choose_importer();
 		if ($type=='session') return $this->choose_session();
 		if ($type=='session2') return $this->choose_session2();

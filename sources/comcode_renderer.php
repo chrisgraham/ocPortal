@@ -2145,7 +2145,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$rel=(($as_admin) || has_specific_permission($source_member,'search_engine_links'))?'':'nofollow';
 			if ($attributes['target']=='_blank')
 			{
-				$title=do_lang_tempcode('LINK_NEW_WINDOW');
+				$title=(is_object($caption)?static_evaluate_tempcode($caption):$caption).''.do_lang('LINK_NEW_WINDOW');
 			} else $title='';
 			$temp_tpl->attach(do_template('COMCODE_URL',array('_GUID'=>'d1657530e6d3d57e6a4791fb3bfa0dd7','TITLE'=>$title,'REL'=>$rel,'TARGET'=>$attributes['target'],'URL'=>$url_full,'CAPTION'=>$caption)));
 			break;
@@ -2184,7 +2184,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if (!array_key_exists('title',$attributes)) $attributes['title']=$attributes['param'];
 				if ((is_object($attributes['title'])) || ($attributes['title']!=''))
 				{
-					$_title=is_object($attributes['title'])?$attributes['title']:comcode_to_tempcode($attributes['title'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
+					$_title=is_object($attributes['title'])?make_string_tempcode(escape_html($attributes['title'])):comcode_to_tempcode($attributes['title'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 					$title=$_title->evaluate();
 				} else $title=$_embed;
 				$embed=hyperlink($_embed,$title,true);
@@ -2196,7 +2196,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$type=(array_key_exists('type',$attributes))?$attributes['type']:'downloads';
 			if ((is_object($attributes['param'])) || ($attributes['param']!=''))
 			{
-				$_caption=is_object($attributes['param'])?$attributes['param']:comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
+				$_caption=is_object($attributes['param'])?make_string_tempcode(escape_html($attributes['param'])):comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 				$__caption=$_caption->evaluate();
 			} else $__caption=$_embed;
 			$url=get_custom_base_url().'/'.$type.'/'.rawurlencode($_embed);

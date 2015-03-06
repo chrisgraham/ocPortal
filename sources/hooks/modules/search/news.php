@@ -52,7 +52,7 @@ class Hook_search_news
 	 */
 	function get_tree($_selected)
 	{
-		$selected=intval($_selected);
+		$selected=($_selected=='' || $_selected=='!')?array():array(intval($_selected));
 
 		require_code('news');
 

@@ -64,7 +64,7 @@ class Hook_Profiles_Tabs_Edit_delete
 		// UI fields
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 
-		$text=do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==get_member())?'_SUICIDAL':''),$username);
+		$text=do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==get_member())?'_SUICIDAL':''),escape_html($username));
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');

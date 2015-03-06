@@ -48,7 +48,7 @@ class Module_admin_ocf_merge_members
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'MERGE_MEMBERS');
+		return (get_forum_type()!='ocf')?array():array('misc'=>'MERGE_MEMBERS');
 	}
 
 	/**

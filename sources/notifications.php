@@ -214,6 +214,8 @@ class Notification_dispatcher
 
 		if (($this->store_in_staff_messaging_system) && (addon_installed('staff_messaging')))
 		{
+			require_lang('messaging');
+
 			list($type,$id)=explode('_',$this->code_category,2);
 			$message_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'),NULL,false,false,true);
 			$message=do_lang('MESSAGING_NOTIFICATION_WRAPPER',$message,$message_url->evaluate());

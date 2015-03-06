@@ -164,7 +164,7 @@ class Hook_html_site
 			if (($change_htaccess) && (file_exists($htaccess_path)) && (is_writable_wrap($htaccess_path)))
 			{
 				$htaccess=file_get_contents($htaccess_path);
-				$htaccess=preg_replace('#\(site\|forum\|adminzone\|cms\|personalzone\|collaboration[^\)]*#','${0}|'.implode('|',$new_zones),$htaccess);
+				$htaccess=preg_replace('#\(site\|forum\|adminzone\|cms\|collaboration[^\)]*#','${0}|'.implode('|',$new_zones),$htaccess);
 				$myfile=fopen($htaccess_path,'wt');
 				fwrite($myfile,$htaccess);
 				fclose($myfile);

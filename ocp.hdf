@@ -179,43 +179,43 @@ VirtualHost {
       }
 
       y {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm(\?.*)?$
+        pattern = ^/(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm(\?.*)?$
         to = $1/index.php?page=cedi&id=$2&$3
         qsa = true
       }
 
       z {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/galleries/image/([^\&\?]*)\.htm(\?.*)?$
+        pattern = ^/(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm(\?.*)?$
         to = $1/index.php?page=galleries&type=image&id=$2&wide=1&$3
         qsa = true
       }
 
       aa {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/galleries/video/([^\&\?]*)\.htm(\?.*)?$
+        pattern = ^/(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm(\?.*)?$
         to = $1/index.php?page=galleries&type=video&id=$2&wide=1&$3
         qsa = true
       }
 
       ab {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/iotds/view/([^\&\?]*)\.htm(\?.*)?$
+        pattern = ^/(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm(\?.*)?$
         to = $1/index.php?page=iotds&type=view&id=$2&wide=1$3
         qsa = true
       }
 
       ac {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?.*)?$
+        pattern = ^/(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm(\?.*)?$
         to = $1/index.php?page=$2&type=$3&id=$4&$5
         qsa = true
       }
 
       ad {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm(\?.*)?$
+        pattern = ^/(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm(\?.*)?$
         to = $1/index.php?page=$2&type=$3&$4
         qsa = true
       }
 
       ae {
-        pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)\.htm(\?.*)?$
+        pattern = ^/(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm(\?.*)?$
         to = $1/index.php?page=$2&$3
         qsa = true
       }

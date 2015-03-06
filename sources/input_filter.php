@@ -19,20 +19,86 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__input_filter()
+{
+	global $FORCE_INPUT_FILTER_FOR_ALL;
+	$FORCE_INPUT_FILTER_FOR_ALL=false;
+}
+
+/**
  * Check an input field isn't 'evil'.
  *
  * @param  string			The name of the parameter
  * @param  string			The value retrieved
+ * @param  ?boolean		Whether the parameter is a POST parameter (NULL: undetermined)
  */
-function check_input_field($name,$val)
+function check_input_field_string($name,&$val,$posted=false)
 {
 	if ((preg_match('#^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#i',$val)!=0) && ($name!='value')/*Don't want autosave triggering this*/)
 	{
 		log_hack_attack_and_exit('SCRIPT_URL_HACK_2',$val);
 	}
-	if (((!function_exists('is_guest')) || (is_guest())) && (strpos($val,'[link')!==false) && (strpos($val,'<a ')!==false))
+
+	// Security check for known URL fields. Check for specific things, plus we know we can be pickier in general
+	$is_url=($name=='from') || ($name=='preview_url') || ($name=='redirect') || ($name=='redirect_passon') || ($name=='url');
+	if ($is_url)
 	{
-		log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
+		if ($is_url)
+		{
+			if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$val)!=0)
+			{
+				if ($name=='page') $_GET[$name]=''; // Stop loops
+				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$val);
+			}
+
+			// Don't allow external redirections
+			if (!$posted)
+			{
+				$_val=str_replace('https://','http://',$val);
+				if (looks_like_url($_val))
+				{
+					$bus=array(
+						get_base_url(false),
+						get_forum_base_url(),
+						'http://ocportal.com/',
+					);
+					$ok=false;
+					foreach ($bus as $bu)
+					{
+ 						if (substr($_val,0,strlen($bu))==$bu)
+						{
+							$ok=true;
+							break;
+						}
+					}
+					if (!$ok)
+					{
+						$val=get_base_url(false);
+					}
+				}
+			}
+		}
+	}
+
+	if ($GLOBALS['BOOTSTRAPPING']==0)
+	{
+		// Quickly depose of common spam attacks. Not really security, just a sensible barrier
+		if (((!function_exists('is_guest')) || (is_guest())) && ((strpos($val,'[url=http://')!==false) || (strpos($val,'[link')!==false)) && (strpos($val,'<a ')!==false)) // Combination of non-ocPortal-supporting bbcode and HTML, almost certainly a bot trying too hard to get link through
+		{
+			log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
+		}
+
+		// Additional checks for non-privileged users
+		if (function_exists('has_specific_permission') && $name!='page'/*Too early in boot if 'page'*/)
+		{
+			if (false /*v9+*/)
+			{
+				hard_filter_input_data__html($val);
+				hard_filter_input_data__filesystem($val);
+			}
+		}
 	}
 }
 
@@ -43,10 +109,8 @@ function check_input_field($name,$val)
  * @param  string			The value retrieved
  * @return string			The filtered value
  */
-function check_posted_field($name,$val)
+function check_posted_field($name,&$val)
 {
-	check_input_field($name,$val);
-
 	$true_referer=(substr(ocp_srv('HTTP_REFERER'),0,7)=='http://') || (substr(ocp_srv('HTTP_REFERER'),0,8)=='https://');
 	$canonical_referer=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',ocp_srv('HTTP_REFERER')))));
 	$canonical_baseurl=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',get_base_url()))));
@@ -77,9 +141,133 @@ function check_posted_field($name,$val)
 		}
 	}
 
+	// Custom fields.xml filter system
 	$val=filter_form_field_default($name,$val);
+}
 
-	return $val;
+/**
+ * Filter input data for safety within potential filesystem calls.
+ * Only called for non-privileged users, filters/alters rather than blocks, due to false-positive likelihood.
+ *
+ * @param  string			The data
+ */
+function hard_filter_input_data__filesystem(&$val)
+{
+	static $nastiest_path_signals=array(
+		'(^|[/\\\\])info\.php($|\0)', // LEGACY
+		'(^|[/\\\\])_config\.php($|\0)',
+		'\.\.[/\\\\]',
+		'(^|[/\\\\])data_custom[/\\\\].*log.*',
+	);
+	$matches=array();
+	foreach ($nastiest_path_signals as $signal)
+	{
+		if (preg_match('#'.$signal.'#',$val,$matches)!=0)
+		{
+			$val=str_replace($matches[0],str_replace('.','&#46;',$matches[0]),$val); // Break the paths
+		}
+	}
+}
+
+/**
+ * Filter input data for safety within frontend markup, taking account of HTML/JavaScript/CSS/embed attacks.
+ * Only called for non-privileged users, filters/alters rather than blocks, due to false-positive likelihood.
+ *
+ * @param  string			The data
+ */
+function hard_filter_input_data__html(&$val)
+{
+	require_code('comcode');
+
+	global $POTENTIAL_JS_NAUGHTY_ARRAY;
+
+	// Null vector
+	$val=str_replace(chr(0),'',$val);
+
+	// Comment vector
+	$old_val='';
+	do
+	{
+		$old_val=$val;
+		$val=preg_replace('#/\*.*\*/#Us','',$val);
+	}
+	while ($old_val!=$val);
+
+	// Entity vector
+	$matches=array();
+	do
+	{
+		$old_val=$val;
+		$count=preg_match_all('#&\#(\d+)#i',$val,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
+		for ($i=0;$i<$count;$i++)
+		{
+			$matched_entity=intval($matches[1][$i]);
+			if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
+			{
+				if ($matched_entity==0) $matched_entity=ord(' ');
+				$val=str_replace($matches[0][$i].';',chr($matched_entity),$val);
+				$val=str_replace($matches[0][$i],chr($matched_entity),$val);
+			}
+		}
+		$count=preg_match_all('#&\#x([\da-f]+)#i',$val,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
+		for ($i=0;$i<$count;$i++)
+		{
+			$matched_entity=intval(base_convert($matches[1][$i],16,10));
+			if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
+			{
+				if ($matched_entity==0) $matched_entity=ord(' ');
+				$val=str_replace($matches[0][$i].';',chr($matched_entity),$val);
+				$val=str_replace($matches[0][$i],chr($matched_entity),$val);
+			}
+		}
+	}
+	while ($old_val!=$val);
+
+	// Tag vectors
+	$bad_tags='noscript|script|link|style|meta|iframe|frame|object|embed|applet|html|xml|body|head|form|base|layer|v:vmlframe';
+	$val=preg_replace('#\<('.$bad_tags.')#i','<span',$val); // Intentionally does not strip so as to avoid attacks like <<scriptscript --> <script
+	$val=preg_replace('#\</('.$bad_tags.')#i','</span',$val);
+
+	// CSS attack vectors
+	$val=preg_replace('#\\\\(\d+)#i','${1}',$val); // CSS escaping
+	$val=preg_replace('#e\s*(x\s*p\s*r\s*e\s*s\s*s\s*i\s*o\s*n\()#i','&eacute;${1}',$val); // expression(
+	$val=preg_replace('#b\s*(e\s*h\s*a\s*v\s*i\s*o\s*r\s*\()#i','&szlig;${1}',$val); // behavior(
+	$val=preg_replace('#b\s*(i\s*n\s*d\s*i\s*n\s*g\s*\()#i','&szlig;${1}',$val); // bindings(
+
+	// Script-URL vectors (protocol handlers)
+	$val=preg_replace('#((j[\\\\\s]*a[\\\\\s]*v[\\\\\s]*a[\\\\\s]*|v[\\\\\s]*b[\\\\\s]*)s[\\\\\s]*c[\\\\\s]*r[\\\\\s]*i[\\\\\s]*p[\\\\\s]*t[\\\\\s]*):#i','${1};',$val);
+
+	// Behavior protocol handler
+	$val=preg_replace('#(b[\\\\\s]*e[\\\\\s]*h[\\\\\s]*a[\\\\\s]*v[\\\\\s]*i[\\\\\s]*o[\\\\\s]*r[\\\\\s]*):#i','${1};',$val);
+
+	// Event vectors (anything that *might* have got into a tag context, or out of an attribute context, that looks like it could potentially be a JS attribute -- intentionally broad as invalid-but-working HTML can trick regexps)
+	do
+	{
+		$before=$val;
+		$val=preg_replace('#([<"\'].*\s)o([nN])(.*=)#s','${1}&#111;${2}${3}',$val);
+		$val=preg_replace('#([<"\'].*\s)O([nN])(.*=)#s','${1}&#79;${2}${3}',$val);
+	}
+	while ($before!=$val);
+
+	// Check tag balancing (we don't want to allow partial tags to compound together against separately checked chunks)
+	$len=strlen($val);
+	$depth=0;
+	for ($i=0;$i<$len;$i++)
+	{
+		$at=$val[$i];
+		if ($at=='<')
+		{
+			$depth++;
+		} elseif ($at=='>')
+		{
+			$depth--;
+		}
+		if ($depth<0) break;
+	}
+	if ($depth>=1)
+	{
+		$val.='">'; // Ugly way to make sure all is closed off
+	}
 }
 
 /**

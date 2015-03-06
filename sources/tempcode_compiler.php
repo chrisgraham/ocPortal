@@ -75,7 +75,9 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
 
-	$compilable_symbols=array('"ADDON_INSTALLED"','"BASE_URL"','"COPYRIGHT"','"SITE_NAME"','"BRAND_BASE_URL"','"BRAND_NAME"','"IMG_WIDTH"','"IMG_HEIGHT"',/*bad if theme image missing'"IMG"',*/'"LANG"','"THEME"','"VALUE_OPTION"','"CONFIG_OPTION"');
+	$compilable_symbols=array('"ADDON_INSTALLED"','"COPYRIGHT"','"SITE_NAME"','"BRAND_BASE_URL"','"BRAND_NAME"','"IMG_WIDTH"','"IMG_HEIGHT"',/*bad if theme image missing'"IMG"',*/'"LANG"','"THEME"','"VALUE_OPTION"','"CONFIG_OPTION"');
+	if (function_exists('get_option') && get_option('enable_https',true)!='1')
+		$compilable_symbols[]='"BASE_URL"';
 	global $SITE_INFO;
 	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1'))
 	{

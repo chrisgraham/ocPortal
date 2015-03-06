@@ -48,7 +48,7 @@ class Module_admin_ocf_join
 	 */
 	function get_entry_points()
 	{
-		return array('menu'=>'MEMBERS','misc'=>'ADD_MEMBER','delurk'=>'DELETE_LURKERS','download_csv'=>'DOWNLOAD_MEMBER_CSV','import_csv'=>'IMPORT_MEMBER_CSV','group_member_timeouts'=>'GROUP_MEMBER_TIMEOUTS');
+		return (get_forum_type()!='ocf')?array():array('menu'=>'MEMBERS','misc'=>'ADD_MEMBER','delurk'=>'DELETE_LURKERS','download_csv'=>'DOWNLOAD_MEMBER_CSV','import_csv'=>'IMPORT_MEMBER_CSV','group_member_timeouts'=>'GROUP_MEMBER_TIMEOUTS');
 	}
 
 	/**

@@ -153,22 +153,34 @@ class Module_admin_ipban
 		$_bans=explode(chr(10),$bans);
 		foreach ($old_bans as $ban)
 		{
-			if (!in_array($ban,$_bans)) remove_ip_ban($ban);
+			if (preg_match('#^'.preg_quote($ban,'#').'(\s|$)#m',$bans)==0)
+			{
+				remove_ip_ban($ban);
+			}
 		}
 		$matches=array();
 		foreach ($_bans as $ban)
 		{
 			if (trim($ban)=='') continue;
-			if (!in_array($ban,$old_bans))
+			preg_match('#^([^\s]+)(.*)$#',$ban,$matches);
+			$ip=$matches[1];
+			if (preg_match('#^[a-f0-9\.]+$#U',$ip)==0)
 			{
-				if (preg_match('#^(\d+|\*)\.(\d+|\*)\.(\d+|\*)\.(\d+|\*)(.*)#',$ban,$matches)==0)
+				attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',$ban),'warn');
+			} else
+			{
+				if ($ip==get_ip_address())
 				{
-					attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',$ban),'warn');
-				} else
+					attach_message(do_lang_tempcode('WONT_BAN_SELF',$ban),'warn');
+				}
+				elseif ($ip==ocp_srv('SERVER_ADDR'))
 				{
-					$ban=$matches[1].'.'.$matches[2].'.'.$matches[3].'.'.$matches[4];
-					ban_ip($ban,trim($matches[5]));
-					$old_bans[]=$ban;
+					attach_message(do_lang_tempcode('WONT_BAN_SERVER',$ban),'warn');
+				}
+				if (!in_array($ip,$old_bans))
+				{
+					ban_ip($ip,trim($matches[2]));
+					$old_bans[]=$ip;
 				}
 			}
 		}

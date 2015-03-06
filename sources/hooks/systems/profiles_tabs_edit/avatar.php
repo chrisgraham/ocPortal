@@ -76,7 +76,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 				} else // Upload
 				{
 					// We have chosen an upload. Note that we will not be looking at alt_url at this point, even though it is specified below for canonical reasons
-					$urls=get_url('avatar_alt_url','avatar_file',file_exists(get_custom_file_base().'/uploads/avatars')?'uploads/avatars':'uploads/ocf_avatars',0,OCP_UPLOAD_IMAGE,false);
+					$urls=get_url('avatar_alt_url','avatar_file',file_exists(get_custom_file_base().'/uploads/avatars')?'uploads/avatars':'uploads/ocf_avatars',0,OCP_UPLOAD_IMAGE,false,'','',false,true);
 					if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[0]!='') && (url_is_local($urls[0]))) $urls[0]=get_custom_base_url().'/'.$urls[0];
 				}
 

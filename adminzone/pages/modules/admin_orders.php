@@ -219,7 +219,7 @@ class Module_admin_orders
 
 			$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
 
-			$member		=	hyperlink($url,$submitted_by,false,false,do_lang('CUSTOMER'));
+			$member		=	hyperlink($url,$submitted_by,false,true,do_lang('CUSTOMER'));
 
 			$view_url	=	build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
@@ -320,7 +320,7 @@ class Module_admin_orders
 
 			$product_name	=	$row['p_name'];
 
-			$product	=	hyperlink($product_info_url,$product_name,false,false,do_lang('VIEW'));
+			$product	=	hyperlink($product_info_url,$product_name,false,true,do_lang('VIEW'));
 
 			$product_entries->attach(results_entry(
 					array(

@@ -1635,6 +1635,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[2]))
 				{
 					$value=str_replace($param[0],$param[1],$param[2]);
+					if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($param[0])) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -1703,6 +1704,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$cut=isset($param[3]) && ($param[3]=='1');
 					$value=wordwrap($param[0],intval($param[1]),isset($param[2])?$param[2]:'<br />',$cut);
+					if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($param[0])) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -1758,6 +1760,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 						$value=$all_usergroups[$groups[intval($param[0])]];
 					}
+
+					if ($GLOBALS['XSS_DETECT'] && ocp_is_escaped($param[0])) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -1825,7 +1829,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$value=fix_id($param[0]);
-					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
+					if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 				}
 				break;
 
@@ -2490,6 +2494,11 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 		$param[3]='1';
 	}
 
+	if ($GLOBALS['XSS_DETECT'])
+	{
+		$is_escaped=ocp_is_escaped($param[0]);
+	}
+
 	$amount=intval(isset($param[1])?$param[1]:'60');
 	$is_html=((isset($param[3])) && ($param[3]=='1'));
 	if ($is_html)
@@ -2559,6 +2568,11 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 	} else
 	{
 		$value=$html;
+	}
+
+	if ($GLOBALS['XSS_DETECT'])
+	{
+		if ($is_escaped || !$is_html/*Will have been explicitly escaped by this function*/) ocp_mark_as_escaped($value);
 	}
 
 	return $value;

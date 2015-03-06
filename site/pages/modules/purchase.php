@@ -468,7 +468,7 @@ class Module_purchase
 			$result=do_template($tpl,array('LOGOS'=>$logos,'TRANSACTION_BUTTON'=>$transaction_button,'CURRENCY'=>get_option('currency'),'ITEM_NAME'=>$item_name,'TITLE'=>$title,'LENGTH'=>is_null($length)?'':strval($length),'LENGTH_UNITS'=>$length_units,'PURCHASE_ID'=>$purchase_id,'PRICE'=>float_to_raw_string(floatval($price))));
 		} else // Handle the transaction internally
 		{
-			if (((ocp_srv('HTTPS')=='') || (ocp_srv('HTTPS')=='off')) && (!ecommerce_test_mode()))
+			if ((!tacit_https()) && (!ecommerce_test_mode()))
 			{
 				warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 			}

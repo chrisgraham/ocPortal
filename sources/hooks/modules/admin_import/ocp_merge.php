@@ -561,7 +561,9 @@ class Hook_ocp_merge
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'attachment_refs',200,$row_start);
 			foreach ($rows as $row)
 			{
-				$id_new=import_id_remap_get($row['r_referer_type'],$row['r_referer_id'],true);
+				$import_type_fixed=$row['r_referer_type'];
+				if ($import_type_fixed=='ocf_post') $import_type_fixed='post';
+				$id_new=import_id_remap_get($import_type_fixed,$row['r_referer_id'],true);
 				if (is_null($id_new)) $id_new=$row['r_referer_id'];
 				$aid=import_id_remap_get('attachment',$row['a_id'],true);
 				if (!is_null($aid))
@@ -1642,6 +1644,8 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
+			if (import_check_if_imported('catalogue',$row['c_name'])) continue;
+
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$row['c_name']));
 			if (is_null($test))
 			{
@@ -1656,6 +1660,7 @@ class Hook_ocp_merge
 				if (!array_key_exists('c_send_view_reports',$row)) $row['c_send_view_reports']=0;
 				unset($row['c_own_template']);
 				$GLOBALS['SITE_DB']->query_insert('catalogues',$row);
+				import_id_remap_put('catalogue',$row['c_name'],$row['c_name']);
 
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'catalogue_fields WHERE '.db_string_equal_to('c_name',$row['c_name']));
 				foreach ($rows2 as $row2)
@@ -1686,7 +1691,7 @@ class Hook_ocp_merge
 
 			if ((is_null($row['cc_parent_id'])) && ($GLOBALS['SITE_DB']->query_value('catalogues','c_is_tree',array('c_name'=>$row['c_name']))==1))
 			{
-				$real_root=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_catalogues','id',array('cc_parent_id'=>NULL,'c_name'=>$row['c_name']));
+				$real_root=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','id',array('cc_parent_id'=>NULL,'c_name'=>$row['c_name']));
 				if (!is_null($real_root))
 				{
 					import_id_remap_put('catalogue_category',strval($row['id']),$real_root);
@@ -1711,7 +1716,8 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			if (is_null(import_id_remap_get('catalogue_entry',strval($row['id'])))) continue;
+			if (!is_null(import_id_remap_get('catalogue_entry',strval($row['id']),true))) continue;
+
 			$category_id=import_id_remap_get('catalogue_category',$row['cc_id'],true);
 			if (is_null($category_id)) continue;
 			$map=array();
@@ -1812,10 +1818,12 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			$member_blocker=import_id_remap_get('member',$row['member_blocker']);
-			$member_blocked=import_id_remap_get('member',$row['member_blocked']);
+			$member_blocker=import_id_remap_get('member',$row['member_blocker'],true);
+			$member_blocked=import_id_remap_get('member',$row['member_blocked'],true);
+			if (is_null($member_blocker)) continue;
+			if (is_null($member_blocked)) continue;
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_blocking','member_blocker',array('member_blocker'=>$member_blocker,'member_blocked'=>$member_blocked));
-			if(!is_null($test)) continue;
+			if (!is_null($test)) continue;
 			$GLOBALS['SITE_DB']->query_insert('chat_blocking',array('member_blocker'=>$member_blocker,'member_blocked'=>$member_blocked,'date_and_time'=>$row['date_and_time']));
 		}
 
@@ -1823,8 +1831,10 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$member_likes=import_id_remap_get('member',$row['member_likes']);
-			$member_liked=import_id_remap_get('member',$row['member_liked']);
+			$member_likes=import_id_remap_get('member',$row['member_likes'],true);
+			$member_liked=import_id_remap_get('member',$row['member_liked'],true);
+			if (is_null($member_likes)) continue;
+			if (is_null($member_liked)) continue;
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_likes',array('member_likes'=>$member_likes,'member_liked'=>$member_liked));
 			if (!is_null($test)) continue;
 			$GLOBALS['SITE_DB']->query_insert('chat_buddies',array('member_likes'=>$member_likes,'member_liked'=>$member_liked,'date_and_time'=>$row['date_and_time']));
@@ -1835,7 +1845,8 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			$s_member=import_id_remap_get('member',$row['s_member']);
+			$s_member=import_id_remap_get('member',$row['s_member'],true);
+			if (is_null($s_member)) continue;
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_sound_effects','s_member',array('s_member'=>$s_member,'s_effect_id'=>$row['s_effect_id']));
 			if (!is_null($test)) continue;
 			$GLOBALS['SITE_DB']->query_insert('chat_sound_effects',array('s_member'=>$s_member,'s_effect_id'=>$row['s_effect_id'],'s_url'=>$row['s_url']));
@@ -2909,7 +2920,7 @@ class Hook_ocp_merge
 	 */
 	function import_menu_items($db,$table_prefix,$file_base)
 	{
-		$parent_rows=$db->query('SELECT * FROM '.get_table_prefix().'menu_items');
+		$parent_rows=$db->query('SELECT * FROM '.$table_prefix.'menu_items');
 		if (is_null($parent_rows)) return;
 		foreach ($parent_rows as $row)
 		{

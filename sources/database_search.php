@@ -78,7 +78,7 @@ function generate_text_summary($_temp_summary,$words_searched)
 				$last_gt=strrpos(substr($_temp_summary,0,$content_bit_pos),'>');
 				$last_lt=strrpos(substr($_temp_summary,0,$content_bit_pos),'<');
 
-				if (($last_gt!==false) && ($last_gt>$last_lt))
+				if (($last_gt===false) || ($last_gt>$last_lt))
 				{
 					$extra_pre='<span class="comcode_highlight">';
 					$extra_post='</span>';
@@ -501,13 +501,13 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
 			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible
 
-			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
-
 			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
 			{
 				$keywords_query.=' ORDER BY '.$order;
 				if ($direction=='DESC') $keywords_query.=' DESC';
 			}
+
+			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
 
 			if ($group_by_ok)
 			{
@@ -555,25 +555,32 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$tc_add=' '.$translate_join_type.' '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 				if (strpos($orig_table_clause,$tc_add)!==false) $tc_add='';
 
-				if (($only_titles) && ($i!=0)) break;
-
-				$where_clause_2=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where);
-				$where_clause_2=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$where_clause_2); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
-				$where_clause_3=$where_clause;
-				if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
-					$where_clause_3.=(($where_clause=='')?'':' AND ').'NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
-
-				if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
+				if ((!$only_titles) || ($i==0))
 				{
-					$_select=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where).' AS contextual_relevance';
-					$_select=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$_select); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
+					$where_clause_2=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where);
+					$where_clause_2=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$where_clause_2); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
+					$where_clause_3=$where_clause;
+					if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
+						$where_clause_3.=(($where_clause=='')?'':' AND ').'NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
+
+					if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
+					{
+						$_select=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where).' AS contextual_relevance';
+						$_select=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$_select); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
+					} else
+					{
+						$_select='';
+					}
+
+					$_table_clause=$orig_table_clause.$tc_add;
+
+					$where_alternative_matches[]=array($where_clause_2,$where_clause_3,$_select,$_table_clause,'t'.strval($i));
 				} else
 				{
-					$_select='';
-				}
-				$_table_clause=$orig_table_clause.$tc_add;
+					$_table_clause=$orig_table_clause.$tc_add;
 
-				$where_alternative_matches[]=array($where_clause_2,$where_clause_3,$_select,$_table_clause,'t'.strval($i));
+					$where_alternative_matches[]=array('1=0','','',$_table_clause,'t'.strval($i));
+				}
 			}
 			if ($content_where!='') // Non-translatable fields
 			{

@@ -440,7 +440,7 @@ function get_quizz_data_for_csv($quiz_id)
 	$csv_data=array();
 
 	// Create header array
-	$header=array(do_lang('MEMBER_NAME'),do_lang('MEMBER_EMAIL'));
+	$header=array(do_lang('USERNAME'),do_lang('EMAIL'));
 
 	// Get all entries and member answers of this quiz in to an array
 	$member_answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_entry_answer t1 JOIN '.get_table_prefix().'quiz_entries t2 ON t2.id=t1.q_entry JOIN '.get_table_prefix().'quiz_questions t3 ON t3.id=t1.q_question',array('t2.id AS entry_id','q_question','q_member','q_answer'),array('t2.q_quiz'=>$quiz_id),'ORDER BY q_order');

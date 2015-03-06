@@ -120,7 +120,7 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$fields->attach(results_entry(array($row['t_title'],protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array($row['t_title'],protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		$search_url=NULL;

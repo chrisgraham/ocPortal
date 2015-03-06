@@ -142,9 +142,10 @@ function update_ticket_type_lead_times()
  * @param  ?AUTO_LINK	The ticket type (NULL: all ticket types)
  * @param  boolean		Don't view others' tickets, even if the member has permission to
  * @param  boolean		Whether to skip showing errors, returning NULL instead
+ * @param  boolean		Whether to include first posts
  * @return array			Array of tickets, empty on failure
  */
-function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=false,$silent_error_handling=false)
+function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=false,$silent_error_handling=false,$include_first_posts=false)
 {
 	$restrict='';
 	$restrict_description='';
@@ -193,7 +194,10 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 	foreach ($topics as $topic)
 	{
 		$fp=$topic['firstpost'];
-		unset($topic['firstpost']); // To stop Tempcode randomly making serialization sometimes change such that the refresh_if_changed is triggered
+		if (!$include_first_posts)
+		{
+			unset($topic['firstpost']); // To stop Tempcode randomly making serialization sometimes change such that the refresh_if_changed is triggered
+		}
 		if ((is_null($ticket_type)) || (strpos($fp->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type))!==false))
 		{
 			$filtered_topics[]=$topic;

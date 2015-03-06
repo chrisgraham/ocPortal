@@ -150,7 +150,7 @@ class Module_admin_security
 		{
 			$time=get_timezoned_date($row['date_and_time']);
 			$lookup_url=build_url(array('page'=>'admin_lookup','param'=>$row['ip']),'_SELF');
-			$fields->attach(results_entry(array(escape_html($row['failed_account']),escape_html($time),hyperlink($lookup_url,$row['ip']))));
+			$fields->attach(results_entry(array(escape_html($row['failed_account']),escape_html($time),hyperlink($lookup_url,escape_html($row['ip'])))));
 		}
 		$failed_logins=results_table(do_lang_tempcode('FAILED_LOGINS'),$start,'failed_start',$max,'failed_max',$max_rows,$fields_title,$fields,$sortables,$_sortable,$sort_order,'failed_sort',new ocp_tempcode());
 
@@ -216,7 +216,7 @@ class Module_admin_security
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECURITY_LOGGING'))));
 
-		return do_template('SECURITY_ALERT_SCREEN',array('_GUID'=>'6c5543151af09c79bf204bea5df61dde','TITLE'=>$title,'USER_AGENT'=>$row['user_agent'],'REFERER'=>$row['referer'],'USER_OS'=>$row['user_os'],'REASON'=>$reason,'IP'=>hyperlink($lookup_url,$row['ip']),'USERNAME'=>hyperlink($member_url,escape_html($username)),'POST'=>$post,'URL'=>$row['url']));
+		return do_template('SECURITY_ALERT_SCREEN',array('_GUID'=>'6c5543151af09c79bf204bea5df61dde','TITLE'=>$title,'USER_AGENT'=>$row['user_agent'],'REFERER'=>$row['referer'],'USER_OS'=>$row['user_os'],'REASON'=>$reason,'IP'=>hyperlink($lookup_url,$row['ip'], false, true),'USERNAME'=>hyperlink($member_url,escape_html($username)),'POST'=>$post,'URL'=>$row['url']));
 	}
 
 }

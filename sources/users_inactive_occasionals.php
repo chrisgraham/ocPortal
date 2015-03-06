@@ -138,6 +138,8 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 			$test=$GLOBALS['SITE_DB']->query_value('stats','MAX(date_and_time)',array('the_user'=>$member));
 			if (!is_null($test))
 			{
+				require_code('temporal');
+				require_code('tempcode');
 				if (date('d/m/Y',tz_time($test,get_site_timezone()))!=date('d/M/Y',tz_time(time(),get_site_timezone())))
 				{
 					require_code('points');
@@ -316,7 +318,7 @@ function try_cookie_login()
 				if (array_key_exists($real_member_cookie,$unserialize))
 				{
 					$the_member=$unserialize[$real_member_cookie];
-					if (get_magic_quotes_gpc()) $the_member=addslashes($the_member);
+					if (get_magic_quotes_gpc()) $the_member=addslashes(@strval($the_member));
 					$_COOKIE[get_member_cookie()]=$the_member;
 				}
 				if (array_key_exists($real_pass_cookie,$unserialize))

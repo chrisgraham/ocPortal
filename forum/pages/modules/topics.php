@@ -1134,7 +1134,7 @@ class Module_topics
 					access_denied('I_ERROR');
 				elseif ((!has_specific_permission(get_member(),'view_other_pt')) && ($_postdetails[0]['p_intended_solely_for']!=get_member()) && ($_postdetails[0]['p_poster']!=get_member()) && (!is_null($_postdetails[0]['p_intended_solely_for'])))
 					access_denied('I_ERROR');
-				if ((!has_specific_permission(get_member(),'see_unvalidated')) && (!$_postdetails[0]['p_validated']) && (($_postdetails[0]['p_poster']!=get_member()) || ((is_guest($_postdetails[0]['p_poster'])) && ($_postdetails[0]['p_ip_address']!=get_ip_address()))))
+				if ((!has_specific_permission(get_member(),'see_unvalidated')) && ($_postdetails[0]['p_validated']==0) && (($_postdetails[0]['p_poster']!=get_member()) || ((is_guest($_postdetails[0]['p_poster'])) && ($_postdetails[0]['p_ip_address']!=get_ip_address()))))
 					access_denied('I_ERROR');
 
 				$_topic=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from','t_cache_first_title'),array('id'=>$_postdetails[0]['p_topic_id']),'',1);

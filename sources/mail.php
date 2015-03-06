@@ -216,6 +216,8 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	require_code('site');
 	require_code('mime_types');
 
+	$bypass_queue=($bypass_queue || ($priority<3) || (strpos(serialize($attachments),'tmpfile')!==false));
+
 	if (is_null($as)) $as=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 	if (!$coming_out_of_queue)
@@ -724,6 +726,10 @@ function filter_css($css,$context)
 	// Strip comments from CSS. This optimises, and also avoids us needing to do a sophisticated parse
 	$css=preg_replace('#/\*.*\*/#Us','',$css);
 
+	// Strip all media rules, we don't support parsing it, and e-mails will not be that complex
+	$middle_regexp='[^\{\}]*'.'\{[^\{\}]*\}'.'[^\{\}]*';
+	$css=preg_replace('#@media[^\{\}]*\{('.$middle_regexp.')*\}#s','',$css);
+
 	// Find and process each CSS selector block
 	$stack=array();
 	$css_new='';
@@ -748,8 +754,6 @@ function filter_css($css,$context)
 					foreach ($selectors as $selector)
 					{
 						$selector=trim($selector);
-
-						if (strpos($selector,'@media print')!==false) break;
 
 						// We let all tag-name selectors through if the tag exists in the document, unless they contain a class/ID specifier -- in which case we toe to the presence of that class/ID
 						if ((strpos($selector,'.')===false) && (strpos($selector,'#')===false) && (preg_match('#(^|\s)(\w+)([\[\#\.:\s]|$)#',$selector,$matches)!=0))

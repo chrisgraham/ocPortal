@@ -162,7 +162,7 @@ class Hook_admin_stats_ocf_posting_rates
 		$i=0;
 		foreach ($posting_rates as $date=>$value)
 		{
-			$fields->attach(results_entry(array(escape_html($date),integer_format($value))));
+			$fields->attach(results_entry(array(escape_html($date),escape_html(integer_format($value)))));
 
 			$real_data[]=array(
 				'Date/Time'=>$date,

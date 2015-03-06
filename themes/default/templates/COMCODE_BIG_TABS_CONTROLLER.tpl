@@ -4,7 +4,7 @@
 <div class="comcode_big_tab_controller"{$?,{$VALUE_OPTION,html5}, role="tablist"}>
 	{+START,LOOP,TABS}
 		<div class="{$?,{$EQ,{_loop_key},0},big_tab_active big_tab_first,big_tab_inactive}" id="{$FIX_ID,{PASS_ID|*}}_btgoto_{$FIX_ID,{_loop_var|*}}">
-			<a{$?,{$VALUE_OPTION,html5}, aria-controls="{$FIX_ID,{PASS_ID|*}}_section_{$FIX_ID,{NAME|*}}" role="tab"} href="#" onclick="return flip_page('{$FIX_ID,{_loop_var|*;}}','{$FIX_ID,{PASS_ID|*;}}',a{$FIX_ID,{PASS_ID|*}}_big_tab);">{_loop_var*}</a>
+			<a{$?,{$VALUE_OPTION,html5}, aria-controls="{$FIX_ID,{PASS_ID|*}}_section_{$FIX_ID,{NAME|*}}" role="tab"} href="#" onclick="return flip_page('{$FIX_ID,{_loop_var|*;}}','{$FIX_ID,{PASS_ID|*;}}',a{$FIX_ID,{PASS_ID|*}}_big_tab);">{_loop_var}</a>
 		</div>
 	{+END}
 </div>

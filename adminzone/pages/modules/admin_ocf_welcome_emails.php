@@ -241,7 +241,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$fields->attach(results_entry(array($row['w_name'],get_translated_text($row['w_subject']),do_lang_tempcode('HOURS',escape_html(strval($row['w_send_time']))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array($row['w_name'],get_translated_text($row['w_subject']),do_lang_tempcode('HOURS',escape_html(strval($row['w_send_time']))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);

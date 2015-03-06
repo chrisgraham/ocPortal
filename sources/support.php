@@ -398,7 +398,7 @@ function addon_installed($addon)
 		if (function_exists('persistant_cache_get')) $ADDON_INSTALLED_CACHE=persistant_cache_get('ADDONS_INSTALLED');
 	}
 	if (isset($ADDON_INSTALLED_CACHE[$addon])) return $ADDON_INSTALLED_CACHE[$addon];
-	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.filter_naughty($addon).'.php');
+	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty($addon).'.php');
 	$ADDON_INSTALLED_CACHE[$addon]=$answer;
 	if (function_exists('persistant_cache_set')) persistant_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
 	return $answer;
@@ -632,7 +632,7 @@ function ocp_tempnam($prefix)
 	if ((($tempnam===false) || ($tempnam==''/*Should not be blank, but seen in the wild*/)) && (!$problem_saving))
 	{
 		$problem_saving=true;
-		$tempnam=tempnam($local_path,$prefix);
+		$tempnam=tempnam($local_path,'tmpfile__'.$prefix);
 	}
 	return $tempnam;
 }
@@ -1286,7 +1286,7 @@ function member_tracking_update()
  * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: don't care)
  * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: don't care)
  * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-ids to rows about them (NULL: Too many)
+ * @return ?array			A map of member-ids to rows about them (except for guest, which is a count) (NULL: Too many)
  */
 function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 {
@@ -1306,12 +1306,17 @@ function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 	if (($id!==NULL) && ($id!='')) $map['mt_id']=$id;
 	$map['session_invisible']=0;
 	$db=($forum_layer?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
-	$results=$db->query_select('member_tracking t LEFT JOIN '.$db->get_table_prefix().'sessions s ON t.mt_member_id=s.the_user',array('*'),$map,'ORDER BY mt_member_id',200);
+	$results=$db->query_select('member_tracking t LEFT JOIN '.$db->get_table_prefix().'sessions s ON t.mt_member_id=s.the_user',array('*'),$map,' AND mt_member_id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' ORDER BY mt_member_id',200);
 	if (count($results)==200) return NULL;
+
+	unset($map['session_invisible']);
+	$num_guests=$db->query_value('member_tracking t','COUNT(*)',$map,' AND mt_member_id='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()));
 
 	$results=remove_duplicate_rows($results,'mt_member_id');
 
-	$out=array();
+	$out=array(
+		$GLOBALS['FORUM_DRIVER']->get_guest_id()=>$num_guests,
+	);
 	foreach ($results as $row)
 	{
 		if (!member_blocked(get_member(),$row['mt_member_id'])) $out[$row['mt_member_id']]=$row;

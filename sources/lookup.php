@@ -186,7 +186,7 @@ function find_security_alerts($where)
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['the_user']);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 
-		$_row=array(hyperlink($member_url,$username),hyperlink($full_url,$time),hyperlink($lookup_url,$row['ip']),$reason);
+		$_row=array(hyperlink($member_url,escape_html($username)),hyperlink($full_url,escape_html($time)),hyperlink($lookup_url,escape_html($row['ip'])),$reason);
 		if (has_js())
 		{
 			$deletion_tick=do_template('RESULTS_TABLE_TICK',array('ID'=>strval($row['id'])));

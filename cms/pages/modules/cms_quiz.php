@@ -149,7 +149,7 @@ class Module_cms_quiz extends standard_aed_module
 
 			$type=do_lang_tempcode($row['q_type']);
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz')),get_translated_text($row['q_name']))),$type,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz')),get_translated_text($row['q_name']),false,true)),$type,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])))),true));
 		}
 
 		$search_url=build_url(array('page'=>'search','id'=>'quiz'),get_module_zone('search'));
@@ -334,7 +334,7 @@ class Module_cms_quiz extends standard_aed_module
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
-				syndicate_described_activity('quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
+				syndicate_described_activity('quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 		}
 
 		return strval($id);
@@ -363,7 +363,7 @@ class Module_cms_quiz extends standard_aed_module
 			$submitter=$GLOBALS['SITE_DB']->query_value('quizzes','q_submitter',array('id'=>$id));
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
-				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,NULL/*$submitter*/);
+				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes',1,NULL/*$submitter*/);
 		}
 
 		edit_quiz($id,$name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),post_param('meta_keywords',''),post_param('meta_description',''),post_param_integer('points_for_passing',0),$tied_newsletter);

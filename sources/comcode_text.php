@@ -96,17 +96,12 @@ function init__comcode_text()
 
 	// These tags have contents that are not interpreted as Comcode (so no HTML tags either), but are formatted for white-space
 	global $CODE_TAGS;
-	$CODE_TAGS=array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash'=>1,'thumb'=>1,'menu'=>1,'no_parse'=>1,'code'=>1,'sql'=>1,'php'=>1,'tt'=>1,'samp'=>1,'codebox'=>1,'staff_note'=>1);
+	$CODE_TAGS=array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash'=>1,'thumb'=>1,'menu'=>1,'no_parse'=>1,'code'=>1,'sql'=>1,'php'=>1,'tt'=>1,'samp'=>1,'codebox'=>1,'staff_note'=>1,'section_controller'=>1,'big_tab_controller'=>1);
 
 	// ALSO:
 	// See $non_text_tags list in comcode_renderer.php
 	// See non_text_tags in JAVASCRIPT_EDITING.tpl
 	// See _get_details_comcode_tags function in comcode_add.php
-
-	// We're not allowed to specify any of these as entities
-	global $POTENTIAL_JS_NAUGHTY_ARRAY;
-	$POTENTIAL_JS_NAUGHTY_ARRAY=array('d'=>1,/*'a'=>1,'t'=>1,'a'=>1,*/'j'=>1,'a'=>1,'v'=>1,'s'=>1,'c'=>1,'r'=>1,'i'=>1,'p'=>1,'t'=>1,'J'=>1,'A'=>1,'V'=>1,'S'=>1,'C'=>1,'R'=>1,'I'=>1,'P'=>1,'T'=>1,' '=>1,"\t"=>1,"\n"=>1,"\r"=>1,':'=>1,'/'=>1,'*'=>1,'\\'=>1);
-	$POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)]=1;
 
 	// Hehe
 	global $LEET_FILTER;
@@ -1857,91 +1852,15 @@ function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_
 
 		$comcode=preg_replace('#(\\\\)+(\[/(html|semihtml)\])#','\2',$comcode); // Stops sneaky trying to trick the end of the HTML tag to hack this function
 
-		if (($in_html) && ($in_semihtml)) $ahead_end=max(strpos($comcode,'[/html]',$pos),strpos($comcode,'[/semihtml]',$pos));
-		elseif ($in_html) $ahead_end=strpos($comcode,'[/html]',$pos);
-		elseif ($in_semihtml) $ahead_end=strpos($comcode,'[/semihtml]',$pos);
+		if (($in_html) && ($in_semihtml)) $ahead_end=max(strpos(strtolower($comcode),'[/html]',$pos),strpos(strtolower($comcode),'[/semihtml]',$pos));
+		elseif ($in_html) $ahead_end=strpos(strtolower($comcode),'[/html]',$pos);
+		elseif ($in_semihtml) $ahead_end=strpos(strtolower($comcode),'[/semihtml]',$pos);
 		else $ahead_end=false;
 		if ($ahead_end===false) $ahead_end=strlen($comcode);
 		$ahead=substr($comcode,$pos,$ahead_end-$pos);
 
-		// Null vector
-		$ahead=str_replace(chr(0),'',$ahead);
-
-		// Comment vector
-		$old_ahead='';
-		do
-		{
-			$old_ahead=$ahead;
-			$ahead=preg_replace('#/\*.*\*/#Us','',$ahead);
-		}
-		while ($old_ahead!=$ahead);
-
-		// Entity vector
-		$matches=array();
-		do
-		{
-			$old_ahead=$ahead;
-			$count=preg_match_all('#&\#(\d+)#i',$ahead,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
-			for ($i=0;$i<$count;$i++)
-			{
-				$matched_entity=intval($matches[1][$i]);
-				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
-				{
-					if ($matched_entity==0) $matched_entity=ord(' ');
-					$ahead=str_replace($matches[0][$i].';',chr($matched_entity),$ahead);
-					$ahead=str_replace($matches[0][$i],chr($matched_entity),$ahead);
-				}
-			}
-			$count=preg_match_all('#&\#x([\da-f]+)#i',$ahead,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
-			for ($i=0;$i<$count;$i++)
-			{
-				$matched_entity=intval(base_convert($matches[1][$i],16,10));
-				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
-				{
-					if ($matched_entity==0) $matched_entity=ord(' ');
-					$ahead=str_replace($matches[0][$i].';',chr($matched_entity),$ahead);
-					$ahead=str_replace($matches[0][$i],chr($matched_entity),$ahead);
-				}
-			}
-		}
-		while ($old_ahead!=$ahead);
-
-		// Tag vectors
-		$ahead=preg_replace('#\<(noscript|script|link|style|meta|iframe|frame|object|embed|applet|html|xml)#i','<span',$ahead);
-		$ahead=preg_replace('#\<(/noscript|/script|/link|/style|/meta|/iframe|/frame|/object|/embed|/applet|/html|/xml)#i','</span',$ahead);
-
-		// CSS attack vectors
-		$ahead=preg_replace('#\\\\(\d+)#i','${1}',$ahead); // CSS escaping
-		$ahead=preg_replace('#e\s*(x\s*p\s*r\s*e\s*s\s*s\s*i\s*o\s*n\()#i','&eacute;${1}',$ahead);
-		$ahead=preg_replace('#b\s*(e\s*h\s*a\s*v\s*i\s*o\s*r\s*\()#i','&szlig;${1}',$ahead);
-		$ahead=preg_replace('#b\s*(i\s*n\s*d\s*i\s*n\s*g\s*\()#i','&szlig;${1}',$ahead);
-
-		// Script-URL vectors
-		$ahead=preg_replace('#((j[\\\\\s]*a[\\\\\s]*v[\\\\\s]*a[\\\\\s]*|v[\\\\\s]*b[\\\\\s]*)s[\\\\\s]*c[\\\\\s]*r[\\\\\s]*i[\\\\\s]*p[\\\\\s]*t[\\\\\s]*):#i','${1};',$ahead);
-
-		// Event vectors
-		$ahead=preg_replace('#\so(n|N)#',' &#111;${1}',$ahead);
-		$ahead=preg_replace('#\sO(n|N)#',' &#79;${1}',$ahead);
-
-		// Check tag balancing (we don't want to allow partial tags to compound together against separately checked chunks)
-		$len=strlen($ahead);
-		$depth=0;
-		for ($i=0;$i<$len;$i++)
-		{
-			$at=$ahead[$i];
-			if ($at=='<')
-			{
-				$depth++;
-			} elseif ($at=='>')
-			{
-				$depth--;
-			}
-			if ($depth<0) break;
-		}
-		if ($depth>=1)
-		{
-			$ahead.='">'; // Ugly way to make sure all is closed off
-		}
+		require_code('input_filter');
+		hard_filter_input_data__html($ahead);
 
 		// Tidy up
 		$comcode=substr($comcode,0,$pos).$ahead.substr($comcode,$ahead_end);

@@ -124,7 +124,7 @@ class Hook_admin_stats_downloads
 			{
 				$i++; continue;
 			} elseif ($i>=$start+$max) break;
-			$fields->attach(results_entry(array(escape_html($download_name),integer_format($value))));
+			$fields->attach(results_entry(array(escape_html($download_name),escape_html(integer_format($value)))));
 
 			$real_data[]=array(
 				'Download name'=>$download_name,

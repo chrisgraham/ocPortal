@@ -1781,7 +1781,7 @@ function step_6()
 	require_once(get_file_base().'/'.$info_file);
 	require_code('database');
 	require_code('database_action');
-   require_code('menus2');
+	require_code('menus2');
 	require_code('config');
 	include_ocf();
 
@@ -2604,18 +2604,18 @@ RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,QSA]
 
 # These have a specially reduced form (no need to make it too explicit that these are CEDI)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=cedi&id=$2 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=cedi&id=$2 [L,QSA]
 RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=cedi&id=$1 [L,QSA]
 
 # These have a specially reduce form (wide is implied)
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/galleries/video/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/iotds/view/([^\&\?]*)\.htm$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
 
 # These are standard patterns
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3&id=$4 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/([^/\&\?]+)\.htm$ $1/index.php\?page=$2 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3&id=$4 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm$ $1/index.php\?page=$2 [L,QSA]
 RewriteRule ^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ index.php\?page=$1&type=$2&id=$3 [L,QSA]
 RewriteRule ^([^/\&\?]+)/([^/\&\?]*)\.htm$ index.php\?page=$1&type=$2 [L,QSA]
 RewriteRule ^([^/\&\?]+)\.htm$ index.php\?page=$1 [L,QSA]

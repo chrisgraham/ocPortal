@@ -49,6 +49,11 @@ function init__comcode()
 	global $OVERRIDE_SELF_ZONE;
 	$OVERRIDE_SELF_ZONE=NULL; // This is not pretty, but needed to properly scope links for search results.
 
+	// We're not allowed to specify any of these as entities
+	global $POTENTIAL_JS_NAUGHTY_ARRAY;
+	$POTENTIAL_JS_NAUGHTY_ARRAY=array(/*'v'=>1,*/'b'=>1,/*'V'=>1,*/'B'=>1,'d'=>1,'D'=>1,/*'a'=>1,'t'=>1,'a'=>1,*/'j'=>1,'a'=>1,'v'=>1,'s'=>1,'c'=>1,'r'=>1,'i'=>1,'p'=>1,'t'=>1,'J'=>1,'A'=>1,'V'=>1,'S'=>1,'C'=>1,'R'=>1,'I'=>1,'P'=>1,'T'=>1,' '=>1,"\t"=>1,"\n"=>1,"\r"=>1,':'=>1,'/'=>1,'*'=>1,'\\'=>1);
+	$POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)]=1;
+
 	global $LAX_COMCODE;
 	$LAX_COMCODE=false;
 }

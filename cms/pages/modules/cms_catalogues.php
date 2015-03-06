@@ -229,7 +229,7 @@ class Module_cms_catalogues extends standard_aed_module
 			$name=$entry_fields[0]['effective_value']; // 'Name' is value of first field
 
 			$fr=array();
-			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['id']),get_module_zone('catalogues')),$name));
+			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['id']),get_module_zone('catalogues')),$name,false,true));
 			if (array_key_exists($row['cc_id'],$cat_titles))
 			{
 				$cc_title=$cat_titles[$row['cc_id']];
@@ -1086,7 +1086,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$fr=array();
-			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'catalogues','type'=>'category','id'=>$row['id']),get_module_zone('catalogues')),get_translated_text($row['cc_title'])));
+			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'catalogues','type'=>'category','id'=>$row['id']),get_module_zone('catalogues')),get_translated_text($row['cc_title']),false,true));
 			$fr[]=get_timezoned_date($row['cc_add_date']);
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
 

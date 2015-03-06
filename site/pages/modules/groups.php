@@ -48,7 +48,7 @@ class Module_groups
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'USERGROUPS');
+		return (get_forum_type()!='ocf')?array():array('misc'=>'USERGROUPS');
 	}
 
 	/**
@@ -455,7 +455,7 @@ class Module_groups
 			}
 		}
 
-		breadcrumb_set_self(make_string_tempcode($name));
+		breadcrumb_set_self(make_string_tempcode(escape_html($name)));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USERGROUPS'))));
 
 		if (has_actual_page_access(get_member(),'admin_ocf_groups',get_module_zone('admin_ocf_groups')))

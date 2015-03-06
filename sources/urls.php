@@ -55,7 +55,7 @@ function init__urls()
  */
 function get_self_url_easy()
 {
-	$protocol=((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off'))?'https':'http';
+	$protocol=tacit_https()?'https':'http';
 	if (!isset($_SERVER['HTTP_HOST']))
 	{
 		$domain=get_domain();
@@ -234,7 +234,12 @@ function skippable_keep($key,$val)
  */
 function tacit_https()
 {
-	return ((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off'));
+	static $tacit_https=NULL;
+	if ($tacit_https===NULL)
+	{
+		$tacit_https=((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off')) || (ocp_srv('HTTP_X_FORWARDED_PROTO')=='https');
+	}
+	return $tacit_https;
 }
 
 /**

@@ -4,7 +4,7 @@
 			{+START,IF,{$JS_ON}}
 				<ol id="stafflinkslist">
 					{+START,LOOP,FORMATTEDLINKS}
-						<li><a target="_blank" title="{TITLE*}: {!LINK_NEW_WINDOW}" href="{URL}">{TITLE*}</a>{+START,IF_NON_EMPTY,{DESC}}<br />{DESC*}{+END}</li>
+						<li><a target="_blank" title="{TITLE*}: {!LINK_NEW_WINDOW}" href="{URL*}">{TITLE*}</a>{+START,IF_NON_EMPTY,{DESC}}<br />{DESC*}{+END}</li>
 					{+END}
 				</ol>
 			{+END}

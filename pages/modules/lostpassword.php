@@ -66,7 +66,7 @@ class Module_lostpassword
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array('misc'=>'RESET_PASSWORD'):array();
+		return (is_guest() && get_forum_type()=='ocf')?array('misc'=>'RESET_PASSWORD'):array();
 	}
 
 	/**

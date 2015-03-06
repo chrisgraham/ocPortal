@@ -48,6 +48,7 @@ class Module_onlinemembers
 	 */
 	function get_entry_points()
 	{
+		if (get_forum_type()!='ocf') return array();
 		return array('!'=>'USERS_ONLINE');
 	}
 

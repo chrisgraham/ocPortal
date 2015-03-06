@@ -414,7 +414,7 @@ function block_helper_script()
 		$hook_files=array();
 		foreach ($hook_keys as $hook)
 		{
-			$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
+			$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
 			if (!file_exists($path))
 			{
 				$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';

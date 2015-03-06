@@ -314,12 +314,17 @@ function regenerate_event_reminder_jobs($id,$force=false)
  * Create a neatly human-readable date range, using various user-friendly readability tricks.
  *
  * @param  TIME				From time in user time
- * @param  TIME				To time in user time
+ * @param  ?TIME				To time in user time (NULL: no actual to time)
  * @param  boolean			Whether time is included in this date range
  * @return string				Textual specially-formatted range
  */
 function date_range($from,$to,$do_time=true)
 {
+	if (is_null($to))
+	{
+		return get_timezoned_date($from,true,true,false,true);
+	}
+
 	if (($to-$from>60*60*24) || (!$do_time))
 	{
 		$_length=do_lang('DAYS',integer_format(intval(ceil(($to-$from)/(60*60*24.0)))));
@@ -520,7 +525,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	}
 
 	if ($where!='') $where.=' AND ';
-	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' AND e_start_year='.date('Y',$period_start).') AND (e_start_month<='.strval(intval(date('m',$period_end))+1).' AND e_start_year='.date('Y',$period_end).' OR e_start_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','none').')';
+	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' AND e_start_year='.date('Y',$period_start).' OR e_start_year>'.date('Y',$period_start).') AND (e_start_month<='.strval(intval(date('m',$period_end))+1).' AND e_start_year='.date('Y',$period_end).' OR e_start_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','none').')';
 
 	$where=' WHERE '.$where;
 	$event_count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);

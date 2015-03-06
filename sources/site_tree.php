@@ -273,9 +273,9 @@ function site_tree_script()
 					if (preg_match('#@package\s+(\w+)#',file_get_contents(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$page_type.'/'.$page.'.php')),$matches)!=0)
 					{
 						$package=$matches[1];
-						$path=get_file_base().'/sources/hooks/systems/addon_registry/'.$package.'.php';
+						$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.$package.'.php';
 						if (!file_exists($path))
-							$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.$package.'.php';
+							$path=get_file_base().'/sources/hooks/systems/addon_registry/'.$package.'.php';
 						if (file_exists($path))
 						{
 							require_lang('zones');

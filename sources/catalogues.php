@@ -1455,7 +1455,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 		'publisher'=>'', // blank means same as creator
 		'modified'=>is_null($entry['ce_edit_date'])?'':date('Y-m-d',$entry['ce_edit_date']),
 		'type'=>get_translated_text($catalogue['c_title']).' entry',
-		'title'=>$title_to_use_2,
+		'title'=>comcode_escape($title_to_use_2),
 		'identifier'=>'_SEARCH:catalogues:entry:'.strval($id),
 		'description'=>'',
 	);

@@ -287,10 +287,13 @@ class Module_admin_stats
 			$year_start=intval(date('Y',$first_stat));
 			$years_ahead=intval(date('Y'))-$year_start;
 		}
-		if (utctime_to_usertime($first_stat)>$month_start)
+		if ($stats_table)
 		{
-			$prior_month_start=$first_stat;
-			$month_start=time();
+			if (utctime_to_usertime($first_stat)>$month_start)
+			{
+				$prior_month_start=$first_stat;
+				$month_start=time();
+			}
 		}
 		$fields->attach(form_input_date(do_lang_tempcode('FROM'),do_lang_tempcode('TIME_RANGE_START'),'time_start',true,false,false,$prior_month_start,$years_ahead,$year_start));
 		$fields->attach(form_input_date(do_lang_tempcode('TO'),do_lang_tempcode('TIME_RANGE_END'),'time_end',true,false,false,$month_start,$years_ahead,$year_start));
@@ -593,7 +596,8 @@ class Module_admin_stats
 
 		$title=get_page_title('TOP_REFERRERS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
-		$non_local_filter='referer NOT LIKE \''.db_encode_like(get_custom_base_url().'%').'\'';
+		$non_local_filter='referer NOT LIKE \''.db_encode_like(preg_replace('#^https?://#','http://',get_base_url()).'%').'\'';
+		$non_local_filter.=' AND referer NOT LIKE \''.db_encode_like(preg_replace('#^https?://#','https://',get_base_url()).'%').'\'';
 		if (get_param_integer('debug',0)==1) $non_local_filter='1=1';
 
 		$where=$non_local_filter.' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end);
@@ -1481,9 +1485,9 @@ class Module_admin_stats
 	{
 		//Return a pie chart with the $type used to view this page
 		$start=get_param_integer('start_'.$type,0);
-		$max=get_param_integer('max_'.$type,20);
-		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'));
-		list($sortable,$sort_order)=explode(' ',get_param('sort','date_and_time ASC'),2);
+		$max=get_param_integer('max_'.$type,25);
+		$sortables=array('views'=>do_lang_tempcode('_VIEWS'));
+		list($sortable,$sort_order)=explode(' ',get_param('sort','views DESC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		global $NON_CANONICAL_PARAMS;
@@ -1492,7 +1496,7 @@ class Module_admin_stats
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
 		$ip_filter=$GLOBALS['DEBUG_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
-		$rows=$GLOBALS['SITE_DB']->query('SELECT id,'.$type.' FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,5000/*reasonable limit*/);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT id,'.$type.' FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter,5000/*reasonable limit*/);
 		if (count($rows)<1)
 		{
 			$list=new ocp_tempcode();
@@ -1526,22 +1530,29 @@ class Module_admin_stats
 				continue;
 			} elseif ($i>=$start+$max) break;
 			if ($key=='') $link=do_lang('_UNKNOWN'); else $link=escape_html($key);
-			$fields->attach(results_entry(array($link,escape_html(float_format($value/$degrees)))));
+			$fields->attach(results_entry(array($link,escape_html(integer_format($value)))));
 
 			//if ($done<20)
 			//{
-				$data[$key]=$value;
+				$data[$key]=$value*$degrees;
 				//$done++;
 				$done_total+=$value;
 			//}
 
 			$i++;
 		}
-		if ((360.0-$done_total)>0.0)
+		if (count($rows)>$done_total)
 		{
-			$data[do_lang('OTHER')]=360-$done_total;
-			$fields->attach(results_entry(array(do_lang('OTHER'),float_format((360-$done_total)/$degrees)),true));
+			$data[do_lang('OTHER')]=360.0-$done_total*$degrees;
+			$fields->attach(results_entry(array(do_lang('OTHER'),integer_format(count($rows)-$done_total)),true));
 		}
+
+		if ($sortable=='views')
+		{
+			asort($data1);
+			if ($sort_order=='DESC') $data1=array_reverse($data1);
+		}
+
 		$list=results_table(do_lang_tempcode('PAGES_STATISTICS',escape_html($page)),$start,'start_'.$type,$max,'max_'.$type,$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort_'.$type);
 
 		$output=create_pie_chart($data);

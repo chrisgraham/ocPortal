@@ -581,9 +581,14 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 			if ($movie->getFrameCount()==0) return '';
 
 			$frame=$movie->getFrame(min($movie->getFrameCount(),25));
-			$gd_img=$frame->toGDImage();
-
-			@imagejpeg($gd_img,$expected_output_path);
+			if (method_exists($frame,'toGDImage'))
+			{
+				$gd_img=$frame->toGDImage();
+				@imagejpeg($gd_img,$expected_output_path);
+			} else
+			{
+				$frame->save($expected_output_path); // New-style
+			}
 
 			if (file_exists($expected_output_path))
 			{

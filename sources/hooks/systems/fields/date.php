@@ -97,7 +97,6 @@ class Hook_fields_date
 				if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
 				if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
 				$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
-				$time=utctime_to_usertime($time);
 			}
 			$ev=get_timezoned_date($time,true,false,true,true);
 		}

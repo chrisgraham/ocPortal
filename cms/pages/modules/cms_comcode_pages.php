@@ -524,7 +524,7 @@ class Module_cms_comcode_pages
 			$table_rows->attach(results_entry(array(
 				protect_from_escaping(hyperlink(build_url(array('page'=>$table_row['page']),$table_row['zone']),$table_row['page_title'])),
 				protect_from_escaping(do_template('COMCODE_TELETYPE',array('CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['page']))))),
-				protect_from_escaping(hyperlink(build_url(array('page'=>''),$table_row['zone']),$table_row['zone_name'])),
+				protect_from_escaping(hyperlink(build_url(array('page'=>''),$table_row['zone']),$table_row['zone_name'],false,true)),
 				protect_from_escaping(do_template('COMCODE_TELETYPE',array('CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['wrappable_pagelink']))))),
 				//$parent_page,
 				//$username,
