@@ -578,7 +578,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 
 		require_code('notifications');
 
-		if (($reason!='CAPTCHAFAIL_HACK') && ($reason!='LAME_SPAM_HACK') && ($reason!='EVIL_POSTED_FORM_HACK'))
+		if (($reason!='CAPTCHAFAIL_HACK') && ($reason!='LAME_SPAM_HACK'))
 		{
 			$subject=do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
 			dispatch_notification('hack_attack',NULL,$subject,$message->evaluate(get_site_default_lang(),false),NULL,A_FROM_SYSTEM_PRIVILEGED);

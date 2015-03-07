@@ -4112,6 +4112,7 @@ testing_platform
  - _tests/tests/unit_tests/_installer.php
  - _tests/tests/unit_tests/override_issues.php
  - _tests/tests/unit_tests/xss.php
+ - _tests/tests/regression_tests/input_filter_post_block.php
 
 youtube_channel_integration_block
 ---------------------------------
