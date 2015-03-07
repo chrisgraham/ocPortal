@@ -111,32 +111,35 @@ function check_input_field_string($name,&$val,$posted=false)
  */
 function check_posted_field($name,&$val)
 {
-	$true_referer=(substr(ocp_srv('HTTP_REFERER'),0,7)=='http://') || (substr(ocp_srv('HTTP_REFERER'),0,8)=='https://');
-	$canonical_referer=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',ocp_srv('HTTP_REFERER')))));
-	$canonical_baseurl=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',get_base_url()))));
-
-	if (($true_referer) && (substr(strtolower($canonical_referer),0,strlen($canonical_baseurl))!=strtolower($canonical_baseurl)) && (!is_guest()))
+	if (strtolower(ocp_srv('REQUEST_METHOD'))=='post')
 	{
-		if (!in_array($name,array('login_username','password','remember','login_invisible')))
-		{
-			$allowed_partners=explode(chr(10),get_option('allowed_post_submitters'));
-			$allowed_partners[]='paypal.com';
-			$allowed_partners[]='www.paypal.com';
-			$found=false;
-			foreach ($allowed_partners as $partner)
-			{
-				if (trim($partner)=='') continue;
+		$true_referer=(substr(ocp_srv('HTTP_REFERER'),0,7)=='http://') || (substr(ocp_srv('HTTP_REFERER'),0,8)=='https://');
+		$canonical_referer=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',ocp_srv('HTTP_REFERER')))));
+		$canonical_baseurl=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',get_base_url()))));
 
-				if (strpos(ocp_srv('HTTP_REFERER'),trim($partner))!==false)
-				{
-					$found=true;
-					break;
-				}
-			}
-			if (!$found)
+		if (($true_referer) && (substr(strtolower($canonical_referer),0,strlen($canonical_baseurl))!=strtolower($canonical_baseurl)) && (!is_guest()))
+		{
+			if (!in_array($name,array('login_username','password','remember','login_invisible')))
 			{
-				$_POST=array(); // To stop loops
-				log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK',ocp_srv('HTTP_REFERER'));
+				$allowed_partners=explode(chr(10),get_option('allowed_post_submitters'));
+				$allowed_partners[]='paypal.com';
+				$allowed_partners[]='www.paypal.com';
+				$found=false;
+				foreach ($allowed_partners as $partner)
+				{
+					if (trim($partner)=='') continue;
+
+					if (strpos(ocp_srv('HTTP_REFERER'),trim($partner))!==false)
+					{
+						$found=true;
+						break;
+					}
+				}
+				if (!$found)
+				{
+					$_POST=array(); // To stop loops
+					log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK',ocp_srv('HTTP_REFERER'));
+				}
 			}
 		}
 	}
