@@ -315,7 +315,7 @@ function _generic_exit($text,$template)
 	global $EXITING;
 	if ((running_script('upgrader')) || (!function_exists('get_screen_title'))) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
 
-	if (($EXITING==1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
+	if (($EXITING>=1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 	$EXITING++;
 	if (!function_exists('do_header')) require_code('site');
 
@@ -578,7 +578,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 
 		require_code('notifications');
 
-		if (($reason!='CAPTCHAFAIL_HACK') && ($reason!='LAME_SPAM_HACK'))
+		if (($reason!='CAPTCHAFAIL_HACK') && ($reason!='LAME_SPAM_HACK') && ($reason!='EVIL_POSTED_FORM_HACK'))
 		{
 			$subject=do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
 			dispatch_notification('hack_attack',NULL,$subject,$message->evaluate(get_site_default_lang(),false),NULL,A_FROM_SYSTEM_PRIVILEGED);
