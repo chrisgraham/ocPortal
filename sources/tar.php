@@ -186,7 +186,17 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 	$_full=($path=='')?$subpath:($path.'/'.$subpath);
 	if ($_full=='') $_full='.';
 	$info=array();
-	$dh=opendir($_full);
+	if (!is_null($logfile))
+	{
+		$dh=@opendir($_full);
+		if ($dh===false)
+		{
+			if (fwrite($logfile,'Could not access '.$_full."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		}
+	} else
+	{
+		$dh=opendir($_full);
+	}
 	if ($dh!==false)
 	{
 		while (($entry=readdir($dh))!==false)
@@ -197,7 +207,11 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 			if (($all_files) || (!should_ignore_file($_subpath)))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
-				if (!is_readable($full)) continue;
+				if (!is_readable($full))
+				{
+					if (fwrite($logfile,'Could not access '.$_full.' [case 2]'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+					continue;
+				}
 				if (is_dir($full))
 				{
 					$info2=tar_add_folder_incremental($resource,$logfile,$path,$threshold,$max_size,$_subpath,$all_files);
@@ -248,7 +262,17 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
 
 	$_full=($path=='')?$subpath:($path.'/'.$subpath);
 	if ($_full=='') $_full='.';
-	$dh=opendir($_full);
+	if (!is_null($logfile))
+	{
+		$dh=@opendir($_full);
+		if ($dh===false)
+		{
+			if (fwrite($logfile,'Could not access '.$_full.' [case 2]'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		}
+	} else
+	{
+		$dh=opendir($_full);
+	}
 	if ($dh!==false)
 	{
 		while (($entry=readdir($dh))!==false)
@@ -261,7 +285,11 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
 			if (($all_files) || (!should_ignore_file($_subpath)))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
-				if (!is_readable($full)) continue;
+				if (!is_readable($full))
+				{
+					if (fwrite($logfile,'Could not access '.$full."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+					continue;
+				}
 				if (is_dir($full))
 				{
 					if ((is_null($root_only_dirs)) || (in_array($entry,$root_only_dirs)))

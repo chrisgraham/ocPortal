@@ -223,7 +223,7 @@ class Module_admin_backup
 		if (count($entries)!=0)
 		{
 			require_code('templates_columned_table');
-			$header_row=columned_table_header_row(array(do_lang_tempcode('FILENAME'),do_lang_tempcode('TYPE'),do_lang_tempcode('SIZE'),do_lang_tempcode('DATE_TIME'),new ocp_tempcode()));
+			$header_row=columned_table_header_row(array(do_lang_tempcode('FILENAME'),do_lang_tempcode('TYPE'),do_lang_tempcode('SIZE'),do_lang_tempcode('DATE'),new ocp_tempcode()));
 
 			$rows=new ocp_tempcode();
 			foreach ($entries as $entry)
@@ -250,7 +250,7 @@ class Module_admin_backup
 						break;
 				}
 
-				$rows->attach(columned_table_row(array(hyperlink($link,escape_html($entry['file'])),$type,clean_file_size($entry['size']),get_timezoned_date($entry['mtime']),$actions)));
+				$rows->attach(columned_table_row(array(hyperlink($link,escape_html($entry['file'])),$type,escape_html(clean_file_size($entry['size'])),escape_html(get_timezoned_date($entry['mtime'])),$actions)));
 			}
 
 			$files=do_template('COLUMNED_TABLE',array('_GUID'=>'726070efa71843236e975d87d4a17dae','HEADER_ROW'=>$header_row,'ROWS'=>$rows));
@@ -385,8 +385,7 @@ class Module_admin_backup
 		}
 
 		$url=build_url(array('page'=>'_SELF'),'_SELF');
-		redirect_screen($title,$url,do_lang_tempcode('BACKUP_INFO_1',$file));
-		return new ocp_tempcode();
+		return redirect_screen($title,$url,do_lang_tempcode('BACKUP_INFO_1',escape_html($file.(function_exists('gzopen')?'.tar.gz':'.tar'))));
 	}
 
 }
