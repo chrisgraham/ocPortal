@@ -1493,16 +1493,6 @@ class Module_calendar
 			$event=adjust_event_dates_for_a_recurrence($day,$event);
 		}
 		list($time_raw,$from)=find_event_start_timestamp($event);
-		if ($day!='')
-		{
-			if (date('Y-m-d',$from)!=$day) // Possibly the day given in URL is invalid due to a day shift across timezones, adjust if required and recalculate
-			{
-				$day_dif=$event['e_start_day']-intval(date('d',$from));
-				$event['e_start_day']+=$day_dif;
-				$event['e_end_day']+=$day_dif;
-				list($time_raw,$from)=find_event_start_timestamp($event);
-			}
-		}
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
 		if ((!is_null($event['e_end_year'])) && (!is_null($event['e_end_month'])) && (!is_null($event['e_end_day'])))
 		{
@@ -1647,7 +1637,7 @@ class Module_calendar
 				list(,$to)=find_event_end_timestamp($event);
 			}
 
-			syndicate_described_activity('calendar:ACTIVITY_SUBSCRIBED_EVENT',get_translated_text($event['e_title']),date_range($from,$to,!is_null($event['e_start_hour'])),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
+			syndicate_described_activity('calendar:ACTIVITY_SUBSCRIBED_EVENT',get_translated_text($event['e_title']),date_range($from,$to,!is_null($event['e_start_hour']),make_nice_timezone_name($timezone)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 		}
 
 		// Add next reminder to job system

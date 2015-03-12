@@ -805,7 +805,7 @@ class Module_cms_calendar extends standard_aed_module
 					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,true);
 					$to=cal_utctime_to_usertime($_to,$timezone,($do_timezone_conv==1));
 				}
-				$date_range=date_range($from,$to,!is_null($start_hour));
+				$date_range=date_range($from,$to,!is_null($start_hour),make_nice_timezone_name($timezone));
 				if ($recurrence!='') $date_range=do_lang('DOES_RECUR',$date_range);
 				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,$date_range,'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 			}
@@ -944,7 +944,7 @@ class Module_cms_calendar extends standard_aed_module
 
 				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','submitter',array('id'=>$id));
 
-				$date_range=date_range($from,$to,!is_null($start_hour));
+				$date_range=date_range($from,$to,!is_null($start_hour),make_nice_timezone_name($timezone));
 				if ($recurrence!='') $date_range=do_lang('DOES_RECUR',$date_range);
 				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CALENDAR_EVENT':'calendar:ACTIVITY_CALENDAR_EVENT',$title,$date_range,'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL/*$submitter*/,true);
 			}

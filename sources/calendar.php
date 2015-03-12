@@ -484,9 +484,10 @@ function regenerate_event_reminder_jobs($id,$force=false)
  * @param  TIME				From time in user time
  * @param  ?TIME				To time in user time (NULL: no actual to time)
  * @param  boolean			Whether time is included in this date range
+ * @param  string				Display timezone
  * @return string				Textual specially-formatted range
  */
-function date_range($from,$to,$do_time=true)
+function date_range($from,$to,$do_time=true,$timezone='')
 {
 	if (is_null($to))
 	{
@@ -499,7 +500,7 @@ function date_range($from,$to,$do_time=true)
 		if ($days-intval($days)<0.1) $days=floor($days); // If it's only 0.1 above a day, we will actually round down. It's useful for stopping confusion around DST changes in particular.
 		$_length=do_lang('DAYS',integer_format(intval(ceil($days))));
 		if (!$do_time) return $_length;
-		$date=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
+		$date1=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
 		$date2=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$to));
 	} else
 	{
@@ -509,16 +510,25 @@ function date_range($from,$to,$do_time=true)
 		$pm_b=date('a',$to);
 		if ($pm_a==$pm_b)
 		{
-			$date=str_replace(do_lang('calendar_minute_no_seconds'),'',locale_filter(my_strftime(do_lang('calendar_minute_ampm_known'),$from)));
-			$date2=str_replace(do_lang('calendar_minute_no_seconds'),'',locale_filter(my_strftime(do_lang('calendar_minute'),$to)));
+			$date1=locale_filter(my_strftime(do_lang('calendar_minute_ampm_known'),$from));
+			$date2=locale_filter(my_strftime(do_lang('calendar_minute'),$to));
 		} else
 		{
-			$date=str_replace(do_lang('calendar_minute_no_seconds'),'',locale_filter(my_strftime(do_lang('calendar_minute'),$from)));
-			$date2=str_replace(do_lang('calendar_minute_no_seconds'),'',locale_filter(my_strftime(do_lang('calendar_minute'),$to)));
+			$date1=locale_filter(my_strftime(do_lang('calendar_minute'),$from));
+			$date2=locale_filter(my_strftime(do_lang('calendar_minute'),$to));
 		}
+		$_date1=str_replace(do_lang('calendar_minute_no_minutes'),'',$date1);
+		$_date2=str_replace(do_lang('calendar_minute_no_minutes'),'',$date2);
+		if ($_date1!=$date1 && $_date2!=$date2)
+		{
+			$date1=$_date1;
+			$date2=$_date2;
+		}
+		$date=locale_filter(date(do_lang('calendar_date_verbose'),$from));
+		return do_lang('EVENT_TIME_RANGE_WITHIN_DAY'.(($timezone=='')?'':'_WITH_TIMEZONE'),$date,$date1,array($date2,$_length,$timezone));
 	}
 
-	return do_lang('EVENT_TIME_RANGE',$date,$date2,$_length);
+	return do_lang('EVENT_TIME_RANGE'.(($timezone=='')?'':'_WITH_TIMEZONE'),$date1,$date2,array($_length,$timezone));
 }
 
 /**
