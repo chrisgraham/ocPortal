@@ -491,10 +491,10 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	require_code('database_action');
 	// ($index?'#':'').
 	$GLOBALS['FORUM_DB']->add_table_field('f_member_custom_fields','field_'.strval($id),$_type); // Default will be made explicit when we insert rows
-	if ($index)
+	$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
+	if ($indices_count<60) // Could be 64 but trying to be careful here...
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
-		if ($indices_count<60) // Could be 64 but trying to be careful here...
+		if ($index)
 		{
 			if ($_type!='LONG_TEXT')
 			{
@@ -504,10 +504,10 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 			{
 				$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf_ft_'.strval($id),array('field_'.strval($id)),'mf_member_id');
 			}
+		} elseif ((strpos($type,'trans')!==false) || ($type=='posting_field'))
+		{
+			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id'); // For joins
 		}
-	} elseif ((strpos($type,'trans')!==false) || ($type=='posting_field'))
-	{
-		$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
 	}
 
 	log_it('ADD_CUSTOM_PROFILE_FIELD',strval($id),$name);

@@ -1100,23 +1100,26 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 
 	$GLOBALS['FORUM_DB']->query_update('f_custom_fields',$map,array('id'=>$id),'',1);
 
-	list(,$index)=get_cpf_storage_for($type);
+	list($_type,$index)=get_cpf_storage_for($type);
 
 	require_code('database_action');
 	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
-	if ($index)
+	$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
+	if ($indices_count<60) // Could be 64 but trying to be careful here...
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
-		if ($indices_count<60) // Could be 64 but trying to be careful here...
+		if ($index)
 		{
-			if ($type!='LONG_TEXT')
+			if ($_type!='LONG_TEXT')
 			{
 				$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
 			}
-			if (strpos($type,'_TEXT')!==false)
+			if (strpos($_type,'_TEXT')!==false)
 			{
 				$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf_ft_'.strval($id),array('field_'.strval($id)),'mf_member_id');
 			}
+		} elseif ((strpos($type,'trans')!==false) || ($type=='posting_field'))
+		{
+			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id'); // For joins
 		}
 	}
 
