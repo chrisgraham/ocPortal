@@ -43,6 +43,7 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$closed=
 {
 	if (is_null($member_id)) $member_id=get_member();
 
+	require_code('ocf_forums');
 	if (($closed) && (!ocf_may_moderate_forum($forum_id,$member_id))) return false;
 
 	if (is_null($forum_id)) return true; // A private topic
