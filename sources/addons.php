@@ -586,6 +586,7 @@ function install_addon($file,$files=NULL)
 				{
 					require_code('menus2');
 					add_menu_item_simple('zone_menu',NULL,$zone,$zone.':',0,1);
+					$zone_default_page='start';
 					if ($zone=='forum') $zone_default_page='forumview'; // A bit of an architectural fudge, but people get confused why it doesn't come back the same
 					$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($zone,1),'zone_default_page'=>$zone_default_page,'zone_header_text'=>insert_lang('???',2),'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
 
