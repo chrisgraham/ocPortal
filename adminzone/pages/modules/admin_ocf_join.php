@@ -914,6 +914,8 @@ class Module_admin_ocf_join
 
 						// Put it together
 						$line['Username']=ucfirst($_forename).ucfirst($_surname).$year;
+
+						if ($line['Username']=='') continue;
 					} else
 					{
 						continue; // This field is needed
@@ -966,7 +968,7 @@ class Module_admin_ocf_join
 				if (array_key_exists($email_address_key,$line)) $email_address=$line[$email_address_key]; else $email_address=NULL;
 				if (preg_match('#^([^\s]*)\s+\(.*\)$#',$email_address,$matches)!=0) $email_address=$matches[1];
 				if (preg_match('#^.*\s+<(.*)>$#',$email_address,$matches)!=0) $email_address=$matches[1];
-				if (array_key_exists($dob_key,$line))
+				if ((array_key_exists($dob_key,$line)) && ($line[$dob_key]!=''))
 				{
 					$parts=explode('/',$line[$dob_key]);
 					$dob_day=array_key_exists(2,$parts)?intval($parts[2]):NULL;

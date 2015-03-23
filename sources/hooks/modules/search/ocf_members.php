@@ -174,7 +174,7 @@ class Hook_search_ocf_members
 				break;
 
 			default:
-				$remapped_orderer=$sort;
+				$remapped_orderer=preg_replace('#[^\w]#','',$sort);
 				break;
 		}
 
@@ -427,7 +427,10 @@ class Hook_search_ocf_members
 			);
 			foreach ($fields as $key=>$val)
 			{
-				if ($val['RAW']!='') $_lines[$key]=$val['RENDERED'];
+				if (((is_string($val['RAW'])) && ($val['RAW']!='')) || ((is_object($val['RAW'])) && (!$val['RAW']->is_empty())))
+				{
+					$_lines[$key]=$val['RENDERED'];
+				}
 			}
 			if ((!$preview) && (addon_installed('ocf_contactmember')) && (has_actual_page_access(get_member(),'contactmember')))
 			{

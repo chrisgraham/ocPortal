@@ -190,7 +190,7 @@ class Hook_search_catalogue_entries
 				break;
 
 			default:
-				$remapped_orderer=$sort;
+				$remapped_orderer=preg_replace('#[^\w]#','',$sort);
 				break;
 		}
 

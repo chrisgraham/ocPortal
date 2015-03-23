@@ -477,6 +477,8 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 			@flock($PAGE_CACHE_FILE,LOCK_EX);
 			@ftruncate($PAGE_CACHE_FILE,0);
 			@flock($PAGE_CACHE_FILE,LOCK_UN);
+			global $PAGE_CACHE_LANG_LOADED;
+			$PAGE_CACHE_LANG_LOADED=array(); // This will no longer be valid, as one of the files that came into it has changed
 			$PAGE_CACHE_LAZY_LOAD=false;
 			$LANG_LOADED_LANG=array();
 			$PAGE_CACHE_LANGS_REQUESTED[]=array($codename,$lang);

@@ -464,7 +464,7 @@ class Module_search
 			$options=new ocp_tempcode();
 			if (array_key_exists('special_on',$info))
 				foreach ($info['special_on'] as $name=>$display)
-					$options->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array('_GUID'=>'c1853f42d0a110026453f8b94c9f623c','CHECKED'=>(!is_null($content)) || (get_param_integer('option_'.$id.'_'.$name,0)==1),'NAME'=>'option_'.$id.'_'.$name,'DISPLAY'=>$display)));
+					$options->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array('_GUID'=>'c1853f42d0a110026453f8b94c9f623c','CHECKED'=>(is_null($content)) || (get_param_integer('option_'.$id.'_'.$name,0)==1),'NAME'=>'option_'.$id.'_'.$name,'DISPLAY'=>$display)));
 			if (array_key_exists('special_off',$info))
 				foreach ($info['special_off'] as $name=>$display)
 					$options->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array('_GUID'=>'2223ada7636c85e6879feb9a6f6885d2','CHECKED'=>(get_param_integer('option_'.$id.'_'.$name,0)==1),'NAME'=>'option_'.$id.'_'.$name,'DISPLAY'=>$display)));

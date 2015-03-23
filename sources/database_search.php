@@ -585,7 +585,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 						$_select=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$_select); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
 					} else
 					{
-						$_select='';
+						$_select='1';
 					}
 
 					$_table_clause=$orig_table_clause.$tc_add;
@@ -595,7 +595,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				{
 					$_table_clause=$orig_table_clause.$tc_add;
 
-					$where_alternative_matches[]=array('1=0','','',$_table_clause,'t'.strval($i));
+					$where_alternative_matches[]=array('1=0','','1',$_table_clause,'t'.strval($i));
 				}
 			}
 			if ($content_where!='') // Non-translatable fields
@@ -614,7 +614,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 						$_select=preg_replace('#\?#',$field,$content_where).' AS contextual_relevance';
 					} else
 					{
-						$_select='';
+						$_select='1';
 					}
 
 					$_table_clause=$orig_table_clause;

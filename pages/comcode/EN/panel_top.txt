@@ -8,7 +8,9 @@
 		{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OR,{$WIDE},{$EQ,{$PAGE},forumview}}}}
 			[block]main_member_bar[/block]
 		{+END}
-		[block]main_pt_notifications[/block]
+		{+START,IF,{$NOT,{$MATCH_KEY_MATCH,_WILD:forumview:pt}}}
+			[block]main_pt_notifications[/block]
+		{+END}
 	{+END}
 {+END}
 [/semihtml]

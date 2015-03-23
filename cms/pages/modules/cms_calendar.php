@@ -797,13 +797,13 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,true);
-				$from=cal_utctime_to_usertime($_from,$timezone,($do_timezone_conv==1));
+				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,false);
+				$from=cal_utctime_to_usertime($_from,$timezone,false);
 				$to=mixed();
 				if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 				{
-					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,true);
-					$to=cal_utctime_to_usertime($_to,$timezone,($do_timezone_conv==1));
+					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,false);
+					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 				$date_range=date_range($from,$to,!is_null($start_hour),make_nice_timezone_name($timezone));
 				if ($recurrence!='') $date_range=do_lang('DOES_RECUR',$date_range);
@@ -933,13 +933,13 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,true);
-				$from=cal_utctime_to_usertime($_from,$timezone,($do_timezone_conv==1));
+				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,false);
+				$from=cal_utctime_to_usertime($_from,$timezone,false);
 				$to=mixed();
 				if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 				{
-					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,true);
-					$to=cal_utctime_to_usertime($_to,$timezone,($do_timezone_conv==1));
+					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,false);
+					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
 				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','submitter',array('id'=>$id));

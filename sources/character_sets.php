@@ -45,7 +45,11 @@ function foxy_utf8_to_nce($data='')
 		{
 			if (function_exists('mb_list_encodings'))
 			{
-				$valid_encoding=(in_array(strtolower($input_charset),array_map('strtolower',mb_list_encodings())));
+				static $good_encodings=array();
+				if (!isset($good_encodings[$input_charset]))
+				{
+					$good_encodings[$input_charset]=(in_array(strtolower($input_charset),array_map('strtolower',mb_list_encodings())));
+				}
 			} else $valid_encoding=true;
 			if ($valid_encoding)
 			{

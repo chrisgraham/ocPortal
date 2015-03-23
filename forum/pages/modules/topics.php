@@ -2882,6 +2882,11 @@ END;
 		$forum_id=$topic_info[0]['t_forum_id'];
 		$private_topic=is_null($forum_id);
 
+		if (($topic_info[0]['t_validated']==1) && ($GLOBALS['FORUM_DB']->query_value('f_posts','p_validated',array('id'=>$topic_info[0]['t_cache_first_post_id']))==0))
+		{
+			attach_message(do_lang_tempcode('FIRST_POST_IS_UNVALIDATED'),'inform');
+		}
+
 		$this->handle_topic_breadcrumbs($forum_id,$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('EDIT_TOPIC'));
 
 		$this->check_has_mod_access($topic_id);

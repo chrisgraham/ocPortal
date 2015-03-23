@@ -206,7 +206,7 @@ class Module_filedump
 				{
 					$filesize[$i]=do_lang_tempcode('NA_EM');
 				}
-				$dbrows=$GLOBALS['SITE_DB']->query_select('filedump',array('description','the_member'),array('name'=>$file,'path'=>$place));
+				$dbrows=$GLOBALS['SITE_DB']->query_select('filedump',array('description','the_member'),array('name'=>substr($file,0,80),'path'=>substr($place,0,255)));
 				if (!array_key_exists(0,$dbrows)) $description[$i]=($directory[$i])?do_lang_tempcode('NA_EM'):do_lang_tempcode('NONE_EM'); else $description[$i]=make_string_tempcode(escape_html(get_translated_text($dbrows[0]['description'])));
 				if ($description[$i]->is_empty()) $description[$i]=do_lang_tempcode('NONE_EM');
 				$deletable[$i]=(array_key_exists(0,$dbrows) && ($dbrows[0]['the_member']==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump'));
@@ -336,10 +336,10 @@ class Module_filedump
 			return do_template('CONFIRM_SCREEN',array('_GUID'=>'19503cf5dc795b9c85d26702b79e3202','TITLE'=>$title,'FIELDS'=>$hidden,'PREVIEW'=>$text,'URL'=>$url));
 		}
 
-		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','the_member',array('name'=>$file,'path'=>$place));
+		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','the_member',array('name'=>substr($file,0,80),'path'=>substr($place,0,255)));
 		if (((!is_null($owner)) && ($owner==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump')))
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>$file,'path'=>$place));
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>substr($file,0,80),'path'=>substr($place,0,255)));
 			if (!is_null($test)) delete_lang($test);
 
 			$path=get_custom_file_base().'/uploads/filedump'.$place.$file;
@@ -484,11 +484,11 @@ class Module_filedump
 
 			$return_url=build_url(array('page'=>'_SELF','place'=>$place),'_SELF');
 
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>$file,'path'=>$place));
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>substr($file,0,80),'path'=>substr($place,0,255)));
 			if (!is_null($test)) delete_lang($test);
-			$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$file,'path'=>$place),'',1);
+			$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>substr($file,0,80),'path'=>substr($place,0,255)),'',1);
 			$description=post_param('description');
-			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$file,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
+			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>substr($file,0,80),'path'=>substr($place,0,255),'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
 
 			require_code('notifications');
 			$subject=do_lang('FILEDUMP_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$file,$place);

@@ -191,6 +191,7 @@ class Hook_search_comcode_pages
 						$path=zone_black_magic_filterer((($dir=='comcode_custom')?get_custom_file_base():get_file_base()).'/'.$zone.'/pages/'.$dir.'/'.$page.'.txt');
 						if ((!is_null($cutoff)) && (filemtime($path)<$cutoff)) continue;
 						$contents=file_get_contents($path);
+						if ($only_titles) $contents=preg_replace('#^.*\[title(="1")?\](.*)\[/title\].*$#Us','${2}',$contents);
 
 						if (in_memory_search_match(array('content'=>$content,'conjunctive_operator'=>$boolean_operator),$contents))
 						{

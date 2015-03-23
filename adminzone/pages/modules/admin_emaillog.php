@@ -85,6 +85,8 @@ class Module_admin_emaillog
 		// Put errors into table
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
+		if ($max>50)
+			disable_php_memory_limit();
 		$sortables=array('m_date_and_time'=>do_lang_tempcode('DATE_TIME'),'m_to_name'=>do_lang_tempcode('FROM'),'m_from_name'=>do_lang_tempcode('TO'),'m_subject'=>do_lang_tempcode('SUBJECT'));
 		$test=explode(' ',get_param('sort','m_date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';

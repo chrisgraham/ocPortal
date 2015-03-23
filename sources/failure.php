@@ -477,15 +477,10 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	{
 		// Test we're not banning a good bot
 		$se_ip_lists=array(
+			// NB: We're using Coral Cache (nyud.net)
 			'http://www.iplists.com.nyud.net/nw/google.txt'=>false,
-			'http://www.iplists.com.nyud.net/nw/msn.txt'=>false,
-			'http://www.iplists.com.nyud.net/infoseek.txt'=>false,
-			'http://www.iplists.com.nyud.net/nw/inktomi.txt'=>false,
-			'http://www.iplists.com.nyud.net/nw/lycos.txt'=>false,
-			'http://www.iplists.com.nyud.net/nw/askjeeves.txt'=>false,
-			'http://www.iplists.com.nyud.net/northernlight.txt'=>false,
-			'http://www.iplists.com.nyud.net/nw/altavista.txt'=>false,
-			'http://www.iplists.com.nyud.net/nw/misc.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/misc.txt'=>false, // Includes Bing, Yandex, SOSO, Sogou, Baidu, Ask Jeeves (aka Teoma)
+			// NB: Yahoo (aka Slurp aka Inktomi), AltaVista, InfoSeek, Lycos, are all confirmed defunct.
 			'https://www.cloudflare.com/ips-v4'=>true,
 			'https://www.cloudflare.com/ips-v6'=>true,
 		);

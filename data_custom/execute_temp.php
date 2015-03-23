@@ -55,4 +55,69 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$data=file_get_contents('/Library/WebServer/Documents/ocportal/themes/default/images/action_small.png');
+	$min_length=6;
+
+	$data=str_replace("\0",'',$data); // Strip out interleaved nulls because they are used in wide-chars, obscuring the data
+	$mash='';
+	$needs_delimiter_next=false;
+	$in_portion=false;
+	for ($i=0;$i<strlen($data);$i++)
+	{
+		$ch=$data[$i];
+		$chx=1;
+		$next_ok=_is_valid_data_mash_char($ch);
+		if (($next_ok) && (!$in_portion))
+		{
+			$x=$ch;
+			for ($j=$i+1;$j<strlen($data);$j++)
+			{
+				$_ch=$data[$j];
+				$_next_ok=_is_valid_data_mash_char($_ch);
+				if ($_next_ok)
+				{
+					$x.=$_ch;
+					$chx++;
+				} else
+				{
+					break;
+				}
+			}
+			if ((strlen($x)<$min_length) || ($x==strtoupper($x)) || ($x=='Microsoft Word Document') || ($x=='WordDocument') || ($x=='SummaryInformation') || ($x=='DocumentSummaryInformation'))
+			{
+				$chx=0;
+			}
+		}
+
+		if (($next_ok) && ($in_portion))
+		{
+			$mash.=$ch;
+		}
+		elseif (($next_ok) && ($chx>=$min_length))
+		{
+			if ($needs_delimiter_next)
+			{
+				$mash.=' ';
+				$needs_delimiter_next=false;
+			}
+			$mash.=$ch;
+			$in_portion=true;
+		} else
+		{
+			if ($in_portion)
+			{
+				$needs_delimiter_next=true;
+				$in_portion=false;
+			}
+		}
+	}
+
+	@print($mash);
+}
+
+function _is_valid_data_mash_char(&$ch)
+{
+	$c=ord($ch);
+	if (($c==145) || ($c==146)) $ch="'";
+	return (($c>=65 && $c<=90) || ($c>=97 && $c<=122) || ($ch=="'") || ($ch=='-'));
 }
