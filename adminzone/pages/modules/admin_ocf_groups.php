@@ -313,10 +313,17 @@ class Module_admin_ocf_groups extends standard_aed_module
 			'g_is_presented_at_install'=>do_lang_tempcode('IS_PRESENTED_AT_INSTALL'),
 			'g_is_default'=>do_lang_tempcode('DEFAULT_GROUP'),
 			'g_open_membership'=>do_lang_tempcode('OPEN_MEMBERSHIP'),
-			'g_promotion_threshold ASC,id'=>do_lang_tempcode('PROMOTION_TARGET'),
+		);
+		if (addon_installed('points'))
+		{
+			$sortables=array_merge($sortables,array(
+				'g_promotion_threshold ASC,id'=>do_lang_tempcode('PROMOTION_TARGET'),
+			));
+		}
+		$sortables=array_merge($sortables,array(
 			'g_is_super_admin'=>do_lang_tempcode('SUPER_ADMIN'),
 			'g_order'=>do_lang_tempcode('ORDER'),
-		);
+		));
 		if ($current_ordering=='g_promotion_threshold ASC,id ASC')
 		{
 			list($sortable,$sort_order)=array('g_promotion_threshold ASC,id','ASC');
@@ -334,18 +341,26 @@ class Module_admin_ocf_groups extends standard_aed_module
 			$NON_CANONICAL_PARAMS[]='sort';
 		}
 
-		$header_row=results_field_title(array(
+		$_header_row=array(
 			do_lang_tempcode('NAME'),
 			do_lang_tempcode('IS_PRESENTED_AT_INSTALL'),
 			do_lang_tempcode('DEFAULT_GROUP'),
 			//do_lang_tempcode('IS_PRIVATE_CLUB'),
 			//do_lang_tempcode('GROUP_LEADER'),
 			do_lang_tempcode('OPEN_MEMBERSHIP'),
-			do_lang_tempcode('PROMOTION_TARGET'),
+		);
+		if (addon_installed('points'))
+		{
+			$_header_row=array_merge($_header_row,array(
+				do_lang_tempcode('PROMOTION_TARGET'),
+			));
+		}
+		$_header_row=array_merge($_header_row,array(
 			do_lang_tempcode('SUPER_ADMIN'),
 			do_lang_tempcode('ORDER'),
 			do_lang_tempcode('ACTIONS'),
-		),$sortables,'sort',$sortable.' '.$sort_order);
+		));
+		$header_row=results_field_title($_header_row,$sortables,'sort',$sortable.' '.$sort_order);
 
 		$fields=new ocp_tempcode();
 
@@ -381,9 +396,16 @@ class Module_admin_ocf_groups extends standard_aed_module
 				//($row['g_is_private_club']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 				//is_null($row['g_group_leader'])?do_lang_tempcode('NA_EM'):make_string_tempcode($GLOBALS['FORUM_DRIVER']->get_username($row['g_group_leader'])),
 				($row['g_open_membership']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
-				is_null($row['g_promotion_target'])?do_lang_tempcode('NA_EM'):(make_string_tempcode(ocf_get_group_name($row['g_promotion_target']).' ('.strval($row['g_promotion_threshold']).')')),
-				($row['g_is_super_admin']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 			);
+			if (addon_installed('points'))
+			{
+				$fr=array_merge($fr,array(
+					is_null($row['g_promotion_target'])?do_lang_tempcode('NA_EM'):(make_string_tempcode(ocf_get_group_name($row['g_promotion_target']).' ('.strval($row['g_promotion_threshold']).')')),
+				));
+			}
+			$fr=array_merge($fr,array(
+				($row['g_is_super_admin']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
+			));
 
 			$orderlist=new ocp_tempcode();
 			$selected_one=false;

@@ -308,7 +308,12 @@ function semihtml_to_comcode($semihtml,$force=false)
 
 	safe_ini_set('pcre.backtrack_limit','10000000');
 
-	$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml);
+	do
+	{
+		$semihtml_before=$semihtml;
+		$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml_before);
+	}
+	while ($semihtml!=$semihtml_before);
 	$array_html_preg_replace=array();
 	$semihtml=str_replace('&#8203;','',$semihtml);
 	if (strtolower(get_charset())=='utf-8')

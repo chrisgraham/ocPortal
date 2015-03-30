@@ -1024,9 +1024,10 @@ function set_execution_context($new_get,$new_zone='_SEARCH',$new_current_script=
 		$_GET[$key]=is_integer($val)?strval($val):$val;
 	}
 
-	global $RELATIVE_PATH,$ZONE;
+	global $RELATIVE_PATH,$ZONE,$SELF_URL_CACHED;
 	$RELATIVE_PATH=($new_zone=='_SEARCH')?get_page_zone(get_param('page')):$new_zone;
 	$ZONE=NULL; // So zone details will have to reload
+	$SELF_URL_CACHED=NULL;
 
 	global $PAGE_NAME_CACHE;
 	$PAGE_NAME_CACHE=NULL;

@@ -46,6 +46,7 @@ class Hook_choose_filedump_file
 		if ((has_actual_page_access(NULL,'filedump')) && (file_exists($fullpath)))
 		{
 			$files=get_directory_contents($fullpath,'',false,false);
+			natsort($files);
 			foreach ($files as $f)
 			{
 				$description=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>basename($f),'path'=>$id.'/'));
@@ -62,7 +63,10 @@ class Hook_choose_filedump_file
 				{
 					$has_children=(count(get_directory_contents($fullpath.'/'.$f,'',false,false))>0);
 
-					$out.='<category id="'.xmlentities((($id=='')?'':($id.'/')).$f).'" title="'.xmlentities($f).'" has_children="'.($has_children?'true':'false').'" selectable="'.($folder?'true':'false').'"></category>';
+					if ($has_children)
+					{
+						$out.='<category id="'.xmlentities((($id=='')?'':($id.'/')).$f).'" title="'.xmlentities($f).'" has_children="'.($has_children?'true':'false').'" selectable="'.($folder?'true':'false').'"></category>';
+					}
 				} elseif (!$folder)
 				{
 					if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f)))

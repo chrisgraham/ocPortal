@@ -127,7 +127,7 @@ class Module_login
 		$login_url=build_url(array('page'=>'_SELF','type'=>'login'),'_SELF');
 
 		// Test to see if we have any redirect issue that blocks form submissions
-		if (ocp_srv('HTTP_USER_AGENT')!='ocPortal' && strpos(ocp_srv('HTTP_REFERER'),'logout')===false)
+		if (ocp_srv('HTTP_USER_AGENT')!='ocPortal' && strpos(ocp_srv('HTTP_REFERER'),'logout')===false && running_script('index'))
 		{
 			$this_proper_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			$_login_url=$this_proper_url->evaluate();

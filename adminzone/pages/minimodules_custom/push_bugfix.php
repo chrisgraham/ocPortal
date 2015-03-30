@@ -511,6 +511,7 @@ function make_call($call,$params,$file=NULL)
 				<input type="submit" value="Action failed: Try manually" />
 			</form>
 		';
+        $result='';
 	}
 	if ($result=='Access Denied')
 	{

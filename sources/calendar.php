@@ -603,7 +603,8 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 
 				require_code('calendar_ical');
 
-				$whole=end(explode('BEGIN:VCALENDAR',$data));
+				$_whole=explode('BEGIN:VCALENDAR',$data);
+				$whole=end($_whole);
 
 				$events=explode('BEGIN:VEVENT',$whole);
 

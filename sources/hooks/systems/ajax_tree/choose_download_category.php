@@ -59,7 +59,7 @@ class Hook_choose_download_category
 				$_id=strval($t['id']);
 			}
 
-			if ($stripped_id===$_id) continue; // Possible when we look under as a root
+			if ($stripped_id===strval($t['id'])) continue; // Possible when we look under as a root
 			$title=$t['title'];
 			$has_children=($t['child_count']!=0);
 			$selectable=((!$addable_filter) || $t['addable']);

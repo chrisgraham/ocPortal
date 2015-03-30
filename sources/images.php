@@ -119,7 +119,7 @@ function _symbol_thumbnail($param)
 			} else
 			{
 				$ext=get_file_extension($orig_url);
-				if (!is_image($ext)) $ext='png';
+				if (!is_image('example.'.$ext)) $ext='png';
 				$filename=url_to_filename($orig_url).'.'.$ext;
 			}
 			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here

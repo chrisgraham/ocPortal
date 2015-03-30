@@ -1021,6 +1021,9 @@ class Module_admin_newsletter extends standard_aed_module
 			$_automatic.=$tp;
 		}
 		$completed=do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('_GUID'=>'20f6adc244b04d9e5206682ec4e0cc0f','CONTENT'=>$_automatic));
+
+		$completed=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f46','CONTENT'=>$completed,'LANG'=>$lang,'SUBJECT'=>''));
+
 		return $completed->evaluate($lang);
 	}
 

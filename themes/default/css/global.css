@@ -4010,6 +4010,8 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 		background: none !important;
 	}
 
+	.non_accessibility_redundancy,
+	.menu_type__top,
 	.buttons_group,
 	.associated_links_block_group,
 	.screen_actions_outer,
@@ -4024,7 +4026,7 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 	.comments_form,
 	.community_message,
 	.ratings, .trackbacks {
-		display: none;
+		display: none !important;
 	}
 
 	.global_navigation {

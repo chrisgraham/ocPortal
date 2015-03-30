@@ -25,6 +25,7 @@ data_custom/latest_activity.txt
 /*.fcgi
 tmpfile__*
 *.tmp
+*~
 /_vti*
 *.log
 error_log

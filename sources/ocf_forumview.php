@@ -446,6 +446,12 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 		}
 	}
 
+	// Pre-load it, so meta-data isn't altered later
+	$bak=$GLOBALS['META_DATA'];
+	$topic['first_post']=get_translated_tempcode($topic_row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
+	$topic['first_post']->evaluate();
+	$GLOBALS['META_DATA']=$bak;
+
 	$topic['id']=$topic_row['id'];
 	$topic['num_views']=$topic_row['t_num_views'];
 	$topic['num_posts']=$topic_row['t_cache_num_posts'];

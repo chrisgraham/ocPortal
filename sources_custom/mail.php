@@ -350,6 +350,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		->setFrom(array($website_email=>$from_name))
 		->setReplyTo(array($from_email=>$from_name))
 		->setTo($to_array)
+		->setDate(time())
 		->setPriority($priority)
 		->setCharset($charset)
 		->setBody($html_evaluated,'text/html',$charset)

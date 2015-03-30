@@ -1,4 +1,4 @@
 [block="forum_features" title="{!SECTION_FORUMS}"]side_stored_menu[/block]
 [block]side_personal_stats[/block]
 [block]side_ocf_personal_topics[/block]
-[block]main_leader_board[/block]
+{+START,IF,{$ADDON_INSTALLED,points}}[block]main_leader_board[/block]{+END}

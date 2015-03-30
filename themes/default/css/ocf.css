@@ -1267,7 +1267,11 @@ side_ocf_personal_topics=
 */
 
 @media print {
+	.ocf_post_back_to_top,
+	.ocf_topic_control_functions,
 	.ocf_member_bar_etc,
+	.box___block_main_bottom_bar,
+	.box__members_viewing,
 	.ocf_page_buttons,
 	.ocf_topic_marker,
 	.ocf_member_signature .comcode_hide {

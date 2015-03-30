@@ -57,7 +57,7 @@
 		{+END}
 	{+END}
 
-	<div class="box box___ocf_topic_screen"><div class="box_inner">
+	<div class="box box__members_viewing"><div class="box_inner">
 		{+START,IF_NON_EMPTY,{MEMBERS_VIEWING}}
 			{+START,IF,{$NEQ,{NUM_MEMBERS},0}}
 				{!MEMBERS_VIEWING,{NUM_GUESTS*},{NUM_MEMBERS*},{MEMBERS_VIEWING}}

@@ -459,6 +459,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	$headers.='X-Sender: <'.$website_email.'>'.$line_term;
 	$cc_address=$no_cc?'':get_option('cc_address');
 	if (($cc_address!='') && (!in_array($cc_address,$to_email))) $headers.=((get_option('bcc')=='1')?'Bcc: <':'Cc: <').$cc_address.'>'.$line_term;
+	$headers.='Date: '.date('r',time()).$line_term;
 	$headers.='Message-ID: <'.$_boundary.'@'.get_domain().'>'.$line_term;
 	$headers.='X-Priority: '.strval($priority).$line_term;
 	$brand_name=get_value('rebrand_name');

@@ -542,7 +542,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					$params.=' '.$key.'="'.str_replace('"','\"',$val).'"';
 				}
-				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?escape_html($embed->evaluate()):(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 			}
 			return do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:NO_ACCESS_FOR_TAG',escape_html($tag),escape_html($username))));
 		}
@@ -608,7 +608,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 			if (($tag!='block') || (!is_file(get_file_base().'/sources_custom/miniblocks/'.$embed->evaluate().'.php'/*Won't have a defined editing UI*/)))
 			{
-				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('comcode:COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('comcode:COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?escape_html($embed->evaluate()):(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('comcode:COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('comcode:COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 			} else
 			{
 				return make_string_tempcode('[block'.escape_html($params).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/block]');
