@@ -389,7 +389,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	$dot_pos=strrpos($_file,'.');
 	$ext=substr($_file,$dot_pos+1);
 	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $ext.='.png';
-	$_file=substr($_file,0,$dot_pos);
+	$_file=preg_replace('#[^\w]#','x',substr($_file,0,$dot_pos));
 	$thumb_path='';
 	do
 	{
@@ -1074,9 +1074,10 @@ function get_gd_version()
  * Find whether the image specified is actually an image, based on file extension
  *
  * @param  string			A URL or file path to the image
+ * @param  boolean		Whether to check mime too
  * @return boolean		Whether the string pointed to a file appeared to be an image
  */
-function is_image($name)
+function is_image($name,$mime_too=false)
 {
 	if (substr(basename($name),0,1)=='.') return false; // Temporary file that some OS's make
 
@@ -1086,6 +1087,16 @@ function is_image($name)
 	if ($types===NULL) $types=explode(',',get_option('valid_images'));
 	foreach ($types as $val)
 		if (strtolower($val)==$ext) return true;
+
+	if (($mime_too) && (looks_like_url($name)))
+	{
+		http_download_file($name,0,false);
+		global $HTTP_DOWNLOAD_MIME_TYPE;
+		if (preg_match('#^image/(png|gif|jpeg)$#',$HTTP_DOWNLOAD_MIME_TYPE)!=0)
+		{
+			return true;
+		}
+	}
 
 	return false;
 }

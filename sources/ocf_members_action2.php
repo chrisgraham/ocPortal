@@ -1432,7 +1432,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 	if ($avatar_url!='')
 	{
 		require_code('images');
-		if (!is_image($avatar_url))
+		if (!is_image($avatar_url,true))
 		{
 			$ext=get_file_extension($avatar_url);
 			warn_exit(do_lang_tempcode('UNKNOWN_FORMAT',escape_html($ext)));
@@ -1517,7 +1517,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	require_code('uploads');
 
-	if ((!is_swf_upload()) && ((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
+	if (((!array_key_exists($upload_name,$_FILES)) || (!is_swf_upload()) && (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
 	{
 		$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_url',array('id'=>$member_id));
 		$x=post_param($param_name,'');
@@ -1544,7 +1544,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	//  If we don't have GD, we need them to have uploaded a thumbnail too.
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
 	{
-		if ((!is_swf_upload()) && ((!array_key_exists($upload_name.'2',$_FILES)) || (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))
+		if (((!array_key_exists($upload_name.'2',$_FILES)) || (!is_swf_upload()) && (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))
 		{
 			$field=post_param('thumb_'.$param_name,'');
 			if (($field=='') && ($urls[0]!='')) warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));

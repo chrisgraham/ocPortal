@@ -251,7 +251,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	}
 	elseif (post_param($specify_name,'')!='') // If we specified
 	{
-		$is_image=is_image($_POST[$specify_name]);
+		$is_image=is_image($_POST[$specify_name],true);
 
 		$url=_get_specify_url($specify_name,$upload_folder,$enforce_type,$accept_errors);
 		if ($url==array('','')) return array('','','','');
@@ -431,7 +431,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			if ($gd)
 			{
 				if ((!is_saveable_image($url[0])) && (get_file_extension($url[0])!='svg')) $ext='.png'; else $ext='';
-				$file=basename($url[0]);
+				$file=preg_replace('#[^\w]#','x',basename($url[0]));
 				$_file=$file;
 				$place=get_custom_file_base().'/'.$thumb_folder.'/'.$_file.$ext;
 				$i=2;
@@ -575,11 +575,11 @@ function _get_specify_url($specify_name,$upload_folder,$enforce_type=0,$accept_e
 function _check_enforcement_of_type($file,$enforce_type,$accept_errors=false)
 {
 	require_code('images');
-	if (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (!is_image($file)) && (get_file_extension($file)!='swf'))
+	if (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (!is_image($file,true)) && (get_file_extension($file)!='swf'))
 	{
 		warn_exit(do_lang_tempcode('NOT_IMAGE'));
 	}
-	if (($enforce_type==OCP_UPLOAD_IMAGE) && (!is_image($file)))
+	if (($enforce_type==OCP_UPLOAD_IMAGE) && (!is_image($file,true)))
 	{
 //		if ($accept_errors)
 //			attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
