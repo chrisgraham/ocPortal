@@ -324,7 +324,10 @@ function nice_get_download_licences($it=NULL,$allow_na=false)
  */
 function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=NULL,$do_stats=true,$use_compound_list=false,$levels=NULL,$addable_filter=false)
 {
-	if ($levels==-1) return array();
+	if (!$use_compound_list)
+	{
+		if ($levels==-1) return array();
+	}
 
 //	if (!has_category_access(get_member(),'downloads',strval($category_id))) return array();
 
@@ -350,7 +353,7 @@ function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=N
 	if (count($rows)==300) $rows=array();
 	$children[0]['child_count']=count($rows);
 	$breadcrumbs.=' > ';
-	if ($levels!==0)
+	if (($levels!==0) || ($use_compound_list))
 	{
 		foreach ($rows as $child)
 		{
@@ -365,7 +368,8 @@ function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=N
 				$children[0]['compound_list'].=$_compound_list;
 			}
 
-			$children=array_merge($children,$child_children);
+			if ($levels!==0)
+				$children=array_merge($children,$child_children);
 		}
 	}
 

@@ -164,7 +164,7 @@ function update_ajax_member_list_response(result,list_contents)
 	window.current_list_for.down_once=false;
 	var handle_arrow_usage=function(event) {
 		if (typeof event=='undefined') var event=window.event;
-		if (key_pressed(event,40,true)) // DOWN
+		if (!event.shiftKey && key_pressed(event,40,true)) // DOWN
 		{
 			current_list_for_copy.disabled=true;
 			window.setTimeout(function() { current_list_for_copy.disabled=false; }, 1000);
@@ -184,7 +184,7 @@ function update_ajax_member_list_response(result,list_contents)
 			list.options[list.selectedIndex].selected=true;
 			return cancel_bubbling(event);
 		}
-		if (key_pressed(event,38,true)) // UP
+		if (!event.shiftKey && key_pressed(event,38,true)) // UP
 		{
 			current_list_for_copy.disabled=true;
 			window.setTimeout(function() { current_list_for_copy.disabled=false; }, 1000);
@@ -233,7 +233,7 @@ function update_ajax_member_list_response(result,list_contents)
 
 			return cancel_bubbling(event);
 		}
-		if (key_pressed(event,[40,38],true))
+		if (!event.shiftKey && key_pressed(event,[40,38],true))
 		{
 			if (typeof event.preventDefault!='undefined') event.preventDefault();
 			return cancel_bubbling(event);
@@ -244,7 +244,7 @@ function update_ajax_member_list_response(result,list_contents)
 	{
 		if (typeof event=='undefined') var event=window.event;
 
-		if (key_pressed(event,[40,38],true))
+		if (!event.shiftKey && key_pressed(event,[40,38],true))
 		{
 			if (typeof event.preventDefault!='undefined') event.preventDefault();
 			return cancel_bubbling(event);
@@ -255,7 +255,7 @@ function update_ajax_member_list_response(result,list_contents)
 	{
 		if (typeof event=='undefined') var event=window.event;
 
-		if (key_pressed(event,[40,38,13],true))
+		if (!event.shiftKey && key_pressed(event,[40,38,13],true))
 		{
 			if (typeof event.preventDefault!='undefined') event.preventDefault();
 			return cancel_bubbling(event);

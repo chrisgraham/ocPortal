@@ -431,7 +431,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			if ($gd)
 			{
 				if ((!is_saveable_image($url[0])) && (get_file_extension($url[0])!='svg')) $ext='.png'; else $ext='';
-				$file=preg_replace('#[^\w]#','x',basename($url[0]));
+				$file=preg_replace('#[^\w\.]#','x',basename($url[0]));
 				$_file=$file;
 				$place=get_custom_file_base().'/'.$thumb_folder.'/'.$_file.$ext;
 				$i=2;

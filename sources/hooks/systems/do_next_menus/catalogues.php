@@ -37,10 +37,11 @@ class Hook_do_next_menus_catalogues
 			$ret[]=array('cms','catalogues',array('cms_catalogues',array('type'=>'misc'),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('CATALOGUES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','COUNT(*)',NULL,'',true))))),('DOC_CATALOGUES'));
 		if ($exhaustive)
 		{
-			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title','c_description','c_ecommerce'),NULL,'',10,NULL,true);
+			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title','c_description','c_ecommerce'),NULL,'ORDER BY c_add_date',50,NULL,true);
 			if (!is_null($catalogues))
 			{
-				$ret2=array();
+				$count=0;
+
 				foreach ($catalogues as $row)
 				{
 					if (substr($row['c_name'],0,1)=='_') continue;
@@ -48,12 +49,13 @@ class Hook_do_next_menus_catalogues
 					if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
 					{
 						if (has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))
-							$ret2[]=array('cms','of_catalogues',array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',escape_html(get_translated_text($row['c_title'])),escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
+						{
+							$ret[]=array('cms','of_catalogues',array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',escape_html(get_translated_text($row['c_title'])),escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
+							$count++;
+
+							if ($count==10) break;
+						}
 					}
-				}
-				if (count($ret2)<10)
-				{
-					$ret=array_merge($ret,$ret2);
 				}
 			}
 		}
