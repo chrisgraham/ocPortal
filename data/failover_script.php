@@ -76,15 +76,24 @@ if (!empty($SITE_INFO['failover_check_urls']))
 		$full_url.=((strpos($full_url,'?')===false)?'?':'&').'keep_failover=0';
 
 		$time_before=microtime(true);
-		readfile($full_url,false,$context);
+		$data=file_get_contents($full_url,false,$context);
 		$time_after=microtime(true);
 		$time=$time_after-$time_before;
 
+		// Bad HTTP status
 		if (strpos($http_response_header[0],'200')===false)
 		{
 			is_failing($full_url.'('.$http_response_header[0].')');
 		}
 
+		// Parse error or fatal error, with display errors on in php.ini (without display errors, PHP uses the correct HTTP status)
+		$matches=array();
+		if ((strlen($data)<500) && (preg_match('#<b>(\w+ error)</b>#',$data,$matches)!=0))
+		{
+			is_failing($full_url.'('.$matches[1].')');
+		}
+
+		// Slowness
 		if ((!empty($SITE_INFO['failover_loadtime_threshold'])) && ($time>=floatval($SITE_INFO['failover_loadtime_threshold'])))
 		{
 			is_failing($full_url.'('.number_format($time,2).' seconds)');
@@ -244,11 +253,11 @@ function set_failover_mode($new_mode)
 			$regexp='('.str_replace(' ','\ ',implode('|',$browsers)).')';
 
 			$new_code.='RewriteEngine on'."\n";
-			$new_code.='RewriteMap failover_mode txt:'.$FILE_BASE.'/data_custom/failover_rewritemap.txt'."\n";
+			//$new_code.='RewriteMap failover_mode txt:'.$FILE_BASE.'/data_custom/failover_rewritemap.txt'."\n";	Has to be defined in main Apache config
 			$new_code.='RewriteRule ^/(.*) ${failover_mode:$1} [L,QSA]'."\n";
-			$new_code.='RewriteMap failover_mode_mobile txt:'.$FILE_BASE.'/data_custom/failover_rewritemap.txt'."\n";
+			//$new_code.='RewriteMap failover_mode__mobile txt:'.$FILE_BASE.'/data_custom/failover_rewritemap__mobile.txt'."\n";
 			$new_code.='RewriteCond %{HTTP_USER_AGENT} '.$regexp."\n";
-			$new_code.='RewriteRule ^/(.*) ${failover_mode_mobile:$1} [L,QSA]'."\n";
+			$new_code.='RewriteRule ^/(.*) ${failover_mode__mobile:$1} [L,QSA]'."\n";
 		}
 		$new_code='#FAILOVER ENDS'."\n";
 

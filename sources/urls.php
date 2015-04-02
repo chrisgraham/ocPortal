@@ -68,10 +68,18 @@ function get_self_url_easy()
 	$self_url=$protocol.'://'.$domain;
 	$port=ocp_srv('SERVER_PORT');
 	if (($port!='') && ($port!='80')) $self_url.=':'.$port;
-	$s=ocp_srv('PHP_SELF');
-	if (substr($s,0,1)!='/') $self_url.='/';
-	$self_url.=$s;
-	if ((array_key_exists('QUERY_STRING',$_SERVER)) && ($_SERVER['QUERY_STRING']!='')) $self_url.='?'.$_SERVER['QUERY_STRING'];
+	$ruri=ocp_srv('REQUEST_URI');
+	if ($ruri!='')
+	{
+		if (substr($ruri,0,1)!='/') $self_url.='/';
+		$self_url.=$ruri;
+	} else
+	{
+		$s=ocp_srv('PHP_SELF');
+		if (substr($s,0,1)!='/') $self_url.='/';
+		$self_url.=$s;
+		if ((array_key_exists('QUERY_STRING',$_SERVER)) && ($_SERVER['QUERY_STRING']!='')) $self_url.='?'.$_SERVER['QUERY_STRING'];
+	}
 	return $self_url;
 }
 

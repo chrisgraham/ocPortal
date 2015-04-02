@@ -692,9 +692,9 @@ function do_site()
 	if ((running_script('index')) && (count($_POST)==0) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='0') && (is_guest()))
 	{
 		$bot_type=get_bot_type();
-		$supports_failsafe_mode=(isset($SITE_INFO['failsafe_mode'])) && ($SITE_INFO['failsafe_mode']!='off');
+		$supports_failover_mode=(isset($SITE_INFO['failover_mode'])) && ($SITE_INFO['failover_mode']!='off');
 		$supports_guest_caching=(isset($SITE_INFO['any_guest_cached_too'])) && ($SITE_INFO['any_guest_cached_too']=='1');
-		if ((($bot_type!==NULL) || ($supports_failsafe_mode) || ($supports_guest_caching)) && (can_static_cache()))
+		if ((($bot_type!==NULL) || ($supports_failover_mode) || ($supports_guest_caching)) && (can_static_cache()))
 		{
 			$url=get_self_url_easy();
 			$fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize($url));
@@ -703,24 +703,34 @@ function do_site()
 			if (is_mobile()) $fast_cache_path.='__mobile';
 
 			$out_evaluated=$out->evaluate(NULL,false);
+			$static_cache=$out_evaluated;
 
-			write_static_cache_file($fast_cache_path.'.gcd',$out_evaluated,true);
-
-			if ($supports_failsafe_mode)
+			if (!is_file($fast_cache_path.'.gcd') || filemtime($fast_cache_path.'.gcd')<time()-60*60*5)
 			{
-				// Add failover messages
-				$out_evaluated=str_replace($SITE_INFO['failover_message_place_after'],$SITE_INFO['failover_message_place_after'].$SITE_INFO['failover_message'],$out_evaluated);
-				$out_evaluated=str_replace($SITE_INFO['failover_message_place_before'],$SITE_INFO['failover_message'].$SITE_INFO['failover_message_place_before'],$out_evaluated);
+				write_static_cache_file($fast_cache_path.'.gcd',$static_cache,true);
+			}
 
-				// Disable all form controls
-				$out_evaluated=preg_replace('#<(textarea|input|select|button)#','<$1 disabled="disabled"',$out_evaluated);
+			if ($supports_failover_mode)
+			{
+				if (!is_file($fast_cache_path.'__failover_mode.gcd') || filemtime($fast_cache_path.'__failover_mode.gcd')<time()-60*60*5)
+				{
+					// Add failover messages
+					$static_cache=str_replace($SITE_INFO['failover_message_place_after'],$SITE_INFO['failover_message_place_after'].$SITE_INFO['failover_message'],$static_cache);
+					$static_cache=str_replace($SITE_INFO['failover_message_place_before'],$SITE_INFO['failover_message'].$SITE_INFO['failover_message_place_before'],$static_cache);
 
-				write_static_cache_file($fast_cache_path.'__failsafe_mode.gcd',$out_evaluated,false);
+					// Disable all form controls
+					$static_cache=preg_replace('#<(textarea|input|select|button)#','<$1 disabled="disabled"',$static_cache);
+
+					// Remove any sessions
+					$static_cache=preg_replace('#(&|&amp;|&amp;amp;|%3Aamp%3A|\?)?(keep_session|keep_devtest)(=|%3D)\d+#','',$static_cache);
+
+					write_static_cache_file($fast_cache_path.'__failover_mode.gcd',$static_cache,false);
+				}
 
 				if (!empty($SITE_INFO['failover_apache_rewritemap_file']))
 				{
-					$url_stem=str_replace(get_base_url().'/','',$url);
-					if (preg_match('#^'.preg_quote($SITE_INFO['failover_apache_rewritemap_file'],'#').'$#',$url_stem)!=0)
+					$url_stem=preg_replace('#[&?](keep_session|keep_devtest)=\d+#','',str_replace(get_base_url().'/','',$url));
+					if (preg_match('#^'.$SITE_INFO['failover_apache_rewritemap_file'].'$#',$url_stem)!=0)
 					{
 						if (is_mobile())
 						{
@@ -732,7 +742,7 @@ function do_site()
 						$rewritemap_file_contents=file_get_contents($rewritemap_file);
 						if (strpos($rewritemap_file_contents,"\n".$url_stem.' ')===false)
 						{
-							$rewritemap_file_contents.="\n".$url_stem.' '.$fast_cache_path.'__failsafe_mode.gcd';
+							$rewritemap_file_contents.="\n".$url_stem.' '.$fast_cache_path.'__failover_mode.gcd';
 							file_put_contents($rewritemap_file,$rewritemap_file_contents,LOCK_EX);
 						}
 					}

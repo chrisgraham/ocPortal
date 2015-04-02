@@ -622,10 +622,7 @@ function init__global2()
  */
 function can_static_cache()
 {
-	if (isset($_GET['keep_session'])) return false;
 	if (isset($_GET['redirect'])) return false;
-	if (isset($_GET['zone'])) return false;
-	if (isset($_GET['date'])) return false;
 	/*$url_easy=get_self_url_easy();
 	if (strpos($url_easy,'sort=')!==false) return false;	Actually this stops very useful caching, esp on the forum - better to just reduce the cache time to a fraction of an hour
 	if (strpos($url_easy,'start=')!==false) return false;
@@ -663,7 +660,7 @@ function static_cache($mode)
 			'non_bot'=>($mode & STATIC_CACHE__FAST_SPIDER)==0,
 			'no_js'=>!array_key_exists('js_on',$_COOKIE),
 			'mobile'=>is_mobile(),
-			'failsafe_mode'=>($mode & STATIC_CACHE__FAILOVER_MODE)!=0,
+			'failover_mode'=>($mode & STATIC_CACHE__FAILOVER_MODE)!=0,
 		),
 	);
 	if (($mode & STATIC_CACHE__FAILOVER_MODE)!=0)
@@ -678,7 +675,7 @@ function static_cache($mode)
 						'non_bot'=>$non_bot,
 						'no_js'=>$no_js,
 						'mobile'=>$mobile,
-						'failsafe_mode'=>true, // This is always saved as a variant anyway
+						'failover_mode'=>true, // This is always saved as a variant anyway
 					);
 				}
 			}
@@ -690,7 +687,7 @@ function static_cache($mode)
 		if ($param['non_bot']) $fast_cache_path.='__non-bot';
 		if ($param['no_js']) $fast_cache_path.='__no-js';
 		if ($param['mobile']) $fast_cache_path.='__mobile';
-		if ($param['failsafe_mode']) $fast_cache_path.='__failsafe_mode';
+		if ($param['failover_mode']) $fast_cache_path.='__failover_mode';
 		$fast_cache_path.='.gcd';
 		if (is_file($fast_cache_path)) break;
 	}
