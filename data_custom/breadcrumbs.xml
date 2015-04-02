@@ -35,7 +35,7 @@
 	</substitution>
 
 	<!-- Simple catalogue links back to home page (most people don't want to expose catalogues technically as such) -->
-	<substitution match_key="_WILD:catalogues:category">
+	<substitution match_key="_WILD:catalogues:category:.*">
 		<link label="{!HOME}">:</link>
 	</substitution>
 

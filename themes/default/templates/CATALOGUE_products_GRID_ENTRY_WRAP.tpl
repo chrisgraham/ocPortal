@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="price_box">
-		<span class="price">{$CURRENCY_SYMBOL}{$FLOAT_FORMAT,{FIELD_2}}</span>
+		<span class="price">{$CURRENCY_SYMBOL}{$FLOAT_FORMAT*,{FIELD_2_PLAIN}}</span>
 	</div>
 
 	<div>
