@@ -952,7 +952,7 @@ function check_variable_list($LOCAL_VARIABLES,$offset=-1)
 		}
 
 		// Check for non-used variables
-		if (($GLOBALS['FILENAME']!='sources\phpstub.php') && ($v['references']==0) && ($name!='__return') && ($name!='_') && (!$v['is_global']) && (!in_array($name,array('db','file_base','table_prefix','old_base_dir','upgrade_from_hack','upgrade_from','this','GLOBALS','php_errormsg',/*'_GET','_POST','_REQUEST','_COOKIE','_SERVER','_ENV', These are intentionally removed as they should only be used at one point in the code*/'_SESSION','_FILES'))))
+		if (($GLOBALS['FILENAME']!='sources\phpstub.php') && ($v['references']==0) && ($name!='__return') && ($name!='_') && (!$v['is_global']) && (!in_array($name,array('db','file_base','table_prefix','old_base_dir','upgrade_from_hack','upgrade_from','this','GLOBALS','php_errormsg','http_response_header',/*'_GET','_POST','_REQUEST','_COOKIE','_SERVER','_ENV', These are intentionally removed as they should only be used at one point in the code*/'_SESSION','_FILES'))))
 		{
 			if (!$v['unused_value'])
 				log_warning('Non-used '.($v['unused_value']?'value':'variable').' (\''.$name.'\')',$v['first_mention']);
@@ -2026,6 +2026,7 @@ function reinitialise_local_variables()
 {
 	return array(
 		'php_errormsg'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('string'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
+		'http_response_header'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
 		'_GET'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
 		'_POST'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
 		'_REQUEST'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),

@@ -64,16 +64,16 @@ if ($SITE_INFO['failover_mode']!='auto_on' && $SITE_INFO['failover_mode']!='auto
 // Check URLs
 if (!empty($SITE_INFO['failover_check_urls']))
 {
-	$context=array(
+	$context=stream_context_create(array(
 		'http'=>array(
 			'user_agent'=>'ocportal_failover_test',
 		)
-	);
+	));
 	$urls=explode(';',$SITE_INFO['failover_check_urls']);
 	foreach ($urls as $url)
 	{
 		$full_url=$SITE_INFO['base_url'].'/'.$url;
-		$full_url.=((strpos($full_url,'?')==false)?'?':'&').'keep_failover=0';
+		$full_url.=((strpos($full_url,'?')===false)?'?':'&').'keep_failover=0';
 
 		$time_before=microtime(true);
 		readfile($full_url,false,$context);
@@ -85,9 +85,9 @@ if (!empty($SITE_INFO['failover_check_urls']))
 			is_failing($full_url.'('.$http_response_header[0].')');
 		}
 
-		if ((!empty($SITE_INFO['failover_loadtime_threshold'])) && ($time>=floatval($SITE_INFO['failover_loadtime_threshold']))
+		if ((!empty($SITE_INFO['failover_loadtime_threshold'])) && ($time>=floatval($SITE_INFO['failover_loadtime_threshold'])))
 		{
-			is_failing($full_url.'('.strval($time).' seconds)');
+			is_failing($full_url.'('.number_format($time,2).' seconds)');
 		}
 	}
 }
@@ -100,7 +100,7 @@ if (!empty($SITE_INFO['failover_loadaverage_threshold']))
 		$result=sys_getloadavg();
 		if ($result[1]>=floatval($SITE_INFO['failover_loadaverage_threshold']))
 		{
-			is_failing('load-average='.strval($result[1]));
+			is_failing('load-average='.number_format($result[1],2));
 		}
 	}
 
@@ -113,7 +113,8 @@ if (!empty($SITE_INFO['failover_loadaverage_threshold']))
 		{
 			$cpu_num=0;
 			$load_total=0;
-			foreach ($server as $cpu){
+			foreach ($server as $cpu)
+			{
 				$cpu_num++;
 				$load_total+=$cpu->loadpercentage;
 			}
@@ -122,7 +123,7 @@ if (!empty($SITE_INFO['failover_loadaverage_threshold']))
 			{
 				if ($load>=floatval($SITE_INFO['failover_loadaverage_threshold']))
 				{
-					is_failing('load-average='.strval($load));
+					is_failing('load-average='.number_format($load,2));
 				}
 			}
 		}
@@ -139,6 +140,8 @@ set_failover_mode('auto_off');
  */
 function is_failing($url)
 {
+	global $SITE_INFO;
+
 	if ($SITE_INFO['failover_mode']=='auto_off')
 	{
 		global $SITE_INFO;
@@ -170,7 +173,7 @@ function set_failover_mode($new_mode)
 	$path=$FILE_BASE.'/info.php';
 	$data=file_get_contents($path);
 	$orig=$data;
-	$data=preg_replace('#(\$SITE_INFO[\'failover_mode\']\s*=\s*\')[^\']+(\';)#',"\n".'$1'.addcslashes($new_mode).'$2',$data);
+	$data=preg_replace('#(\$SITE_INFO[\'failover_mode\']\s*=\s*\')[^\']+(\';)#',"\n".'$1'.addslashes($new_mode).'$2',$data);
 	if ($orig!=$data)
 		file_put_contents($path,$data,LOCK_EX);
 
