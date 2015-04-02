@@ -278,7 +278,7 @@ class Hook_Profiles_Tabs_about
 		$days_joined=intval(round((time()-$join_time)/60/60/24));
 		$total_posts=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)');
 		$join_date=($join_time==0)?'':get_timezoned_date($join_time,false);
-		$count_posts=do_lang_tempcode('_COUNT_POSTS',integer_format($post_count),float_format(floatval($post_count)/floatval(($days_joined==0)?1:$days_joined)),array(float_format(floatval(100*$post_count)/floatval(($total_posts==0)?1:$total_posts))));
+		$count_posts=do_lang_tempcode('_COUNT_POSTS',escape_html(integer_format($post_count)),escape_html(float_format(floatval($post_count)/floatval(($days_joined==0)?1:$days_joined))),array(escape_html(float_format(floatval(100*$post_count)/floatval(($total_posts==0)?1:$total_posts)))));
 
 		$a=($avatar_url=='')?0:ocf_get_member_best_group_property($member_id_of,'max_avatar_width');
 		$b=($photo_thumb_url=='')?0:intval(get_option('thumb_width'));
