@@ -462,5 +462,6 @@ ocPortal does not contain a way for individual sites to be set up automatically 
  - [page="_SEARCH:tut_configuration"]Basic Configuration[/page]
  - [page="_SEARCH:tut_subcom"]Creating sub-communities (and sub-sites)[/page]
  - [page="_SEARCH:tut_permissions"]Access Control and Privileges[/page]
+ - [page="_SEARCH:tut_failover"]Failover mode[/page]
 
 

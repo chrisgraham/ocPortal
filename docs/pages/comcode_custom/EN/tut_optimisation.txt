@@ -367,3 +367,4 @@ For hard-core programming, xdebug would be used. However, you can also run profi
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]
+ - [page="_SEARCH:tut_failover"]Failover mode[/page]

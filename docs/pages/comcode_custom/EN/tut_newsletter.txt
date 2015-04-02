@@ -121,7 +121,7 @@ You have the following template variables available to you (beyond all the defau
  - [b]member_id[/b], The member ID of the subscriber, or blank if there is no discerned member ID
  - [b]email_address[/b], The email address of the subscriber
  - [b]sendid[/b], A special code identifying the subscriber (starts with 'm' if it is a member, or 'n' if it is a newsletter subscriber)
- - [b]unsub_url[/b], A URL to unsubscribe from (one-click unsubscribe for newsletter recipients, a link to account settings for other recipients). If you are using [tt]unsub_url[/tt] in a Comcode newsletter it is very important not to insert it plainly, as ocPortal will look at the link for a link caption and incidentally click that link for every user. Instead use a Comcode 'url' tag and hence tell ocPortal what caption to give the link.
+ - [b]unsub_url[/b], A URL to unsubscribe from (may be blank if the newsletter is being sent to a member rather than a direct subscriber). If you are using [tt]unsub_url[/tt] in a Comcode newsletter it is very important not to insert it plainly, as ocPortal will look at the link for a link caption and incidentally click that link for every user. Instead use a Comcode 'url' tag and hence tell ocPortal what caption to give the link.
 
 If you are going to go down this path it is strongly recommended to tick (check) the 'HTML only' box when you go to send your newsletters, as the auto-generated text equivalents will not be easily readable.
 The vast majority of email applications have HTML capabilities nowadays, so you are not really sacrificing anything if you do this.

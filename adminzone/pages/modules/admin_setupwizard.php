@@ -303,6 +303,7 @@ class Module_admin_setupwizard
 			'tester',
 			'textbased_persistent_cacheing',
 			'rootkit_detector',
+			'failover',
 			'msn',
 			'backup',
 			'bookmarks',

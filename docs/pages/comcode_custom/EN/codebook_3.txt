@@ -278,6 +278,7 @@ The following 'keep' parameters have interface triggers, but are also handy for 
  - [tt]keep_lang[/tt] -- set to a two-letter ISO language code to tell ocPortal which language to use
  - [tt]keep_session[/tt] -- this isn't useful for manual editing, but it is used to note session-IDs when [session-]cookies are not working
  - [tt]keep_timezone[/tt] -- this is the timezone code (tz style) to view in
+ - [tt]keep_failover[/tt] -- force the site to run normally even when failover mode has activated
 
 The following aren't 'keep' parameters, but are still useful and otherwise behave in the same way:
  - [tt]auth[/tt] -- set to '1' to make ocPortal request HTTP authentication. This is useful for RSS URLs, if you want the feeds to be generated as authenticated.

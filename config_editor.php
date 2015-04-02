@@ -281,6 +281,9 @@ vb_version
 			case 'full_ips':
 				$notes='Whether to match sessions to the full IP addresses. Set this to 1 if you are sure users don\'t jump around IP addresses on the same 255.255.255.0 subnet (e.g. due to proxy server randomisation). This increases security.';
 				break;
+			case 'failover_mode':
+				$notes='The failover mode. Either \'off\' or \'on\' or \'auto_off\' or \'auto_on\'. Usually it will be left to \'off\', meaning there is no active failover mode. The next most common setting will be \'auto_off\', which means the failover_script.php script is allowed to set it to \'auto_on\' if it detects the site is failing (and back to \'auto_off\' again when things are okay again). Setting it to \'on\' is manually declaring the site has failed and you want to keep it in failover mode.';
+				break;
 		}
 		if (strpos($key,'_table_prefix')!==false)
 		{

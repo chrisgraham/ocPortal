@@ -295,6 +295,11 @@ function init__global2()
 			exit();
 		}
 	}
+	if ((isset($SITE_INFO['failover_mode'])) && ($SITE_INFO['failover_mode']=='on' || $SITE_INFO['failover_mode']=='auto_on') && (get_param_integer('keep_failover',NULL)!==0))
+	{
+		$bot_type=get_bot_type();
+		fast_spider_cache($bot_type!==NULL,true);
+	}
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots
 	{
 		if ((running_script('index')) && (count($_POST)==0))

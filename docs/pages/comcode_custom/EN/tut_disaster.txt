@@ -105,4 +105,5 @@ You can use the [tt]config_editor.php[/tt] script in order to turn them off, ove
 
  - [page="_SEARCH:tut_sql"]Manually editing your database with phpMyAdmin[/page]
  - [page="_SEARCH:tut_web_hosting"]Web hosting for ocPortal users[/page]
+ - [page="_SEARCH:tut_failover"]Failover mode[/page]
 
