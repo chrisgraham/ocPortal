@@ -268,5 +268,5 @@ Once you feel your site is ready for the general public, you will want to 'open 
  - [page="_SEARCH:tut_legal"]Legal and social responsibilities[/page]
  - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
  - [page="_SEARCH:tut_menus"]Customising what's on the menus[/page]
-
+ - [page="_SEARCH:tut_adv_configuration"]Advanced Configuration[/page]
 
