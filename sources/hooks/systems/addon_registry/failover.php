@@ -76,6 +76,8 @@ class Hook_addon_registry_failover
 
 			'sources/hooks/systems/addon_registry/failover.php',
 			'data/failover_script.php',
+			'data_custom/failover_rewritemap.txt',
+			'data_custom/failover_rewritemap__mobile.txt',
 		);
 	}
 

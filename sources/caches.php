@@ -148,6 +148,8 @@ function persistent_cache_empty()
 		}
 	}
 	closedir($d);
+	@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap.txt','',LOCK_EX);
+	@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap__mobile.txt','',LOCK_EX);
 
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;

@@ -52,6 +52,10 @@ ErrorDocument 404 /index.php?page=404
 # Needed for mod_rewrite. Disable this line if your server does not have AllowOverride permission (can be one cause of Internal Server Errors)
 Options +SymLinksIfOwnerMatch -MultiViews
 
+#FAILOVER STARTS
+### LEAVE THIS ALONE, AUTOMATICALLY MAINTAINED ###
+#FAILOVER ENDS
+
 RewriteEngine on
 
 # Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.

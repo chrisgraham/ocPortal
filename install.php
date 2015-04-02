@@ -2617,6 +2617,10 @@ END;
 $clauses[]=<<<END
 RewriteEngine on
 
+#FAILOVER STARTS
+### LEAVE THIS ALONE, AUTOMATICALLY MAINTAINED ###
+#FAILOVER ENDS
+
 # Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.
 RewriteRule ^([^=]*)webdav.php/([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ - [L]
 RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,QSA,R]

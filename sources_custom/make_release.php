@@ -838,6 +838,8 @@ function populate_build_files_array($dir='',$pretend_dir='')
 			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/cedi_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='ocp_sitemap.xml') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='ocp_news_sitemap.xml') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif ($pretend_dir.$file=='data_custom/failover_rewritemap.txt') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif ($pretend_dir.$file=='data_custom/failover_rewritemap__mobile.txt') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='data_custom/errorlog.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]="<?php return; ?".">\n"; // So that code can't be executed
 			elseif ($pretend_dir.$file=='data_custom/execute_temp.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]=preg_replace('#function execute_temp\(\)\n\n\{\n.*\}\n\n#s',"function execute_temp()\n\n{\n}\n\n#",file_get_contents(get_file_base().'/'.$dir.$file));
 			// NB: 'data_custom/breadcrumbs.xml' and 'data_custom/fields.xml' are also volatile for users, but in git we're not allowed to mess with these without commit/release intent.

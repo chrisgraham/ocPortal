@@ -688,45 +688,56 @@ function do_site()
 	}
 
 	// Cacheing for spiders
-	if ((running_script('index')) && (count($_POST)==0) && (isset($GLOBALS['SITE_INFO']['fast_spider_cache'])) && ($GLOBALS['SITE_INFO']['fast_spider_cache']!='0') && (is_guest()))
+	global $SITE_INFO;
+	if ((running_script('index')) && (count($_POST)==0) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='0') && (is_guest()))
 	{
 		$bot_type=get_bot_type();
-		if ((($bot_type!==NULL) || ((isset($GLOBALS['SITE_INFO']['any_guest_cached_too'])) && ($GLOBALS['SITE_INFO']['any_guest_cached_too']=='1'))) && (can_fast_spider_cache()))
+		$supports_failsafe_mode=(isset($SITE_INFO['failsafe_mode'])) && ($SITE_INFO['failsafe_mode']!='off');
+		$supports_guest_caching=(isset($SITE_INFO['any_guest_cached_too'])) && ($SITE_INFO['any_guest_cached_too']=='1');
+		if ((($bot_type!==NULL) || ($supports_failsafe_mode) || ($supports_guest_caching)) && (can_static_cache()))
 		{
-			$fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize(get_self_url_easy()));
+			$url=get_self_url_easy();
+			$fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize($url));
 			if ($bot_type===NULL) $fast_cache_path.='__non-bot';
 			if (!array_key_exists('js_on',$_COOKIE)) $fast_cache_path.='__no-js';
-			if (is_mobile()) $fast_cache_path.='_mobile';
-			$fast_cache_path.='.gcd';
-
-			if (!is_dir(get_custom_file_base().'/persistent_cache/'))
-			{
-				if (@mkdir(get_custom_file_base().'/persistent_cache/',0777))
-				{
-					fix_permissions(get_custom_file_base().'/persistent_cache/',0777);
-					sync_file(get_custom_file_base().'/persistent_cache/');
-				} else
-				{
-					intelligent_write_error($fast_cache_path);
-				}
-			}
+			if (is_mobile()) $fast_cache_path.='__mobile';
 
 			$out_evaluated=$out->evaluate(NULL,false);
 
-			$myfile=@fopen($fast_cache_path,'ab') OR intelligent_write_error($fast_cache_path);
-			flock($myfile,LOCK_EX);
-			ftruncate($myfile,0);
-			if ((function_exists('gzencode')) && (php_function_allowed('ini_set')))
+			write_static_cache_file($fast_cache_path.'.gcd',$out_evaluated,true);
+
+			if ($supports_failsafe_mode)
 			{
-				fwrite($myfile,gzencode($out_evaluated,9));
-			} else
-			{
-				fwrite($myfile,$out_evaluated);
+				// Add failover messages
+				$out_evaluated=str_replace($SITE_INFO['failover_message_place_after'],$SITE_INFO['failover_message_place_after'].$SITE_INFO['failover_message'],$out_evaluated);
+				$out_evaluated=str_replace($SITE_INFO['failover_message_place_before'],$SITE_INFO['failover_message'].$SITE_INFO['failover_message_place_before'],$out_evaluated);
+
+				// Disable all form controls
+				$out_evaluated=preg_replace('#<(textarea|input|select|button)#','<$1 disabled="disabled"',$out_evaluated);
+
+				write_static_cache_file($fast_cache_path.'__failsafe_mode.gcd',$out_evaluated,false);
+
+				if (!empty($SITE_INFO['failover_apache_rewritemap_file']))
+				{
+					$url_stem=str_replace(get_base_url().'/','',$url);
+					if (preg_match('#^'.preg_quote($SITE_INFO['failover_apache_rewritemap_file'],'#').'$#',$url_stem)!=0)
+					{
+						if (is_mobile())
+						{
+							$rewritemap_file=get_file_base().'/data_custom/failover_rewritemap__mobile.txt';
+						} else
+						{
+							$rewritemap_file=get_file_base().'/data_custom/failover_rewritemap.txt';
+						}
+						$rewritemap_file_contents=file_get_contents($rewritemap_file);
+						if (strpos($rewritemap_file_contents,"\n".$url_stem.' ')===false)
+						{
+							$rewritemap_file_contents.="\n".$url_stem.' '.$fast_cache_path.'__failsafe_mode.gcd';
+							file_put_contents($rewritemap_file,$rewritemap_file_contents,LOCK_EX);
+						}
+					}
+				}
 			}
-			flock($myfile,LOCK_UN);
-			fclose($myfile);
-			fix_permissions($fast_cache_path);
-			sync_file($fast_cache_path);
 		}
 	}
 
@@ -809,6 +820,43 @@ function do_site()
 	}
 
 	//exit();
+}
+
+/**
+ * Write out a static cache file.
+ *
+ * @param  PATH			Cache file path
+ * @param  string			Cache contents
+ * @param  boolean		Whether to allow gzipping
+ */
+function write_static_cache_file($fast_cache_path,$out_evaluated,$support_gzip)
+{
+	if (!is_dir(get_custom_file_base().'/persistent_cache/'))
+	{
+		if (@mkdir(get_custom_file_base().'/persistent_cache/',0777))
+		{
+			fix_permissions(get_custom_file_base().'/persistent_cache/',0777);
+			sync_file(get_custom_file_base().'/persistent_cache/');
+		} else
+		{
+			intelligent_write_error($fast_cache_path);
+		}
+	}
+
+	$myfile=@fopen($fast_cache_path,'ab') OR intelligent_write_error($fast_cache_path);
+	flock($myfile,LOCK_EX);
+	ftruncate($myfile,0);
+	if ((function_exists('gzencode')) && (php_function_allowed('ini_set')) && ($support_gzip))
+	{
+		fwrite($myfile,gzencode($out_evaluated,9));
+	} else
+	{
+		fwrite($myfile,$out_evaluated);
+	}
+	flock($myfile,LOCK_UN);
+	fclose($myfile);
+	fix_permissions($fast_cache_path);
+	sync_file($fast_cache_path);
 }
 
 /**

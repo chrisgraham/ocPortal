@@ -38,12 +38,12 @@ $required_settings=array(
 	'fast_spider_cache',
 	'any_guest_cached_too',
 	'failover_mode',
-	'failover_message',
+	//'failover_message',	Actually, may be blank
 	'failover_cache_miss_message',
-	'failover_loadtime_threshold',
-	'failover_loadaverage_threshold',
+	//'failover_loadtime_threshold',	Actually, may be blank
+	//'failover_loadaverage_threshold',	Actually, may be blank
 	'failover_email_contact',
-	'failover_check_urls',
+	//'failover_check_urls',	Actually, may be blank
 	'base_url',
 );
 
@@ -62,62 +62,68 @@ if ($SITE_INFO['failover_mode']!='auto_on' && $SITE_INFO['failover_mode']!='auto
 }
 
 // Check URLs
-$context=array(
-	'http'=>array(
-		'user_agent'=>'ocportal_failover_test',
-	)
-);
-$urls=explode(';',$SITE_INFO['failover_check_urls']);
-foreach ($urls as $url)
+if (!empty($SITE_INFO['failover_check_urls']))
 {
-	$full_url=$SITE_INFO['base_url'].'/'.$url;
-	$full_url.=((strpos($full_url,'?')==false)?'?':'&').'keep_failover=0';
-
-	$time_before=microtime(true);
-	readfile($full_url,false,$context);
-	$time_after=microtime(true);
-	$time=$time_after-$time_before;
-
-	if (strpos($http_response_header[0],'200')===false)
+	$context=array(
+		'http'=>array(
+			'user_agent'=>'ocportal_failover_test',
+		)
+	);
+	$urls=explode(';',$SITE_INFO['failover_check_urls']);
+	foreach ($urls as $url)
 	{
-		is_failing($full_url.'('.$http_response_header[0].')');
-	}
+		$full_url=$SITE_INFO['base_url'].'/'.$url;
+		$full_url.=((strpos($full_url,'?')==false)?'?':'&').'keep_failover=0';
 
-	if ($time>=floatval($SITE_INFO['failover_loadtime_threshold'])
-	{
-		is_failing($full_url.'('.strval($time).' seconds)');
-	}
-}
+		$time_before=microtime(true);
+		readfile($full_url,false,$context);
+		$time_after=microtime(true);
+		$time=$time_after-$time_before;
 
-// Check loadaverage (Unix-like)
-if (function_exists('sys_getloadavg'))
-{
-	$result=sys_getloadavg();
-	if ($result[1]>=floatval($SITE_INFO['failover_loadaverage_threshold']))
-	{
-		is_failing('load-average='.strval($result[1]));
-	}
-}
-
-// Check loadaverage (Windows)
-if (class_exists('COM'))
-{
-	$wmi=new COM('Winmgmts://');
-	$server=$wmi->execquery('SELECT LoadPercentage FROM Win32_Processor');
-	if (is_array($server))
-	{
-		$cpu_num=0;
-		$load_total=0;
-		foreach ($server as $cpu){
-			$cpu_num++;
-			$load_total+=$cpu->loadpercentage;
-		}
-		$load=round((float)$load_total/(float)$cpu_num);
-		if ($cpu_num!=0)
+		if (strpos($http_response_header[0],'200')===false)
 		{
-			if ($load>=floatval($SITE_INFO['failover_loadaverage_threshold']))
+			is_failing($full_url.'('.$http_response_header[0].')');
+		}
+
+		if ((!empty($SITE_INFO['failover_loadtime_threshold'])) && ($time>=floatval($SITE_INFO['failover_loadtime_threshold']))
+		{
+			is_failing($full_url.'('.strval($time).' seconds)');
+		}
+	}
+}
+
+if (!empty($SITE_INFO['failover_loadaverage_threshold']))
+{
+	// Check loadaverage (Unix-like)
+	if (function_exists('sys_getloadavg'))
+	{
+		$result=sys_getloadavg();
+		if ($result[1]>=floatval($SITE_INFO['failover_loadaverage_threshold']))
+		{
+			is_failing('load-average='.strval($result[1]));
+		}
+	}
+
+	// Check loadaverage (Windows)
+	if (class_exists('COM'))
+	{
+		$wmi=new COM('Winmgmts://');
+		$server=$wmi->execquery('SELECT LoadPercentage FROM Win32_Processor');
+		if (is_array($server))
+		{
+			$cpu_num=0;
+			$load_total=0;
+			foreach ($server as $cpu){
+				$cpu_num++;
+				$load_total+=$cpu->loadpercentage;
+			}
+			$load=round((float)$load_total/(float)$cpu_num);
+			if ($cpu_num!=0)
 			{
-				is_failing('load-average='.strval($load));
+				if ($load>=floatval($SITE_INFO['failover_loadaverage_threshold']))
+				{
+					is_failing('load-average='.strval($load));
+				}
 			}
 		}
 	}
@@ -159,11 +165,92 @@ function is_failing($url)
  */
 function set_failover_mode($new_mode)
 {
-	global $FILE_BASE;
+	global $FILE_BASE,$SITE_INFO;
+
 	$path=$FILE_BASE.'/info.php';
 	$data=file_get_contents($path);
 	$orig=$data;
 	$data=preg_replace('#(\$SITE_INFO[\'failover_mode\']\s*=\s*\')[^\']+(\';)#',"\n".'$1'.addcslashes($new_mode).'$2',$data);
 	if ($orig!=$data)
-		file_put_contents($path,$data);
+		file_put_contents($path,$data,LOCK_EX);
+
+	if ((!empty($SITE_INFO['failover_apache_rewritemap_file'])) && (is_file($FILE_BASE.'/data_custom/failover_rewritemap.txt')))
+	{
+		$new_contents=file_get_contents($FILE_BASE.'/.htaccess');
+
+		$new_contents=preg_replace('#^RewriteMap.*\n+#s','',$new_contents);
+
+		$new_code='#FAILOVER STARTS'."\n";
+		if ($new_mode=='auto_on' || $new_mode=='on')
+		{
+
+			// The set of browsers
+			$browsers=array(
+								// Implication by technology claims
+								'WML',
+								'WAP',
+								'Wap',
+								'MIDP', // Mobile Information Device Profile
+
+								// Generics
+								'Mobile',
+								'Smartphone',
+								'WebTV',
+
+								// Well known/important browsers/brands
+								'Minimo', // By Mozilla
+								'Fennec', // By Mozilla (being outmoded by minimo)
+								'Mobile Safari', // Usually Android
+								'lynx',
+								'Links',
+								'iPhone',
+								'iPod',
+								'Opera Mobi',
+								'Opera Mini',
+								'BlackBerry',
+								'Windows Phone',
+								'Windows CE',
+								'Symbian',
+								'nook browser', // Barnes and Noble
+								'Blazer', // Palm
+								'PalmOS',
+								'webOS', // Palm
+								'SonyEricsson',
+
+								// Games consoles
+								'Nintendo',
+								'PlayStation Portable',
+
+								// Less well known but common browsers
+								'UP.Browser', // OpenWave
+								'UP.Link', // OpenWave again?
+								'NetFront',
+								'Teleca',
+								'UCWEB',
+
+								// Specific lamely-identified devices/brands
+								'DDIPOCKET',
+								'SEMC-Browser',
+								'DoCoMo',
+								'Xda',
+								'ReqwirelessWeb', // Siemens/Samsung
+
+								// Specific services
+								'AvantGo',
+								);
+			$regexp='('.str_replace(' ','\ ',implode('|',$browsers)).')';
+
+			$new_code.='RewriteEngine on'."\n";
+			$new_code.='RewriteMap failover_mode txt:'.$FILE_BASE.'/data_custom/failover_rewritemap.txt'."\n";
+			$new_code.='RewriteRule ^/(.*) ${failover_mode:$1} [L,QSA]'."\n";
+			$new_code.='RewriteMap failover_mode_mobile txt:'.$FILE_BASE.'/data_custom/failover_rewritemap.txt'."\n";
+			$new_code.='RewriteCond %{HTTP_USER_AGENT} '.$regexp."\n";
+			$new_code.='RewriteRule ^/(.*) ${failover_mode_mobile:$1} [L,QSA]'."\n";
+		}
+		$new_code='#FAILOVER ENDS'."\n";
+
+		$new_contents=preg_replace('/#FAILOVER STARTS.*#FAILOVER ENDS/s',$new_code,$new_contents);
+
+		file_put_contents($FILE_BASE.'/.htaccess',$new_contents,LOCK_EX);
+	}
 }

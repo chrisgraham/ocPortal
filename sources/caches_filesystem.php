@@ -116,6 +116,8 @@ class filecache
 				@unlink(get_custom_file_base().'/persistent_cache/'.$e);
 			}
 		}
+		@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap.txt','',LOCK_EX);
+		@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap__mobile.txt','',LOCK_EX);
 		closedir($d);
 	}
 }
