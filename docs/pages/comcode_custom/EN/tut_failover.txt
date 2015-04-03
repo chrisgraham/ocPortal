@@ -1,0 +1,196 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Failover mode[/title]
+
+ocPortal has a special failover mode that can be activated if the site goes down for various possible reasons.
+It is controlled by a special standalone CRON script that is individually configured.
+
+This is an advanced feature, you need to be comfortable manually configuring files and server configuration to use it.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]How a site could go down[/title]
+
+There are many ways a site could go down. Some are mitigated by failover mode, some are not.
+
+Covered by failover mode:
+ - More website hits than ocPortal can actually handle on your hardware (e.g. "slashdotting")
+ - Database corruption that impacts your front page
+ - Some kind of unexpected ocPortal-originating fault that impacts your front page
+
+Not covered by failover mode:
+ - Domain problems (e.g. your domain registration expires, your DNS becomes misconfigured, your DNS server is failing)
+  - This is covered in the sense that failover mode would activate and you'd be e-mailed (assuming you're target e-mail isn't down too), but the server could not be reached anyway so it would have no positive impact
+  - Mitigation: read your domain expiry/renewal notices, be careful when re-configuring DNS, use a robust DNS provider like CloudFlare (definitely not GoDaddy)
+ - Your hardware fails (e.g. server freezes, harddisk fails, machine catches fire)
+  - Mitigation: choose a decent host that does regular backups and is around to quickly do a full restore if something goes very wrong
+ - Network problems (e.g. network routing problems, network failure)
+  - Mitigation: choose a decent host that has redundant networking
+ - Server disappears from the Internet (e.g. a server admin decides to unplug your server, your web host goes out of business, maintenance, power failure)
+  - Mitigation: choose a decent webhost that can afford to stay in business, doesn't force significant down-time for maintenance, and has backup powers)
+ - A server admin wipes your website (e.g. an accident, bills not paid)
+  - Mitigation: choose a decent webhost who has proper backups, responsiveness, and will give you forewarning about missed invoices
+ - Operating system malfunction (e.g. failed system update, error in web server or PHP configuration)
+  - Mitigation: choose a decent webhost who will spot and fix such issues very quickly
+ - Transfer quota ("monthly bandwidth") exceeded
+  - This problem is very unlikely, transfer quotas are very high nowadays
+  - Mitigation: choose a decent webhost, and if you have high requirements monitor and plan capacity
+ - Problems deeper within the ocPortal website (i.e. not impacting the front page)
+  - This problem is less severe than your whole site going down
+  - Mitigation: you can program the failover system to check multiple URLs
+ - The failover mode CRON script becomes broken somehow, and you didn't notice
+  - Having both a system failure, and failover failure, is definitely unlucky
+  - Mitigation: HTTP requests to check your uptime are sent with a user-agent of 'ocportal_failover_test'. You may look for this in your web logs to see it is still running.
+
+In short, performance and ocPortal problems can usually be saved via failover mode, while external problems cannot. Most external problems are less likely though, as other people have direct responsibility for those areas, while you have direct responsibility for your own website.
+
+You may want to consider using a service like Cloudflare (and/or multiple servers) if you are concerned about the reliability of your own server infrastructure. Cloudflare can cache page copies in a similar (but inferior) way to failover mode, so can be a nice extra safeguard. Problems at this level are much rarer than they once were however, and Cloudflare does have its own disadvantages (such as an extra point of failure, and extra latency). If 100% up-time is a critical requirement, you hopefully have the budget also to put in a really high-quality hosting infrastructure.
+
+[title="2"]What failover mode does[/title]
+
+Failover mode will serve a guest version of the site (i.e. no logins), with a message explaining that failover mode is active.
+Any actions requiring database usage will not work (for example, forum posts). This is because failover mode activates before even a database connection is made (to maximise effectiveness).
+Failover mode is an on-server solution, hence some of the discussion in the prior section.
+
+[title="3"]It's smart[/title]
+
+Failover is turned on/off automatically via the CRON script.
+If the script is detecting failover mode is now not needed, it will actually sit around for a minute checking it doesn't need to put it quickly back on again. This is to stop it flittering on/off/on/off each time CRON runs, if failover mode had merely temporarily alleviated performance issues enough to create a misleading "now it's okay" state.
+
+[title="Basic assumptions/requirements[/title]
+
+ - 'shell_exec' should work from PHP.
+ - The PHP executable should be in the path.
+ - Native PHP mail must be available
+ - Certain assumptions may be made about HTML structure, so with heavily-modified themes you may need to alter the PHP code a bit.
+ - The actual administrative messages are sent in English-only (generally the failover system does not, as a standalone system, have ocPortal's own translatability and themeing support).
+ - Your server should not be firewalled from checking its own URLs
+ - [tt]info.php[/tt] will be written to using search & replace to toggle failover mode on and off, so the setting within [tt]info.php[/tt] needs to be written in a non-obfuscated way
+ - The base URL must be explicitly set within [tt]info.php[/tt] (this is normal & recommended anyway)
+ - The guest cache must be enabled
+
+[title="2"]Configuring[/title]
+
+The bundled 'failover' addon must be installed.
+
+There are a few aspects to configuring failover mode:
+1) CRON script
+2) Specific configuration in [tt]info.php[/tt]
+2) Enabling the guest cache in [tt]info.php[/tt] (failover fallback is based off the guest cache)
+
+Failover mode is activated/deactivated via the [tt]data/failover_script.php[/tt] CRON script. You need to set up CRON to execute this script very regularly, e.g. every minute.
+This script should be set up in the same basic way as the [tt]data/cron_bridge.php[/tt] script ocPortal has. The failover script is separate as it is standalone to the rest of ocPortal (if you're wondering, this is why it has to be hand-configured outside of ocPortal).
+
+[tt]info.php[/tt] should be given new settings like:
+[code]
+$SITE_INFO['failover_mode']='auto_off';
+$SITE_INFO['failover_message']='<div class="global_messages"><div class="box box___message"><div class="box_inner"><div class="global_message" role="alert"><img src="'.$SITE_INFO['base_url'].'/themes/default/images/messageicons/warn.png" alt="" /><span>We are currently experiencing some difficulties with our site. Logins and posting are temporarily disabled.</span></div></div></div></div>';
+$SITE_INFO['failover_message_place_after']='</header>';
+$SITE_INFO['failover_message_place_before']='<footer';
+$SITE_INFO['failover_cache_miss_message']='We are currently experiencing some difficulties with our site. Unfortunately we don\'t have an offline version of this page available.';
+$SITE_INFO['failover_loadtime_threshold']='5';
+$SITE_INFO['failover_loadaverage_threshold']='5';
+$SITE_INFO['failover_email_contact']='you@example.com';
+$SITE_INFO['failover_check_urls']='index.php?page=start;forum/index.php?page=forumview';
+[/code]
+
+The possible values for the [tt]failover_mode[/tt] setting are:
+ - 'off' (no failover mode)
+ - 'on' (manually declare the site has failed and you want to keep it in failover mode)
+ - '[b]auto_off[/b]' (the [tt]failover_script.php[/tt] script is allowed to set it to 'auto_on' if it detects the site is failing)
+ - 'auto_on' (the [tt]failover_script.php[/tt] script is allowed to set it to 'auto_off' if it detects the site is no longer failing)
+
+[tt]failover_loadtime_threshold[/tt] specifies the minimum time in seconds that the front page must load in.
+
+[tt]failover_loadaverage_threshold[/tt] specifies the minimum [tt]load-average[/tt] number that will trigger failover mode. This will only work on systems that support the 'uptime' command (e.g. Linux), or queries via COM (possibly Windows, depending on PHP configuration). Don't bother trying to work out what the numbers mean, tune them based on system norms. A higher number means a higher server CPU load.
+There are no checks for I/O or memory bottlenecks, but these tend to reflect in the CPU load, or at least the page load-time.
+
+Set [tt]failover_email_contact[/tt] to the e-mail address you wish to receive alerts on (when failover is automatically activated or deactivated). If you need to mail multiple people, separate using semicolons ([tt];[/tt]). Note that there are services to change e-mails to SMS messages, and you can usually configure smartphones to do notifications on e-mails matching certain patterns.
+
+The [tt]failover_check_urls[/tt] setting lets you define multiple URLs (separated by a semicolon) to check (for failing HTTP statuses, or long load-times). These URLs will all be looked up beneath the base URL.
+
+To enable guest cache add this to [tt]info.php[/tt]:
+[code]
+$SITE_INFO['fast_spider_cache']=3;
+$SITE_INFO['any_guest_cached_too']='1';
+[/code]
+
+[title="3"]RewriteMap (advanced)[/title]
+
+[url="RewriteMap"]http://httpd.apache.org/docs/2.4/rewrite/rewritemap.html[/url] is a special Apache-only feature for bypassing PHP entirely during failover mode.
+
+To use this setting you need to have access to manually edit your main Apache configuration.
+[quote="Apache manual"]
+The RewriteMap directive may not be used in <Directory> sections or .htaccess files. You must declare the map in server or virtualhost context.
+[/quote]
+The config lines added will look something like this:
+[code]
+RewriteMap failover_mode txt:/home/someuser/public_html/data_custom/failover_rewritemap.txt
+RewriteMap failover_mode__mobile txt:/home/someuser/public_html/data_custom/failover_rewritemap__mobile.txt
+[/code]
+
+The [tt]failover_apache_rewritemap_file[/tt] setting in [tt]info.php[/tt] defines a pattern (regular expression) of URLs that should be put into the RewriteMap file during static cache population.
+
+[code]
+$SITE_INFO['failover_apache_rewritemap_file']='((site/)?index\.php\?page=\w+(&type=\w+)?)|((site/)?pg/\w+(/\w+)?)|((site/)?\w+(/\w+)?\.htm)|((site/)?news/view/\w+\.htm)';
+[/code]
+
+Don't include too much in the pattern, or the file will get very large and inefficient for Apache to process and ocPortal to maintain -- just put your core URLs in. The above example is for all sub-ID-level pages in the ocPortal welcome and site zones, and news entries.
+
+If left empty, there will be no RewriteMap used. If set, the [tt].htaccess[/tt] file will automatically have the RewriteMap enabled/disabled along with failover mode.
+
+You must make sure the [tt]data_custom/failover_rewritemap.txt[/tt] and [tt]data_custom/failover_rewritemap__mobile.txt[/tt] files are writable by the web server.
+
+[title="3"]A RewriteRule[/title]
+
+An alternative to the RewriteMap is a simple RewriteRule we support. It does rely on PHP working, but ocPortal itself does not need to be (i.e. the first couple of ocPortal files don't even need to be able to bootstrap).
+It redirects all requests into a single ocPortal script which is designed to be standalone (so you could be in the middle of an upgrade, and it should still work, for example).
+
+It will automatically activate if you have this in your [tt]info.php[/tt]:
+[code]
+$SITE_INFO['failover_apache_rewritemap_file']='-';
+[/code]
+
+To manually activate it just put this at the top of your [tt].htaccess[/tt]:
+[code]
+RewriteEngine on
+RewriteRule ^((static_cache|themes|uploads|data|data_custom)/.*) $1 [L]
+RewriteCond %{QUERY_STRING} !keep_failover [NC]
+RewriteRule ^(.*) sources/static_cache.php [L,QSA]
+[/code]
+
+This is actually a really convenient alternative to closing a site when upgrading it, as you can totally trash ocPortal and still have things running.
+
+[title="2"]Testing[/title]
+
+You can force failover mode temporarily on via the [tt]keep_failover=1[/tt] parameter and off with the [tt]keep_failover=0[/tt] parameter.
+
+This is useful when forcing things to get cached into the static cache manually, when you still want all other hits to come out of the static cache due to a hit flood -- or when testing if things are safe to manually turn on after manually turned off.
+
+[title="2"]Tweaking[/title]
+
+In failover mode, the static cache file served is mentioned at the end of the HTML source.
+If you wish to tweak it manually by file editing you can.
+The messages about being in failover-mode are hard-saved into the cache file, so these can be tweaked via file editing too.
+Be aware that there could be a few variant permutations though (e.g. with-JS/without-JS, mobile/desktop, bot/non-bot).
+
+[title="2"]A word of warning[/title]
+
+Do not empty the caches during failover mode, as they will not be able to rebuild themselves. This includes both the template cache and the static cache.
+
+[title="2"]Monitoring up-time generally[/title]
+
+For extra peace of mind you may wish to set up an uptime monitor such as [url="Uptime Robot"]https://uptimerobot.com/[/url].
+This will help warn you about the "Not covered by failover mode" situations described above.
+
+[concepts
+ 1_key="Failover"          1_value="When a site automatically goes into a fallback mode when a problem happens"
+ 2_key="Slashdotting"      2_value="When a site is getting more hits that it can take. Named after the popular slashdot.org site, which at peak popularity would often knock out the sites that their headline stories linked to"
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_disaster"]Disaster recovery[/page]
+ - [page="_SEARCH:tut_sql"]Manually editing your database with phpMyAdmin[/page]
+ - [page="_SEARCH:tut_configuration"]Basic Configuration[/page]
+ - [page="_SEARCH:tut_adv_configuration"]Advanced Configuration[/page]
+ - [page="_SEARCH:tut_optimisation"]Optimisation[/page]
+
