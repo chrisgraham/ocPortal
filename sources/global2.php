@@ -353,7 +353,7 @@ function init__global2()
 	{
 		if ((running_script('index')) && (count($_POST)==0))
 		{
-			if ((isset($SITE_INFO['any_guest_cached_too'])) && ($SITE_INFO['any_guest_cached_too']=='1') && (is_guest(NULL,true)))
+			if ((isset($SITE_INFO['any_guest_cached_too'])) && ($SITE_INFO['any_guest_cached_too']=='1') && (is_guest(NULL,true)) && (get_param_integer('keep_failover',NULL)!==0))
 			{
 				static_cache(STATIC_CACHE__GUEST);
 			}
@@ -411,17 +411,6 @@ function init__global2()
 		}
 	}
 
-	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
-	{
-		// Before anything gets outputted
-		handle_logins();
-
-		require_code('site'); // This powers the site (top level page generation)
-
-		// Are we installed?
-		get_option('site_name');
-	}
-
 	// Our logging (change false to true for temporarily changing it so staff get logging)
 	if (get_option('log_php_errors')=='1')
 	{
@@ -436,6 +425,17 @@ function init__global2()
 
 	// G-zip?
 	safe_ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
+
+	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
+	{
+		// Before anything gets outputted
+		handle_logins();
+
+		require_code('site'); // This powers the site (top level page generation)
+
+		// Are we installed?
+		get_option('site_name');
+	}
 
 	if ((function_exists('setlocale')) && ($MICRO_AJAX_BOOTUP==0))
 	{

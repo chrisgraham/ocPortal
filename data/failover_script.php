@@ -76,27 +76,27 @@ if (!empty($SITE_INFO['failover_check_urls']))
 		$full_url.=((strpos($full_url,'?')===false)?'?':'&').'keep_failover=0';
 
 		$time_before=microtime(true);
-		$data=file_get_contents($full_url,false,$context);
+		$data=@file_get_contents($full_url,false,$context);
 		$time_after=microtime(true);
 		$time=$time_after-$time_before;
 
 		// Bad HTTP status
-		if (strpos($http_response_header[0],'200')===false)
+		if (strpos($http_response_header[0],'200')===false || $data===false)
 		{
-			is_failing($full_url.'('.$http_response_header[0].')');
+			is_failing($full_url.' (bad HTTP code; '.$http_response_header[0].')');
 		}
 
 		// Parse error or fatal error, with display errors on in php.ini (without display errors, PHP uses the correct HTTP status)
 		$matches=array();
 		if ((strlen($data)<500) && (preg_match('#<b>(\w+ error)</b>#',$data,$matches)!=0))
 		{
-			is_failing($full_url.'('.$matches[1].')');
+			is_failing($full_url.' ('.$matches[1].')');
 		}
 
 		// Slowness
 		if ((!empty($SITE_INFO['failover_loadtime_threshold'])) && ($time>=floatval($SITE_INFO['failover_loadtime_threshold'])))
 		{
-			is_failing($full_url.'('.number_format($time,2).' seconds)');
+			is_failing($full_url.' (slow load; '.number_format($time,2).' seconds)');
 		}
 	}
 }
@@ -107,9 +107,10 @@ if (!empty($SITE_INFO['failover_loadaverage_threshold']))
 	if (function_exists('sys_getloadavg'))
 	{
 		$result=sys_getloadavg();
-		if ($result[1]>=floatval($SITE_INFO['failover_loadaverage_threshold']))
+		$load=$result[1];
+		if ($load>=floatval($SITE_INFO['failover_loadaverage_threshold']))
 		{
-			is_failing('load-average='.number_format($result[1],2));
+			is_failing('slow server; load-average='.number_format($load,2));
 		}
 	}
 
@@ -141,6 +142,13 @@ if (!empty($SITE_INFO['failover_loadaverage_threshold']))
 
 // If we got this far, no problems
 set_failover_mode('auto_off');
+if ($SITE_INFO['failover_mode']=='auto_on')
+{
+	$base_url=parse_url($SITE_INFO['base_url']);
+	$subject='Failover mode DEactivated for '.$base_url['host'];
+	$message="Failover mode deactivated, the site is now back online.";
+	send_failover_email($subject,$message);
+}
 
 /**
  * A check has failed, inform contact(s) about it then exit.
@@ -150,24 +158,32 @@ set_failover_mode('auto_off');
 function is_failing($url)
 {
 	global $SITE_INFO;
-
+	set_failover_mode('auto_on');
 	if ($SITE_INFO['failover_mode']=='auto_off')
 	{
-		global $SITE_INFO;
-		$emails=explode(';',$SITE_INFO['failover_email_contact']);
-		foreach ($emails as $email)
-		{
-			$base_url=parse_url($SITE_INFO['base_url']);
-
-			$subject='Failover mode activated for '.$base_url['host'];
-			$message="Failover mode activated when running the following check:\n".$url."\n\nWhen the problem has been corrected it will automatically disable.\nIf this is a false alarm somehow you can force failover mode off manually by setting \$SITE_INFO['failover_mode']='off'; in info.php";
-			mail($email,$subject,$message);
-		}
+		$base_url=parse_url($SITE_INFO['base_url']);
+		$subject='Failover mode activated for '.$base_url['host'];
+		$message="Failover mode activated when running the following check:\n".$url."\n\nWhen the problem has been corrected it will automatically disable.\nIf this is a false alarm somehow you can force failover mode off manually by setting \$SITE_INFO['failover_mode']='off'; in info.php";
+		send_failover_email($subject,$message);
 	}
 
-	set_failover_mode('auto_on');
-
 	exit();
+}
+
+/**
+ * Send a failover email.
+ *
+ * @param  string					Subject.
+ * @param  string					Body.
+ */
+function send_failover_email($subject,$message)
+{
+	global $SITE_INFO;
+	$emails=explode(';',$SITE_INFO['failover_email_contact']);
+	foreach ($emails as $email)
+	{
+		mail($email,$subject,$message);
+	}
 }
 
 /**
@@ -180,17 +196,19 @@ function set_failover_mode($new_mode)
 	global $FILE_BASE,$SITE_INFO;
 
 	$path=$FILE_BASE.'/info.php';
-	$data=file_get_contents($path);
-	$orig=$data;
-	$data=preg_replace('#(\$SITE_INFO[\'failover_mode\']\s*=\s*\')[^\']+(\';)#',"\n".'$1'.addslashes($new_mode).'$2',$data);
-	if ($orig!=$data)
-		file_put_contents($path,$data,LOCK_EX);
+	$config_contents=file_get_contents($path);
+	$orig_config_contents=$config_contents;
+	$config_contents=preg_replace('#^(\$SITE_INFO\[\'failover_mode\'\]\s*=\s*\')[^\']+(\';)#m','$1'.addslashes($new_mode).'$2',$config_contents);
+
+	if ($orig_config_contents==$config_contents) return; // No change needed
+
+	file_put_contents($path,$config_contents,LOCK_EX);
 
 	if ((!empty($SITE_INFO['failover_apache_rewritemap_file'])) && (is_file($FILE_BASE.'/data_custom/failover_rewritemap.txt')))
 	{
-		$new_contents=file_get_contents($FILE_BASE.'/.htaccess');
+		$htaccess_contents=file_get_contents($FILE_BASE.'/.htaccess');
 
-		$new_contents=preg_replace('#^RewriteMap.*\n+#s','',$new_contents);
+		$htaccess_contents=preg_replace('#^RewriteMap.*\n+#s','',$htaccess_contents);
 
 		$new_code='#FAILOVER STARTS'."\n";
 		if ($new_mode=='auto_on' || $new_mode=='on')
@@ -254,16 +272,16 @@ function set_failover_mode($new_mode)
 
 			$new_code.='RewriteEngine on'."\n";
 			//$new_code.='RewriteMap failover_mode txt:'.$FILE_BASE.'/data_custom/failover_rewritemap.txt'."\n";	Has to be defined in main Apache config
-			$new_code.='RewriteRule ^((static_cache|themes|uploads|data|data_custom)/.*) $1 [L]'."\n";
-			$new_code.='RewriteRule ^(.*) ${failover_mode:$1} [L,QSA]'."\n";
+			$new_code.='RewriteRule ^((static_cache|themes|uploads|data|data_custom)/.*) \$1 [L]'."\n";
+			$new_code.='RewriteRule ^(.*) ${failover_mode:\$1} [L,QSA]'."\n";
 			//$new_code.='RewriteMap failover_mode__mobile txt:'.$FILE_BASE.'/data_custom/failover_rewritemap__mobile.txt'."\n";
 			$new_code.='RewriteCond %{HTTP_USER_AGENT} '.$regexp."\n";
-			$new_code.='RewriteRule ^(.*) ${failover_mode__mobile:$1} [L,QSA]'."\n";
+			$new_code.='RewriteRule ^(.*) ${failover_mode__mobile:\$1} [L,QSA]'."\n";
 		}
-		$new_code='#FAILOVER ENDS'."\n";
+		$new_code.='#FAILOVER ENDS'."\n";
 
-		$new_contents=preg_replace('/#FAILOVER STARTS.*#FAILOVER ENDS/s',$new_code,$new_contents);
+		$htaccess_contents=preg_replace('/#FAILOVER STARTS.*#FAILOVER ENDS/s',$new_code,$htaccess_contents);
 
-		file_put_contents($FILE_BASE.'/.htaccess',$new_contents,LOCK_EX);
+		file_put_contents($FILE_BASE.'/.htaccess',$htaccess_contents,LOCK_EX);
 	}
 }

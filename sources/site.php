@@ -164,7 +164,7 @@ function init__site()
 
 		$old_style=get_option('htm_short_urls')!='1';
 
-		if ((!headers_sent()) && (running_script('index')) && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
+		if ((!headers_sent()) && (running_script('index')) && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && (get_param_integer('keep_failover',NULL)!==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
 		{
 			$GLOBALS['HTTP_STATUS_CODE']='301';
 			header('HTTP/1.0 301 Moved Permanently');
@@ -547,7 +547,7 @@ function process_monikers($page_name)
 				if (is_numeric($url_id)) // Lookup and redirect to moniker
 				{
 					$correct_moniker=find_id_moniker(array('page'=>$page_name,'type'=>get_param('type','misc'),'id'=>$url_id));
-					if (($correct_moniker!==NULL) && ($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
+					if (($correct_moniker!==NULL) && ($correct_moniker!=$url_id) && (count($_POST)==0) && (get_param_integer('keep_failover',NULL)!==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
 					{
 						header('HTTP/1.0 301 Moved Permanently');
 						$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
@@ -574,7 +574,7 @@ function process_monikers($page_name)
 					// Map back 'id'
 					$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
 
-					if (($deprecated) && (count($_POST)==0))
+					if (($deprecated) && (count($_POST)==0) && (get_param_integer('keep_failover',NULL)!==0))
 					{
 						$correct_moniker=find_id_moniker(array('page'=>$page_name,'type'=>get_param('type','misc'),'id'=>$monikers[0]['m_resource_id']));
 						if ($correct_moniker!=$url_id) // Just in case database corruption means ALL are deprecated
