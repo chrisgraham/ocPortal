@@ -5,6 +5,7 @@
 *.tcp
 *.tcd
 *.gcd
+static_cache/*.htm
 templates_cached
 data_custom/*log.php
 /exports

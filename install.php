@@ -1965,19 +1965,8 @@ function step_10()
 	}
 
 	// Empty persistent cache
-	$path=get_custom_file_base().'/persistent_cache/';
-	$_dir=@opendir($path);
-	if ($_dir!==false)
-	{
-		while (false!==($file=readdir($_dir)))
-		{
-			if (substr($file,-4)=='.gcd')
-			{
-				@unlink($path.$file);
-			}
-		}
-		closedir($_dir);
-	}
+	require_code('caches');
+	persistent_cache_empty();
 
 	return do_template('INSTALLER_STEP_10',array('_GUID'=>'0e50bc1b9934c32fb62fb865a3971a9b','PREVIOUS_STEP'=>'9','FINAL'=>$final,'LOG'=>$log));
 }

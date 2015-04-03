@@ -148,6 +148,18 @@ function persistent_cache_empty()
 		}
 	}
 	closedir($d);
+	$path=get_custom_file_base().'/static_cache';
+	if (!file_exists($path)) return;
+	$d=opendir($path);
+	while (($e=readdir($d))!==false)
+	{
+		if (substr($e,-4)=='.htm')
+		{
+			// Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
+			@unlink(get_custom_file_base().'/static_cache/'.$e);
+		}
+	}
+	closedir($d);
 	@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap.txt','',LOCK_EX);
 	@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap__mobile.txt','',LOCK_EX);
 

@@ -7,6 +7,7 @@ rm -f themes/*/templates_cached/*/*.css
 rm -f themes/*/templates_cached/*/*.gz
 rm -f lang_cached/*/*.lcd
 find . -name "*.gcd" -exec rm -f {} \;
+find static_cache -name "*.htm" -exec rm -f {} \;
 if [ -e "data_custom/failover_rewritemap.txt" ]; then
 	echo > data_custom/failover_rewritemap.txt
 	echo > data_custom/failover_rewritemap__mobile.txt

@@ -654,7 +654,7 @@ function static_cache($mode)
 	}
 
 	// Work out cache path (potentially will search a few places, based on priority)
-	$_fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize(get_self_url_easy()));
+	$_fast_cache_path=get_custom_file_base().'/static_cache/'.md5(serialize(get_self_url_easy()));
 	$param_sets=array(
 		array(
 			'non_bot'=>($mode & STATIC_CACHE__FAST_SPIDER)==0,
@@ -688,7 +688,7 @@ function static_cache($mode)
 		if ($param['no_js']) $fast_cache_path.='__no-js';
 		if ($param['mobile']) $fast_cache_path.='__mobile';
 		if ($param['failover_mode']) $fast_cache_path.='__failover_mode';
-		$fast_cache_path.='.gcd';
+		$fast_cache_path.='.htm';
 		if (is_file($fast_cache_path)) break;
 	}
 
@@ -700,7 +700,7 @@ function static_cache($mode)
 		if ($mtime>time()-$expires)
 		{
 			// Only bots can do HTTP caching, as they won't try to login and end up reaching a previously cached page
-			if (($mode & STATIC_CACHE__FAST_SPIDER)!=0)
+			if ((($mode & STATIC_CACHE__FAST_SPIDER)!=0) && (($mode & STATIC_CACHE__FAILOVER_MODE)==0))
 			{
 				header("Pragma: public");
 				header("Cache-Control: max-age=".strval($expires));

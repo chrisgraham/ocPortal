@@ -107,17 +107,7 @@ class filecache
 	 */
 	function flush()
 	{
-		$d=opendir(get_custom_file_base().'/persistent_cache');
-		while (($e=readdir($d))!==false)
-		{
-			if (substr($e,-4)=='.gcd')
-			{
-				// Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
-				@unlink(get_custom_file_base().'/persistent_cache/'.$e);
-			}
-		}
-		@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap.txt','',LOCK_EX);
-		@file_put_contents(get_custom_file_base().'/data_custom/failover_rewritemap__mobile.txt','',LOCK_EX);
-		closedir($d);
+		require_code('caches');
+		persistent_cache_empty();
 	}
 }

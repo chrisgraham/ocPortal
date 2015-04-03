@@ -697,7 +697,7 @@ function do_site()
 		if ((($bot_type!==NULL) || ($supports_failover_mode) || ($supports_guest_caching)) && (can_static_cache()))
 		{
 			$url=get_self_url_easy();
-			$fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize($url));
+			$fast_cache_path=get_custom_file_base().'/static_cache/'.md5(serialize($url));
 			if ($bot_type===NULL) $fast_cache_path.='__non-bot';
 			if (!array_key_exists('js_on',$_COOKIE)) $fast_cache_path.='__no-js';
 			if (is_mobile()) $fast_cache_path.='__mobile';
@@ -705,14 +705,14 @@ function do_site()
 			$out_evaluated=$out->evaluate(NULL,false);
 			$static_cache=$out_evaluated;
 
-			if (!is_file($fast_cache_path.'.gcd') || filemtime($fast_cache_path.'.gcd')<time()-60*60*5)
+			if (!is_file($fast_cache_path.'.htm') || filemtime($fast_cache_path.'.htm')<time()-60*60*5)
 			{
-				write_static_cache_file($fast_cache_path.'.gcd',$static_cache,true);
+				write_static_cache_file($fast_cache_path.'.htm',$static_cache,true);
 			}
 
 			if ($supports_failover_mode)
 			{
-				if (!is_file($fast_cache_path.'__failover_mode.gcd') || filemtime($fast_cache_path.'__failover_mode.gcd')<time()-60*60*5)
+				if (!is_file($fast_cache_path.'__failover_mode.htm') || filemtime($fast_cache_path.'__failover_mode.htm')<time()-60*60*5)
 				{
 					// Add failover messages
 					$static_cache=str_replace($SITE_INFO['failover_message_place_after'],$SITE_INFO['failover_message_place_after'].$SITE_INFO['failover_message'],$static_cache);
@@ -724,7 +724,7 @@ function do_site()
 					// Remove any sessions
 					$static_cache=preg_replace('#(&|&amp;|&amp;amp;|%3Aamp%3A|\?)?(keep_session|keep_devtest)(=|%3D)\d+#','',$static_cache);
 
-					write_static_cache_file($fast_cache_path.'__failover_mode.gcd',$static_cache,false);
+					write_static_cache_file($fast_cache_path.'__failover_mode.htm',$static_cache,false);
 				}
 
 				if (!empty($SITE_INFO['failover_apache_rewritemap_file']))
@@ -742,7 +742,7 @@ function do_site()
 						$rewritemap_file_contents=file_get_contents($rewritemap_file);
 						if (strpos($rewritemap_file_contents,"\n".$url_stem.' ')===false)
 						{
-							$rewritemap_file_contents.="\n".$url_stem.' '.$fast_cache_path.'__failover_mode.gcd';
+							$rewritemap_file_contents.="\n".$url_stem.' '.$fast_cache_path.'__failover_mode.htm';
 							file_put_contents($rewritemap_file,$rewritemap_file_contents,LOCK_EX);
 						}
 					}
@@ -841,12 +841,12 @@ function do_site()
  */
 function write_static_cache_file($fast_cache_path,$out_evaluated,$support_gzip)
 {
-	if (!is_dir(get_custom_file_base().'/persistent_cache/'))
+	if (!is_dir(get_custom_file_base().'/static_cache/'))
 	{
-		if (@mkdir(get_custom_file_base().'/persistent_cache/',0777))
+		if (@mkdir(get_custom_file_base().'/static_cache/',0777))
 		{
-			fix_permissions(get_custom_file_base().'/persistent_cache/',0777);
-			sync_file(get_custom_file_base().'/persistent_cache/');
+			fix_permissions(get_custom_file_base().'/static_cache/',0777);
+			sync_file(get_custom_file_base().'/static_cache/');
 		} else
 		{
 			intelligent_write_error($fast_cache_path);
