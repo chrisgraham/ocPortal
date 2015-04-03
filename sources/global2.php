@@ -299,9 +299,11 @@ function init__global2()
 			exit();
 		}
 	}
-	if ((isset($SITE_INFO['failover_mode'])) && ($SITE_INFO['failover_mode']=='on' || $SITE_INFO['failover_mode']=='auto_on') && (get_param_integer('keep_failover',NULL)!==0))
+	$force_failover=get_param_integer('keep_failover',NULL);
+	if (((isset($SITE_INFO['failover_mode'])) && ($SITE_INFO['failover_mode']=='on' || $SITE_INFO['failover_mode']=='auto_on') && ($force_failover!==0)) || ($force_failover===1))
 	{
 		$bot_type=get_bot_type();
+		require_code('static_cache');
 		static_cache((($bot_type!==NULL)?STATIC_CACHE__FAST_SPIDER:0) | STATIC_CACHE__FAILOVER_MODE);
 	}
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots
@@ -311,6 +313,7 @@ function init__global2()
 			$bot_type=get_bot_type();
 			if (($bot_type!==NULL) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='0'))
 			{
+				require_code('static_cache');
 				static_cache(STATIC_CACHE__FAST_SPIDER);
 			}
 		}
@@ -355,6 +358,7 @@ function init__global2()
 		{
 			if ((isset($SITE_INFO['any_guest_cached_too'])) && ($SITE_INFO['any_guest_cached_too']=='1') && (is_guest(NULL,true)) && (get_param_integer('keep_failover',NULL)!==0))
 			{
+				require_code('static_cache');
 				static_cache(STATIC_CACHE__GUEST);
 			}
 		}
@@ -612,133 +616,6 @@ function init__global2()
 			upgrade_modules();
 			ocf_upgrade();
 		}
-	}
-}
-
-/**
- * Find if we can use the static cache.
- *
- * @return boolean			Whether we can
- */
-function can_static_cache()
-{
-	if (isset($_GET['redirect'])) return false;
-	/*$url_easy=get_self_url_easy();
-	if (strpos($url_easy,'sort=')!==false) return false;	Actually this stops very useful caching, esp on the forum - better to just reduce the cache time to a fraction of an hour
-	if (strpos($url_easy,'start=')!==false) return false;
-	if (strpos($url_easy,'max=')!==false) return false;*/
-	return true;
-}
-
-/**
- * If possible dump the user to 100% static caching.
- *
- * @param  integer			The mode
- */
-function static_cache($mode)
-{
-	global $SITE_INFO;
-
-	require_code('urls');
-
-	if (($mode & STATIC_CACHE__FAILOVER_MODE)==0)
-	{
-		if (!can_static_cache()) return;
-	}
-
-	if (($mode & STATIC_CACHE__FAILOVER_MODE)!=0)
-	{
-		// Correct HTTP status
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false))
-			header('HTTP/1.0 503 Service Temporarily Unavailable');
-	}
-
-	// Work out cache path (potentially will search a few places, based on priority)
-	$_fast_cache_path=get_custom_file_base().'/static_cache/'.md5(serialize(get_self_url_easy()));
-	$param_sets=array(
-		array(
-			'non_bot'=>($mode & STATIC_CACHE__FAST_SPIDER)==0,
-			'no_js'=>!array_key_exists('js_on',$_COOKIE),
-			'mobile'=>is_mobile(),
-			'failover_mode'=>($mode & STATIC_CACHE__FAILOVER_MODE)!=0,
-		),
-	);
-	if (($mode & STATIC_CACHE__FAILOVER_MODE)!=0)
-	{
-		foreach ($param_sets[0]['mobile']?array(true,false):array(false,true) as $mobile)
-		{
-			foreach ($param_sets[0]['no_js']?array(true,false):array(false,true) as $no_js)
-			{
-				foreach ($param_sets[0]['non_bot']?array(true,false):array(false,true) as $non_bot)
-				{
-					$param_sets[]=array(
-						'non_bot'=>$non_bot,
-						'no_js'=>$no_js,
-						'mobile'=>$mobile,
-						'failover_mode'=>true, // This is always saved as a variant anyway
-					);
-				}
-			}
-		}
-	}
-	foreach ($param_sets as $param)
-	{
-		$fast_cache_path=$_fast_cache_path;
-		if ($param['non_bot']) $fast_cache_path.='__non-bot';
-		if ($param['no_js']) $fast_cache_path.='__no-js';
-		if ($param['mobile']) $fast_cache_path.='__mobile';
-		if ($param['failover_mode']) $fast_cache_path.='__failover_mode';
-		$fast_cache_path.='.htm';
-		if (is_file($fast_cache_path)) break;
-	}
-
-	// Is cached
-	if (is_file($fast_cache_path))
-	{
-		$expires=intval(60.0*60.0*floatval($SITE_INFO['fast_spider_cache']));
-		$mtime=filemtime($fast_cache_path);
-		if ($mtime>time()-$expires)
-		{
-			// Only bots can do HTTP caching, as they won't try to login and end up reaching a previously cached page
-			if ((($mode & STATIC_CACHE__FAST_SPIDER)!=0) && (($mode & STATIC_CACHE__FAILOVER_MODE)==0))
-			{
-				header("Pragma: public");
-				header("Cache-Control: max-age=".strval($expires));
-				header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
-				header('Last-Modified: '.gmdate('D, d M Y H:i:s',$mtime).' GMT');
-
-				$since=ocp_srv('HTTP_IF_MODIFIED_SINCE');
-				if ($since!='')
-				{
-					if (strtotime($since)<$mtime)
-					{
-						header('HTTP/1.0 304 Not Modified');
-						exit();
-					}
-				}
-			}
-
-			// Output
-			if ((($mode & STATIC_CACHE__FAILOVER_MODE)==0) && (function_exists('gzencode')) && (php_function_allowed('ini_set')))
-			{
-				safe_ini_set('zlib.output_compression','Off');
-				header('Content-Encoding: gzip');
-			}
-			$contents=file_get_contents($fast_cache_path);
-			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($contents);
-			exit($contents);
-		} else
-		{
-			@unlink($fast_cache_path);
-			sync_file($fast_cache_path);
-		}
-	}
-
-	if (($mode & STATIC_CACHE__FAILOVER_MODE)!=0)
-	{
-		// Error message saying nothing cached
-		header('Content-type: text/plain');
-		exit($SITE_INFO['failover_cache_miss_message']);
 	}
 }
 
