@@ -67,6 +67,7 @@ if (!empty($SITE_INFO['failover_check_urls']))
 	$context=stream_context_create(array(
 		'http'=>array(
 			'user_agent'=>'ocportal_failover_test',
+			'timeout'=>floatval(isset($SITE_INFO['failover_loadtime_threshold'])?$SITE_INFO['failover_loadtime_threshold']:5)+1.0,
 		)
 	));
 	$urls=explode(';',$SITE_INFO['failover_check_urls']);
@@ -80,8 +81,14 @@ if (!empty($SITE_INFO['failover_check_urls']))
 		$time_after=microtime(true);
 		$time=$time_after-$time_before;
 
+		// Misc failure
+		if ($data===false)
+		{
+			is_failing($full_url.' (failed load / slow load)');
+		}
+
 		// Bad HTTP status
-		if (strpos($http_response_header[0],'200')===false || $data===false)
+		if (strpos($http_response_header[0],'200')===false)
 		{
 			is_failing($full_url.' (bad HTTP code; '.$http_response_header[0].')');
 		}
