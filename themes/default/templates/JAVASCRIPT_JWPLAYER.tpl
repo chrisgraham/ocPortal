@@ -2883,6 +2883,8 @@ playerReady = function (b) {
 				jwplayer.html5.utils.log(type, data)
 			}
 			for (var listenerIndex in _listeners[type]) {
+				if (isNaN(listenerIndex)) continue;
+
 				try {
 					_listeners[type][listenerIndex].listener(data)
 				} catch (err) {
@@ -2897,6 +2899,8 @@ playerReady = function (b) {
 				}
 			}
 			for (var globalListenerIndex in _globallisteners) {
+				if (isNaN(globalListenerIndex)) continue;
+
 				try {
 					_globallisteners[globalListenerIndex].listener(data)
 				} catch (err) {
@@ -3397,7 +3401,7 @@ playerReady = function (b) {
 			P.preload = "none";
 			B = false;
 			K = 0;
-			for (var O in U.levels) {
+			for (var O=0;O<U.levels.length;O++) {
 				var N = U.levels[O];
 				if (a.html5.utils.isYouTube(N.file)) {
 					delete P;
@@ -3536,7 +3540,7 @@ playerReady = function (b) {
 			}
 			var config = _model.config;
 			var path = option.split(".");
-			for (var edge in path) {
+			for (var edge=0;edge<path.length;edge++) {
 				if (edge == path.length - 1) {
 					config[path[edge]] = options[option]
 				} else {
@@ -3548,6 +3552,8 @@ playerReady = function (b) {
 			}
 		}
 		for (var index in _configurableStateVariables) {
+			if (isNaN(index)) continue;
+
 			var configurableStateVariable = _configurableStateVariables[index];
 			_model[configurableStateVariable] = _model.config[configurableStateVariable]
 		}

@@ -45,7 +45,7 @@ class Hook_login_provider_openid
 						'pref/language',
 						'media/image/default',
 					);
-					header('Location: '.$openid->authUrl());
+					header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$openid->authUrl())));
 					exit();
 				}
 			} elseif($_GET['openid_mode']=='cancel')

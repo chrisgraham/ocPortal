@@ -168,7 +168,7 @@ function init__site()
 		{
 			$GLOBALS['HTTP_STATUS_CODE']='301';
 			header('HTTP/1.0 301 Moved Permanently');
-			header('Location: '.get_self_url(true));
+			header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',get_self_url(true))));
 			exit();
 		}
 	}
@@ -178,7 +178,7 @@ function init__site()
 	{
 		$GLOBALS['HTTP_STATUS_CODE']='301';
 		header('HTTP/1.0 301 Moved Permanently');
-		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
+		header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)))));
 		exit();
 	}
 
@@ -197,7 +197,7 @@ function init__site()
 					attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
 				}
 
-				header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
+				header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()))));
 				exit();
 			}
 		}
@@ -552,7 +552,7 @@ function process_monikers($page_name)
 						header('HTTP/1.0 301 Moved Permanently');
 						$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
 						$new_url=$_new_url->evaluate();
-						header('Location: '.$new_url);
+						header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$new_url)));
 						exit();
 					}
 				} else
@@ -582,7 +582,7 @@ function process_monikers($page_name)
 							header('HTTP/1.0 301 Moved Permanently');
 							$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
 							$new_url=$_new_url->evaluate();
-							header('Location: '.$new_url);
+							header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$new_url)));
 							exit();
 						}
 					}

@@ -86,7 +86,7 @@ class Hook_Syndication_facebook
 		if ($code=='')
 		{
 			$oauth_redir_url=$FACEBOOK_CONNECT->getLoginUrl(array('redirect_uri'=>$oauth_url->evaluate(),'scope'=>array('publish_stream','offline_access')));
-		   header('Location: '.$oauth_redir_url);
+		   header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$oauth_redir_url)));
 			exit();
 		}
 
@@ -137,7 +137,7 @@ class Hook_Syndication_facebook
 
 		if (get_page_name()!='facebook_oauth') // Take member back to page that implicitly shows their results
 		{
-			header('Location: '.str_replace('&syndicate_start__facebook=1','',str_replace('oauth_in_progress=1&','oauth_in_progress=0&',$oauth_url->evaluate())));
+			header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',str_replace('&syndicate_start__facebook=1','',str_replace('oauth_in_progress=1&','oauth_in_progress=0&',$oauth_url->evaluate())))));
 			exit();
 		}
 

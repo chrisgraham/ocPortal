@@ -68,7 +68,7 @@ class Module_forums
 			if ((strpos($base_url,'.php')!==false) || (strpos($base_url,'?')!==false)) $base_url=dirname($base_url);
 
 			//log_hack_attack_and_exit('REFERRER_IFRAME_HACK'); No longer a hack attack becase people webmasters changed their forum base URL at some point, creating problems with old bookmarks!
-			header('Location: '.get_self_url(true,false,array('url'=>get_forum_base_url())));
+			header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',get_self_url(true,false,array('url'=>get_forum_base_url())))));
 			exit();
 		}
 

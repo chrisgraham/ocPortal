@@ -140,7 +140,7 @@ function simple_tracker_script()
 		'c_url'=>$url,
 	));
 
-	header('Location: '.$url);
+	header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$url)));
 }
 
 /**
@@ -263,7 +263,7 @@ function pagelink_redirect_script()
 	if ((strpos($x,chr(10))!==false) || (strpos($x,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
-	header('Location: '.$x);
+	header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$x)));
 }
 
 /**
@@ -1025,7 +1025,7 @@ function thumb_script()
 
 	if ((strpos($url_thumb,chr(10))!==false) || (strpos($url_thumb,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-	header('Location: '.$url_thumb);
+	header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$url_thumb)));
 }
 
 /**

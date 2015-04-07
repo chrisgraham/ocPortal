@@ -934,7 +934,7 @@ function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$monthly_sp
 			$year
 		);
 
-		$timezoned_timestamp=tz_time($timestamp_day_end,$timezone);
+		$timezoned_day_end_timestamp=tz_time($timestamp_day_end,$timezone);
 
 		$timestamp_day_start=mktime(
 			0,
@@ -945,9 +945,19 @@ function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$monthly_sp
 			$year
 		);
 
-		if (!$show_in_users_timezone) return $timestamp_day_start;
+		if ($timezoned_day_end_timestamp>$timestamp_day_end)
+		{
+			$timestamp_day_end+=60*60*24;
+			$timezoned_day_end_timestamp+=60*60*24;
+			$timestamp_day_start+=60*60*24;
+		}
 
-		return $timestamp_day_start+($timestamp_day_end-$timezoned_timestamp);
+		if (!$show_in_users_timezone)
+		{
+			return $timestamp_day_start;
+		}
+
+		return $timestamp_day_start+($timestamp_day_end-$timezoned_day_end_timestamp);
 	}
 
 	if (!$show_in_users_timezone) // Move into timezone, as if that is UTC, as it won't get converted later
@@ -999,7 +1009,7 @@ function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$monthly_spec
 			$year
 		);
 
-		$timezoned_timestamp=tz_time($timestamp_day_start,$timezone);
+		$timezoned_day_start_timestamp=tz_time($timestamp_day_start,$timezone);
 
 		$timestamp_day_end=mktime(
 			23,
@@ -1010,9 +1020,19 @@ function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$monthly_spec
 			$year
 		);
 
-		if (!$show_in_users_timezone) return $timestamp_day_end;
+		if ($timezoned_day_start_timestamp>$timestamp_day_start)
+		{
+			$timestamp_day_start+=60*60*24;
+			$timezoned_day_start_timestamp+=60*60*24;
+			$timestamp_day_end+=60*60*24;
+		}
 
-		return $timestamp_day_end+($timestamp_day_start-$timezoned_timestamp);
+		if (!$show_in_users_timezone)
+		{
+			return $timestamp_day_end;
+		}
+
+		return $timestamp_day_end+($timestamp_day_start-$timezoned_day_start_timestamp);
 	}
 
 	if (!$show_in_users_timezone) // Move into timezone, as if that is UTC, as it won't get converted later

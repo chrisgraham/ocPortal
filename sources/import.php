@@ -172,7 +172,7 @@ function i_force_refresh()
 
 		if (!headers_sent())
 		{
-			header('Location: '.$GLOBALS['I_REFRESH_URL']);
+			header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$GLOBALS['I_REFRESH_URL'])));
 		} else
 		{
 			echo '<meta http-equiv="Refresh" content="0; URL='.escape_html($GLOBALS['I_REFRESH_URL']).'" />';

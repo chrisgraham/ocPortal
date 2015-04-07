@@ -903,7 +903,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'has been disabled for security reasons')===false) && 
 		(strpos($text,'max_questions')/*mysql limit*/===false) && 
 		(strpos($text,'Error at offset')===false) && 
-		(strpos($text,'No word lists can be found for the language "en"')===false) && 
+		(strpos($text,'No word lists can be found for the language &quot;en&quot;')===false) && 
 		(strpos($text,'Unable to allocate memory for pool')===false) && 
 		(strpos($text,'Out of memory')===false) && 
 		(strpos($text,'Can\'t open file')===false) && 

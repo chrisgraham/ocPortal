@@ -163,7 +163,7 @@ function assign_refresh($url,$multiplier)
 		global $FORCE_META_REFRESH;
 		if (($special_page_type=='view') && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (!headers_sent()) && (!$FORCE_META_REFRESH))
 		{
-			header('Location: '.$url);
+			header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$url)));
 			if (strpos($url,'#')===false)
 				$GLOBALS['QUICK_REDIRECT']=true;
 		}

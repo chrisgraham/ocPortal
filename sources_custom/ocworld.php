@@ -378,7 +378,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 
 			// Put trolled into the database
 			$GLOBALS['SITE_DB']->query_update('w_members',array('trolled'=>$trolled),array('id'=>$member_id),'',1);
-			header('Location: '.get_self_url(true));
+			header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',get_self_url(true))));
 		}
 	}
 

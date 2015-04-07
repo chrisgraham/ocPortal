@@ -37,4 +37,4 @@ $expires=60*60;
 $url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($GLOBALS['FORUM_DRIVER']->get_member_from_username(get_param('id')));
 if ($url=='') $url=find_theme_image('blank');
 if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
-header('Location: '.$url);
+header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$url)));

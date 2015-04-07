@@ -426,7 +426,7 @@ class Module_admin_lang
 
 		// Send header
 		header('Content-Type: application/octet-stream'.'; authoritative=true;');
-		header('Content-Disposition: attachment; filename="ocportal-'.$lang.'.tar"');
+		header('Content-Disposition: attachment; filename="ocportal-'.str_replace(chr(13),'',str_replace(chr(10),'',$lang)).'.tar"');
 
 		require_code('tar');
 		require_code('lang_compile');

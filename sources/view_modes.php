@@ -109,7 +109,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	if (substr($special_page_type,-4)=='.css')
 	{
 		$url=build_url(array('page'=>'admin_themes','type'=>'edit_css','theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'file'=>$special_page_type,'keep_wide_high'=>1),get_module_zone('admin_themes'));
-		header('Location: '.$url->evaluate());
+		header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$url->evaluate())));
 		exit();
 	}
 
@@ -117,7 +117,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	if ($special_page_type=='site_tree')
 	{
 		$url=build_url(array('page'=>'admin_sitetree','type'=>'site_tree','id'=>get_zone_name().':'.get_page_name()),get_module_zone('admin_sitetree'));
-		header('Location: '.$url->evaluate());
+		header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$url->evaluate())));
 		exit();
 	}
 
