@@ -170,6 +170,31 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 		}
 	}
 
+	// FUDGEFUDGE: Extra check for private topics
+	$topic_id=NULL;
+	if (($content_type=='post') && (get_forum_type()=='ocf'))
+	{
+		$post_rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_topic_id','p_intended_solely_for','p_poster'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$post_rows))
+			return false;
+		if ($post_rows[0]['p_intended_solely_for']!==NULL && ($post_rows[0]['p_intended_solely_for']!=$member_id && $post_rows[0]['p_poster']!=$member_id || is_guest($member_id)))
+			return false;
+		$topic_id=$post_rows[0]['p_topic_id'];
+	}
+	if (($content_type=='topic') && (get_forum_type()=='ocf'))
+	{
+		$topic_id=intval($content_id);
+	}
+	if (!is_null($topic_id))
+	{
+		$topic_rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to'),array('id'=>$topic_id),'',1);
+		if (!array_key_exists(0,$topic_rows))
+			return false;
+		require_code('ocf_topics');
+		if ($topic_rows[0]['t_forum_id']==NULL && ($topic_rows[0]['t_pt_from']!=$member_id && $topic_rows[0]['t_pt_to']!=$member_id && !ocf_has_special_pt_access($topic_id,$member_id) || is_guest($member_id)))
+			return false;
+	}
+
 	return ((has_actual_page_access($member_id,$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($member_id,$permission_type_code,$category_id))));
 }
 
