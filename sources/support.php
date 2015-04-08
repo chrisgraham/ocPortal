@@ -999,6 +999,24 @@ function get_ip_address($amount=4)
 	if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
 	else */$ip=ocp_srv('REMOTE_ADDR');
 
+	global $SITE_INFO;
+	if (($amount==3) && (array_key_exists('full_ips',$SITE_INFO)) && ($SITE_INFO['full_ips']=='1')) // Extra configurable security
+	{
+		$amount=4;
+	}
+
+	return normalise_ip_address($ip,$amount);
+}
+
+/**
+ * Normalise a provided IP address
+ *
+ * @param  IP				The IP address to normalise
+ * @param  ?integer		Amount to mask out (NULL: do not)
+ * @return IP				The normalised IP address
+ */
+function normalise_ip_address($ip,$amount=NULL)
+{
 	// Bizarro-filter (found "in the wild")
 	$pos=strpos($ip,',');
 	if ($pos!==false) $ip=substr($ip,0,$pos);
@@ -1007,12 +1025,6 @@ function get_ip_address($amount=4)
 
 	if (!is_valid_ip($ip)) return '';
 
-	global $SITE_INFO;
-	if (($amount==3) && (array_key_exists('full_ips',$SITE_INFO)) && ($SITE_INFO['full_ips']=='1')) // Extra configurable security
-	{
-		$amount=4;
-	}
-
 	if (strpos($ip,'.')===false)
 	{
 		if (substr_count($ip,':')<7)
@@ -1020,25 +1032,31 @@ function get_ip_address($amount=4)
 			$ip=str_replace('::',str_repeat(':',(7-substr_count($ip,':'))+2),$ip);
 		}
 		$parts=explode(':',$ip);
-		for ($i=0;$i<$amount*2;$i++)
+		for ($i=0;$i<(is_null($amount)?8:($amount*2));$i++)
 		{
 			$parts[$i]=isset($parts[$i])?str_pad($parts[$i],4,'0',STR_PAD_LEFT):'0000';
 		}
-		for ($i=$amount*2;$i<8;$i++)
+		if (!is_null($amount))
 		{
-			$parts[$i]='*';
+			for ($i=$amount*2;$i<8;$i++)
+			{
+				$parts[$i]='*';
+			}
 		}
 		return implode(':',$parts);
 	} else
 	{
 		$parts=explode('.',$ip);
-		for ($i=0;$i<$amount;$i++)
+		for ($i=0;$i<(is_null($amount)?4:$amount);$i++)
 		{
 			if (!array_key_exists($i,$parts)) $parts[$i]='0';
 		}
-		for ($i=$amount;$i<4;$i++)
+		if (!is_null($amount))
 		{
-			$parts[$i]='*';
+			for ($i=$amount;$i<4;$i++)
+			{
+				$parts[$i]='*';
+			}
 		}
 		return implode('.',$parts);
 	}
