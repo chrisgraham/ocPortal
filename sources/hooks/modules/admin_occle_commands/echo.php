@@ -35,7 +35,7 @@ class Hook_echo
 		{
 			if (!array_key_exists(0,$parameters)) return array('','','','');
 
-			return array('','',implode(' ', $parameters),'');
+			return array('','',implode(' ',$parameters),'');
 		}
 	}
 

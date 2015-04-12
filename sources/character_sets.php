@@ -50,6 +50,7 @@ function foxy_utf8_to_nce($data='')
 				{
 					$good_encodings[$input_charset]=(in_array(strtolower($input_charset),array_map('strtolower',mb_list_encodings())));
 				}
+				$valid_encoding=$good_encodings[$input_charset];
 			} else $valid_encoding=true;
 			if ($valid_encoding)
 			{
@@ -300,7 +301,12 @@ function convert_to_internal_encoding($data,$input_charset=NULL,$internal_charse
 	{
 		if (function_exists('mb_list_encodings'))
 		{
-			$good_encoding=(in_array(strtolower($input_charset),array_map('strtolower',mb_list_encodings())));
+			static $good_encodings=array();
+			if (!isset($good_encodings[$input_charset]))
+			{
+				$good_encodings[$input_charset]=(in_array(strtolower($input_charset),array_map('strtolower',mb_list_encodings())));
+			}
+			$good_encoding=$good_encodings[$input_charset];
 		} else $good_encoding=true;
 
 		if ($good_encoding)

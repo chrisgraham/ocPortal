@@ -27,8 +27,8 @@ ocPortal requires:
  - Connectivity to a mail server (SMTP) so that outgoing email can be sent out to the staff email address or the addresses of individual members
  - If running Apache using a [tt]mod_php[/tt] (as opposed to a CGI version of PHP), the server configuration needs to have [tt]AllowOverride All[/tt] or at least [tt]AllowOverride Options FileInfo Limit[/tt] (because we use distributed [tt].htaccess[/tt] files containing settings to increase security)
  - If running Windows, you should use an NTFS partition not a FAT32 partition, as FAT32 cannot support file locking
-(*) Other database software may work, but is not supported
  - The PHP environment must not have explicit disabling of standard functionality that we require. Commonly web hosts do this using modsecurity, disable_functions, suhosin, suPHP or their own modified PHP versions. We do our best to workaround such issues for common recoverable cases, but ultimately if arbitrary standard functionality has been disabled the software cannot function.
+(*) Other database software may work, but is not supported
 
 ocPortal recommends:
  - A PHP environment with the FTP, GD FreeType, ZIP and XML extensions/integrated-functionality

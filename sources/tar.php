@@ -209,7 +209,7 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full))
 				{
-					if (fwrite($logfile,'Could not access '.$_full.' [case 2]'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+					if (fwrite($logfile,'Could not access '.$full.' [case 2]'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 					continue;
 				}
 				if (is_dir($full))
