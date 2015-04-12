@@ -279,7 +279,9 @@ function edit_download_category($category,$parent_id,$description,$category_id,$
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
 	{
 		if ($category_id==$under_category_id) warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
-		$under_category_id=$GLOBALS['SITE_DB']->query_value('download_categories','parent_id',array('id'=>$under_category_id));
+		$_under_category_id=$GLOBALS['SITE_DB']->query_value('download_categories','parent_id',array('id'=>$under_category_id));
+		if ($under_category_id===$_under_category_id) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		$under_category_id=$_under_category_id;
 	}
 
 	require_code('urls2');

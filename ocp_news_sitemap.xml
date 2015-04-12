@@ -2,6 +2,24 @@
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 	
 				<url>
+					<loc>http://192.168.1.100/ocportal/site/news/view/-img-script-alert/ssdfd.htm</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2015-03-07T23:37:52+00:00</news:publication_date>
+						<news:title>ssdfd</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
 					<loc>http://192.168.1.100/ocportal/site/news/view/art/-img-script-alert.htm</loc>
 					<news:news>
 						<news:publication>

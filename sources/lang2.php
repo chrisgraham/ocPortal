@@ -281,7 +281,7 @@ function convert_po_to_ini()
 	require_code('lang_compile');
 
 	$dh=opendir(get_custom_file_base().'/lang_custom');
-	while ($f=readdir($dh))
+	while (($f=readdir($dh))!==false)
 	{
 		if (substr($f,-3)=='.po')
 		{
@@ -296,7 +296,9 @@ function convert_po_to_ini()
 	         $c.=$key.'='.str_replace("\n",'\n',$val)."\n";
 			}
 			$p=get_custom_file_base().'/lang_custom/'.strtoupper($parts[1]).'/'.$parts[0].'.ini';
-			file_put_contents($p,$c);
+			$myfile=fopen($p,'wb');
+			fwrite($myfile,$c);
+			fclose($myfile);
 			fix_permissions($p);
 			sync_file($p);
 		}

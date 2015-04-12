@@ -886,8 +886,8 @@ function watermark_gallery_image($gallery,$file_path,$filename)
 	// Save
 	imagealphablending($source,false);
 	if (function_exists('imagesavealpha')) imagesavealpha($source,true);
-	if ($ext=='png') imagepng($source,$file_path);
-	elseif (($ext=='jpg') || ($ext=='jpeg')) imagejpeg($source,$file_path);
+	if ((function_exists('imagepng')) && ($ext=='png')) imagepng($source,$file_path);
+	elseif ((function_exists('imagejpeg')) && (($ext=='jpg') || ($ext=='jpeg'))) imagejpeg($source,$file_path);
 	elseif ((function_exists('imagegif')) && ($ext=='gif')) imagegif($source,$file_path);
 
 	// Clean up
@@ -1037,7 +1037,9 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	while (($under_category_id!='') && ($under_category_id!=STRING_MAGIC_NULL))
 	{
 		if ($name==$under_category_id) warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
-		$under_category_id=$GLOBALS['SITE_DB']->query_value('galleries','parent_id',array('name'=>$under_category_id));
+		$_under_category_id=$GLOBALS['SITE_DB']->query_value('galleries','parent_id',array('name'=>$under_category_id));
+		if ($under_category_id==$_under_category_id) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		$under_category_id=$_under_category_id;
 	}
 
 	if (is_null($parent_id)) $parent_id='';

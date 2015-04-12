@@ -111,7 +111,7 @@ class html_safe_lang_test_set extends ocp_test_case
 			'WRITE_ERROR',
 		);
 
-		$result=array_keys(array_intersect_assoc($LANGUAGE_LITERAL,$LANGUAGE_HTML));
+		$result=array_keys(array_intersect_key($LANGUAGE_LITERAL,$LANGUAGE_HTML));
 		$cnt=0;
 		foreach ($result as $r)
 		{

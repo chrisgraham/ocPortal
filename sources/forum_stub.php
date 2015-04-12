@@ -182,7 +182,7 @@ class forum_driver_base
 		{
 			if (get_forum_type()=='ocf')
 			{
-				return uniqid(''); // Let it get deleted at least
+				return uniqid('',false); // Let it get deleted at least
 			}
 			$ret=NULL;
 		}

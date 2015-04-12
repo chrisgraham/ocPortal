@@ -76,7 +76,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 			if (strpos($original_comcode,$matches[0][$i])!==false) // Check still here (if we have same image in multiple places, may have already been attachment-ified)
 			{
 				$data=@base64_decode($matches[1][$i]);
-				if ($data!==false)
+				if (($data!==false) && (function_exists('imagepng')))
 				{
 					$image=@imagecreatefromstring($data);
 					if ($image!==false)

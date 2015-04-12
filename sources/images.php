@@ -901,7 +901,7 @@ function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tr
 	// If we've got transparency then we have to save as PNG
 	if (!is_null($thumb_options) && isset($red) && $using_alpha) $ext2='png';
 
-	if ($ext2=='png')
+	if ((function_exists('imagepng')) && ($ext2=='png'))
 	{
 		if (strtolower(substr($to,-4)) != '.png') $to=$to . '.png';
 		$test=@imagepng($dest,$to);
@@ -913,7 +913,7 @@ function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tr
 			return false;
 		}
 	}
-	elseif (($ext2=='jpg') || ($ext2=='jpeg'))
+	elseif ((function_exists('imagejpeg')) && (($ext2=='jpg') || ($ext2=='jpeg')))
 	{
 		$jpeg_quality=get_value('jpeg_quality');
 		if ($jpeg_quality!==NULL)

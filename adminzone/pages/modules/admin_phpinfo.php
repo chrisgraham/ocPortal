@@ -12,6 +12,8 @@
 
 */
 
+/*EXTRA FUNCTIONS: shell_exec*/
+
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -102,7 +104,8 @@ class Module_admin_phpinfo
 		{
 			$user=posix_getuid();
 			$suexec=($user==fileowner(get_file_base().'/index.php'));
-			$out.='<p>Running as user: '.escape_html(posix_getpwuid($user)).' ('.($suexec?'SuExec or similar':'Not SuExec').')</p>';
+			$dets=posix_getpwuid($user);
+			$out.='<p>Running as user: '.escape_html($dets['name']).' ('.($suexec?'suEXEC or similar':'Not suEXEC').')</p>';
 		}
 		elseif (strpos(@ini_get('disable_functions'),'shell_exec')===false)
 		{
@@ -116,7 +119,7 @@ class Module_admin_phpinfo
 				{
 					$suexec=NULL;
 				}
-				$out.='<p>Running as user: '.escape_html($test).(is_null($suexec)?'':(' ('.($suexec?'SuExec or similar':'Not SuExec').')')).'</p>';
+				$out.='<p>Running as user: '.escape_html($test).(is_null($suexec)?'':(' ('.($suexec?'suEXEC or similar':'Not suEXEC').')')).'</p>';
 			}
 		} else
 		{
@@ -124,7 +127,7 @@ class Module_admin_phpinfo
 			$user=@fileowner($tmp);
 			@unlink($tmp);
 			$suexec=($user==fileowner(get_file_base().'/index.php'));
-			$out.='<p>Running as user: '.escape_html(($suexec && (strpos(@ini_get('disable_functions'),'get_current_user')===false))?get_current_user():strval($user)).' ('.($suexec?'SuExec or similar':'Not SuExec').')</p>';
+			$out.='<p>Running as user: '.escape_html(($suexec && (strpos(@ini_get('disable_functions'),'get_current_user')===false))?get_current_user():('#'.strval($user))).' ('.($suexec?'suEXEC or similar':'Not suEXEC').')</p>';
 		}
 		$out.='<p>PHP configured as: '.escape_html(php_sapi_name()).'</p>';
 

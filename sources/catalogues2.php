@@ -610,7 +610,9 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
 	{
 		if ($id==$under_category_id) warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
-		$under_category_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_parent_id',array('id'=>$under_category_id));
+		$_under_category_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_parent_id',array('id'=>$under_category_id));
+		if ($under_category_id===$_under_category_id) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		$under_category_id=$_under_category_id;
 	}
 
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_description','cc_title'),array('id'=>$id),'',1);
