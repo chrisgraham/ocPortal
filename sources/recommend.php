@@ -57,13 +57,18 @@ function get_num_invites($member_id)
 }
 
 /**
- * Whether the current member may use invites (doesn't check if they have any left though!)
+ * Whether the current member may use invites.
  *
  * @return boolean	Whether they may
  */
 function may_use_invites()
 {
-	if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) return true;
+	if (get_forum_type()!='ocf') return false;
+	if (is_guest()) return false;
+
+	$invites=get_num_invites(get_member());
+	if ($invites<=0) return false;
+
 	return (get_option('is_on_invites')=='1');
 }
 

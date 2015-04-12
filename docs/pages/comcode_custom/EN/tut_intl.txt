@@ -230,7 +230,7 @@ To change the default language used on the whole site, use the [tt]http://yourba
 [exp_thumb="Language configuration" float="right"]intl_config[/exp_thumb]
 It is possible to configure ocPortal such that members may select which language to use on your site, and pages are then presented in this language. There are a number of ways a user may choose a language:
  - via the language block (which inserts a [tt]keep_lang[/tt] parameter into the URL, to preserve their choice until they close the browser window)
- - via their member profile (OCF supports this better than other language drivers, although the integration can be improved by editing the [tt]lang/map.ini[/tt] file)
+ - via their member profile (OCF supports this better than other forum drivers, although the integration can be improved by editing the [tt]lang/map.ini[/tt] file)
  - via their web browser stated language (disabled by default, as most users unfortunately have it misconfigured)
 
 As members can select their language by editing their member profile it may be necessary to edit your own profile to the language you're trying to check even if you changed the default, because you might already have your profile saved as the previous different language (usually English).

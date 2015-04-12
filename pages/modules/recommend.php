@@ -189,7 +189,7 @@ class Module_recommend
 			}
 		}
 
-		if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()))
+		if (may_use_invites())
 		{
 			$invites=get_num_invites(get_member());
 			if ($invites>0)
@@ -271,7 +271,7 @@ class Module_recommend
 		handle_max_file_size($hidden);
 
 		$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),'','subject',$subject,true));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('RECOMMEND_SUP_MESSAGE'),'message',$message,$need_message));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('RECOMMEND_SUP_MESSAGE'),'message',$message,$need_message,NULL,true));
 
 		if (addon_installed('captcha'))
 		{
@@ -288,7 +288,7 @@ class Module_recommend
 
 		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'08a538ca8d78597b0417f464758a59fd','JAVASCRIPT'=>$javascript,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'08a538ca8d78597b0417f464758a59fd','JAVASCRIPT'=>$javascript,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text,'TARGET'=>'_self'));
 	}
 
 	/**
@@ -676,22 +676,18 @@ class Module_recommend
 				$_message=$message;
 			}
 
-			if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()) && (post_param_integer('invite',0)==1))
+			if ((may_use_invites()) && (post_param_integer('invite',0)==1))
 			{
-				$invites=get_num_invites(get_member());
-				if ($invites>0)
-				{
-					send_recommendation_email($name,$email_address,$_message,true,$recommender_email_address,post_param('subject',NULL),$names_to_send[$key]);
+				send_recommendation_email($name,$email_address,$_message,true,$recommender_email_address,post_param('subject',NULL),$names_to_send[$key]);
 
-					$GLOBALS['FORUM_DB']->query_insert('f_invites',array(
-						'i_inviter'=>get_member(),
-						'i_email_address'=>$email_address,
-						'i_time'=>time(),
-						'i_taken'=>0
-					));
+				$GLOBALS['FORUM_DB']->query_insert('f_invites',array(
+					'i_inviter'=>get_member(),
+					'i_email_address'=>$email_address,
+					'i_time'=>time(),
+					'i_taken'=>0
+				));
 
-					$invite=true;
-				}
+				$invite=true;
 			}
 			elseif ((get_option('is_on_invites')=='0') && (get_forum_type()=='ocf'))
 			{

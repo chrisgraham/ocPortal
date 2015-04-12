@@ -273,3 +273,33 @@ function get_lang_file_descriptions($lang,$file=NULL)
 	return $target;
 }
 
+/**
+ * Convert all PO files to ini files. You have to place the .po files in lang_custom.
+ */
+function convert_po_to_ini()
+{
+	require_code('lang_compile');
+
+	$dh=opendir(get_custom_file_base().'/lang_custom');
+	while ($f=readdir($dh))
+	{
+		if (substr($f,-3)=='.po')
+		{
+			$_f=basename($f,'.po');
+			$parts=explode('-',$_f,2);
+			$entries=array();
+			_get_lang_file_map(get_custom_file_base().'/lang_custom/'.$f,$entries,NULL,false);
+			@mkdir(get_custom_file_base().'/lang_custom/'.strtoupper($parts[1]),0777);
+			$c='[strings]'."\n";
+			foreach ($entries as $key=>$val)
+			{
+	         $c.=$key.'='.str_replace("\n",'\n',$val)."\n";
+			}
+			$p=get_custom_file_base().'/lang_custom/'.strtoupper($parts[1]).'/'.$parts[0].'.ini';
+			file_put_contents($p,$c);
+			fix_permissions($p);
+			sync_file($p);
+		}
+	}
+}
+
