@@ -268,7 +268,6 @@ function comcode_convert_script()
 		$fields->attach(form_input_huge(do_lang_tempcode('TEXT'),'','data','',true));
 		$fields->attach(form_input_tick('Convert HTML to Comcode','','from_html',false));
 		$fields->attach(form_input_tick('Convert to semihtml','','semihtml',false));
-		$fields->attach(form_input_tick('Comes from WYSIWYG','','data__is_wysiwyg',false));
 		$fields->attach(form_input_tick('Lax mode (less parse rules)','','lax',false));
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('to_comcode_xml',strval(either_param_integer('to_comcode_xml',0))));

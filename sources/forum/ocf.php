@@ -1489,6 +1489,7 @@ class forum_driver_ocf extends forum_driver_base
 					$this->connection->query_insert('f_member_known_login_ips',array('i_val_code'=>$code,'i_member_id'=>$row['id'],'i_ip'=>$ip));
 					$url=find_script('validateip').'?code='.$code;
 					$url_simple=find_script('validateip');
+                    require_code('comcode');
 					$mail=do_lang('IP_VERIFY_MAIL',comcode_escape($url),comcode_escape(get_ip_address()),array($url_simple,$code),get_lang($row['id']));
 					$email_address=$row['m_email_address'];
 					if ($email_address=='') $email_address=get_option('staff_address');

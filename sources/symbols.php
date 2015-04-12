@@ -241,6 +241,16 @@ function ecv($lang,$escaped,$type,$name,$param)
 					global $META_DATA;
 					if (isset($param[1]))
 					{
+						$matches=array();
+						if (($param[0]=='image') && (preg_match('#^'.preg_quote(find_script('attachment'),'#').'\?id=(\d+)#',$param[1],$matches)!=0))
+						{
+							require_code('attachments');
+							if (!has_attachment_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),intval($matches[1])))
+							{
+								break;
+							}
+						}
+
 						$META_DATA[$param[0]]=$param[1];
 					} else
 					{

@@ -856,8 +856,8 @@ function watermark_gallery_image($gallery,$file_path,$filename)
 	// Save
 	imagealphablending($source,false);
 	if (function_exists('imagesavealpha')) imagesavealpha($source,true);
-	if ($ext=='png') imagepng($source,$file_path);
-	elseif (($ext=='jpg') || ($ext=='jpeg')) imagejpeg($source,$file_path);
+	if ((function_exists('imagepng')) && ($ext=='png')) imagepng($source,$file_path);
+	elseif ((function_exists('imagejpeg')) && (($ext=='jpg') || ($ext=='jpeg'))) imagejpeg($source,$file_path);
 	elseif ((function_exists('imagegif')) && ($ext=='gif')) imagegif($source,$file_path);
 
 	// Clean up

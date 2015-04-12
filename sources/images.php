@@ -118,7 +118,7 @@ function _symbol_thumbnail($param)
 			} else
 			{
 				$ext=get_file_extension($orig_url);
-				if (!is_image($ext)) $ext='png';
+				if (!is_image('example.'.$ext)) $ext='png';
 				$filename=url_to_filename($orig_url).'.'.$ext;
 			}
 			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
@@ -377,7 +377,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	$dot_pos=strrpos($_file,'.');
 	$ext=substr($_file,$dot_pos+1);
 	if (!is_saveable_image($_file)) $ext='png';
-	$_file=substr($_file,0,$dot_pos);
+	$_file=preg_replace('#[^\w]#','x',substr($_file,0,$dot_pos));
 	$thumb_path='';
 	do
 	{
@@ -828,7 +828,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	// If we've got transparency then we have to save as PNG
 	if (!is_null($thumb_options) && isset($red) && $using_alpha) $ext2='png';
 
-	if ($ext2=='png')
+	if ((function_exists('imagepng')) && ($ext2=='png'))
 	{
 		if (strtolower(substr($to,-4)) != '.png') $to = $to . '.png';
 		$test=@imagepng($dest,$to);
@@ -840,7 +840,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			return false;
 		}
 	}
-	elseif (($ext2=='jpg') || ($ext2=='jpeg'))
+	elseif ((function_exists('imagejpeg')) && (($ext2=='jpg') || ($ext2=='jpeg')))
 	{
 		$jpeg_quality=get_value('jpeg_quality');
 		if ($jpeg_quality!==NULL)
@@ -923,9 +923,10 @@ function get_gd_version()
  * Find whether the image specified is actually an image, based on file extension
  *
  * @param  string			A URL or file path to the image
+ * @param  boolean		Whether to check mime too
  * @return boolean		Whether the string pointed to a file appeared to be an image
  */
-function is_image($name)
+function is_image($name,$mime_too=false)
 {
 	if (substr(basename($name),0,1)=='.') return false; // Temporary file that some OS's make
 
@@ -934,6 +935,16 @@ function is_image($name)
 	$types=explode(',',get_option('valid_images'));
 	foreach ($types as $val)
 		if (strtolower($val)==$ext) return true;
+
+	if (($mime_too) && (looks_like_url($name)))
+	{
+		http_download_file($name,0,false);
+		global $HTTP_DOWNLOAD_MIME_TYPE;
+		if (preg_match('#^image/(png|gif|jpeg)$#',$HTTP_DOWNLOAD_MIME_TYPE)!=0)
+		{
+			return true;
+		}
+	}
 
 	return false;
 }

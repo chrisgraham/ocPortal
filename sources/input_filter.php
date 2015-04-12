@@ -538,7 +538,7 @@ class field_restriction_loader
 				if ($this->levels_from_filtered==0)
 				{
 					$applies=true;
-					if ((array_key_exists('notstaff',$attributes)) && ($attributes['notstaff']=='1') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))
+					if ((array_key_exists('notstaff',$attributes)) && ($attributes['notstaff']=='1') && (isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))
 						$applies=false;
 					if ($applies)
 					{

@@ -193,7 +193,7 @@ function init__site()
 					attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
 				}
 
-				header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
+				header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()))));
 				exit();
 			}
 		}

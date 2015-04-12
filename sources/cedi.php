@@ -550,7 +550,10 @@ function _cedi_show_tree(&$cedi_seen,$select,$id,$tree,$title,$use_compound_list
  */
 function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$tree=NULL,$title=NULL,$do_stats=true,$use_compound_list=false,$levels=NULL)
 {
-	if ($levels==-1) return array();
+	if (!$use_compound_list)
+	{
+		if ($levels==-1) return array();
+	}
 
 	if (is_null($page_id)) $page_id=db_get_first_id();
 	$cedi_seen[]=$page_id;
@@ -574,7 +577,7 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$tree=NULL,$title=NULL,$do
 	$rows=$GLOBALS['SITE_DB']->query_select('seedy_children',array('*'),array('parent_id'=>$page_id),'ORDER BY title',300/*reasonable limit*/);
 	$children[0]['child_count']=count($rows);
 	$tree.=' > ';
-	if ($levels!==0)
+	if (($levels!==0) || ($use_compound_list))
 	{
 		foreach ($rows as $child)
 		{
@@ -601,7 +604,8 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$tree=NULL,$title=NULL,$do
 					$children[0]['compound_list'].=$_compound_list;
 				}
 
-				$children=array_merge($children,$child_children);
+				if ($levels!==0)
+					$children=array_merge($children,$child_children);
 			}
 		}
 	}

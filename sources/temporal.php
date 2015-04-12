@@ -149,7 +149,7 @@ function get_users_timezone($member=NULL)
 		{
 			$_timezone_old_offset=get_value('timezone_old_offset');
 			if (is_null($_timezone_old_offset)) $_timezone_old_offset='0';
-			ini_restore('date.timezone');
+			@ini_restore('date.timezone');
 			if (function_exists('date_default_timezone_set'))
 				@date_default_timezone_set(ini_get('date.timezone'));
 			$timezone_member=convert_timezone_offset_to_formal_timezone(floatval($_timezone_member)+floatval($_timezone_old_offset)+floatval(floatval(date('O'))/100.0));

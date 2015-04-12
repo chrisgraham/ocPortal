@@ -113,6 +113,31 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 		}
 	}
 
+	// FUDGEFUDGE: Extra check for private topics
+	$topic_id=NULL;
+	if (($content_type=='post') && (get_forum_type()=='ocf'))
+	{
+		$post_rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_topic_id','p_intended_solely_for','p_poster'),array('id'=>intval($content_id)),'',1);
+		if (!array_key_exists(0,$post_rows))
+			return false;
+		if ($post_rows[0]['p_intended_solely_for']!==NULL && ($post_rows[0]['p_intended_solely_for']!=$member_id && $post_rows[0]['p_poster']!=$member_id || is_guest($member_id)))
+			return false;
+		$topic_id=$post_rows[0]['p_topic_id'];
+	}
+	if (($content_type=='topic') && (get_forum_type()=='ocf'))
+	{
+		$topic_id=intval($content_id);
+	}
+	if (!is_null($topic_id))
+	{
+		$topic_rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to'),array('id'=>$topic_id),'',1);
+		if (!array_key_exists(0,$topic_rows))
+			return false;
+		require_code('ocf_topics');
+		if ($topic_rows[0]['t_forum_id']==NULL && ($topic_rows[0]['t_pt_from']!=$member_id && $topic_rows[0]['t_pt_to']!=$member_id && !ocf_has_special_pt_access($topic_id,$member_id) || is_guest($member_id)))
+			return false;
+	}
+
 	return ((has_actual_page_access($member_id,$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($member_id,$permission_type_code,$category_id))));
 }
 
@@ -775,7 +800,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title,array($post_title,$username),get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array($post_title,post_param('post'),comcode_escape($content_url_flat),comcode_escape($username)),get_site_default_lang());
+		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(($post_title=='')?do_lang('NO_SUBJECT'):$post_title,post_param('post'),comcode_escape($content_url_flat),comcode_escape($username)),get_site_default_lang());
 		dispatch_notification('comment_posted',$content_type.'_'.$content_id,$subject,$message_raw);
 
 		// Is the user gonna automatically enable notifications for this?

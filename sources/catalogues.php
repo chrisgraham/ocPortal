@@ -1158,7 +1158,10 @@ function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filt
  */
 function get_catalogue_category_tree($catalogue_name,$category_id,$tree=NULL,$title=NULL,$levels=NULL,$addable_filter=false,$use_compound_list=false)
 {
-	if ($levels==-1) return array();
+	if (!$use_compound_list)
+	{
+		if ($levels==-1) return array();
+	}
 
 	if (!has_category_access(get_member(),'catalogues_catalogue',$catalogue_name)) return array();
 	if ((!is_null($category_id)) && (get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($category_id)))) return array();
@@ -1211,7 +1214,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$tree=NULL,$ti
 	usort($rows,'multi_sort');
 	$no_root=!array_key_exists(0,$children);
 	if (!$no_root) $children[0]['child_count']=count($rows);
-	if ($levels!==0)
+	if (($levels!==0) || ($use_compound_list))
 	{
 		foreach ($rows as $child)
 		{
@@ -1229,7 +1232,8 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$tree=NULL,$ti
 					if (!$no_root) $children[0]['compound_list'].=$_compound_list;
 				}
 
-				$children=array_merge($children,$child_children);
+				if ($levels!==0)
+					$children=array_merge($children,$child_children);
 			}
 		}
 	}

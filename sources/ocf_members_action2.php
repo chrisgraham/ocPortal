@@ -1082,23 +1082,26 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 
 	$GLOBALS['FORUM_DB']->query_update('f_custom_fields',$map,array('id'=>$id),'',1);
 
-	list(,$index)=get_cpf_storage_for($type);
+	list($_type,$index)=get_cpf_storage_for($type);
 
 	require_code('database_action');
 	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
-	if ($index)
+	$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
+	if ($indices_count<60) // Could be 64 but trying to be careful here...
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
-		if ($indices_count<60) // Could be 64 but trying to be careful here...
+		if ($index)
 		{
-			if ($type!='LONG_TEXT')
+			if ($_type!='LONG_TEXT')
 			{
 				$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
 			}
-			if (strpos($type,'_TEXT')!==false)
+			if (strpos($_type,'_TEXT')!==false)
 			{
 				$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf_ft_'.strval($id),array('field_'.strval($id)),'mf_member_id');
 			}
+		} elseif ((strpos($type,'trans')!==false) || ($type=='posting_field'))
+		{
+			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id'); // For joins
 		}
 	}
 
@@ -1408,7 +1411,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 	if ($avatar_url!='')
 	{
 		require_code('images');
-		if (!is_image($avatar_url))
+		if (!is_image($avatar_url,true))
 		{
 			$ext=get_file_extension($avatar_url);
 			warn_exit(do_lang_tempcode('UNKNOWN_FORMAT',escape_html($ext)));
@@ -1493,7 +1496,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	require_code('uploads');
 
-	if ((!is_swf_upload()) &&((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
+	if (((!array_key_exists($upload_name,$_FILES)) || (!is_swf_upload()) && (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
 	{
 		$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_url',array('id'=>$member_id));
 		$x=post_param($param_name);
@@ -1515,7 +1518,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
 	{
-		if ((!is_swf_upload()) && ((!array_key_exists($upload_name.'2',$_FILES)) || (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))
+		if (((!array_key_exists($upload_name.'2',$_FILES)) || (!is_swf_upload()) && (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))
 		{
 			$field=post_param('thumb_'.$param_name,'');
 			if (($field=='') && ($urls[0]!='')) warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));

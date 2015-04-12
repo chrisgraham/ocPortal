@@ -53,7 +53,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 			require_code('uploads');
 			if (has_specific_permission($member_id_viewing,'own_avatars'))
 			{
-				if (((!array_key_exists('avatar_file',$_FILES)) || (!is_uploaded_file($_FILES['avatar_file']['tmp_name']))) && (!is_swf_upload())) // No upload -> URL or stock or none
+				if (!(((is_swf_upload(true)) && (array_key_exists('avatar_file',$_FILES))) || ((array_key_exists('avatar_file',$_FILES)) && (is_uploaded_file($_FILES['avatar_file']['tmp_name']))))) // No upload -> URL or stock or none
 				{
 					$urls=array();
 					$stock=post_param('avatar_alt_url','');

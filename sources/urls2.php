@@ -290,6 +290,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 		$slash_pos=false;
 	}
 	$parsed_url['path']=($slash_pos===false)?substr($parsed_url['path'],1):substr($parsed_url['path'],$slash_pos+1); // everything AFTER the zone
+	$parsed_url['path']=preg_replace('#/index\.php$#','',$parsed_url['path']);
 	$attributes=array();
 	$attributes['page']=''; // hopefully will get overwritten with a real one
 
@@ -306,7 +307,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 			$match_string_pattern=preg_replace('#[A-Z]+#','[^\&\?]+',preg_quote($match_string));
 
 			$zones=find_all_zones();
-			if (preg_match('#^'.$match_string_pattern.'(/index\.php|$)#',$parsed_url['path'])!=0)
+			if (preg_match('#^'.$match_string_pattern.'$#',$parsed_url['path'])!=0)
 			{
 				$attributes=array_merge($attributes,$params);
 

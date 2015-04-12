@@ -125,19 +125,6 @@ class Module_login
 
 		$login_url=build_url(array('page'=>'_SELF','type'=>'login'),'_SELF');
 
-		// It's intentional that we will only go to the zone-default page if an explicitly blank redirect URL is given. If not we go to the given redirect URL or to the made-safe current URL (made-safe=zone root if we posted as we do not want to re-post). Note that 'redirect_passon' is simulated by injecting the self-URL as a URL parameter by access_denied() - as we want re-post in this case.
-		// If this is a new install test to see if we have any redirect issue that blocks form submissions
-		if (get_option('site_closed')=='1')
-		{
-			$this_proper_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			$_login_url=$this_proper_url->evaluate();
-			$test=http_download_file($_login_url,0,false,true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
-			if ((is_null($test)) && ($GLOBALS['HTTP_MESSAGE']!=='200') && ($GLOBALS['HTTP_MESSAGE']!=='401') && ((!is_file(get_file_base().'/install.php')) || ($GLOBALS['HTTP_MESSAGE']!=='500')))
-			{
-				attach_message(do_lang_tempcode((substr(get_base_url(),0,11)=='http://www.')?'HTTP_REDIRECT_PROBLEM_WITHWWW':'HTTP_REDIRECT_PROBLEM_WITHOUTWWW',escape_html(get_base_url().'/config_editor.php')),'warn');
-			}
-		}
-
 		if (count($_FILES)==0) // Only if we don't have _FILES (which could never be relayed)
 		{
 			$passion->attach(build_keep_post_fields(array('redirect')));
