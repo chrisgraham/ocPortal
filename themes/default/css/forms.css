@@ -204,7 +204,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .input_colour, .input_list, .input_line, .input_integer,
-.input_author, .input_username, .input_colour, .input_email, .input_codename,
+.input_author, .input_username, .input_email, .input_codename,
 .input_tick, .input_float, .input_text, .input_upload, .input_radio {
 }
 
