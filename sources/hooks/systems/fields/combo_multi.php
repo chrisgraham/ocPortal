@@ -127,7 +127,7 @@ class Hook_fields_combo_multi
 		$default=$field['cf_default'];
 		$exploded_inbuilt=explode('|',$default);
 		$_list=array();
-		$exploded_chosen=explode(chr(10),$actual_value);
+		$exploded_chosen=($actual_value=='' || $actual_value==$default)?array():explode(chr(10),$actual_value);
 		$custom_value=mixed();
 		foreach ($exploded_inbuilt as $i=>$l)
 		{
