@@ -123,6 +123,7 @@ class Module_admin
 			array('maximum','limit','total','max','increase','long'),
 			array('characters','words','bytes'),
 
+			array('delineate','delimit','delimitate','demarcate'),
 			array('order','sort'),
 			array('sudo','masquerade'),
 			array('multi-moderation','multimoderation'),
