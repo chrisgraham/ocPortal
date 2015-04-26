@@ -54,6 +54,9 @@ function validate_ip_script()
 {
 	@ob_end_clean();
 
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	$keep=keep_symbol(array('1'));
 
 	$code=either_param('code','');
@@ -1103,7 +1106,8 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 	list($_type,$index)=get_cpf_storage_for($type);
 
 	require_code('database_action');
-	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
+	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','mcf'.strval($id));
+	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf_ft_'.strval($id));
 	$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
 	if ($indices_count<60) // Could be 64 but trying to be careful here...
 	{

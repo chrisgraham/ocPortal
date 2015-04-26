@@ -137,7 +137,6 @@ class Hook_addon_registry_ocf_forum
 			'OCF_TOPIC_POLL_BUTTON.tpl',
 			'OCF_TOPIC_POLL_VIEW_RESULTS.tpl',
 			'OCF_TOPIC_POST.tpl',
-			'OCF_MEMBER_BOX_CUSTOM_FIELD.tpl',
 			'OCF_TOPIC_ROW_LINK.tpl',
 			'OCF_TOPIC_ROW_MODIFIER.tpl',
 			'OCF_TOPIC_SCREEN.tpl',

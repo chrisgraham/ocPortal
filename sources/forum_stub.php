@@ -178,7 +178,7 @@ class forum_driver_base
 		if (isset($USER_NAME_CACHE[$id])) return $USER_NAME_CACHE[$id];
 
 		$ret=$this->_get_username($id);
-		if ($ret=='') // Odd, but sometimes
+		if ($ret==='') // Odd, but sometimes
 		{
 			if (get_forum_type()=='ocf')
 			{

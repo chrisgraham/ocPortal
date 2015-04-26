@@ -50,7 +50,7 @@ function destrictify($change_content_type=true,$mysql_too=false)
 	if ((get_forum_type()=='ocf') && ($mysql_too)) $GLOBALS['SITE_DB']->query('SET sql_mode=\'\'',NULL,NULL,true);
 	safe_ini_set('ocproducts.type_strictness','0');
 	global $PREVIOUS_XSS_STATE;
-	array_push($PREVIOUS_XSS_STATE,ini_get('ocproducts.xss_detect'));
+	@array_push($PREVIOUS_XSS_STATE,ini_get('ocproducts.xss_detect'));
 	safe_ini_set('ocproducts.xss_detect','0');
 	$include_path='./';
 	$include_path.=PATH_SEPARATOR.get_file_base().'/';
@@ -88,7 +88,7 @@ function restrictify()
 	{
 		safe_ini_set('ocproducts.type_strictness','1');
 		global $PREVIOUS_XSS_STATE;
-		safe_ini_set('ocproducts.xss_detect',array_pop($PREVIOUS_XSS_STATE));
+		@safe_ini_set('ocproducts.xss_detect',array_pop($PREVIOUS_XSS_STATE));
 	}
 	safe_ini_set('include_path','');
 	safe_ini_set('allow_url_fopen','0');

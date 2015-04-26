@@ -750,7 +750,7 @@ class Module_quiz
 		// Give them corrections if it is a quiz.
 		elseif ($quiz['q_type']=='COMPETITION')
 		{
-			$result=comcode_to_tempcode($_corrections->evaluate());
+			$result=paragraph(do_lang_tempcode('THANKYOU_FOR_ENTERING','fgery5465'));
 
 			syndicate_described_activity('quiz:ACTIVITY_ENTERED_COMPETITION',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 		} else

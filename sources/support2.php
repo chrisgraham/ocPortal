@@ -81,15 +81,16 @@ function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=fa
  * Convert a string to an array, with utf-8 awareness where possible/required.
  *
  * @param  string			Input
+ * @param  boolean		Whether to force unicode as on.
  * @return array			Output
  */
-function ocp_mb_str_split($str)
+function ocp_mb_str_split($str,$force=false)
 {
-	$len=ocp_mb_strlen($str);
+	$len=ocp_mb_strlen($str,$force);
 	$array=array();
 	for ($i=0;$i<$len;$i++)
 	{
-		$array[]=ocp_mb_substr($str,$i,1);
+		$array[]=ocp_mb_substr($str,$i,1,$force);
 	}
 	return $array;
 }
@@ -100,12 +101,13 @@ function ocp_mb_str_split($str)
  * @param  string		The input string.
  * @param  integer	The maximum chunking length.
  * @param  string		Split character.
+ * @param  boolean	Whether to force unicode as on.
  * @return string		The chunked version of the input string.
  */
-function ocp_mb_chunk_split($str,$len=76,$glue="\r\n")
+function ocp_mb_chunk_split($str,$len=76,$glue="\r\n",$force=false)
 {
 	if ($str=='') return '';
-	$array=ocp_mb_str_split($str);
+	$array=ocp_mb_str_split($str,$force);
 	$n=-1;
 	$new='';
 	foreach ($array as $char)

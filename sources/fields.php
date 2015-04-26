@@ -162,8 +162,9 @@ function get_bound_content_entry($content_type,$id)
  * @param  ?ID_TEXT		Content entry ID (NULL: new entry)
  * @param  tempcode		Fields (passed by reference)
  * @param  tempcode		Hidden Fields (passed by reference)
+ * @param  boolean		Whether to add a separate header above the fields, so long as not all the fields are already under some other header
  */
-function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
+function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$add_separate_header=false)
 {
 	require_code('catalogues');
 
@@ -230,6 +231,9 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 		$field_groups_blank=$field_groups[''];
 		unset($field_groups['']);
 		$field_groups=array_merge(array($field_groups_blank),$field_groups);
+
+		if ($add_separate_header)
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MORE'))));
 	}
 	foreach ($field_groups as $field_group_title=>$extra_fields)
 	{

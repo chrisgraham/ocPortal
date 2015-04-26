@@ -526,8 +526,7 @@ class standard_aed_module
 		if ($this->has_tied_catalogue())
 		{
 			require_code('fields');
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MORE'))));
-			append_form_custom_fields($this->award_type,NULL,$fields,$hidden);
+			append_form_custom_fields($this->award_type,NULL,$fields,$hidden,true);
 		}
 
 		// SEO?
@@ -1009,8 +1008,7 @@ class standard_aed_module
 		if ($this->has_tied_catalogue())
 		{
 			require_code('fields');
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MORE'))));
-			append_form_custom_fields($this->award_type,$id,$fields,$hidden);
+			append_form_custom_fields($this->award_type,$id,$fields,$hidden,true);
 		}
 
 		// SEO?

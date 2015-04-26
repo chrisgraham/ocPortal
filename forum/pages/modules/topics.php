@@ -2732,34 +2732,45 @@ END;
 		$javascript="
 			var form=document.getElementById('post').form;
 			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
+			form.onsubmit=function() {
+				var post=form.elements['post'];
+				var text_value;
+				if (is_wysiwyg_field(post))
 				{
-					var post=form.elements['post'];
-					if ((!post.value) && (post[1])) post=post[1];
-					if (post.value.length>".strval($size).")
+					try
 					{
-						window.fauxmodal_alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
-						return false;
+						text_value=window.CKEDITOR.instances['post'].getData();
 					}
+					catch (e) {};
+				} else
+				{
+					if ((!post.value) && (post[1])) post=post[1];
+					text_value=post.value;
+				}
+				if (text_value.length>".strval($size).")
+				{
+					window.fauxmodal_alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
+					return false;
+				}
 		";
 
 		$stub=unixify_line_format(either_param('stub',''));
 		if ($stub!='') $javascript.="
-					var df='".str_replace(chr(10),'\n',addslashes($stub))."';
+				var df='".str_replace(chr(10),'\n',addslashes($stub))."';
 
-					var pv=post.value;
-					if ((post) && (pv.substring(0,df.length)==df))
-					{
-						pv=pv.substring(df.length,pv.length);
-					}
-					post.value=pv;
+				var pv=post.value;
+				if ((post) && (pv.substring(0,df.length)==df))
+				{
+					pv=pv.substring(df.length,pv.length);
+				}
+				post.value=pv;
 		";
 
 		$javascript.="
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+				if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
 
-					return true;
-				};
+				return true;
+			};
 		";
 
 		return $javascript;

@@ -1624,10 +1624,10 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	{
 		require_code('catalogues2');
 
-		actual_delete_catalogue_category(intval($id));
-
 		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$id));
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+		actual_delete_catalogue_category(intval($id));
 
 		$this->donext_catalogue_name=$catalogue_name;
 	}

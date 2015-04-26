@@ -424,10 +424,6 @@ class Module_admin_lang
 	{
 		$lang=filter_naughty(get_param('id'));
 
-		// Send header
-		header('Content-Type: application/octet-stream'.'; authoritative=true;');
-		header('Content-Disposition: attachment; filename="ocportal-'.str_replace(chr(13),'',str_replace(chr(10),'',$lang)).'.tar"');
-
 		require_code('tar');
 		require_code('lang_compile');
 		require_code('character_sets');
@@ -477,36 +473,55 @@ msgstr ""
 						$english=str_replace(chr(10),'\n',$english);
 
 						$seen_before=false;
-						if (isset($en_seen_before[$val]))
+						if (isset($en_seen_before[$english]))
 						{
 							$seen_before=true;
 							foreach ($entries2 as $_key=>$_val)
 							{
-								if ($entries2[$_key][2]==$val)
+								if ($entries2[$_key][2]==$english)
 									$entries2[$_key][1]=true;
 							}
 						}
 						$entries2[$key]=array($val,$seen_before,$english);
-						$en_seen_before[$val]=1;
+						$en_seen_before[$english]=true;
 					}
 					require_code('support2');
 					foreach ($entries2 as $key=>$_val)
 					{
 						list($val,$seen_before,$english)=$_val;
+
+						// Fix bad unicode
+						if (get_charset()=='utf-8')
+						{
+							$test_string=$val; // avoid being destructive 
+							$test_string=preg_replace('#[\x09\x0A\x0D\x20-\x7E]#','',$test_string); // ASCII 
+							$test_string=preg_replace('#[\xC2-\xDF][\x80-\xBF]#','',$test_string); // non-overlong 2-byte 
+							$test_string=preg_replace('#\xE0[\xA0-\xBF][\x80-\xBF]#','',$test_string); // excluding overlongs 
+							$test_string=preg_replace('#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','',$test_string); // straight 3-byte 
+							$test_string=preg_replace('#\xED[\x80-\x9F][\x80-\xBF]#','',$test_string); // excluding surrogates 
+							$test_string=preg_replace('#\xF0[\x90-\xBF][\x80-\xBF]{2}#','',$test_string); // planes 1-3 
+							$test_string=preg_replace('#[\xF1-\xF3][\x80-\xBF]{3}#','',$test_string); //  planes 4-15 
+							$test_string=preg_replace('#\xF4[\x80-\x8F][\x80-\xBF]{2}#','',$test_string); // plane 16 
+							if ($test_string!='') $val=utf8_encode($val);
+						}
+
+						// NB: 76 is cutoff point, except escaping can't happen either before or after doing the line split wit this, so we need to do a lower cutoff
+						//  point (60) and then do the escaping
+
 						$data.='#: [strings]'.$key.chr(10);
 						if ($seen_before) $data.='msgctxt "[strings]'.$key.'"'.chr(10);
-						$wrapped=preg_replace('#"\n"$#','',ocp_mb_chunk_split(str_replace('"','\"',$english),76,'"'.chr(10).'"'));
+						$wrapped=preg_replace('#"\n"$#','',str_replace(array('\\','"'),array('\\\\','\"'),ocp_mb_chunk_split($english,60,'"'.chr(10).'"',true)));
 						if (strpos($wrapped,chr(10))!==false)
 						{
-							$data.='msgid ""'.chr(10).'"'.$wrapped.'"'.chr(10);
+							$data.='msgid ""'.chr(10).'"'.preg_replace('#(^\\\\"|\\\\"$)#m','"',$wrapped).'"'.chr(10);
 						} else
 						{
 							$data.='msgid "'.$wrapped.'"'.chr(10);
 						}
-						$wrapped=preg_replace('#"\n"$#','',ocp_mb_chunk_split(str_replace('"','\"',$val),76,'"'.chr(10).'"'));
+						$wrapped=preg_replace('#"\n"$#','',str_replace(array('\\','"'),array('\\\\','\"'),ocp_mb_chunk_split($val,60,'"'.chr(10).'"',true)));
 						if (strpos($wrapped,chr(10))!==false)
 						{
-							$data.='msgstr ""'.chr(10).'"'.$wrapped.'"'.chr(10);
+							$data.='msgstr ""'.chr(10).'"'.preg_replace('#(^\\\\"|\\\\"$)#m','"',$wrapped).'"'.chr(10);
 						} else
 						{
 							$data.='msgstr "'.$wrapped.'"'.chr(10);
@@ -518,6 +533,11 @@ msgstr ""
 			}
 		}
 		tar_close($tar);
+
+		// Send header
+		header('Content-Type: application/octet-stream'.'; authoritative=true;');
+		header('Content-Disposition: attachment; filename="ocportal-'.str_replace(chr(13),'',str_replace(chr(10),'',$lang)).'.tar"');
+
 		readfile($tempfile);
 		@unlink($tempfile);
 

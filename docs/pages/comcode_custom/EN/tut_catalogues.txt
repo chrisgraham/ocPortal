@@ -32,7 +32,7 @@ A catalogue consists of a number of fields.
 [exp_thumb="Adding an entry to a catalogue" float="right"]catalogues_add_entry[/exp_thumb]
 Catalogues support the following field types:
  - [tt]short_text[/tt] -- A short piece of text (less than 255 characters)
- - [tt]long_text[/tt] -- A long piece of text. The first such field will support attachments.
+ - [tt]long_text[/tt] -- A long piece of text
  - [tt]short_trans[/tt] -- A short piece of text (less than 255 characters), that supports Comcode
  - [tt]long_trans[/tt] -- A long piece of text, that supports Comcode
  - [tt]integer[/tt] -- An integer (whole number)
