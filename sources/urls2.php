@@ -354,6 +354,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 	if (array_key_exists('id',$attributes)) $page_link.=':'.urldecode($attributes['id']);
 	foreach ($attributes as $key=>$val)
 	{
+		if (!is_string($val)) $val=strval($val);
 		if (($key!='page') && ($key!='type') && ($key!='id'))
 			$page_link.=':'.$key.'='.urldecode($val);
 	}

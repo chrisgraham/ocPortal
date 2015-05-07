@@ -71,7 +71,7 @@ function zip_error($errno,$mzip=false)
 	$errmsg='unknown';
 	foreach ($zip_file_function_errors as $const_name=>$error_message)
 	{
-		if ((defined($const_name)) && (constant($const_name))==$errno)
+		if ((defined($const_name)) && (@constant($const_name))===$errno)
 		{
 			$errmsg=$error_message;
 		}

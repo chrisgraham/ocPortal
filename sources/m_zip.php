@@ -97,7 +97,7 @@ function zip_open($zip_file)
 
 		attach_message(do_lang_tempcode('NO_SHELL_ZIP_POSSIBLE2',escape_html($config_url)),'warn');
 
-		return constant('ZIPARCHIVE::ER_INTERNAL');
+		return (substr(phpversion(),0,2)=='4.')?20:constant('ZIPARCHIVE::ER_INTERNAL');
 	}
 
 	$res=-1; // any nonzero value
@@ -106,7 +106,7 @@ function zip_open($zip_file)
 	{
 		attach_message(do_lang_tempcode('NO_SHELL_ZIP_POSSIBLE'),'warn');
 
-		return constant('ZIPARCHIVE::ER_INTERNAL');
+		return (substr(phpversion(),0,2)=='4.')?20:constant('ZIPARCHIVE::ER_INTERNAL');
 	}
 	$res=shell_exec($unzip_cmd);
 
@@ -115,7 +115,7 @@ function zip_open($zip_file)
 	if (is_null($res))
 	{
 		m_deldir($zip_dir);
-		return constant('ZIPARCHIVE::ER_INTERNAL');
+		return (substr(phpversion(),0,2)=='4.')?20:constant('ZIPARCHIVE::ER_INTERNAL');
 	}
 
 	// OTHERWISE, you still have the option of parsing $unused_array_result to find clues of errors

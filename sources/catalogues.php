@@ -549,7 +549,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 	if (is_null($num_entries))
 		$num_entries=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
 
-	if ($num_entries>300) // Needed to stop huge slow down, so reduce to sorting by ID
+	if (!$in_db_sorting && $num_entries>300) // Needed to stop huge slow down, so reduce to sorting by ID
 	{
 		$in_db_sorting=true;
 		$virtual_order_by='r.id';

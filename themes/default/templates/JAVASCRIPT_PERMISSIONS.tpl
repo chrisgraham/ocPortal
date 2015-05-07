@@ -369,7 +369,7 @@ function update_permission_box(setting)
 							row=document.getElementById('access_'+group+'_sp_container');
 							new_cell=row.insertBefore(document.createElement('td'),row.cells[row.cells.length-1]);
 							new_cell.className='form_table_field_input sp_cell';
-							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!permissions:OVERRIDE;^}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!permissions:NO_COMPACT;^}</option><option value="1">{!permissions:YES_COMPACT;^}</option></select>');
+							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!permissions:OVERRIDE;^}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">/</option><option value="0">{!permissions:NO_COMPACT;^}</option><option value="1">{!permissions:YES_COMPACT;^}</option></select>');
 
 							element=document.getElementById('access_'+group+'_sp_'+sp);
 
