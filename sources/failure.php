@@ -907,6 +907,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'Unable to allocate memory for pool')===false) && 
 		(strpos($text,'Out of memory')===false) && 
 		(strpos($text,'Can\'t open file')===false) && 
+		(strpos($text,'INSERT command denied to user')===false) && 
 		(strpos($text,'Disk is full writing')===false) && 
 		(strpos($text,'Disk quota exceeded')===false) && 
 		(strpos($text,'No space left on device')===false) && 
