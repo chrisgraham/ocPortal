@@ -156,7 +156,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 		if ($this_level!=0)
 		{
 			$where_lang=multi_lang()?(db_string_equal_to('language',$lang).' AND '):'';
-			$query=' FROM '.get_table_prefix().'newsletter_subscribe s LEFT JOIN '.get_table_prefix().'newsletter n ON n.email=s.email WHERE '.$where_lang.'code_confirm=0 AND s.newsletter_id='.strval($newsletter['id']).' AND the_level>='.strval((integer)$this_level);
+			$query=' FROM '.get_table_prefix().'newsletter_subscribe s LEFT JOIN '.get_table_prefix().'newsletter n ON n.email=s.email WHERE '.$where_lang.'code_confirm=0 AND s.newsletter_id='.strval($newsletter['id']).' AND the_level>='.strval((integer)$this_level).' ORDER BY n.id';
 			$temp=$GLOBALS['SITE_DB']->query('SELECT n.id,n.email,the_password,n_forename,n_surname'.$query,$max,$start);
 			if ($start==0)
 			{
@@ -210,7 +210,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 				{
 					$query='SELECT xxxxx FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON m.id=g.gm_member_id AND g.gm_validated=1 WHERE '.db_string_not_equal_to('m_email_address','').' AND '.$where_lang.'m_validated=1 AND (gm_group_id='.strval($id).' OR m_primary_group='.strval($id).')';
 					if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
-					$query.=' AND m_is_perm_banned=0';
+					$query.=' AND m_is_perm_banned=0 ORDER BY m.id';
 				} else
 				{
 					$query='SELECT xxxxx  FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON m.id=g.gm_member_id AND g.gm_validated=1 WHERE '.db_string_not_equal_to('m_email_address','').' AND '.$where_lang.'m_validated=1 AND gm_group_id='.strval($id);
@@ -218,7 +218,8 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 					$query.=' AND m_is_perm_banned=0';
 					$query.=' UNION SELECT xxxxx FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.db_string_not_equal_to('m_email_address','').' AND '.$where_lang.'m_validated=1 AND m_primary_group='.strval($id);
 					if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
-					$query.=' AND m_is_perm_banned=0';
+
+					$query.=' AND m_is_perm_banned=0 ORDER BY id';
 				}
 				$_rows=$GLOBALS['FORUM_DB']->query(str_replace('xxxxx','m.id,m.m_email_address,m.m_username',$query),$max,$start,false,true);
 				if ($start==0)
@@ -250,7 +251,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 		{
 			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_email_address','').' AND '.$where_lang.'m_validated=1';
 			if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
-			$query.=' AND m_is_perm_banned=0';
+			$query.=' AND m_is_perm_banned=0 ORDER BY id';
 			$_rows=$GLOBALS['FORUM_DB']->query('SELECT id,m_email_address,m_username'.$query,$max,$start);
 			if ($start==0)
 				$total['-1']=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$query);
@@ -466,18 +467,22 @@ function newsletter_shutdown_function()
 
 			if (!is_null($last_cron))
 			{
-				$GLOBALS['SITE_DB']->query_insert('newsletter_drip_send',array(
-					'd_inject_time'=>time(),
-					'd_subject'=>$NEWSLETTER_SUBJECT,
-					'd_message'=>$newsletter_message_substituted,
-					'd_html_only'=>$NEWSLETTER_HTML_ONLY,
-					'd_to_email'=>$email_address,
-					'd_to_name'=>$usernames[$i],
-					'd_from_email'=>$NEWSLETTER_FROM_EMAIL,
-					'd_from_name'=>$NEWSLETTER_FROM_NAME,
-					'd_priority'=>$NEWSLETTER_PRIORITY,
-					'd_template'=>$NEWSLETTER_MAIL_TEMPLATE,
-				));
+				$test=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter_drip_send','d_to_email',array('d_to_email'=>$email_address,'d_subject'=>$NEWSLETTER_SUBJECT));
+				if (is_null($test))
+				{
+					$GLOBALS['SITE_DB']->query_insert('newsletter_drip_send',array(
+						'd_inject_time'=>time(),
+						'd_subject'=>$NEWSLETTER_SUBJECT,
+						'd_message'=>$newsletter_message_substituted,
+						'd_html_only'=>$NEWSLETTER_HTML_ONLY,
+						'd_to_email'=>$email_address,
+						'd_to_name'=>$usernames[$i],
+						'd_from_email'=>$NEWSLETTER_FROM_EMAIL,
+						'd_from_name'=>$NEWSLETTER_FROM_NAME,
+						'd_priority'=>$NEWSLETTER_PRIORITY,
+						'd_template'=>$NEWSLETTER_MAIL_TEMPLATE,
+					));
+				}
 			} else
 			{
 				mail_wrap($NEWSLETTER_SUBJECT,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,NULL,true,NULL,true,$in_html,false,$NEWSLETTER_MAIL_TEMPLATE);

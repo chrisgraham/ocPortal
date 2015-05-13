@@ -187,6 +187,7 @@ class Module_newsletter
 				'd_template'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('newsletter_drip_send','d_inject_time',array('d_inject_time'));
+			$GLOBALS['SITE_DB']->create_index('newsletter_drip_send','d_to_email',array('d_to_email'));
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<9))
 		{

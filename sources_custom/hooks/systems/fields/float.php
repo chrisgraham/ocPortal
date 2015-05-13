@@ -40,7 +40,7 @@ class Hook_fields_float
 	 */
 	function inputted_to_sql_for_search($row,$i)
 	{
-		return exact_match_sql($row,$i);
+		return exact_match_sql($row,$i,'float');
 	}
 
 	// ===================

@@ -45,7 +45,7 @@ class Hook_fields_integer
 	 */
 	function inputted_to_sql_for_search($row,$i)
 	{
-		return exact_match_sql($row,$i);
+		return exact_match_sql($row,$i,'integer');
 	}
 
 	// ===================

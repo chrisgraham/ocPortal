@@ -803,12 +803,14 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
  * Whilst this is a clever algorithm, it isn't so clever as to actually try and match each selector against a DOM tree. If any segment of a compound selector matches, match is assumed.
  *
  * @param  ID_TEXT		CSS file
- * @param  ID_TEXT		Theme
+ * @param  ?ID_TEXT		Theme (NULL: default)
  * @param  string			(X)HTML context under which CSS is filtered
  * @return string			Filtered CSS
  */
 function filter_css($c,$theme,$context)
 {
+	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
+
 	// Reduce input parameters to critical components, and cache on - saves a lot of time if multiple emails sent by script
 	static $cache=array();
 	$simple_sig=preg_replace('#\s+(?!class)(?!id)[\w\-]+="[^"<>]*"#','',preg_replace('#[^<>]*(<[^<>]+>)[^<>]*#s','${1}',$context));

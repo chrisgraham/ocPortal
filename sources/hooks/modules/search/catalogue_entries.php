@@ -285,9 +285,19 @@ class Hook_search_catalogue_entries
 					{
 						$where_clause.=' AND ';
 
-						if ((substr($param,0,1)=='=') || ($row_type=='integer') || ($row_type=='float'))
+						if (substr($param,0,1)=='=')
 						{
 							$where_clause.=db_string_equal_to($search_field,substr($param,1));
+						}
+						elseif ($row_type=='integer' || $row_type=='float')
+						{
+							if (is_numeric($param))
+							{
+								$where_clause.=$search_field.'='.$param;
+							} else
+							{
+								$where_clause.=db_string_equal_to($search_field,$param);
+							}
 						} else
 						{
 							if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!is_under_radar($param)))
@@ -379,6 +389,9 @@ class Hook_search_catalogue_entries
 		{
 			foreach ($rows as $i=>$row)
 			{
+				$out[$i]['data']=$row;
+				unset($rows[$i]);
+
 				$catalogue_name=$row['c_name'];
 				$tpl_set=$catalogue_name;
 				$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name],'PAGE',$tpl_set,-1);
@@ -403,6 +416,7 @@ class Hook_search_catalogue_entries
 			{
 				$out[$i]['data']=$row;
 				unset($rows[$i]);
+
 				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
 			}	
 		}

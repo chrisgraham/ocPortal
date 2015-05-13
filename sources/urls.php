@@ -631,6 +631,7 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 				foreach ($extra_vars as $key=>$val) // Add these in explicitly
 				{
 					if ($val===NULL) continue;
+					if (is_integer($key)) $key=strval($key);
 					if ($val===SELF_REDIRECT) $val=get_self_url(true,true);
 					$_makeup.=($first?'?':'&').$key.'='.ocp_url_encode($val,true);
 					$first=false;
