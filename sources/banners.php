@@ -28,6 +28,203 @@ function init__banners()
 	define('BANNER_DEFAULT',2);
 }
 
+function choose_banner($banner_set,$algorithm)
+{
+    if (count($banner_set)==0) return NULL;
+
+    $rotation_identifier=md5(serialize(func_get_args()));
+
+    switch ($algorithm)
+    {
+        case 'importance_bias_random':
+            $banner=choose_banner__importance_bias_random($banner_set);
+            break;
+
+        case 'importance_bias_rotation':
+            $banner=choose_banner__importance_bias_rotation($banner_set,$rotation_identifier);
+            break;
+
+        case 'precedence_random':
+            $banner=choose_banner__precedence_random($banner_set);
+            break;
+
+        case 'precedence_rotation':
+            $banner=choose_banner__precedence_rotation($banner_set,$rotation_identifier);
+            break;
+    }
+ 
+    return $banner;
+}
+
+
+function find_all_highest_precedence_banners($banner_set)
+{
+    // Filter our banners according to precedence...
+
+    // Find the highest precedence
+    $highest=NULL;
+    foreach ($banner_set as $precedence)
+    {
+        if ((is_null($highest)) || ($precedence>$highest))
+        {
+            $highest=$precedence;
+        }
+    }
+
+    // Get array of banners of highest precedence
+    $banner_set_filtered=array();
+    foreach ($banner_set as $banner_codename=>$precedence)
+    {
+        if ($precedence==$highest)
+        {
+            $banner_set_filtered[$banner_codename]=$precedence;
+
+        }
+    }
+
+    return $banner_set_filtered;
+}
+
+function choose_banner__importance_bias_random($banner_set)
+{
+    // Find the total of all the precedences
+    $total=array_sum($banner_set);
+    
+    // Pick a random number between zero and the total
+    $spot_on_number_line=(rand()/getrandmax())*$total;
+
+    // If all the banners are *imagined* laid out in a sequence, with number range width equal to precedence, on which banner on the number line is our random number?
+    $position_on_number_line=0;
+    foreach ($banner_set as $banner_code=>$precedence)
+    {
+        $position_on_number_line+=$precedence;
+        if ($position_on_number_line>=$spot_on_number_line)
+        {
+            //echo 'total='.$total.' spot_on_number_line='.$spot_on_number_line.' position_on_number_line='.$position_on_number_line.' banner '.$banner_code;exit();    Useful for debugging
+            return $banner_code;
+        }
+    }
+    exit('Should never get here ('.strval($position_on_number_line).' of '.strval($spot_on_number_line).')');
+
+}
+
+function choose_banner__importance_bias_rotation($banner_set,$rotation_identifier)
+{
+    
+    $banner_set = get_test_data();
+
+    // Find the total of all the precedences
+    $total=array_sum($banner_set);
+
+    
+    // Find our current cycle in the rotation / initialise if new
+    $_pos=get_long_value($rotation_identifier.'_position');
+    if ($_pos===NULL)
+    {
+        $pos=0;
+    } else
+    {
+        $pos=intval($_pos);
+    }
+
+
+    // Advance cycle if necessary
+    $_hits=get_long_value($rotation_identifier.'_hits');
+    if ($_hits===NULL)
+    {
+        $hits=0;
+    } else
+    {
+        $hits=intval($_hits);
+    }
+
+    if ($hits==HITS_PER_BANNER_ROTATION_CYCLE)
+    {
+        // Advance cycle
+        $hits=1;
+        set_long_value($rotation_identifier.'_hits',strval($hits));
+        $pos++;
+        if($pos>=$total)
+        {
+            // Reset cycle, as it passed the end
+            $pos=0;
+        }
+        set_long_value($rotation_identifier.'_position',strval($pos));
+    } else
+    {
+        // Continue cycle
+        $hits++;
+        set_long_value($rotation_identifier.'_hits',strval($hits));
+    }
+
+    // Pick banner
+    $banner_set_values=array_keys($banner_set);
+    $result=$banner_set_values[$pos];
+    return $result;
+
+
+
+
+}
+
+
+function choose_banner__precedence_random($banner_set)
+{
+    return array_rand(find_all_highest_precedence_banners($banner_set));
+}
+
+function choose_banner__precedence_rotation($banner_set,$rotation_identifier)
+{
+    $banner_set=find_all_highest_precedence_banners($banner_set);
+
+    // Find the maximum number of banners in the rotation
+    $max=count($banner_set);
+
+    // Find our current cycle in the rotation / initialise if new
+    $_pos=get_long_value($rotation_identifier.'_position');
+    if ($_pos===NULL)
+    {
+        $pos=0;
+    } else
+    {
+        $pos=intval($_pos);
+    }
+
+    // Advance cycle if necessary
+    $_hits=get_long_value($rotation_identifier.'_hits');
+    if ($_hits===NULL)
+    {
+        $hits=0;
+    } else
+    {
+        $hits=intval($_hits);
+    }
+    if ($hits==HITS_PER_BANNER_ROTATION_CYCLE)
+    {
+        // Advance cycle
+        $hits=1;
+        set_long_value($rotation_identifier.'_hits',strval($hits));
+        $pos++;
+        if ($pos>=$max)
+        {
+            // Reset cycle, as it passed the end
+            $pos=0;
+        }
+        set_long_value($rotation_identifier.'_position',strval($pos));
+    } else
+    {
+        // Continue cycle
+        $hits++;
+        set_long_value($rotation_identifier.'_hits',strval($hits));
+    }
+
+    // Pick banner
+    $banner_set_values=array_keys($banner_set);
+    $result=$banner_set_values[$pos];
+    return $result;
+}
+
+
 /**
  * Show a banner according to GET parameter specification.
  *
@@ -40,7 +237,7 @@ function init__banners()
  * @param  ?string		The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (NULL: get from URL param) (blank: our own site)
  * @return ?tempcode		Result (NULL: we weren't asked to return the result)
  */
-function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_only=NULL,$source=NULL)
+function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$b_algorithm=NULL,$internal_only=NULL,$source=NULL)
 {
 	require_code('images');
 	require_lang('banners');
@@ -184,15 +381,18 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 		$tally=0;
 		$counter=0;
 		$bound=array();
+		$banner_set = array();
 		while (array_key_exists($counter,$rows))
 		{
 			$myrow=$rows[$counter];
 
 			if (($myrow['the_type']==2) && (!$show_defaults)) $myrow['importance_modulus']=0;
-			$tally+=$myrow['importance_modulus'];
-			$bound[$counter]=$tally;
+			/*$tally+=$myrow['importance_modulus'];
+			$bound[$counter]=$tally;*/
+			$banner_set[$myrow['name']]= $myrow['importance_modulus'];
 			$counter++;
 		}
+		/* $banner_set = array($myrow['name']=>$myrow['importance_modulus']);*/
 		if ($tally==0)
 		{
 			load_user_stuff();
@@ -209,13 +409,27 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 		}
 
 		// Choose which banner to show from the results
-		$rand=mt_rand(0,$tally);
-		for ($i=0;$i<$counter;$i++)
-		{
-			if ($rand<=$bound[$i]) break;
-		}
+		// $rand=mt_rand(0,$tally);
+		// for ($i=0;$i<$counter;$i++)
+		// {
+		// 	if ($rand<=$bound[$i]) break;
+		// }
 
-		$name=$rows[$i]['name'];
+		// $name=$rows[$i]['name'];
+
+		$name = choose_banner($banner_set,$b_algorithm);
+
+		reset($rows);	//reset the internal array pointer 
+				$icount = 0;	
+				foreach($rows as $bn){
+				  if(in_array($name,$bn)){ //search for the banner name in individual array
+						break;  //break out of loop when the match is found
+					}
+				  $icount++; //increment the counter if match not found 
+				
+				}
+			$i = $icount; //set a new value for current array pointer
+		
 
 		// Update the counts (ones done per-view)
 		if (get_db_type()!='xml')
