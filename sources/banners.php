@@ -28,6 +28,13 @@ function init__banners()
 	define('BANNER_DEFAULT',2);
 }
 
+/**
+ * Choose a banner according to the specified algorithm.
+ *
+ * @param  array 		Array of banners with their precedence values
+ * @param  string		Name of the algorithm
+ * @return string		Name of the banner
+ */
 function choose_banner($banner_set,$algorithm)
 {
     if (count($banner_set)==0) return NULL;
@@ -56,7 +63,12 @@ function choose_banner($banner_set,$algorithm)
     return $banner;
 }
 
-
+/**
+ * Finds all the banners with highest precedence values.
+ *
+ * @param  array 		Array of banners with their precedence values
+ * @return array		Array of banners with highest precedence values
+ */
 function find_all_highest_precedence_banners($banner_set)
 {
     // Filter our banners according to precedence...
@@ -85,6 +97,13 @@ function find_all_highest_precedence_banners($banner_set)
     return $banner_set_filtered;
 }
 
+/**
+ * Choose a banner randomly with .
+ *
+ * @param  array 		Array of banners with their precedence values
+ * @param  string		Name of the algorithm
+ * @return string		Name of the banner
+ */
 function choose_banner__importance_bias_random($banner_set)
 {
     // Find the total of all the precedences
@@ -108,6 +127,14 @@ function choose_banner__importance_bias_random($banner_set)
 
 }
 
+/**
+ * Choose a banner randomly with .
+ *
+ * @param  array 		Array of banners with their precedence values
+ * @param  string		Name of the algorithm
+ * @param  string 		Md5'ed string for a unique rotation identifier
+ * @return string		Name of the banner
+ */
 function choose_banner__importance_bias_rotation($banner_set,$rotation_identifier)
 {
     
@@ -168,11 +195,25 @@ function choose_banner__importance_bias_rotation($banner_set,$rotation_identifie
 }
 
 
+/**
+ * Choose a banner randomly with .
+ *
+ * @param  array 		Array of banners with their precedence values
+ * @return string		Name of the banner
+ */
 function choose_banner__precedence_random($banner_set)
 {
     return array_rand(find_all_highest_precedence_banners($banner_set));
 }
 
+/**
+ * Choose a banner randomly with .
+ *
+ * @param  array 		Array of banners with their precedence values
+ * @param  string		Name of the algorithm
+ * @param  string 		Md5'ed string for a unique rotation identifier
+ * @return string		Name of the banner
+ */
 function choose_banner__precedence_rotation($banner_set,$rotation_identifier)
 {
     $banner_set=find_all_highest_precedence_banners($banner_set);
