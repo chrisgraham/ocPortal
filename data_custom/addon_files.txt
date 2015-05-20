@@ -4120,6 +4120,9 @@ youtube_channel_integration_block
  - sources_custom/blocks/youtube_channel.php
  - themes/default/templates_custom/BLOCK_YOUTUBE_CHANNEL.tpl
  - themes/default/templates_custom/BLOCK_YOUTUBE_CHANNEL_STYLE.tpl
+ - themes/default/images_custom/youtube_channel_integration/star_empty.gif
+ - themes/default/images_custom/youtube_channel_integration/star_full.gif
+ - themes/default/images_custom/youtube_channel_integration/star_half.gif
 
 twitter_feed_integration_block
 ---------------------------------
