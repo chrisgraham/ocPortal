@@ -457,7 +457,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$b_algorit
 		// }
 
 		// $name=$rows[$i]['name'];
-
+		define('HITS_PER_BANNER_ROTATION_CYCLE',50);
 		$name = choose_banner($banner_set,$b_algorithm);
 
 		reset($rows);	//reset the internal array pointer 
