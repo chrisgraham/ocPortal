@@ -623,7 +623,7 @@ function install_addon($file,$files=NULL)
 		}
 	}
 
-	// Install news blocks
+	// Install new blocks
 	foreach ($directory as $dir)
 	{
 		$addon_file=$dir['path'];

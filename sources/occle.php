@@ -1281,10 +1281,17 @@ class virtual_bash
 					$occle_state_diff[$occle_change]=$occle_env_after[$occle_change];
 			}
 
-			ocp_setcookie('occle_state_b64',base64_encode(serialize($occle_state_diff)));
-			ocp_setcookie('occle_state_code_b64',base64_encode(serialize(array_diff(array_keys($GLOBALS['_REQUIRED_CODE']),$already_required))));
-			ocp_setcookie('occle_state_lang_b64',base64_encode(serialize(array_keys($GLOBALS['LANGS_REQUESTED']))));
-			// ^ We use base64 encoding to work around inane modsecurity restrictions. We can't always work around modsecurity (GET/POST encoding would be too messy), but for cookies it is an easy win
+			$cookie_size=strlen(serialize($_COOKIE));
+			if ($cookie_size<4096) // Be careful, large cookies can block Apache requests
+			{
+				ocp_setcookie('occle_state_b64',base64_encode(serialize($occle_state_diff)));
+				ocp_setcookie('occle_state_code_b64',base64_encode(serialize(array_diff(array_keys($GLOBALS['_REQUIRED_CODE']),$already_required))));
+				ocp_setcookie('occle_state_lang_b64',base64_encode(serialize(array_keys($GLOBALS['LANGS_REQUESTED']))));
+				// ^ We use base64 encoding to work around inane modsecurity restrictions. We can't always work around modsecurity (GET/POST encoding would be too messy), but for cookies it is an easy win
+			} else
+			{
+				ocp_eatcookie('occle_state_b64');
+			}
 		}
 		else
 		{

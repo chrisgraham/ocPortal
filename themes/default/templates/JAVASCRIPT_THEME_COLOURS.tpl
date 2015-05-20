@@ -15,7 +15,7 @@ function hexToDec(number)
 	return parseInt(number,16);
 }
 
-window.names_to_numbers={};
+window.names_to_numbers={length: 0};
 window.last_cc={};
 window.last_cc_i={};
 function do_color_change(e)
@@ -199,6 +199,7 @@ function make_colour_chooser(name,color,context,tabindex,label,className)
 	}
 
 	window.names_to_numbers[name]=window.names_to_numbers.length;
+    window.names_to_numbers.length++;
 
 	var p=document.getElementById('colours_go_here');
 

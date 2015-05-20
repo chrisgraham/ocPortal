@@ -219,7 +219,7 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 		't_cache_last_post_id='.(is_null($last_post_id)?'NULL':strval((integer)$last_post_id)).',
 		t_cache_last_title=\''.db_escape_string($last_title).'\',
 		t_cache_last_time='.(is_null($last_time)?'NULL':strval((integer)$last_time)).',
-		t_cache_last_username=\''.db_escape_string($last_username).'\',
+		t_cache_last_username=\''.db_escape_string(substr($last_username,0,255)).'\',
 		t_cache_last_member_id='.(is_null($last_member_id)?'NULL':strval((integer)$last_member_id)).',';
 
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET '.

@@ -86,7 +86,7 @@ function update_ajax_member_list_response(result,list_contents)
 
 	close_down();
 
-	var data_list=(typeof document.createElement('datalist').options!='undefined');
+	var data_list=false;//(typeof document.createElement('datalist').options!='undefined');	Still to buggy in browsers
 
 	//if (list_contents.childNodes.length==0) return;
 	var list=document.createElement(data_list?'datalist':'select');

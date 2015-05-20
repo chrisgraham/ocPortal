@@ -374,8 +374,8 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 			// If it's a new one, we need to change the comcode to reference the ID we made for it
 			if ($attachment['type']=='new')
 			{
-				$new_comcode=preg_replace('#(\[(attachment|attachment_safe)[^\]]*\])new_'.strval($marker_id).'(\[/)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
-				$new_comcode=preg_replace('#(<(attachment|attachment_safe)[^>]*>)new_'.strval($marker_id).'(</)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
+				$new_comcode=preg_replace('#(\[(attachment|attachment_safe)[^\]]*\])new_'.$marker_id.'(\[/)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
+				$new_comcode=preg_replace('#(<(attachment|attachment_safe)[^>]*>)new_'.$marker_id.'(</)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
 
 				if (!is_null($type))
 					$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment['id']));

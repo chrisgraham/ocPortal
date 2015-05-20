@@ -1722,10 +1722,10 @@ table.scrollable_inside {
 .results_table[summary*="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:last-child {
 	{$BETA_CSS_PROPERTY,border-top-right-radius: 0px;}
 }
-.results_table>tbody>tr:last-child>*:first-child {
+.results_table>tbody>tr:last-child>*:first-child, .results_table>tbody>tr.last>*:first-child {
 	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 5px;}
 }
-.results_table>tbody>tr:last-child>*:last-child {
+.results_table>tbody>tr:last-child>*:last-child, .results_table>tbody>tr.last>*:last-child {
 	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
 }
 
@@ -1745,7 +1745,7 @@ table.scrollable_inside {
 .results_table>*>tr>td:first-child, .results_table>*>tr>th:first-child {
 	border-left: 1px solid {$GET,standard_border};
 }
-.results_table>tbody>tr:last-child>td, .results_table>tbody>tr:last-child>th {
+.results_table>tbody>tr:last-child>td, .results_table>tbody>tr.last>td, .results_table>tbody>tr:last-child>th {
 	border-bottom: 1px solid {$GET,standard_border};
 }
 
