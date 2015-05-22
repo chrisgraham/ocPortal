@@ -5496,7 +5496,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if (!_btnSubmitID)
 	{
 		_btnSubmitID='submit_button';
-		if (!document.getElementById(_btnSubmitID))
+		var test=document.getElementById(_btnSubmitID);
+		if ((!test) || (test.form!=rep.form))
 		{
 			_btnSubmitID=null;
 			var inputs=rep.form.elements;

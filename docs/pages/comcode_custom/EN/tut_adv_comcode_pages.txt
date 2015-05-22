@@ -9,7 +9,7 @@ ocPortal provides features to allow Comcode pages to be very feature rich. This 
 
 If you have read the 'custom pages of information' tutorial, you will know that using Comcode pages, you can type in text that visually resembles the look of the page (unlike HTML, which can look very complicated). This is a very powerful tool, but it is ultimately limited by the fact that you are only producing a document, not an interactive, data-bound, part of a website: if this was all you could do (forgetting modules for a minute), then ocPortal would not be much more powerful than a word processor.
 
-ocPortal has a concept called a 'block'. Blocks are essentially building blocks that can be inserted into a Comcode page in order to add the aforementioned interactive and date-bound functionality that is so important to a modern website. At the time of writing, ocPortal contains 67 blocks (at the time of writing) for you to use, and we are planning more of them for future versions.
+ocPortal has a concept called a 'block'. Blocks are essentially building blocks that can be inserted into a Comcode page in order to add the aforementioned interactive and data-bound functionality that is so important to a modern website. At the time of writing, ocPortal contains 67 blocks for you to use, and we are planning more of them for future versions.
 
 [title="2"]How to use a block[/title]
 
@@ -66,7 +66,7 @@ To export a Comcode page with 'inline attachments', choose to edit the page, and
 
 
 [concepts
- 1_key="Block"   1_value="Building blocks that can be inserted into a Comcode page, in order to add interactive and date-bound functionality"
+ 1_key="Block"   1_value="Building blocks that can be inserted into a Comcode page, in order to add interactive and data-bound functionality"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

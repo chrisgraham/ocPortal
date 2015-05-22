@@ -1015,9 +1015,26 @@ function step_5()
 		}
 	}
 
+    // Check table prefix
 	$table_prefix=post_param('table_prefix');
 	if ($table_prefix=='') warn_exit(do_lang_tempcode('NO_BLANK_TABLE_PREFIX'));
 
+    // Test base URL isn't subject to redirects
+    $test_url=$base_url.'/installer_is_testing_base_urls.php';
+    require_code('files');
+    http_download_file($test_url,NULL,false);
+    global $HTTP_DOWNLOAD_URL;
+    if ($HTTP_DOWNLOAD_URL!=$test_url)
+    {
+        if (preg_replace('#www\.#','',$HTTP_DOWNLOAD_URL)==$test_url)
+        {
+            warn_exit(do_lang_tempcode('BASE_URL_REDIRECTS_WITH_WWW'));
+        }
+        elseif ($HTTP_DOWNLOAD_URL==preg_replace('#www\.#','',$test_url))
+        {
+            warn_exit(do_lang_tempcode('BASE_URL_REDIRECTS_WITHOUT_WWW'));
+        }
+    }
 
 	// Give warning if database contains data
 	global $SITE_INFO;

@@ -173,7 +173,9 @@
 
 				<div id="extra_errors"></div>
 
-				{CONTENT}
+                <div>
+    				{CONTENT}
+                </div>
 			</div></div>
 		</div>
 
