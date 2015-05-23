@@ -49,7 +49,7 @@ class Hook_rss_downloads
 			$_categories[$i]['text_original']=get_translated_text($_category['category']);
 		}
 		$categories=collapse_2d_complexity('id','text_original',$_categories);
-		$query='SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'download_downloads WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.' ORDER BY add_date DESC';
+		$query='SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'download_downloads WHERE add_date>'.strval((integer)$cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1 ':'').' AND '.$filters.' ORDER BY add_date DESC';
 		$rows=$GLOBALS['SITE_DB']->query($query,$max);
 		foreach ($rows as $row)
 		{
@@ -83,7 +83,7 @@ class Hook_rss_downloads
 			} else $if_comments=new ocp_tempcode();
 
 			$keep=symbol_tempcode('KEEP');
-			$enclosure_url=find_script('dload').'?id='.strval($id).$keep->evaluate();
+			$enclosure_url=find_script('dload').'?id='.strval($row['id']).$keep->evaluate();
 			$full_url=$row['url'];
 			if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
 			list($enclosure_length,)=get_enclosure_details($row['url'],$full_url);

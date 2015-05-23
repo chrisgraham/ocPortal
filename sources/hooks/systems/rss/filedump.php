@@ -57,7 +57,7 @@ class Hook_rss_filedump
 		{
 			if ($i==$max) break;
 
-			if ($filters!=array(''))
+			if ($filters!=array('*'))
 			{
 				$ok=false;
 				foreach ($filters as $filter)

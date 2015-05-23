@@ -120,7 +120,7 @@ class Module_cms_iotds extends standard_aed_module
 	 * @param  LONG_TEXT			Notes for the IOTD
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($url='',$thumb_url='',$title='',$caption='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
+	function get_form_fields($url='',$thumb_url='',$title='',$caption='',$current=true,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -164,7 +164,7 @@ class Module_cms_iotds extends standard_aed_module
 				$test=$GLOBALS['SITE_DB']->query_value_null_ok('iotd','is_current',array('is_current'=>1));
 				if (is_null($test)) $current=true;
 			}
-			$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
+			$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode(($url=='')?'DESCRIPTION_IMMEDIATE_USE_ADD':'DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
 		}
 
 		require_code('feedback2');

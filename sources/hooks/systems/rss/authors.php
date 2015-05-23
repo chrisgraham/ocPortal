@@ -47,7 +47,7 @@ class Hook_rss_authors
 		{
 			if ($i==$max) break;
 
-			$id=strval($row['author']);
+			$id=$row['author'];
 			$author='';
 
 			$news_date='';
