@@ -9,19 +9,53 @@ class banners_algorithm_test_set extends ocp_test_case
 public function setUp()
 {
 		parent::setUp();
+
+        require_code('banners');
+        require_code('banners2');
+        require_code('submit');
+
 }
 
+public function addBannerType(){
+    add_banner_type('test',0,100,100,100,0);
+    $this->assertTrue(100==$GLOBALS['FORUM_DB']->query_value('banner_types','t_image_width',array('id'=>'test')));
+}
 
+public function addBanner(){
 
+     add_banner('test1','http://ocportal.com/themes/ocproducts/images/newlogo.gif','test',0,0,'',0.2,'test notes',1,NULL,2,1,'test');
+     $this->assertTrue('test'==$GLOBALS['FORUM_DB']->query_value('banners','b_title_text',array('name'=>'test1')));
+
+     add_banner('test2','http://ocportal.com/themes/ocproducts/images/newlogo.gif','test',0,0,'',0.3,'test notes',1,NULL,2,1,'test');
+     $this->assertTrue('test'==$GLOBALS['FORUM_DB']->query_value('banners','b_title_text',array('name'=>'test2')));
+
+     add_banner('test3','http://ocportal.com/themes/ocproducts/images/newlogo.gif','test',0,0,'',0.3,'test notes',1,NULL,2,1,'test');
+     $this->assertTrue('test'==$GLOBALS['FORUM_DB']->query_value('banners','b_title_text',array('name'=>'test3')));
+
+     add_banner('test4','http://ocportal.com/themes/ocproducts/images/newlogo.gif','test',0,0,'',0.3,'test notes',1,NULL,2,1,'test');
+     $this->assertTrue('test'==$GLOBALS['FORUM_DB']->query_value('banners','b_title_text',array('name'=>'test4')));
+
+} 
+
+public function getBanners(){
+   
+
+    $rows = $GLOBALS['FORUM_DB']->query("SELECT name, importance_modulus FROM ".get_table_prefix()."banners WHERE name IN ('test1','test2','test3','test4')");
+    return $rows;
+}
 
 public function get_test_data()
 {
-    return array(
-        'test1'=>0.2,
-        'test2'=>0.3,
-        'test3'=>0.3,
-        'test4'=>0.3,
-    );
+    $rows = $this->getBanners();
+
+    $final_array = array();
+
+    foreach ($rows as $bkey => $arr) {
+        $final_array[$arr['name']] = $arr['importance_modulus'];
+    }
+    var_dump($final_array);
+    return $final_array;
+
 }
 
 public function test_case__importance_bias_random()
@@ -56,31 +90,36 @@ public function test_case__importance_bias_random()
         $dif=$choice_count-$expected_choices[$banner_code];
 
         // If the difference for any of the banners is more than 10%, this suggests our randomised choices are not valid
-       if (abs($dif)>0.1*$n) $is_correct=false;
-        
+        $this->assertTrue(abs($dif)<0.1*$n);
     }
-    var_dump($is_correct);
     
 }
 
-// function test_case__importance_bias_rotation()
-// {
-//     $n=HITS_PER_BANNER_ROTATION_CYCLE*3*2; 
-//     $is_correct=$this->_test_case__precedence($n,'importance_bias_rotation',0.0);
-//     var_dump($is_correct);
-// }
+function test_case__importance_bias_rotation()
+{
+    $banner_set = $this->get_test_data();
+    $precedence_total=array_sum($banner_set);
+    $n=HITS_PER_BANNER_ROTATION_CYCLE*3*2; 
+
+    $banner_set=$this->get_test_data();
+
+    $acceptable_choices=array('test2','test3','test4');
+    
+    $is_correct=$this->_test_case__precedence($n,'importance_bias_rotation',0.0);
+    var_dump($is_correct);
+}
 
 function test_case__precedence_random()
 {
     $is_correct=$this->_test_case__precedence(100,'precedence_random',0.1);
-    var_dump($is_correct);
+    $this->assertTrue($is_correct);
 }
 
 function test_case__precedence_rotation()
 {
     $n=SELF::HITS_PER_BANNER_ROTATION_CYCLE*3*2; // Let it go through the rotation 2 full times
     $is_correct=$this->_test_case__precedence($n,'precedence_rotation',0.0);
-    var_dump($is_correct);
+    $this->assertTrue($is_correct);
 }
 
 function _test_case__precedence($n,$algorithm,$tolerance)
@@ -218,11 +257,8 @@ function choose_banner__importance_bias_rotation($banner_set,$rotation_identifie
     $banner_set_values=array_keys($banner_set);
     $result=$banner_set_values[$pos];
     return $result;
-
-
-
-
 }
+
 
 function choose_banner__precedence_random($banner_set)
 {
@@ -320,6 +356,15 @@ function get_long_value($name)
 }
 
 
+function testDeleteBannerTypes()
+    {   
+        delete_banner_type('test');
+        delete_banner('test1');
+        delete_banner('test2');
+        delete_banner('test3');
+        delete_banner('test4');
+
+    }
 
 public function tearDown()
 	{		
