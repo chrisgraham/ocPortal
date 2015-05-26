@@ -437,7 +437,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 		if (($in_semihtml) || ($is_all_semihtml))
 		{
 			require_code('comcode_from_html');
-			$evaluated=semihtml_to_comcode($evaluated);
+			$evaluated=semihtml_to_comcode($evaluated,true);
 		}
 
 		require_code('geshi');

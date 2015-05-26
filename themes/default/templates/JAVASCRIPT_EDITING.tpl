@@ -353,7 +353,8 @@ function wysiwyg_editor_init_for(element)
 			info.get('txtCellPad')['default']='0';
 		}
 	});
-	window.lang_PREFER_OCP_ATTACHMENTS='{!javascript:PREFER_OCP_ATTACHMENTS;}';
+	if (document.getElementById('attachment_store'))
+		window.lang_PREFER_OCP_ATTACHMENTS='{!javascript:PREFER_OCP_ATTACHMENTS;}';
 
 	/*window.setTimeout( function() {
 		window.scrollTo(0,0); // Otherwise jumps to last editor

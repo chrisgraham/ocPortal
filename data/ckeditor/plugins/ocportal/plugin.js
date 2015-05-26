@@ -27,9 +27,15 @@
 
 			var func= {
 				exec: function(e) {
-					fauxmodal_alert(window.lang_PREFER_OCP_ATTACHMENTS,function() {
+					if (typeof window.lang_PREFER_OCP_ATTACHMENTS=='undefined')
+					{
 						editor.execCommand('image');
-					});
+					} else
+					{
+						fauxmodal_alert(window.lang_PREFER_OCP_ATTACHMENTS,function() {
+							editor.execCommand('image');
+						});
+					}
 				}
 			};
 			editor.addCommand('ocportal_image',func);

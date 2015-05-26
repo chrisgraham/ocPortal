@@ -761,6 +761,8 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	if ((is_null($post_title)) && (!$forum_tie)) return false;
 
 	$post=post_param('post','');
+	if ($post==do_lang('POST_WARNING')) $post='';
+	if ($post==do_lang('THREADED_REPLY_NOTICE',do_lang('POST_WARNING'))) $post='';
 	if (!is_null($post_title))
 	{
 		if (($post=='') && ($post_title!=''))
