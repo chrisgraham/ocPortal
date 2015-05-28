@@ -214,7 +214,7 @@ function _get_group_tags($group=NULL)
  */
 function _get_non_wysiwyg_tags()
 {
-	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','upload','exp_thumb','exp_ref','thumb','reference','snapback','post','topic','attachment');
+	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','code','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','upload','exp_thumb','exp_ref','thumb','reference','snapback','post','topic','attachment');
 	return $ret;
 }
 
@@ -597,7 +597,7 @@ function comcode_helper_script()
 		{
 			$fields->attach(form_input_text_multi(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping(do_lang('COMCODE_TAG_'.$tag.'_EMBED')),'tag_contents',explode(',',$default_embed),2));
 		}
-		elseif ((array_key_exists($tag,$TEXTUAL_TAGS)) || ($tag=='menu'))
+		elseif ((array_key_exists($tag,$TEXTUAL_TAGS)) || ($tag=='menu') || ($tag=='code'))
 		{
 			if (($tag=='menu') && ($default_embed==''))
 			{

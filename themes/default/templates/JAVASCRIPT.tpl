@@ -2386,9 +2386,9 @@ function get_inner_html(element,outerToo)
 			}
 			else if (src_dom_node.nodeType==3) {
 				// text node
-				out+= (src_dom_node.nodeValue?src_dom_node.nodeValue:"");
+				out+=escape_html(src_dom_node.nodeValue?src_dom_node.nodeValue:"");
 			}
-			else if (src_dom_node.nodeType == 4) {
+			else if (src_dom_node.nodeType==4) {
 				// text node
 				out+=(src_dom_node.nodeValue?"<![CDATA["+src_dom_node.nodeValue+"]]":"");
 			}
