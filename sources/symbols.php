@@ -845,7 +845,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'AVATAR':
 				$value=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url(isset($param[0])?intval($param[0]):get_member());
-				if ((url_is_local($value)) && ($value!='')) $value=get_base_url().'/'.$value;
+				if ((url_is_local($value)) && ($value!='')) $value=get_custom_base_url().'/'.$value;
 				break;
 
 			case 'IS_GUEST':
@@ -1003,7 +1003,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$value=$GLOBALS['FORUM_DRIVER']->get_member_photo_url(intval($param[0]));
-					if ((url_is_local($value)) && ($value!='')) $value=get_base_url().'/'.$value;
+					if ((url_is_local($value)) && ($value!='')) $value=get_custom_base_url().'/'.$value;
 				}
 				break;
 

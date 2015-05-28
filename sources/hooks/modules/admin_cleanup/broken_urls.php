@@ -210,12 +210,12 @@ class Hook_broken_urls
 		{
 			if (url_is_local($url))
 			{
-				if (($url[0]=='/') && (strpos(get_base_url(),'/')!==false))
+				if (($url[0]=='/') && (strpos(get_custom_base_url(),'/')!==false))
 				{
-					$url=substr(get_base_url(),0,strpos(get_base_url(),'/')).'/'.$url;
+					$url=substr(get_custom_base_url(),0,strpos(get_custom_base_url(),'/')).'/'.$url;
 				} else
 				{
-					$url=get_base_url().'/'.$url;
+					$url=get_custom_base_url().'/'.$url;
 				}
 			}
 

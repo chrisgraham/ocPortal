@@ -73,9 +73,9 @@ class Hook_pointstore_ocgifts
 			$gift_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocgifts','gift'=>$gift['id'],'username'=>$username),'_SEARCH');
 
 			$image_url='';
-			if (is_file(get_file_base().'/'.rawurldecode($gift['image'])))
+			if (is_file(get_custom_file_base().'/'.rawurldecode($gift['image'])))
 			{
-				$image_url=get_base_url().'/'.$gift['image'];
+				$image_url=get_custom_base_url().'/'.$gift['image'];
 			}
 
 			$gifts[]=array(
@@ -158,7 +158,7 @@ class Hook_pointstore_ocgifts
 				// Gather some details
 				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_user_id'=>$to_member_id,'from_user_id'=>$from_member,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'topic_id'=>NULL,'gift_message'=>$gift_message),true);
 				$gift_name=$gift_row['name'];
-				$gift_image_url=get_base_url().'/'.$gift_row['image'];
+				$gift_image_url=get_custom_base_url().'/'.$gift_row['image'];
 
 				// Send notification
 				require_code('notifications');

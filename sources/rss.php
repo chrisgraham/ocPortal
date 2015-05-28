@@ -73,7 +73,7 @@ class rss
 			return;
 		}
 
-		if (!$is_filesystem_path && url_is_local($url)) $url=get_base_url().'/'.$url;
+		if (!$is_filesystem_path && url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
 		//echo $url;exit();
 

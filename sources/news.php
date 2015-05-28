@@ -47,7 +47,7 @@ function render_news_box($row,$zone='_SEARCH')
 	if ($row['news_image']!='')
 	{
 		$img=$row['news_image'];
-		if (url_is_local($img)) $img=get_base_url().'/'.$img;
+		if (url_is_local($img)) $img=get_custom_base_url().'/'.$img;
 	}
 	$category=get_translated_text($news_cat_row['nc_title']);
 

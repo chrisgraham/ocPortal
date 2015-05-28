@@ -79,14 +79,14 @@ function load_html_page($string,$file_base=NULL)
 					{
 						if (is_file(get_custom_file_base().'/'.dirname($string).'/'.$old_link))
 						{
-							$new_link=get_base_url().'/'.dirname($string).'/'.$old_link;
+							$new_link=get_custom_base_url().'/'.dirname($string).'/'.$old_link;
 						}
 						elseif (is_file(get_custom_file_base().'/'.$old_link))
 						{
-							$new_link=get_base_url().'/'.$old_link;
+							$new_link=get_custom_base_url().'/'.$old_link;
 						} else
 						{
-							$new_link=get_base_url().'/uploads/website_specific/'.$old_link;
+							$new_link=get_custom_base_url().'/uploads/website_specific/'.$old_link;
 						}
 					}
 				}
