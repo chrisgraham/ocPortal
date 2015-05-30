@@ -168,7 +168,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]rebrand_base_url[/tt] -- to change where branding URLs go to (e.g. the stub that is used when linking to documentation), set it here
  - [tt]company_name[/tt] -- if ocPortal is being rebranded to be 'made' by another company, set the name here (this has no effect of copyright of course, but ocProducts allows this)
  - [tt]comment_forum__galleries[/tt] / [tt]comment_forum__images[/tt] / [tt]comment_forum__videos[/tt] / [tt]comment_forum__downloads[/tt] / [tt]comment_forum__calendar[/tt] / [tt]comment_forum__news[/tt] / [tt]comment_forum__iotds[/tt] / [tt]comment_forum__polls[/tt] -- override the comment forum for a particular content type
- - [tt]comment_forum__catalogues_<catalogue-name>[/tt] -- define a comment forum for a specific catalogue
+ - [tt]comment_forum__catalogues__<catalogue-name>[/tt] -- define a comment forum for a specific catalogue
  - [tt]ionic_on[/tt] -- inform the software that the IIS Ionic Rewriter plugin is installed and configured
  - [tt]unofficial_ecommerce[/tt] -- set to '1' if your forum driver contains usergroup manipulation functions (we don't support this, but wanted to be able to allow those willing to extend forum drivers to use our full eCommerce framework)
  - [tt]lots_of_data_in_*[/tt] -- set this to '1', with '*' replaced with a database table name, if you want the ocFilter mechanism to work with recursive db lookups rather than one huge flat lookup

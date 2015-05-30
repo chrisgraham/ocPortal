@@ -12,7 +12,7 @@
 				<tr>
 					<th class="de_th">Facebook:</th>
 					<td>
-						<a rel="me" target="_blank" title="{$USERNAME*,{MEMBER_ID}}'s Facebook {!LINK_NEW_WINDOW}" href="http://www.facebook.com/profile.php?id={$USER_FB_CONNECT*,{MEMBER_ID}}"><img alt="Facebook" src="{$IMG*,recommend/facebook}" /></a>
+						<a rel="me" target="_blank" title="{$USERNAME*,{MEMBER_ID}}'s Facebook {!LINK_NEW_WINDOW}" href="http://www.facebook.com/profile.php?app_scoped_user_id={$USER_FB_CONNECT*,{MEMBER_ID}}"><img alt="Facebook" src="{$IMG*,recommend/facebook}" /></a>
 					</td>
 				</tr>
 			</tbody>

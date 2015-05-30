@@ -75,6 +75,8 @@ function init__lang()
 	$REQUIRE_LANG_LOOP=0;
 	global $REQUIRED_ALL_LANG;
 	$REQUIRED_ALL_LANG=array();
+	global $NEEDS_PAGE_CACHE_RESAVE;
+	$NEEDS_PAGE_CACHE_RESAVE=false;
 
 	// Lazy loading code: learning algorithm to cache strings against different pages without loading all, unless we get a cache miss in the page's pool
 	global $PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED,$PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED;
@@ -814,7 +816,9 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					$PAGE_CACHE_LANG_LOADED[$lang][$codename]=NULL;
 					if ($GLOBALS['MEM_CACHE']!==NULL)
 					{
-						persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+						global $NEEDS_PAGE_CACHE_RESAVE;
+						if (!$NEEDS_PAGE_CACHE_RESAVE) register_shutdown_function('_page_cache_resave');
+						$NEEDS_PAGE_CACHE_RESAVE=true;
 					} else
 					{
 						open_page_cache_file();
@@ -847,7 +851,9 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
 					if ($GLOBALS['MEM_CACHE']!==NULL)
 					{
-						persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+						global $NEEDS_PAGE_CACHE_RESAVE;
+						if (!$NEEDS_PAGE_CACHE_RESAVE) register_shutdown_function('_page_cache_resave');
+						$NEEDS_PAGE_CACHE_RESAVE=true;
 					} else
 					{
 						open_page_cache_file();
@@ -888,7 +894,9 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE[$lang][$codename];
 			if ($GLOBALS['MEM_CACHE']!==NULL)
 			{
-				persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+				global $NEEDS_PAGE_CACHE_RESAVE;
+				if (!$NEEDS_PAGE_CACHE_RESAVE) register_shutdown_function('_page_cache_resave');
+				$NEEDS_PAGE_CACHE_RESAVE=true;
 			} else
 			{
 				open_page_cache_file();
@@ -989,6 +997,15 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 		}
 	}
 	return $out;
+}
+
+/**
+ * Re-save language learning cache into persistent cache
+ */
+function _page_cache_resave()
+{
+	global $PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED;
+	persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 }
 
 /**

@@ -3922,7 +3922,7 @@ figure {
 		padding-right: 10px !important;
 	}
 
-	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
+	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"], a[rel="lightbox"] { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
 		background-image: none;
 		padding: 0px;
 	}

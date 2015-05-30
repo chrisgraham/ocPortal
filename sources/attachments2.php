@@ -369,7 +369,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 				$part=substr($part,strlen($part)-strpos(strrev($part),strrev('[attachment'))-strlen('[attachment'));
 			}
 			preg_match('#new_(\d+)[\[<]#',$part,$marker_matches);
-			$marker_id=array_key_exists(1,$marker_matches)?intval($marker_matches[1]):strval($i+1); // Should always exist, but if not (some weird internal Comcode parsing error -- this stuff is complex) then pick a sensible default
+			$marker_id=array_key_exists(1,$marker_matches)?($marker_matches[1]):strval($i+1); // Should always exist, but if not (some weird internal Comcode parsing error -- this stuff is complex) then pick a sensible default
 
 			// If it's a new one, we need to change the comcode to reference the ID we made for it
 			if ($attachment['type']=='new')
