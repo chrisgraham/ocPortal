@@ -5,12 +5,19 @@
 
 .screen_actions_outer {
 	margin: 2em 0;
+	overflow: visible !important;
 }
 
 .screen_actions {
-	overflow: hidden;
 	padding-top: 2px;
 	padding-bottom: 2px;
+}
+
+/* We normally hide stuff with overflow:hidden, but some share buttons use absolute positioned layers that need to escape our box */
+.screen_actions:after {
+	content: "";
+	display: table;
+	clear: both;
 }
 
 .screen_actions div {
