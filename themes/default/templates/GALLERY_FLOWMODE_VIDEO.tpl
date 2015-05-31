@@ -16,6 +16,15 @@
 					{+END}
 
 					<tbody>
+						{+START,IF_NON_EMPTY,{_TITLE}}
+							<tr>
+								<th class="de_th meta_data_title">{!TITLE}</th>
+								<td>
+									{_TITLE*}
+								</td>
+							</tr>
+						{+END}
+
 						<tr>
 							<th class="de_th meta_data_title">{!ADDED}</th>
 							<td>
