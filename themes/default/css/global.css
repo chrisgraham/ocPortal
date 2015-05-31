@@ -647,6 +647,13 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 
 .global_middle_outer {
 	margin-top: 0.8em;
+	overflow: visible !important;
+}
+/* We normally hide stuff with overflow:hidden, but some share buttons use absolute positioned layers that need to escape our box */
+.global_middle_outer:after {
+	content: "";
+	display: table;
+	clear: both;
 }
 {+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
 	.zone_running_ .global_middle_outer {
