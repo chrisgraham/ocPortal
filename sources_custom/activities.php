@@ -198,7 +198,7 @@ function get_activity_querying_sql($viewer_id,$mode,$member_ids)
  *
  * @param  array			Database row
  * @param  boolean		Whether the rendered activity will be shown in a live ocPortal (as opposed to being e-mailed, for example)
- * @return tempcode		Rendered activity
+ * @return array			Rendered activity
  */
 function render_activity($row,$use_inside_ocp=true)
 {

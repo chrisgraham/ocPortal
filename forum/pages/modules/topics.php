@@ -1803,6 +1803,8 @@ class Module_topics
 	 */
 	function report_post() // Type
 	{
+		if (!ocf_may_report_post()) access_denied('I_ERROR');
+
 		$post_id=get_param_integer('id');
 
 		$post_info=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>$post_id),'',1);
@@ -1994,6 +1996,8 @@ class Module_topics
 			}
 			elseif ($forum_id==-2) // New reported post topic
 			{
+				if (!ocf_may_report_post()) access_denied('I_ERROR');
+
 				$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('reported_posts_forum'));
 				if (is_null($forum_id)) warn_exit(do_lang_tempcode('NO_REPORTED_POST_FORUM'));
 
