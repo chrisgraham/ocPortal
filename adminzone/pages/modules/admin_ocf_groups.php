@@ -453,10 +453,10 @@ class Module_admin_ocf_groups extends standard_aed_module
 
 			if (is_null($row['g_promotion_target']))
 			{
-				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_NORMAL',get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']),strval($row['id']),array(integer_format($row['g_order']+1),integer_format($num_members)));
+				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_NORMAL',escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])),strval($row['id']),array(integer_format($row['g_order']+1),integer_format($num_members)));
 			} else
 			{
-				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_RANK',get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']),strval($row['id']),array(strval($row['g_promotion_target']),integer_format($row['g_order']+1),integer_format($num_members)));
+				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_RANK',escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])),strval($row['id']),array(strval($row['g_promotion_target']),integer_format($row['g_order']+1),integer_format($num_members)));
 			}
 			$fields->attach(form_input_list_entry(strval($row['id']),false,$text));
 		}

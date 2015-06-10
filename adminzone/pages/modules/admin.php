@@ -1115,7 +1115,7 @@ class Module_admin
 					$lang=$image['lang'];
 					$lang_map=better_parse_ini_file(file_exists(get_file_base().'/lang_custom/langs.ini')?(get_file_base().'/lang_custom/langs.ini'):(get_file_base().'/lang/langs.ini'));
 					$lang=array_key_exists($lang,$lang_map)?$lang_map[$lang]:$lang;
-					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'68b418db6d3f7676cf1682a68f76f88a','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>$lang,'SUP'=>$sup)));
+					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'68b418db6d3f7676cf1682a68f76f88a','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>escape_html($lang),'SUP'=>$sup)));
 				}
 			}
 		}

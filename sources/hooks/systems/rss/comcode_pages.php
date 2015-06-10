@@ -74,7 +74,9 @@ class Hook_rss_comcode_pages
 
 				$id=$zone.':'.$page;
 
-				$path=get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.get_site_default_lang().'/'.$page.'.txt';
+				$page_request=_request_page($page,$zone);
+				if (strpos($page_request[0],'COMCODE')===false) continue;
+				$path=$page_request[count($page_request)-1];
 				$news_date=date($date_string,filectime($path));
 				$edit_date=date($date_string,filemtime($path));
 				if ($news_date==$edit_date) $edit_date='';

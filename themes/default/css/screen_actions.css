@@ -6,6 +6,10 @@
 .screen_actions_outer {
 	margin: 2em 0;
 	overflow: visible !important;
+
+	/* Needed so the :after clearfix works in a constrained context */
+	display: inline-block;
+	width: 100%;
 }
 
 .screen_actions {

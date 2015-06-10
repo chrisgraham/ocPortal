@@ -2106,6 +2106,8 @@ function resize_frame(name,minHeight)
 			}
 		}
 	}
+
+	frame_element.style.transform='scale(1)'; // Workaround Chrome painting bug
 }
 function trigger_resize(and_subframes)
 {
