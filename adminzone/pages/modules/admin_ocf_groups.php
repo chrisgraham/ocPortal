@@ -490,8 +490,12 @@ class Module_admin_ocf_groups extends standard_aed_module
 		}
 		$myrow=$rows[0];
 
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_group_leader']);
-		if (is_null($username)) $username='';//do_lang('UNKNOWN');
+		$username='';
+		if (!is_null($myrow['g_group_leader']))
+		{
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_group_leader']);
+			if (is_null($username)) $username='';//do_lang('UNKNOWN');
+		}
 
 		if ((intval($id)==db_get_first_id()+8) && ($GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_presented_at_install'=>'1'))==0))
 			$myrow['g_is_presented_at_install']=1;

@@ -726,6 +726,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					curl_setopt($ch,CURLOPT_CAINFO,$crt_path);
 					curl_setopt($ch,CURLOPT_CAPATH,$crt_path);
 				}
+				//curl_setopt($ch,CURLOPT_SSLVERSION,6);
 				curl_setopt($ch,CURLOPT_SSL_CIPHER_LIST,'TLSv1');
 				//if (!$no_redirect) @curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true); // May fail with safe mode, meaning we can't follow Location headers. But we can do better ourselves anyway and protect against file:// exploits.
 				curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,intval($timeout));
@@ -766,75 +767,67 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				{
 					$error=curl_error($ch);
 					curl_close($ch);
-					if ($trigger_error)
-						warn_exit($error);
-					return NULL;
-				}
-				if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
-				if (substr($line,0,25)=="HTTP/1.0 100 Continue\r\n\r\n") $line=substr($line,25);
-				$HTTP_DOWNLOAD_MIME_TYPE=curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
-				$HTTP_DOWNLOAD_SIZE=curl_getinfo($ch,CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-				$HTTP_DOWNLOAD_URL=curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
-				$HTTP_MESSAGE=strval(curl_getinfo($ch,CURLINFO_HTTP_CODE));
-				if ($HTTP_MESSAGE=='206') $HTTP_MESSAGE='200'; // We don't care about partial-content return code, as ocP implementation gets ranges differently and we check '200' as a return result
-				if (strpos($HTTP_DOWNLOAD_MIME_TYPE,';')!==false)
+				} else
 				{
-					$HTTP_CHARSET=substr($HTTP_DOWNLOAD_MIME_TYPE,8+strpos($HTTP_DOWNLOAD_MIME_TYPE,'charset='));
-					$HTTP_DOWNLOAD_MIME_TYPE=substr($HTTP_DOWNLOAD_MIME_TYPE,0,strpos($HTTP_DOWNLOAD_MIME_TYPE,';'));
-				}
-				curl_close($ch);
-				if (substr($line,0,strlen('HTTP/1.0 200 Connection Established'))=='HTTP/1.0 200 Connection Established') $line=substr($line,strpos($line,"\r\n\r\n")+4);
-				$pos=strpos($line,"\r\n\r\n");
-
-				if (substr($line,0,strlen('HTTP/1.1 100 '))=='HTTP/1.1 100 ' || substr($line,0,strlen('HTTP/1.0 100 '))=='HTTP/1.0 100 ') $pos=strpos($line,"\r\n\r\n",$pos+4);
-				if ($pos===false) $pos=strlen($line); else $pos+=4;
-				$lines=explode("\r\n",substr($line,0,$pos));
-				foreach ($lines as $lno=>$_line)
-				{
-					$_line.="\r\n";
-					$matches=array();
-
-					if (preg_match('#^Content-Disposition: [^;]*;\s*filename="([^"]*)"#i',$_line,$matches)!=0)
+					if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
+					if (substr($line,0,25)=="HTTP/1.0 100 Continue\r\n\r\n") $line=substr($line,25);
+					$HTTP_DOWNLOAD_MIME_TYPE=curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
+					$HTTP_DOWNLOAD_SIZE=curl_getinfo($ch,CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+					$HTTP_DOWNLOAD_URL=curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
+					$HTTP_MESSAGE=strval(curl_getinfo($ch,CURLINFO_HTTP_CODE));
+					if ($HTTP_MESSAGE=='206') $HTTP_MESSAGE='200'; // We don't care about partial-content return code, as ocP implementation gets ranges differently and we check '200' as a return result
+					if (strpos($HTTP_DOWNLOAD_MIME_TYPE,';')!==false)
 					{
-						$HTTP_FILENAME=$matches[1];
+						$HTTP_CHARSET=substr($HTTP_DOWNLOAD_MIME_TYPE,8+strpos($HTTP_DOWNLOAD_MIME_TYPE,'charset='));
+						$HTTP_DOWNLOAD_MIME_TYPE=substr($HTTP_DOWNLOAD_MIME_TYPE,0,strpos($HTTP_DOWNLOAD_MIME_TYPE,';'));
 					}
-					if (preg_match("#^Set-Cookie: ([^\r\n=]*)=([^\r\n]*)\r\n#i",$_line,$matches)!=0)
-					{
-						$HTTP_NEW_COOKIES[trim(rawurldecode($matches[1]))]=trim($matches[2]);
-					}
-					if (preg_match("#^Location: (.*)\r\n#i",$_line,$matches)!=0)
-					{
-						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=basename($matches[1]);
+					curl_close($ch);
+					if (substr($line,0,strlen('HTTP/1.0 200 Connection Established'))=='HTTP/1.0 200 Connection Established') $line=substr($line,strpos($line,"\r\n\r\n")+4);
+					$pos=strpos($line,"\r\n\r\n");
 
-						if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url);
-						if ($matches[1]!=$url)
+					if (substr($line,0,strlen('HTTP/1.1 100 '))=='HTTP/1.1 100 ' || substr($line,0,strlen('HTTP/1.0 100 '))=='HTTP/1.0 100 ') $pos=strpos($line,"\r\n\r\n",$pos+4);
+					if ($pos===false) $pos=strlen($line); else $pos+=4;
+					$lines=explode("\r\n",substr($line,0,$pos));
+					foreach ($lines as $lno=>$_line)
+					{
+						$_line.="\r\n";
+						$matches=array();
+
+						if (preg_match('#^Content-Disposition: [^;]*;\s*filename="([^"]*)"#i',$_line,$matches)!=0)
 						{
-							$bak=$HTTP_FILENAME;
-							$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
-							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
-							$DOWNLOAD_LEVEL--;
-							return _detect_character_encoding($text);
+							$HTTP_FILENAME=$matches[1];
+						}
+						if (preg_match("#^Set-Cookie: ([^\r\n=]*)=([^\r\n]*)\r\n#i",$_line,$matches)!=0)
+						{
+							$HTTP_NEW_COOKIES[trim(rawurldecode($matches[1]))]=trim($matches[2]);
+						}
+						if (preg_match("#^Location: (.*)\r\n#i",$_line,$matches)!=0)
+						{
+							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=basename($matches[1]);
+
+							if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url);
+							if ($matches[1]!=$url)
+							{
+								$bak=$HTTP_FILENAME;
+								$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
+								if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
+								$DOWNLOAD_LEVEL--;
+								return _detect_character_encoding($text);
+							}
 						}
 					}
-				}
 
-				$DOWNLOAD_LEVEL--;
-				$ret=_detect_character_encoding(substr($line,$pos));
-				if (!is_null($write_to_file))
-				{
-					fwrite($write_to_file,$ret);
-					$ret='';
+					$DOWNLOAD_LEVEL--;
+					$ret=_detect_character_encoding(substr($line,$pos));
+					if (!is_null($write_to_file))
+					{
+						fwrite($write_to_file,$ret);
+						$ret='';
+					}
+					return $ret;
 				}
-				return $ret;
 			}
 		}
-
-		if ($trigger_error)
-			warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_BAD_URL',escape_html($url)));
-		else $HTTP_MESSAGE_B=do_lang_tempcode('HTTP_DOWNLOAD_BAD_URL',escape_html($url));
-		$DOWNLOAD_LEVEL--;
-		$HTTP_MESSAGE='non-HTTP';
-		return NULL;
 	}
 
 	// Direct sockets method
@@ -1173,16 +1166,27 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	{
 		if (($errno!=110) && (($errno!=10060) || (@ini_get('default_socket_timeout')=='1')) && (is_null($post_params)) && ((@ini_get('allow_url_fopen')) || (php_function_allowed('ini_set'))))
 		{
+			$crt_path=get_file_base().'/data/curl-ca-bundle.crt';
+			$context=stream_context_create(array(
+				'ssl'=>array(
+					'verify_peer'=>true,
+					'cafile'=>$crt_path,
+					'SNI_enabled'=>true,
+					'ciphers' => 'TLSv1',
+				)
+			));
+
 			// Perhaps fsockopen is restricted... try fread/file_get_contents
 			safe_ini_set('allow_url_fopen','1');
 			$timeout_before=@ini_get('default_socket_timeout');
 			safe_ini_set('default_socket_timeout',strval(intval($timeout)));
+         $php_errormsg = mixed();
 			if (is_null($byte_limit))
 			{
-				$read_file=@file_get_contents($url);
+				$read_file=@file_get_contents($url,NULL,$context);
 			} else
 			{
-				$_read_file=@fopen($url,'rb');
+				$_read_file=@fopen($url,'rb',false,$context);
 				if ($_read_file!==false)
 				{
 					$read_file='';
@@ -1197,10 +1201,12 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$DOWNLOAD_LEVEL--;
 				return _detect_character_encoding($read_file);
 			}
+			$errstr=$php_errormsg;
 		}
 
 		if ($trigger_error)
 		{
+			if ($errstr=='') $errstr=strval($errno);
 			$error=do_lang_tempcode('_HTTP_DOWNLOAD_NO_SERVER',escape_html($url),escape_html($errstr));
 			warn_exit($error);
 		}

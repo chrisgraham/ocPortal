@@ -28,6 +28,10 @@ class Hook_cron_newsletter_drip_send
 	{
 		if (!addon_installed('newsletter')) return;
 
+		if (get_long_value('newsletter_currently_dripping')==='1') return;
+
+		set_long_value('newsletter_currently_dripping','1');
+
 		$_minutes_between_sends=get_value('minutes_between_sends');
 		$_mails_per_send=get_value('mails_per_send');
 		$minutes_between_sends=is_null($_minutes_between_sends)?10:intval($_minutes_between_sends);
@@ -50,12 +54,17 @@ class Hook_cron_newsletter_drip_send
 			}
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'newsletter_drip_send WHERE '.$id_list);
 
+			set_long_value('newsletter_currently_dripping','0');
+
 			// Send
 			require_code('mail');
 			foreach ($to_send as $mail)
 			{
 				mail_wrap($mail['d_subject'],$mail['d_message'],array($mail['d_to_email']),array($mail['d_to_name']),$mail['d_from_email'],$mail['d_from_name'],$mail['d_priority'],NULL,true,NULL,true,$mail['d_html_only']==1,false,$mail['d_template']);
 			}
+		} else
+		{
+			set_long_value('newsletter_currently_dripping','0');
 		}
 	}
 

@@ -42,12 +42,12 @@ function ocf_member_handle_promotion($member_id=NULL)
 		if ($or_list!='') $or_list.=' OR ';
 		$or_list.='id='.strval($id);
 	}
-	$promotions=$GLOBALS['FORUM_DB']->query('SELECT id,g_promotion_target FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE ('.$or_list.') AND g_promotion_target IS NOT NULL AND g_promotion_threshold<='.strval((integer)$total_points));
+	$promotions=$GLOBALS['FORUM_DB']->query('SELECT id,g_promotion_target FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE ('.$or_list.') AND g_promotion_target IS NOT NULL AND g_promotion_threshold<='.strval((integer)$total_points).' ORDER BY g_promotion_threshold');
 	$promotes_today=array();
 	foreach ($promotions as $promotion)
 	{
 		$_p=$promotion['g_promotion_target'];
-		if ((!array_key_exists($_p,$groups)) && (!array_key_exists($_p,$promotes_today))) // If we're not already in the
+		if ((!array_key_exists($_p,$groups)) && (!array_key_exists($_p,$promotes_today))) // If we're not already in the group
 		{
 			// If it is our primary
 			if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_primary_group')==$promotion['id'])

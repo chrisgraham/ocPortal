@@ -109,7 +109,7 @@ class Module_admin_phpinfo
 		}
 		elseif (strpos(@ini_get('disable_functions'),'shell_exec')===false)
 		{
-			$test=shell_exec('whoami');
+			$test=@shell_exec('whoami');
 			if (!empty($test))
 			{
 				if (strpos(@ini_get('disable_functions'),'get_current_user')===false)
