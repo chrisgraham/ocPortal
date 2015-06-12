@@ -188,7 +188,7 @@ class Hook_addon_registry_core_language_editing
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'MAX'=>placeholder_number(),
-                'PAGINATION'=>placeholder_pagination()
+				'PAGINATION'=>placeholder_pagination()
 			)), NULL, '', true)
 		);
 	}

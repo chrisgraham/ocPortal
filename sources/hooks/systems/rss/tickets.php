@@ -70,7 +70,7 @@ class Hook_rss_tickets
 			$date=date($date_string,$row['firsttime']);
 			$edit_date=date($date_string,$row['lasttime']);
 
-			$title=xmlentities(escape_html($row['firsttitle']));
+			$title=xmlentities($row['firsttitle']);
 			$summary=xmlentities($row['firstpost']->evaluate());
 
 			$category='';

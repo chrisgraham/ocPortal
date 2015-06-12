@@ -209,7 +209,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .input_colour_required, .input_list_required, .input_line_required, .input_integer_required,
-.input_author_required, .input_username_required, .input_colour_required, .input_email_required, .input_codename_required,
+.input_author_required, .input_username_required, .input_email_required, .input_codename_required,
 .input_tick_required, .input_float_required, .input_text_required, .input_upload_required {
 }
 

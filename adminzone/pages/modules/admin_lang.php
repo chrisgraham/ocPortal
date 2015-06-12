@@ -375,20 +375,20 @@ class Module_admin_lang
         $pagination=pagination(do_lang('TRANSLATE_CONTENT'),NULL,$start,'start',$max,'max',$total,NULL,NULL,true);
 
 		return do_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array(
-            '_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2',
-            'TITLE'=>$title,
-            'MAX'=>integer_format($max),
-            'TOTAL'=>integer_format($total-$max),
-            'LANG_ORIGINAL_NAME'=>get_site_default_lang(),
-            'LANG_NICE_ORIGINAL_NAME'=>lookup_language_full_name(get_site_default_lang()),
-            'LANG_NICE_NAME'=>lookup_language_full_name($lang),
-            'TOO_MANY'=>$too_many,
-            'INTERTRANS'=>$intertrans,
-            'LANG'=>$lang,
-            'LINES'=>$lines,
-            'URL'=>$url,
-            'PAGINATION'=>$pagination,
-        ));
+			'_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2',
+			'TITLE'=>$title,
+			'MAX'=>integer_format($max),
+			'TOTAL'=>integer_format($total-$max),
+			'LANG_ORIGINAL_NAME'=>get_site_default_lang(),
+			'LANG_NICE_ORIGINAL_NAME'=>lookup_language_full_name(get_site_default_lang()),
+			'LANG_NICE_NAME'=>lookup_language_full_name($lang),
+			'TOO_MANY'=>$too_many,
+			'INTERTRANS'=>$intertrans,
+			'LANG'=>$lang,
+			'LINES'=>$lines,
+			'URL'=>$url,
+			'PAGINATION'=>$pagination,
+		));
 	}
 
 	/**

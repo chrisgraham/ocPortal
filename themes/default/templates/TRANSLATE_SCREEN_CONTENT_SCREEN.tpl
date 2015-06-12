@@ -13,11 +13,11 @@
 		<thead>
 			<tr>
 				<th>
-                    {!CODENAME}
+					{!CODENAME}
 				</th>
 				<th>
 					{!ORIGINAL}{+START,IF,{$NEQ,{LANG_ORIGINAL_NAME},{LANG}}} ({LANG_NICE_ORIGINAL_NAME*}?){+END}
-                    &rarr;
+					&rarr;
 					{LANG_NICE_NAME*}
 				</th>
 				{+START,IF_NON_EMPTY,{INTERTRANS}}

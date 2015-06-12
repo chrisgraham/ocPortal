@@ -896,7 +896,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(!running_script('cron_bridge')) && 
 		(strpos($text,'_custom/')===false) && 
 		(strpos($text,'_custom\\')===false) && 
-        (strpos($text,'Search: Operations error')===false) && // LDAP error, misconfiguration
+		(strpos($text,'Search: Operations error')===false) && // LDAP error, misconfiguration
 		(strpos($text,'Unknown: failed to open stream')===false) && // Comes up on some free web hosts
 		(strpos($text,'data/occle.php')===false) && 
 		(strpos($text,'/mini')===false) && 

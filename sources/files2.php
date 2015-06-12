@@ -1180,7 +1180,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			safe_ini_set('allow_url_fopen','1');
 			$timeout_before=@ini_get('default_socket_timeout');
 			safe_ini_set('default_socket_timeout',strval(intval($timeout)));
-         $php_errormsg = mixed();
+         $php_errormsg=mixed();
 			if (is_null($byte_limit))
 			{
 				$read_file=@file_get_contents($url,NULL,$context);
