@@ -2176,7 +2176,7 @@ END;
 			{
 				enable_notifications('ocf_topic',strval($topic_id),$invited_member);
 
-				ocf_invite_to_pt(intval($invited_member),$topic_id);
+				ocf_invite_to_pt($invited_member,$topic_id);
 			}
 		}
 
