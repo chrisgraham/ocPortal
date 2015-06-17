@@ -229,7 +229,7 @@ class Module_recommend
 						$resource_title=do_lang('THIS'); // Could not find at all, so say 'this'
 					} else
 					{
-						$subject=get_param('subject',do_lang('RECOMMEND_MEMBER_SUBJECT_SPECIFIC',get_site_name(),$resource_title));
+						$subject=get_param('subject',do_lang('RECOMMEND_MEMBER_SUBJECT_SPECIFIC',get_site_name(),$resource_title),true);
 					}
 
 					$message=do_lang('FOUND_THIS_ON',get_site_name(),comcode_escape($from),comcode_escape($resource_title));

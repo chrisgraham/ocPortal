@@ -205,7 +205,7 @@ function find_addon_effective_mtime($addon_name)
 	$mtime=mixed();
 	foreach ($files_rows as $filename)
 	{
-		if (file_exists(get_file_base().'/'.$filename))
+		if (@file_exists(get_file_base().'/'.$filename)) //@d due to possible bad file paths
 		{
 			$_mtime=filemtime(get_file_base().'/'.$filename);
 			$mtime=is_null($mtime)?$_mtime:max($mtime,$_mtime);
