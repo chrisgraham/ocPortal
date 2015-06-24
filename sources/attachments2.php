@@ -101,7 +101,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 							'a_add_time'=>time()),true);
 						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
 
-						$original_comcode=str_replace($original_comcode,$matches[0][$i],'[attachment type="inline" thumb="0"]'.strval($attachment_id).'[/attachment]');
+						$original_comcode=str_replace($matches[0][$i],'[attachment type="inline" thumb="0"]'.strval($attachment_id).'[/attachment]',$original_comcode);
 					}
 				}
 			}
