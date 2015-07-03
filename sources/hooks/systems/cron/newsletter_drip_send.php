@@ -30,8 +30,6 @@ class Hook_cron_newsletter_drip_send
 
 		if (get_long_value('newsletter_currently_dripping')==='1') return;
 
-		set_long_value('newsletter_currently_dripping','1');
-
 		$_minutes_between_sends=get_value('minutes_between_sends');
 		$_mails_per_send=get_value('mails_per_send');
 		$minutes_between_sends=is_null($_minutes_between_sends)?10:intval($_minutes_between_sends);
@@ -40,12 +38,15 @@ class Hook_cron_newsletter_drip_send
 		$time=time();
 		$last_time=intval(get_value('last_newsletter_drip_send'));
 		if (($last_time>time()-$minutes_between_sends*60-5/*Accomodate for slight startup time changes*/) && (!/*we do allow an admin to force it by CRON URL*/$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) return;
+
+		set_long_value('newsletter_currently_dripping','1');
+
 		set_value('last_newsletter_drip_send',strval($time));
 
 		$to_send=$GLOBALS['SITE_DB']->query_select('newsletter_drip_send',array('*'),NULL,'ORDER BY d_inject_time DESC',$mails_per_send);
 		if (count($to_send)!=0)
 		{
-			// Quick cleanup to minimise race-condition possibility
+			// Quick cleanup for maximum performance
 			$id_list='';
 			foreach ($to_send as $mail)
 			{
@@ -60,7 +61,7 @@ class Hook_cron_newsletter_drip_send
 			require_code('mail');
 			foreach ($to_send as $mail)
 			{
-				mail_wrap($mail['d_subject'],$mail['d_message'],array($mail['d_to_email']),array($mail['d_to_name']),$mail['d_from_email'],$mail['d_from_name'],$mail['d_priority'],NULL,true,NULL,true,$mail['d_html_only']==1,false,$mail['d_template']);
+				mail_wrap($mail['d_subject'],$mail['d_message'],array($mail['d_to_email']),array($mail['d_to_name']),$mail['d_from_email'],$mail['d_from_name'],$mail['d_priority'],NULL,true,NULL,true,$mail['d_html_only']==1,false,$mail['d_template'],true);
 			}
 		} else
 		{

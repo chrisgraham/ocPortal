@@ -20,9 +20,11 @@
 	{$,Decide whether we can show it now (otherwise it will defer) }
 	{$SET,tpl_go_ahead,{$AND,{$NOT,{$IN_STR,{CONTENTS},<td,<tr,<th}},{$IN_STR,{CONTENTS},<}}}
 
+	{$,Has to skip escaping with ` because we do not know enough about context - would be XSS tested without this mode enabled}
+
 	{+START,IF,{$GET,tpl_go_ahead}}
 		{$GET,tpl_marker_open}
-		{CONTENTS}
+		{CONTENTS`}
 		{$GET,tpl_marker_link}
 		{$GET,tpl_marker_close}
 
@@ -32,6 +34,6 @@
 	{+END}
 
 	{+START,IF,{$NOT,{$GET,tpl_go_ahead}}}
-		{CONTENTS}
+		{CONTENTS`}
 	{+END}
 {+END}

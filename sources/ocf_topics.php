@@ -22,16 +22,19 @@
  * Get an SQL 'WHERE' clause for the posts in a topic.
  *
  * @param  AUTO_LINK		The ID of the topic we are getting details of.
+ * @param  ?MEMBER		The member doing the lookup (NULL: current member).
  * @return string			The WHERE clause.
  */
-function ocf_get_topic_where($topic_id)
+function ocf_get_topic_where($topic_id,$member_id=NULL)
 {
+	if (is_null($member_id)) $member_id=get_member();
+
 	$where='p_topic_id='.strval((integer)$topic_id);
 	if (is_guest())
 		$where.=' AND p_intended_solely_for IS NULL';
-	elseif (!has_specific_permission(get_member(),'view_other_pt'))
-		$where.=' AND (p_intended_solely_for='.strval((integer)get_member()).' OR p_poster='.strval((integer)get_member()).' OR p_intended_solely_for IS NULL)';
-	if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
+	elseif (!has_specific_permission($member_id,'view_other_pt'))
+		$where.=' AND (p_intended_solely_for='.strval((integer)$member_id).' OR p_poster='.strval((integer)$member_id).' OR p_intended_solely_for IS NULL)';
+	if (!has_specific_permission($member_id,'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)$member_id).'))';
 	return $where;
 }
 

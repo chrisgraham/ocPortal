@@ -2941,7 +2941,8 @@ function replace_comments_form_with_ajax(options,hash)
 	{
 		comments_form.old_onsubmit=comments_form.onsubmit;
 
-		comments_form.onsubmit=function(event) {
+		comments_form.onsubmit=function(event,is_preview) {
+			if ((typeof is_preview!='undefined') && (is_preview)) return true;
 
 			// Cancel the event from running
 			if (typeof event=='undefined') var event=window.event;

@@ -910,6 +910,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		}
 		if (!is_null($referer))
 			$out.="Referer: ".rawurlencode($referer)."\r\n";
+		$out.="Connection: Close\r\n";
 		if ($_postdetails_params!='')
 		{
 			if ($is_xml)
@@ -951,7 +952,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 			}
 		}
-		$out.="Connection: Close\r\n\r\n";
 
 		@fwrite($mysock,$out);
 		$data_started=false;

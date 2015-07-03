@@ -1365,6 +1365,13 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 		}
 	}
 
+	// Check it is not numeric
+	if (is_numeric($username))
+	{
+		if ($return_errors) return do_lang_tempcode('USERNAME_NUMERIC');
+		warn_exit(do_lang_tempcode('USERNAME_NUMERIC'));
+	}
+
 	return NULL;
 }
 
