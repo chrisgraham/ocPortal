@@ -123,6 +123,11 @@ class JSMin
 						$this->output .= $this->a;
 						$this->a			 = $this->get();
 
+						if ($this->a === NULL)
+						{
+							return NULL;
+						}
+
 						if ($this->a === $this->b)
 						{
 							break;
@@ -160,6 +165,11 @@ class JSMin
 						while (true)
 						{
 							$this->a = $this->get();
+
+							if ($this->a === NULL)
+							{
+								return NULL;
+							}
 
 							if ($this->a === '/')
 							{
@@ -201,6 +211,7 @@ class JSMin
 			$c = '';
 			do
 			{
+				if (!isset($this->input[$ptr])) break;
 				$_c = $this->input[$ptr];
 				$o = ord($_c);
 				$alphanumeric = ($o>=65 && $o<=90 || $o>=97 && $o<=122 || $o>=48 && $o<=57 || $c=='\\' || $c=='_' || $c=='$' || $o>126);
@@ -375,6 +386,11 @@ class JSMin
 					while (true)
 					{
 						$c = $this->get();
+
+						if ($c === NULL)
+						{
+							return NULL;
+						}
 
 						if (ord($c) <= $chr_lf)
 						{
