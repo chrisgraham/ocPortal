@@ -89,7 +89,7 @@ function _symbol_thumbnail($param)
 	// where: If padding or cropping, specifies where to crop or pad. One of "start", "end" or "both"
 	// option: An extra option if desired. If type is "pad" then this can be a hex colour for the padding
 	// only_make_smaller: Whether to avoid growing small images to fit (smaller images are better for the Web). One of 0 (false) or 1 (true)
-	if (($param[0]!=''))
+	if (!empty($param[0]))
 	{
 		if ((get_option('is_on_gd')=='0') || (!function_exists('imagepng'))) return $param[0];
 

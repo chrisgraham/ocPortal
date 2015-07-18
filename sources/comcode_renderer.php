@@ -246,6 +246,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	foreach ($_POST+$_GET as $name=>$val)
 	{
 		if (is_array($val)) continue;
+		if (is_integer($name)) $name=strval($name);
 
 		if ((post_param($name,'')==$comcode) || (substr($name,-7)=='_parsed')) $posted=true;
 	}

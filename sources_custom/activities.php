@@ -190,6 +190,8 @@ function get_activity_querying_sql($viewer_id,$mode,$member_ids)
 	      break;
 	}
 
+	if (!isset($where_clause)) $where_clause='';
+
 	return array($proceed_selection,$where_clause);
 }
 

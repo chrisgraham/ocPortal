@@ -290,7 +290,7 @@ class standard_aed_module
 				}
 			}
 			$query.=' GROUP BY allow_comments ORDER BY qty DESC';
-			$val=$GLOBALS['SITE_DB']->query_value_null_ok_full($query,1); // We need the mode here, not the mean
+			$val=$GLOBALS['SITE_DB']->query_value_null_ok_full($query); // We need the mode here, not the mean
 			$allow_comments=is_null($val)?1:$val;
 		}
 

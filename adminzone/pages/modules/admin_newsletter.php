@@ -721,7 +721,7 @@ class Module_admin_newsletter extends standard_aed_module
 				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email','COUNT(*) as cnt'),NULL,'GROUP BY SUBSTRING_INDEX(email,\'@\',-1)'); // Far less PHP processing
 			} else
 			{
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email'),NULL,500,$start);
+				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email'),NULL,'',500,$start);
 			}
 			foreach ($rows as $row)
 			{
@@ -914,7 +914,7 @@ class Module_admin_newsletter extends standard_aed_module
 			return redirect_screen(do_lang('PERIODIC_REMOVED'),$url,do_lang('PERIODIC_REMOVED_TEXT'));
 		}
 
-		$in_full=(post_param_integer('in_full',0)==1);
+		$in_full=post_param_integer('in_full',0);
 		$chosen_categories=post_param('chosen_categories');
 		$message=$this->_generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
 
@@ -1447,6 +1447,7 @@ class Module_admin_newsletter extends standard_aed_module
 			$in_html=($html_only==1);
 		}
 		$text_preview=($html_only==1)?'':comcode_to_clean_text(static_evaluate_tempcode(template_to_tempcode($message)));
+
 		require_code('mail');
 		$preview_subject=$subject;
 		if (post_param_integer('make_periodic',0)==1)

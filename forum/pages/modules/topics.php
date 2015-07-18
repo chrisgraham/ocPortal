@@ -2013,6 +2013,8 @@ class Module_topics
 
 				$_title=get_screen_title('REPORT_POST');
 				$check_permissions=false;
+
+				decache('main_staff_checklist');
 			} else // New topic
 			{
 				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0));
@@ -2164,6 +2166,21 @@ END;
 			$_url=build_url($map,get_module_zone('topicview'));
 			$url=$_url->evaluate();
 			if ($validated!=0) $url.='#post_'.strval($post_id);
+		}
+
+		if ($forum_id>=0)
+		{
+			$topic_validated=$GLOBALS['FORUM_DB']->query_value('f_topics','t_validated',array('id'=>$topic_id));
+			if (($topic_validated==0) && (!has_specific_permission(get_member(),'jump_to_unvalidated')))
+			{
+				$map=array('page'=>'forumview','id'=>$forum_id);
+				$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
+				if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+				$test=get_param_integer('threaded',-1);
+				if ($test!=-1) $map['threaded']=$test;
+				$_url=build_url($map,get_module_zone('forumview'));
+				$url=$_url->evaluate();
+			}
 		}
 
 		if (($new_topic) && ($forum_id==-1))

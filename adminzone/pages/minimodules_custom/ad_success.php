@@ -54,7 +54,7 @@ foreach ($advertiser_sessions as $session)
 		}
 	}
 
-	$ip=$GLOBALS['SITE_DB']->query_value_null_ok('stats','ip',array('the_page'=>'site/pages/modules/join.php','the_user'=>$user),'',1);
+	$ip=$GLOBALS['SITE_DB']->query_value_null_ok('stats','ip',array('the_page'=>'site/pages/modules/join.php','the_user'=>$user));
 	$user=is_null($ip)?NULL:$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_user FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE '.db_string_equal_to('ip',$ip).' AND the_user>0');
 	if (!is_null($user)) $joining[$from]++;
 	$test=is_null($user)?NULL:$GLOBALS['SITE_DB']->query_value_null_ok('stats','id',array('the_page'=>'site/pages/modules_custom/purchase.php','the_user'=>$user));

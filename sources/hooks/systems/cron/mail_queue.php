@@ -29,7 +29,7 @@ class Hook_cron_mail_queue
 		if (get_option('mail_queue_debug')=='0')
 		{
 			// Implement basic locking
-			if (get_long_value('mailer_currently_dripping',time()-60*5)==='1') return;
+			if (get_long_value_newer_than('mailer_currently_dripping',time()-60*5)==='1') return;
 			set_long_value('mailer_currently_dripping','1');
 
 			$mails=$GLOBALS['SITE_DB']->query_select(

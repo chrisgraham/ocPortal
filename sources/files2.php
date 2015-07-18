@@ -963,7 +963,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		while (($chunked) || (!@feof($mysock))) // @'d because socket might have died. If so fread will will return false and hence we'll break
 		{
 			$line=@fread($mysock,(($chunked) && (strlen($buffer_unprocessed)>10))?10:1024);
-
 			if ($line===false)
 			{
 				if ((!$chunked) || ($buffer_unprocessed=='')) break;
@@ -1136,6 +1135,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		@fclose($mysock);
 		if (!$data_started)
 		{
+			if ($byte_limit===0) return '';
+
 			if ($trigger_error)
 				warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($url)));
 			else $HTTP_MESSAGE_B=do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($url));
@@ -1180,7 +1181,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			safe_ini_set('allow_url_fopen','1');
 			$timeout_before=@ini_get('default_socket_timeout');
 			safe_ini_set('default_socket_timeout',strval(intval($timeout)));
-         $php_errormsg=mixed();
+			$php_errormsg=mixed();
 			if (is_null($byte_limit))
 			{
 				$read_file=@file_get_contents($url,NULL,$context);

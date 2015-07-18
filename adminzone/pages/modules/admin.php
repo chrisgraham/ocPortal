@@ -613,6 +613,8 @@ class Module_admin
 
 				if (!is_null($null_test))
 				{
+					$_n=do_lang($p['human_name'],NULL,NULL,NULL,NULL,false);
+					if (is_null($_n)) continue;
 					$n=do_lang_tempcode($p['human_name']);
 					switch ($p['the_name'])
 					{
@@ -801,7 +803,7 @@ class Module_admin
 			$all_blocks=find_all_blocks();
 			foreach (array_keys($all_blocks) as $p)
 			{
-				$t=do_lang('BLOCK_'.$p.'_DESCRIPTION');
+				$t=do_lang('BLOCK_'.$p.'_DESCRIPTION',NULL,NULL,NULL,NULL,false);
 				if (($this->_keyword_match($p)) || ($this->_keyword_match($t)))
 				{
 					$url='';

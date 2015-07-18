@@ -104,6 +104,8 @@ function _build_keep_post_fields($exclude=NULL)
 	$out='';
 	foreach ($_POST as $key=>$val)
 	{
+		if (is_integer($key)) $key=strval($key);
+
 		if ((!is_null($exclude)) && (in_array($key,$exclude))) continue;
 
 		if (count($_POST)>80)

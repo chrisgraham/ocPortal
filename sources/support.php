@@ -2618,7 +2618,7 @@ function update_catalogue_content_ref($type,$from,$to)
 		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$to),array('cv_value'=>$from,'cf_type'=>$type));
 	} else
 	{
-		$fields=$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('id'),array('cf_type'=>$type));
+		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('cf_type'=>$type));
 		foreach ($fields as $field)
 		{
 			$GLOBALS['SITE_DB']->query_update('catalogue_efv_short',array('cv_value'=>$to),array('cv_value'=>$from,'cf_id'=>$field['id']));

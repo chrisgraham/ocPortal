@@ -204,12 +204,16 @@ class Module_reportcontent
 		if (!is_null($topic_id))
 		{
 			// Already a topic
+			$new_topic=false;
 		} else // New topic
 		{
 			$topic_id=ocf_make_topic($forum_id,'','',1,1,0,0,0,NULL,NULL,false);
+			$new_topic=true;
 		}
 		$topic_title=do_lang('REPORTED_CONTENT_TITLE',$content_title);
-		$post_id=ocf_make_post($topic_id,$content_title,$post,0,is_null($topic_id),1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,false,true,$forum_id,true,$topic_title,0,NULL,$anonymous==1);
+		$post_id=ocf_make_post($topic_id,$content_title,$post,0,$new_topic,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,false,true,$forum_id,true,$topic_title,0,NULL,$anonymous==1);
+
+		decache('main_staff_checklist');
 
 		// Add to reported_content table
 		$GLOBALS['SITE_DB']->query_insert('reported_content',array(
