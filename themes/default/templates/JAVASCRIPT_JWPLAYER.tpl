@@ -2946,7 +2946,7 @@ playerReady = function (b) {
 })(jwplayer);
 (function (a) {
 	var b = {
-		prefix: "http://l.longtailvideo.com/html5/",
+		prefix: "https://l.longtailvideo.com/html5/",
 		file: "logo.png",
 		link: "http://www.longtailvideo.com/players/jw-flv-player/",
 		margin: 8,

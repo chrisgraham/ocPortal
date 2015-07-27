@@ -206,6 +206,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			{
 				list($members2,$maybe_more2)=$this->_all_members_who_have_enabled($notification_code,'forum:'.strval($forum_id),$to_member_ids,$start,$max);
 				$members+=$members2;
+				$maybe_more|=$maybe_more2;
 			} else // Private topic, scan for participation against those already monitoring, for retroactive security (maybe someone lost access)
 			{
 				require_code('ocf_topics');

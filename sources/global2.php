@@ -1303,12 +1303,18 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		if ($https===NULL)
 		{
 			require_code('urls');
-			if (get_option('enable_https',true)=='0')
+			if (running_script('index'))
 			{
-				$https=false;
+				if (get_option('enable_https',true)=='0')
+				{
+					$https=false;
+				} else
+				{
+					$https=function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name()));
+				}
 			} else
 			{
-				$https=function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name()));
+				$https=function_exists('tacit_https') && tacit_https();
 			}
 			$CURRENTLY_HTTPS=$https;
 		}

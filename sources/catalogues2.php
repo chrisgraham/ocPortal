@@ -257,7 +257,7 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:intval($_default));
 			} else
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>is_null($default)?'':$_default);
+				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>(is_null($default) || ($type=='list') || ($type=='radiolist') || ($type=='multilist'))?'':$_default);
 			}
 			$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$_type,$map);
 		}

@@ -326,7 +326,20 @@ class Block_main_multi_content
 					}
 				} else
 				{
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['id_field'].' ASC',$max,NULL);
+					$sql='SELECT r.*'.$extra_select_sql.' '.$query;
+					if (is_string($info['id_field']))
+					{
+						$sql.=' ORDER BY r.'.$info['id_field'].' ASC';
+					} else
+					{
+						$sql.=' ORDER BY ';
+						foreach ($info['id_field'] as $i=>$id_field)
+						{
+							if ($i!=0) $sql.=',';
+							$sql.='r.'.$id_field.' ASC';
+						}
+					}
+					$rows=$info['connection']->query($sql,$max,NULL);
 				}
 				break;
 			default:

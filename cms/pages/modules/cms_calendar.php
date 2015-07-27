@@ -942,7 +942,7 @@ class Module_cms_calendar extends standard_aed_module
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
-				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','submitter',array('id'=>$id));
+				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','e_submitter',array('id'=>$id));
 
 				$date_range=date_range($from,$to,!is_null($start_hour),make_nice_timezone_name($timezone));
 				if ($recurrence!='') $date_range=do_lang('DOES_RECUR',$date_range);

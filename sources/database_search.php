@@ -515,13 +515,13 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
 			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible
 
+			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
+
 			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
 			{
 				$keywords_query.=' ORDER BY '.$order;
 				if ($direction=='DESC') $keywords_query.=' DESC';
 			}
-
-			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
 
 			/*if ($group_by_ok) 	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
 			{
@@ -674,12 +674,12 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
 			}
+			$query.=($group_by_ok?' GROUP BY r.id':'');
 			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 			{
 				$query.=' ORDER BY '.$order;
 				if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
 			}
-			$query.=($group_by_ok?' GROUP BY r.id':'');
 			$query.=' LIMIT '.strval($max+$start);
 			$query.=')';
 		}
