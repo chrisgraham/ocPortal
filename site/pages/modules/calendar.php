@@ -1490,7 +1490,7 @@ class Module_calendar
 		$day=get_param('day','');
 		if ($day!='')
 		{
-			$event=adjust_event_dates_for_a_recurrence($day,$event);
+			$event=adjust_event_dates_for_a_recurrence($day,$event,get_users_timezone());
 		}
 		list($time_raw,$from)=find_event_start_timestamp($event);
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
