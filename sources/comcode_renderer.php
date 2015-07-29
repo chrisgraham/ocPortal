@@ -563,7 +563,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 	}
 	elseif ($tag=='codebox')
 	{
-		$attributes['scroll']=1;
+		$attributes['scroll']='1';
 		$tag='code';
 	}
 	elseif ($tag=='left')
@@ -641,10 +641,10 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=do_template('COMCODE_OVERLAY',array('_GUID'=>'dfd0f7a72cc2bf6b613b28f8165a0034','UNIQ_ID'=>'a'.uniqid('',true),'EMBED'=>$embed,'ID'=>($attributes['param']!='')?$attributes['param']:('rand'.uniqid('',true)),'X'=>$x,'Y'=>$y,'WIDTH'=>$width,'HEIGHT'=>$height,'TIMEIN'=>$timein,'TIMEOUT'=>$timeout));
 			break;
 		case 'code':
-			list($_embed,$title)=do_code_box($attributes['param'],$embed,(array_key_exists('numbers',$attributes)) && ($attributes['numbers']==1),$in_semihtml,$is_all_semihtml);
+			list($_embed,$title)=do_code_box($attributes['param'],$embed,(array_key_exists('numbers',$attributes)) && ($attributes['numbers']=='1'),$in_semihtml,$is_all_semihtml);
 			if (!is_null($_embed))
 			{
-				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
+				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']=='1'))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
 				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
 				{
 					$style='height: auto';
@@ -663,8 +663,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				$_embed=$embed->evaluate();
 
-				if ((!array_key_exists('scroll',$attributes)) && (strlen($_embed)>1000)) $attributes['scroll']=1;
-				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
+				if ((!array_key_exists('scroll',$attributes)) && (strlen($_embed)>1000)) $attributes['scroll']='1';
+				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']=='1'))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
 				$title=do_lang_tempcode('CODE');
 				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
 				{

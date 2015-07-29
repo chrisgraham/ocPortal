@@ -1182,7 +1182,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$timeout_before=@ini_get('default_socket_timeout');
 			safe_ini_set('default_socket_timeout',strval(intval($timeout)));
 			$php_errormsg=mixed();
-			if (is_null($byte_limit))
+			if ((is_null($byte_limit)) && (is_null($write_to_file)))
 			{
 				$read_file=@file_get_contents($url,NULL,$context);
 			} else
@@ -1191,7 +1191,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				if ($_read_file!==false)
 				{
 					$read_file='';
-					while ((!feof($_read_file)) && (strlen($read_file)<$byte_limit)) $read_file.=fread($_read_file,1024);
+					while ((!feof($_read_file)) && ((is_null($byte_limit)) || (strlen($read_file)<$byte_limit)))
+					{
+						$line=fread($_read_file,1024);
+						if (is_null($write_to_file)) $read_file.=$line; else fwrite($write_to_file,$line);
+					}
 					fclose($_read_file);
 				} else $read_file=false;
 			}

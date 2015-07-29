@@ -553,7 +553,7 @@ class Module_cms_comcode_pages
 		if (((!is_file(get_file_base().'/'.$restore_from)) && (!is_file(get_custom_file_base().'/'.$restore_from))) || ((!is_null(get_param('restore_from',NULL))) && (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member()))))
 		{
 			$page_request=_request_page($file,$zone);
-			if (strpos($page_request[0],'COMCODE')===false) return '';
+			if ($page_request===false || strpos($page_request[0],'COMCODE')===false) return '';
 			$restore_from=$page_request[count($page_request)-1];
 		}
 

@@ -1060,7 +1060,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if (array_key_exists('scheme',$url_bits))
 					{
 						$value=$url_bits['scheme'].'://'.(array_key_exists('host',$url_bits)?$url_bits['host']:'localhost');
-						if ((array_key_exists('port',$url_bits)) && ($url_bits['port']!=80)) $value.=':'.$url_bits['port'];
+						if ((array_key_exists('port',$url_bits)) && ($url_bits['port']!=80)) $value.=':'.strval($url_bits['port']);
 					}
 					if (array_key_exists('path',$url_bits)) $value.=$url_bits['path'];
 				}
