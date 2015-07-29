@@ -123,6 +123,11 @@ class JSMin
 						$this->output .= $this->a;
 						$this->a			 = $this->get();
 
+						if ($this->a === NULL)
+						{
+							return NULL;
+						}
+
 						if ($this->a === $this->b)
 						{
 							break;
@@ -156,6 +161,11 @@ class JSMin
 					while (true)
 					{
 						$this->a = $this->get();
+
+						if ($this->a === NULL)
+						{
+							return NULL;
+						}
 
 						if ($this->a === '/')
 						{
@@ -360,6 +370,11 @@ class JSMin
 					while (true)
 					{
 						$c = $this->get();
+
+						if ($c === NULL)
+						{
+							return NULL;
+						}
 
 						if (ord($c) <= $chr_lf)
 						{

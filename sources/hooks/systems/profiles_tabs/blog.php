@@ -107,7 +107,7 @@ class Hook_Profiles_Tabs_blog
 				if ($myrow['news_image']!='')
 				{
 					$news_img=$myrow['news_image'];
-					if (url_is_local($news_img)) $news_img=get_base_url().'/'.$news_img;
+					if (url_is_local($news_img)) $news_img=get_custom_base_url().'/'.$news_img;
 				}
 				$news_category=get_translated_text($news_cat[0]['nc_title']);
 				$seo_bits=seo_meta_get_for('news',strval($news_id));

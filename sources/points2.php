@@ -103,19 +103,19 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 		dispatch_notification('receive_points_staff',NULL,do_lang('USER_GIVEN_POINTS',integer_format($amount),NULL,NULL,get_site_default_lang()),$message_raw,NULL,$sender_id);
 	}
 
-	if (get_forum_type()=='ocf')
-	{
-		require_code('ocf_posts_action');
-		require_code('ocf_posts_action2');
-		ocf_member_handle_promotion($recipient_id);
-	}
-
 	global $TOTAL_POINTS_CACHE,$POINT_INFO_CACHE;
 	if (array_key_exists($recipient_id,$TOTAL_POINTS_CACHE)) $TOTAL_POINTS_CACHE[$recipient_id]+=$amount;
 	if ((array_key_exists($recipient_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$recipient_id])))
 		$POINT_INFO_CACHE[$recipient_id]['points_gained_given']+=$amount;
 	if ((array_key_exists($sender_id,$POINT_INFO_CACHE)) && (array_key_exists('gift_points_used',$POINT_INFO_CACHE[$sender_id])))
 		$POINT_INFO_CACHE[$sender_id]['gift_points_used']+=$amount;
+
+	if (get_forum_type()=='ocf')
+	{
+		require_code('ocf_posts_action');
+		require_code('ocf_posts_action2');
+		ocf_member_handle_promotion($recipient_id);
+	}
 
 	if (!$anonymous)
 	{

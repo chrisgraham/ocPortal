@@ -503,8 +503,8 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			$GLOBALS['SITE_DB']->query_update('chat_active',array('date_and_time'=>time()),array('member_id'=>get_member()));
 		} else
 		{
-			$GLOBALS['SITE_DB']->query_delete('chat_active',array('member_id'=>get_member(),'room_id'=>$room_id));
-			$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>$room_id),'',1);
+			$GLOBALS['SITE_DB']->query_delete('chat_active',array('member_id'=>get_member(),'room_id'=>$room_id),'',1);
+			$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>$room_id));
 		}
 	}
 

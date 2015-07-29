@@ -33,8 +33,13 @@ function init__caches()
 	{
 		if (class_exists('Memcache'))
 		{
-			$MEM_CACHE=new Memcache();
-			$MEM_CACHE->connect('localhost',11211) OR $MEM_CACHE=NULL;
+			require_code('caches_memcache');
+
+			$MEM_CACHE=new memcachecache();
+			global $ECACHE_OBJECTS;
+			$ECACHE_OBJECTS=array();
+			$ECACHE_OBJECTS=$MEM_CACHE->get(get_file_base().'ECACHE_OBJECTS');
+			if ($ECACHE_OBJECTS===NULL) $ECACHE_OBJECTS=array();
 		}
 		elseif (function_exists('apc_fetch'))
 		{
@@ -75,7 +80,7 @@ function init__caches()
 			$ECACHE_OBJECTS=wincache_ucache_get(get_file_base().'ECACHE_OBJECTS');
 			if ($ECACHE_OBJECTS===false) $ECACHE_OBJECTS=array();
 		}
-		elseif (file_exists(get_custom_file_base().'/persistant_cache/'))
+		elseif (file_exists(get_custom_file_base().'/persistant_cache/') && $GLOBALS['DEV_MODE'])
 		{
 			require_code('caches_filesystem');
 			require_code('files');
@@ -96,9 +101,9 @@ function persistant_cache_get($key,$min_cache_date=NULL)
 	global $MEM_CACHE;
 	if (($GLOBALS['DEBUG_MODE']) && (mt_rand(0,3)==1)) return NULL;
 	if ($MEM_CACHE===NULL) return NULL;
-	$test=$MEM_CACHE->get(get_file_base().serialize($key),$min_cache_date); // First we'll try specifically for site
-	if ($test!==NULL) return $test;
-	return $MEM_CACHE->get(('ocp'.float_to_raw_string(ocp_version_number())).serialize($key),$min_cache_date); // And last we'll try server-wide
+	return $MEM_CACHE->get(get_file_base().serialize($key),$min_cache_date); // First we'll try specifically for site
+	//if ($test!==NULL) return $test;
+	//return $MEM_CACHE->get(('ocp'.float_to_raw_string(ocp_version_number())).serialize($key),$min_cache_date); // And last we'll try server-wide
 }
 
 /**
@@ -111,6 +116,8 @@ function persistant_cache_get($key,$min_cache_date=NULL)
  */
 function persistant_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
 {
+	$server_wide=false;
+
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;
 	if ($expire_secs===NULL) $expire_secs=$server_wide?0:(60*60);
@@ -127,7 +134,7 @@ function persistant_cache_delete($key)
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;
 	$MEM_CACHE->delete(get_file_base().serialize($key));
-	$MEM_CACHE->delete('ocp'.float_to_raw_string(ocp_version_number()).serialize($key));
+	//$MEM_CACHE->delete('ocp'.float_to_raw_string(ocp_version_number()).serialize($key));
 }
 
 /**

@@ -36,7 +36,7 @@ function open_link_as_overlay(ob,width,height,target)
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
-		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" class="inline_image_2" src="{$IMG*,bottom/loading}" /></p><p class="community_block_tagline">[ <a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a> ]</p>';
+		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" class="inline_image_2" src="{$IMG*,bottom/loading}" /></p><p class="community_block_tagline">[ <a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW;}">{!SEE_FULL_IMAGE;}</a> ]</p>';
 
 		// Show overlay
 		var myLightbox = {

@@ -281,6 +281,8 @@ function find_activities($viewer_id,$mode,$member_ids)
 	      break;
 	}
 
+	if (!isset($whereville)) $whereville='';
+
 	return array($proceed_selection,$whereville);
 }
 

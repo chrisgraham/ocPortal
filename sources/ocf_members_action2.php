@@ -52,6 +52,9 @@ function validate_ip_script()
 {
 	@ob_end_clean();
 
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	$keep=keep_symbol(array('1'));
 
 	$code=either_param('code','');
@@ -1085,7 +1088,8 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 	list($_type,$index)=get_cpf_storage_for($type);
 
 	require_code('database_action');
-	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
+	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','mcf'.strval($id));
+	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf_ft_'.strval($id));
 	$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
 	if ($indices_count<60) // Could be 64 but trying to be careful here...
 	{
@@ -1340,6 +1344,13 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 		}
 	}
 
+	// Check it is not numeric
+	if (is_numeric($username))
+	{
+		if ($return_errors) return do_lang_tempcode('USERNAME_NUMERIC');
+		warn_exit(do_lang_tempcode('USERNAME_NUMERIC'));
+	}
+
 	return NULL;
 }
 
@@ -1513,8 +1524,8 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	{
 		$urls[1]='';
 	}
-	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[0]!='') && (url_is_local($urls[0]))) $urls[0]=get_base_url().'/'.$urls[0];
-	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[1]!='') && (url_is_local($urls[1]))) $urls[1]=get_base_url().'/'.$urls[1];
+	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[0]!='') && (url_is_local($urls[0]))) $urls[0]=get_custom_base_url().'/'.$urls[0];
+	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[1]!='') && (url_is_local($urls[1]))) $urls[1]=get_custom_base_url().'/'.$urls[1];
 
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
 	{

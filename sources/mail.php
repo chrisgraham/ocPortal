@@ -130,7 +130,7 @@ function comcode_to_clean_text($message_plain)
 		require_code('comcode_from_html');
 		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0]),$message_plain);
 	}
-	if (preg_match("#\[html\](.*)\[\/html\]#Us",$message_plain,$match)!=0)
+	if (preg_match("#^\s*\[html\](.*)\[\/html\]\s*$#Us",$message_plain,$match)!=0)
 	{
 		require_code('comcode_from_html');
 		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0]),$message_plain);

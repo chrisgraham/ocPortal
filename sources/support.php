@@ -196,13 +196,14 @@ function is_wide()
  * Get string length, with utf-8 awareness where possible/required.
  *
  * @param  string		The string to get the length of.
+ * @param  boolean	Whether to force unicode as on.
  * @return integer	The string length.
  */
-function ocp_mb_strlen($in)
+function ocp_mb_strlen($in,$force=false)
 {
-	if (strtolower(get_charset())!='utf-8') return strlen($in);
-	if (function_exists('mb_strlen')) return @mb_strlen($in); // @ is because there could be invalid unicode involved
-	if (function_exists('iconv_strlen')) return @iconv_strlen($in);
+	if ((!$force) && (strtolower(get_charset())!='utf-8')) return strlen($in);
+	if (function_exists('mb_strlen')) return @mb_strlen($in,$force?'utf-8':get_charset()); // @ is because there could be invalid unicode involved
+	if (function_exists('iconv_strlen')) return @iconv_strlen($in,$force?'utf-8':get_charset());
 	return strlen($in);
 }
 
@@ -217,12 +218,12 @@ function ocp_mb_strlen($in)
  */
 function ocp_mb_substr($in,$from,$amount=NULL,$force=false)
 {
-	if (is_null($amount)) $amount=ocp_mb_strlen($in)-$from;
+	if (is_null($amount)) $amount=ocp_mb_strlen($in,$force)-$from;
 
 	if ((!$force) && (strtolower(get_charset())!='utf-8')) return substr($in,$from,$amount);
 
-	if (function_exists('iconv_substr')) return @iconv_substr($in,$from,$amount);
-	if (function_exists('mb_substr')) return @mb_substr($in,$from,$amount);
+	if (function_exists('iconv_substr')) return @iconv_substr($in,$from,$amount,$force?'utf-8':get_charset());
+	if (function_exists('mb_substr')) return @mb_substr($in,$from,$amount,$force?'utf-8':get_charset());
 
 	$ret=substr($in,$from,$amount);
 	$end=ord(substr($ret,-1));

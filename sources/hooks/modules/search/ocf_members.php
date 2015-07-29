@@ -359,7 +359,7 @@ class Hook_search_ocf_members
 		}
 		//if (has_specific_permission(get_member(),'view_profiles'))
 		{
-			if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))
+			if ((addon_installed('galleries')) && (get_option('show_gallery_counts')=='1'))
 			{
 				$num_galleries=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member_'.strval($member_id).'_%').'\'');
 			}

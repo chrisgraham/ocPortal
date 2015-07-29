@@ -40,7 +40,7 @@
 	{+END}
 	{+START,IF,{$HAS_SPECIFIC_PERMISSION,see_ip}}
 		<td class="dottedborder_barrier_b_nonrequired">
-			<a href="{$PAGE_LINK*,adminzone:admin_lookup:misc:{IP}}">{IP*}</a>
+			<a href="{$PAGE_LINK*,adminzone:admin_lookup:misc:{IP&}}">{IP*}</a>
 		</td>
 	{+END}
 </tr>

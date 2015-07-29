@@ -247,6 +247,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	foreach ($_POST+$_GET as $name=>$val)
 	{
 		if (is_array($val)) continue;
+		if (is_integer($name)) $name=strval($name);
 
 		if ((post_param($name,'')==$comcode) || (substr($name,-7)=='_parsed')) $posted=true;
 	}
@@ -434,7 +435,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 		if (($in_semihtml) || ($is_all_semihtml))
 		{
 			require_code('comcode_from_html');
-			$evaluated=semihtml_to_comcode($evaluated);
+			$evaluated=semihtml_to_comcode($evaluated,true);
 		}
 
 		require_code('geshi');
@@ -559,7 +560,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 	}
 	elseif ($tag=='codebox')
 	{
-		$attributes['scroll']=1;
+		$attributes['scroll']='1';
 		$tag='code';
 	}
 	elseif ($tag=='left')
@@ -644,10 +645,10 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				break;
 			}
 
-			list($_embed,$title)=do_code_box($attributes['param'],$embed,(array_key_exists('numbers',$attributes)) && ($attributes['numbers']==1),$in_semihtml,$is_all_semihtml);
+			list($_embed,$title)=do_code_box($attributes['param'],$embed,(array_key_exists('numbers',$attributes)) && ($attributes['numbers']=='1'),$in_semihtml,$is_all_semihtml);
 			if (!is_null($_embed))
 			{
-				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
+				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']=='1'))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
 				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
 				{
 					$style='height: auto';
@@ -666,8 +667,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				$_embed=$embed->evaluate();
 
-				if ((!array_key_exists('scroll',$attributes)) && (strlen($_embed)>1000)) $attributes['scroll']=1;
-				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
+				if ((!array_key_exists('scroll',$attributes)) && (strlen($_embed)>1000)) $attributes['scroll']='1';
+				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']=='1'))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
 				$title=do_lang_tempcode('CODE');
 				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
 				{
@@ -2145,7 +2146,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$rel=(($as_admin) || has_specific_permission($source_member,'search_engine_links'))?'':'nofollow';
 			if ($attributes['target']=='_blank')
 			{
-				$title=(is_object($caption)?static_evaluate_tempcode($caption):$caption).''.do_lang('LINK_NEW_WINDOW');
+				$title=(is_object($caption)?static_evaluate_tempcode($caption):$caption).' '.do_lang('LINK_NEW_WINDOW');
 			} else $title='';
 			$temp_tpl->attach(do_template('COMCODE_URL',array('_GUID'=>'d1657530e6d3d57e6a4791fb3bfa0dd7','TITLE'=>$title,'REL'=>$rel,'TARGET'=>$attributes['target'],'URL'=>$url_full,'CAPTION'=>$caption)));
 			break;

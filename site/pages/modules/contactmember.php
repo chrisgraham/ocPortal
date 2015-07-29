@@ -95,12 +95,12 @@ class Module_contactmember
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-		$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),'','subject',get_param('subject',''),true));
+		$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),'','subject',get_param('subject','',true),true));
 		$default_email=(is_guest())?'':$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_email_address');
 		$default_name=(is_guest())?'':$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_username');
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('_DESCRIPTION_NAME'),'name',$default_name,true));
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('YOUR_ADDRESS'),'email_address',$default_email,true));
-		$fields->attach(form_input_text(do_lang_tempcode('MESSAGE'),'','message',get_param('message',''),true));
+		$fields->attach(form_input_text(do_lang_tempcode('MESSAGE'),'','message',get_param('message','',true),true));
 		if (addon_installed('captcha'))
 		{
 			require_code('captcha');

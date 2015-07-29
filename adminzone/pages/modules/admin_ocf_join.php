@@ -726,6 +726,7 @@ class Module_admin_ocf_join
 						break;
 
 					default: // string
+						if (!isset($m[$part])) continue;
 						$at=$m[$part];
 						break;
 				}
@@ -1002,7 +1003,7 @@ class Module_admin_ocf_join
 
 				$avatar_url=array_key_exists('Avatar',$line)?$line['Avatar']:'';
 				if (!is_null($avatar_url))
-					if (substr($avatar_url,0,strlen(get_base_url()))==get_base_url()) $avatar_url=substr($avatar_url,strlen(get_base_url()));
+					if (substr($avatar_url,0,strlen(get_base_url().'/'))==get_base_url().'/') $avatar_url=substr($avatar_url,strlen(get_base_url().'/'));
 				$signature=array_key_exists('Signature',$line)?$line['Signature']:'';
 				$is_perm_banned=array_key_exists('Banned',$line)?((strtoupper($line['Banned'])=='YES' || $line['Banned']=='1' || strtoupper($line['Banned'])=='Y' || strtoupper($line['Banned'])=='ON')?1:0):0;
 				$reveal_age=array_key_exists('Reveal age',$line)?((strtoupper($line['Reveal age'])=='YES' || $line['Reveal age']=='1' || strtoupper($line['Reveal age'])=='Y' || strtoupper($line['Reveal age'])=='ON')?1:0):0;
@@ -1108,6 +1109,8 @@ class Module_admin_ocf_join
 					if (is_null($password_compatibility_scheme)) $password_compatibility_scheme='';
 
 					$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,'',NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,NULL,0,'*','');
+					$all_members[$linked_id]=$username;
+					$all_members_flipped[$username]=$linked_id;
 					$num_added++;
 				} else
 				{

@@ -180,6 +180,16 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		}
 	}
 
+ 	// Ensure parent post is from the same topic
+ 	if (!is_null($parent_id))
+ 	{
+ 		$test_topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_topic_id',array('id'=>$parent_id),' AND '.ocf_get_topic_where($topic_id,$poster));
+ 		if (is_null($test_topic_id))
+ 		{
+ 			$parent_id=NULL;
+ 		}
+ 	}
+
 	if ((is_null($validated)) || (($validated==1) && ($check_permissions)))
 	{
 		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
@@ -368,10 +378,16 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
 		{
 			if ($post_count_increment==1)
 			{
-				$member_post_count+=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>$forum_id));
+				$where=array('p_poster'=>$member_id,'p_cache_forum_id'=>$forum_id);
+				if (addon_installed('unvalidated'))
+					$where['p_validated']=1;
+				$member_post_count+=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',$where);
 			}
 		}
-		$member_post_count+=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>NULL));
+		$where=array('p_poster'=>$member_id,'p_cache_forum_id'=>NULL);
+		if (addon_installed('unvalidated'))
+			$where['p_validated']=1;
+		$member_post_count+=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',$where);
 		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_num_posts='.strval((integer)$member_post_count).' WHERE id='.strval((integer)$member_id));
 	}
 	else

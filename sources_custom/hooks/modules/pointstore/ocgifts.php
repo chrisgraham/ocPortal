@@ -75,9 +75,9 @@ class Hook_pointstore_ocgifts
 			$gift_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocgifts','gift'=>$gift['id'],'username'=>$username),'_SEARCH');
 
 			$image_url='';
-			if (is_file(get_file_base().'/'.rawurldecode($gift['image'])))
+			if (is_file(get_custom_file_base().'/'.rawurldecode($gift['image'])))
 			{
-				$image_url=get_base_url().'/'.$gift['image'];
+				$image_url=get_custom_base_url().'/'.$gift['image'];
 			}
 
 			$gifts[]=array(
@@ -168,14 +168,14 @@ class Hook_pointstore_ocgifts
 				if ($anonymous==0)
 				{
 					$subject=do_lang('GOT_GIFT');
-					$message='[html]'.do_lang('GIFT_EXPLANATION1',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$gift_row[0]['name']).'[/html].'."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$message='[html]'.do_lang('GIFT_EXPLANATION1',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$gift_row[0]['name']).'[/html].'."\n\n".'[img]'.get_custom_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
 
 					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id));
 				}
 				else
 				{
 					$subject=do_lang('GOT_GIFT',NULL,NULL,NULL,get_lang($to_member_id));
-					$message='[html]'.do_lang('GIFT_EXPLANATION2',$gift_row[0]['name'],NULL,NULL,get_lang($to_member_id)).'[/html].'."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$message='[html]'.do_lang('GIFT_EXPLANATION2',$gift_row[0]['name'],NULL,NULL,get_lang($to_member_id)).'[/html].'."\n\n".'[img]'.get_custom_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
 
 					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id),A_FROM_SYSTEM_UNPRIVILEGED);
 				}

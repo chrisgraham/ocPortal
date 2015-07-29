@@ -52,6 +52,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 			// Cleanup language strings
 			if (!$DECACHED_COMCODE_LANG_STRINGS)
 			{
+				$DECACHED_COMCODE_LANG_STRINGS=true;
 				$comcode_lang_strings=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),array('the_zone'=>'!'),'',NULL,NULL,true);
 				if (!is_null($comcode_lang_strings))
 				{
@@ -61,7 +62,6 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 						delete_lang($comcode_lang_string['string_index']);
 					}
 				}
-				$DECACHED_COMCODE_LANG_STRINGS=true;
 			}
 		}
 

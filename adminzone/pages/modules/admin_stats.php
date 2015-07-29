@@ -932,11 +932,8 @@ class Module_admin_stats
 	 */
 	function overview()
 	{
-		$page='pages/comcode_custom/'.get_site_default_lang().'/start.txt';
-		if (!file_exists(get_custom_file_base().'/'.$page))
-			$page='pages/comcode/'.get_site_default_lang().'/start.txt';
-		if (!file_exists(get_file_base().'/'.$page))
-			$page='pages/comcode/'.fallback_lang().'/start.txt';
+		$page_request=_request_page(get_zone_default_page(''),'');
+		$page=$page_request[count($page_request)-1];
 
 		$title=get_page_title('OVERVIEW_STATISTICS');
 

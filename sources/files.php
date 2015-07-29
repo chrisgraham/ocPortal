@@ -246,6 +246,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		'subs.inc'=>'',
 		'docs'=>'data/images',
 		'uploads'=>'',
+		'.editorconfig'=>'',
 	);
 	if (($bitmask & IGNORE_NONBUNDLED_SCATTERED)!=0)
 	{

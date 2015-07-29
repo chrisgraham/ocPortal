@@ -167,7 +167,7 @@ function handle_active_login($username)
 		create_session($member,1,post_param_integer('login_invisible',0)==1);
 	} else
 	{
-		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>substr(trim(post_param('login_username')),0,255),'date_and_time'=>time(),'ip'=>get_ip_address()));
+		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>substr(trim(post_param('login_username')),0,80),'date_and_time'=>time(),'ip'=>get_ip_address()));
 		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'failedlogins WHERE date_and_time>'.strval(time()-60*15).' AND '.db_string_equal_to('ip',get_ip_address()));
 		if ($count>30) log_hack_attack_and_exit('BRUTEFORCE_LOGIN_HACK');
 	}

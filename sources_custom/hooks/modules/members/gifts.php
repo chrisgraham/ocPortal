@@ -64,7 +64,7 @@ class Hook_members_gifts
 				$image_url='';
 				if (is_file(get_file_base().'/'.urldecode($gift_info[0]['image'])))
 				{
-					$image_url=get_base_url().'/'.$gift_info[0]['image'];
+					$image_url=get_custom_base_url().'/'.$gift_info[0]['image'];
 				}
 
 				$gifts[]=array(

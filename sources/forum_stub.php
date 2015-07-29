@@ -170,7 +170,7 @@ class forum_driver_base
 		if (isset($USER_NAME_CACHE[$id])) return $USER_NAME_CACHE[$id];
 
 		$ret=$this->_get_username($id);
-		if ($ret=='') $ret=NULL; // Odd, but sometimes
+		if ($ret==='') $ret=NULL; // Odd, but sometimes
 		$USER_NAME_CACHE[$id]=$ret;
 		return $ret;
 	}

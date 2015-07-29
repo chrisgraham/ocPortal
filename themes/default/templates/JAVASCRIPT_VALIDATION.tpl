@@ -250,7 +250,7 @@ function do_form_preview(event,form,preview_url,has_separate_preview)
 
 	var old_action=form.getAttribute('action');
 
-	if ((has_separate_preview) || (window.has_separate_preview))
+	if ((has_separate_preview) || (typeof window.has_separate_preview!=undefined) && (window.has_separate_preview))
 	{
 		form.setAttribute('action',old_action+((old_action.indexOf('?')==-1)?'?':'&')+'preview=1');
 		return true;

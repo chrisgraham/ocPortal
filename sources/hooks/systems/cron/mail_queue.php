@@ -28,6 +28,10 @@ class Hook_cron_mail_queue
 	{
 		if (get_option('mail_queue_debug')=='0')
 		{
+			// Implement basic locking
+			if (get_long_value_newer_than('mailer_currently_dripping',time()-60*5)==='1') return;
+			set_long_value('mailer_currently_dripping','1');
+
 			$mails=$GLOBALS['SITE_DB']->query_select(
 				'logged_mail_messages',
 				array('id','m_subject','m_message','m_to_email','m_to_name','m_from_email','m_from_name','m_priority','m_attachments','m_no_cc','m_as','m_as_admin','m_in_html','m_date_and_time','m_member_id','m_url','m_template'),
@@ -55,6 +59,8 @@ class Hook_cron_mail_queue
 				}
 			}
 		}
+
+		set_long_value('mailer_currently_dripping','0');
 	}
 
 }

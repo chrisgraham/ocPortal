@@ -104,6 +104,8 @@ function _build_keep_post_fields($exclude=NULL)
 	$out='';
 	foreach ($_POST as $key=>$val)
 	{
+		if (is_integer($key)) $key=strval($key);
+
 		if ((!is_null($exclude)) && (in_array($key,$exclude))) continue;
 
 		if (count($_POST)>80)
@@ -229,7 +231,7 @@ function _fixup_protocolless_urls($in)
 
 	$in=remove_url_mistakes($in); // Chain in some other stuff
 
-	if (strpos($in,'://')!==false) return $in; // Absolute
+	if (strpos($in,':')!==false) return $in; // Absolute (e.g. http:// or mailto:)
 
 	if (substr($in,0,1)=='#') return $in;
 	if (substr($in,0,1)=='%') return $in;
@@ -354,6 +356,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 	if (array_key_exists('id',$attributes)) $page_link.=':'.urldecode($attributes['id']);
 	foreach ($attributes as $key=>$val)
 	{
+		if (!is_string($val)) $val=strval($val);
 		if (($key!='page') && ($key!='type') && ($key!='id'))
 			$page_link.=':'.$key.'='.urldecode($val);
 	}

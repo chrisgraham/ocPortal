@@ -501,13 +501,13 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
 			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible
 
+			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
+
 			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC'))
 			{
 				$keywords_query.=' ORDER BY '.$order;
 				if ($direction=='DESC') $keywords_query.=' DESC';
 			}
-
-			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
 
 			if ($group_by_ok)
 			{

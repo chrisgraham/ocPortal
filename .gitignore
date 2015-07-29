@@ -9,6 +9,7 @@ www.pid
 /_config.php
 /.htaccess
 .DS_Store
+.editorconfig
 *.lcd
 *.tcp
 *.tcd

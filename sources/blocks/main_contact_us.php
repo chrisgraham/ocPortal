@@ -85,6 +85,8 @@ class Block_main_contact_us
 				require_code('mail');
 				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),NULL,'','',3,NULL,false,get_member());
 			}
+
+			decache('main_staff_checklist');
 		} else
 		{
 			$message=new ocp_tempcode();

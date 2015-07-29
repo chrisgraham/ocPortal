@@ -171,7 +171,10 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 		require_code('ocf_posts_action');
 		if ($from_cnt!=$to_cnt)
 		{
-			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$topic_id)));
+			$sql='SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$topic_id);
+			if (addon_installed('unvalidated'))
+				$sql.=' AND p_validated=1';
+			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query($sql));
 			$member_post_counts=array_count_values($_member_post_counts);
 
 			foreach ($member_post_counts as $member_id=>$member_post_count)
@@ -373,7 +376,10 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 		require_code('ocf_posts_action');
 		if ($from_cnt!=$to_cnt)
 		{
-			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list_2));
+			$sql='SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list_2.')';
+			if (addon_installed('unvalidated'))
+				$sql.=' AND p_validated=1';
+			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query($sql));
 			$member_post_counts=array_count_values($_member_post_counts);
 
 			foreach ($member_post_counts as $member_id=>$member_post_count)

@@ -852,7 +852,7 @@ class Module_cms_calendar extends standard_aed_module
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
-				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','submitter',array('id'=>$id));
+				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','e_submitter',array('id'=>$id));
 
 				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CALENDAR_EVENT':'calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL/*$submitter*/,true);
 			}

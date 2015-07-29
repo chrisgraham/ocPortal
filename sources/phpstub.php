@@ -820,9 +820,11 @@ function get_defined_functions()
  *
  * @param  PATH		Filename.
  * @param  string		Mode (e.g. at).
+ * @param  boolean	Use include path.
+ * @param  ?object	Context (NULL: no context).
  * @return ~resource The file handle (false: could not be opened).
  */
-function fopen($filename,$mode)
+function fopen($filename,$mode,$use_include_path=false,$context=NULL)
 {
 	return array();
 }

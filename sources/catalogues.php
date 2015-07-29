@@ -1005,7 +1005,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 {
 	if (is_null($category_id))
 	{
-		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name),'',1);
+		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
 	}
 
 	if ((is_null($category_id)) && (is_null($levels)))

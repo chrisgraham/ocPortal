@@ -532,7 +532,7 @@ function render_quiz($questions)
 				$answer_text=is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text']);
 				$radios->attach(form_input_radio_entry($name,strval($a['id']),false,protect_from_escaping($answer_text)));
 			}
-			$fields->attach(form_input_radio($text,'',$name,$radios));
+			$fields->attach(form_input_radio($text,'',$name,$radios,$question['q_required']==1));
 		}
 	}
 

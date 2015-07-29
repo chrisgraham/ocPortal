@@ -37,7 +37,7 @@ class Hook_rss_comcode_pages
 		$filters=explode(',',$_filters);
 
 		$content=new ocp_tempcode();
-		$_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('the_page','the_zone'));
+		$_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('the_page','the_zone','cc_page_title'));
 		$rows=array();
 		foreach ($_rows as $row)
 			$rows[$row['the_zone'].':'.$row['the_page']]=$row;
@@ -49,8 +49,8 @@ class Hook_rss_comcode_pages
 		$rows3=array();
 		foreach ($_rows3 as $row)
 			$rows3[$row['the_zone'].':'.$row['the_page']]=$row;
-		$zones=find_all_zones();
-		foreach ($zones as $zone)
+		$zones=find_all_zones(false,true);
+		foreach ($zones as $zone=>$zone_details)
 		{
 			if (!has_zone_access(get_member(),$zone)) continue;
 
@@ -74,7 +74,9 @@ class Hook_rss_comcode_pages
 
 				$id=$zone.':'.$page;
 
-				$path=get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.get_site_default_lang().'/'.$page.'.txt';
+				$page_request=_request_page($page,$zone);
+				if (strpos($page_request[0],'COMCODE')===false) continue;
+				$path=$page_request[count($page_request)-1];
 				$news_date=date($date_string,filectime($path));
 				$edit_date=date($date_string,filemtime($path));
 				if ($news_date==$edit_date) $edit_date='';
@@ -82,7 +84,7 @@ class Hook_rss_comcode_pages
 				$summary='';
 				$news='';
 				$author='';
-				$news_title=$page;
+				$news_title=xmlentities($page);
 				if (array_key_exists($id,$rows))
 				{
 					$_news_title=get_translated_text($rows[$id]['cc_page_title'],NULL,NULL,true);
@@ -93,6 +95,9 @@ class Hook_rss_comcode_pages
 					$summary=xmlentities(get_translated_text($rows2[$id]['meta_description']));
 				if (array_key_exists($id,$rows3))
 				{
+					if ((!has_specific_permission(get_member(),'see_unvalidated')) && ($rows3[$id]['p_validated']==0))
+						continue;
+
 					$author=$GLOBALS['FORUM_DRIVER']->get_username($rows3[$id]['p_submitter']);
 					$news_date=date($date_string,$rows3[$id]['p_add_date']);
 					$edit_date=date($date_string,$rows3[$id]['p_edit_date']);
@@ -100,8 +105,8 @@ class Hook_rss_comcode_pages
 				}
 				if (is_null($author)) $author='';
 
-				$category='';
-				$category_raw='';
+				$category=$zone_details[1];
+				$category_raw=$zone;
 
 				$view_url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
 

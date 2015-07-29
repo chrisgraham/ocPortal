@@ -42,12 +42,12 @@ function ocf_member_handle_promotion($member_id=NULL)
 		if ($or_list!='') $or_list.=' OR ';
 		$or_list.='id='.strval($id);
 	}
-	$promotions=$GLOBALS['FORUM_DB']->query('SELECT id,g_promotion_target FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE ('.$or_list.') AND g_promotion_target IS NOT NULL AND g_promotion_threshold<='.strval((integer)$total_points));
+	$promotions=$GLOBALS['FORUM_DB']->query('SELECT id,g_promotion_target FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE ('.$or_list.') AND g_promotion_target IS NOT NULL AND g_promotion_threshold<='.strval((integer)$total_points).' ORDER BY g_promotion_threshold');
 	$promotes_today=array();
 	foreach ($promotions as $promotion)
 	{
 		$_p=$promotion['g_promotion_target'];
-		if ((!array_key_exists($_p,$groups)) && (!array_key_exists($_p,$promotes_today))) // If we're not already in the
+		if ((!array_key_exists($_p,$groups)) && (!array_key_exists($_p,$promotes_today))) // If we're not already in the group
 		{
 			// If it is our primary
 			if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_primary_group')==$promotion['id'])
@@ -219,7 +219,7 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 		't_cache_last_post_id='.(is_null($last_post_id)?'NULL':strval((integer)$last_post_id)).',
 		t_cache_last_title=\''.db_escape_string($last_title).'\',
 		t_cache_last_time='.(is_null($last_time)?'NULL':strval((integer)$last_time)).',
-		t_cache_last_username=\''.db_escape_string($last_username).'\',
+		t_cache_last_username=\''.db_escape_string(substr($last_username,0,255)).'\',
 		t_cache_last_member_id='.(is_null($last_member_id)?'NULL':strval((integer)$last_member_id)).',';
 
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET '.

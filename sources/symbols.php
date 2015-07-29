@@ -603,7 +603,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'AVATAR':
 				$value=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url(isset($param[0])?intval($param[0]):get_member());
-				if ((url_is_local($value)) && ($value!='')) $value=get_base_url().'/'.$value;
+				if ((url_is_local($value)) && ($value!='')) $value=get_custom_base_url().'/'.$value;
 				break;
 
 			case 'IS_GUEST':
@@ -764,7 +764,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$value=$GLOBALS['FORUM_DRIVER']->get_member_photo_url(intval($param[0]));
-					if ((url_is_local($value)) && ($value!='')) $value=get_base_url().'/'.$value;
+					if ((url_is_local($value)) && ($value!='')) $value=get_custom_base_url().'/'.$value;
 				}
 				break;
 
@@ -821,7 +821,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if (array_key_exists('scheme',$url_bits))
 					{
 						$value=$url_bits['scheme'].'://'.(array_key_exists('host',$url_bits)?$url_bits['host']:'localhost');
-						if ((array_key_exists('port',$url_bits)) && ($url_bits['port']!=80)) $value.=':'.$url_bits['port'];
+						if ((array_key_exists('port',$url_bits)) && ($url_bits['port']!=80)) $value.=':'.strval($url_bits['port']);
 					}
 					if (array_key_exists('path',$url_bits)) $value.=$url_bits['path'];
 				}

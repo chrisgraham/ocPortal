@@ -1931,6 +1931,8 @@ class Module_topics
 
 				$_title=get_page_title('REPORT_POST');
 				$check_permissions=false;
+
+				decache('main_staff_checklist');
 			} else // New topic
 			{
 				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0));
@@ -2062,6 +2064,21 @@ END;
 			if ($validated!=0) $url.='#post_'.strval($post_id);
 		}
 
+		if ($forum_id>=0)
+		{
+			$topic_validated=$GLOBALS['FORUM_DB']->query_value('f_topics','t_validated',array('id'=>$topic_id));
+			if (($topic_validated==0) && (!has_specific_permission(get_member(),'jump_to_unvalidated')))
+			{
+				$map=array('page'=>'forumview','id'=>$forum_id);
+				$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
+				if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+				$test=get_param_integer('threaded',-1);
+				if ($test!=-1) $map['threaded']=$test;
+				$_url=build_url($map,get_module_zone('forumview'));
+				$url=$_url->evaluate();
+			}
+		}
+
 		if (($new_topic) && ($forum_id==-1))
 		{
 			require_code('notifications');
@@ -2072,7 +2089,7 @@ END;
 			{
 				enable_notifications('ocf_topic',strval($topic_id),$invited_member);
 
-				ocf_invite_to_pt(intval($invited_member),$topic_id);
+				ocf_invite_to_pt($invited_member,$topic_id);
 			}
 		}
 
@@ -2654,34 +2671,45 @@ END;
 		$javascript.="
 			var form=document.getElementById('post').form;
 			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
+			form.onsubmit=function() {
+				var post=form.elements['post'];
+				var text_value;
+				if (is_wysiwyg_field(post))
 				{
-					var post=form.elements['post'];
-					if ((!post.value) && (post[1])) post=post[1];
-					if (post.value.length>".strval($size).")
+					try
 					{
-						window.fauxmodal_alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
-						return false;
+						text_value=window.CKEDITOR.instances['post'].getData();
 					}
+					catch (e) {};
+				} else
+				{
+					if ((!post.value) && (post[1])) post=post[1];
+					text_value=post.value;
+				}
+				if (text_value.length>".strval($size).")
+				{
+					window.fauxmodal_alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
+					return false;
+				}
 		";
 
 		$stub=unixify_line_format(either_param('stub',''));
 		if ($stub!='') $javascript.="
-					var df='".str_replace(chr(10),'\n',addslashes($stub))."';
+				var df='".str_replace(chr(10),'\n',addslashes($stub))."';
 
-					var pv=post.value;
-					if ((post) && (pv.substring(0,df.length)==df))
-					{
-						pv=pv.substring(df.length,pv.length);
-					}
-					post.value=pv;
+				var pv=post.value;
+				if ((post) && (pv.substring(0,df.length)==df))
+				{
+					pv=pv.substring(df.length,pv.length);
+				}
+				post.value=pv;
 		";
 
 		$javascript.="
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+				if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
 
-					return true;
-				};
+				return true;
+			};
 		";
 
 		return $javascript;

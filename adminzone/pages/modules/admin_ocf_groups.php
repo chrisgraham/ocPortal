@@ -429,10 +429,10 @@ class Module_admin_ocf_groups extends standard_aed_module
 
 			if (is_null($row['g_promotion_target']))
 			{
-				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_NORMAL',get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']),strval($row['id']),array(integer_format($row['g_order']+1),integer_format($num_members)));
+				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_NORMAL',escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])),strval($row['id']),array(integer_format($row['g_order']+1),integer_format($num_members)));
 			} else
 			{
-				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_RANK',get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']),strval($row['id']),array(strval($row['g_promotion_target']),integer_format($row['g_order']+1),integer_format($num_members)));
+				$text=do_lang_tempcode('EXTENDED_GROUP_TITLE_RANK',escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])),strval($row['id']),array(strval($row['g_promotion_target']),integer_format($row['g_order']+1),integer_format($num_members)));
 			}
 			$fields->attach(form_input_list_entry(strval($row['id']),false,$text));
 		}
@@ -466,8 +466,12 @@ class Module_admin_ocf_groups extends standard_aed_module
 		}
 		$myrow=$rows[0];
 
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_group_leader']);
-		if (is_null($username)) $username='';//do_lang('UNKNOWN');
+		$username='';
+		if (!is_null($myrow['g_group_leader']))
+		{
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_group_leader']);
+			if (is_null($username)) $username='';//do_lang('UNKNOWN');
+		}
 
 		if ((intval($id)==db_get_first_id()+8) && ($GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_presented_at_install'=>'1'))==0))
 			$myrow['g_is_presented_at_install']=1;

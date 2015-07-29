@@ -34,7 +34,7 @@ class Hook_Syndication_facebook
 
 		if ($code=='')
 		{
-			$oauth_redir_url=$FACEBOOK_CONNECT->getLoginUrl(array('redirect_uri'=>$oauth_url->evaluate(),'scope'=>array('publish_stream','offline_access')));
+			$oauth_redir_url=$FACEBOOK_CONNECT->getLoginUrl(array('redirect_uri'=>$oauth_url->evaluate(),'scope'=>array('publish_stream')));
 		   header('Location: '.$oauth_redir_url);
 			exit();
 		}
@@ -55,15 +55,15 @@ class Hook_Syndication_facebook
 
 		if (is_null($member_id))
 		{
-			$FACEBOOK_CONNECT->setExtendedAccessToken();
-			$facebook->api('/oauth/access_token', 'POST',
+			/*$FACEBOOK_CONNECT->setExtendedAccessToken();		Facebook API no longer has this
+			$FACEBOOK_CONNECT->api('/oauth/access_token', 'POST',
 				array(
 					'grant_type'=>'fb_exchange_token',
 					'client_id'=>get_option('facebook_appid'),
 					'client_secret'=>get_option('facebook_secret_code'),
 					'fb_exchange_token'=>$access_token
 			    )
-			);
+			);*/
 
 			if (get_option('facebook_uid')=='')
 			{

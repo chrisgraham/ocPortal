@@ -520,7 +520,7 @@ function install_addon($file,$files=NULL)
 		}
 	}
 
-	// Install news blocks
+	// Install new blocks
 	foreach ($directory as $dir)
 	{
 		$addon_file=$dir['path'];
@@ -609,7 +609,7 @@ function uninstall_addon($name)
 	$last=array();
 	foreach ($addon_row['addon_files'] as $filename)
 	{
-		if (file_exists(get_file_base().'/'.$filename))
+		if (@file_exists(get_file_base().'/'.$filename)) //@d due to possible bad file paths
 		{
 			$test=$GLOBALS['SITE_DB']->query_value('addons_files','COUNT(*)',array('filename'=>$filename));
 			if ($test<=1) // Make sure it's not shared with other addons

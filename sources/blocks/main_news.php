@@ -210,7 +210,7 @@ class Block_main_news
 				if ($myrow['news_image']!='')
 				{
 					$img=$myrow['news_image'];
-					if (url_is_local($img)) $img=get_base_url().'/'.$img;
+					if (url_is_local($img)) $img=get_custom_base_url().'/'.$img;
 				}
 				$category=get_translated_text($NEWS_CATS[$myrow['news_category']]['nc_title']);
 				$seo_bits=seo_meta_get_for('news',strval($id));

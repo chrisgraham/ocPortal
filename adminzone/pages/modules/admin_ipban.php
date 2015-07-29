@@ -164,7 +164,7 @@ class Module_admin_ipban
 			if (trim($ban)=='') continue;
 			preg_match('#^([^\s]+)(.*)$#',$ban,$matches);
 			$ip=$matches[1];
-			if (preg_match('#^[a-f0-9\.]+$#U',$ip)==0)
+			if (preg_match('#^[a-f0-9\.\*:]+$#U',$ip)==0)
 			{
 				attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',$ban),'warn');
 			} else

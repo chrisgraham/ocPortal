@@ -577,7 +577,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 		}
 
 		// Put on activity wall / whatever
-		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'cma_hook');
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
@@ -686,6 +686,8 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	if ((is_null($post_title)) && (!$forum_tie)) return false;
 
 	$post=post_param('post',NULL);
+	if ($post==do_lang('POST_WARNING')) $post='';
+	if ($post==do_lang('THREADED_REPLY_NOTICE',do_lang('POST_WARNING'))) $post='';
 	if (($post=='') && ($post_title!==''))
 	{
 		$post=$post_title;
@@ -812,7 +814,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		}
 
 		// Activity
-		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'cma_hook');
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();

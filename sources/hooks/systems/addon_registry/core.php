@@ -699,6 +699,7 @@ class Hook_addon_registry_core
 			'sources/caches_apc.php',
 			'sources/caches_xcache.php',
 			'sources/caches_wincache.php',
+			'sources/caches_memcache.php',
 			'sources/config.php',
 			'sources/config2.php',
 			'sources/critical_errors.php',

@@ -622,7 +622,7 @@ function test_fail_php_type_check($type,$function_name,$name,$value,$echo=false)
 			if ((!is_string($value)) || (strlen($value)>33)) _fail_php_type_check($type,$function_name,$name,$value,$echo);
 			break;
 		case 'EMAIL':
-			if ((!is_string($value)) || (is_valid_email_address($value))) _fail_php_type_check($type,$function_name,$name,$value,$echo);
+			if ((!is_string($value)) || (!is_valid_email_address($value))) _fail_php_type_check($type,$function_name,$name,$value,$echo);
 			break;
 		case 'URLPATH':
 			if ((!is_string($value)) || (strlen($value)>127)) _fail_php_type_check($type,$function_name,$name,$value,$echo);

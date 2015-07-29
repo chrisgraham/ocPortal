@@ -688,7 +688,7 @@ function get_charset()
 	}
 
 	global $LANGS_REQUESTED;
-	if ((function_exists('do_lang')) && (function_exists('user_lang')) && (isset($LANGS_REQUESTED['critical_error'])) && (!in_safe_mode()))
+	if ((function_exists('do_lang')) && (function_exists('user_lang')) && (isset($LANGS_REQUESTED['critical_error'])) && (isset($LANGS_REQUESTED['global'])) && (!in_safe_mode()))
 	{
 		$attempt=do_lang('charset',NULL,NULL,NULL,NULL,false);
 		if ($attempt!==NULL)
@@ -1223,12 +1223,18 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$https=$CURRENTLY_HTTPS;
 		if ($https===NULL)
 		{
-			if (get_option('enable_https',true)=='0')
+			if (running_script('index'))
 			{
-				$https=false;
+				if (get_option('enable_https',true)=='0')
+				{
+					$https=false;
+				} else
+				{
+					$https=function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name()));
+				}
 			} else
 			{
-				$https=function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name()));
+				$https=function_exists('tacit_https') && tacit_https();
 			}
 			$CURRENTLY_HTTPS=$https;
 		}
@@ -1253,7 +1259,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
 		$port=ocp_srv('SERVER_PORT');
 		if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
-			$SITE_INFO['base_url']='http://'.$domain.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',str_replace('\\','/',dirname(ocp_srv('PHP_SELF'))))));
+		$SITE_INFO['base_url']='http://'.$domain.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',str_replace('\\','/',dirname(ocp_srv('PHP_SELF'))))));
 	}
 
 	$base_url=$SITE_INFO['base_url'];

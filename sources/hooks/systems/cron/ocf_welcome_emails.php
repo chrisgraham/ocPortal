@@ -113,6 +113,13 @@ class Hook_cron_ocf_welcome_emails
 						$message=newsletter_variable_substitution($message,$subject,$forename,$surname,$name,$member['m_email_address'],$sendid,$hash);
 					}
 
+					if ($is_html)
+					{
+						require_code('tempcode_compiler');
+						$temp=template_to_tempcode($message);
+						$message=$temp->evaluate(get_lang($member['id']));
+					}
+
 					if (get_value('notification_safety_testing')==='1')
 					{
 						$test=$GLOBALS['SITE_DB']->query_value_null_ok('logged_mail_messages','m_date_and_time',array('m_subject'=>$subject,'m_to_email'=>serialize(array($member['m_email_address']))));
@@ -124,7 +131,7 @@ class Hook_cron_ocf_welcome_emails
 						}
 					}
 
-					mail_wrap($subject,$message,array($member['m_email_address']),$name,'','',3,NULL,false,NULL,true);
+					mail_wrap($subject,$message,array($member['m_email_address']),$name,'','',3,NULL,false,NULL,true,$is_html);
 				}
 			}
 		}

@@ -916,7 +916,7 @@ class Module_admin_config
 					set_value('timezone',$value);
 				}
 			}
-			elseif ($myrow['c_set']==1)
+			else
 			{
 				if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (is_numeric($myrow['config_value'])))
 				{
@@ -924,17 +924,10 @@ class Module_admin_config
 				} else $old_value=$myrow['config_value'];
 
 				// If the option was changed
-				if ($old_value!=$value)
+				if (($old_value!=$value) || ($myrow['c_set']==0))
 				{
 					set_option($myrow['the_name'],$value,$myrow['the_type'],$myrow['config_value']);
 				}
-			} else
-			{
-				if (($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext'))
-				{
-					$_value=strval(insert_lang($value,1));
-				} else $_value=$value;
-				$GLOBALS['SITE_DB']->query_update('config',array('config_value'=>$_value,'c_set'=>1),array('the_name'=>$myrow['the_name']),'',1);
 			}
 		}
 

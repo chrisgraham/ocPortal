@@ -46,7 +46,7 @@ class Hook_rss_cedi
 		{
 			$id=strval($row['id']);
 
-			if (!has_category_access(get_member(),'seedy_page',strval($id))) continue;
+			if (!has_category_access(get_member(),'seedy_page',strval($row['id']))) continue;
 
 			$author='';
 
@@ -69,7 +69,7 @@ class Hook_rss_cedi
 		}
 
 		require_lang('cedi');
-		return array($content,do_lang('CEDI_POSTS'));
+		return array($content,do_lang('CEDI_PAGES'));
 	}
 
 }
