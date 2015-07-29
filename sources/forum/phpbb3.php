@@ -129,7 +129,7 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 		$output=crypt($password,$salt);
 		if (strlen($output) < 60)
 		{
-			return false;
+			return '';
 		}
 	}
 

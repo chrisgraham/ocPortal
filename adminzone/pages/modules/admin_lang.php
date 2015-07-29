@@ -335,7 +335,7 @@ class Module_admin_lang
 			$ids_to_lookup[]=$it['id'];
 		}
 		$names=find_lang_content_names($ids_to_lookup);
-        $_to_translate=array();
+		$_to_translate=array();
 		foreach ($to_translate as $i=>$it)
 		{
 			if ($it['importance_level']==0) continue; // Corrupt data
@@ -344,9 +344,10 @@ class Module_admin_lang
 			$name=$names[$id];
 			if (is_null($name)) continue; // Orphaned string
 
-            $_to_translate[]=$it;
-        }
-        $to_translate=$_to_translate;
+			$_to_translate[]=$it;
+		}
+
+		$to_translate=$_to_translate;
 		foreach ($to_translate as $i=>$it)
 		{
 			$old=$it['text_original'];
@@ -370,9 +371,9 @@ class Module_admin_lang
 
 		require_code('lang2');
 
-        $_GET['lang']=$lang;
-        require_code('templates_pagination');
-        $pagination=pagination(do_lang('TRANSLATE_CONTENT'),NULL,$start,'start',$max,'max',$total,NULL,NULL,true);
+		$_GET['lang']=$lang;
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang('TRANSLATE_CONTENT'),NULL,$start,'start',$max,'max',$total,NULL,NULL,true);
 
 		return do_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array(
 			'_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2',

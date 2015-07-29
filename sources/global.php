@@ -502,12 +502,14 @@ if (!function_exists('file_get_contents'))
 	 * Get the contents of a file.
 	 *
 	 * @param  SHORT_TEXT	The file name.
+	 * @param  boolean		Use include path.
+	 * @param  ?object		Context (NULL: no context).
 	 * @return ~LONG_TEXT	The file contents (false: error).
 	 */
-	function file_get_contents($filename)
+	function file_get_contents($filename,$use_include_path=false,$context=NULL)
 	{
 		$data='';
-		$file=@fopen($filename,'rb');
+		$file=@fopen($filename,'rb',$use_include_path,$context);
 		if ($file)
 		{
 			while (!feof($file)) $data.=fread($file,1024);

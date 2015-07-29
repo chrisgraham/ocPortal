@@ -951,7 +951,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 			}
 		}
-		$out.="\r\nConnection: Close\r\n"; // Not a standard header, comes in a separate header set
+		$out.="\r\nConnection: Close"; // Not a standard header, comes in a separate header set
 
 		@fwrite($mysock,$out);
 		$data_started=false;
@@ -1168,14 +1168,20 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		if (($errno!=110) && (($errno!=10060) || (@ini_get('default_socket_timeout')=='1')) && (is_null($post_params)) && ((@ini_get('allow_url_fopen')) || (php_function_allowed('ini_set'))))
 		{
 			$crt_path=get_file_base().'/data/curl-ca-bundle.crt';
-			$context=stream_context_create(array(
-				'ssl'=>array(
-					'verify_peer'=>true,
-					'cafile'=>$crt_path,
-					'SNI_enabled'=>true,
-					'ciphers' => 'TLSv1',
-				)
-			));
+			if (function_exists('stream_context_create'))
+			{
+				$context=stream_context_create(array(
+					'ssl'=>array(
+						'verify_peer'=>true,
+						'cafile'=>$crt_path,
+						'SNI_enabled'=>true,
+						'ciphers' => 'TLSv1',
+					)
+				));
+			} else
+			{
+				$context=mixed();
+			}
 
 			// Perhaps fsockopen is restricted... try fread/file_get_contents
 			safe_ini_set('allow_url_fopen','1');
@@ -1184,7 +1190,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$php_errormsg=mixed();
 			if ((is_null($byte_limit)) && (is_null($write_to_file)))
 			{
-				$read_file=@file_get_contents($url,NULL,$context);
+				$read_file=@file_get_contents($url,false,$context);
 			} else
 			{
 				$_read_file=@fopen($url,'rb',false,$context);
