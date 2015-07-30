@@ -1706,6 +1706,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 						'Minimo', // By Mozilla
 						'Fennec', // By Mozilla (being outmoded by minimo)
 						'Mobile Safari', // Usually Android
+						'Android',
 						'lynx',
 						'Links',
 						'iPhone',

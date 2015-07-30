@@ -803,7 +803,7 @@ function load_user_stuff()
 		if (!array_key_exists('forum_type',$SITE_INFO)) $SITE_INFO['forum_type']='ocf';
 		require_code('forum/'.$SITE_INFO['forum_type']);	 // So we can at least get user details
 		$GLOBALS['FORUM_DRIVER']=object_factory('forum_driver_'.filter_naughty_harsh($SITE_INFO['forum_type']));
-		if (($SITE_INFO['forum_type']=='ocf') && (get_db_forums()==get_db_site()) && ($GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix()==get_table_prefix()) && (!$GLOBALS['DEV_MODE'])) // NB: In debug mode needs separating so we can properly test our boundaries
+		if (($SITE_INFO['forum_type']=='ocf') && (get_db_forums()==get_db_site()) && ($GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix()==get_table_prefix()))
 		{
 			$GLOBALS['FORUM_DRIVER']->connection=$GLOBALS['SITE_DB'];
 		}

@@ -151,7 +151,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	 */
 	function get_form_fields($id=NULL,$name='',$is_default=0,$is_super_admin=0,$is_super_moderator=0,$group_leader='',$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$flood_control_submit_secs=0,$flood_control_access_secs=0,$gift_points_base=25,$gift_points_per_day=1,$max_daily_upload_mb=5,$max_attachments_per_post=20,$max_avatar_width=80,$max_avatar_height=80,$max_post_length_comcode=40000,$max_sig_length_comcode=1000,$enquire_on_new_ips=0,$is_presented_at_install=0,$group_is_hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
 	{
-		if ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write)
+		if ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write)
 		{
 			attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
 		}
