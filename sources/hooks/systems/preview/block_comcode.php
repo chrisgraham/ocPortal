@@ -50,16 +50,19 @@ class Hook_Preview_block_comcode
 		$bparameters_xml='';
 		$block=post_param('block');
 		$parameters=get_block_parameters($block);
+		$parameters[]='failsafe';
+		$parameters[]='cache';
+		$parameters[]='quick_cache';
 		foreach ($parameters as $parameter)
 		{
-			if (($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive'))))
+			$value=post_param($parameter,NULL);
+			if (is_null($value))
 			{
-				$value=post_param($parameter,'');
-			} else
-			{
-				$value=post_param($parameter,'0');
+				if (post_param_integer('tick_on_form__'.$parameter,NULL)===NULL) continue; // If not on form, continue, otherwise must be 0
+				$value='0';
 			}
-			if ($value!='')
+
+			if (($value!='') && (($parameter!='failsafe') || ($value=='1')) && (($parameter!='cache') || ($value!=block_cache_default($block))) && (($parameter!='quick_cache') || ($value=='1')))
 			{
 				$bparameters.=' '.$parameter.'="'.str_replace('"','\"',$value).'"';
 				$bparameters_xml='<blockParam key="'.escape_html($parameter).'" val="'.escape_html($value).'" />';

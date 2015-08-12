@@ -325,7 +325,10 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 		$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
 		if (get_value('captcha_single_guess')==='1')
 		{
-			$GLOBALS['SITE_DB']->query_delete('security_images',array('si_session_id'=>get_session_id())); // Only allowed to check once
+			if (!running_script('snippet'))
+			{
+				$GLOBALS['SITE_DB']->query_delete('security_images',array('si_session_id'=>get_session_id())); // Only allowed to check once
+			}
 		}
 		if (is_null($_code_needed))
 		{
