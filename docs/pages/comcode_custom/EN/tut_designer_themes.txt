@@ -80,18 +80,18 @@ This section will step through how to build your design, in a number of steps an
 [title="3"]Global layout of XHTML[/title]
 
 [list="1"]
-[*]You will next need to start modifying templates to incorporate your "global" XHTML (XHTML you expect to show on all pages). Start with the main one: [tt]GLOBAL_HTML_WRAP[/tt]. You can do this in ocPortal from the themes section, or you can do it in your favourite text editor (e.g. Dreamweaver) by copying for example [tt]themes/default/templates/GLOBAL_HTML_WRAP.tpl[/tt] to [tt]themes/<yourthemename>/templates_custom/GLOBAL_HTML_WRAP.tpl[/tt]. It will take you a bit of time to learn what default template code to keep and what can go. Basically you will want to keep:
+[*]You will next need to start modifying templates to incorporate your "global" XHTML (XHTML you expect to show on all pages). Start with the main one: [tt]GLOBAL_HTML_WRAP.tpl[/tt]. You can do this in ocPortal from the themes section, or you can do it in your favourite text editor (e.g. Dreamweaver) by copying for example [tt]themes/default/templates/GLOBAL_HTML_WRAP.tpl[/tt] to [tt]themes/<yourthemename>/templates_custom/GLOBAL_HTML_WRAP.tpl[/tt]. It will take you a bit of time to learn what default template code to keep and what can go. Basically you will want to keep:
 [list]
-	[*]The contents of the [tt]<head>[/tt] tag from [tt]GLOBAL_HTML_WRAP[/tt]
-	[*]References to panels, like [tt]{$GET,panel_left}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], so that panels can still be placed (assuming you have panels on your design! - or you may have a left and no right, or vice-versa). You can rearrange it all and place it in different places, and you don't need all the stuff about widths because you are allowed to make bigger assumptions than our default templates can. It is possible to hard-code panels into the [tt]GLOBAL_HTML_WRAP[/tt] template instead of using separate files, but is makes it harder for webmasters to make changes. If you feel more comfortable not using panels at first this is fine.
-	[*][tt]{MIDDLE}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], which is the main content of a page.
-	[*][tt]{MESSAGE_TOP}[/tt] and [tt]{MESSAGE}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], which is used to put out status messages as you complete things on the site or if small errors happen.
-	[*][tt]{$JS_TEMPCODE,footer}[/tt] and the [tt]<script>[/tt] tag from [tt]GLOBAL_HTML_WRAP[/tt].
-	[*][tt]{$COPYRIGHT`}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], which should be used instead of the hard-coded copyright of your design (most designs have it).
+	[*]The contents of the [tt]<head>[/tt] tag from [tt]GLOBAL_HTML_WRAP.tpl[/tt]
+	[*]References to panels, like [tt]{$LOAD_PANEL,left}[/tt] from [tt]GLOBAL_HTML_WRAP.tpl[/tt], so that panels can still be placed (assuming you have panels on your design! - or you may have a left and no right, or vice-versa). You can rearrange it all and place it in different places, and you don't need all the stuff about widths because you are allowed to make bigger assumptions than our default templates can. It is possible to hard-code panels into the [tt]GLOBAL_HTML_WRAP.tpl[/tt] template instead of using separate files, but is makes it harder for webmasters to make changes. If you feel more comfortable not using panels at first this is fine.
+	[*][tt]{MIDDLE}[/tt] from [tt]GLOBAL_HTML_WRAP.tpl[/tt], which is the main content of a page.
+	[*][tt]{$MESSAGES_TOP}[/tt] and [tt]{$LATE_MESSAGES}[/tt] from [tt]GLOBAL_HTML_WRAP.tpl[/tt], which is used to put out status messages as you complete things on the site or if small errors happen.
+	[*][tt]{$JS_TEMPCODE,footer}[/tt] and the [tt]<script>[/tt] tag from [tt]GLOBAL_HTML_WRAP.tpl[/tt].
+	[*][tt]{$COPYRIGHT`}[/tt] from [tt]GLOBAL_HTML_WRAP.tpl[/tt], which should be used instead of the hard-coded copyright of your design (most designs have it).
 	[*]The rest (and there are lots, because our default theme is very thorough) can be removed.
 [/list]
 [*]If you have incorporated panels and have made the assumption that they will never be blank/hidden, then you must put [tt]supports_wide=0[/tt] into your [tt]themes/<theme>/theme.ini[/tt] file.
-[*]Once you have your main XHTML incorporated you will see lots of problems with layout, because there will be incompatibilities with your styling and the default styling. So now is a good time to fix all these. You probably will want to remove a many of the default styles ocPortal uses from [tt]global.css[/tt], but be careful to only remove really general layout style rules -- don't just remove huge chunks of CSS indiscriminately.
+[*]Once you have your main XHTML incorporated you will see lots of problems with layout, because there will be incompatibilities with your styling and the default styling. So now is a good time to fix all these. You probably will want to remove many of the default styles ocPortal uses from [tt]global.css[/tt], but be careful to only remove really general layout style rules -- don't just remove huge chunks of CSS indiscriminately.
 [*]Similarly, you may find you made assumptions in your CSS. For example, you may have set quite specific styles for default elements because you only use them in a specific way on your design (e.g. making all 'strong' tags really large). Your ocPortal theme will need to not make too many assumptions like this, remember a lot of your CSS will be running on screens you haven't given individual design attention to because they will be running a lot of default XHTML from ocPortal.
 [/list]
 
@@ -107,7 +107,7 @@ This section will step through how to build your design, in a number of steps an
 	[*]Comcode page: Right panel (if you have one on the design), [tt]:panel_right[/tt]
 	[*]Comcode page: Top panel (if you have one on the design), [tt]:panel_top[/tt]
 	[*]Comcode page: Bottom panel (if you have one on the design), [tt]:panel_bottom[/tt]
-	[*][tt]GLOBAL_HTML_WRAP[/tt]: Often there will be blocks in the header, like 'search' or 'login'. You can place these using code like [tt]{$BLOCK,block=<blockname>}[/tt]. Similarly sometimes the is a menu in the footer, which can be placed like [code]{$BLOCK,block=side_stored_menu,type=<menu-type>,param=<menu-name>}[/code]
+	[*][tt]GLOBAL_HTML_WRAP.tpl[/tt]: Often there will be blocks in the header, like 'search' or 'login'. You can place these using code like [tt]{$BLOCK,block=<blockname>}[/tt]. Similarly sometimes there is a menu in the footer, which can be placed like [code]{$BLOCK,block=side_stored_menu,type=<menu-type>,param=<menu-name>}[/code]
 [/list]
 [/list]
 
@@ -240,7 +240,7 @@ There are three situations that may require you to add new panels to ocPortal, o
 The solution to these problems are page/panel inclusion into templates. Any page name that starts with "panel_" is a panel and won't be shown in the site-map. Similarly, any page name that starts with "_" is considered special and won't show in the site-map.
 To include a new panel with the page name of [tt]panel_<panelname>[/tt] it is as simple as placing this code into your template:
 [code]
-{$LOAD_PANEL,panel_<panelname>}
+{$LOAD_PANEL,<panelname>}
 [/code]
 To include a page named [tt]<otherpagename>[/tt] into another Comcode page you can do something very similar using this in the page being included into:
 [code]
@@ -421,7 +421,7 @@ You will need to ensure you don't put English text into your templates. To avoid
 [quote]
 Designed by BigBoy designs
 [/quote]
-to internationalise it you would need to create a named language string. We'll pick a name that represents the text. In this case, [tt]DESIGNED_BY_TEAM[/tt]. We would replace the text with [tt]{!DESIGNED_BY_TEAM,BigBoy designs}[/tt] and add this to the [tt]lang_custom/EN/global.ini[/tt] file (create this file if it des not already exist):
+to internationalise it you would need to create a named language string. We'll pick a name that represents the text. In this case, [tt]DESIGNED_BY_TEAM[/tt]. We would replace the text with [tt]{!DESIGNED_BY_TEAM,BigBoy designs}[/tt] and add this to the [tt]lang_custom/EN/global.ini[/tt] file (create this file if it does not already exist):
 [code]
 DESIGNED_BY_TEAM=Designed by {1}
 [/code]

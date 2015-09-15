@@ -12,7 +12,7 @@ During installing ocPortal, there will be two user-names provided by default:
  - [tt]admin[/tt] (or whatever you changed it to during installation)
  - [tt]test[/tt]
 
-The test username is intended for testing permissions for non-administrators, which is a very important task, as it is easy to make mistakes during configuration. There is a 'su' feature that allows an administrator to become any user by typing in their username (and not needing to type in their password, or logout): this is a perfect way to use the 'test' username. Access the 'su' feature from the login block ([tt]side_personal_stats[/tt]) or by putting [tt]&keep_su=<username>[/tt] onto the end of the URL.
+The test username is intended for testing permissions for non-administrators, which is a very important task, as it is easy to make mistakes during configuration. There is a 'su' feature that allows an administrator to become any user by typing in their username (and not needing to type in their password, or logout): this is a perfect way to use the 'test' username. Access the 'su' feature from the footer or by putting [tt]&keep_su=<username>[/tt] onto the end of the URL.
 
 [title="2"]Joining[/title]
 
@@ -40,7 +40,7 @@ If a member has forgotten their password, there is a link to have it reset avail
 [title="3"]Recommendation and Invites[/title]
 
 The recommendation module performs two functions:
-1) General recommendation, sending out e-mails to people recommending your website
+1) General recommendation, sending out e-mails from people recommending your website
 2) Invites, if joining is restricted
 
 General recommendation is very straight-forward. ocPortal provides the ability to upload contact lists, from various e-mail software, so you can recommend to many people at once. Members may customise the message sent out when their recommendation is made.

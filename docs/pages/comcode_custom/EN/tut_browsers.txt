@@ -40,6 +40,24 @@ PNG is an image file format. PNG is used in favour to GIF, as it supports images
 
 RSS, Atom and OPML are usually viewed in a separate program, such as 'FeedReader'. However, the latest generation of web browsers also provide their own feed subscription support. Firefox supports 'Active Bookmarks' that are assembled from links in an RSS feed: this works with ocPortal news.
 
+[title="2"]Browser testing[/title]
+
+[exp_thumb="BrowserStack are kind enough to provide free testing capabilities to the core ocPortal developers. It is a high-quality service." float="right"]browserstack[/exp_thumb]
+Browser testing presents the following difficulties:
+1) A machine may only have one Microsoft browser installed.
+2) To test on mobile devices you really should test on a proper mobile device to get a real feel for things.
+3) Safari only works on Mac OS, so you need a Mac.
+4) Internet Explorer only works on Windows, so you need a Windows install.
+5) On browsers such as Google Chrome operating system font rendering differences may mean things lay out slightly differently on different operating systems.
+
+There are a number of things that can help you with testing:[list]
+[*] Google Chrome has excellent device emulation, for quick/earlier testing for different mobile devices (not a substitute for proper testing).
+[*] Internet Explorer lets you run in compatibility modes to test on earlier versions of their engines (imperfect, but useful).
+[*] [url="IETester"]http://www.my-debugbar.com/wiki/IETester/HomePage[/url] lets you test much older Internet Explorer versions (imperfect/unstable, but useful).
+[*] Virtual Machines let you test different Internet Explorer browsers without needing separate physical machines. [url="Microsoft supply free images to help"]https://dev.modern.ie/[/url]. They come at a hefty download size though, uses lots of disk space, and using VMs means lots of RAM usage.
+[*] You can use a commercial online testing system like [url="BrowserStack"]https://www.browserstack.com/[/url]. BrowserStack host virtual machines for you in the cloud so that you don't need to maintain your own VMs. You can also automatically take mass-screenshots across many devices, and also run automated JavaScript testing (for developers).
+[/list]
+
 [title="2"]Javascript[/title]
 
 Javascript may be disabled by visitors to ocPortal. Sometimes users consider it unsafe and disable it (there is a strong case to this, but it is a very limiting thing to do), although by doing so on the modern web, most websites will not work.

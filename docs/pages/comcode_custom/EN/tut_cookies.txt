@@ -50,7 +50,7 @@ Whilst this is indirect, and requires one page view before detection is accurate
 If ocPortal says Javascript is not enabled it can mean three things:
  - Javascript truly isn't enabled
  - Session Cookies are disabled
- - The ocPortal cookie settings chosen at installation are not incorrect
+ - The ocPortal cookie settings chosen at installation are incorrect
 
 Number 2 is the most likely cause, and this can be adjusted in the "Privacy" options of Internet Explorer: it is the simplistic "High privacy" slider that causes many users to disable cookies, when infact cookies are just one of many ways that people may be tracked (hence it is false piece of mind, at the expense of functionality). A good way to determine whether session cookies are disabled is by going back to your website after closing the browser window: if the URLs in ocPortal have a 'keep_session' bit in them then it means that session cookies are disabled.
 

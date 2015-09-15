@@ -493,7 +493,7 @@ There are other standard attributes, but only four, and they're used exceedingly
 
 Now that you've learnt all the XHTML elements, how to use them, and their attributes, you might think it's all over. This is not true; XHTML has a final surprise for you.
 
-As you might have guessed, you can't put any element inside another. There are rules. The basic rule is that of block-level and inline elements. Every XHTML element is either a block-level element, or an inline element (with a few exceptions, which are beyond the scope of this tutorial, but they don't behave particularly differently anyway.) With a few exceptions, block-level elements may not contain other block-level elements. As well as this, inline elements may not contain block-level elements. Block-level elements may, however, contain inline elements.
+As you might have guessed, you can't put any element inside another. There are rules. The basic rule is that of block-level and inline elements. Every XHTML element is either a block-level element, or an inline element (with a few exceptions, which are beyond the scope of this tutorial, but they don't behave particularly differently anyway.) Block-level elements may contain either other block-level elements or inline elements. However, inline elements may only contain other inline elements.
 
 What follows is an example XHTML document, utilising all of the above principles:
 [code="HTML"]

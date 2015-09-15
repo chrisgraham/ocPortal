@@ -795,6 +795,14 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 
 		$data=(strtolower(substr($entry['path'],-4,4))=='.tpl')?tar_get_file($tar,$entry['path'],true):NULL;
 
+		// check valid path
+		$php_errormsg=mixed();
+		@file_exists(get_file_base().'/'.$entry['path']); //@d due to possible bad file paths
+		if ((isset($php_errormsg)) && (strpos($php_errormsg,'be a valid path')!==false))
+		{
+			warn_exit(do_lang_tempcode('CORRUPT_TAR'));
+		}
+
 		// .php?
 		if ((strtolower(substr($entry['path'],-4,4))=='.php') || ((!is_null($data)) && ((strpos($data['data'],'{+START,PHP')!==false) || (strpos($data['data'],'<'.'?php')!==false))))
 		{

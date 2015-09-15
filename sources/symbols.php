@@ -2132,7 +2132,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'INSERT_SPAMMER_BLACKHOLE':
 				if (get_option('spam_blackhole_detection')=='1')
 				{
-					$field_name='x'.md5(get_site_name().': antispam');
+					$field_name=md5(get_site_name().': antispam');
 					$value='<div id="'.escape_html($field_name).'_wrap" style="display:none"><label for="'.escape_html($field_name).'">'.do_lang('DO_NOT_FILL_ME_SPAMMER_BLACKHOLE').'</label><input id="'.escape_html($field_name).'" name="'.escape_html($field_name).'" value="" type="text" /></div>';
 					if (!$GLOBALS['SEMI_DEV_MODE'])
 						$value.='<script type="text/javascript">// <'.'![CDATA['.chr(10).'var wrap=document.getElementById(\''.escape_html($field_name).'_wrap\'); wrap.parentNode.removeChild(wrap);'.chr(10).'//]]></script>';

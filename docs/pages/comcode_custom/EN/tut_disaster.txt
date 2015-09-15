@@ -37,7 +37,7 @@ For this, I am assuming that you are using [concept]OCF[/concept]. If you are us
 [exp_thumb="Edit the row for the username for which the password should be changed" float="right"]disaster_pass_2[/exp_thumb]
 1) Enter phpMyAdmin
 
-2) Browse the contents of the ocPortal f_members table (named [tt]ocp2_f_members[/tt] if you used the default table prefix).
+2) Browse the contents of the ocPortal f_members table (named [tt]ocp_f_members[/tt] if you used the default table prefix).
 
 3) You will see rows for all usernames. Click the little edit icon and you'll see an editing screen.
 

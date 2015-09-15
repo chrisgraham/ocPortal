@@ -641,7 +641,7 @@ function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=
 	_check_enforcement_of_type($file,$enforce_type,$accept_errors);
 
 	// If we are not obfuscating then we will need to search for an available filename
-	if (($obfuscate==0) || ($obfuscate==3))
+	if (($obfuscate==0) || ($obfuscate==3) || (strlen($file)>150))
 	{
 		$_file=preg_replace('#\..*\.#','.',$file);
 		$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;

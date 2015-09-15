@@ -26,7 +26,7 @@ The sub-forum system exists so that forums may be organised such that subjects a
 [title="2"]Topics in a forum[/title]
 
 Within a forum, there are a number of to modify a topic, to change their behaviour:
- - A topic may be 'pinned' (also known as 'stickied' in some systems). A pinned topic is placed at the top of the topic list, usually as it contains importer information
+ - A topic may be 'pinned' (also known as 'stickied' in some systems). A pinned topic is placed at the top of the topic list, usually as it contains important information
  - A topic may be 'sunk'. This is the opposite of pinning -- a sunk topic will display at the bottom of the topic list, on the last page of results
  - A topic may be made 'cascading'. Cascaded topics appear in all forums in the forum tree, underneath (and including) the forum they are placed in. The cascade property is often used to make forum-wide announcements
  - A topic may be 'closed'. Only those with the necessary privilege may post in a closed topic
@@ -44,7 +44,7 @@ OCF creates a default forum structure which is appropriate for a small or new co
 
 [title="2"]Using access permissions effectively[/title]
 
-All forums define whether members of each usergroup has access to them, as well as allowing privilege overrides.
+All forums define whether members of each usergroup have access to them, as well as allowing privilege overrides.
 
 As normal with the ocPortal permission system, members have the 'best' permissions out of those available to each of their usergroups. This means that if a user has "edit mid-impact content" (for example) permission given to them in any usergroup that they are a member of, they will receive that permission. There is one exception-- if the permission is defined as a global privilege, any overrides (per-forum permissions) will take precedence.
 

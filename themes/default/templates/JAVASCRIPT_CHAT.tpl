@@ -173,7 +173,18 @@ function do_input_private_message(field_name)
 		'',
 		function(va)
 		{
-			if (va!=null) insert_textbox(document.getElementById(field_name),"[private=\""+va+"\"][/private]");
+			if (va!=null)
+			{
+				var vb=window.fauxmodal_prompt(
+					'{!MESSAGE;^}',
+					'',
+					function(vb)
+					{
+						if (vb!=null) insert_textbox(document.getElementById(field_name),"[private=\""+va+"\"]"+vb+"[/private]");
+					},
+					'{!chat:INPUT_CHATCODE_private_message;^}'
+				);
+			}
 		},
 		'{!chat:INPUT_CHATCODE_private_message;^}'
 	);
@@ -195,7 +206,8 @@ function do_input_invite(field_name)
 					function(vb)
 					{
 						if (vb!=null) insert_textbox(document.getElementById(field_name),"[invite=\""+va+"\"]"+vb+"[/invite]");
-					}
+					},
+					'{!chat:INPUT_CHATCODE_invite;^}'
 				);
 			}
 		},
@@ -219,7 +231,8 @@ function do_input_new_room(field_name)
 					function(vb)
 					{
 						if (vb!=null) insert_textbox(document.getElementById(field_name),"[newroom=\""+va+"\"]"+vb+"[/newroom]");
-					}
+					},
+					'{!chat:INPUT_CHATCODE_new_room;^}'
 				);
 			}
 		},

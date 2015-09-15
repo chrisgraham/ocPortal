@@ -8,34 +8,54 @@ For an overview of the ocPortal permission system, see the 'Advanced configurati
 
 [contents]decimal,lower-alpha[/contents]
 
-[title="2"]Access control[/title]
+[title="2"]Brief overview of what can be set[/title]
+
+You can set:
+ - Access (view) permissions for zones, pages, and categories.
+ - Global privileges.
+ - Overridden privileges for particular content-types, by overriding them on the module (page) controlling that content-type.
+ - Overridden privileges for particular categories.
+ - Adhoc access control on particular match-keys.
+
+You cannot set:
+ - Permissions on the entry-level (e.g. for a specific news article). You need to use categorisation to group entries that would have the same access level.
+ - Write privileges on individual Comcode Pages. In v10+ it will be possible to set them on a per-zone basis though. In any version you can allow one particular user to have control over a particular page if they are the owner of that page (i.e. the submitter), and they have been granted permission to edit their own content.
+ - Permissions on the member-level. You need to use usergroups to assign permissions. You can put members in multiple usergroups to achieve complex permission schemes. Technically ocPortal does support per-member permissions, but we don't have a user interface to set it because we wanted to keep the system concepts as streamlined and simple as possible: usergroups always provide a way to achieve what is needed.
+ - Inheritable permissions from parent to child categories. You can quickly copy permissions to subcategories in the Permissions Tree Editor instead, or assign them at the module level and leave the categories as non-overridden (so inheriting from module to all categories within that module). We made this decision for simplicity and performance reasons.
+
+[title="2"]Access (view) control[/title]
 
 [exp_thumb="The Permissions Tree Editor" float="right"]permissions_tree_editor[/exp_thumb]
 To edit permissions in ocPortal you can either use:
- - The permissions tree editor
+ - The Permissions Tree Editor
  - Manual configuration
 
 {!permissions:DOC_PERMISSIONS_TREE}
 
-The remainder of this section is concerned with manual permission setting.
+The remainder details the separate permission setting interfaces in different parts of ocPortal. The concepts from below are relevant to using the Permissions Tree Editor, as they detail what controls are embedded at different points within the tree. We do recommend using the Permissions Tree Editor directly though, unless you happen to be working directly with the zone/category/page at the time of setting permissions for it.
 
 [title="3"]Editing zone permissions[/title]
 
-[i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]
+[i]This section describes editing from outside the Permissions Tree Editor. It is easier to centralise control from the Permissions Tree Editor where all the settings here may be accessed.[/i]
 
 [exp_thumb="Setting zone permissions" float="left"]permissions_Edit-zone-permissions[/exp_thumb]
 You can edit zone permissions by editing the zone for which you want to change the permissions.
 
+For each zone you can set which usergroups can access (view) it.
+
 Go the Admin Zone, then the 'Structure' section, then the 'Zones' icon. Choose a zone to edit (bear in mind that you can't change permissions for the Welcome Zone, as everybody is allowed to access it), and continue.
 [surround]
-[exp_thumb="Choosing a zone to edit" float="right"]permissions_Choose-zone-edit[/exp_thumb]
+[staff_note]bad screenshot needs updating [exp_thumb="Choosing a zone to edit" float="right"]permissions_Choose-zone-edit[/exp_thumb][/staff_note]
 You will be presented with the zone editing form. Near the bottom are the options for usergroup access permissions: one binary 'can/can't' access permission per usergroup. Toggle the checkboxes as you see fit (if a checkbox is unchecked, the corresponding usergroup can't enter the zone, but if it is checked, the usergroup can enter the zone without problem), and submit the form.
 [/surround]
 [title="3"]Editing page permissions[/title]
 
-[i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]
+[i]This section describes editing from outside the Permissions Tree Editor. It is easier to centralise control from the Permissions Tree Editor where all the settings here may be accessed. In fact, we do not link the Page Permissions interface into the default admin menu structure unless JavaScript is not enabled. There is a similar interface when editing a Comcode Page, however.[/i]
+
 [surround]
 [exp_thumb="Editing page permissions" float="right"]permissions_Page-permissions-grid[/exp_thumb]
+For each page you can set which usergroups can access (view) it. For modules you can also often override certain privileges for the content handled within those modules.
+
 Go to the Admin Zone, then the 'Structure' section, then the 'Permissions' icon. Choose 'Page permissions'. To edit a page's permissions manually, you need to go to the page permissions page. Once more, choose a zone to edit, and submit the form. You will be presented with a checkbox-grid of the permissions for every page in your selected zone. Along the top are the names of all the usergroups on your site, and down the side are the names of all the pages in your selected zone. In the middle is a checkbox-grid for the permissions, and down the right is a column of buttons for inverting a whole row of checkboxes at once [[exp_ref]permissions_Mass-checkbox-change[/exp_ref]].
 
 Once all the access permissions are set as appropriate, submit the form.
@@ -44,17 +64,21 @@ Once all the access permissions are set as appropriate, submit the form.
 
 [i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]
 
+[surround]
 [exp_thumb="Editing category permissions" float="left"]permissions_Edit-category-permissions[/exp_thumb]
+For each category you can set which usergroups can access (view) it, and often also override certain privileges for that category.
+
 Usergroup access permissions exist for just about any type of category ocPortal provides: from calendar entry types to news categories, you can easily set the usergroup access permissions through the category edit page. In this example, we'll change the usergroup access permissions for a news category.
 
 Go to the Content Management Zone. Choose the icon for the content type you want to edit. Click the 'Edit one category' icon. Select the category to edit, and submit the form.
 
 Then, set the permissions as necessary, and submit the form once more.
-[exp_thumb="Choosing a category to edit" float="right"]permissions_Choose-category-edit[/exp_thumb]
+[staff_note][exp_thumb="Choosing a category to edit" float="right"]permissions_Choose-category-edit[/exp_thumb][/staff_note]
 
 The process is the same for editing the permissions of any type of category.
+[/surround]
 
-[title="3"]Match-key permissions[/title]
+[title="2"]Match-key permissions[/title]
 
 [b]For an explanation of [concept]match-key[/concept]s, see the [page="_SEARCH:tut_menus"]Customising what's on the menus[/page] tutorial.[/b]
 
@@ -63,12 +87,14 @@ The process is the same for editing the permissions of any type of category.
 
 [title="2"]Privileges[/title]
 
+[surround]
 [exp_thumb="Choosing a privilege section to edit permissions within" float="right"]permissions_Choose-specific-access[/exp_thumb]
 {!permissions:DOC_PRIVILEGES}
 
 The privileges are accessed through the "privileges" page. On this page is a list of permission sections; all the privileges are grouped into related sections for ease-of-configuration. Choose a section, and submit the form to see and change the related privileges. The page shows a checkbox-grid of the usergroups and the privileges in your selected section. Set up the privileges as appropriate, and submit the form to change them.
 
 For a good real-world example of how to set up privileges, see the 'Setting bypass-validation access' section of the [page="tut_forums"]organising discussion forums[/page] tutorial.
+[/surround]
 
 [title="2"]Adding, Editing and Deleting content[/title]
 
@@ -132,7 +158,7 @@ Fortunately ocPortal has a special feature for this situation: under the 'Securi
  1_key="access permission"     1_value="Whether members of a certain usergroup have permission to access somewhere (a zone, page, or category, for example); a member does not need all their usergroups to have access, only one"
  2_key="privilege"   2_value="Whether a certain usergroup has permission to do specific things (such as using high-level Comcode, or bypass the word-filter)"
  3_key="su"                    3_value="Named after the Unix command 'su' ('superuser'), which when used at the command line allows somebody to temporarily log in as a different user"
- 4_key="permissions tree editor"  4_value="This editor is a user friendly interface for editing all permissions (except privileges) on an ocPortal website"
+ 4_key="Permissions Tree Editor"  4_value="This editor is a user friendly interface for editing all permissions (except privileges) on an ocPortal website"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

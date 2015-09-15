@@ -68,7 +68,7 @@ If you wanted to choose a different yacht to display every week, for example, th
 
 ocPortal has one award that is pre-created by default: Download Of The Week. This is provided because independent 'Download Of The Week' functionality was provided in ocPortal prior to the creation of the award system and subsequently dropped as an independent system.
 
-Each award has its own archive, under the [tt]points[/tt] page. The archive is linked from the [tt]main_awards[/tt] block, but you could also add it to your menus if you wanted to.
+Each award has its own archive, under the [tt]awards[/tt] page. The archive is linked from the [tt]main_awards[/tt] block, but you could also add it to your menus if you wanted to.
 
 You can configure the awards (when you add or edit the award itself) to carry a number of points. If you do this, the submitter of content given that award will be given some points, and that'll show up on their points profile.
 

@@ -261,7 +261,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		if ((mt_rand(0,100)==1) && (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages')))
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
-		$through_queue=(!$bypass_queue) && ((get_option('mail_queue')==='1') || ((get_option('mail_queue_debug')==='1') && (cron_installed())));
+		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
 			'm_subject'=>substr($subject_line,0,255),
@@ -983,7 +983,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$is_v
 	if (is_null($fields))
 	{
 		$fields=array();
-		foreach (array_diff(array_keys($_POST),array('MAX_FILE_SIZE','perform_validation','_validated','posting_ref_id','f_face','f_colour','f_size','x','y','name','subject','email','to_members_email','to_written_name','redirect','http_referer')) as $key)
+		foreach (array_diff(array_keys($_POST),array('MAX_FILE_SIZE','perform_validation','_validated','posting_ref_id','f_face','f_colour','f_size','x','y','name','subject','email','to_members_email','to_written_name','redirect','http_referer',md5(get_site_name().': antispam'))) as $key)
 		{
 			$is_hidden=(strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName');
 			if ($is_hidden) continue;
@@ -1044,6 +1044,6 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$is_v
 		}
 	}
 
-	mail_wrap($subject,$message_raw,array($to_email),$to_name,$from_email,$from_name,3,$attachments);
+	mail_wrap($subject,$message_raw,is_null($to_email)?NULL:array($to_email),$to_name,$from_email,$from_name,3,$attachments);
 }
 

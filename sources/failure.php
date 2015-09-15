@@ -931,6 +931,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'connect to')===false) && 
 		(strpos($text,'Access denied for')===false) && 
 		(strpos($text,'Unknown database')===false) && 
+		(strpos($text,'Broken pipe')===false) && 
 		(strpos($text,'headers already sent')===false) && 
 		(preg_match('#php\.net.*SSL3_GET_SERVER_CERTIFICATE:certificate #',$text)==0) && // Missing certificates on server
 		(preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && 

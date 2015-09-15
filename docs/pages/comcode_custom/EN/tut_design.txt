@@ -18,7 +18,7 @@ Design is about communication: communicating style, communicating a brand, commu
 
 [title="3"]Style and brand[/title]
 
-What does a design say? Colour, pattern, language, and many other factors, all imply things about a website and organisation. A well conceived brand consists of certain tenants, and the design implementation of that brand effectively communicates them.
+What does a design say? Colour, pattern, language, and many other factors, all imply things about a website and organisation. A well conceived brand consists of certain tenets, and the design implementation of that brand effectively communicates them.
 
 Consider a simple example: a website with a dark background, smooth gradients around shades of brown, and vivid and short pieces of text, might be great for a website selling chocolates. It would communicate the simple pleasure of chocolate, and subliminally reinforce the concept via the chocolate-like colours. On every mental level it puts chocolate fully into the mind of the visitor, and can work to trigger the right feelings, and the overall richness and effect works to leave a lasting impression (lasting mental imprint).
 

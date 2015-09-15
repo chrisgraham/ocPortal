@@ -94,7 +94,7 @@ We would choose to edit the cricket practice event:
  - to start on the date of the next expected practice
  - to end 1 hour after that date
  - and select 'Edit with fixing past recurrences'
-It is preferably that we did this before the actual cancelled event occurrence. If we were too late, we would undergo the same process, but delete the last hard-coded event that was added.
+It is preferable that we did this before the actual cancelled event occurrence. If we were too late, we would undergo the same process, but delete the last hard-coded event that was added.
 
 [title="2"]Scheduling commands[/title]
 

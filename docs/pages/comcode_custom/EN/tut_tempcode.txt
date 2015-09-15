@@ -30,7 +30,7 @@ Tempcode provides four constructs other than the plain text of the template itse
  - [b]Parameters[/b]: [tt]{PARAMETER}[/tt] where PARAMETER is a code-name of something that was actually passed to the template
  - [b]Language strings[/b]: [tt]{!STRING,<parameters>...}[/tt] where STRING is a real language string from a loaded language file (e.g. Banner code could use strings from banners.ini, but most other code could not; global.ini contains strings usable anywhere)
  - [b]Symbols[/b]: [tt]{$SYMBOL,<parameters>...}[/tt] where SYMBOL is a real symbol ocPortal supports. Embedding a symbol is like making a function call or running a command in the complex place, or a substitution in the simple case
- - [b]Directives[/b]: [tt]{+START,DIRECTIVE,<parameters>...}...{+END,DIRECTIVE}[/tt] where DIRECTIVE is a real directive ocPortal supports. Directives essentially wrap portions of the template, controlling that portion; they are generally used for types of condition checking (e.g. IF) or loop. There are also directives like [tt]{+IMPLODE,<parameters>...}[/tt] that do not wrap, but work outside the normal "string manipulation" bounds that symbols do
+ - [b]Directives[/b]: [tt]{+START,DIRECTIVE,<parameters>...}...{+END}[/tt] where DIRECTIVE is a real directive ocPortal supports. Directives essentially wrap portions of the template, controlling that portion; they are generally used for types of condition checking (e.g. IF) or loop. There are also directives like [tt]{+IMPLODE,<parameters>...}[/tt] that do not wrap, but work outside the normal "string manipulation" bounds that symbols do
 
 Any Tempcode construct may be escaped (made to fit in an encoding scheme, such as HTML or  URLs, such that special text characters do not interact with that encoding scheme in an insecure/corrupting way) by escaping filters with ease, just by placing the symbol associated with the mode of escaping before the closing '}'. The following escaping filters are provided:
 [list="x"]
@@ -47,7 +47,7 @@ Any Tempcode construct may be escaped (made to fit in an encoding scheme, such a
 [*][tt]'[/tt] CSS
 	(anything that isn't a part of a very constrained non-string value is stripped)
 [*][tt]/[/tt] Special Javascript SGML-issue
-	(e.g. [tt]print('</p>');[/tt]  [html]&rarr;[/html]  [tt]print('<\/p')[/tt])
+	(e.g. [tt]print('</p>');[/tt]  [html]&rarr;[/html]  [tt]print('<\/p>');[/tt])
 [*][tt]^[/tt] Where new lines become '\n'
 	(multiple lines drawn together with [tt]\n[/tt] as a separator)
 [*][tt]&[/tt] URL parameters   (or [tt].[/tt] if you don't want extra ocPortal URL escaping to happen)
@@ -57,7 +57,7 @@ Any Tempcode construct may be escaped (made to fit in an encoding scheme, such a
 [*][tt]%[/tt] Strict codenames
 	(e.g. [tt]ThiS[/tt] [html]&rarr;[/html] [tt]ThiS[/tt]   [i]but[/i]  [tt]This is[/tt]  --> \[\[hack attack]] triggered)
 [/list]
-You can also use [tt]-[/tt] to indicate that a symbol should not be pre-processed, which is very occasionally useful if you want to stop something like a block being preloaded if it is buried under a Tempcode IF directive and hence doesn't always run. Stopping pre-processing will stop any Javascript or [abbr="Cascading Style Sheets"]CSS[/abbr] dependencies being called up, however.
+You can also use [tt]-[/tt] to indicate that a variable should not be pre-processed, which is very occasionally useful if you want to stop something like a block being preloaded if it is buried under a Tempcode IF directive and hence doesn't always run. Stopping pre-processing will stop any Javascript or [abbr="Cascading Style Sheets"]CSS[/abbr] dependencies being called up, however.
 
 It is absolutely crucial that Tempcode programmers use the proper escaping. Without it, all kinds of insecurities and unreliabilities can develop. About 50% of parameters in the default ocPortal templates actually use HTML escaping so that plain text placed inside a template does not interfere with the HTML structure itself and displays literally.
 
@@ -67,7 +67,7 @@ Templates are composed together into a tree structure, and then the tree structu
 
 [title="2"]Placing theme images[/title]
 
-To insert an image into your template, use ocPortal's image parameter: [tt]{$IMG,codename}[/tt]. Replace [tt]codename[/tt] with the image code for the image you want to use. This will turn into the image's URL. Be aware that this does not insert any HTML for you, so to use it fully:
+To insert an image into your template, use ocPortal's image symbol: [tt]{$IMG,codename}[/tt]. Replace [tt]codename[/tt] with the image code for the image you want to use. This will turn into the image's URL. Be aware that this does not insert any HTML for you, so to use it fully:
 [code]<img src="{$IMG,page/delete}" alt="Delete This" title="Delete This" />[/code]
 This would insert the image [tt]http://www.mywebsite.com/themes/default/images/page/EN/delete.png[/tt] into your page.
 [staff_note][html]<img src="[/html]{$IMG,page/delete}[html]" alt="Delete This" title="Delete This" />[/html][/staff_note]
