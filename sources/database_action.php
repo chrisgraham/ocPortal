@@ -354,6 +354,8 @@ function delete_specific_permission($name)
  */
 function delete_attachments($type,$connection=NULL)
 {
+	if (get_value('disable_attachment_cleanup')==='1') return;
+
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	require_code('attachments2');

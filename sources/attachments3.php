@@ -61,6 +61,8 @@ function _delete_attachment($id,$connection)
  */
 function delete_comcode_attachments($type,$id,$connection=NULL)
 {
+	if (get_value('disable_attachment_cleanup')==='1') return;
+
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	require_lang('comcode');
