@@ -18,7 +18,7 @@ Advanced configuration options include (but are not limited to):
 
 ocPortal is split into a series of addons. All the addons are installed when you install ocPortal but it is recommended that you should remove any that aren't needed once you are familiar with the software. This is so as to make sure the non-required/unconfigured functionality doesn't accidentally get discovered by your visitors, and that any unnecessary complexity is removed. Less is more when it comes to good design, and if you ensure you have only the right set of features on your site then you can better tailor it for your visitors.
 
-To uninstall addons go to the Setup section of the Admin Zone, then the Add-ons icon. Any addons that are uninstalled will be archived so you can restore them later if you wish (although any data you created for the addons, such as entries, will be permanently lost).
+To uninstall addons go to the Structure section of the Admin Zone, then the Add-ons icon. Any addons that are uninstalled will be archived so you can restore them later if you wish (although any data you created for the addons, such as entries, will be permanently lost).
 
 [title="3"]Modules[/title]
 

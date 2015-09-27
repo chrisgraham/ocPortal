@@ -40,7 +40,7 @@ In a typical set-up, staff are given access to modify the Wiki+ tree, whilst ord
 
 [title="3"]Orphaned pages[/title]
 
-Orphaned pages should not be perceived as a bad thing. It's fine to have pages not linked into the tree structure, if you're linking to them in the typical wiki-code style syntax ([[page name]]). Comcode has subsumed that part of wiki-code.
+Orphaned pages should not be perceived as a bad thing. It's fine to have pages not linked into the tree structure, if you're linking to them in the typical wiki-code style syntax ([tt][[page name]][/tt]). Comcode has subsumed that part of wiki-code.
 It's a choice you have. You can link in both ways, one way, or the other way.
 
 [title="2"]Moderation[/title]

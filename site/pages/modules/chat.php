@@ -1244,7 +1244,7 @@ class Module_chat
 			{
 				if (is_null($effect)) continue;
 
-				if ((post_param('select_'.$effect.$suffix)=='-1') && (is_null(post_param('hidFileID_upload_'.$effect.$suffix,NULL))) && (!is_uploaded_file($_FILES['upload_'.$effect.$suffix]['tmp_name']))) // Handle special case of '-1'
+				if ((post_param('select_'.$effect.$suffix)=='-1') && (is_null(post_param('hidFileID_upload_'.$effect.$suffix,NULL))) && (isset($_FILES['upload_'.$effect.$suffix])) && (!is_uploaded_file($_FILES['upload_'.$effect.$suffix]['tmp_name']))) // Handle special case of '-1'
 				{
 					$url='-1';
 				} else

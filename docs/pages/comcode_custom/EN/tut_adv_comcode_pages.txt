@@ -18,7 +18,7 @@ Unlike other systems that you may have experience with, ocPortal blocks (such as
 To use a block, all you actually need to do is to use the Comcode '\[block]' tag, with the name of the block as the tag contents. Parameters passed to the block simply get placed as parameters for the block tag itself.
 
 The available blocks are classified into three groups:
- - Side blocks. These are intended to be shown on a menu page.
+ - Side blocks. These are intended to be shown on a panel page.
  - Main blocks. These are intended to be shown on the body of the site (an actual page).
  - Bottom blocks. These are intended for use in the footer of the site.
 These classifications are not fixed however. It is common, for example, to use the [tt]main_poll[/tt] block on a menu; by re-templating, any pre-written visual assumptions about placement may be broken down.

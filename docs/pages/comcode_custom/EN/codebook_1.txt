@@ -473,7 +473,7 @@ Repeat, the checkbox was
 
 <p>
 <!--
-If we output directly we'll get '_true' or '_false'.
+If we output directly we'll get '1' or '0'.
 -->
 It was ticked: {TICKED}.
 </p>
@@ -989,7 +989,7 @@ $secondary_groups=array_map('intval',explode(',',$row['additionalGroups']));
 Be aware that Tempcode only supports these data types as template parameters:
  - more Tempcode
  - strings
- - booleans (which are converted to strings as '_true' or '_false', which is what Tempcode uses for it's boolean logic)
+ - booleans (which are converted to strings as '1' or '0', which is what Tempcode uses for it's boolean logic)
  - arrays (but only for use by special directives -- referencing an array as a normal parameter will only return it's size)
 It intentionally does not support integers or floats, so these must be converted to strings manually when passed through, using 'strval' (machine-read integers), 'integer_format' (human-read integers), 'float_to_raw_string' (machine-read floats), or 'float_format' (human-read floats).
 

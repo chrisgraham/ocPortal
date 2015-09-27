@@ -1,7 +1,7 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Filtering using ocFilter syntax[/title]
 
 ocFilter is a special ocPortal syntax (language) for writing filter lists. In other words, it is a way of writing down what you would like to be matched.
-Various areas of ocPortal support the ocFilter syntax, including the [tt]main_content[/tt] block, and the [tt]if_in_group[/tt] Comcode tag.
+Various areas of ocPortal support the ocFilter syntax, including the [tt]main_multi_content[/tt] block, and the [tt]if_in_group[/tt] Comcode tag.
 
 [contents]decimal,lower-alpha[/contents]
 

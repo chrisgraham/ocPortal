@@ -71,9 +71,6 @@ class Module_cedi
 
 		$GLOBALS['SITE_DB']->drop_if_exists('seedy_posts');
 
-		delete_attachments('seedy_post');
-		delete_attachments('cedi_post');
-
 		delete_menu_item_simple('_SEARCH:cedi:type=misc');
 		delete_menu_item_simple('_SEARCH:cedi:type=random');
 		delete_menu_item_simple('_SEARCH:cedi:type=changes');
