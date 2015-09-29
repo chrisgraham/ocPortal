@@ -47,7 +47,7 @@ function init__ocf_ldap()
  * @param  boolean	Whether this is for use in a DN string.
  * @return string		The escaped value.
  */
-function ldap_escape($str,$for_dn=false) 
+function ocp_ldap_escape($str,$for_dn=false) 
 { 
 	// see: 
 	// RFC2254 
@@ -66,7 +66,7 @@ function ldap_escape($str,$for_dn=false)
 }
 
 /**
- * Unescape data from LDAP. Technically this is not unescaping, it's just a character set conversion, but function is named to provide symmetry with ldap_escape which does both escaping and character set conversion.
+ * Unescape data from LDAP. Technically this is not unescaping, it's just a character set conversion, but function is named to provide symmetry with ocp_ldap_escape which does both escaping and character set conversion.
  *
  * @param  string		The escaped value.
  * @return string		The value.
@@ -194,7 +194,7 @@ function ocf_is_ldap_member_potential($cn)
 	global $LDAP_CONNECTION;
 	if (is_null($LDAP_CONNECTION)) return false;
 
-	$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape($cn).'))',array(member_property()));
+	$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape($cn).'))',array(member_property()));
 	$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 	$answer=(array_key_exists(0,$entries));
 	ldap_free_result($results);
@@ -259,7 +259,7 @@ function ocf_is_on_ldap($cn)
 {
 	global $LDAP_CONNECTION;
 	$path=member_search_qualifier().get_option('ldap_base_dn');
-	$query='(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape($cn).'))';
+	$query='(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape($cn).'))';
 	$results=@ldap_search($LDAP_CONNECTION,$path,$query,array(member_property()),1);
 	if ($results===false)
 	{
@@ -289,7 +289,7 @@ function ocf_get_ldap_hash($cn)
 {
 	global $LDAP_CONNECTION;
 
-	$results=@ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape($cn).'))',array('userpassword'));
+	$results=@ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape($cn).'))',array('userpassword'));
 	if ($results===false)
 	{
 		require_code('site');
@@ -553,7 +553,7 @@ function ocf_ldap_guess_email($cn)
 {
 	global $LDAP_CONNECTION;
 
-	$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape($cn).'))');
+	$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape($cn).'))');
 	$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 	ldap_free_result($results);
 	if (!array_key_exists(0,$entries)) return '';
@@ -584,7 +584,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 		// Members under group (secondary)
 		if (($include_secondaries) && (!is_null($cn)))
 		{
-			$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_group_class().')('.group_property().'='.ldap_escape($cn).'))',array('memberuid','gidnumber'));
+			$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_group_class().')('.group_property().'='.ocp_ldap_escape($cn).'))',array('memberuid','gidnumber'));
 			$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 			if ((array_key_exists(0,$entries)) && (array_key_exists('memberuid',$entries[0]))) // Might not exist in LDAP
 			{
@@ -609,7 +609,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 		// Groups under member (primary)
 		if (($include_primaries) && (!is_null($gid)))
 		{
-			$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')(gidnumber='.ldap_escape(strval($gid)).'))',array(member_property()));
+			$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')(gidnumber='.ocp_ldap_escape(strval($gid)).'))',array(member_property()));
 			$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 
 			foreach ($entries as $key=>$member) // There will only be one, but I wrote a loop so lets use a loop
@@ -629,7 +629,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 		if (!is_null($cn))
 		{
 			// Groups under member (Active Directory makes no distinction)
-			$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.group_property().'='.ldap_escape($cn).'))',array('memberof')); // We do ldap_search as Active Directory can be fussy when looking at large sets, like all members
+			$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.group_property().'='.ocp_ldap_escape($cn).'))',array('memberof')); // We do ldap_search as Active Directory can be fussy when looking at large sets, like all members
 			$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 			if ((array_key_exists(0,$entries)) && (array_key_exists('memberof',$entries[0]))) // Might not exist in LDAP
 			{
@@ -675,7 +675,7 @@ function ocf_get_members_groups_ldap($member_id)
 	if (get_option('ldap_is_windows')=='0')
 	{
 		// Members under group (secondary)
-		$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')(memberuid='.ldap_escape($cn).'))',array(group_property()),1);
+		$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')(memberuid='.ocp_ldap_escape($cn).'))',array(group_property()),1);
 		$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 		foreach ($entries as $key=>$entry)
 		{
@@ -699,7 +699,7 @@ function ocf_get_members_groups_ldap($member_id)
 		ldap_free_result($results);
 
 		// Groups under member (primary)
-		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape($cn).'))',array('gidnumber'));
+		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape($cn).'))',array('gidnumber'));
 		$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 		$group_id_use=NULL;
 		foreach ($entries as $key=>$group) // There will only be one, but I wrote a loop so lets use a loop
@@ -715,7 +715,7 @@ function ocf_get_members_groups_ldap($member_id)
 	} else
 	{
 		// Groups under member (Active Directory makes no distinction)
-		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape($cn).'))',array('memberof'));
+		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape($cn).'))',array('memberof'));
 		$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 		$group_id_use=NULL;
 		if ((array_key_exists(0,$entries)) && (array_key_exists('memberof',$entries[0]))) // Might not exist in LDAP
@@ -748,7 +748,7 @@ function ocf_ldap_get_member_primary_group($member_id)
 
 	if (get_option('ldap_is_windows')=='0')
 	{
-		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape(ocf_member_ocfid_to_ldapcn($member_id)).'))',array('gidnumber'));
+		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape(ocf_member_ocfid_to_ldapcn($member_id)).'))',array('gidnumber'));
 		$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 		$gid=array_key_exists(0,$entries)?$entries[0]['gidnumber'][0]:NULL;
 		ldap_free_result($results);
@@ -758,7 +758,7 @@ function ocf_ldap_get_member_primary_group($member_id)
 	} else
 	{
 		// Whilst Windows has primaryGroupID, it has an ID that refers outside of LDAP, so is of no use to us. We use the last a member is in as the primary
-		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape(ocf_member_ocfid_to_ldapcn($member_id)).'))',array('memberof'));
+		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ocp_ldap_escape(ocf_member_ocfid_to_ldapcn($member_id)).'))',array('memberof'));
 		$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 		if ((array_key_exists(0,$entries)) && (array_key_exists('memberof',$entries[0]))) // Might not exist in LDAP
 		{
@@ -787,7 +787,7 @@ function ocf_ldap_get_member_primary_group($member_id)
 function ocf_group_ldapgid_to_ocfid($gid)
 {
 	global $LDAP_CONNECTION;
-	$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_group_class().')(gidnumber='.ldap_escape(strval($gid)).'))',array(group_property()),1);
+	$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_group_class().')(gidnumber='.ocp_ldap_escape(strval($gid)).'))',array(group_property()),1);
 	$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 	if (!array_key_exists(0,$entries)) return NULL;
 	if (array_key_exists(0,$entries[0][group_property()]))
@@ -811,7 +811,7 @@ function ocf_group_ldapgid_to_ocfid($gid)
 function ocf_group_ldapcn_to_ldapgid($cn)
 {
 	global $LDAP_CONNECTION;
-	$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_group_class().')('.group_property().'='.ldap_escape($cn).'))',array('gidnumber'));
+	$results=ldap_search($LDAP_CONNECTION,group_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_group_class().')('.group_property().'='.ocp_ldap_escape($cn).'))',array('gidnumber'));
 	$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 
 	if (!array_key_exists(0,$entries)) return NULL;
