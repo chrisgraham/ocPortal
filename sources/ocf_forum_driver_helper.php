@@ -185,7 +185,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 	// Send out notifications
 	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();
-	ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title,NULL,false,$no_notify_for__notification_code,$no_notify_for__code_category);
+	ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,$is_new,$post,$content_title,NULL,false,$no_notify_for__notification_code,$no_notify_for__code_category);
 
 	$is_hidden=false;
 	if (!get_mass_import_mode())
