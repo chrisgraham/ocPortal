@@ -485,6 +485,7 @@ class Module_admin_sitetree
 			{
 				$page=substr($key,6);
 				$page_details=_request_page($page,$zone,NULL,NULL,true);
+				if ($page_details===false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 				$pages[$page]=strtolower($page_details[0]);
 			}
 		}
@@ -732,6 +733,7 @@ class Module_admin_sitetree
 			{
 				$page=substr($key,6);
 				$page_details=_request_page($page,$zone,NULL,NULL,true);
+				if ($page_details===false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 				$pages[$page]=strtolower($page_details[0]);
 				if (array_key_exists(3,$page_details)) $pages[$page].='/'.$page_details[3];
 			}
