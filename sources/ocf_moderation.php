@@ -21,12 +21,14 @@
 /**
  * List all the multi moderations that may be used in a certain forum.
  *
- * @param  AUTO_LINK		The forum we are listing for.
+ * @param  ?AUTO_LINK	The forum we are listing for (NULL: private topics).
  * @return array 			List of multi moderations.
  */
 function ocf_list_multi_moderations($forum_id)
 {
 	if (!addon_installed('ocf_multi_moderations')) return array();
+
+	if (is_null($forum_id)) return array();
 
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.mm_name=t.id',array('mm_forum_multi_code','m.id','m.mm_name','text_original AS _mm_name'),NULL,'ORDER BY text_original');
 	$out=array();
