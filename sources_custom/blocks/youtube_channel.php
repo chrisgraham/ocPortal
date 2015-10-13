@@ -204,7 +204,7 @@ class Block_youtube_channel
                         $views = $videoMetadata->items[0]->statistics->viewCount;             //get video view count
                     }
                     $embeddable = $videoMetadata->items[0]->status->embeddable;               //used to find out if video can be embedded
-                    favoritecount = 0;
+                    $favoritecount = 0;
                     if (isset($videoMetadata->items[0]->statistics->favoriteCount)) {
                         $favoritecount = $videoMetadata->items[0]->statistics->favoriteCount; //get video favorite count
                     }
