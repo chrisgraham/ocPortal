@@ -446,7 +446,7 @@ END;
 		if (@preg_match('#(\s|,|^)'.str_replace('#','\#',preg_quote($function)).'(\s|$|,)#',strtolower(@ini_get('disable_functions').','.ini_get('suhosin.executor.func.blacklist').','.ini_get('suhosin.executor.include.blacklist').','.ini_get('suhosin.executor.eval.blacklist')))!=0)
 			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('DISABLED_FUNCTION',escape_html($function)))));
 	}
-	if (function_exists('mysqli_get_client_version'))
+	/*client check is wrong if (function_exists('mysqli_get_client_version'))
 	{
 		$x=float_to_raw_string(floatval(mysqli_get_client_version())/10000.0);
 		if (version_compare($x,'4.1.0','<'))
@@ -456,7 +456,7 @@ END;
 	{
 		if (version_compare(mysql_get_client_info(),'4.1.0','<'))
 			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('MYSQL_TOO_OLD'))));
-	}
+	}*/
 
 	global $FILE_ARRAY;
 

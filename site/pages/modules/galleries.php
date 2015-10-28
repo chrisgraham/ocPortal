@@ -818,7 +818,7 @@ class Module_galleries
 					$rows=$GLOBALS['SITE_DB']->query_select('videos',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
 					{
-						attach_message(do_lang_tempcode('MISSING_RESOURCE','warn'));
+						attach_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
 						break;
 					}
 					$row=$rows[0];
@@ -862,7 +862,7 @@ class Module_galleries
 					$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
 					{
-						attach_message(do_lang_tempcode('MISSING_RESOURCE','warn'));
+						attach_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
 						break;
 					}
 					$row=$rows[0];

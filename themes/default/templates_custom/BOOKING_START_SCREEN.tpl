@@ -59,7 +59,7 @@
 			<p class="associated_details">{!ALL_DATES_IN,{$TIMEZONE*}}</p>
 
 			{+START,LOOP,CATEGORIES}
-				<h2>{CATEGORY_TITLE}</h2>
+				<h2>{CATEGORY_TITLE*}</h2>
 
 				<div class="wide_table_wrap">
 					<table class="wide_table results_table spaced_table">
