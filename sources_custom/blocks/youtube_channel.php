@@ -199,11 +199,23 @@ class Block_youtube_channel
                         continue;
                     }
 
-                    $views = $videoMetadata->items[0]->statistics->viewCount;                 //get video view count
+                    $views = 0;
+                    if (isset($videoMetadata->items[0]->statistics->viewCount)) {
+                        $views = $videoMetadata->items[0]->statistics->viewCount;             //get video view count
+                    }
                     $embeddable = $videoMetadata->items[0]->status->embeddable;               //used to find out if video can be embedded
-                    $favoritecount = $videoMetadata->items[0]->statistics->favoriteCount;     //get video favorite count
-                    $likes = $videoMetadata->items[0]->statistics->likeCount;                 //get video likes count
-                    $dislikes = $videoMetadata->items[0]->statistics->dislikeCount;           //get video dislikes count
+                    $favoritecount = 0;
+                    if (isset($videoMetadata->items[0]->statistics->favoriteCount)) {
+                        $favoritecount = $videoMetadata->items[0]->statistics->favoriteCount; //get video favorite count
+                    }
+                    $likes = 0;
+                    if (isset($videoMetadata->items[0]->statistics->likeCount)) {
+                        $likes = $videoMetadata->items[0]->statistics->likeCount;             //get video likes count
+                    }
+                    $dislikes = 0;
+                    if (isset($videoMetadata->items[0]->statistics->dislikeCount)) {
+                        $dislikes = $videoMetadata->items[0]->statistics->dislikeCount;       //get video dislikes count
+                    }
 
                     $ratingstotal = $likes + $dislikes;                                       //generate total number of likes and dislikes
 
