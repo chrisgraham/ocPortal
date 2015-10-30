@@ -1176,7 +1176,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						'cafile'=>$crt_path,
 						'SNI_enabled'=>true,
 						'ciphers' => 'TLSv1',
-					)
+					),
+					'http'=>array(
+						'user_agent'=>$ua,
+					),
 				));
 			} else
 			{
