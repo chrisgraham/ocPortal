@@ -14,7 +14,7 @@ Please note that staff may view private messages if they so choose to. For this 
 
 [title="2"]Bots[/title]
 
-You can send messages (commands) to the website itself, and any other bots we might have installed on our site. The bot will respond automatically to your commands, following it's programming.
+You can send messages (commands) to the website itself, and any other bots we might have installed on our site. The bot will respond automatically to your commands, following its programming.
 To do this, just send a private message to 'bot'. We suggest you start with a message of 'help' which is a command that will cause all bots to identify themselves and the commands that they support.
 
 [semihtml]<table summary=""><tr><td>[tt][private="bot"]help[/private][/tt]</td></tr></table>[/semihtml]

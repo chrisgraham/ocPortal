@@ -19,7 +19,7 @@ Important note: The campaign banner system allows a hit-balancing system, whereb
 
 [title="2"]More on balancing banners[/title]
 
-All banners are balanced against each other by an attribute known as the 'importance modulus', which is defined for every banner. The banner with the highest importance level is the one most likely to get shown. As new banners are added, importance modulus of banners will be needed to be adjusted higher if they're chance of being shown is required not to go down; this would be at the detriment of the banners you did not adjust the importance levels of.
+All banners are balanced against each other by an attribute known as the 'importance modulus', which is defined for every banner. The banner with the highest importance level is the one most likely to get shown. As new banners are added, importance modulus of banners will be needed to be adjusted higher if their chance of being shown is required not to go down; this would be at the detriment of the banners you did not adjust the importance levels of.
 
 In other words, the importance modulus is not a chance of a banner being shown, but only a balancing factor. If you have 900 banners with importance 1, then a banner with importance modulus 100 has a 10% chance of being shown.
 
@@ -113,7 +113,7 @@ If you wish to use your banner space, in part of full, for showing banners that 
 
 More information on the Point Store is provided in the 'Creating an economy/reward-system for members via points' tutorial.
 
-Alternatively, or in conjunction with the Point Store, members may simple submit banners, and you may choose to validate them without requiring the members to spend points.
+Alternatively, or in conjunction with the Point Store, members may simply submit banners, and you may choose to validate them without requiring the members to spend points.
 
 [title="2"]Troubleshooting[/title]
 
