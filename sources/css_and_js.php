@@ -85,7 +85,8 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	}
 
 	// Copy to tmp file
-	$temp_file=get_custom_file_base().'/themes/'.$destination_theme.'/css_custom/'.basename($fullpath,'.css').'__tmp_copy.css';
+	$tmp_filename=$css_file.'__tmp_copy_'.uniqid('',true);
+	$temp_file=get_custom_file_base().'/themes/'.$destination_theme.'/css_custom/'.$tmp_filename.'.css';
 	$myfile=@fopen($temp_file,'at') OR intelligent_write_error($temp_file);
 	flock($myfile,LOCK_EX);
 	ftruncate($myfile,0);
@@ -93,7 +94,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	flock($myfile,LOCK_UN);
 
 	// Load up as Tempcode
-	$_sheet=_css_compile($destination_theme,$destination_theme,$css_file.'__tmp_copy',$temp_file,false);
+	$_sheet=_css_compile($destination_theme,$destination_theme,$tmp_filename,$temp_file,false);
 	fclose($myfile);
 	fix_permissions($temp_file);
 	@unlink($temp_file);

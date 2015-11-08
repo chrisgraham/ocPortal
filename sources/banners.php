@@ -255,8 +255,8 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 /**
  * Get a nice, formatted XHTML list to select a banner type
  *
- * @param  ?ID_TEXT		The currently selected licence (NULL: none selected)
- * @return tempcode		The list of categories
+ * @param  ?ID_TEXT		The currently selected banner type (NULL: none selected)
+ * @return tempcode		The list of banner types
  */
 function nice_get_banner_types($it=NULL)
 {
