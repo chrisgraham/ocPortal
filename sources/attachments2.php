@@ -408,7 +408,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 			$ids_present[]=$attachment['id'];
 		}
 
-		if (!$previewing_only)
+		if ((!$previewing_only) && (get_value('disable_attachment_cleanup')!=='1'))
 		{
 			// Clear any de-referenced attachments
 			foreach ($before as $ref)

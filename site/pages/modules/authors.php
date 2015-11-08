@@ -175,7 +175,7 @@ class Module_authors
 		$handle=get_author_id_from_name($author);
 		if (!is_null($handle))
 		{
-			$forum_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url($handle,false,true),do_lang_tempcode('AUTHOR_PROFILE'),false,false,'',NULL,NULL,'me')));
+			$forum_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url($handle,true,true),do_lang_tempcode('AUTHOR_PROFILE'),false,false,'',NULL,NULL,'me')));
 			if (addon_installed('points'))
 			{
 				$give_points_url=build_url(array('page'=>'points','type'=>'member','id'=>$handle),get_module_zone('points'));

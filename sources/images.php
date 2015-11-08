@@ -92,6 +92,8 @@ function _symbol_thumbnail($param)
 	{
 		if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return $param[0];
 
+		disable_php_memory_limit();
+
 		$only_make_smaller=isset($param[8])?($param[8]=='1'):false;
 		$orig_url=$param[0]; // Source for thumbnail generation
 		if (url_is_local($orig_url)) $orig_url=get_custom_base_url().'/'.$orig_url;

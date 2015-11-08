@@ -899,6 +899,6 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 		}
 	}
 
-	mail_wrap($subject,$message_raw,array($to_email),$to_name,$from_email,$from_name,3,$attachments);
+	mail_wrap($subject,$message_raw,is_null($to_email)?NULL:array($to_email),$to_name,$from_email,$from_name,3,$attachments);
 }
 

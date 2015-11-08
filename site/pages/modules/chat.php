@@ -570,8 +570,11 @@ class Module_chat
 			$_buttons=array(
 				'private_message',
 				'invite',
-				'new_room'
 			);
+			if (has_specific_permission(get_member(),'create_private_room'))
+			{
+				$_buttons[]='new_room';
+			}
 			foreach ($_buttons as $button) $buttons->attach(do_template('CHATCODE_EDITOR_BUTTON',array('_GUID'=>'f1c3ccc2b6f0b68d71b7d256b3817cf3','TITLE'=>do_lang_tempcode('INPUT_CHATCODE_'.$button),'B'=>$button)));
 		}
 
@@ -1238,7 +1241,7 @@ class Module_chat
 			{
 				if (is_null($effect)) continue;
 
-				if ((post_param('select_'.$effect.$suffix)=='-1') && (is_null(post_param('hidFileID_upload_'.$effect.$suffix,NULL))) && (!is_uploaded_file($_FILES['upload_'.$effect.$suffix]['tmp_name']))) // Handle special case of '-1'
+				if ((post_param('select_'.$effect.$suffix)=='-1') && (is_null(post_param('hidFileID_upload_'.$effect.$suffix,NULL))) && (isset($_FILES['upload_'.$effect.$suffix])) && (!is_uploaded_file($_FILES['upload_'.$effect.$suffix]['tmp_name']))) // Handle special case of '-1'
 				{
 					$url='-1';
 				} else

@@ -172,6 +172,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 
 	if (!is_null($news_category))
 	{
+		$news_category=array_unique($news_category);
 		foreach ($news_category as $value)
 		{
 			if ((is_null($value)) && (!$already_created_personal_category))

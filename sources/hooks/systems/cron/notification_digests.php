@@ -26,6 +26,11 @@ class Hook_cron_notification_digests
 	 */
 	function run()
 	{
+		if (!defined('MAXIMUM_DIGEST_LENGTH'))
+		{
+			define('MAXIMUM_DIGEST_LENGTH',1024*100); // 100KB
+		}
+
 		require_code('notifications');
 		foreach (array(
 			A_DAILY_EMAIL_DIGEST=>60*60*24,
@@ -60,7 +65,13 @@ class Hook_cron_notification_digests
 					foreach ($messages as $message)
 					{
 						if ($_message!='') $_message.=chr(10);
-						$_message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
+						if (strlen($_message)+strlen($message['d_message'])<MAXIMUM_DIGEST_LENGTH)
+						{
+							$_message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
+						} else
+						{
+							$_message.=do_lang('DIGEST_ITEM_OMITTED',comcode_escape($message['d_subject']),get_timezoned_date($message['d_date_and_time']),array(comcode_escape(get_site_name())));
+						}
 					}
 					if ($_message!='')
 					{

@@ -869,7 +869,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 			}
 		}
-		$out.="\r\nConnection: Close"; // Not a standard header, comes in a separate header set
+		$out.="Connection: Close\r\n\r\n";
 
 		@fwrite($mysock,$out);
 		$data_started=false;

@@ -1627,7 +1627,7 @@ class Module_topics
 
 		if (is_guest())
 		{
-			$specialisation->attach(form_input_line(do_lang_tempcode('_DESCRIPTION_NAME'),'','poster_name_if_guest',do_lang('GUEST'),true));
+			$specialisation->attach(form_input_line(do_lang_tempcode('GUEST_NAME'),'','poster_name_if_guest',do_lang('GUEST'),true));
 		}
 
 		require_code('fields');
@@ -1863,17 +1863,21 @@ class Module_topics
 		if ($poster_name_if_guest=='') $poster_name_if_guest=NULL;
 		if (!is_null($poster_name_if_guest))
 		{
+			$poster_name_if_guest=trim($poster_name_if_guest);
 			$restricted_usernames=explode(',',get_option('restricted_usernames'));
-			$restricted_usernames[]=do_lang('GUEST');
 			$restricted_usernames[]=do_lang('UNKNOWN');
 			$restricted_usernames[]=do_lang('SYSTEM');
+			if (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username($poster_name_if_guest)))
+			{
+				$restricted_usernames[]=$poster_name_if_guest;
+			}
 			foreach ($restricted_usernames as $_restricted_username)
 			{
 				$restricted_username=trim($_restricted_username);
 				if ($restricted_username=='') continue;
-				if (strpos($poster_name_if_guest,$restricted_username)!==false)
+				if ($poster_name_if_guest==$restricted_username)
 				{
-					$poster_name_if_guest=NULL;
+					$poster_name_if_guest=$poster_name_if_guest.' ('.do_lang('GUEST').')';
 					break;
 				}
 			}

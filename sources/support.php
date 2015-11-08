@@ -457,7 +457,7 @@ function float_format($val,$decs_wanted=2,$only_needed_decs=false)
 		$str=substr($str,0,strlen($str)-$decs_here+$decs_wanted);
 		if ($decs_wanted==0) $str=rtrim($str,'.');
 	}
-	if ($only_needed_decs) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
+	if ($only_needed_decs && $decs_wanted!=0) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
 	return $str;
 }
 
@@ -1658,6 +1658,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 						'Minimo', // By Mozilla
 						'Fennec', // By Mozilla (being outmoded by minimo)
 						'Mobile Safari', // Usually Android
+						'Android',
 						'lynx',
 						'Links',
 						'iPhone',
