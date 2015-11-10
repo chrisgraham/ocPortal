@@ -1377,7 +1377,6 @@ class Module_admin_stats
 			$i++;
 		}
 		fclose($file);
-		fix_permissions($path);
 		if (count($to_insert['begin_num'])!=0)
 		{
 			$GLOBALS['SITE_DB']->query_insert('ip_country',$to_insert);

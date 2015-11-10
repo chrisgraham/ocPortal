@@ -106,7 +106,7 @@ If you change the member ID to a question mark, it will work as a generic URL th
 ocPortal RSS complies with Apple's podcast format.
 The podcast URL for a gallery is:
 [tt]http://baseurl/backend.php?mode=galleries&filter=galleryname&type=rss&itunes=1[/tt]
-Reply [tt]baseurl[/tt] and [tt]galleryname[/tt] as appropriate.
+Replace [tt]baseurl[/tt] and [tt]galleryname[/tt] as appropriate.
 
 Note that the default advertised Atom feed will not work. Only RSS is supported by iTunes, and only the RSS feed is given the extra meta-data required. The [tt]&itunes=1[/tt] marker also tells ocPortal to supply an iTunes-friendly feed.
 
