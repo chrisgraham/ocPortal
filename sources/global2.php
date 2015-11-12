@@ -18,6 +18,8 @@
  * @package		core
  */
 
+/*EXTRA FUNCTIONS: iconv*/
+
 /**
  * Standard code module initialisation function.
  */
@@ -1483,7 +1485,11 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 
 	if (($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0))
 	{
-		check_posted_field($name,$ret);
+		if ($ret!==$default)
+			check_posted_field($name,$ret);
+
+		// Custom fields.xml filter system
+		$ret=filter_form_field_default($name,$ret);
 	}
 
 	if ($ret===$default) return $ret;
@@ -1616,7 +1622,11 @@ function post_param_integer($name,$default=false)
 
 	if (($GLOBALS['BOOTSTRAPPING']==0) && ($GLOBALS['MICRO_AJAX_BOOTUP']==0))
 	{
-		check_posted_field($name,$ret);
+		if ($ret!==$default)
+			check_posted_field($name,$ret);
+
+		// Custom fields.xml filter system
+		$ret=filter_form_field_default($name,$ret);
 	}
 
 	if (($default===NULL) && ($ret==='')) return NULL;

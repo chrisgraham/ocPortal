@@ -106,48 +106,75 @@ function check_input_field_string($name,&$val,$posted=false)
 }
 
 /**
- * Check a posted field isn't 'evil' (we do more checks for post fields than get fields), and run fields.xml filters on it.
+ * Check a posted field isn't part of a malicious CSRF attack via referer checking (we do more checks for post fields than get fields).
  *
  * @param  string			The name of the parameter
  * @param  string			The value retrieved
  */
 function check_posted_field($name,&$val)
 {
-	// Check referer
-	if (strtolower(ocp_srv('REQUEST_METHOD'))=='post')
-	{
-		$true_referer=(substr(ocp_srv('HTTP_REFERER'),0,7)=='http://') || (substr(ocp_srv('HTTP_REFERER'),0,8)=='https://');
-		$canonical_referer=strtolower(preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',ocp_srv('HTTP_REFERER')))))); // Just the domain
-		$canonical_baseurl=strtolower(preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',get_base_url()))))); // Just the domain
-		if (($true_referer) && (substr($canonical_referer,0,strlen($canonical_baseurl))!=$canonical_baseurl) && (!is_guest()))
-		{
-			if (!in_array($name,array('login_username','password','remember','login_invisible')))
-			{
-				$allowed_partners=explode(chr(10),get_option('allowed_post_submitters'));
-				$allowed_partners[]='paypal.com';
-				$allowed_partners[]='www.paypal.com';
-				$found=false;
-				foreach ($allowed_partners as $partner)
-				{
-					if (trim($partner)=='') continue;
+	$evil=false;
 
-					if (strpos(ocp_srv('HTTP_REFERER'),trim($partner))!==false)
+	$referer=ocp_srv('HTTP_REFERER');
+
+	$is_true_referer=(substr($referer,0,7)=='http://') || (substr($referer,0,8)=='https://');
+
+	if ($is_true_referer)
+	{
+		ocp_setcookie('has_referers','1'); // So we know for later requests that "blank" means a malicious external request (from third-party HTTPS URL, or a local file being executed)
+	}
+
+	if ((strtolower(ocp_srv('REQUEST_METHOD'))=='post') && (!is_guest()))
+	{
+		if ($is_true_referer)
+		{
+			$canonical_referer_domain=strip_url_to_representative_domain($referer);
+			$canonical_baseurl_domain=strip_url_to_representative_domain(get_base_url());
+			if ($canonical_referer_domain!=$canonical_baseurl_domain)
+			{
+				if (!in_array($name,array('login_username','password','remember','login_invisible')))
+				{
+					$allowed_partners=explode(chr(10),get_option('allowed_post_submitters'));
+					$allowed_partners[]='paypal.com';
+					$found=false;
+					foreach ($allowed_partners as $partner)
 					{
-						$found=true;
-						break;
+						$partner=trim($partner);
+
+						if (($partner!='') && ($canonical_referer_domain==$partner))
+						{
+							$found=true;
+							break;
+						}
+					}
+					if (!$found)
+					{
+						$evil=true;
 					}
 				}
-				if (!$found)
-				{
-					$_POST=array(); // To stop loops
-					log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK',ocp_srv('HTTP_REFERER'));
-				}
 			}
+		} elseif (ocp_admirecookie('has_referers')==='1')
+		{
+			$evil=true;
 		}
 	}
 
-	// Custom fields.xml filter system
-	$val=filter_form_field_default($name,$val);
+	if ($evil)
+	{
+		$_POST=array(); // To stop loops
+		log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK',$referer);
+	}
+}
+
+/**
+ * Convert a full URL to a domain name we will consider this a trust on.
+ *
+ * @param  URLPATH		The URL
+ * @return string			The domain
+ */
+function strip_url_to_representative_domain($url)
+{
+	return preg_replace('#^www\.#','',strtolower(parse_url($url,PHP_URL_HOST)));
 }
 
 /**

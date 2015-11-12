@@ -726,8 +726,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					curl_setopt($ch,CURLOPT_CAINFO,$crt_path);
 					curl_setopt($ch,CURLOPT_CAPATH,$crt_path);
 				}
-				//curl_setopt($ch,CURLOPT_SSLVERSION,6);
-				curl_setopt($ch,CURLOPT_SSL_CIPHER_LIST,'TLSv1');
+				if (defined('CURL_SSLVERSION_TLSv1'))
+				{
+					curl_setopt($ch,CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1);
+				} else
+				{
+					curl_setopt($ch,CURLOPT_SSL_CIPHER_LIST,'TLSv1');
+				}
 				//if (!$no_redirect) @curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true); // May fail with safe mode, meaning we can't follow Location headers. But we can do better ourselves anyway and protect against file:// exploits.
 				curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,intval($timeout));
 				curl_setopt($ch,CURLOPT_TIMEOUT,intval($timeout));
@@ -1179,6 +1184,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					),
 					'http'=>array(
 						'user_agent'=>$ua,
+						'method'=>($byte_limit===0)?'HEAD':'GET',
 					),
 				));
 			} else
