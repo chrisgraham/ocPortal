@@ -522,8 +522,8 @@ function delete_image($id,$delete_full=true)
 
 	// Delete from database
 	$GLOBALS['SITE_DB']->query_delete('images',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'images','rating_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'images','trackback_for_id'=>$id));
+	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'images','rating_for_id'=>strval($id)));
+	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'images','trackback_for_id'=>strval($id)));
 	require_code('notifications');
 	delete_all_notifications_on('comment_posted','images_'.strval($id));
 
@@ -805,7 +805,7 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
  */
 function delete_video($id,$delete_full=true)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('videos',array('title','comments','cat'),array('id'=>$id));
+	$rows=$GLOBALS['SITE_DB']->query_select('videos',array('title','comments','cat'),array('id'=>$id),'',1);
 	$title=$rows[0]['title'];
 	$comments=$rows[0]['comments'];
 	$cat=$rows[0]['cat'];
@@ -828,8 +828,8 @@ function delete_video($id,$delete_full=true)
 
 	// Delete from database
 	$GLOBALS['SITE_DB']->query_delete('videos',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'videos','rating_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'videos','trackback_for_id'=>$id));
+	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'videos','rating_for_id'=>strval($id)));
+	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'videos','trackback_for_id'=>strval($id)));
 	require_code('notifications');
 	delete_all_notifications_on('comment_posted','videos_'.strval($id));
 

@@ -264,8 +264,8 @@ function delete_calendar_event($id)
 	require_code('seo2');
 	seo_meta_erase_storage('event',strval($id));
 
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'events','rating_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'events','trackback_for_id'=>$id));
+	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'events','rating_for_id'=>strval($id)));
+	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'events','trackback_for_id'=>strval($id)));
 	require_code('notifications');
 	delete_all_notifications_on('comment_posted','events_'.strval($id));
 

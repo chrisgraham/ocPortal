@@ -335,8 +335,10 @@ function do_input_thumb(field_name,va)
 		{
 			if ((va!=null) && (va.indexOf('://')==-1))
 			{
-				window.fauxmodal_alert('{!NOT_A_URL;^}');
-				return do_input_thumb(field_name,va);
+				window.fauxmodal_alert('{!NOT_A_URL;^}',function() {
+					do_input_url(field_name,va);
+				});
+				return;
 			}
 
 			if (va)
@@ -344,7 +346,7 @@ function do_input_thumb(field_name,va)
 				generate_question_ui(
 					'{!THUMB_OR_IMG_2;^}',
 					{thumbnail: '{!THUMBNAIL;^}',fullsize: '{!IMAGE;^}'},
-					'{!_ATTACHMENT;^}',
+					'{!comcode:INPUT_COMCODE_img;^}',
 					null,
 					function(vb)
 					{
@@ -379,8 +381,7 @@ function do_input_thumb(field_name,va)
 							},
 							'{!comcode:INPUT_COMCODE_img;^}'
 						);
-					},
-					'{!comcode:INPUT_COMCODE_img;^}'
+					}
 				);
 			}
 		},
@@ -430,8 +431,10 @@ function do_input_url(field_name,va)
 		{
 			if ((va!=null) && (va.indexOf('://')==-1))
 			{
-				window.fauxmodal_alert('{!NOT_A_URL;^}');
-				return do_input_url(field_name,va);
+				window.fauxmodal_alert('{!NOT_A_URL;^}',function() {
+					do_input_url(field_name,va);
+				});
+				return;
 			}
 
 			if (va!==null)
@@ -549,8 +552,10 @@ function do_input_email(field_name,va)
 		{
 			if ((va!=null) && (va.indexOf('@')==-1))
 			{
-				window.fauxmodal_alert('{!NOT_A_EMAIL;^}');
-				return do_input_email(field_name,va);
+				window.fauxmodal_alert('{!NOT_A_EMAIL;^}',function() {
+					do_input_url(field_name,va);
+				});
+				return;
 			}
 
 			if (va!==null)
