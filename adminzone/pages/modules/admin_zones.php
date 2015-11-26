@@ -316,6 +316,8 @@ class Module_admin_zones
 						$_preview.=do_lang('BROKEN_XHTML_FIXED');
 					}
 				}
+
+				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($_preview);
 			} else $_preview=NULL;
 
 			$is_panel=(substr($for,0,6)=='panel_');
