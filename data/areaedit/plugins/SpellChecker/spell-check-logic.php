@@ -332,9 +332,9 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
 	if (is_null($words_skip)) $words_skip=array();
 
 	// Convert UTF-8 multi-bytes into decimal character entities.  This is because aspell isn't fully utf8-aware
-	$text=preg_replace('/([\xC0-\xDF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
-	$text=preg_replace('/([\xE0-\xEF][\x80-\xBF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
-	$text=preg_replace('/([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
+	$text=@preg_replace('/([\xC0-\xDF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
+	$text=@preg_replace('/([\xE0-\xEF][\x80-\xBF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
+	$text=@preg_replace('/([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
 
 	if (!$ret)
 	{

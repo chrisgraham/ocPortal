@@ -1,5 +1,5 @@
 <div class="points_boxes">
-	<div class="points_box medborder">
+	<div class="points_box box">
 		{+START,IF,{$HAS_PRIVILEGE,use_points,{MEMBER}}}
 			<p class="intro">{!CURRENT_POINTS}:</p>
 			<p>{!POINTS_TO_SPEND,<span class="figure">{REMAINING*}</span>}</p>
@@ -9,7 +9,7 @@
 		{+END}
 	</div>
 
-	<div class="points_box medborder">
+	<div class="points_box box">
 		<p class="intro">{!COUNT_GIFT_POINTS_LEFT}:</p>
 		<p>{!POINTS_TO_GIVE,<span class="figure">{GIFT_POINTS_AVAILABLE*}</span>}</p>
 	</div>
@@ -22,7 +22,7 @@
 		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_URL*}">{NAME*}</a>}
 	</p>
 
-	<table summary="{!COLUMNED_TABLE}" class="variable_table points_summary_table">
+	<table summary="{!COLUMNED_TABLE}" class="autosized_table points_summary_table">
 		<thead>
 			<tr>
 				<th>{!ACTIVITY}</th>
@@ -76,17 +76,17 @@
 			{+END}{+END}
 			{+START,IF,{$NEQ,{POINTS_RATING},0}}
 				<tr>
-					<td>&bull; {!COUNT_RATINGS}:</td>
+					<td>&bull; {!RATING_CONTENT}:</td>
 					<td class="equation">{POINTS_GAINED_RATING*} &times; {POINTS_RATING*} {!POINTS_UNIT}</td>
 					<td class="answer">= {MULT_POINTS_RATING*} {!POINTS_UNIT}</td>
 				</tr>
 			{+END}
 			{+START,IF,{$NEQ,{POINTS_CREDITS},0}}{+START,IF,{$ADDON_INSTALLED,support_credits}}
-			<tr>
-				<td>&bull; {!SPECIAL_CPF__ocp_support_credits}:</td>
-				<td class="equation">{POINTS_GAINED_CREDITS*} &times; {POINTS_CREDITS*} {!POINTS_UNIT}</td>
-				<td class="answer">= {MULT_POINTS_CREDITS*} {!POINTS_UNIT}</td>
-			</tr>
+				<tr>
+					<td>&bull; {!SPECIAL_CPF__ocp_support_credits}:</td>
+					<td class="equation">{POINTS_GAINED_CREDITS*} &times; {POINTS_CREDITS*} {!POINTS_UNIT}</td>
+					<td class="answer">= {MULT_POINTS_CREDITS*} {!POINTS_UNIT}</td>
+				</tr>
 			{+END}{+END}
 		</tbody>
 	</table>
@@ -104,9 +104,9 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{GIVE}}
-	{+START,BOX}
+	<div class="box box___points_profile"><div class="box_inner">
 		{GIVE}
-	{+END}
+	</div></div>
 {+END}
 
 {+START,IF_NON_EMPTY,{FROM}}
