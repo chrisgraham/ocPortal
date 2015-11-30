@@ -76,11 +76,10 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
+		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'),NULL,'WHERE c_name NOT LIKE \'\_%\'');
 		foreach ($catalogues as $catalogue)
 		{
 			$catalogue_name=$catalogue['c_name'];
-			if (substr($catalogue_name,0,1)=='_') continue;
 			$nl=do_lang('NOTIFICATION_TYPE_catalogue_entry__'.$catalogue_name,NULL,NULL,NULL,NULL,false);
 			if (is_null($nl))
 			{
