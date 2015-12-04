@@ -910,6 +910,7 @@ function comcode_preg_replace($element,$pattern,$replacement,$semihtml)
 
 /**
  * Do some regular expression matches, locked correctly to single HTML elements. This is necessary to make sure nesting is handled correctly, which regular expressions cannot do on their own.
+ * It is case-sensitive for performance reasons. But everyone uses lower-case tags for a long time now. Also assumes no tabs within tag definition.
  *
  * @param  string			The element name to replace over
  * @param  array			A list of pairs: Pattern, Replacement
@@ -918,7 +919,46 @@ function comcode_preg_replace($element,$pattern,$replacement,$semihtml)
  */
 function array_html_preg_replace($element,$array,$semihtml)
 {
-	if (version_compare('4.3.0',phpversion())>=0)
+	// Quick exit, for efficiency
+	if (strpos($semihtml,'<'.$element)===false)
+	{
+		return $semihtml;
+	}
+
+	// See if we have no nesting (no nesting --> $easy_replace)
+	$easy_replace=true;
+	$on_closer=true;
+	$pos=0;
+	do
+	{
+		$pos_opener_1=strpos($semihtml,'<'.$element.'>',$pos);
+		$pos_opener_2=strpos($semihtml,'<'.$element.' ',$pos);
+		$pos_opener=($pos_opener_1!==false && ($pos_opener_2===false || $pos_opener_1<$pos_opener_2))?$pos_opener_1:$pos_opener_2;
+		if ($pos_opener===false) break;
+
+		if ($pos==0) // First iteration is just to find first opener
+		{
+			$pos=$pos_opener+1;
+			continue;
+		}
+
+		$pos_closer_1=strpos($semihtml,'</'.$element.'>',$pos);
+		$pos_closer_2=strpos($semihtml,'</'.$element.' ',$pos);
+		$pos_closer=($pos_closer_1!==false && ($pos_closer_2===false || $pos_closer_1<$pos_closer_2))?$pos_closer_1:$pos_closer_2;
+		if ($pos_closer===false) break;
+
+		if ($pos_opener<$pos_closer)
+		{
+			$easy_replace=false;
+			break;
+		}
+
+		$pos=$pos_opener+1;
+	}
+	while ($pos!==false);
+
+	// Short way
+	if ($easy_replace || version_compare('4.3.0',phpversion())>=0/*PREG_OFFSET_CAPTURE in PHP4.3*/)
 	{
 		foreach ($array as $temp)
 		{
@@ -928,19 +968,21 @@ function array_html_preg_replace($element,$array,$semihtml)
 		return $semihtml;
 	}
 
+	// Long way
 	$old_semihtml='';
 	do
 	{
 		$old_semihtml=$semihtml;
 
+		// Find offset of openers and closers
 		$matches=array();
-		$count=preg_match_all('#<'.$element.'[\s>]#',$semihtml,$matches,PREG_OFFSET_CAPTURE);
+		$count=preg_match_all('#<'.$element.'[ >]#',$semihtml,$matches,PREG_OFFSET_CAPTURE);
 		$starts=array();
 		for ($i=0;$i<$count;$i++)
 		{
 			$starts[]=$matches[0][$i][1];
 		}
-		$count=preg_match_all('#</'.$element.'[\s>]#',$semihtml,$matches,PREG_OFFSET_CAPTURE);
+		$count=preg_match_all('#</'.$element.'[ >]#',$semihtml,$matches,PREG_OFFSET_CAPTURE);
 		$ends=array();
 		$lengths=array();
 		for ($i=0;$i<$count;$i++)
@@ -958,9 +1000,10 @@ function array_html_preg_replace($element,$array,$semihtml)
 				foreach ($ends as $i=>$end)
 				{
 					if ($end<$start) continue;
+
 					$opens=@$s_opens[$start][$end];
 					$closes=@$s_closes[$start][$end];
-					if (is_null($opens))
+					if (is_null($opens)) // Not worked out yet, work out and put into $s_opens and $s_closes
 					{
 						$segment=substr($semihtml,$start,$end+$lengths[$i]-$start);
 						$opens=substr_count($segment,'<'.$element.' ')+substr_count($segment,'<'.$element.'>');
@@ -968,6 +1011,8 @@ function array_html_preg_replace($element,$array,$semihtml)
 						$s_opens[$start][$end]=$opens;
 						$s_closes[$start][$end]=$closes;
 					} else $segment=NULL;
+
+					// Segment is a clean isolated tag
 					if ($opens==$closes)
 					{
 						if (is_null($segment))
@@ -978,7 +1023,7 @@ function array_html_preg_replace($element,$array,$semihtml)
 						$after=substr($semihtml,$end+$lengths[$i]);
 						$subbed=preg_replace($pattern.'A',$replacement,$segment);
 						$semihtml=$before.$subbed.$after;
-						if ($semihtml!=$old_semihtml) break 3;
+						if ($semihtml!=$old_semihtml) break 3; // We need to start again now as the offsets have all changed
 						break; // Ok, well at least we know we found our tag bound, so no more need to search
 					}
 				}

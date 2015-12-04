@@ -550,7 +550,7 @@ class Module_cedi
 			'type'=>'Wiki+ Page',
 			'title'=>comcode_escape(get_translated_text($page['title'])),
 			'identifier'=>'_SEARCH:cedi:misc:'.strval($page['id']),
-			'description'=>get_translated_text($page['description']),
+			'description'=>(strlen($description_comcode)<200)?$description_comcode:'',
 			'numposts'=>strval($num_posts),
 			'image'=>find_theme_image('bigicons/cedi'),
 		);
