@@ -328,8 +328,8 @@ END;
 					@fwrite($mysock,$packet);
 					@fclose($mysock);
 				}
-				$start+=100;
 			}
+			$start+=100;
 		}
 		while (array_key_exists(0,$listeners));
 	}
