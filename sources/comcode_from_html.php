@@ -963,7 +963,7 @@ function array_html_preg_replace($element,$array,$semihtml)
 		foreach ($array as $temp)
 		{
 			list($pattern,$replacement)=$temp;
-			$semihtml=preg_replace(str_replace('$','',str_replace('^','',$pattern)),$replacement,$semihtml);
+			$semihtml=preg_replace(str_replace('$#','#',str_replace('#^','#',$pattern)),$replacement,$semihtml);
 		}
 		return $semihtml;
 	}
