@@ -755,7 +755,7 @@ class Module_cedi
 		$markers=$this->get_markers();
 		foreach ($markers as $id)
 		{
-			$GLOBALS['SITE_DB']->query_delete('seedy_posts',array('id'=>$id),'',1);
+			cedi_delete_post($id);
 		}
 
 		$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_page'=>get_param_integer('id'),'the_action'=>'MERGE_CEDI_POSTS','date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>get_member()));

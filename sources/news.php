@@ -319,7 +319,7 @@ Content-length: {$_length}
 
 {$request}
 END;
-				}
+				} else continue;
 				$errno=0;
 				$errstr='';
 				$mysock=@fsockopen($listener['rem_ip'],$listener['rem_port'],$errno,$errstr,6.0);

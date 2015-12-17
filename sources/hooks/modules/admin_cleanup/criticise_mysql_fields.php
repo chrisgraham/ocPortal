@@ -45,7 +45,7 @@ function list_to_map_2($map_value,$list)
 }
 
 /**
- * OcCLE command hook.
+ * Hook class.
  */
 class Hook_criticise_mysql_fields
 {
@@ -201,7 +201,6 @@ class Hook_criticise_mysql_fields
 							{
 								$type='INTEGER';
 							}
-							$type='INTEGER';
 						}
 						break;
 					case 'real':
