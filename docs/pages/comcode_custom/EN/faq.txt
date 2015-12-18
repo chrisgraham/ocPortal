@@ -83,7 +83,6 @@ You may also choose to use one of the forums from our list of [page="_SEARCH:tut
 We feel Linux is more suited for PHP purposes than Windows. ocPortal will work fine on Windows, however setting file permissions remotely can be very tricky and non-standard between different Windows servers.
 
 [b]Do you recommend any web hosts / provide your own hosting?[/b]
-[url="Arvixe"]http://www.arvixe.com/5256-223-3-122.html[/url] is currently our recommended web host.
 Read about ocPortal's minimum requirements in our [page="_SEARCH:tut_web_hosting"]hosting tutorial[/page]. ocPortal is designed to run well on almost all web hosts.
 
 [b]Does ocPortal support (some forum vendor and version)?[/b]

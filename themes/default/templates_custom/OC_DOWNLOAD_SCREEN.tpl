@@ -2,8 +2,6 @@
 
 <p style="font-size:.85em; color: #6f757d; text-align:center">Looking for addons and themes? Go to our <a href="{$PAGE_LINK*,site:community}">community section</a>.</p>
 
-<p>If you don't already have hosting, we recommend <a href="http://www.arvixe.com/5256-223-3-122.html" target="_blank">Arvixe</a>.<br />Arvixe hosting comes with ocPortal pre-installed.</p>
-
 <p>If you do already have hosting, the next step is to transfer the installation files to your server. We can do this automatically with our &ldquo;instant transfer&rdquo; option, or you can save the files and upload them yourself.</p>
 
 <div class="downloadoptions">
@@ -42,8 +40,6 @@
 		{HOSTINGCOPY_FORM}
 	</div>
 </div>
-
-<p style="margin-top: 3em"><a class="link_exempt" href="http://www.arvixe.com/5256-223-3-122.html" target="_blank" title="ocPortal hosting (this link will open in a new window)"><img src="{$IMG*,468.60.ocportal}" alt="" /></a></p>
 
 <script type="text/javascript">// <![CDATA[
 	document.getElementById('s_download').style.display='none';
