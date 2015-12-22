@@ -66,7 +66,7 @@ class Hook_Profiles_Tabs_edit
 
 		$tabs=array();
 
-		if (count($_POST)>0) echo ' '; // HACKHACK: IIS seems to have a weird issue with 'slowish spiky process not continuing with output' - this works around it. Not ideal as would break headers in any hook.
+		if (count($_POST)>0) echo ' '; // HACKHACK: FastCGI seems to have a weird issue with 'slowish spiky process not continuing with output' - this works around it. Not ideal as would break headers in any hook.
 
 		$hooks=find_all_hooks('systems','profiles_tabs_edit');
 		if (isset($hooks['settings'])) // Editing must go first, so changes reflect in the renders of the tabs
