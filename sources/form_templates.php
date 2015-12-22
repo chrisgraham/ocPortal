@@ -276,7 +276,7 @@ function get_field_restrict_property($property,$field,$page=NULL,$type=NULL)
 				foreach ($_restrictions as $bits)
 				{
 					list($restriction,$attributes)=$bits;
-					if (strtolower($restriction)==strtolower($field)) return $bits['embed'];
+					if (strtolower($restriction)==strtolower($property)) return $bits[1]['embed'];
 				}
 			}
 		}

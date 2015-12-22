@@ -540,7 +540,7 @@ class Module_cedi
 			'type'=>'CEDI Page',
 			'title'=>get_translated_text($page['title']),
 			'identifier'=>'_SEARCH:cedi:misc:'.strval($page['id']),
-			'description'=>get_translated_text($page['description']),
+			'description'=>(strlen($description_comcode)<200)?$description_comcode:'',
 			'numposts'=>strval($num_posts),
 			'image'=>find_theme_image('bigicons/cedi'),
 		);
@@ -732,7 +732,7 @@ class Module_cedi
 		$markers=$this->get_markers();
 		foreach ($markers as $id)
 		{
-			$GLOBALS['SITE_DB']->query_delete('seedy_posts',array('id'=>$id),'',1);
+			cedi_delete_post($id);
 		}
 
 		$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_page'=>get_param_integer('id'),'the_action'=>'MERGE_CEDI_POSTS','date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>get_member()));

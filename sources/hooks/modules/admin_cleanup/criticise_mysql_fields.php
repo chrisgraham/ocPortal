@@ -198,7 +198,6 @@ class Hook_criticise_mysql_fields
 							{
 								$type='INTEGER';
 							}
-							$type='INTEGER';
 						}
 						break;
 					case 'real':

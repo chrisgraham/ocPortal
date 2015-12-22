@@ -172,7 +172,7 @@ class Hook_raw
 			fclose($fh);
 			if ($output<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			fix_permissions($path.'/'.$file_name);
-			sync_file($path.$file_name);
+			sync_file($path.'/'.$file_name);
 			return $output;
 		}
 		else return false; //File doesn't exist

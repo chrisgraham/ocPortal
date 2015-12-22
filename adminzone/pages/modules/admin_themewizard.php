@@ -252,6 +252,7 @@ class Module_admin_themewizard
 		$dark=post_param_integer('dark');
 		$inherit_css=post_param_integer('inherit_css');
 
+		echo ' '; // HACKHACK: FastCGI seems to have a weird issue with 'slowish spiky process not continuing with output' - this works around it. Not ideal as would break headers in any hook.
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMEWIZARD'))));

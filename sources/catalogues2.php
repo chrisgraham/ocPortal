@@ -992,8 +992,8 @@ function actual_delete_catalogue_entry($id)
 	$GLOBALS['SITE_DB']->query_delete('catalogue_efv_integer',array('ce_id'=>$id));
 
 	$GLOBALS['SITE_DB']->query_delete('catalogue_entries',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'catalogues','trackback_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'catalogues','rating_for_id'=>$id));
+	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'catalogues','trackback_for_id'=>strval($id)));
+	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'catalogues','rating_for_id'=>strval($id)));
 
 	require_code('seo2');
 	seo_meta_erase_storage('catalogue_entry',strval($id));

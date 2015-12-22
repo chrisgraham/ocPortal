@@ -1260,15 +1260,15 @@ class Module_admin_themes
 
 			// The file we're LOADING from for edit (maybe $file, maybe some old versions being restored)
 			$restore_from=filter_naughty(get_param('restore_from',$file));
-			if (file_exists(get_file_base().'/themes/'.$restore_from))
+			if (file_exists(get_custom_file_base().'/themes/'.$restore_from))
 			{
-				$path=get_file_base().'/themes/'.$restore_from;
+				$path=get_custom_file_base().'/themes/'.$restore_from;
 				$contents=file_get_contents($path,FILE_TEXT);
 				$last_path=$path;
 			}
-			elseif (file_exists(get_custom_file_base().'/themes/'.$restore_from))
+			elseif (file_exists(get_file_base().'/themes/'.$restore_from))
 			{
-				$path=get_custom_file_base().'/themes/'.$restore_from;
+				$path=get_file_base().'/themes/'.$restore_from;
 				$contents=file_get_contents($path,FILE_TEXT);
 				$last_path=$path;
 			} else
