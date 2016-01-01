@@ -792,7 +792,7 @@ function do_site()
 
 	// Little disk space check
 	$last_space_check=get_value('last_space_check');
-	if (($last_space_check===NULL) || (intval($last_space_check)<time()-60*60*3))
+	if ((($last_space_check===NULL) || (intval($last_space_check)<time()-60*60*3)) && (php_function_allowed('disk_free_space')))
 	{
 		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
 			set_value('last_space_check',strval(time()));

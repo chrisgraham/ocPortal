@@ -74,7 +74,8 @@ function incoming_uploads_script()
 		{
 			header('HTTP/1.1 500 File Upload Error');
 
-			@error_log('ocPortal: '.do_lang('ERROR_UPLOADING_'.strval($_FILES['file']['error'])),0);
+			if (php_function_allowed('error_log'))
+				@error_log('ocPortal: '.do_lang('ERROR_UPLOADING_'.strval($_FILES['file']['error'])),0);
 
 			exit('ocPortal: '.do_lang('ERROR_UPLOADING_'.strval($_FILES['file']['error'])));
 		}

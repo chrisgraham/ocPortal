@@ -1057,7 +1057,8 @@ function get_gd_version()
 	}
 
 	ob_start();
-	phpinfo();
+	if (php_function_allowed('phpinfo'))
+		phpinfo();
 	$_info=ob_get_contents();
 	ob_end_clean();
 	$a=explode("\n",$_info);

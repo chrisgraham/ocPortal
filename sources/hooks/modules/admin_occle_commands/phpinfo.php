@@ -34,7 +34,8 @@ class Hook_phpinfo
 		else
 		{
 			ob_start();
-			phpinfo();
+			if (php_function_allowed('phpinfo'))
+				phpinfo();
 			$out=ob_get_contents();
 			ob_end_clean();
 			require_code('xhtml');
