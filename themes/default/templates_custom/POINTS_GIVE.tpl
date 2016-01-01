@@ -29,7 +29,7 @@
 			</label>:
 
 			<label class="accessibility_hidden" for="give_reason">{!REASON}</label>
-			<input size="26" id="give_reason" class="input_line_required" value="{!REASON}" onfocus="if (this.value=='{!REASON;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!REASON;}'; this.style.color='gray'; }" type="text" name="reason" style="color: gray" />
+			<input maxlength="255" size="26" id="give_reason" class="input_line_required" value="{!REASON}" onfocus="if (this.value=='{!REASON;}') this.value=''; this.className='field_input_filled';" onblur="if (this.value=='') { this.value='{!REASON;}'; this.className='field_input_non_filled'; }" type="text" name="reason" class="field_input_non_filled" />
 		</p>
 
 		<p>
@@ -67,7 +67,7 @@
 
 				<p>
 					<label class="accessibility_hidden" for="give_reason">{!REASON}</label>
-					<input size="26" id="give_reason" class="input_line_required" value="{!REASON}" onfocus="if (this.value=='{!REASON;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!REASON;}'; this.style.color='gray'; }" type="text" name="reason" style="color: gray" />
+					<input maxlength="255" size="26" id="give_reason" class="input_line_required" value="{!REASON}" onfocus="if (this.value=='{!REASON;}') this.value=''; this.className='field_input_filled';" onblur="if (this.value=='') { this.value='{!REASON;}'; this.className='field_input_non_filled'; }" type="text" name="reason" class="field_input_non_filled" />
 				</p>
 
 				<p>
