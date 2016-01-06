@@ -2506,7 +2506,6 @@ group_points
  - sources_custom/points.php
  - sources_custom/hooks/systems/do_next_menus/group_points.php
  - adminzone/pages/minimodules_custom/group_points.php
- - themes/default/templates_custom/POINTS_PROFILE.tpl
  - sources_custom/hooks/systems/symbols/POINTS_FROM_USERGROUPS.php
  - sources_custom/hooks/systems/cron/group_points.php
  - pages/comcode_custom/EN/group_points.txt
