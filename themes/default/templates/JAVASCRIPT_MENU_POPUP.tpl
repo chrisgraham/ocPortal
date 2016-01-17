@@ -125,7 +125,7 @@ function pop_up_menu(id,place,menu,event)
 		if (l+find_width(e)+10>full_width) l=full_width-find_width(e)-10;
 	} else
 	{ // NB: For non-below, we can't assume 'l' is absolute, as it is actually relative to parent node which is itself positioned
-		if (find_pos_x(p,true)+find_width(e)>full_width) l=-find_width(e);
+		if (find_pos_x(e.parentNode,true)+find_width(e)>full_width) l=-find_width(e);
 	}
 	e.style.left=l+'px';
 	window.setTimeout(function() { // Force it after a refresh too, when real width is known
