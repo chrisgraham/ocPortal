@@ -569,7 +569,7 @@ function load_ocpchat(event)
 			<ul class="spaced_list">{!OCP_CHAT_EXTRA;}</ul> \
 			<p class="associated_link associated_links_block_group"><a title="{!OCP_CHAT_STANDALONE} {!LINK_NEW_WINDOW;}" target="_blank" href="'+escape_html(url)+'">{!OCP_CHAT_STANDALONE}</a> <a href="#" onclick="return load_ocpchat(event);">{!HIDE}</a></p> \
 		</div> \
-		<iframe class="ocp_chat_iframe" frameborder="0" style="width: 650px; border: 0" src="'+escape_html(url)+'"></iframe> \
+		<iframe class="ocp_chat_iframe" style="width: 650px; border: 0" src="'+escape_html(url)+'"></iframe> \
 	'.replace(/\\{1\\}/,escape_html((window.location+'').replace(get_base_url(),'http://baseurl')));
 
 	var box=document.getElementById('ocpchat_box');
