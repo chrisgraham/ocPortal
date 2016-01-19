@@ -10,7 +10,7 @@ If you choose to upload a CSV file we will give you a choice to choose which con
 
 Our recommend tool should work with all major software and web applications that support CSV, and we have prepared instructions for retrieving CSV files from the following software:
 
-[title="2"]Windows Live Mail[/title]
+[title="3"]Windows Live Mail[/title]
 
 1) Start Windows Live Mail.
 2) Click on the &quot;Contacts&quot; icon at the bottom of the left column.
