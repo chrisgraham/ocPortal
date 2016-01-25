@@ -136,7 +136,7 @@ class Module_admin_newsletter extends standard_aed_module
 	{
 		$map=array();
 		$map[strval($id)]=$level;
-		$results=newsletter_who_send_to($map,$lang,0,0);
+		$results=newsletter_who_send_to($map,$lang,0,0,false,'',true);
 		return $results[6][strval($id)];
 	}
 
@@ -564,7 +564,7 @@ class Module_admin_newsletter extends standard_aed_module
 					{
 						$map=array();
 						$map['g'.strval($group_id)]=1;
-						$_c=newsletter_who_send_to($map,$lang,0,0);
+						$_c=newsletter_who_send_to($map,$lang,0,0,false,'',true);
 						$c6=$_c[6]['g'.strval($group_id)];
 						if ($c6!=0)
 							$newsletters->attach(form_input_list_entry('g'.strval($group_id),false,do_lang_tempcode('THIS_WITH',do_lang_tempcode('GROUP'),make_string_tempcode(escape_html($group)))));
@@ -613,12 +613,12 @@ class Module_admin_newsletter extends standard_aed_module
 			if (is_null($level)) // implies all OCF members
 			{
 				$map[$id]=1; // $id will be -1
-				$_c=newsletter_who_send_to($map,$lang,0,0,true);
+				$_c=newsletter_who_send_to($map,$lang,0,0,true,'',true);
 				if (isset($_c[6][$id])) $max_rows=$_c[6][$id];
 			} else // implies normal newsletter / usergroup
 			{
 				$map[$id]=$level; // We're requesting that we probe subscribers of $id on $level
-				$_c=newsletter_who_send_to($map,$lang,0,0,true);
+				$_c=newsletter_who_send_to($map,$lang,0,0,true,'',true);
 				if (isset($_c[6][$id])) $max_rows=$_c[6][$id];
 			}
 
@@ -632,11 +632,11 @@ class Module_admin_newsletter extends standard_aed_module
 				if (is_null($level)) // implies all OCF members
 				{
 					$map[$id]=1; // $id will be -1
-					$_c=newsletter_who_send_to($map,$lang,$start+$start2,$max,true);
+					$_c=newsletter_who_send_to($map,$lang,$start+$start2,$max,true,'',true);
 				} else // implies normal newsletter / usergroup
 				{
 					$map[$id]=$level; // We're requesting that we probe subscribers of $id on $level
-					$_c=newsletter_who_send_to($map,$lang,$start+$start2,$max,true);
+					$_c=newsletter_who_send_to($map,$lang,$start+$start2,$max,true,'',true);
 				}
 				$rows=$_c[7];
 
@@ -1273,7 +1273,7 @@ class Module_admin_newsletter extends standard_aed_module
 				{
 					$map=array();
 					$map['g'.strval($group_id)]=1;
-					$_c=newsletter_who_send_to($map,$lang,0,0);
+					$_c=newsletter_who_send_to($map,$lang,0,0,false,'',true);
 					$c6=$_c[6]['g'.strval($group_id)];
 					if ($c6!=0)
 						$fields->attach(form_input_tick(do_lang_tempcode('THIS_WITH',do_lang_tempcode('GROUP'),make_string_tempcode(escape_html($group))),do_lang_tempcode('NUM_READERS',integer_format($c6)),'g'.strval($group_id),post_param_integer('g'.strval($group_id),0)==1));

@@ -314,10 +314,27 @@ function clever_find_value(the_form,the_element)
 				my_value=the_form.elements[i].value;
 		}
 	}
-	if ((the_element.nodeName.toLowerCase()=='select') && (the_element.selectedIndex>=0))
+	if (the_element.nodeName.toLowerCase()=='select')
 	{
-		my_value=the_element.options[the_element.selectedIndex].value;
-		if ((my_value=='') && (the_element.getAttribute('size')>1)) my_value='-1'; // Fudge, as we have selected something explicitly that is blank
+		if (the_element.multiple)
+		{
+			my_value='';
+			for (var i=0;i<the_element.options.length;i++)
+			{
+				if (the_element.options[i].selected)
+				{
+					if (my_value!='') my_value+=',';
+					my_value+=the_element.options[i].value;
+				}
+			}
+		} else if (the_element.selectedIndex>=0)
+		{
+			my_value=the_element.options[the_element.selectedIndex].value;
+			if ((my_value=='') && (the_element.getAttribute('size')>1)) my_value='-1'; // Fudge, as we have selected something explicitly that is blank
+		} else
+		{
+			my_value='';
+		}
 	}
 	if (my_value===null) my_value='';
 	return my_value;

@@ -125,7 +125,7 @@ function actual_send_newsletter($message,$subject,$lang,$send_details,$html_only
 }
 
 /**
- * Find a group of members the newsletter will go to.
+ * Find a group of people the newsletter will go to.
  *
  * @param  array				A map describing what newsletters and newsletter levels the newsletter is being sent to
  * @param  LANGUAGE_NAME	The language
@@ -133,9 +133,10 @@ function actual_send_newsletter($message,$subject,$lang,$send_details,$html_only
  * @param  integer			Maximum records to return from each category
  * @param  boolean			Whether to get raw rows rather than mailer-ready correspondance lists
  * @param  string				Serialized CSV data to also consider
+ * @param  boolean			Whether to do exact level matching, rather than "at least" matching
  * @return array				Returns a tuple of corresponding detail lists, emails,hashes,usernames,forenames,surnames,ids, and a record count for levels (depending on requests: csv, 1, <newsletterID>, g<groupID>) [record counts not returned if $start is not zero, for performance reasons]
  */
-function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=false,$csv_data='')
+function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=false,$csv_data='',$strict_level=false)
 {
 	// Find who to send to
 	$level=0;
@@ -156,11 +157,27 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 		if ($this_level!=0)
 		{
 			$where_lang=multi_lang()?(db_string_equal_to('language',$lang).' AND '):'';
-			$query=' FROM '.get_table_prefix().'newsletter_subscribe s LEFT JOIN '.get_table_prefix().'newsletter n ON n.email=s.email WHERE '.$where_lang.'code_confirm=0 AND s.newsletter_id='.strval($newsletter['id']).' AND the_level>='.strval((integer)$this_level).' ORDER BY n.id';
+			$query=' FROM '.get_table_prefix().'newsletter_subscribe s LEFT JOIN '.get_table_prefix().'newsletter n ON n.email=s.email WHERE '.$where_lang.'code_confirm=0 AND s.newsletter_id='.strval($newsletter['id']);
+			if ($strict_level)
+			{
+				$query.=' AND the_level='.strval((integer)$this_level);
+			} else
+			{
+				$query.=' AND the_level>='.strval((integer)$this_level);
+			}
+			$query.=' ORDER BY n.id';
 			$temp=$GLOBALS['SITE_DB']->query('SELECT n.id,n.email,the_password,n_forename,n_surname'.$query,$max,$start);
 			if ($start==0)
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'newsletter_subscribe WHERE newsletter_id='.strval($newsletter['id']).' AND the_level>='.strval((integer)$this_level));
+				$query='SELECT COUNT(*) FROM '.get_table_prefix().'newsletter_subscribe WHERE newsletter_id='.strval($newsletter['id']);
+				if ($strict_level)
+				{
+					$query.=' AND the_level='.strval((integer)$this_level);
+				} else
+				{
+					$query.=' AND the_level>='.strval((integer)$this_level);
+				}
+				$test=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
 				if ($test>10000) // Inaccurace, for performance reasons
 				{
 					$total[strval($newsletter['id'])]=$test;
