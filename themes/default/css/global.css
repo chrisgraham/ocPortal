@@ -970,7 +970,7 @@ body .accessibility_hidden { /* Contents should be made visible (or interpreted)
 	position: absolute;
 	top: -256000px;
 	left: 0;
-	visibility: hidden; /* So browser doesn't waste resources rendering */
+	opacity: 0; /* So browser doesn't waste resources rendering */
 	display: block; /* stops browser bugs where it interacts with the layout flow incorrectly */
 }
 

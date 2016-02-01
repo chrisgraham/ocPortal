@@ -251,7 +251,7 @@ if (!isset($WITHIN_PHP)) $WITHIN_PHP=false;
 
 if (!$WITHIN_PHP)
 {
-	error_reporting(E_ALL);
+	error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 
 	$extra=array();
 	if (isset($_SERVER['argv']))

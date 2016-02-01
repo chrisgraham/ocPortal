@@ -29,7 +29,7 @@ if (strpos($_SERVER['PHP_SELF'],'spell-check-logic.php')!==false)
  */
 function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 {
-	error_reporting(E_ALL);
+	error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 
 	if (!function_exists('get_file_base'))
 	{

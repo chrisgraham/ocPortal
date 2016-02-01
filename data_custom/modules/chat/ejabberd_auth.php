@@ -65,7 +65,7 @@ class JabberAuth {
 		@openlog("pipe-auth", LOG_NDELAY, LOG_SYSLOG);
 
 		if($this->debug) {
-			@error_reporting(E_ALL);
+			@error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 			safe_ini_set("log_errors", "1");
 			safe_ini_set("error_log", $this->debugfile);
 		}

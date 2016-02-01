@@ -191,6 +191,11 @@ function init__global2()
 	$BOOTSTRAPPING=1;
 	$CHECKING_SAFEMODE=false;
 
+	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
+	set_error_handler('ocportal_error_handler');
+	if (function_exists('error_get_last')) register_shutdown_function('catch_fatal_errors');
+	$HAS_SET_ERROR_HANDLER=true;
+
 	$BAD_WORD_CHARS=array(chr(128),chr(130),chr(131),chr(132),chr(133),chr(134),chr(135),chr(136),chr(137),chr(138),chr(139),chr(140),chr(142),chr(145),chr(146),chr(147),chr(148),chr(149),chr(150),chr(151),chr(152),chr(153),chr(154),chr(155),chr(156),chr(158),chr(159));
 	$FIXED_WORD_CHARS=array('(EUR-)',',','{f.}','"','...','-|-','=|=','^','{%o}','{~S}','<','CE','{~Z}',"'","'",'"','"','-','-','--','~','(TM)','{~s}','>','ce','{~z}','{.Y.}'); // some of these are Comcode shortcuts. We can't use entities as we can't assume we're converting into Comcode.
 	$FIXED_WORD_CHARS_HTML=array('&#8364;','&#8218;','&#402;','&#8222;','&hellip;','&#8224;','&#8225;','&#710;','&#8240;','&#352;','&#8249;','&#338;','&#381;',"&lsquo;","&rsquo;",'&ldquo;','&rdquo;','&bull;','&ndash;','&mdash;','&#732;','&trade;','&#353;','&#8250;','&#339;','&#382;','&#376;');
@@ -202,7 +207,8 @@ function init__global2()
 	$CACHE_FIND_SCRIPT=array();
 	$WHAT_IS_RUNNING=current_script();
 
-	error_reporting(E_ALL);
+	error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
+
 	safe_ini_set('html_errors','1');
 	safe_ini_set('docref_root','http://www.php.net/manual/en/');
 	safe_ini_set('docref_ext','.php');
@@ -364,12 +370,6 @@ function init__global2()
 			require_code('permissions'); // So we can check access
 		}
 	}
-
-	// At this point we can display errors nicely
-	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
-	set_error_handler('ocportal_error_handler');
-	if (function_exists('error_get_last')) register_shutdown_function('catch_fatal_errors');
-	$HAS_SET_ERROR_HANDLER=true;
 
 	if ($MICRO_BOOTUP==0)
 	{
@@ -859,10 +859,12 @@ function catch_fatal_errors()
  * @param  PATH			The error message
  * @param  string			The file the error occurred in
  * @param  integer		The line the error occurred on
- * @return boolean		Always false
+ * @return boolean		True effectively means "don't set $php_errormsg"
  */
 function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 {
+	if ((defined('E_DEPRECATED')) && ($errno==E_DEPRECATED)) return true;
+
 	if ((error_reporting()==0) && (!$GLOBALS['DYING_BADLY'])) return false; // This actually tells if @ was used oddly enough. You wouldn't figure from the PHP docs.
 
 	if ((error_reporting() & $errno) || ($GLOBALS['DYING_BADLY']))
@@ -912,6 +914,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 				critical_error('EMERGENCY',$errstr.escape_html(' ['.$errfile.' at '.strval($errline).']'));
 			}
 		}
+		if ($GLOBALS['BOOTSTRAPPING']==1) critical_error('PASSON',$errstr);
 		require_code('failure');
 		_ocportal_error_handler($type,$errno,$errstr,$errfile,$errline);
 	}
@@ -1305,7 +1308,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 			require_code('urls');
 			if (running_script('index'))
 			{
-				if (get_option('enable_https',true)=='0')
+				if (!function_exists('get_option') || get_option('enable_https',true)=='0')
 				{
 					$https=false;
 				} else

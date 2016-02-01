@@ -2,7 +2,7 @@
 
 	ini_set('display_errors','1');
 	ini_set('allow_url_fopen','1');
-	error_reporting(E_ALL);
+	error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$get_url=(isset($_GET['file']) && strlen(trim($_GET['file']))>0)?$_GET['file']:'';

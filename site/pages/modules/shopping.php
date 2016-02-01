@@ -98,8 +98,8 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_table('shopping_cart',array(
 				'id'=>'*AUTO',
 				'session_id'=>'INTEGER',
-				'ordered_by'=>'*USER',
-				'product_id'=>'*AUTO_LINK',
+				'ordered_by'=>'USER',
+				'product_id'=>'AUTO_LINK',
 				'product_name'=>'SHORT_TEXT',
 				'product_code'=>'SHORT_TEXT',
 				'quantity'=>'INTEGER',
