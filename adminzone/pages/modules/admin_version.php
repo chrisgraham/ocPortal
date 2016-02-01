@@ -607,8 +607,13 @@ class Module_admin_version
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from==15))
 		{
+			$GLOBALS['SITE_DB']->delete_index_if_exists('cron_caching_requests','c_in_panel');
+			$GLOBALS['SITE_DB']->delete_index_if_exists('cron_caching_requests','c_interlock');
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_interlock');
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_in_panel');
+
+			$GLOBALS['SITE_DB']->delete_index_if_exists('rating','rating_for_id');
+			$GLOBALS['SITE_DB']->create_index('rating','rating_for_id',array('rating_for_id'));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
