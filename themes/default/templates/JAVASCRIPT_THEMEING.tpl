@@ -1,6 +1,6 @@
 "use strict";
 
-function make_tooltip_func(op)
+function make_tooltip_func(op,ob)
 {
 	return function(event) {
 		if (typeof event=='undefined') var event=window.event;
@@ -18,7 +18,7 @@ function make_tooltip_func(op)
 			var get_descrip=function(callback) { callback('<div class="whitespace_visible">'+escape_html(window.tpl_descrips[op])+'</div>'); };
 		}
 		if (typeof window.activate_tooltip!='undefined')
-			get_descrip(function(text) { activate_tooltip(this,event,text,'20%',null,'130px'); });
+			get_descrip(function(text) { activate_tooltip(ob,event,text,'20%',null,'130px'); });
 	}
 }
 
@@ -36,7 +36,7 @@ function load_template_previews()
 		ob.onmousemove=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event); };
 		ob.onmouseout=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(this,event); };
 		var op=ob.value;
-		ob.onmouseover=make_tooltip_func(op);
+		ob.onmouseover=make_tooltip_func(op,ob);
 	}
 }
 

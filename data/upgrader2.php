@@ -103,7 +103,7 @@ foreach ($todo as $i=>$_target_file)
 {
 	list($target_file,,$offset,$length,)=$_target_file;
 
-	if ($_target_file=='data/upgrader2.php')
+	if ($target_file=='data/upgrader2.php')
 	{
 		if ($file_offset+20<count($todo)) continue; // Only extract on last step, to avoid possible transitionary bugs between versions of this file (this is the file running and refreshing now, i.e this file!)
 	} else
