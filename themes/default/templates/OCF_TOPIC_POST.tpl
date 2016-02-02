@@ -82,7 +82,7 @@
 					{+END}{+END}{+END}
 				{+END}
 
-				{POST}
+				{POST`}
 			</div>
 
 			{LAST_EDITED}
