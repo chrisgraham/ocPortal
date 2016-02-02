@@ -5,7 +5,7 @@
 if (function_exists('set_time_limit')) @set_time_limit(0);
 ini_set('allow_url_fopen','1');
 ini_set('display_errors','1');
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 
 $transcoder_server='http://'.$_SERVER['HTTP_HOST'].str_replace('queue.php','',$_SERVER['SCRIPT_NAME']);
 $liveserver=str_replace('/transcoder','',$transcoder_server);

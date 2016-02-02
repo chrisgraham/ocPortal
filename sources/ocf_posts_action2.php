@@ -84,6 +84,7 @@ function ocf_member_handle_promotion($member_id=NULL)
 
 	if (count($promotes_today)!=0)
 	{
+		require_lang('ocf');
 		$name=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
 		log_it('MEMBER_PROMOTED_AUTOMATICALLY',strval($member_id),$name);
 	}

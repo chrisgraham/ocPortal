@@ -72,6 +72,17 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 if ((strpos($_SERVER['PHP_SELF'],'/sources/')!==false) || (strpos($_SERVER['PHP_SELF'],'/sources_custom/')!==false)) exit('May not be included directly');
 
 /**
+ * Find whether a particular PHP function is blocked.
+ *
+ * @param  string		Function name.
+ * @return boolean	Whether it is.
+ */
+function php_function_allowed($function)
+{
+	return (@preg_match('#(\s|,|^)'.str_replace('#','\#',preg_quote($function)).'(\s|$|,)#',strtolower(@ini_get('disable_functions').','.ini_get('suhosin.executor.func.blacklist').','.ini_get('suhosin.executor.include.blacklist').','.ini_get('suhosin.executor.eval.blacklist')))==0);
+}
+
+/**
  * This function is a very important one when coding. It allows you to include a source code file (from root/sources/ or root/sources_custom/) through the proper channels.
  * You should remember this function, and not substitute anything else for it, as that will likely make your code unstable.
  * It is key to source code modularity in ocPortal.
@@ -330,6 +341,10 @@ function require_code($codename,$light_exit=false)
 		if ($codename=='critical_errors')
 		{
 			exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The ocPortal critical error message file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>'); require($GLOBALS['FILE_BASE'].'/sources/global.php');
+		}
+		if ($php_errormsg!='')
+		{
+			$codename.='... "'.$php_errormsg.'"';
 		}
 		critical_error('MISSING_SOURCE',$codename);
 	}

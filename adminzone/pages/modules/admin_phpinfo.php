@@ -69,7 +69,8 @@ class Module_admin_phpinfo
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_PHP_INFO');
 
 		ob_start();
-		phpinfo();
+		if (php_function_allowed('phpinfo'))
+			phpinfo();
 		require_code('xhtml');
 		$out=xhtmlise_html(ob_get_contents());
 		ob_end_clean();

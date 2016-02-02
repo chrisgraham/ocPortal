@@ -45,7 +45,7 @@ function destrictify($change_content_type=true,$mysql_too=false)
 		@header('Content-type: text/html; charset='.get_charset());
 	$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 	$GLOBALS['TITLE_CALLED']=true;
-	error_reporting(E_ALL ^ E_NOTICE);
+	error_reporting(E_ALL & ~E_NOTICE & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 	if (function_exists('set_time_limit')) @set_time_limit(200);
 	if ((get_forum_type()=='ocf') && ($mysql_too)) $GLOBALS['SITE_DB']->query('SET sql_mode=\'\'',NULL,NULL,true);
 	@ini_set('ocproducts.type_strictness','0');
@@ -77,7 +77,7 @@ function restrictify()
 	if (isset($_MODIFIED_FILES)) $_MODIFIED_FILES=array();
 
 	// Put back strictness
-	error_reporting(E_ALL);
+	error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 	if (function_exists('set_time_limit')) @set_time_limit(25);
 	if (get_forum_type()=='ocf') $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES',NULL,NULL,true);
 	if ($GLOBALS['DEBUG_MODE'])

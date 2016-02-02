@@ -37,6 +37,7 @@ class Module_authors
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=3;
+		$info['update_require_upgrade']=1;
 		$info['locked']=true;
 		return $info;
 	}

@@ -43,7 +43,7 @@ if (substr($FILE_BASE,-4)=='.php')
 $RELATIVE_PATH='';
 @chdir($FILE_BASE);
 
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 
 if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
 if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
@@ -354,9 +354,12 @@ function step_1()
 	$test=ini_get('mbstring.func_overload');
 	if (($test!==false) && ($test!=='') && ($test!=='0'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MBSTRING_FUNC_OVERLOAD'))));
-	$disk_space=@disk_free_space(get_file_base());
-	if ((is_integer($disk_space)) && ($disk_space<25*1024*1024))
-		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_DISK_SPACE'))));
+	if (php_function_allowed('disk_free_space'))
+	{
+		$disk_space=@disk_free_space(get_file_base());
+		if ((is_integer($disk_space)) && ($disk_space<25*1024*1024))
+			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_DISK_SPACE'))));
+	}
 	if ((!function_exists('zip_open')) && (!@file_exists('/usr/bin/unzip')))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_ZIP_ON_SERVER'))));
 	if (!function_exists('imagecreatefromstring'))
@@ -374,8 +377,8 @@ function step_1()
 		array_intersect array_merge array_pop array_push array_reverse array_search array_shift
 		array_slice array_splice array_unique array_values arsort asort base64_decode base64_encode
 		call_user_func ceil chdir checkdate chmod chr chunk_split class_exists clearstatcache closedir
-		constant copy cos count crypt current date dechex decoct define defined dirname disk_free_space
-		deg2rad error_log error_reporting eval exit explode fclose feof fgets file file_exists
+		constant copy cos count crypt current date dechex decoct define defined dirname
+		deg2rad error_reporting eval exit explode fclose feof fgets file file_exists
 		file_get_contents filectime filegroup filemtime fileowner fileperms filesize floatval floor
 		get_defined_vars get_declared_classes get_defined_functions fopen fread fseek ftell
 		function_exists fwrite gd_info get_class get_html_translation_table get_magic_quotes_gpc getcwd
@@ -396,7 +399,7 @@ function step_1()
 		is_integer is_null is_numeric is_object is_readable is_resource is_string is_uploaded_file is_writable
 		isset krsort ksort localeconv ltrim mail max md5 method_exists microtime min
 		mkdir mktime move_uploaded_file mt_getrandmax mt_rand mt_srand number_format ob_end_clean
-		ob_end_flush ob_get_contents ob_start octdec opendir ord pack parse_url pathinfo phpinfo phpversion
+		ob_end_flush ob_get_contents ob_start octdec opendir ord pack parse_url pathinfo phpversion
 		preg_match preg_grep preg_match_all
 		preg_replace preg_replace_callback preg_split print_r putenv rawurldecode
 		rawurlencode readdir realpath register_shutdown_function rename require require_once reset rmdir
@@ -427,7 +430,7 @@ function step_1()
 		parse_ini_file parse_str is_executable
 		is_scalar is_subclass_of metaphone natcasesort natsort nl2br ob_get_length ob_gzhandler
 		ob_iconv_handler ob_implicit_flush php_sapi_name
-		php_uname printf convert_cyr_string cosh count_chars
+		printf convert_cyr_string cosh count_chars
 		disk_total_space gethostbynamel getimagesize getlastmod getmypid getmyuid
 		gettimeofday get_cfg_var get_magic_quotes_runtime get_meta_tags get_parent_class
 		get_included_files get_resource_type gzcompress gzdeflate gzencode gzfile gzinflate

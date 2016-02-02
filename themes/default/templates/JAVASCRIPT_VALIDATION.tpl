@@ -297,10 +297,27 @@ function cleverFindValue(theForm,theElement)
 				myValue=theForm.elements[i].value;
 		}
 	}
-	if ((theElement.nodeName.toLowerCase()=='select') && (theElement.selectedIndex>=0))
+	if (theElement.nodeName.toLowerCase()=='select')
 	{
-		myValue=theElement.options[theElement.selectedIndex].value;
-		if ((myValue=='') && (theElement.getAttribute('size')>1)) myValue='-1'; // Fudge, as we have selected something explicitly that is blank
+		if (theElement.multiple)
+		{
+			myValue='';
+			for (var i=0;i<theElement.options.length;i++)
+			{
+				if (theElement.options[i].selected)
+				{
+					if (myValue!='') myValue+=',';
+					myValue+=theElement.options[i].value;
+				}
+			}
+		} else if (theElement.selectedIndex>=0)
+		{
+			myValue=theElement.options[theElement.selectedIndex].value;
+			if ((myValue=='') && (theElement.getAttribute('size')>1)) myValue='-1'; // Fudge, as we have selected something explicitly that is blank
+		} else
+		{
+			myValue='';
+		}
 	}
 	if (myValue===null) myValue='';
 	return myValue;
