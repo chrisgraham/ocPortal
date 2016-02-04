@@ -695,7 +695,7 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 	$start=isset($_GET['start'])?intval($_GET['start']):0;
 	foreach ($files as $i=>$to_use)
 	{
-		if ($i<=$start) continue; // Set to largest number we know so far work
+		if ($i<$start) continue; // Set to largest number we know so far work
 
 		if (strpos(file_get_contents($to_use),'/*CQC: No check*/')!==false)
 		{

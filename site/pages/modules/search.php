@@ -495,7 +495,7 @@ class Module_search
 			}
 			global $M_SORT_KEY;
 			$M_SORT_KEY='LANG';
-			usort($_search_domains,'multi_sort');
+			@usort($_search_domains,'multi_sort');
 			foreach ($_search_domains as $sd)
 			{
 				$search_domains->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN',$sd));

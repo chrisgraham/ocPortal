@@ -212,7 +212,7 @@ function set_long_value($name,$value)
 	$GLOBALS['SITE_DB']->query_delete('long_values',array('the_name'=>$name),'',1);
 	if ($value!==NULL)
 	{
-		$GLOBALS['SITE_DB']->query_insert('long_values',array('date_and_time'=>time(),'the_value'=>$value,'the_name'=>$name));
+		$GLOBALS['SITE_DB']->query_insert('long_values',array('date_and_time'=>time(),'the_value'=>$value,'the_name'=>$name),false,true);
 	}
 }
 
