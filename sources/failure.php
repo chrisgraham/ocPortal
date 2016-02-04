@@ -1273,7 +1273,11 @@ function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_err
 		$result=$client->submit($udata,array('add'=>$add));
 		if ($trigger_error)
 		{
-			if (isset($result['error']))
+			if (is_object($result))
+			{
+				attach_message('dnsbl.tornevall.org: '.$result->getMessage(),'warn');
+			}
+			elseif (isset($result['error']))
 			{
 				attach_message('dnsbl.tornevall.org: '.$result['error']['message'],'warn');
 			}

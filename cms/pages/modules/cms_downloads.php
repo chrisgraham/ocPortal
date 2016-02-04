@@ -744,7 +744,7 @@ class Module_cms_downloads extends standard_aed_module
 
 		$this->donext_type=$category_id;
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('download_downloads','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','validated',array('id'=>$id))===0)) // Just became validated, syndicate as just added
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_value('download_downloads','submitter',array('id'=>$id));
 

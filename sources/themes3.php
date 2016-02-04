@@ -188,7 +188,7 @@ function actual_copy_theme($theme,$to)
 	{
 		$i['theme']=$to;
 		$i['path']=str_replace('themes/'.$theme.'/','themes/'.$to.'/',$i['path']);
-		$GLOBALS['SITE_DB']->query_insert('theme_images',$i);
+		$GLOBALS['SITE_DB']->query_insert('theme_images',$i,false,true);
 	}
 
 	log_it('COPY_THEME',$theme,$to);

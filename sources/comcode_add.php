@@ -80,7 +80,6 @@ function _get_details_comcode_tags()
 		'carousel'=>array('param'),
 		'hide'=>array('param'),
 		'tooltip'=>array('param'),
-		'currency'=>array('param','bracket'),
 		/*'block'=>array(),*/
 		'if_in_group'=>array('param','type'),
 		'flash'=>array('param'),
@@ -98,8 +97,16 @@ function _get_details_comcode_tags()
 		'topic'=>array('param','forum'),
 		'attachment'=>array('description','filename','type','thumb','float','align','width','height','thumb_url'),
 	);
+
 	//'attachment_safe'=>array('description','filename','type','width','height','align','float','thumb_url'),	Merged into attachment in UI
+
+	if (addon_installed('ecommerce'))
+	{
+		$tag_list['currency']=array('param','bracket');
+	}
+
 	ksort($tag_list);
+
 	/* // Helps find missing tags
 	unset($VALID_COMCODE_TAGS['section']);
 	unset($VALID_COMCODE_TAGS['section_controller']);

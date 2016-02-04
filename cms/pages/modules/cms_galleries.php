@@ -1126,7 +1126,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		$this->donext_type=$cat;
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('images','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value_null_ok('images','validated',array('id'=>$id))===0)) // Just became validated, syndicate as just added
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_value('images','submitter',array('id'=>$id));
 
@@ -1581,7 +1581,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 
 		$this->donext_type=$cat;
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('videos','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value_null_ok('videos','validated',array('id'=>$id))===0)) // Just became validated, syndicate as just added
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_value('videos','submitter',array('id'=>$id));
 

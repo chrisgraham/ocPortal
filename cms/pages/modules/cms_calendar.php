@@ -938,7 +938,7 @@ class Module_cms_calendar extends standard_aed_module
 			$recurrences=$_recurrences;
 		}
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('calendar_events','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value_null_ok('calendar_events','validated',array('id'=>$id))===0)) // Just became validated, syndicate as just added
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{

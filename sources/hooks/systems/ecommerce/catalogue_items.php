@@ -124,10 +124,13 @@ class Hook_catalogue_items
 
 		if (!array_key_exists(3,$fields)) return ECOMMERCE_PRODUCT_INTERNAL_ERROR;
 
-		if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
+		if (array_key_exists(4,$fields))
+		{
+			if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
 
-		if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0))
-			return ECOMMERCE_PRODUCT_AVAILABLE;
+			if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0))
+				return ECOMMERCE_PRODUCT_AVAILABLE;
+		}
 
 		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 		if ($fields[3]['effective_value']!='')

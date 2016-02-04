@@ -38,7 +38,7 @@ class Hook_rss_filedump
 
 		if (!has_actual_page_access(get_member(),'filedump')) return NULL;
 
-		if (!file_exists(get_custom_file_base().'/uploads/filedump/')) return array();
+		if (!file_exists(get_custom_file_base().'/uploads/filedump/')) return NULL;
 
 		$filters=explode(',',$_filters);
 

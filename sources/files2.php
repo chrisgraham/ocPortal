@@ -230,7 +230,11 @@ function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=t
 {
 	$out=array();
 
-	$d=opendir($path);
+	$d=@opendir($path);
+	if ($d===false)
+	{
+		return array();
+	}
 	while (($file=readdir($d))!==false)
 	{
 		if (!$special_too)
@@ -646,14 +650,33 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$_postdetails_params=$post_params['_'];
 			} else
 			{
-				foreach ($post_params as $param_key=>$param_value)
+				if (count($post_params)>0)
 				{
-					if ($use_curl)
+					if (function_exists('http_build_query'))
 					{
-						if (substr($param_value,0,1)=='@') $param_value=' @'.substr($param_value,1);
+						$post_params_copy=$post_params;
+						foreach ($post_params_copy as $param_key=>$param_value)
+						{
+							if (($use_curl) && (substr($param_value,0,1)=='@'))
+							{
+								$param_value=' @'.substr($param_value,1);
+								$post_params_copy[$param_key]=$param_value;
+							}
+						}
+						$_postdetails_params.='?'.http_build_query($post_params_copy);
+					} else
+					{
+						$first=true;
+						foreach ($post_params as $param_key=>$param_value)
+						{
+							if ($use_curl)
+							{
+								if (substr($param_value,0,1)=='@') $param_value=' @'.substr($param_value,1);
+							}
+							$_postdetails_params.=((array_key_exists('query',$url_parts)) || (!$first))?('&'.$param_key.'='.rawurlencode($param_value)):($param_key.'='.rawurlencode($param_value));
+							$first=false;
+						}
 					}
-					$_postdetails_params.=(!$first)?('&'.$param_key.'='.rawurlencode($param_value)):($param_key.'='.rawurlencode($param_value));
-					$first=false;
 				}
 			}
 		}
@@ -848,7 +871,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		{
 			$connect_to=ocp_srv('LOCAL_ADDR');
 			if ($connect_to=='') $connect_to='127.0.0.1'; // Localhost can fail due to IP6
-		} elseif (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions'))==0) $connect_to=gethostbyname($connect_to); // for DNS cacheing
+		} elseif (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions'))==0) $connect_to=@gethostbyname($connect_to); // for DNS cacheing
 		$proxy=function_exists('get_value')?get_value('proxy',NULL,true):NULL;
 		if ($proxy=='') $proxy=NULL;
 		if ((!is_null($proxy)) && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
