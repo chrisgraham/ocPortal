@@ -103,11 +103,6 @@ class Module_admin_permissions
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))
 		{
 			add_specific_permission('SUBMISSION','unfiltered_input',false);
-
-			if (!permission_exists('perform_keyword_check'))
-			{
-				add_specific_permission('SUBMISSION','perform_keyword_check',false);
-			}
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
