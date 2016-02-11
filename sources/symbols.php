@@ -588,10 +588,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 						require_code('banners');
 
 						$b_type=isset($param[0])?$param[0]:'';
-						$internal_only=isset($param[1])?intval($param[1]):(($b_type=='')?0:1);
+						$internal_only=isset($param[2])?intval($param[2]):(($b_type=='')?0:1);
 						if (isset($GLOBALS['NON_CACHEABLE_SYMBOLS']['SET_RAND'])) // Normal operation
 						{
-							$_value=banners_script(true,'','',$b_type,$internal_only,'');
+							$b_algorithm = isset($param[1])?$param[1]:NULL;
+							$_value=banners_script(true,'','',$b_type,$b_algorithm,$internal_only,'');
 							$value=$_value->evaluate();
 						} else // Been told to behave statically
 						{
