@@ -80,4 +80,3 @@ If you require assistance for an upgrade, consider the [page="site:support"]Expe
  - [page="_SEARCH:tut_install"]Basic Installation[/page]
  - [page="_SEARCH:tut_adv_installation"]Advanced installation[/page]
  - [page="_SEARCH:tut_backup"]Backing up your site[/page]
- - [page="_SEARCH:tut_support"]Getting support, making requests, reporting bugs, registration, and paid consultancy[/page]
