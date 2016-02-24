@@ -561,7 +561,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 	if (!is_object($url))
 	{
 		$parts=array();
-		if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page link. Complex regexp to make sure URLs do not match
+		if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto') && ($parts[1]!='http') && ($parts[1]!='https')) // Specially encoded page link. Complex regexp to make sure URLs do not match
 		{
 			$page_link=$url;
 			list($zone_name,$map,$hash)=page_link_decode($url);
