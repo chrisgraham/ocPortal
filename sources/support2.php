@@ -313,7 +313,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 	if ((get_option('site_closed')=='0') || (get_option('no_stats_when_closed',true)!=='1'))
 	{
 		$ip=get_ip_address();
-		$GLOBALS['SITE_DB']->query_insert('adminlogs',array('the_type'=>$type,'param_a'=>is_null($a)?'':substr($a,0,80),'param_b'=>is_null($b)?'':substr($b,0,80),'date_and_time'=>time(),'the_user'=>get_member(),'ip'=>$ip));
+		$GLOBALS['SITE_DB']->query_insert('adminlogs',array('the_type'=>$type,'param_a'=>is_null($a)?'':ocp_mb_substr($a,0,80),'param_b'=>is_null($b)?'':ocp_mb_substr($b,0,80),'date_and_time'=>time(),'the_user'=>get_member(),'ip'=>$ip));
 	}
 
 	decache('side_tag_cloud');

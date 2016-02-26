@@ -264,7 +264,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
-			'm_subject'=>substr($subject_line,0,255),
+			'm_subject'=>ocp_mb_substr($subject_line,0,255),
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),
