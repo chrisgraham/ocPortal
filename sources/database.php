@@ -297,7 +297,7 @@ function get_db_site()
 function get_db_site_user()
 {
 	global $SITE_INFO;
-	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) return substr(md5($SITE_INFO['db_forums_user'].'_'.$GLOBALS['CURRENT_SHARE_USER']),0,16);
+	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) return substr(md5($SITE_INFO['db_site_user'].'_'.$GLOBALS['CURRENT_SHARE_USER']),0,16);
 	return ((array_key_exists('db_site_user',$SITE_INFO)) && ($SITE_INFO['db_site_user']!==NULL))?$SITE_INFO['db_site_user']:'root';
 }
 

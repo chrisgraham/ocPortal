@@ -105,6 +105,14 @@ class Module_admin_permissions
 			add_specific_permission('SUBMISSION','unfiltered_input',false);
 		}
 
+		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
+		{
+			if (!permission_exists('perform_keyword_check'))
+			{
+				add_specific_permission('SUBMISSION','perform_keyword_check',false);
+			}
+		}
+
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
 			add_specific_permission('STAFF_ACTIONS','may_enable_staff_notifications',false);

@@ -338,7 +338,7 @@ function get_field_restrict_property($property,$field,$page=NULL,$type=NULL)
  * @param  ?integer		The maximum length of the field (NULL: default 80)
  * @return tempcode		The input field
  */
-function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL)
+function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=40)
 {
 	if (is_null($default)) $default='';
 

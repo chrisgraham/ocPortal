@@ -1060,7 +1060,7 @@ class Module_admin_ocf_join
 					$custom_fields[$cpf['id']]=array_key_exists($cpf['text_original'],$line)?$line[$cpf['text_original']]:$cpf['cf_default'];
 					if ((!array_key_exists($cpf['text_original'],$line)) && ($cpf['cf_type']=='list'))
 					{
-						$parts=explode($custom_fields[$cpf['id']],'|');
+						$parts=explode('|',$custom_fields[$cpf['id']]);
 						$custom_fields[$cpf['id']]=$parts[0];
 					}
 					if ($cpf['cf_type']=='integer')
