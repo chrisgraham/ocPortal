@@ -140,9 +140,8 @@ function tar_get_directory(&$resource,$tolerate_errors=false)
 					fseek($myfile,$block_size,SEEK_CUR);
 				} else
 				{
-					fseek($myfile,512,SEEK_CUR);
 					$next_name=fread($myfile,$size);
-					fseek($myfile,$block_size-512-$size,SEEK_CUR);
+					fseek($myfile,$block_size-$size,SEEK_CUR);
 				}
 			}
 

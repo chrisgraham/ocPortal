@@ -196,7 +196,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 			$myrow=$rows[$counter];
 
 			if (($myrow['the_type']==2) && (!$show_defaults)) $myrow['importance_modulus']=0;
-			$tally+=$myrow['importance_modulus'];
+			$tally+=max(0,$myrow['importance_modulus']);
 			$bound[$counter]=$tally;
 			$counter++;
 		}
