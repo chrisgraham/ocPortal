@@ -34,7 +34,8 @@ class Hook_checklist_cedi
 
 		// CEDI moderation
 		$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA');
-		$url=build_url(array('page'=>'cedi'),get_module_zone('cedi'));
+		$_url=build_url(array('page'=>'cedi'),get_module_zone('cedi'));
+		$url=escape_html_tempcode($_url);
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'f32f27f6f9aa77bea277e2f5d4deb6e7','URL'=>'','STATUS'=>$status,'TASK'=>urlise_lang(do_lang('NAG_CEDI'),$url),'INFO'=>''));
 		return array(array($tpl,NULL,NULL,NULL));
 	}

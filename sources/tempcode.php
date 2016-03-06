@@ -347,6 +347,17 @@ function make_string_tempcode($string)
 }
 
 /**
+ * Add entity entity escaping to a string/Tempcode.
+ *
+ * @param  mixed			String or Tempcode
+ * @return Tempcode		Tempcode
+ */
+function escape_html_tempcode($data)
+{
+	return build_closure_tempcode(TC_LANGUAGE_REFERENCE,'dont_escape_trick',array($data),array(FORCIBLY_ENTITY_ESCAPED));
+}
+
+/**
  * Apply whatever escaping is requested to the given value.
  *
  * @param  array			A list of escaping to do

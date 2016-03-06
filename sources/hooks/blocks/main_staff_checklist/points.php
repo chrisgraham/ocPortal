@@ -33,7 +33,8 @@ class Hook_checklist_points
 		{
 			require_lang('points');
 
-			$url=build_url(array('page'=>'admin_points'),'adminzone');
+			$_url=build_url(array('page'=>'admin_points'),'adminzone');
+			$url=escape_html_tempcode($_url);
 			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA');
 			$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'f421d75a70956d3beddf16c3f8138f26','URL'=>'','STATUS'=>$status,'TASK'=>urlise_lang(do_lang('NAG_MONITOR_GIFTS'),$url),'INFO'=>''));
 			return array(array($tpl,NULL,NULL,NULL));
