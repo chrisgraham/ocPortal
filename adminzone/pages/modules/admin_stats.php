@@ -935,6 +935,7 @@ class Module_admin_stats
 	{
 		$page_request=_request_page(get_zone_default_page(''),'');
 		$page=$page_request[count($page_request)-1];
+		if (is_array($page)) $page=$page['r_to_page'];
 
 		$title=get_screen_title('OVERVIEW_STATISTICS');
 

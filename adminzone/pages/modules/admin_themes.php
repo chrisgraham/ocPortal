@@ -1419,7 +1419,7 @@ class Module_admin_themes
 			} else $old_contents='';
 
 			$matches=array();
-			$cnt=preg_match_all('#\{([\w][\w\_]*)\}#',$old_contents,$matches);
+			$cnt=preg_match_all('#\{([\w][\w\_]*)[\*;%\#]?\}#',$old_contents,$matches);
 			$parameters=new ocp_tempcode();
 			$p_done=array();
 			for ($j=0;$j<$cnt;$j++)
