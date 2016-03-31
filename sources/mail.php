@@ -699,8 +699,6 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 							$rcv=fread($socket,1024);
 							if (strtolower(substr($rcv,0,3))=='354')
 							{
-								$attractive_date=strftime('%d %B %Y  %H:%M:%S',time());
-
 								$_to_name=preg_replace('#@.*$#','',is_array($to_name)?$to_name[$i]:$to_name); // preg_replace is because some servers may reject sending names that look like e-mail addresses. ocP tries this from recommend module.
 								if (count($to_email)==1)
 								{
@@ -716,7 +714,6 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 									fwrite($socket,'To: '.$_to_name."\r\n");
 								}
 								fwrite($socket,'Subject: '.$tightened_subject."\r\n");
-								fwrite($socket,'Date: '.$attractive_date."\r\n");
 								$headers=preg_replace('#^\.#m','..',$headers);
 								$sending_message=preg_replace('#^\.#m','..',$sending_message);
 								fwrite($socket,$headers."\r\n");
