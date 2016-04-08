@@ -133,6 +133,7 @@ class Block_main_staff_checklist
 			decache('main_staff_checklist');
 		}
 		$custasks=new ocp_tempcode();
+		require_lang('dates');
 		$rows=$GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
 		foreach($rows as $r)
 		{
