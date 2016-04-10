@@ -337,7 +337,7 @@ function make_string_tempcode($string)
  * Add entity entity escaping to a string/Tempcode.
  *
  * @param  mixed			String or Tempcode
- * @return Tempcode		Tempcode
+ * @return tempcode		Tempcode
  */
 function escape_html_tempcode($data)
 {
