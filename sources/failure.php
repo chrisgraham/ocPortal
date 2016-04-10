@@ -392,7 +392,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	}
 	$hack_threshold=5;
 	if ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (function_exists('get_member')) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) $count=0;
-	$new_row=array('user_agent'=>substr(get_browser_string(),0,255),'referer'=>substr(ocp_srv('HTTP_REFERER'),0,255),'user_os'=>substr(get_os_string(),0,255),'reason'=>$reason,'reason_param_a'=>substr($reason_param_a,0,255),'reason_param_b'=>substr($reason_param_b,0,255),'url'=>substr($url,0,255),'data_post'=>$post,'the_user'=>$id,'date_and_time'=>time(),'ip'=>$ip);
+	$new_row=array('user_agent'=>substr(get_browser_string(),0,255),'referer'=>substr(ocp_srv('HTTP_REFERER'),0,255),'user_os'=>substr(get_os_string(),0,255),'reason'=>$reason,'reason_param_a'=>ocp_mb_substr($reason_param_a,0,255),'reason_param_b'=>ocp_mb_substr($reason_param_b,0,255),'url'=>substr($url,0,255),'data_post'=>$post,'the_user'=>$id,'date_and_time'=>time(),'ip'=>$ip);
 	$ip_ban_todo=NULL;
 	if (($count>=$hack_threshold) && (get_option('autoban')!='0'))
 	{

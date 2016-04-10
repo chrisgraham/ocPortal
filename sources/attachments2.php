@@ -121,7 +121,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	$may_have_one=false;
 	foreach($_POST as $key=>$value)
 	{
-		if (preg_match('#^hidFileID\_#i',$key)!=0)
+		if (is_string($key) && preg_match('#^hidFileID\_#i',$key)!=0)
 		{
 			require_code('uploads');
 			$may_have_one=is_swf_upload();
@@ -451,7 +451,7 @@ function _check_attachment_count()
 		$may_have_one=false;
 		foreach($_POST as $key=>$value)
 		{
-			if (preg_match('#^hidFileID\_#i',$key)!=0)
+			if (is_string($key) && preg_match('#^hidFileID\_#i',$key)!=0)
 			{
 				require_code('uploads');
 				$may_have_one=is_swf_upload();

@@ -1032,7 +1032,7 @@ class Module_admin
 					$tree->attach(do_template('BREADCRUMB_ESCAPED'));
 					$tree->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'misc'),'adminzone'),do_lang_tempcode('THEMES')));
 					$tree->attach(do_template('BREADCRUMB_ESCAPED'));
-					$tree->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'edit_css','theme'=>$image['theme']),'adminzone'),do_lang_tempcode('EDIT_THEME_IMAGE')));
+					$tree->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'manage_images','theme'=>$image['theme']),'adminzone'),do_lang_tempcode('EDIT_THEME_IMAGE')));
 					$tree->attach(do_template('BREADCRUMB_ESCAPED'));
 					$tree->attach(escape_html($image['theme']));
 					$sup=do_lang_tempcode('LOCATED_IN',$tree);

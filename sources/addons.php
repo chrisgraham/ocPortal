@@ -399,7 +399,7 @@ description=".$description."
 }
 
 /**
- * Uninstall an addon.
+ * Install an addon.
  *
  * @param  string			Name of the addon
  * @param  ?array			The files to install (NULL: all)

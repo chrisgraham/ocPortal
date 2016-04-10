@@ -693,6 +693,7 @@ function do_site()
 			$ob=object_factory('Hook_content_meta_aware_'.$hook,true);
 			if ($ob===NULL) continue;
 			$ob_info=$ob->info();
+			if (!isset($ob_info['view_pagelink_pattern'])) continue;
 			$ob_info['view_pagelink_pattern']=preg_replace('#:[^:]*$#',':_WILD',$ob_info['view_pagelink_pattern']);
 
 			if (($ob_info['view_pagelink_pattern']==$looking_for) && ($ob_info['support_url_monikers']))

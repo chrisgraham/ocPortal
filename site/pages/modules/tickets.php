@@ -537,7 +537,7 @@ class Module_tickets
 						generate_captcha();
 					}
 				} else $use_captcha=false;
-				$comment_form=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'aaa32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'ATTACHMENTS'=>$attachments,'ATTACH_SIZE_FIELD'=>$attach_size_field,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>is_guest(),'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST')));
+				$comment_form=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'aaa32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'ATTACHMENTS'=>$attachments,'ATTACH_SIZE_FIELD'=>$attach_size_field,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>is_guest(),'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory']==1)),'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST')));
 			} else
 			{
 				$comment_form=new ocp_tempcode();
@@ -705,7 +705,7 @@ class Module_tickets
 				if (substr($body,-2)=='> ') $body=substr($body,0,strlen($body)-2);
 				$new_post->attach('[email subject="Re: '.comcode_escape(post_param('title')).' ['.get_site_name().']" body="'.comcode_escape($body).'"]'.$email.'[/email]'."\n\n");
 			}
-			elseif ((is_guest()) && ($ticket_type_details['guest_emails_mandatory']))
+			elseif ((is_guest()) && ($ticket_type_details['guest_emails_mandatory']==1))
 			{
 				// Error if the e-mail address is required for this ticket type
 				warn_exit(do_lang_tempcode('ERROR_GUEST_EMAILS_MANDATORY'));

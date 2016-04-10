@@ -227,7 +227,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
-			'm_subject'=>substr($subject_tag,0,255),
+			'm_subject'=>ocp_mb_substr($subject_tag,0,255),
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),
@@ -600,8 +600,6 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 							$rcv=fread($socket,1024);
 							if (strtolower(substr($rcv,0,3))=='354')
 							{
-								$attractive_date=strftime('%d %B %Y  %H:%M:%S',time());
-
 								$_to_name=preg_replace('#@.*$#','',is_array($to_name)?$to_name[$i]:$to_name); // preg_replace is because some servers may reject sending names that look like e-mail addresses. ocP tries this from recommend module.
 								if (count($to_email)==1)
 								{
@@ -617,7 +615,6 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 									fwrite($socket,'To: '.$_to_name."\r\n");
 								}
 								fwrite($socket,'Subject: '.$tightened_subject."\r\n");
-								fwrite($socket,'Date: '.$attractive_date."\r\n");
 								$headers=preg_replace('#^\.#m','..',$headers);
 								$sending_message=preg_replace('#^\.#m','..',$sending_message);
 								fwrite($socket,$headers."\r\n");

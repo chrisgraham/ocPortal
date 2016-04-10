@@ -398,6 +398,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 			{
 				room_id=messages[i].getAttribute("room_id");
 				current_room_id=room_id;
+				message_container=null;
 			} else
 			{
 				current_room_id=messages[i].getAttribute("room_id");

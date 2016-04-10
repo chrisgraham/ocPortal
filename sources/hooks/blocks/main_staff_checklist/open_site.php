@@ -28,7 +28,8 @@ class Hook_checklist_open_site
 	 */
 	function run()
 	{
-		$url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'SITE'),'adminzone',NULL,false,false,false,'group_CLOSED_SITE');
+		$_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'SITE'),'adminzone',NULL,false,false,false,'group_CLOSED_SITE');
+		$url=escape_html_tempcode($_url);
 		$task=urlise_lang(do_lang('NAG_OPEN_WEBSITE'),$url);
 
 		$status=(get_option('site_closed')=='1')?0:1;

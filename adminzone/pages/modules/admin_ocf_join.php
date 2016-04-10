@@ -1048,7 +1048,7 @@ class Module_admin_ocf_join
 					$custom_fields[$cpf['id']]=array_key_exists($cpf['text_original'],$line)?$line[$cpf['text_original']]:$cpf['cf_default'];
 					if ((!array_key_exists($cpf['text_original'],$line)) && ($cpf['cf_type']=='list'))
 					{
-						$parts=explode($custom_fields[$cpf['id']],'|');
+						$parts=explode('|',$custom_fields[$cpf['id']]);
 						$custom_fields[$cpf['id']]=$parts[0];
 					}
 					if ($cpf['cf_type']=='integer')
@@ -1059,7 +1059,7 @@ class Module_admin_ocf_join
 						$custom_fields[$cpf['id']]=((strtoupper($custom_fields[$cpf['id']])=='YES' || strtoupper($custom_fields[$cpf['id']])=='Y' || strtoupper($custom_fields[$cpf['id']])=='ON' || $custom_fields[$cpf['id']]=='1')?1:0);
 					} elseif (($cpf['cf_type']=='short_text') || ($cpf['cf_type']=='short_trans'))
 					{
-						$custom_fields[$cpf['id']]=substr(str_replace(chr(10),', ',str_replace(','.chr(10),chr(10),$custom_fields[$cpf['id']])),0,255);
+						$custom_fields[$cpf['id']]=ocp_mb_substr(str_replace(chr(10),', ',str_replace(','.chr(10),chr(10),$custom_fields[$cpf['id']])),0,255);
 					} elseif (($cpf['cf_type']=='long_text') || ($cpf['cf_type']=='long_trans'))
 					{
 						//$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];

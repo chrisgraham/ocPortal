@@ -76,7 +76,7 @@ function delete_ticket_type($ticket_type)
  */
 function get_ticket_type($ticket_type)
 {
-	if (is_null($ticket_type)) return array('ticket_type'=>NULL,'guest_emails_mandatory'=>false,'search_faq'=>false,'cache_lead_time'=>NULL);
+	if (is_null($ticket_type)) return array('ticket_type'=>NULL,'guest_emails_mandatory'=>0,'search_faq'=>0,'cache_lead_time'=>NULL);
 
 	$row=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL,array('ticket_type'=>$ticket_type),'',1);
 	if (count($row)==0) return NULL;
