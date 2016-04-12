@@ -120,8 +120,8 @@ function incoming_uploads_script()
 	if ($is_uploaded)
 	{
 		$max_length=255;
-		$field_type_test=$GLOBALS['SITE_DB']->query_value('db_meta','m_type',array('m_name'=>'i_orig_filename'));
-		if ($field_type_test=='ID_TEXT') $max_length=80; // Legacy
+		$field_type_test=$GLOBALS['SITE_DB']->query_value_null_ok('db_meta','m_type',array('m_name'=>'i_orig_filename'));
+		if ($field_type_test==='ID_TEXT') $max_length=80; // Legacy
 		$name=substr($name,max(0,strlen($name)-$max_length));
 
 		header('Content-type: text/plain; charset='.get_charset());
