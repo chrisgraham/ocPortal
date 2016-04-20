@@ -53,6 +53,8 @@ If you need to be able to easily remove 'bounce' emails from newsletter subscrib
 
 If encrypted CPFs are needed (see the [page="_SEARCH:tut_adv_members"]Advanced ocPortal member system[/page] tutorial), the PHP OpenSSL extension is required.
 
+PHP 5.2 is needed for the weather block.
+
 [title="2"]Forum drivers[/title]
 
 Please note that many 'forum systems' are referred to as 'bulletin boards', and that a 'forum' within 'forums' is often referred to as a 'board'. We consistently use the terms 'discussion forums', 'forums' and 'forum' to describe these.

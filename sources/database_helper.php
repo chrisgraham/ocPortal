@@ -411,9 +411,7 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 	}
 	$type_remap=$this_ref->static_ob->db_get_type_remap();
 	$extra=(!is_null($new_name))?$new_name:$name;
-	$extra2='';
-	if (substr(get_db_type(),0,5)=='mysql') $extra2='IGNORE ';
-	$query='ALTER '.$extra2.'TABLE '.$this_ref->table_prefix.$table_name.' CHANGE ';
+	$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' CHANGE ';
 	if (strpos(get_db_type(),'mysql')!==false)
 	{
 		$query.='`'.$name.'`'; // In case we renamed due to change in keywords
