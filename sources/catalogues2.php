@@ -466,14 +466,14 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_categories',$map,true);
 
+	store_in_catalogue_cat_treecache($id,$parent_id);
+
 	calculate_category_child_count_cache($parent_id);
 
 	log_it('ADD_CATALOGUE_CATEGORY',strval($id),get_translated_text($title));
 
 	require_code('seo2');
 	if (!is_numeric($title)) seo_meta_set_for_implicit('catalogue_category',strval($id),array($title,$description),$title);
-
-	store_in_catalogue_cat_treecache($id,$parent_id);
 
 	if (!is_null($parent_id))
 	{

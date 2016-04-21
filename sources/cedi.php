@@ -312,7 +312,6 @@ function cedi_delete_page($id)
 		{
 			cedi_delete_post($post['id']);
 		}
-		$start+=500;
 	}
 	while (array_key_exists(0,$posts));
 	$pages=$GLOBALS['SITE_DB']->query_select('seedy_pages',array('*'),array('id'=>$id),'',1);
