@@ -700,7 +700,7 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 	$avoid=array();
 	if (isset($_GET['avoid']))
 		$avoid=explode(',',$_GET['avoid']);
-	$files=do_dir($OCPORTAL_PATH.(isset($_GET['subdir'])?('/'.$_GET['subdir']):''),true,false,$avoid);
+	$files=do_dir($OCPORTAL_PATH.(isset($_GET['subdir'])?('/'.$_GET['subdir']):''),true,true,$avoid);
 	$start=isset($_GET['start'])?intval($_GET['start']):0;
 	foreach ($files as $i=>$to_use)
 	{

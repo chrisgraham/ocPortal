@@ -5444,9 +5444,12 @@ function queueChanged(ob)
 {
 	if (ob.settings.page_type!='upload_multi') // In case widget has multi selection even though we disabled it
 	{
-		for (var i=1;i<ob.files.length;i++)
+		if (ob.files.length>1)
 		{
-			ob.removeFile(ob.files[i]);
+			for (var i=ob.files.length-2;i>=0;i--)
+			{
+				ob.removeFile(ob.files[i]);
+			}
 		}
 	}
 }
