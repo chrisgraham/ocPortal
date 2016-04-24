@@ -208,7 +208,7 @@ There are many factors to cookie integration, and it is renowned to be problemat
 
 [b]How do I change the forum base-URL (because my forum links and emoticons are broken)?[/b]
 You must correct it using the config editor script, available under the 'Environment' link in the 'Configuration' box of the Admin Zone. The installer asked for this value, but many users (wrongly) do not change it from the default auto-detected value.
-Note that once the value in the config editor is changed, the 'Comcode page cache' must be cleared so as to update the value. To do this, hold down Ctrl+Alt+Shift and reload a page from your ocPortal site in a browser, when logged into ocPortal as an administrator. Clearing the caches manually is only necessary when using the config editor, as it is separated from ocPortal for fail-safe reasons.
+Note that once the value in the config editor is changed, the 'Comcode page cache' must be cleared so as to update the value. Clearing the caches manually is only necessary when using the config editor, as it is separated from ocPortal for fail-safe reasons.
 
 [b]Why do I not have commenting boxes on my portal?[/b]
 You must create a comment forum with the name specified in your configuration settings. Also, commenting must be enabled for the content involved, and must be enabled globally (-- although both these elements allow commenting by default).

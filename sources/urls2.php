@@ -127,7 +127,7 @@ function _build_keep_post_fields($exclude=NULL)
  */
 function _url_to_filename($url_full)
 {
-	$bad_chars=array('!','/','\\','?','*','<','>','|','"',':');
+	$bad_chars=array('!','/','\\','?','*','<','>','|','"',':','%',' '););
 	$new_name=$url_full;
 	foreach ($bad_chars as $bad_char)
 	{
