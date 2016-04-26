@@ -64,7 +64,7 @@ The cache is implemented to work with either:
  - memcache ('memcache' is the PHP extension for the 'memcached' server), which provides a heavyweight solution to memory sharing -- it is not recommended that this be used, as it requires additional configuration and PHP memcached support (by the mainstream extension) is limited, leading ocPortal to not be able to make use of its advantage over eAccelerator (a network of memory servers)
  - disk cache -- whilst this does increase disk usage, it still provides a performance boost over not having a persistent cache. Don't use the disk cache is a production situation as it is not designed to work on busy servers (file access conflicts)
 
-ocPortal will not use a persistent cache by default (except in v6.0.0) but it may be enable from the installation options editor.
+ocPortal will not use a persistent cache by default (except in v6.0.0) but it may be enabled from the installation options editor.
 
 ocPortal does not cache processed content in memory that has no special featured status, as this would only trade reliance on CPU for reliance on memory in a non-productive fashion.
 

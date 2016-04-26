@@ -2705,7 +2705,7 @@ order allow,deny
 allow from all
 END;
 
-$base=dirname(ocp_srv('PHP_SELF'));
+$base=str_replace('\\','/',dirname(ocp_srv('PHP_SELF')));
 $clauses[]=<<<END
 <FilesMatch !"\.(jpg|jpeg|gif|png|ico)$">
 ErrorDocument 404 {$base}/index.php?page=404

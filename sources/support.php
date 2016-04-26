@@ -456,7 +456,8 @@ function addon_installed($addon,$non_bundled_too=false)
 function float_to_raw_string($num,$decs_wanted=2,$only_needed_decs=false)
 {
 	$str=number_format($num,$decs_wanted,'.','');
-	$decs_here=strlen($str)-strpos($str,'.')-1;
+	$dot_pos=strpos($str,'.');
+	$decs_here=($dot_pos===false)?0:(strlen($str)-$dot_pos-1);
 	if ($decs_here<$decs_wanted)
 	{
 		for ($i=0;$i<$decs_wanted-$decs_here;$i++)
@@ -485,7 +486,8 @@ function float_format($val,$decs_wanted=2,$only_needed_decs=false)
 	$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
 	if ($locale['thousands_sep']=='') $locale['thousands_sep']=',';
 	$str=number_format($val,$decs_wanted,$locale['decimal_point'],$locale['thousands_sep']);
-	$decs_here=strlen($str)-strpos($str,'.')-1;
+	$dot_pos=strpos($str,'.');
+	$decs_here=($dot_pos===false)?0:(strlen($str)-$dot_pos-1);
 	if ($decs_here<$decs_wanted)
 	{
 		for ($i=0;$i<$decs_wanted-$decs_here;$i++)
