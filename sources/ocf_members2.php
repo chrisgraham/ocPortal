@@ -158,7 +158,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 	foreach ($poster_details['custom_fields'] as $name=>$value)
 	{
 		if ((!is_null($value)) && ($value!==''))
-			$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'10b72cd1ec240c315e56bc8a0f3a92a1','MEMBER_ID'=>strval($member_id),'NAME'=>$name,'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
+			$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'10b72cd1ec240c315e56bc8a0f3a92a1','MEMBER_ID'=>strval($member_id),'NAME'=>@strval($name),'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
 	}
 	$custom_fields_full=new ocp_tempcode();
 	if (array_key_exists('custom_fields_full',$poster_details))
@@ -166,7 +166,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 		foreach ($poster_details['custom_fields_full'] as $name=>$value)
 		{
 			if ((!is_null($value)) && ($value!==''))
-				$custom_fields_full->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'20b72cd1ec240c315e56bc8a0f3a92a1','MEMBER_ID'=>strval($member_id),'NAME'=>$name,'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
+				$custom_fields_full->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'20b72cd1ec240c315e56bc8a0f3a92a1','MEMBER_ID'=>strval($member_id),'NAME'=>@strval($name),'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
 		}
 	}
 	$ip_address=NULL;
@@ -204,7 +204,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 	{
 		foreach ($extra_fields as $key=>$val)
 		{
-			$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'530f049d3b3065df2d1b69270aa93490','MEMBER_ID'=>strval($member_id),'NAME'=>$key,'VALUE'=>($val))));
+			$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'530f049d3b3065df2d1b69270aa93490','MEMBER_ID'=>strval($member_id),'NAME'=>@strval($key),'VALUE'=>($val))));
 		}
 	}
 
