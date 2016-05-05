@@ -250,16 +250,16 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 
 			if ($_type=='float')
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:floatval($_default));
+				$entry_map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:floatval($_default));
 			}
 			elseif ($_type=='integer')
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:intval($_default));
+				$entry_map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:intval($_default));
 			} else
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>(is_null($default) || ($type=='list') || ($type=='radiolist') || ($type=='multilist'))?'':$_default);
+				$entry_map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>(is_null($default) || ($type=='list') || ($type=='radiolist') || ($type=='multilist'))?'':$_default);
 			}
-			$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$_type,$map);
+			$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$_type,$entry_map);
 		}
 
 		$start+=300;
