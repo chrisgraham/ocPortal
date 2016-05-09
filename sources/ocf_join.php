@@ -204,8 +204,8 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
  * @param  boolean		Whether to ask for intro messages (if enabled at all)
  * @param  boolean		Whether to check for invites (if enabled at all)
  * @param  boolean		Whether to check email-address restrictions (if enabled at all)
- * @param  boolean		Whether to require staff confirmation (if enabled at all)
- * @param  boolean		Whether to force email address validation (if enabled at all)
+ * @param  boolean		Whether to require email address validation (if enabled at all)
+ * @param  boolean		Whether to force staff validation (if enabled at all)
  * @param  boolean		Whether to do COPPA checks (if enabled at all)
  * @param  boolean		Whether to instantly log the user in
  * @return array			A tuple: Messages to show (currently nothing else in tuple)
