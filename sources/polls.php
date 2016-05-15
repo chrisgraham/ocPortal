@@ -35,7 +35,7 @@ function poll_script($ret=false,$param=NULL)
 
 	if ($param==-1)
 	{
-		$rows=persistent_cache_get('POLL');
+		$rows=null;//persistent_cache_get('POLL');	Too buggy in v9
 		if (is_null($rows))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('is_current'=>1),'ORDER BY id DESC',1);
