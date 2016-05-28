@@ -114,7 +114,7 @@ function ocf_is_httpauth_member($member_id)
 function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
 {
 	global $CUSTOM_FIELD_CACHE;
-	$x=serialize(array($public_view,$owner_view,$owner_set,$required,$show_in_posts,$show_in_post_previews,$special_start));
+	$x=serialize(array($public_view,$owner_view,$owner_set,$required,$show_in_posts,$show_in_post_previews,$special_start,$show_on_join_form));
 	if (array_key_exists($x,$CUSTOM_FIELD_CACHE)) // ocPortal offers a wide array of features. It's multi dimensional. ocPortal.. entering the 6th dimension. hyper-hyper-time.
 	{
 		$result=$CUSTOM_FIELD_CACHE[$x];

@@ -813,7 +813,7 @@ class Module_tickets
 		if (is_null($info)) return NULL;
 
 		// Get the ID of the default FAQ catalogue
-		$catalogue_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','id',array('c_name'=>'faqs'));
+		$catalogue_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','id',array('c_name'=>'faqs'));
 		if (is_null($catalogue_id)) return NULL;
 
 		// Category filter
