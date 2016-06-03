@@ -86,6 +86,7 @@ function is_ticket_forum($forum_id)
 	if (is_null($forum_id)) return false;
 
 	$root_ticket_forum_id=get_ticket_forum_id(NULL,NULL,false,true);
+	if (is_null($root_forum_id)) return NULL;
 	if (($root_ticket_forum_id==db_get_first_id()) && ($forum_id!=db_get_first_id())) return false; // If ticket forum (oddly) set as root, don't cascade it through all!
 	if ($forum_id===$root_ticket_forum_id) return true;
 
