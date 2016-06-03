@@ -204,7 +204,6 @@ function user_lang()
 		return get_site_default_lang();
 	}
 
-	// In URL?
 	$lang='';
 	$special_page_type=get_param('special_page_type','');
 	if ($special_page_type!='' && substr($special_page_type,0,5)=='lang_')
@@ -246,7 +245,6 @@ function user_lang()
 	}
 	$USER_LANG_LOOP=1;
 
-	// In URL?
 	if (($lang!='') && (does_lang_exist($lang)))
 	{
 		$USER_LANG_CACHED=$lang;
