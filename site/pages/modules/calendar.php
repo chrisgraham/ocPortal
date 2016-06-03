@@ -231,6 +231,8 @@ class Module_calendar
 			$types=$GLOBALS['SITE_DB']->query_select('calendar_types');
 			foreach ($types as $type)
 			{
+				if ($type['id'] == db_get_first_id()) continue;
+
 				foreach (array_keys($groups) as $group_id)
 				{
 					if (in_array($group_id,$admin_groups)) continue;

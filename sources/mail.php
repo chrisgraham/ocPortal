@@ -386,17 +386,17 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	$headers.='MIME-Version: 1.0'.$line_term;
 	if ((!is_null($attachments)) || (!$simplify_when_can))
 	{
-		$headers.='Content-Type: multipart/mixed;'."\n\t".'boundary="'.$boundary.'"';
+		$headers.='Content-Type: multipart/mixed; boundary="'.$boundary.'"';
 	} else
 	{
-		$headers.='Content-Type: multipart/alternative;'."\n\t".'boundary="'.$boundary2.'"';
+		$headers.='Content-Type: multipart/alternative; boundary="'.$boundary2.'"';
 	}
 	$sending_message='';
 	$sending_message.='This is a multi-part message in MIME format.'.$line_term.$line_term;
 	if ((!is_null($attachments)) || (!$simplify_when_can))
 	{
 		$sending_message.='--'.$boundary.$line_term;
-		$sending_message.='Content-Type: multipart/alternative;'."\n\t".'boundary="'.$boundary2.'"'.$line_term.$line_term.$line_term;
+		$sending_message.='Content-Type: multipart/alternative; boundary="'.$boundary2.'"'.$line_term.$line_term.$line_term;
 	}
 
 	global $CID_IMG_ATTACHMENT;
@@ -445,7 +445,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 	// HTML version
 	$sending_message.='--'.$boundary2.$line_term;
-	$sending_message.='Content-Type: multipart/related;'."\n\t".'type="text/html";'."\n\t".'boundary="'.$boundary3.'"'.$line_term.$line_term.$line_term;
+	$sending_message.='Content-Type: multipart/related; type="text/html"; boundary="'.$boundary3.'"'.$line_term.$line_term.$line_term;
 	$sending_message.='--'.$boundary3.$line_term;
 	$sending_message.='Content-Type: text/html; charset='.((preg_match($regexp,$html_evaluated)==0)?do_lang('charset',NULL,NULL,NULL,$lang):'us-ascii').$line_term; // .'; name="message.html"'.	Outlook doesn't like: makes it think it's an attachment
 	if (get_option('allow_ext_images')!='1')
@@ -583,8 +583,8 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 				if (is_null($error))
 				{
 					$smtp_from_address=get_option('smtp_from_address');
-					if ($smtp_from_address=='') $smtp_from_address=$from_email;
-					fwrite($socket,'MAIL FROM:<'.$website_email.">\r\n");
+					if ($smtp_from_address=='') $smtp_from_address=$website_email;
+					fwrite($socket,'MAIL FROM:<'.$smtp_from_address.">\r\n");
 					$rcv=fread($socket,1024);
 					if ((strtolower(substr($rcv,0,3))=='250') || (strtolower(substr($rcv,0,3))=='251'))
 					{
@@ -617,10 +617,14 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 								fwrite($socket,'Subject: '.$tightened_subject."\r\n");
 								$headers=preg_replace('#^\.#m','..',$headers);
 								$sending_message=preg_replace('#^\.#m','..',$sending_message);
-								fwrite($socket,$headers."\r\n");
+								fwrite($socket,$headers."\r\n\r\n");
 								fwrite($socket,$sending_message);
 								fwrite($socket,"\r\n.\r\n");
 								$rcv=fread($socket,1024);
+								if (strtolower(substr($rcv,0,3))!='250')
+								{
+									$error=do_lang('MAIL_ERROR_DATA').' ('.$rcv.')';
+								}
 								fwrite($socket,"QUIT\r\n");
 								$rcv=fread($socket,1024);
 							} else $error=do_lang('MAIL_ERROR_DATA').' ('.$rcv.')';

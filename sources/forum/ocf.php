@@ -722,40 +722,68 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function member_group_query($groups,$max=NULL,$start=0)
 	{
-		$_groups='';
-		foreach ($groups as $group)
+		if (db_has_subqueries($this->connection->connection_read))
 		{
-			if ($_groups!='') $_groups.=' OR ';
-			$_groups.='gm_group_id='.strval((integer)$group);
+			$_groups='';
+			foreach ($groups as $group)
+			{
+				if ($_groups!='')
+				{
+					$_groups.=',';
+				}
+				$_groups.=strval($group);
+			}
+			if ($_groups=='')
+			{
+				return array();
+			}
+			$sql='SELECT * FROM '.$this->connection->get_table_prefix().'f_members m WHERE m_primary_group IN ('.$_groups.') OR EXISTS(SELECT * FROM '.$this->connection->get_table_prefix().'f_group_members WHERE gm_group_id IN ('.$_groups.') AND gm_member_id=m.id AND gm_validated=1) ORDER BY m_primary_group ASC,id ASC';
+			$a=$this->connection->query($sql,$max,$start,false,true);
+			$out=array();
+			foreach ($a as $x)
+			{
+				$out[$x['id']]=$x;
+			}
+		} else
+		{ // This can be removed in the future, when we reduce our ancient MySQL tolerance
+			$_groups='';
+			foreach ($groups as $group)
+			{
+				if ($_groups!='') $_groups.=' OR ';
+				$_groups.='gm_group_id='.strval((integer)$group);
+			}
+			if ($_groups=='') return array();
+			$a=$this->connection->query('SELECT u.* FROM '.$this->connection->get_table_prefix().'f_group_members g JOIN '.$this->connection->get_table_prefix().'f_members u ON u.id=g.gm_member_id WHERE ('.$_groups.') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start);
+			$_groups='';
+			foreach ($groups as $group)
+			{
+				if ($_groups!='') $_groups.=' OR ';
+				$_groups.='m_primary_group='.strval((integer)$group);
+			}
+			$b=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE '.$_groups.' ORDER BY m_primary_group ASC',$max,$start);
+			$out=array();
+			foreach ($a as $x)
+				if (!array_key_exists($x['id'],$out)) $out[$x['id']]=$x;
+			foreach ($b as $x)
+				if (!array_key_exists($x['id'],$out)) $out[$x['id']]=$x;
 		}
-		if ($_groups=='') return array();
-		$a=$this->connection->query('SELECT u.* FROM '.$this->connection->get_table_prefix().'f_group_members g JOIN '.$this->connection->get_table_prefix().'f_members u ON u.id=g.gm_member_id WHERE ('.$_groups.') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start);
-		$_groups='';
-		foreach ($groups as $group)
-		{
-			if ($_groups!='') $_groups.=' OR ';
-			$_groups.='m_primary_group='.strval((integer)$group);
-		}
-		$b=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE '.$_groups.' ORDER BY m_primary_group ASC',$max,$start);
-		$out=array();
-		foreach ($a as $x)
-			if (!array_key_exists($x['id'],$out)) $out[$x['id']]=$x;
-		foreach ($b as $x)
-			if (!array_key_exists($x['id'],$out)) $out[$x['id']]=$x;
 
 		// Now implicit usergroup hooks
-		$hooks=find_all_hooks('systems','ocf_implicit_usergroups');
-		foreach (array_keys($hooks) as $hook)
+		if ($start==0)
 		{
-			require_code('hooks/systems/ocf_implicit_usergroups/'.$hook);
-			$ob=object_factory('Hook_implicit_usergroups_'.$hook);
-			if (in_array($ob->get_bound_group_id(),$groups))
+			$hooks=find_all_hooks('systems','ocf_implicit_usergroups');
+			foreach (array_keys($hooks) as $hook)
 			{
-				$c=$ob->get_member_list();
-				if (!is_null($c))
+				require_code('hooks/systems/ocf_implicit_usergroups/'.$hook);
+				$ob=object_factory('Hook_implicit_usergroups_'.$hook);
+				if (in_array($ob->get_bound_group_id(),$groups))
 				{
-					foreach ($c as $member_id=>$x)
-						$out[$member_id]=$x;
+					$c=$ob->get_member_list();
+					if (!is_null($c))
+					{
+						foreach ($c as $member_id=>$x)
+							$out[$member_id]=$x;
+					}
 				}
 			}
 		}
@@ -1489,7 +1517,7 @@ class forum_driver_ocf extends forum_driver_base
 					$this->connection->query_insert('f_member_known_login_ips',array('i_val_code'=>$code,'i_member_id'=>$row['id'],'i_ip'=>$ip));
 					$url=find_script('validateip').'?code='.$code;
 					$url_simple=find_script('validateip');
-                    require_code('comcode');
+					require_code('comcode');
 					$mail=do_lang('IP_VERIFY_MAIL',comcode_escape($url),comcode_escape(get_ip_address()),array($url_simple,$code),get_lang($row['id']));
 					$email_address=$row['m_email_address'];
 					if ($email_address=='') $email_address=get_option('staff_address');

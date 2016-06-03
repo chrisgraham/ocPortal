@@ -746,7 +746,9 @@ class standard_aed_module
 		if (($orderer_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
 		{
 			$table.=' LEFT JOIN '.$db->get_table_prefix().'translate t ON t.id=r.'.preg_replace('# (ASC|DESC)$#','',$orderer).' AND '.db_string_equal_to('language',user_lang());
-			$orderer='t.text_original';
+			$_orderer='t.text_original';
+			if (substr($orderer,-5)==' DESC') $_orderer.=' DESC';
+			$orderer=$_orderer;
 		}
 		if ($force_site_db)
 		{

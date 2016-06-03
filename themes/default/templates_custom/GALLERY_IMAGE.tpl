@@ -39,7 +39,7 @@
 					</tr>
 				{+END}
 
-				{$SET,rating,{$RATING,images,{ID},1}}
+				{$SET,rating,{$RATING,images,{ID},1,{SUBMITTER}}}
 				{+START,IF_NON_EMPTY,{$TRIM,{$GET,rating}}}
 					<tr>
 						<th class="de_th meta_data_title">{!RATING}</th>

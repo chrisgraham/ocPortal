@@ -1033,7 +1033,7 @@ function step_5()
 
 	if (($_POST['db_forums']!=$_POST['db_site']) && (get_forum_type()=='ocf'))
 	{
-		$tmp=new database_driver(trim(post_param('db_forums')),trim(post_param('db_forums_host')),trim(post_param('db_forums_user')),trim(post_param('db_forums_password')),$table_prefix);
+		$tmp=new database_driver(trim(post_param('db_forums')),trim(post_param('db_forums_host')),trim(post_param('db_forums_user')),trim(post_param('db_forums_password')),post_param('ocf_table_prefix'));
 		if (is_null($tmp->query_value_null_ok('db_meta','COUNT(*)',NULL,'',true))) warn_exit(do_lang_tempcode('MSN_FORUM_DB_NOT_OCF_ALREADY'));
 	}
 
@@ -2631,7 +2631,7 @@ order allow,deny
 allow from all
 END;
 
-$base=dirname(ocp_srv('PHP_SELF'));
+$base=str_replace('\\','/',dirname(ocp_srv('PHP_SELF')));
 $clauses[]=<<<END
 <FilesMatch !"\.(jpg|jpeg|gif|png|ico)$">
 ErrorDocument 404 {$base}/index.php?page=404

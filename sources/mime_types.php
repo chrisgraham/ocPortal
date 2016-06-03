@@ -35,7 +35,7 @@ function get_mime_type($extension)
 
 		// Documents
 		'pdf'=>'application/pdf',
-		'rtf'=>'text/richtext',
+		'rtf'=>'text/rtf',
 		'ps'=>'application/postscript',
 		'html'=>'application/octet-stream', // to prevent XSS
 		'htm'=>'application/octet-stream', // to prevent XSS

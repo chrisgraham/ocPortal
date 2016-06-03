@@ -2157,7 +2157,8 @@ END;
 	function mark_read_topic() // Type
 	{
 		$topic_id=get_param_integer('id');
-		$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
+		$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>$topic_id));
+		if (is_null($forum_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		ocf_ping_topic_read($topic_id);
 		if ((is_null($forum_id)) || (get_param_integer('ajax',0)==1))

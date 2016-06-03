@@ -134,7 +134,7 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 		if (!array_key_exists(0,$topic_rows))
 			return false;
 		require_code('ocf_topics');
-		if ($topic_rows[0]['t_forum_id']==NULL && ($topic_rows[0]['t_pt_from']!=$member_id && $topic_rows[0]['t_pt_to']!=$member_id && !ocf_has_special_pt_access($topic_id,$member_id) || is_guest($member_id)))
+		if ($topic_rows[0]['t_forum_id']===NULL && ($topic_rows[0]['t_pt_from']!=$member_id && $topic_rows[0]['t_pt_to']!=$member_id && !ocf_has_special_pt_access($topic_id,$member_id) || is_guest($member_id)))
 			return false;
 	}
 
@@ -209,7 +209,7 @@ function post_comment_script()
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	// Read in context of what we're doing
-	$options=post_param('options');
+	$options=isset($_POST['options'])?$_POST['options']:$_GET['options'];
 	secure_serialized_data($options);
 	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum)=unserialize($options);
 

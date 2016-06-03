@@ -185,7 +185,7 @@ class Module_news
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'NEWS_ARCHIVE','cat_select'=>'NEWS_CATEGORIES','blog_select'=>'BLOGS','select'=>'JUST_NEWS_CATEGORIES');
+		return array('misc'=>'NEWS_ARCHIVE','cat_select'=>'JUST_NEWS_CATEGORIES','blog_select'=>'BLOGS','select'=>'NEWS_CATEGORIES');
 	}
 
 	/**

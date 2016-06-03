@@ -116,7 +116,10 @@ class Module_admin_lookup
 			if (is_null($id)) $id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			if (is_null($ip)) $ip='';
 
-			$all_banned=collapse_1d_complexity('ip',$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('ip')));
+			if (addon_installed('securitylogging'))
+				$all_banned=collapse_1d_complexity('ip',$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('ip')));
+			else
+				$all_banned=array();
 
 			$ip_list=new ocp_tempcode();
 			$groups=array();
@@ -204,7 +207,7 @@ class Module_admin_lookup
 			$alerts=($ip=='')?new ocp_tempcode():find_security_alerts(array('ip'=>$ip));
 
 			$member_banned=$GLOBALS['FORUM_DRIVER']->is_banned($id);
-			$ip_banned=($ip!='') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_ip','ip',array('ip'=>$ip))));
+			$ip_banned=($ip!='') && (addon_installed('securitylogging')) && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_ip','ip',array('ip'=>$ip))));
 			$banned_test_2=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$id));
 			$submitter_banned=!is_null($banned_test_2);
 

@@ -782,7 +782,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 				),NULL,false,'MENU_BRANCH_tree'));
 			}
 		}
-		if ($children->is_empty()) return array(NULL,false); // Nothing here!
+		if ($children->is_empty() && (is_string($url) && $url == '' || is_object($url) && $url->is_empty())) return array(NULL,false); // Nothing here!
 		if ((!array_key_exists('expanded',$branch['modifiers'])) && (!$expand_this) && (!$current_page))
 		{
 			$display=has_js()?'none':'block'; // We remap to 'none' using JS. If no JS, it remains visible. Once we have learn't we have JS, we don't need to do it again
