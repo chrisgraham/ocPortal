@@ -137,7 +137,7 @@ function catalogue_file_script()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	error_reporting(0);
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	// Send actual data
 	$myfile=fopen($_full,'rb');

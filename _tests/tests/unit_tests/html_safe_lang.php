@@ -102,6 +102,7 @@ class html_safe_lang_test_set extends ocp_test_case
 			'NA_EM',
 			'QUERY_FAILED',
 			'HTTP_DOWNLOAD_NO_SERVER',
+			'HTTP_DOWNLOAD_STATUS_SERVER_ERROR',
 			'_USER_NO_EXIST',
 			'EMAIL_ADDRESS_IN_USE',
 			'ALREADY_EXISTS',

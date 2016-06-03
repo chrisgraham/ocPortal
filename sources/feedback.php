@@ -191,7 +191,7 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 		if (!array_key_exists(0,$topic_rows))
 			return false;
 		require_code('ocf_topics');
-		if ($topic_rows[0]['t_forum_id']==NULL && ($topic_rows[0]['t_pt_from']!=$member_id && $topic_rows[0]['t_pt_to']!=$member_id && !ocf_has_special_pt_access($topic_id,$member_id) || is_guest($member_id)))
+		if ($topic_rows[0]['t_forum_id']===NULL && ($topic_rows[0]['t_pt_from']!=$member_id && $topic_rows[0]['t_pt_to']!=$member_id && !ocf_has_special_pt_access($topic_id,$member_id) || is_guest($member_id)))
 			return false;
 	}
 

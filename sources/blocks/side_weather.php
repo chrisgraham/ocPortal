@@ -144,14 +144,14 @@ class Block_side_weather
 			{
 				if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
 			}
-			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>htmlentities($rss->error)));
+			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>$GLOBALS['HTTP_MESSAGE_B']));
 		}
 
 		$data=@json_decode($json,true);
 
 		if (!isset($data['query']['results']['channel']['location']))
 		{
-			return new Tempcode(); // No weather for here
+			return new ocp_tempcode(); // No weather for here
 		}
 
 		$feed=$data['query']['results']['channel'];
