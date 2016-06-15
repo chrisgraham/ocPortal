@@ -61,7 +61,7 @@ class Hook_rss_authors
 			$category='';
 			$category_raw='';
 
-			$view_url=build_url(array('page'=>'authors','type'=>'view','id'=>$row['author']),get_module_zone('authors'),NULL,false,false,true);
+			$view_url=build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),get_module_zone('authors'),NULL,false,false,true);
 
 			$if_comments=new ocp_tempcode();
 
