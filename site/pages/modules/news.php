@@ -426,7 +426,7 @@ class Module_news
 		}
 		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		if ((($blogs!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
+		if ((($blogs!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission(($blogs===1)?'mid':'high',get_member(),get_ip_address(),'cms_news')))
 		{
 			$map=array('page'=>($blogs===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;
@@ -606,7 +606,7 @@ class Module_news
 		}
 		breadcrumb_set_parents(array($first_bc));
 
-		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
+		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission(($blog===1)?'mid':'high',get_member(),get_ip_address(),'cms_news')))
 		{
 			$map=array('page'=>($blog===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;
@@ -715,7 +715,7 @@ class Module_news
 			$news_full_plain=get_translated_text($myrow['news']);
 		}
 
-		if ((has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_edit_permission('high',get_member(),$myrow['submitter'],($blog===1)?'cms_blogs':'cms_news',array('news',$myrow['news_category']))))
+		if ((has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_edit_permission(($blog===1)?'mid':'high',get_member(),$myrow['submitter'],($blog===1)?'cms_blogs':'cms_news',array('news',$myrow['news_category']))))
 		{
 			$edit_url=build_url(array('page'=>($blog===1)?'cms_blogs':'cms_news','type'=>'_ed','id'=>$id),get_module_zone(($blog===1)?'cms_blogs':'cms_news'));
 		} else $edit_url=new ocp_tempcode();
@@ -743,7 +743,7 @@ class Module_news
 				$GLOBALS['SITE_DB']->query_update('news',array('news_views'=>$myrow['news_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
-		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$myrow['news_category']))))
+		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission(($blog===1)?'mid':'high',get_member(),get_ip_address(),'cms_news',array('news',$myrow['news_category']))))
 		{
 			$map=array('page'=>($blog===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;
