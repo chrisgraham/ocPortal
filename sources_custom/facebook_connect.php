@@ -13,35 +13,13 @@ function init__facebook_connect()
 
 	// Initialise Facebook Connect
 	require_code('facebook/facebook');
-	class ocpFacebook extends BaseFacebook // We don't want any persistence - we store in normal ocPortal sessions/member rows
-	{
-		protected function setPersistentData($key,$value)
-		{
-		}
-
-		protected function getPersistentData($key,$default=false)
-		{
-		}
-
-		protected function clearPersistentData($key)
-		{
-		}
-
-		protected function clearAllPersistentData()
-		{
-		}
-
-		protected function constructSessionVariableName($key)
-		{
-		}
-	}
 	global $FACEBOOK_CONNECT;
 	$FACEBOOK_CONNECT=mixed();
 	$appid=get_option('facebook_appid',true);
 	if (is_null($appid)) return;
 	$appsecret=get_option('facebook_secret_code',true);
 	if (is_null($appsecret)) return;
-	$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
+	$FACEBOOK_CONNECT=new Facebook(array('appId'=>$appid,'secret'=>$appsecret));
 
 	global $EXTRA_FOOT;
 	if (!isset($EXTRA_FOOT)) $EXTRA_FOOT=new ocp_tempcode();
