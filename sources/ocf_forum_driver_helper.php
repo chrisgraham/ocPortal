@@ -126,7 +126,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 		$is_starter=true;
 
 		require_code('ocf_topics_action');
-		$topic_id=ocf_make_topic($forum_id,$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'',$topic_validated,1,0,0,0,NULL,NULL,false,0,NULL,$content_url);
+		$topic_id=ocf_make_topic($forum_id,$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'',$topic_validated,1,0,0,0,NULL,NULL,false,0,NULL,is_null($content_url)?'':$content_url);
 
 		if (strpos($topic_identifier,':')!==false)
 		{
