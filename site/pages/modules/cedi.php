@@ -464,6 +464,11 @@ class Module_cedi
 			$child_title=$myrow['title'];
 			$child_description=get_translated_text($myrow['description']);
 
+			if (!has_category_access(get_member(),'seedy_page',strval($child_id)))
+			{
+				continue;
+			}
+
 			$my_child_posts=$GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('page_id'=>$child_id));
 			$my_child_children=$GLOBALS['SITE_DB']->query_value('seedy_children','COUNT(*)',array('parent_id'=>$child_id));
 
