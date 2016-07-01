@@ -1,7 +1,7 @@
 {+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
 [semihtml]
 [surround="hero_section"]
-	[title="1"]Welcome to {$SITE_NAME}[/title]
+	[title="1"]Welcome to {$SITE_NAME*}[/title]
 
 	[block failsafe="1"]main_greeting[/block]
 	[surround="hero_button"][page="site:start"]{$SITE_NAME*}[/page][/surround]

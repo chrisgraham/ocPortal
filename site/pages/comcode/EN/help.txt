@@ -1,14 +1,14 @@
-[title="1"]{$SITE_NAME} help[/title]
+[title="1"]{$SITE_NAME*} help[/title]
 
 [title="2"]Logging-in[/title]
 
-You need to [page=":login"]log in[/page] to {$SITE_NAME} in order to get full access to our features, to interact with other members, to manage your profile, and to be able to manage{+START,IF,{$ADDON_INSTALLED,points}} (and get points for){+END} the content you submit.
+You need to [page=":login"]log in[/page] to {$SITE_NAME*} in order to get full access to our features, to interact with other members, to manage your profile, and to be able to manage{+START,IF,{$ADDON_INSTALLED,points}} (and get points for){+END} the content you submit.
 
 {+START,IF,{$ADDON_INSTALLED,points}}[title="2"]Points[/title]
 
 Every logged-in member can gain points as they contribute to our community, in ways like...
  - Posting on the forums
- - Contributing content to {$SITE_NAME}, such as images of the day
+ - Contributing content to {$SITE_NAME*}, such as images of the day
 
 As you gain points, you can spend them on various fun or useful things, such as buying your own e-mail account.
 
@@ -33,12 +33,12 @@ Products that require manual set-up will usually only be charged for upon activa
 {+END}
 {+START,IF,{$AND,{$ADDON_INSTALLED,news},{$HAS_ACTUAL_PAGE_ACCESS,cms_news}}}[title="2"]News/Blogs[/title]
 
-{$ANCHOR,ADD_NEWS}[page="_SEARCH:cms_news:ad"]The add news page[/page] allows you to add your news to {$SITE_NAME}. For most members, this will put the news into a validation queue and inform the staff of the submission.
+{$ANCHOR,ADD_NEWS}[page="_SEARCH:cms_news:ad"]The add news page[/page] allows you to add your news to {$SITE_NAME*}. For most members, this will put the news into a validation queue and inform the staff of the submission.
 {+START,IF,{$HAS_PRIVILEGE,have_personal_category,cms_news}}You also have the opportunity to submit to your own personal news category; this is your own blog on the website.{+END}
 {+END}
 {+START,IF,{$AND,{$ADDON_INSTALLED,galleries},{$HAS_ACTUAL_PAGE_ACCESS,cms_galleries}}}[title="2"]Galleries[/title]
 
-{$ANCHOR,ADD_MEDIA}The [page="_SEARCH:cms_galleries:ad"]add image[/page]/[page="_SEARCH:cms_galleries:av"]add video[/page] pages allow you to add your media to {$SITE_NAME}. For most members, this will put the images into a validation queue and inform the staff of the submission.
+{$ANCHOR,ADD_MEDIA}The [page="_SEARCH:cms_galleries:ad"]add image[/page]/[page="_SEARCH:cms_galleries:av"]add video[/page] pages allow you to add your media to {$SITE_NAME*}. For most members, this will put the images into a validation queue and inform the staff of the submission.
 {+END}
 [title="2"]Other things to do[/title]
 
