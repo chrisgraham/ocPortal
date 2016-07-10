@@ -168,7 +168,7 @@ class Hook_paypal
 			$res=mixed();
 			do
 			{
-				$res=http_download_file('http://'.(ecommerce_test_mode()?'www.sandbox.paypal.com':'www.paypal.com').'/cgi-bin/webscr',NULL,false,false,'ocPortal',$pure_post+array('cmd'=>'_notify-validate'));
+				$res=http_download_file('https://'.(ecommerce_test_mode()?'www.sandbox.paypal.com':'www.paypal.com').'/cgi-bin/webscr',NULL,false,false,'ocPortal',$pure_post+array('cmd'=>'_notify-validate'));
 				$x++;
 			}
 			while ((is_null($res)) && ($x<3));

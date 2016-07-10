@@ -16,7 +16,9 @@
 	</div>
 
 	<div>
-		<a href="{ADD_TO_CART*}"><img class="button_pageitem" src="{$IMG*,pageitem/cart_add}" title="{!ADD_TO_CART}" alt="{!ADD_TO_CART}"/></a>
+		{+START,IF_PASSED,ADD_TO_CART}
+			<a href="{ADD_TO_CART*}"><img class="button_pageitem" src="{$IMG*,pageitem/cart_add}" title="{!ADD_TO_CART}" alt="{!ADD_TO_CART}"/></a>
+		{+END}
 		<a href="{VIEW_URL*}"><img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!GO_FOR_IT}" alt="{!GO_FOR_IT}"/></a>			
 	</div>
 </div></section>

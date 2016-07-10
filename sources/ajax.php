@@ -406,7 +406,8 @@ function namelike_script()
 			$names=array();
 			foreach ($rows as $row)
 			{
-				$names[]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_liked']);
+				if (!is_null($GLOBALS['FORUM_DRIVER']->get_username($row['member_liked'])))
+					$names[]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_liked']);
 			}
 		} else
 		{

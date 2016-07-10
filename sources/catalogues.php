@@ -860,7 +860,7 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_subm
 		if (can_arbitrary_groupby())
 			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name GROUP BY c.c_name';
 	}
-	$query.=' ORDER BY c_add_date DESC';
+	$query.=' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('c_title').' DESC';
 	$rows=$GLOBALS['SITE_DB']->query($query,100/*reasonable limit*/);
 	if (count($rows)==100) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(integer_format(100))),'warn');
 	$out=new ocp_tempcode();

@@ -495,8 +495,10 @@ description=".$description."
  *
  * @param  string			Name of the addon
  * @param  ?array			The files to install (NULL: all)
+ * @param  boolean		Do file part
+ * @param  boolean		Do DB part
  */
-function install_addon($file,$files=NULL)
+function install_addon($file,$files=NULL,$do_files=true,$do_db=true)
 {
 	$full=get_custom_file_base().'/imports/addons/'.$file;
 
@@ -509,7 +511,10 @@ function install_addon($file,$files=NULL)
 	if (is_null($info_file)) warn_exit(do_lang_tempcode('NOT_ADDON'));
 	$info=better_parse_ini_file(NULL,$info_file['data']);
 	$directory=tar_get_directory($tar);
-	tar_extract_to_folder($tar,'',true,$files,true);
+	if ($do_files)
+	{
+		tar_extract_to_folder($tar,'',true,$files,true);
+	}
 
 	$addon=$info['name'];
 	$author=$info['author'];
@@ -569,44 +574,69 @@ function install_addon($file,$files=NULL)
 	}
 
 	// Install new zones
-	$zones=array('');
-	foreach ($directory as $dir)
+	if ($do_db)
 	{
-		$addon_file=$dir['path'];
-
-		if ((is_null($files)) || (in_array($addon_file,$files)))
+		$zones=array('');
+		foreach ($directory as $dir)
 		{
-			$matches=array();
-			if (preg_match('#(\w*)/index.php#',$addon_file,$matches)!=0)
+			$addon_file=$dir['path'];
+
+			if ((is_null($files)) || (in_array($addon_file,$files)))
 			{
-				$zone=$matches[1];
-
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_name',array('zone_name'=>$zone));
-				if (is_null($test))
+				$matches=array();
+				if (preg_match('#(\w*)/index.php#',$addon_file,$matches)!=0)
 				{
-					require_code('menus2');
-					add_menu_item_simple('zone_menu',NULL,$zone,$zone.':',0,1);
-					$zone_default_page='start';
-					if ($zone=='forum') $zone_default_page='forumview'; // A bit of an architectural fudge, but people get confused why it doesn't come back the same
-					$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($zone,1),'zone_default_page'=>$zone_default_page,'zone_header_text'=>insert_lang('???',2),'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
+					$zone=$matches[1];
 
-					$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-					foreach (array_keys($groups) as $group_id)
-						$GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>$zone,'group_id'=>$group_id));
+					$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_name',array('zone_name'=>$zone));
+					if (is_null($test))
+					{
+						require_code('menus2');
+						add_menu_item_simple('zone_menu',NULL,$zone,$zone.':',0,1);
+						$zone_default_page='start';
+						if ($zone=='forum') $zone_default_page='forumview'; // A bit of an architectural fudge, but people get confused why it doesn't come back the same
+						$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($zone,1),'zone_default_page'=>$zone_default_page,'zone_header_text'=>insert_lang('???',2),'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
+
+						$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+						foreach (array_keys($groups) as $group_id)
+							$GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>$zone,'group_id'=>$group_id));
+					}
+
+					$zones[]=$zone;
 				}
-
-				$zones[]=$zone;
 			}
 		}
 	}
 
 	// Install new modules
-	$zones=array_unique(array_merge(find_all_zones(),$zones));
-	if (get_option('collapse_user_zones')=='1') $zones[]='site';
-	foreach ($zones as $zone)
+	if ($do_db)
 	{
-		$prefix=($zone=='')?'':($zone.'/');
+		$zones=array_unique(array_merge(find_all_zones(),$zones));
+		if (get_option('collapse_user_zones')=='1') $zones[]='site';
+		foreach ($zones as $zone)
+		{
+			$prefix=($zone=='')?'':($zone.'/');
 
+			foreach ($directory as $dir)
+			{
+				$addon_file=$dir['path'];
+				if (substr(basename($addon_file),0,1)=='.') continue;
+
+				if ((is_null($files)) || (in_array($addon_file,$files)))
+				{
+					if (preg_match('#^'.$prefix.'pages/(modules|modules\_custom)/([^/]*)\.php$#',$addon_file,$matches)!=0)
+					{
+						if (!module_installed($matches[2]))
+							reinstall_module($zone,$matches[2]);
+					}
+				}
+			}
+		}
+	}
+
+	// Install new blocks
+	if ($do_db)
+	{
 		foreach ($directory as $dir)
 		{
 			$addon_file=$dir['path'];
@@ -614,27 +644,11 @@ function install_addon($file,$files=NULL)
 
 			if ((is_null($files)) || (in_array($addon_file,$files)))
 			{
-				if (preg_match('#^'.$prefix.'pages/(modules|modules\_custom)/([^/]*)\.php$#',$addon_file,$matches)!=0)
+				if (preg_match('#^(sources|sources\_custom)/blocks/([^/]*)\.php$#',$addon_file,$matches)!=0)
 				{
-					if (!module_installed($matches[2]))
-						reinstall_module($zone,$matches[2]);
+					if (!block_installed($matches[2]))
+						reinstall_block($matches[2]);
 				}
-			}
-		}
-	}
-
-	// Install new blocks
-	foreach ($directory as $dir)
-	{
-		$addon_file=$dir['path'];
-		if (substr(basename($addon_file),0,1)=='.') continue;
-
-		if ((is_null($files)) || (in_array($addon_file,$files)))
-		{
-			if (preg_match('#^(sources|sources\_custom)/blocks/([^/]*)\.php$#',$addon_file,$matches)!=0)
-			{
-				if (!block_installed($matches[2]))
-					reinstall_block($matches[2]);
 			}
 		}
 	}
@@ -674,11 +688,14 @@ function install_addon($file,$files=NULL)
 	tar_close($tar);
 
 	// Call install script, if it exists
-	$path='/data_custom/'.strtolower(basename($file,'.tar')).'_install.php';
-	if (file_exists(get_file_base().$path))
+	if ($do_db)
 	{
-		require_code('files');
-		http_download_file(get_base_url().$path);
+		$path='/data_custom/'.strtolower(basename($file,'.tar')).'_install.php';
+		if (file_exists(get_file_base().$path))
+		{
+			require_code('files');
+			http_download_file(get_base_url().$path);
+		}
 	}
 
 	log_it('INSTALL_ADDON',$addon);

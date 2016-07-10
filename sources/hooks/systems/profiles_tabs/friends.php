@@ -66,10 +66,10 @@ class Hook_Profiles_Tabs_friends
 			{
 				if (!member_befriended($member_id_of))
 				{
-					$add_friend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
+					$add_friend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$member_id_of,'redirect'=>static_evaluate_tempcode($GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,true,true))),get_module_zone('chat'));
 				} else
 				{
-					$remove_friend_url=build_url(array('page'=>'chat','type'=>'friend_remove','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
+					$remove_friend_url=build_url(array('page'=>'chat','type'=>'friend_remove','member_id'=>$member_id_of,'redirect'=>static_evaluate_tempcode($GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,true,true))),get_module_zone('chat'));
 				}
 			}
 

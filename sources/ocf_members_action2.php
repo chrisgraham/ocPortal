@@ -755,6 +755,15 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			require_code('urls2');
 			suggest_new_idmoniker_for('members','view',strval($member_id),$username);
 		}
+
+		if ((get_option('one_per_email_address')=='1') && ($email_address!=''))
+		{
+			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_email_address'=>$email_address));
+			if ((!is_null($test)) && ($test!=$member_id))
+			{
+				warn_exit(do_lang_tempcode('_EMAIL_ADDRESS_IN_USE'));
+			}
+		}
 	}
 
 	// Supplement custom field values given with defaults, and check constraints
