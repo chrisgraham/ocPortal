@@ -239,6 +239,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		global $RECORDED_LANG_STRINGS_CONTENT;
 		require_lang('lang');
 		require_code('form_templates');
+		$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK'] = true;
 		$fields=new ocp_tempcode();
 		require_code('lang2');
 		$names=find_lang_content_names(array_keys($RECORDED_LANG_STRINGS_CONTENT));
@@ -282,6 +283,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		global $RECORDED_LANG_STRINGS;
 		require_lang('lang');
 		require_code('form_templates');
+		$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK'] = true;
 		require_code('lang2');
 		$fields=new ocp_tempcode();
 		$descriptions=get_lang_file_descriptions(fallback_lang());

@@ -1,4 +1,6 @@
-{CART_LINK}
+{+START,IF_PASSED,CART_LINK}
+	{CART_LINK}
+{+END}
 
 {+START,BOX,,,light}
 	<div class="hproduct"{$?,{$AND,{$MATCH_KEY_MATCH,_WILD:_WILD:misc},{$VALUE_OPTION,html5}}, itemscope="itemscope" itemtype="http://schema.org/Offer"}>
@@ -50,6 +52,8 @@
 			</div>
 		{+END}
 
-		{CART_BUTTONS}
+		{+START,IF_PASSED,CART_BUTTONS}
+			{CART_BUTTONS}
+		{+END}
 	</div>
 {+END}

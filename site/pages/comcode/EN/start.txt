@@ -1,4 +1,4 @@
-[title="1"]Member section of {$SITE_NAME}[/title]
+[title="1"]Member section of {$SITE_NAME*}[/title]
 
 [block="3" failsafe="1"]main_greeting[/block]
 

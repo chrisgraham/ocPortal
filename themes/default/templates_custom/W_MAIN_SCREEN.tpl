@@ -19,7 +19,7 @@
 								{+START,IF,{HAS_UP_ROOM}}
 									<div>
 										&uarr;<br />
-										<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="up" /><input class="buttonhyperlink" type="submit" value="{UP_ROOM}" /></form>
+										<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="up" /><input class="buttonhyperlink" type="submit" value="{UP_ROOM*}" /></form>
 									</div>
 								{+END}
 								{+START,IF,{$NOT,{HAS_UP_ROOM}}}
@@ -38,7 +38,7 @@
 						<td>
 							{+START,IF,{HAS_LEFT_ROOM}}
 								<div style="text-align: right">
-									&larr;&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="left" /><input class="buttonhyperlink" type="submit" value="{LEFT_ROOM}" /></form>
+									&larr;&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="left" /><input class="buttonhyperlink" type="submit" value="{LEFT_ROOM*}" /></form>
 								</div>
 							{+END}
 							{+START,IF,{$NOT,{HAS_LEFT_ROOM}}}
@@ -53,7 +53,7 @@
 						<td>
 							{+START,IF,{HAS_RIGHT_ROOM}}
 								<div style="text-align: left">
-									&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="right" /><input class="buttonhyperlink" type="submit" value="{RIGHT_ROOM}" /></form>&nbsp;&rarr;
+									&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="right" /><input class="buttonhyperlink" type="submit" value="{RIGHT_ROOM*}" /></form>&nbsp;&rarr;
 								</div>
 							{+END}
 							{+START,IF,{$NOT,{HAS_RIGHT_ROOM}}}
@@ -71,7 +71,7 @@
 							<div style="text-align: center">
 								{+START,IF,{HAS_DOWN_ROOM}}
 								<div>
-									<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="down" /><input class="buttonhyperlink" type="submit" value="{DOWN_ROOM}" /></form><br />
+									<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="down" /><input class="buttonhyperlink" type="submit" value="{DOWN_ROOM*}" /></form><br />
 									<div class="ocw_arrow">
 										&darr;
 									</div>

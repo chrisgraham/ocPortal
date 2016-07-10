@@ -117,7 +117,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		$emoticon_chooser=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
 
-		$comcode_editor=get_comcode_editor();
+		$comcode_editor=get_comcode_editor('signature');
 		$comcode_editor_small=get_comcode_editor('signature',true);
 
 		$w=/* (has_specific_permission($member_id_viewing,'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($_signature_original,'{$,page hint: no_wysiwyg}')===false));

@@ -398,7 +398,7 @@ class Module_cms_comcode_pages
 			}
 			$group_by='';
 			if (can_arbitrary_groupby())
-				$group_by='GROUP BY c.the_zone,c.the_page';
+				$group_by=' GROUP BY c.the_zone,c.the_page';
 
 			$where_map='('.db_string_equal_to('language',$lang).' OR language IS NULL)';
 			if (!has_specific_permission(get_member(),'edit_highrange_content'))

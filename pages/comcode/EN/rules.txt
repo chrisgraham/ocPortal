@@ -1,5 +1,5 @@
-[block=":rules,cms:cms_comcode_pages,site:rules,forum:rules" caption="[title]{$SITE_NAME} Rules[/title]"]main_only_if_match[/block]
+[block=":rules,cms:cms_comcode_pages,site:rules,forum:rules" caption="[title]{$SITE_NAME*} Rules[/title]"]main_only_if_match[/block]
 
-[center][b](Remember: this is a default {$BRAND_NAME} page and should probably be edited as needed.)[/b][/center]
+[center][b](Remember: this is a default {$BRAND_NAME*} page and should probably be edited as needed.)[/b][/center]
 [title="2"]Forums[/title]
 By participating as a member of this website, there are a number of rules that you are expected to follow.

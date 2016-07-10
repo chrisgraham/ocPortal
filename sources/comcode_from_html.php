@@ -847,7 +847,7 @@ function comcode_preg_replace($element,$pattern,$replacement,$semihtml)
 	{
 		if (is_array($replacement))
 		{
-			return preg_replace_callback(str_replace('$','',str_replace('^','',$pattern)),$replacement[0],$semihtml);
+			return preg_replace_callback(str_replace('$#','#',str_replace('#^','#',$pattern)),$replacement[0],$semihtml);
 		} else
 		{
 			return preg_replace(str_replace('$','',str_replace('^','',$pattern)),$replacement,$semihtml);

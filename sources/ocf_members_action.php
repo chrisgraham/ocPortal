@@ -131,6 +131,15 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 			if ((!is_valid_email_address($email_address)) && ($email_address!=''))
 				warn_exit(do_lang_tempcode('_INVALID_EMAIL_ADDRESS',escape_html($email_address)));
 		}
+
+		if ((get_option('one_per_email_address')=='1') && ($email_address!=''))
+		{
+			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_email_address'=>$email_address));
+			if (!is_null($test))
+			{
+				warn_exit(do_lang_tempcode('_EMAIL_ADDRESS_IN_USE'));
+			}
+		}
 	}
 
 	require_code('ocf_members');

@@ -432,8 +432,6 @@ class Module_cms_news extends standard_aed_module
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
-		require_code('feedback2');
-		send_trackbacks(post_param('send_trackbacks',''),$title,$news);
 		$notes=post_param('notes','');
 
 		$urls=get_url('','file','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
@@ -456,6 +454,9 @@ class Module_cms_news extends standard_aed_module
 
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
+
+		require_code('feedback2');
+		send_trackbacks(post_param('send_trackbacks',''),$title,$news);
 
 		$main_news_category=$GLOBALS['SITE_DB']->query_value('news','news_category',array('id'=>$id));
 		$this->donext_type=$main_news_category;

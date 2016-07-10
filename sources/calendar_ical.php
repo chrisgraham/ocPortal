@@ -381,13 +381,17 @@ function get_event_data_ical($calendar_nodes)
 	if (array_key_exists('URL',$calendar_nodes))
 		$url=$calendar_nodes['URL'];
 
+	$all_day=true;
+
 	if (array_key_exists('DTSTART',$calendar_nodes))
 	{
-		$all_day=false;
 		if (strlen($calendar_nodes['DTSTART'])==8)
 		{
 			$calendar_nodes['DTSTART'].=' 00:00';
-			$all_day=true;
+		}
+		if (substr($calendar_nodes['DTSTART'],-6)!=' 00:00')
+		{
+			$all_day=false;
 		}
 		$start=strtotime($calendar_nodes['DTSTART']);
 		$start_year=intval(date('Y',$start));
@@ -415,7 +419,8 @@ function get_event_data_ical($calendar_nodes)
 		if (strlen($calendar_nodes['DTEND'])==8)
 		{
 			$calendar_nodes['DTEND'].=' 00:00';
-		} else
+		}
+		if (substr($calendar_nodes['DTEND'],-6)!=' 00:00')
 		{
 			$all_day=false;
 		}

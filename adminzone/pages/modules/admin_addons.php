@@ -344,7 +344,7 @@ class Module_admin_addons
 		{
 			if (substr($key,0,8)=='install_')
 			{
-				install_addon($passed);
+				install_addon($passed,null,true,false);
 			}
 
 			if (substr($key,0,10)=='uninstall_')
@@ -371,6 +371,14 @@ class Module_admin_addons
 				create_addon($file,$addon_row['addon_files'],$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/mods');
 
 				uninstall_addon($name);
+			}
+		}
+
+		foreach ($_POST as $key=>$passed)
+		{
+			if (substr($key,0,8)=='install_')
+			{
+				install_addon($passed,null,false,true);
 			}
 		}
 
@@ -637,7 +645,7 @@ class Module_admin_addons
 					if ((count($under)!=1) || (!array_key_exists((($dir=='')?'':($dir.'/')).$file.'/index.html',$under)) || (substr($dir,0,7)=='themes/'))
 						$out=array_merge($out,$under);
 				}
-			} else $out[$dir.'/'.$file]=1;
+			} else $out[($dir=='')?'':($dir.'/').$file]=1;
 		}
 
 		return $out;

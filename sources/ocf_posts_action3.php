@@ -198,6 +198,8 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
  */
 function ocf_delete_posts_topic($topic_id,$posts,$reason)
 {
+	if (count($posts)==0) return false;
+
 	// Info about source
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id'),array('id'=>$topic_id),'',1);
 	if (!array_key_exists(0,$info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

@@ -85,11 +85,11 @@ function init__users()
 	}
 
 	// Canonicalise various disparities in how HTTP auth environment variables are set
-	if (array_key_exists('REDIRECT_REMOTE_USER',$_SERVER))
+	if (!empty($_SERVER['REDIRECT_REMOTE_USER']))
 		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REDIRECT_REMOTE_USER']);
-	if (array_key_exists('PHP_AUTH_USER',$_SERVER))
+	if (!empty($_SERVER['PHP_AUTH_USER']))
 		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['PHP_AUTH_USER']);
-	if (array_key_exists('REMOTE_USER',$_SERVER))
+	if (!empty($_SERVER['REMOTE_USER']))
 		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REMOTE_USER']);
 }
 
@@ -356,7 +356,7 @@ function is_httpauth_login()
 	if (is_guest()) return false;
 
 	require_code('ocf_members');
-	return ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (!is_null(ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']))));
+	return ((!empty($_SERVER['PHP_AUTH_USER'])) && (!is_null(ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']))));
 }
 
 /**

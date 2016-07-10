@@ -142,6 +142,8 @@ function get_bound_content_entry($content_type,$id)
  */
 function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 {
+	if (!addon_installed('catalogues')) return;
+
 	require_code('catalogues');
 
 	$catalogue_entry_id=get_bound_content_entry($content_type,$id);
@@ -226,6 +228,8 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
  */
 function save_form_custom_fields($content_type,$id)
 {
+	if (!addon_installed('catalogues')) return;
+
 	if (fractional_edit()) return;
 
 	$existing=get_bound_content_entry($content_type,$id);
@@ -274,6 +278,8 @@ function save_form_custom_fields($content_type,$id)
  */
 function delete_form_custom_fields($content_type,$id)
 {
+	if (!addon_installed('catalogues')) return;
+
 	require_code('catalogues2');
 
 	$existing=get_bound_content_entry($content_type,$id);

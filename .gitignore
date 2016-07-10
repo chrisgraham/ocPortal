@@ -1,3 +1,5 @@
+_tests/screens_tested*
+_tests/html_dump/forum_test_set/*
 .idea
 cron.yaml
 /data_custom/modules/google_appengine/*

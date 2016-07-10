@@ -147,6 +147,8 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 */
 function send_trackbacks($_urls,$title,$excerpt)
 {
+	if ($_urls=='') return true;
+
 	$urls=explode(',',$_urls);
 
 	foreach ($urls as $url)

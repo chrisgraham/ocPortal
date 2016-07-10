@@ -145,8 +145,8 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 			$data=escape_html($get).(($myrow['post']=='')?'':', ').escape_html($myrow['post']);
 			$data=str_replace('&lt;param&gt;','',str_replace('&lt;/param&gt;',', ',$data));
 			if (substr($data,-3)==', '.chr(10)) $data=substr($data,0,strlen($data)-3);
-			$parameters=symbol_truncator(array($data,35,'1','1'),'left');
-		} else $parameters='?';
+			$parameters=symbol_truncator(array($data,35,'1'),'left');
+		} else $parameters=escape_html('?');
 
 		$out->attach(results_entry(array(escape_html($page_converted),escape_html($date),$parameters,escape_html($myrow['browser']),escape_html($myrow['operating_system'])),false));
 	}

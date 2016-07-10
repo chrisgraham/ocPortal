@@ -1,4 +1,4 @@
-[title]Help: Recommending {$SITE_NAME}[/title]
+[title]Help: Recommending {$SITE_NAME*}[/title]
 
 When you recommend our site or a piece of content on our site, you can either:
  - type in the details of your contacts manually

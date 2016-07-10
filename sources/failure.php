@@ -855,7 +855,7 @@ function die_html_trace($message)
 			} else
 			{
 				@ob_start();
-				/*var_dump*/var_export($value);
+				/*var_dump*/@var_export($value);
 				$_value=ob_get_contents();
 				ob_end_clean();
 			}
@@ -915,7 +915,7 @@ function get_html_trace()
 						} else
 						{
 							@ob_start();
-							/*var_dump*/var_export($param);
+							/*var_dump*/@var_export($param);
 							$__value=ob_get_contents();
 							ob_end_clean();
 						}
@@ -943,7 +943,7 @@ function get_html_trace()
 				} else
 				{
 					@ob_start();
-					/*var_dump*/var_export($value);
+					/*var_dump*/@var_export($value);
 					$_value=make_string_tempcode(escape_html(ob_get_contents()));
 					ob_end_clean();
 				}

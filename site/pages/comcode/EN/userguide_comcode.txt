@@ -95,8 +95,8 @@ function ocp()
 		<col style="width: 50%" />
 		<col style="width: 50%" />
 	</colgroup>
-	<tr class="row1"><td>[img="Logo"][/html]{$IMG,comcode}[html][/img]</td><td>[/html][img="Logo"]themes/default/images/comcode.png[/img][html]</td></tr>
-	<tr class="row1"><td>[thumb="Logo"][/html]{$IMG,comcode}[html][/thumb]</td><td>[/html][thumb="Logo"]themes/default/images/comcode.png[/thumb][html]</td></tr>
+	<tr class="row1"><td>[img="Logo"][/html]{$IMG*,comcode}[html][/img]</td><td>[/html][img="Logo"]themes/default/images/comcode.png[/img][html]</td></tr>
+	<tr class="row1"><td>[thumb="Logo"][/html]{$IMG*,comcode}[html][/thumb]</td><td>[/html][thumb="Logo"]themes/default/images/comcode.png[/thumb][html]</td></tr>
 </table>
 [/html]
 
@@ -116,7 +116,7 @@ JavaScript script tags, onX handlers and URLs will all be filtered/blocked. Don'
 		<col style="width: 50%" />
 		<col style="width: 50%" />
 	</colgroup>
-	<tr class="row1"><td>[url="This is a link"][/html]{$BASE_URL}[html][/url]</td><td>[/html][url="This is a link"]{$BASE_URL}[/url][html]</td></tr>
+	<tr class="row1"><td>[url="This is a link"][/html]{$BASE_URL*}[html][/url]</td><td>[/html][url="This is a link"]{$BASE_URL*}[/url][html]</td></tr>
 	<tr class="row1"><td>[email="My E-Mail"]fake_address@example.com[/email]</td><td>[/html][email="My E-Mail"]fake_address@example.com[/email][html]</td></tr>
 	<tr class="row1"><td>[page="cms:cms"]Content Management[/page]</td><td>[/html][page="cms:cms"]Content Management[/page][html]</td></tr>
 </table>

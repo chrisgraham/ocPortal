@@ -661,6 +661,7 @@ class Module_cms_downloads extends standard_aed_module
 			$img_urls=get_url('','img_file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true);
 			if ($img_urls[0]!='')
 			{
+				require_code('galleries2');
 				add_image('','download_'.strval($id),'',$img_urls[0],$img_urls[1],1,0,0,0,'');
 			}
 		}

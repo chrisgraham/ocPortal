@@ -1,5 +1,5 @@
 {+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-[title="1"]Welcome to {$SITE_NAME}[/title]
+[title="1"]Welcome to {$SITE_NAME*}[/title]
 
 [block failsafe="1"]main_greeting[/block]
 You are in the welcome zone. Proceed to the [page="site:start"]main website[/page].
@@ -9,12 +9,12 @@ You are in the welcome zone. Proceed to the [page="site:start"]main website[/pag
 [b]Note to administrators[/b]: There is an option called "Single public zone" that you can enable to get rid of the welcome zone/site zone distinction. This is advisable on most web sites as splash pages are considered poor usability. However they are also useful sometimes, especially if the main site requires special access such as being subscription-only.[/if_in_group]
 
 [surround="accessibility_hidden"]
-If you are a screen reader user, and use JAWS, please visit the Keymap page in the site footer to get important instructions for making JAWS more accessible with the {$SITE_NAME} website.
+If you are a screen reader user, and use JAWS, please visit the Keymap page in the site footer to get important instructions for making JAWS more accessible with the {$SITE_NAME*} website.
 The short cut key is Alt+O for IE users, or Alt+Shift+O for Firefox users.
 [/surround]
 {+END}
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
-[title="1"]{$SITE_NAME}[/title]
+[title="1"]{$SITE_NAME*}[/title]
 
 [block="3" failsafe="1"]main_greeting[/block]
 
