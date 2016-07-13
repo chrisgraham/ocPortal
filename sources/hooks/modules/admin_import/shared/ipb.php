@@ -433,7 +433,7 @@ class Hook_ipb_base
 
 					if (($photo_url!='') && (function_exists('imagepng')))
 					{
-						$photo_thumb_url='uploads/ocf_photos_thumbs/'.find_derivative_filename('ocf_photos_thumbs',$filename,true);
+						$photo_thumb_url='uploads/ocf_photos_thumbs/'.find_derivative_filename('uploads/ocf_photos_thumbs',$filename,true);
 						require_code('images');
 						convert_image($photo_url,$photo_thumb_url,-1,-1,intval(get_option('thumb_width')),false,NULL,true);
 					}
