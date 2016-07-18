@@ -1149,7 +1149,7 @@ function is_saveable_image($name)
 	if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
 	{
 		$gd=imagetypes();
-		if (($ext=='gif') && (($gd&IMG_GIF)!=0) && (function_exists('image_gif'))) return true;
+		if (($ext=='gif') && (($gd&IMG_GIF)!=0) && (function_exists('imagegif'))) return true;
 		if (($ext=='jpg') && (($gd&IMG_JPEG)!=0)) return true;
 		if (($ext=='jpeg') && (($gd&IMG_JPEG)!=0)) return true;
 		if (($ext=='png') && (($gd&IMG_PNG)!=0)) return true;
