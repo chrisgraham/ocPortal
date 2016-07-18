@@ -771,7 +771,7 @@ class Hook_smf2
 			{
 				$uid=$GLOBALS['OCF_DRIVER']->get_member_from_username($row['name']);
 
-				if (!empty($uid)&&($uid!=1 || $uid!=2))
+				if (!empty($uid)&&($uid!=1 && $uid!=2))
 				{
 					if (empty($ban_till))
 					{

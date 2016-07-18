@@ -261,13 +261,31 @@ class Module_members
 		{
 			$member_id=get_param_integer('id',get_member());
 			if (is_guest($member_id))
-				access_denied('NOT_AS_GUEST');
+			{
+				if (is_guest())
+				{
+					access_denied('NOT_AS_GUEST');
+				} else
+				{
+					warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+				}
+			}
 			$username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_username');
-			if ((is_null($username)) || (is_guest($member_id))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+			if (is_null($username)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
 		} else
 		{
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 			if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+			if (is_guest($member_id))
+			{
+				if (is_guest())
+				{
+					access_denied('NOT_AS_GUEST');
+				} else
+				{
+					warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+				}
+			}
 		}
 
 		require_code('ocf_profiles');

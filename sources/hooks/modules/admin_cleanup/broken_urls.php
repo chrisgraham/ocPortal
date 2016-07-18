@@ -158,7 +158,7 @@ class Hook_broken_urls
 				}
 			}
 		}
-		$lax_comcode=$temp;
+		$LAX_COMCODE=$temp;
 		if ((array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS)))
 		{
 			foreach ($COMCODE_BROKEN_URLS as $_url)

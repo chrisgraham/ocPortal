@@ -199,7 +199,7 @@ class Block_side_personal_stats
 		{
 			$title=do_lang_tempcode('NOT_LOGGED_IN');
 
-			if ((get_page_name()!='join') && (get_page_name()!='login'))
+			if ((get_page_name()!='join') && (get_page_name()!='login') || (get_page_name()=='lostpassword'))
 			{
 				if (count($_POST)>0)
 				{
