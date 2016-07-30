@@ -608,7 +608,7 @@ class Module_admin_ecommerce extends standard_aed_module
 	 * @param  integer		The length
 	 * @param  SHORT_TEXT	The units for the length
 	 * @set    y m d w
-	 * @param  ?GROUP			The usergroup that purchasing gains membership to (NULL: super members)
+	 * @param  GROUP			The usergroup that purchasing gains membership to (NULL: not set)
 	 * @param  BINARY			Whether this is applied to primary usergroup membership
 	 * @param  BINARY			Whether this is currently enabled
 	 * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is start (NULL: default)

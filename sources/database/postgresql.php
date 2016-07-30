@@ -66,6 +66,7 @@ class Database_Static_postgresql
 	 */
 	function db_create_index($table_name,$index_name,$_fields,$db)
 	{
+		$_fields=preg_replace('#\(\d+\)#','',$_fields);
 		if ($index_name[0]=='#') return;
 		$this->db_query('CREATE INDEX index'.$index_name.'_'.strval(mt_rand(0,10000)).' ON '.$table_name.'('.$_fields.')',$db);
 	}
@@ -337,7 +338,7 @@ class Database_Static_postgresql
 		}
 
 		$results=@pg_query($db,$query);
-		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results===true))) && (!$fail_ok))
+		if ((($results===false) || (((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ')) && ($results===true))) && (!$fail_ok))
 		{
 			$err=pg_last_error($db);
 			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
@@ -353,7 +354,7 @@ class Database_Static_postgresql
 			}
 		}
 
-		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results!==false) && ($results!==true))
+		if (((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ')) && ($results!==false) && ($results!==true))
 		{
 			return $this->db_get_query_rows($results);
 		}
@@ -404,9 +405,9 @@ class Database_Static_postgresql
 			foreach ($row as $v)
 			{
 				$name=$names[$j];
-				$type=$types[$j];
+				$type=strtoupper($types[$j]);
 
-				if (($type=='INTEGER') || ($type=='SMALLINT') || ($type=='SERIAL') || ($type=='UINTEGER'))
+				if ((substr($type,0,3)=='INT') || ($type=='SMALLINT') || ($type=='SERIAL') || ($type=='UINTEGER'))
 				{
 					if (!is_null($v)) $newrow[$name]=intval($v); else $newrow[$name]=NULL;
 				} else $newrow[$name]=$v;

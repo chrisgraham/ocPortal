@@ -2376,6 +2376,7 @@ END;
 				$hidden=new ocp_tempcode();
 				$hidden->attach(form_input_hidden('id',strval($post_id)));
 				$hidden->attach(form_input_hidden('reason',post_param('reason')));
+				$hidden->attach(form_input_hidden('post_all', '1'));
 
 				$stuff=new ocp_tempcode();
 				foreach ($posts as $post)

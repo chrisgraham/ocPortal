@@ -27,7 +27,6 @@ function gd_text_script()
 	if (!function_exists('imagepng')) return;
 
 	$text=get_param('text',false,true);
-	if (get_magic_quotes_gpc()) $text=stripslashes($text);
 
 	$font_size=array_key_exists('size',$_GET)?intval($_GET['size']):8;
 
