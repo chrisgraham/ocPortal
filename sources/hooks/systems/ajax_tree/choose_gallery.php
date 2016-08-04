@@ -46,7 +46,7 @@ class Hook_choose_gallery
 		$stripped_id=($compound_list?preg_replace('#,.*$#','',$id):$id);
 		$tree=get_gallery_tree(is_null($id)?'root':$stripped_id,'',NULL,true,$filter,false,false,$purity,$compound_list,is_null($id)?0:1,$member_id,$addable_filter,$editable_filter);
 
-		if (!has_actual_page_access(NULL,'galleries')) $tree=array();
+		if (!has_actual_page_access(NULL,'galleries')) $tree=$compound_list?array(array(),''):array();
 
 		if ($compound_list)
 		{

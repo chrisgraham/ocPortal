@@ -45,12 +45,26 @@ function _build_keep_form_fields($page='',$keep_all=false,$exclude=NULL)
 	{
 		foreach ($_GET as $key=>$val)
 		{
-			if (!is_string($val)) continue;
+			$process_for_key = ((substr($key,0,5)=='keep_') || ($keep_all)) && (!in_array($key,$exclude)) && ($key!='page') && (!skippable_keep($key,$val));
 
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if (is_array($val))
+			{
+				foreach ($val as $_key=>$_val) // We'll only support one level deep. Also no keep parameter array support.
+				{
+					if (get_magic_quotes_gpc()) $_val=stripslashes($_val);
 
-			if (((substr($key,0,5)=='keep_') || ($keep_all)) && (!in_array($key,$exclude)) && ($key!='page') && (!skippable_keep($key,$val)))
-				$out->attach(form_input_hidden($key,$val));
+					if ($process_for_key)
+						$out->attach(form_input_hidden($key.'['.$_key.']',$_val));
+				}
+			} else
+			{
+				if (!is_string($val)) continue;
+
+				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+
+				if ($process_for_key)
+					$out->attach(form_input_hidden($key,$val));
+            }
 		}
 	}
 	if ($page!='') $out->attach(form_input_hidden('page',$page));

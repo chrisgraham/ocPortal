@@ -42,7 +42,7 @@ class Hook_choose_download_category
 
 		$out='';
 
-		if (!has_actual_page_access(NULL,'downloads')) $tree=array();
+		if (!has_actual_page_access(NULL,'downloads')) $tree=$compound_list?array(array(),''):array();
 
 		if ($compound_list)
 		{
