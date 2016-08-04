@@ -196,6 +196,11 @@ class Module_admin_ipban
 				{
 					ban_ip($ip,trim($matches[2]));
 					$old_bans[]=$ip;
+				} else
+				{
+					$GLOBALS['SITE_DB']->query_update('usersubmitban_ip',array(
+						'i_descrip'=>isset($matches[2])?$matches[2]:'',
+					),array('ip'=>$ip),'',1);
 				}
 			}
 		}

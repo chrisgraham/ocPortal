@@ -86,7 +86,7 @@ function restrictify()
 	if (get_forum_type()=='ocf') $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES',NULL,NULL,true);
 	if ($GLOBALS['DEV_MODE'])
 	{
-		safe_ini_set('ocproducts.type_strictness','1');
+		//safe_ini_set('ocproducts.type_strictness','1');
 		global $PREVIOUS_XSS_STATE;
 		@safe_ini_set('ocproducts.xss_detect',array_pop($PREVIOUS_XSS_STATE));
 	}

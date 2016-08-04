@@ -297,7 +297,7 @@ function require_code($codename,$light_exit=false)
 		{
 			$php_errormsg='';
 			@include($path_b);
-			if ($php_errormsg=='') $worked=true;
+			if ($php_errormsg=='' || stripos($php_errormsg,'deprecated')!==false/*deprecated errors can leak through because even though we return true in our error handler, error handlers won't run recursively, so if this code is loaded during an error it'll stream through deprecated stuff here*/) $worked=true;
 		}
 
 		if ($worked)

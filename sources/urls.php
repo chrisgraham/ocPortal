@@ -67,7 +67,7 @@ function get_self_url_easy()
 	if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
 	$self_url=$protocol.'://'.$domain;
 	$port=ocp_srv('SERVER_PORT');
-	if (($port!='') && ($port!='80')) $self_url.=':'.$port;
+	if (($port!='') && ($port!=(tacit_https()?'143':'80'))) $self_url.=':'.$port;
 	$s=ocp_srv('PHP_SELF');
 	if (substr($s,0,1)!='/') $self_url.='/';
 	$self_url.=$s;

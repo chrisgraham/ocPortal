@@ -229,8 +229,8 @@ function init__global2()
 	if ($GLOBALS['DEV_MODE'])
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(10);
-		safe_ini_set('ocproducts.type_strictness','1');
-		safe_ini_set('ocproducts.xss_detect','1');
+		//safe_ini_set('ocproducts.type_strictness','1');
+		//safe_ini_set('ocproducts.xss_detect','1');
 	}
 	if ($GLOBALS['DEV_MODE'])
 	{
@@ -859,7 +859,7 @@ function catch_fatal_errors()
  * @param  PATH			The error message
  * @param  string			The file the error occurred in
  * @param  integer		The line the error occurred on
- * @return boolean		True effectively means "don't set $php_errormsg"
+ * @return boolean		False effectively means "normal PHP error handling continues" and set $php_errormsg.
  */
 function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 {
@@ -1341,7 +1341,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$colon_pos=strpos($domain,':');
 		if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
 		$port=ocp_srv('SERVER_PORT');
-		if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
+		if (($port=='') || ($port==($https?'143':'80'))) $port=''; else $port=':'.$port;
 		$SITE_INFO['base_url']='http://'.$domain.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',str_replace('\\','/',dirname(ocp_srv('PHP_SELF'))))));
 	}
 
