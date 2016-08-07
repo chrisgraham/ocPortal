@@ -120,6 +120,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 
 	$times=array();
 	$i=0;
+	$happened_count=0;
 	$parts=explode(' ',$recurrence);
 	if (count($parts)!=1)
 	{
@@ -286,9 +287,14 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		$starts_within=(($a>=$period_start) && ($a<$period_end));
 		$ends_within=(($b>$period_start) && ($b<=$period_end));
 		$spans=(($a<$period_start) && ($b>$period_end));
-		if (($starts_within || $ends_within || $spans) && (in_array($mask[$i%$mask_len],array('1','y'))))
+		$mask_covers=(in_array($mask[$i%$mask_len],array('1','y')));
+		if ($mask_covers)
 		{
-			$times[]=array(max($period_start,$a),min($period_end,$b),$a,$b,$_a,$_b);
+			if ($starts_within || $ends_within || $spans)
+			{
+				$times[]=array(max($period_start,$a),min($period_end,$b),$a,$b,$_a,$_b);
+			}
+			$happened_count++;
 		}
 		$i++;
 
@@ -342,7 +348,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 
 		if ($i==300) break; // Let's be reasonable
 	}
-	while (($recurrence!='') && ($recurrence!='none') && ($a<$period_end) && ((is_null($recurrences)) || ($i<$recurrences)));
+	while (($recurrence!='') && ($recurrence!='none') && ($a<$period_end) && ((is_null($recurrences)) || ($happened_count<$recurrences)));
 
 	return $times;
 }
