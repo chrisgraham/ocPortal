@@ -161,23 +161,6 @@ class Module_admin_themes
 				}
 			}*/
 		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->query_insert('theme_images',array(
-				'id'=>'favicon',
-				'theme'=>'default',
-				'path'=>'favicon.ico',
-				'lang'=>fallback_lang()
-			),false,true);
-
-			$GLOBALS['SITE_DB']->query_insert('theme_images',array(
-				'id'=>'appleicon',
-				'theme'=>'default',
-				'path'=>'appleicon.png',
-				'lang'=>fallback_lang()
-			),false,true);
-		}
 	}
 
 	/**
