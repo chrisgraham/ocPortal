@@ -37,7 +37,7 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assert($condition, $message = false) {
+        function assert($condition, $message = '%s') {
             parent::assert(new TrueExpectation(), $condition, $message);
         }
         
@@ -49,7 +49,7 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertEquals($first, $second, $message = false) {
+        function assertEquals($first, $second, $message = '%s') {
             parent::assert(new EqualExpectation($first), $second, $message);
         }
         
@@ -60,7 +60,7 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertEqualsMultilineStrings($first, $second, $message = false) {
+        function assertEqualsMultilineStrings($first, $second, $message = '%s') {
             parent::assert(new EqualExpectation($first), $second, $message);
         }                             
         
@@ -71,7 +71,7 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertRegexp($pattern, $subject, $message = false) {
+        function assertRegexp($pattern, $subject, $message = '%s') {
             parent::assert(new PatternExpectation($pattern), $subject, $message);
         }
         

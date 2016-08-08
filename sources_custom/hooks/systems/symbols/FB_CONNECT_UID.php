@@ -15,7 +15,7 @@ class Hook_symbol_FB_CONNECT_UID
 				{
 					@ini_set('ocproducts.type_strictness','0');
 					$value=strval($FACEBOOK_CONNECT->getUser());
-					@ini_set('ocproducts.type_strictness','1');
+					//@ini_set('ocproducts.type_strictness','1');
 					if ($value=='0') $value='';
 				}
 			}

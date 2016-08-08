@@ -82,7 +82,7 @@ function restrictify()
 	if (get_forum_type()=='ocf') $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES',NULL,NULL,true);
 	if ($GLOBALS['DEBUG_MODE'])
 	{
-		@ini_set('ocproducts.type_strictness','1');
+		//@ini_set('ocproducts.type_strictness','1');
 		global $PREVIOUS_XSS_STATE;
 		//safe_ini_set('ocproducts.xss_detect',array_pop($PREVIOUS_XSS_STATE));		We don't maintain this in v8, since we increased checking strength but are not fixing all the new false-positives. Real issues are found in v9 and back-ported.
 	}

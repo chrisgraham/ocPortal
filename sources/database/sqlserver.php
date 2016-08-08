@@ -72,6 +72,7 @@ class Database_Static_sqlserver
 	 */
 	function db_create_index($table_name,$index_name,$_fields,$db,$unique_key_field='id')
 	{
+		$_fields=preg_replace('#\(\d+\)#','',$_fields);
 		if ($index_name[0]=='#')
 		{
 			if (db_has_full_text($db))

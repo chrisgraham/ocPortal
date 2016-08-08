@@ -188,7 +188,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 }
 
 /**
- * Find if a certain member may be PTd be a certain member.
+ * Find if a certain member may be PTd by a certain member.
  *
  * @param  MEMBER		Member to be PT'd
  * @param  ?MEMBER	Member to PT. (NULL: current member)

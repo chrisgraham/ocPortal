@@ -61,6 +61,7 @@ class Database_Static_postgresql
 	 */
 	function db_create_index($table_name,$index_name,$_fields,$db)
 	{
+		$_fields=preg_replace('#\(\d+\)#','',$_fields);
 		if ($index_name[0]=='#') return;
 		$this->db_query('CREATE INDEX index'.$index_name.'_'.strval(mt_rand(0,10000)).' ON '.$table_name.'('.$_fields.')',$db);
 	}
@@ -399,9 +400,9 @@ class Database_Static_postgresql
 			foreach ($row as $v)
 			{
 				$name=$names[$j];
-				$type=$types[$j];
+				$type=strtoupper($types[$j]);
 
-				if (($type=='INTEGER') || ($type=='SMALLINT') || ($type=='SERIAL') || ($type=='UINTEGER'))
+				if ((substr($type,0,3)=='INT') || ($type=='SMALLINT') || ($type=='SERIAL') || ($type=='UINTEGER'))
 				{
 					if (!is_null($v)) $newrow[$name]=intval($v); else $newrow[$name]=NULL;
 				} else $newrow[$name]=$v;

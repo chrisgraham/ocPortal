@@ -80,7 +80,7 @@ function init__minikernel()
 	@ini_set('track_errors','1');
 	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 
-	@ini_set('ocproducts.type_strictness','1');
+	//@ini_set('ocproducts.type_strictness','1');
 
 	@ini_set('date.timezone','Greenwich');
 

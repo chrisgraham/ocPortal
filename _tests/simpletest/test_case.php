@@ -97,7 +97,7 @@ class SimpleTestCase {
      *    @param string $message        Text of skip condition.
      *    @access public
      */
-    function skipUnless($shouldnt_skip, $message = false) {
+    function skipUnless($shouldnt_skip, $message = '%s') {
         $this->skipIf(! $shouldnt_skip, $message);
     }
 
@@ -122,7 +122,7 @@ class SimpleTestCase {
      *    @return boolean                    True if all tests passed.
      *    @access public
      */
-    function run(&$reporter) {
+    function run($reporter) {
         $context = &SimpleTest::getContext();
         $context->setTest($this);
         $context->setReporter($reporter);
@@ -305,7 +305,7 @@ class SimpleTestCase {
      *    @return boolean                        True on pass
      *    @access public
      */
-    function assert(&$expectation, $compare, $message = '%s') {
+    function assert($expectation, $compare, $message = '%s') {
         if ($expectation->test($compare)) {
             return $this->pass(sprintf(
                     $message,
@@ -586,7 +586,7 @@ class TestSuite {
      *    @param SimpleReporter $reporter    Current test reporter.
      *    @access public
      */
-    function run(&$reporter) {
+    function run($reporter) {
         $reporter->paintGroupStart($this->getLabel(), $this->getSize());
         for ($i = 0, $count = count($this->_test_cases); $i < $count; $i++) {
             if (is_string($this->_test_cases[$i])) {

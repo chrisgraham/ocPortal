@@ -387,7 +387,7 @@ class Module_catalogues
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
-			$cat_id=actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),1,1,'',0,1);
+			$cat_id=actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',true,2),1,1,'',0,1);
 
 			$fields=array(
 				//		Name							 Description			Type			  Defines order  Required  Visible  Searchable

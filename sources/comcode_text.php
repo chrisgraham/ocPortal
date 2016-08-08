@@ -1096,6 +1096,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 										$link_end_pos_9=strpos($comcode,', ',$pos-1);
 										$link_end_pos_10=strpos($comcode,'. ',$pos-1);
 										$link_end_pos_11=strpos($comcode,"'",$pos-1);
+										$link_end_pos_12=strpos($comcode,'&nbsp;',$pos-1);
 										if (($link_end_pos_2!==false) && (($link_end_pos===false) || ($link_end_pos_2<$link_end_pos))) $link_end_pos=$link_end_pos_2;
 										if (($link_end_pos_3!==false) && (($link_end_pos===false) || ($link_end_pos_3<$link_end_pos))) $link_end_pos=$link_end_pos_3;
 										if (($link_end_pos_4!==false) && (($link_end_pos===false) || ($link_end_pos_4<$link_end_pos))) $link_end_pos=$link_end_pos_4;
@@ -1106,6 +1107,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 										if (($link_end_pos_9!==false) && (($link_end_pos===false) || ($link_end_pos_9<$link_end_pos))) $link_end_pos=$link_end_pos_9;
 										if (($link_end_pos_10!==false) && (($link_end_pos===false) || ($link_end_pos_10<$link_end_pos))) $link_end_pos=$link_end_pos_10;
 										if (($link_end_pos_11!==false) && (($link_end_pos===false) || ($link_end_pos_11<$link_end_pos))) $link_end_pos=$link_end_pos_11;
+										if (($link_end_pos_12!==false) && (($link_end_pos===false) || ($link_end_pos_12<$link_end_pos))) $link_end_pos=$link_end_pos_12;
 										if ($link_end_pos===false) $link_end_pos=strlen($comcode);
 										$auto_link=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',substr($comcode,$pos-1,$link_end_pos-$pos+1));
 										if (substr($auto_link,-3)!='://')

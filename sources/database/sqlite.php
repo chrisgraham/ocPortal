@@ -69,6 +69,7 @@ class Database_Static_sqlite
 	 */
 	function db_create_index($table_name,$index_name,$_fields,$db)
 	{
+		$_fields=preg_replace('#\(\d+\)#','',$_fields);
 		if ($index_name[0]=='#') return;
 		$this->db_query('CREATE INDEX index'.$index_name.'_'.strval(mt_rand(0,10000)).' ON '.$table_name.'('.$_fields.')',$db);
 	}

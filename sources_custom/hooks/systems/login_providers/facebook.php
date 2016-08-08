@@ -46,7 +46,7 @@ class Hook_login_provider_facebook
 					// User will know what is wrong already (Facebook wil have said), so don't show on our end
 				}
 			}
-			@ini_set('ocproducts.type_strictness','1');
+			//@ini_set('ocproducts.type_strictness','1');
 		}
 		return $member;
 	}

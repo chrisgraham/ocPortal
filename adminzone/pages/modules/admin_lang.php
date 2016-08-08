@@ -830,7 +830,7 @@ msgstr ""
 
 			foreach ($for_base_lang_2+$for_base_lang as $key=>$now_val)
 			{
-				$val=post_param('l_'.$key,array_key_exists($key,str_replace('\n',"\n",$for_base_lang_2)?$for_base_lang_2[$key]:$now_val));
+				$val=post_param('l_'.$key,str_replace('\n',"\n",array_key_exists($key,$for_base_lang_2)?$for_base_lang_2[$key]:$now_val));
 				if (($val!=str_replace('\n',"\n",$now_val)) || (!array_key_exists($key,$for_base_lang)) || ($for_base_lang[$key]!=$val) || (!file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$lang_file.'.ini'))) // if it's changed from default ocPortal, or not in default ocPortal, or was already changed in language file, or whole file is not in default ocPortal
 					$out.=$key.'='.str_replace(chr(10),'\n',$val)."\n";
 			}
