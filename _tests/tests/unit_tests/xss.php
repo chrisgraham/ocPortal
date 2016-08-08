@@ -108,7 +108,7 @@ class xss_test_set extends ocp_test_case
 		set_error_handler($temp);
 
 		$setting=ini_get('ocproducts.xss_detect');
-		$this->assertTrue(strpos($php_errormsg,'XSS vulnerability')!==false,empty($setting)?'ocProducts PHP not running':NULL);
+		$this->assertTrue(strpos($php_errormsg,'XSS vulnerability')!==false,($setting===false)?'ocProducts PHP not running':'%s');
 	}
 
 	function testXSSDetectorOnAndWorkingComplex1()
@@ -129,7 +129,7 @@ class xss_test_set extends ocp_test_case
 		set_error_handler($temp);
 
 		$setting=ini_get('ocproducts.xss_detect');
-		$this->assertTrue(strpos($this->found_error,'XSS vulnerability')!==false,empty($setting)?'ocProducts PHP not running':NULL);
+		$this->assertTrue(strpos($this->found_error,'XSS vulnerability')!==false,($setting===false)?'ocProducts PHP not running':'%s');
 	}
 
 	function testXSSDetectorOnAndWorkingComplex2()
@@ -151,7 +151,7 @@ class xss_test_set extends ocp_test_case
 		set_error_handler($temp);
 
 		$setting=ini_get('ocproducts.xss_detect');
-		$this->assertTrue(strpos($this->found_error,'XSS vulnerability')!==false,empty($setting)?'ocProducts PHP not running':NULL);
+		$this->assertTrue(strpos($this->found_error,'XSS vulnerability')!==false,($setting===false)?'ocProducts PHP not running':'%s');
 	}
 
 	function testXSSDetectorOnAndWorkingComplex3()
@@ -174,6 +174,6 @@ class xss_test_set extends ocp_test_case
 		set_error_handler($temp);
 
 		$setting=ini_get('ocproducts.xss_detect');
-		$this->assertTrue(strpos($this->found_error,'XSS vulnerability')!==false,empty($setting)?'ocProducts PHP not running':NULL);
+		$this->assertTrue(strpos($this->found_error,'XSS vulnerability')!==false,($setting===false)?'ocProducts PHP not running':'%s');
 	}
 }

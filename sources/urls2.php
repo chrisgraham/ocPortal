@@ -64,7 +64,7 @@ function _build_keep_form_fields($page='',$keep_all=false,$exclude=NULL)
 
 				if ($process_for_key)
 					$out->attach(form_input_hidden($key,$val));
-            }
+			}
 		}
 	}
 	if ($page!='') $out->attach(form_input_hidden('page',$page));
