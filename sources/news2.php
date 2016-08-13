@@ -717,7 +717,7 @@ function import_wordpress_db()
 						'import__news_article'=>$news_article,
 					);
 
-					$topic_identifer='news_'.strval($id);
+					$topic_identifier='news_'.strval($id);
 				}
 				elseif ($post['post_type']=='page') // Page/articles
 				{

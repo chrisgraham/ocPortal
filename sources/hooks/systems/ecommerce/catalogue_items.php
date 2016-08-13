@@ -83,7 +83,7 @@ class Hook_catalogue_items
 					$item_price=is_object($map[2]['effective_value'])?$map[2]['effective_value']->evaluate():$map[2]['effective_value'];
 
 				if (array_key_exists(6,$map))
-					$tax=floatval(is_object($map[6]['effective_value'])?$map[6]['effective_value']->evaluate():$map[6]['effective_value']);
+					$tax=floatval(preg_replace('#[^\d\.]#','',is_object($map[6]['effective_value'])?$map[6]['effective_value']->evaluate():$map[6]['effective_value']));
 
 				if (array_key_exists(8,$map))
 					$product_weight=floatval(is_object($map[8]['effective_value'])?$map[8]['effective_value']->evaluate():$map[8]['effective_value']);
@@ -305,22 +305,20 @@ class Hook_catalogue_items
 
 		if ($qty==0)
 		{
-			$id=$GLOBALS['SITE_DB']->query_insert('shopping_cart',
-				array(
-					'session_id'=>get_session_id(),
-					'ordered_by'=>get_member(),
-					'product_id'=>$product_det['product_id'],
-					'product_name'=>$product_det['product_name'],
-					'product_code'=>$product_det['product_code'],
-					'quantity'=>$product_det['quantity'],
-					'price'=>round(floatval($product_det['price']),2),
-					'price_pre_tax'=>round(floatval($product_det['tax']),2),
-					'product_description'=>$product_det['description'],
-					'product_type'=>$product_det['product_type'],
-					'product_weight'=>$product_det['product_weight'],
-					'is_deleted' => 0,
-				)
-			);
+			$id=$GLOBALS['SITE_DB']->query_insert('shopping_cart', array(
+				'session_id'=>get_session_id(),
+				'ordered_by'=>get_member(),
+				'product_id'=>$product_det['product_id'],
+				'product_name'=>$product_det['product_name'],
+				'product_code'=>$product_det['product_code'],
+				'quantity'=>$product_det['quantity'],
+				'price'=>round(floatval($product_det['price']),2),
+				'price_pre_tax'=>round(floatval($product_det['tax']),2),
+				'product_description'=>$product_det['description'],
+				'product_type'=>$product_det['product_type'],
+				'product_weight'=>$product_det['product_weight'],
+				'is_deleted'=>0,
+			),true);
 		}
 		else
 		{

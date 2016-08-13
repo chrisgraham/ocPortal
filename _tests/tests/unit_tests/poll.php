@@ -54,7 +54,7 @@ class poll_test_set extends ocp_test_case
 
 	function testEditPoll()
 	{
-		ocf_edit_poll($poll_id=$this->poll_id,$question='Who am I?',$is_private=1,$is_open=1,$minimum_selections=1,$maximum_selections=4,$requires_reply=1,$answers=array(1,2,3),$reason='nothing');
+		ocf_edit_poll($poll_id=$this->poll_id,$question='Who am I?',$is_private=1,$is_open=1,$minimum_selections=1,$maximum_selections=4,$requires_reply=1,$answers=array('1','2','3'),$reason='nothing');
 
 		$this->assertTrue('Who am I?'==$GLOBALS['FORUM_DB']->query_value('f_polls','po_question ',array('id'=>$this->poll_id)));
 	}
