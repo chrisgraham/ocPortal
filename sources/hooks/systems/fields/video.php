@@ -107,6 +107,7 @@ class Hook_fields_video
 		{
 			$keep=symbol_tempcode('KEEP');
 			$download_url=find_script('catalogue_file').'?file='.urlencode(basename($ev)).$keep->evaluate();
+			$download_url.='&inline=1';
 		} else
 		{
 			$download_url=$ev;

@@ -111,6 +111,7 @@ class Hook_fields_picture
 		{
 			$keep=symbol_tempcode('KEEP');
 			$download_url=find_script('catalogue_file').'?file='.urlencode(basename($img_url)).$keep->evaluate();
+			$download_url.='&inline=1';
 		} else
 		{
 			$download_url=$img_url;
