@@ -179,10 +179,7 @@ echo '</ol>';
 echo '<script type="text/javascript">// <![CDATA[
 	window.scrollTo(0,document.getElementById("file_'.strval($file_offset).'").offsetTop-100);
 //]]></script>';
-if ($next_offset_url=='')
-{
-	echo '<p><strong>'.htmlentities($_GET['done']).'!</strong></p>';
-} else
+if ($next_offset_url!='')
 {
 	echo '<hr /><p>Continuing in 3 seconds. If you have meta-refresh disabled, <a href="'.htmlentities($next_offset_url).'">force continue</a>.</p>';
 }

@@ -309,8 +309,8 @@ function upgrade_script()
 							}
 
 							// Install if either of the following is true:
-							//  - it's some file not in an addon (shouldn't actually happen)
-							//  - it's a new addon (addon that is not installed or uninstalled i.e. does not have an exported mod file, and not showing up as uninstalled in log)
+							//  - it's some file not in any addon (shouldn't actually happen)
+							//  - it's a new addon (addon that is not installed or uninstalled i.e. does not have an import-ready addon file [created at uninstallation], and not showing up as uninstalled in log)
 							//  - it's a file in an addon we have installed
 							if ((is_null($found)) || ((!file_exists(get_file_base().'/imports/addons/'.$found.'.tar')) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','id',array('the_type'=>'UNINSTALL_ADDON','param_a'=>$found))))) || (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$found.'.php')))
 							{
