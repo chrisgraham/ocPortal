@@ -107,13 +107,13 @@ function ocf_delete_poll($poll_id,$reason,$check_perms=true)
 	}
 	$topic_id=$topic_info[0]['id'];
 
+	$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_poll_id'=>NULL),array('t_poll_id'=>$poll_id),'',1);
+
 	$name=$GLOBALS['FORUM_DB']->query_value('f_polls','po_question',array('id'=>$poll_id));
 
 	$GLOBALS['FORUM_DB']->query_delete('f_polls',array('id'=>$poll_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('f_poll_answers',array('pa_poll_id'=>$poll_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_poll_votes',array('pv_poll_id'=>$poll_id));
-
-	$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_poll_id'=>NULL),array('t_poll_id'=>$poll_id),'',1);
 
 	require_code('ocf_general_action2');
 	ocf_mod_log_it('DELETE_TOPIC_POLL',strval($poll_id),$name,$reason);
