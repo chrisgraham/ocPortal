@@ -150,8 +150,12 @@ function find_lang_content_names($ids)
 					foreach (array_keys($cma_hooks) as $hook)
 					{
 						require_code('hooks/systems/content_meta_aware/'.$hook);
-						$ob=object_factory('Hook_content_meta_aware_'.$hook);
+						$ob=object_factory('Hook_content_meta_aware_'.$hook,true);
 						$info=$ob->info();
+						if (is_null($info))
+						{
+							continue;
+						}
 						if ($info['table']==$field['m_table'])
 						{
 							if ($info['title_field_dereference'])

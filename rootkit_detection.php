@@ -99,6 +99,7 @@ END;
 
 	// Check database
 	$prefix=$_POST['db_prefix'];
+	$prefix=preg_replace('#[^\w\_]#','',$prefix);
 	if (file_exists($FILE_BASE.'/sources/hooks/systems/addon_registry/calendar_events.php'))
 	{
 		$r=mysql_query('SELECT * FROM '.$prefix.'calendar_events e LEFT JOIN '.$prefix.'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id',$db);

@@ -47,8 +47,12 @@ class Hook_tags
 		foreach (array_keys($hooks) as $hook)
 		{
 			require_code('hooks/systems/content_meta_aware/'.$hook);
-			$ob=object_factory('Hook_content_meta_aware_'.$hook);
+			$ob=object_factory('Hook_content_meta_aware_'.$hook,true);
 			$info=$ob->info();
+			if (is_null($info))
+			{
+				continue;
+			}
 			$seo_type_code=$info['seo_type_code'];
 			if (!is_null($seo_type_code))
 			{

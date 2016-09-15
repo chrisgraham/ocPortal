@@ -78,7 +78,7 @@ class Block_main_contact_us
 				require_code('type_validation');
 				if (!is_valid_email_address($email_from))
 				{
-					warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+					return paragraph(do_lang_tempcode('INVALID_EMAIL_ADDRESS'),'','red_alert');
 				}
 			}
 

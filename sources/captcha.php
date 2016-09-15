@@ -343,7 +343,8 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 					if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
 			}
 
-			warn_exit(do_lang_tempcode('NO_SESSION_SECURITY_CODE'));
+			attach_message(do_lang_tempcode('NO_SESSION_SECURITY_CODE'),'warn');
+			return false;
 		}
 		if (strlen(strval($_code_needed))>6) // Encoded in ASCII (we did it like this to avoid breaking DB compatibility)
 		{

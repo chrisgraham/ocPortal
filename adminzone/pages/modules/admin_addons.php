@@ -653,7 +653,7 @@ class Module_admin_addons
 		{
 			while (false!==($file=readdir($_dir)))
 			{
-				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES))
+				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES | IGNORE_UPLOADS | IGNORE_ACCESS_CONTROLLERS))
 				{
 					$temp[$file]=1;
 				}
@@ -671,10 +671,9 @@ class Module_admin_addons
 				if ((!array_key_exists($file.'_custom',$temp)) || (substr($dir,0,7)=='themes/'))
 				{
 					$under=$this->do_dir($dir.'/'.$file);
-					if ((count($under)!=1) || (!array_key_exists((($dir=='')?'':($dir.'/')).$file.'/index.html',$under)) || (substr($dir,0,7)=='themes/'))
-						$out=array_merge($out,$under);
+					$out=array_merge($out,$under);
 				}
-			} else $out[($dir=='')?'':($dir.'/').$file]=1;
+			} else $out[(($dir=='')?'':($dir.'/')).$file]=1;
 		}
 
 		return $out;

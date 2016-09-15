@@ -244,13 +244,13 @@ class Hook_ipb_base
 				$event_title=$row['event_title'];
 				$event_text=$row['event_content'];
 				$private_event=$row['event_private'];
-				$start_year=date('Y',$row['event_unix_from']);
-				$start_month=date('n',$row['event_unix_from']);
-				$start_day=date('j',$row['event_unix_from']);
+				$start_year=intval(date('Y',$row['event_unix_from']));
+				$start_month=intval(date('n',$row['event_unix_from']));
+				$start_day=intval(date('j',$row['event_unix_from']));
 
-				$end_year=date('Y',$row['event_unix_to']);
-				$end_month=date('n',$row['event_unix_to']);
-				$end_day=date('j',$row['event_unix_to']);
+				$end_year=intval(date('Y',$row['event_unix_to']));
+				$end_month=intval(date('n',$row['event_unix_to']));
+				$end_day=intval(date('j',$row['event_unix_to']));
 			}
 
 			ocf_over_msn();

@@ -284,7 +284,7 @@ class Module_admin
 
 		foreach ($section_limitations as $l)
 		{
-			if (strpos(strtolower($results_type),strtolower($l))!==false) return true;
+			if (@strpos(strtolower($results_type),strtolower($l))!==false) return true;
 		}
 
 		return false;
@@ -832,6 +832,7 @@ class Module_admin
 							$tar=tar_open(get_custom_file_base().'/imports/addons/'.$f,'rb');
 							$directory=tar_get_directory($tar);
 							$info_file=tar_get_file($tar,'mod.inf'); // TODO: Change in v10
+							tar_close($tar);
 							if (!is_null($info_file))
 							{
 								$info=better_parse_ini_file(NULL,$info_file['data']);

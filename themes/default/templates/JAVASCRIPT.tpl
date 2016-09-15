@@ -1193,7 +1193,7 @@ function set_display_with_aria(element,mode)
 function toggleable_tray(element,no_animate,cookie_id_name)
 {
 	if (typeof element=='string') element=document.getElementById(element);
-	if (!element) return;
+	if (!element) return false;
 
 	if (element.className.indexOf('toggleable_tray')==-1) // Suspicious, maybe we need to probe deeper
 	{
@@ -1223,7 +1223,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 	{
 		pic=document.getElementById('e_'+element.id);
 	}
-	if ((pic) && (pic.src=='{$IMG;,exp_con}'.replace(/^https?:/,window.location.protocol))) return; // Currently in action
+	if ((pic) && (pic.src=='{$IMG;,exp_con}'.replace(/^https?:/,window.location.protocol))) return false; // Currently in action
 
 	element.setAttribute('aria-expanded',(type=='none')?'false':'true');
 
@@ -3138,7 +3138,9 @@ function add_captcha_validation(form)
 			var url='{$FIND_SCRIPT;,snippet}?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
 			if (!do_ajax_field_test(url))
 			{
-				form.elements['captcha'].src+='&'; // Force it to reload latest captcha
+				var image=document.getElementById('captcha_image');
+				if (!image) image=document.getElementById('captcha_frame');
+				image.src+='&'; // Force it to reload latest captcha
 				document.getElementById('submit_button').disabled=false;
 				return false;
 			}

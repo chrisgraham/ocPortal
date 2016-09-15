@@ -267,7 +267,7 @@ function post_comment_script()
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	// Read in context of what we're doing
-	$options=isset($_POST['options'])?$_POST['options']:(isset($_GET['options'])?$_GET['options']:array());
+	$options=isset($_POST['options'])?$_POST['options']:(isset($_GET['options'])?$_GET['options']:'');
 	secure_serialized_data($options);
 	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time)=unserialize($options);
 
