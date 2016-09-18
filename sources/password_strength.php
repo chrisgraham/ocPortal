@@ -43,7 +43,7 @@ function test_password($password)
 	}
 
 	/*** check if password is not all upper case ***/
-	if (strtoupper($password) == $password)
+	if (strtoupper($password) != $password)
 	{
 		$strength += 1;
 	}

@@ -566,8 +566,6 @@ class Module_cedi
 	function do_menu($chain,$id,$include_expansion,$may_post=true)
 	{
 		$page_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF');
-		$pos=strpos($chain,'/');
-		$id=intval(substr($chain,($pos===false)?0:($pos+1)));
 		if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search')))
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'cedi_posts','search_under'=>$id),get_module_zone('search'));

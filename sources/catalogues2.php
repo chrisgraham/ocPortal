@@ -65,7 +65,7 @@ function catalogue_file_script()
 	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if (get_option('immediate_downloads',true)==='1')
+	if (get_option('immediate_downloads',true)==='1' || get_param_integer('inline',0)==1)
 	{
 		require_code('mime_types');
 		header('Content-Type: '.get_mime_type(get_file_extension($original_filename)).'; authoritative=true;');

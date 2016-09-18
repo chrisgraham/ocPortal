@@ -83,7 +83,7 @@ class Hook_catalogue_items
 					$item_price=is_object($map[2]['effective_value'])?$map[2]['effective_value']->evaluate():$map[2]['effective_value'];
 
 				if (array_key_exists(6,$map))
-					$tax=floatval(is_object($map[6]['effective_value'])?$map[6]['effective_value']->evaluate():$map[6]['effective_value']);
+					$tax=floatval(preg_replace('#[^\d\.]#','',is_object($map[6]['effective_value'])?$map[6]['effective_value']->evaluate():$map[6]['effective_value']));
 
 				if (array_key_exists(8,$map))
 					$product_weight=floatval(is_object($map[8]['effective_value'])?$map[8]['effective_value']->evaluate():$map[8]['effective_value']);

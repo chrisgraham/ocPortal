@@ -92,7 +92,7 @@ class Block_main_content
 		require_code('hooks/systems/awards/'.filter_naughty_harsh($type_id,true),true);
 		$object=object_factory('Hook_awards_'.$type_id);
 		$info=$object->info();
-		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
+		if (is_null($info)) return paragraph(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'),'','red_alert');
 		if (((!array_key_exists('id_is_string',$info)) || (!$info['id_is_string'])) && (!is_null($content_id)) && (!is_numeric($content_id)))
 		{
 			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true),true);
@@ -270,7 +270,7 @@ class Block_main_content
 
 		if (is_null($award_content_row))
 		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'','red_alert');
 		}
 
 		$submit_url=str_replace('%21',$content_id,$submit_url);

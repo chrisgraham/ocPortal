@@ -269,7 +269,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 			{
 				if (!is_null($forums))
 				{
-					$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_CATEGORY',array('_GUID'=>'889173769e237b917b7e06eda0fb4350','ORDERINGS'=>$orderings,'CATEGORY'=>$C_TITLE[$category_id],'SUBFORUMS'=>$forums)));
+					$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_CATEGORY',array('_GUID'=>'889173769e237b917b7e06eda0fb4350','ORDERINGS'=>$orderings,'CATEGORY'=>isset($C_TITLE[$category_id])?$C_TITLE[$category_id]:do_lang('UNKNOWN'),'SUBFORUMS'=>$forums)));
 					$category_position++;
 				}
 				$forums=new ocp_tempcode();

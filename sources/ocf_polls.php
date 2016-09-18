@@ -96,7 +96,7 @@ function ocf_may_delete_poll_by($forum_id,$poll_owner,$member_id=NULL)
 function ocf_poll_get_results($poll_id,$request_results=true)
 {
 	$poll_info=$GLOBALS['FORUM_DB']->query_select('f_polls',array('*'),array('id'=>$poll_id),'',1);
-	if (!array_key_exists(0,$poll_info)) fatal_exit(do_lang_tempcode('_MISSING_RESOURCE','poll#'.strval($poll_id)));
+	if (!array_key_exists(0,$poll_info)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','poll#'.strval($poll_id)));
 
 	$_answers=$GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('*'),array('pa_poll_id'=>$poll_id),'ORDER BY id');
 	$answers=array();

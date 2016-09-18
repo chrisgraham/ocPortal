@@ -119,7 +119,7 @@ class Block_main_multi_content
 		require_code('hooks/systems/awards/'.filter_naughty_harsh($type_id),true);
 		$object=object_factory('Hook_awards_'.$type_id);
 		$info=$object->info(($filter_b=='')?NULL:$filter_b);
-		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
+		if (is_null($info)) return paragraph(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'),'','red_alert');
 
 		$submit_url=$info['add_url'];
 		if (is_object($submit_url)) $submit_url=$submit_url->evaluate();

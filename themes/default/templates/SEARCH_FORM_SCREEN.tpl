@@ -44,6 +44,7 @@
 
 	<form title="{!PRIMARY_PAGE_FORM}" action="{$URL_FOR_GET_FORM*,{URL}}" method="get" class="main_search_form">
 		{$HIDDENS_FOR_GET_FORM,{URL}}
+		<input type="hidden" name="all_defaults" value="0" />
 
 		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
