@@ -42,7 +42,7 @@
 		>
 	    <parameterEntry
 	      type="TextFile"
-	      scope="info.php"
+	      scope="ocportal/info.php"
 	      match="\$SITE_INFO\s*\['base_url'\]='([^']*)';"
 	      />
 	</parameter>
@@ -62,7 +62,7 @@
 		>
 	    <parameterEntry
 	      type="TextFile"
-	      scope="info.php"
+	      scope="ocportal/info.php"
 	      match="\$SITE_INFO\s*\['domain'\]='([^']*)';"
 	      />
 	</parameter>
@@ -86,12 +86,12 @@
     >
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_site_host'\]='([^']*)';"
       />
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_forums_host'\]='([^']*)';"
       />
   </parameter>
@@ -125,12 +125,12 @@
     >
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_site'\]='([^']*)';"
       />
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_forums'\]='([^']*)';"
       />
   </parameter>
@@ -166,12 +166,12 @@
     >
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_site_user'\]='([^']*)';"
       />
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_forums_user'\]='([^']*)';"
       />
   </parameter>
@@ -199,12 +199,12 @@
     >
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_site_password'\]='([^']*)';"
       />
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['db_forums_password'\]='([^']*)';"
       />
   </parameter>
@@ -254,7 +254,7 @@
     >
     <parameterEntry
       type="TextFile"
-      scope="info.php"
+      scope="ocportal/info.php"
       match="\$SITE_INFO\s*\['admin_password'\]='([^']*)';" />
   </parameter>
 
