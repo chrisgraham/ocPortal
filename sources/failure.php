@@ -915,6 +915,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'Error at offset')===false) && 
 		(strpos($text,'No word lists can be found for the language &quot;en&quot;')===false) && 
 		(strpos($text,'Unable to allocate memory for pool')===false) && 
+		(strpos($text,'gd-png: fatal libpng error')===false) &&
 		(strpos($text,'Out of memory')===false) && 
 		(strpos($text,'Can\'t open file')===false) && 
 		(strpos($text,'INSERT command denied to user')===false) && 
@@ -922,6 +923,8 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'Disk quota exceeded')===false) && 
 		(strpos($text,'No space left on device')===false) && 
 		(strpos($text,'from storage engine')===false) && 
+		(strpos($text,'The MySQL server is running with the --read-only option so it cannot execute this statement')===false) && 
+		(strpos($text,'Deadlock found when trying to get lock; try restarting transaction')===false) &&
 		(strpos($text,'Lost connection to MySQL server')===false) && 
 		(strpos($text,'Unable to save result set')===false) && 
 		(strpos($text,'.MAI')===false) && // MariaDB

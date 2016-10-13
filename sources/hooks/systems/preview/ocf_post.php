@@ -83,7 +83,7 @@ class Hook_Preview_ocf_post
 		$post_date=get_timezoned_date($_post_date);
 
 		$post_title=post_param('title','');
-		if (strlen($post_title)>120)
+		if (ocp_mb_strlen($post_title)>120)
 		{
 			warn_exit(do_lang_tempcode('TITLE_TOO_LONG'));
 		}
