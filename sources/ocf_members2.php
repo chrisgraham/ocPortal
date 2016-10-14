@@ -100,6 +100,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 			require_code('points');
 			$points=integer_format(total_points($poster_details));
 		} else $points='';
+		require_code('ocf_members');
 		$primary_group=ocf_get_member_primary_group($poster_details);
 		if (is_null($primary_group)) return new ocp_tempcode();
 		require_code('ocf_groups');
