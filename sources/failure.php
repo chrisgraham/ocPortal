@@ -779,10 +779,13 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'max_questions')/*mysql limit*/===false) && 
 		(strpos($text,'Error at offset')===false) && 
 		(strpos($text,'Unable to allocate memory for pool')===false) && 
+		(strpos($text,'gd-png: fatal libpng error')===false) &&
 		(strpos($text,'Out of memory')===false) && 
 		(strpos($text,'Disk is full writing')===false) && 
 		(strpos($text,'Disk quota exceeded')===false) && 
 		(strpos($text,'from storage engine')===false) && 
+		(strpos($text,'The MySQL server is running with the --read-only option so it cannot execute this statement')===false) && 
+		(strpos($text,'Deadlock found when trying to get lock; try restarting transaction')===false) &&
 		(strpos($text,'Lost connection to MySQL server')===false) && 
 		(strpos($text,'Unable to save result set')===false) && 
 		(strpos($text,'.MYI')===false) && 

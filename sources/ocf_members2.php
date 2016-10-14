@@ -42,6 +42,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 			require_code('points');
 			$points=integer_format(total_points($_postdetails));
 		} else $points='';
+		require_code('ocf_members');
 		$primary_group=ocf_get_member_primary_group($_postdetails);
 		if (is_null($primary_group)) return new ocp_tempcode();
 		require_code('ocf_groups');

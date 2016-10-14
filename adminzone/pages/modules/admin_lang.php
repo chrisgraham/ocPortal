@@ -654,7 +654,7 @@ msgstr ""
 				$result=convert_to_internal_encoding($result);
 
 				$matches=array();
-				if (preg_match('#<div id=result_box dir="ltr">(.*)</div>#Us',convert_to_internal_encoding($result),$matches)!=0)
+				if (preg_match('#<div id=result_box dir="ltr">(.*)</div>#Us',$result,$matches)!=0)
 				{
 					$result2=$matches[1];
 					$result2=@html_entity_decode($result2,ENT_QUOTES,get_charset());

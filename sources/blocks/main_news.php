@@ -296,9 +296,9 @@ class Block_main_news
 		$rss_url=new ocp_tempcode();
 		if ($is_on_rss==1)
 		{
-			$atom_url=make_string_tempcode(find_script('backend').'?type=atom&mode=news&filter='.$filter);
+			$atom_url=make_string_tempcode(find_script('backend').'?type=atom&mode=news&filter='.urlencode($filter));
 			$atom_url->attach(symbol_tempcode('KEEP'));
-			$rss_url=make_string_tempcode(find_script('backend').'?type=rss2&mode=news&filter='.$filter);
+			$rss_url=make_string_tempcode(find_script('backend').'?type=rss2&mode=news&filter='.urlencode($filter));
 			$rss_url->attach(symbol_tempcode('KEEP'));
 		}
 

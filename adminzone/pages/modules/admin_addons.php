@@ -626,7 +626,7 @@ class Module_admin_addons
 			{
 				if (($dir=='') && ($file=='_tests')) continue;
 
-				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES | IGNORE_UPLOADS | IGNORE_ACCESS_CONTROLLERS))
+				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES | IGNORE_ACCESS_CONTROLLERS))
 				{
 					$temp[$file]=1;
 				}
