@@ -124,11 +124,11 @@ class Hook_catalogue_items
 
 		if (!array_key_exists(3,$fields)) return ECOMMERCE_PRODUCT_INTERNAL_ERROR;
 
-		if (array_key_exists(4,$fields))
+		if (array_key_exists(5,$fields))
 		{
-			if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
+			if (is_object($fields[5]['effective_value'])) $fields[5]['effective_value']=$fields[5]['effective_value']->evaluate();
 
-			if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0))
+			if ((is_null($fields[5]['effective_value'])) || ($fields[5]['effective_value']==do_lang('YES',null,null,null,get_site_default_lang())))
 				return ECOMMERCE_PRODUCT_AVAILABLE;
 		}
 
@@ -600,27 +600,27 @@ class Hook_catalogue_items
 			$current_stock=intval($fields[3]['effective_value']);
 		}
 
-		if (array_key_exists(4,$fields))	//Stock maintained
-		{
-			if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
-
-			if (is_null($fields[4]['effective_value'])) return;
-
-			$stock_maintained=intval($fields[4]['effective_value'])==1;
-		}
-
-		if (array_key_exists(5,$fields))	//Stock level warn threshold
+		if (array_key_exists(5,$fields))	//Stock maintained
 		{
 			if (is_object($fields[5]['effective_value'])) $fields[5]['effective_value']=$fields[5]['effective_value']->evaluate();
 
 			if (is_null($fields[5]['effective_value'])) return;
 
-			$stock_level_warn_threshold=intval($fields[5]['effective_value']);
+			$stock_maintained=($fields[5]['effective_value']==do_lang('YES',null,null,null,get_site_default_lang()));
+		}
+
+		if (array_key_exists(4,$fields))	//Stock level warn threshold
+		{
+			if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
+
+			if (is_null($fields[4]['effective_value'])) return;
+
+			$stock_level_warn_threshold=intval($fields[4]['effective_value']);
 		}
 
 		$product_name=get_translated_text($row['cc_id']);
 
-		if ($current_stock<$quantity && $stock_maintained)
+		if ($current_stock<$quantity && !$stock_maintained)
 		{
 			require_code('site');
 			attach_message(do_lang_tempcode('LOW_STOCK_DISPATCH_FAILED',$product_name));
