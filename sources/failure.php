@@ -939,7 +939,9 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'Error writing file')===false) && // E.g. cannot PHP create a temporary file
 		(strpos($text,'possibly out of free disk space')===false) && 
 		(strpos($text,'Illegal mix of collations')===false) && 
+		(strpos($text,'duplicate key in table')===false) && 
 		(strpos($text,'marked as crashed and should be repaired')===false) && 
+		(strpos($text,'Query execution was interrupted')===false) && 
 		(strpos($text,'connect to')===false) && 
 		(strpos($text,'Access denied for')===false) && 
 		(strpos($text,'Unknown database')===false) && 

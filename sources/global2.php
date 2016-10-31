@@ -2162,12 +2162,14 @@ function convert_data_encodings($known_utf8=false)
 			{
 				if (is_string($val))
 				{
-					$_GET[$key]=iconv($encoding,$charset.'//TRANSLIT',$val);
+					$_GET[$key]=@iconv($encoding,$charset.'//TRANSLIT',$val);
+					if ($_GET[$key]===false) $_GET[$key]=$val;
 				} elseif (is_array($val))
 				{
 					foreach ($val as $i=>$v)
 					{
-						$_GET[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$v);
+						$_GET[$key][$i]=@iconv($encoding,$charset.'//TRANSLIT',$v);
+						if ($_GET[$key][$i]===false) $_GET[$key][$i]=$v;
 					}
 				}
 			}
@@ -2175,12 +2177,14 @@ function convert_data_encodings($known_utf8=false)
 			{
 				if (is_string($val))
 				{
-					$_POST[$key]=iconv($encoding,$charset.'//TRANSLIT',$val);
+					$_POST[$key]=@iconv($encoding,$charset.'//TRANSLIT',$val);
+					if ($_POST[$key]===false) $_POST[$key]=$val;
 				} elseif (is_array($val))
 				{
 					foreach ($val as $i=>$v)
 					{
-						$_POST[$key][$i]=iconv($encoding,$charset.'//TRANSLIT',$v);
+						$_POST[$key][$i]=@iconv($encoding,$charset.'//TRANSLIT',$v);
+						if ($_POST[$key][$i]===false) $_POST[$key][$i]=$v;
 					}
 				}
 			}
