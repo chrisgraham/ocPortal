@@ -221,7 +221,6 @@ function get_table_descriptions()
 		'sp_list'=>'a list of all the privileges available (aka privileges)',
 		'staff_tips_dismissed'=>'stores what webmaster tips (Admin Zone front page) have been read so far',
 		'trackbacks'=>'stores trackbacks for all kinds of content',
-		'tracking'=>'stores tracking for all content that supports it except forum/topic tracking (ocPortal 4.2 doesn\'t really use this table much, except for the staff-messaging tracking)',
 		'translate'=>'very important table, stores most of the text; this table exists to internationalise content and also to store compiled Comcode',
 		'translate_history'=>'used by OCF to store old versions of posts, but potentially any addon can use this so long as it maintains it (think of it as a revision history store that can work on a per-field level)',
 		'tutorial_links'=>'used by the ocPortal documentation, don\'t worry about this table',

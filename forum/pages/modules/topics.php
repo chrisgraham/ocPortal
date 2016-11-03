@@ -1996,6 +1996,7 @@ class Module_topics
 				check_specific_permission('use_pt');
 
 				$topic_id=ocf_make_topic(NULL,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0),get_member(),$member_id);
+				$first_post=true;
 				$_title=get_screen_title('ADD_PRIVATE_TOPIC');
 			}
 			elseif ($forum_id==-2) // New reported post topic
@@ -2010,9 +2011,11 @@ class Module_topics
 				if (!is_null($topic_id))
 				{
 					// Already a topic
+					$first_post=false;
 				} else // New topic
 				{
 					$topic_id=ocf_make_topic($forum_id,'','',1,1,0,0,0,NULL,NULL,false);
+					$first_post=true;
 				}
 
 				$_title=get_screen_title('REPORT_POST');
@@ -2022,6 +2025,7 @@ class Module_topics
 			} else // New topic
 			{
 				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0));
+				$first_post=true;
 				$_title=get_screen_title('ADD_TOPIC');
 
 $_topic_id=strval($topic_id);
@@ -2052,7 +2056,6 @@ END;
 					handle_award_setting('topic',strval($topic_id));
 				}
 			}
-			$first_post=true;
 
 			require_code('fields');
 			if (has_tied_catalogue('topic'))
@@ -2204,12 +2207,6 @@ END;
 		if ($anonymous==1)
 		{
 			log_it('MAKE_ANONYMOUS_POST',strval($post_id),$title);
-		}
-
-		if (addon_installed('awards'))
-		{
-			require_code('awards');
-			handle_award_setting('post',strval($post_id));
 		}
 
 		if (($forum_id==-1) && ($member_id!=-1))

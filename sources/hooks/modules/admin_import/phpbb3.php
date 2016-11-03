@@ -1463,7 +1463,7 @@ class Hook_phpbb3
 
 			$title=do_lang('REPORTED_POST_TITLE',$post_title);
 			$topic_id=ocf_make_topic($forum_id,$title,'',$row['topic_approved'],($row['report_closed']==1)?0:1,0,0,0,NULL,NULL,false);
-			$post=do_template('OCF_REPORTED_POST',array('POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_NAME'=>$topic_info[0]['t_cache_first_title'],'POST'=>$row['report_text'],'POSTER'=>$poster));
+			$post=do_template('OCF_REPORTED_POST_FCOMCODE',array('POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_NAME'=>$topic_info[0]['t_cache_first_title'],'POST'=>$row['report_text'],'POSTER'=>$poster));
 			ocf_make_post($topic_id,$title,$post->evaluate(),0,true,1,0,$member,NULL,$row['report_time'],NULL,NULL,NULL,NULL,false,true,NULL,true,$title,0,NULL,false,$forum_id);
 		}
 	}
