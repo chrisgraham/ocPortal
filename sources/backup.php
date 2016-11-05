@@ -156,6 +156,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 
 	tar_add_file($myfile,'restore.php',$__install_php_file,0664,time(),true);
 	@unlink($__install_php_file);
+	@unlink($__install_data_php_file);
 
 	if ($b_type=='full')
 	{

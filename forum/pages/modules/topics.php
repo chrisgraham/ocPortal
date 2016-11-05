@@ -1747,7 +1747,7 @@ class Module_topics
 		$_postdetails=post_param('post',NULL);
 		if (is_null($_postdetails))
 		{
-			$__post=get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']);
+			$__post=comcode_censored_raw_code_access(get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']));
 			$post=do_template('OCF_REPORTED_POST_FCOMCODE',array('_GUID'=>'e0f65423f3cb7698d5f04431dbe52ddb','POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_TITLE'=>$topic_info[0]['t_cache_first_title'],'POST'=>$__post,'POSTER'=>$poster));
 		} else $post=make_string_tempcode($_postdetails);
 
@@ -1916,6 +1916,7 @@ class Module_topics
 				check_specific_permission('use_pt');
 
 				$topic_id=ocf_make_topic(NULL,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0),get_member(),$member_id);
+				$first_post=true;
 				$_title=get_page_title('ADD_PERSONAL_TOPIC');
 			}
 			elseif ($forum_id==-2) // New reported post topic
@@ -1928,9 +1929,11 @@ class Module_topics
 				if (!is_null($topic_id))
 				{
 					// Already a topic
+					$first_post=false;
 				} else // New topic
 				{
 					$topic_id=ocf_make_topic($forum_id,'','',1,1,0,0,0,NULL,NULL,false);
+					$first_post=true;
 				}
 
 				$_title=get_page_title('REPORT_POST');
@@ -1940,6 +1943,7 @@ class Module_topics
 			} else // New topic
 			{
 				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0));
+				$first_post=true;
 				$_title=get_page_title('ADD_TOPIC');
 
 				if (addon_installed('awards'))
@@ -1948,7 +1952,6 @@ class Module_topics
 					handle_award_setting('topic',strval($topic_id));
 				}
 			}
-			$first_post=true;
 
 			require_code('fields');
 			if (has_tied_catalogue('topic'))
@@ -2100,12 +2103,6 @@ END;
 		if ($anonymous==1)
 		{
 			log_it('MAKE_ANONYMOUS_POST',strval($post_id),$title);
-		}
-
-		if (addon_installed('awards'))
-		{
-			require_code('awards');
-			handle_award_setting('post',strval($post_id));
 		}
 
 		if (($forum_id==-1) && ($member_id!=-1))

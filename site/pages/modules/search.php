@@ -669,7 +669,13 @@ class Module_search
 						if ($where_clause!='(') $where_clause.=' OR ';
 						if ($info['integer_category'])
 						{
-							$where_clause.=((strpos($info['category'],'.')!==false)?'':'r.').$info['category'].'='.strval((integer)$cat);
+							if (is_numeric($cat))
+							{
+								$where_clause.=((strpos($info['category'],'.')!==false)?'':'r.').$info['category'].'='.strval((integer)$cat);
+							} else
+							{
+								$where_clause.='1=0';
+							}
 						} else
 						{
 							$where_clause.=db_string_equal_to(((strpos($info['category'],'.')!==false)?'':'r.').$info['category'],$cat);

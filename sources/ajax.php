@@ -588,7 +588,8 @@ function snippet_script()
 	header('Content-Type: text/plain; charset='.get_charset());
 	$hook=filter_naughty_harsh(get_param('snippet'));
 	require_code('hooks/systems/snippets/'.$hook,true);
-	$object=object_factory('Hook_'.$hook);
+	$object=object_factory('Hook_'.$hook,true);
+	if ($object===null) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	$tempcode=$object->run();
 	$out=$tempcode->evaluate();
 
