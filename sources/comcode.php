@@ -63,7 +63,7 @@ function init__comcode()
  * This function isn't designed to be perfectly secure, and we don't guarantee it's always run, but as a rough thing we prefer to do it.
  *
  * @param  string			Comcode
- * @param  ?MEMBER		Force an HTML-evaluation of the Comcode through this security ID then back to Comcode, as a security technique (null: don't)
+ * @param  ?MEMBER		Force an HTML-evaluation of the Comcode through this security ID then back to Comcode, as a security technique (NULL: don't)
  * @return string			Censored Comcode
  */
 function comcode_censored_raw_code_access($comcode, $aggressive = null)
