@@ -546,7 +546,8 @@ function snippet_script()
 	convert_data_encodings(true);
 	$hook=filter_naughty_harsh(get_param('snippet'));
 	require_code('hooks/systems/snippets/'.$hook,true);
-	$object=object_factory('Hook_'.$hook);
+	$object=object_factory('Hook_'.$hook,true);
+	if ($object===null) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	$tempcode=$object->run();
 	$tempcode->handle_symbol_preprocessing();
 	$out=$tempcode->evaluate();

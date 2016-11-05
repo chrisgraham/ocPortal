@@ -1825,7 +1825,7 @@ class Module_topics
 		$_postdetails=post_param('post',NULL);
 		if (is_null($_postdetails))
 		{
-			$__post=preg_replace('#\[staff_note\].*\[/staff_note\]#Us','',get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']));
+			$__post=comcode_censored_raw_code_access(get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']));
 			$post=do_template('OCF_REPORTED_POST_FCOMCODE',array('_GUID'=>'e0f65423f3cb7698d5f04431dbe52ddb','POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_TITLE'=>$topic_info[0]['t_cache_first_title'],'POST'=>$__post,'POSTER'=>$poster));
 		} else $post=make_string_tempcode($_postdetails);
 
