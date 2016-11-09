@@ -54,6 +54,7 @@ class Hook_continue_import
 				warn_exit(do_lang_tempcode('TOO_MANY_IMPORT_SESSIONS'));
 			}
 
+			require_code('users_inactive_occasionals');
 			set_session_id($session[0]['imp_session']);
 
 			$importer=$session[0]['imp_hook'];

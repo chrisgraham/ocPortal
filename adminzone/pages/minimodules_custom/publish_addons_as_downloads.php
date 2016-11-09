@@ -14,6 +14,7 @@ require_code('dump_addons');
 require_code('version');
 require_code('version2');
 require_code('downloads2');
+require_code('galleries2');
 
 $get_cat=get_param('cat',NULL);
 if ($get_cat===NULL)

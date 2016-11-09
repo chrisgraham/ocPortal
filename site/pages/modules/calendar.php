@@ -1639,6 +1639,8 @@ class Module_calendar
 				list(,$to)=find_event_end_timestamp($event);
 			}
 
+			require_code('temporal2');
+
 			syndicate_described_activity('calendar:ACTIVITY_SUBSCRIBED_EVENT',get_translated_text($event['e_title']),date_range($from,$to,!is_null($event['e_start_hour']),make_nice_timezone_name($event['e_timezone'])),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 		}
 

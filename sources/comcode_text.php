@@ -973,6 +973,10 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
 													array_shift($cells); // First one is non-existant empty
 													$spec=true;
+													$num_cells_in_row=count($cells)/2;
+													$inter_padding=3.0;
+													$total_box_width=(100.0-$inter_padding*($num_cells_in_row-1));
+
 													// Find which to float
 													$to_float=NULL;
 													foreach ($cells as $i=>$cell)
@@ -989,12 +993,27 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													// Do floated one
 													$i_dir_1=(($to_float==1)?'left':'right');
 													$i_dir_2=(($to_float!=1)?'left':'right');
-													if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
+													if ($num_cells_in_row===1)
 													{
-														$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START',array('_GUID'=>'ced8c3a142f74296a464b085ba6891c9','WIDTH'=>array_key_exists(($to_float==1)?0:(count($cells)-1),$ratios)?$ratios[($to_float==1)?0:(count($cells)-1)]:((count($cells)==2)?'0':float_to_raw_string(97.0/(floatval(count($cells))/2.0-1.0),2).'%'),'FLOAT'=>$i_dir_1,'PADDING'=>($to_float==1)?'':'-left','PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2))));
+														$padding_amount='0';
 													} else
 													{
-														$tag_output->attach(do_template('COMCODE_FAKE_TABLE_START',array('_GUID'=>'90be72fcbb6b9d8a312da0bee5b86cb3','WIDTH'=>array_key_exists($to_float,$ratios)?$ratios[$to_float]:'','FLOAT'=>$i_dir_1,'PADDING'=>($to_float==1)?'':'-left','PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2.0)/2.0),2))));
+														$padding_amount=float_to_raw_string($inter_padding,2);
+													}
+													if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
+													{
+														$cell_i=($to_float===1)?0:(count($cells)-1);
+														if (array_key_exists($cell_i,$ratios))
+														{
+															$width=$ratios[$cell_i];
+														} else
+														{
+															$width=float_to_raw_string($total_box_width/$num_cells_in_row,2).'%';
+														}
+														$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START',array('_GUID'=>'ced8c3a142f74296a464b085ba6891c9','WIDTH'=>$width,'FLOAT'=>$i_dir_1,'PADDING'=>($to_float==1)?'':'-left','PADDING_AMOUNT'=>$padding_amount)));
+													} else
+													{
+														$tag_output->attach(do_template('COMCODE_FAKE_TABLE_START',array('_GUID'=>'90be72fcbb6b9d8a312da0bee5b86cb3','WIDTH'=>array_key_exists($to_float,$ratios)?$ratios[$to_float]:'','FLOAT'=>$i_dir_1,'PADDING'=>($to_float==1)?'':'-left','PADDING_AMOUNT'=>$padding_amount)));
 													}
 													$attaches_before=count($COMCODE_ATTACHMENTS[$pass_id]);
 													$tag_output->attach(comcode_text_to_tempcode(isset($cells[$to_float])?rtrim($cells[$to_float]):'',$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
@@ -1011,12 +1030,22 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 														{
 															if ($i!=$to_float)
 															{
-																if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
+																$padding_amount=float_to_raw_string($inter_padding,2);
+
+																if (array_key_exists($cell_i,$ratios))
 																{
-																	$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE2_START',array('_GUID'=>'9bac42a1b62c5c9a2f758639fcb3bb2f','WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:(float_to_raw_string(97.0/(floatval(count($cells))/2.0),2).'%'),'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),'FLOAT'=>$i_dir_1,'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'')));
+																	$width=$ratios[$cell_i];
 																} else
 																{
-																	$tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START',array('_GUID'=>'0f15f9d5554635ed7ac154c9dc5c72b8','WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'','FLOAT'=>$i_dir_1,'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'','PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2))));
+																	$width=float_to_raw_string($total_box_width/$num_cells_in_row,2).'%';
+																}
+
+																if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
+																{
+																	$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE2_START',array('_GUID'=>'9bac42a1b62c5c9a2f758639fcb3bb2f','WIDTH'=>$width,'PADDING_AMOUNT'=>$padding_amount,'FLOAT'=>$i_dir_1,'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'')));
+																} else
+																{
+																	$tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START',array('_GUID'=>'0f15f9d5554635ed7ac154c9dc5c72b8','WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'','FLOAT'=>$i_dir_1,'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'','PADDING_AMOUNT'=>$padding_amount)));
 																}
 																$attaches_before=count($COMCODE_ATTACHMENTS[$pass_id]);
 																$tag_output->attach(comcode_text_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));

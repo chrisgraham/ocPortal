@@ -121,6 +121,7 @@ This notification hook was created using the classifieds notification hook as a 
 			if ($debug) echo "downloads_followup_email: notifications enabled = " . strval(notifications_enabled('downloads_followup_email',NULL,$member_id)) . " \n";
 			
 			// Send actual notification
+			require_code('notifications');
 			dispatch_notification('downloads_followup_email','',$subject_line,$message,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
 		
