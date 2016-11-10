@@ -23,7 +23,7 @@
 
 /**
  * Util.php, Utility functions
- * 
+ *
  * Contains reusable functions for Program E
  * @author Paul Rydell
  * @copyright 2002
@@ -36,7 +36,7 @@
 
 /**
  * Class to hold the reponse
- * 
+ *
  * Container class to hold response, input error and a bunch of other
  * bits of information that is used in other functions
  * @author Paul Rydell
@@ -61,10 +61,10 @@ $afterreplace=array();
 
 
 /**
-* This function will clean up old data in the database that is not 
+* This function will clean up old data in the database that is not
 * needed according to user defined settings.
 *
-* Deletes entries in the database tables dstore, thatstack, thatstackindex 
+* Deletes entries in the database tables dstore, thatstack, thatstackindex
 * and if set also conversationlog.
 *
 * @uses make_seed()
@@ -77,7 +77,6 @@ function cleanup(){
 		return;
 	}
 
-	mt_srand(make_seed());
 	$randval = mt_rand(1,RANDOMCHANCECLEAN);
 
 	if ($randval==RANDOMCHANCECLEAN){
@@ -88,13 +87,13 @@ function cleanup(){
 			$clean_thatstack="delete from thatstack where enteredtime < date_add(now(), interval - " . MINUTESTOKEEPDATA . " minute)";
 			$clean_thatindex="delete from thatindex where enteredtime < date_add(now(), interval - " . MINUTESTOKEEPDATA . " minute)";
 
-			$selectcode = mysql_query($clean_dstore);
+			$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $GLOBALS['SITE_DB']->connection_write[0], $clean_dstore);
 			if ($selectcode){
 			}
-			$selectcode = mysql_query($clean_thatstack);
+			$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $clean_thatstack);
 			if ($selectcode){
 			}
-			$selectcode = mysql_query($clean_thatindex);
+			$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $clean_thatindex);
 			if ($selectcode){
 			}
 
@@ -104,7 +103,7 @@ function cleanup(){
 
 			$clean_convlog="delete from conversationlog where enteredtime < date_add(now(), interval - " . MINUTESTOKEEPCHATLOG . " minute) and " . whichbots();
 
-			$selectcode = mysql_query($clean_convlog);
+			$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $clean_convlog);
 			if ($selectcode){
 			}
 
@@ -115,15 +114,15 @@ function cleanup(){
 }
 
 /**
-* Check if a tag is an old style AIML tag. 
-* 
-* If it is then return its new name and the fact that it is deprecated. This 
-* information is not send back through the return value, but by using call-by-reference 
+* Check if a tag is an old style AIML tag.
+*
+* If it is then return its new name and the fact that it is deprecated. This
+* information is not send back through the return value, but by using call-by-reference
 * variable &$ttag.
-* 
+*
 * @param string $tag     the tag name that needs to be checked
 * @param string &$ttag   depreciated AIML tag name. Note, call-by-reference variable.
-* 
+*
 * @return boolean        true/false; either it is a depreciated AIML tag or it is not.
 */
 function isdeprecated($tag,&$ttag){
@@ -143,7 +142,7 @@ function isdeprecated($tag,&$ttag){
 
 	if ($tag=="TALK_ABOUT"){
 		$tag="TALKABOUT";
-	}	
+	}
 	$deptags=array("NAME","BIRTHDAY","BIRTHPLACE","BOYFRIEND","FAVORITEBAND","FAVORITEBOOK","FAVORITECOLOR","FAVORITEFOOD","FAVORITESONG","FAVORITEMOVIE","FORFUN","FRIENDS","GIRLFRIEND","KINDMUSIC","LOCATION","LOOKLIKE","MASTER","QUESTION","SIGN","TALKABOUT","WEAR");
 
 	if (in_array($tag,$deptags)){
@@ -159,11 +158,11 @@ function isdeprecated($tag,&$ttag){
 /**
 * Substitution routine
 *
-* Is used in combination with for example {@link firstthird()} {@link gender()}. The myfunc() is called from these functions from the arrays generated in {@link subs.inc} by {@link makesrphp()}. 
+* Is used in combination with for example {@link firstthird()} {@link gender()}. The myfunc() is called from these functions from the arrays generated in {@link subs.inc} by {@link makesrphp()}.
 *
-* When doing substitution myfunc replaces the words to be substituted with ~~x~~ 
-* where x is an incremented integer instead of what should eventually be substituted. 
-* Then when all substitution is done another function will go through and replace the 
+* When doing substitution myfunc replaces the words to be substituted with ~~x~~
+* where x is an incremented integer instead of what should eventually be substituted.
+* Then when all substitution is done another function will go through and replace the
 * ~~x~~ with the real value.
 *
 * @todo Analyse if a straight replace will be more effective and efficient. Hard to see why this two-stage replace has any advantages. If not, then rename the function.
@@ -174,7 +173,7 @@ function isdeprecated($tag,&$ttag){
 *
 * @param string $input    The new word replacing the old word.
 *
-* @return string          The user's input, with ~~number~~ where the words in the substitution list 
+* @return string          The user's input, with ~~number~~ where the words in the substitution list
 *                         should be.
 */
 function myfunc($input){
@@ -192,7 +191,7 @@ function myfunc($input){
 * Get the ID, or IP of the user
 *
 * Uses the server global REMOTE_ADDR.
-* 
+*
 * @global REMOTE_ADDR     The user's remote address, i.e. LAN address.
 *
 * @return string          IP number
@@ -208,7 +207,7 @@ function getid(){
 *
 * Should look like: Wed Nov 14 18:09:55 CST 2002
 *
-* @return string          formated date string, Day name, Month name, day number month, time, time zone and year. 
+* @return string          formated date string, Day name, Month name, day number month, time, time zone and year.
 *
 */
 function getfdate(){
@@ -226,19 +225,19 @@ function getfdate(){
 *
 * @uses whichbots()
 *
-* @return integer         the number of templates in the template database. 
+* @return integer         the number of templates in the template database.
 */
 function getsize(){
 
-	$query="select count(*) from templates where " . whichbots();	
+	$query="select count(*) from templates where " . whichbots();
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
-		if(!mysql_numrows($selectcode)){
+		if(!mysqli_num_rows($selectcode)){
 			return 0;
 		}
 		else{
-			while ($q = mysql_fetch_array($selectcode)){
+			while ($q = mysqli_fetch_array($selectcode)){
 				return $q[0];
 			}
 		}
@@ -251,12 +250,12 @@ function getsize(){
 * Get information about the bot that was entered in the startup.xml
 *
 * In startup.xml there are a number of bot-varables called in AIML as <bot name="foo"/>
-* These are stored in the table 'bot' and this function retrieves (ex.) the value of 
+* These are stored in the table 'bot' and this function retrieves (ex.) the value of
 * bot-variable "foo".
 *
-* @global integer uid            is created in talk.php as $myuniqueid then transformed 
+* @global integer uid            is created in talk.php as $myuniqueid then transformed
 *                                in respond.php into $uid by reply()
-* @global integer selectbot     is created in respond.php:replybotname() as $botid 
+* @global integer selectbot     is created in respond.php:replybotname() as $botid
 *                                which in return calls reply() that turns it into $selectbot
 *
 * @see talk.php
@@ -269,19 +268,19 @@ function getsize(){
 */
 function botget($name){
 
-	global $uid, $selectbot;		
+	global $uid, $selectbot;
 
 	$name=addslashes($name);
 
-	$query="select value from bot where name='$name' and bot = $selectbot";	
+	$query="select value from bot where name='$name' and bot = $selectbot";
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
-		if(!mysql_numrows($selectcode)){
+		if(!mysqli_num_rows($selectcode)){
 			return "";
 		}
 		else{
-			while ($q = mysql_fetch_array($selectcode)){
+			while ($q = mysqli_fetch_array($selectcode)){
 				return $q[0];
 			}
 		}
@@ -294,12 +293,12 @@ function botget($name){
 * Get a value for some variable set by the user in AIML.
 *
 * In the template (<template> ... </template>) variables can be set and used during matching.
-* after matching these variables are stored in the table dstore. This function retrieves the 
-* value of a stored variable. This type of variable is also called a 'predicate'. 
+* after matching these variables are stored in the table dstore. This function retrieves the
+* value of a stored variable. This type of variable is also called a 'predicate'.
 *
 * @global integer
 *
-* @return string            Either the value of the stored predicate, or the constand default 
+* @return string            Either the value of the stored predicate, or the constand default
 *                           value of a predicate
 */
 function bget($name){
@@ -310,13 +309,13 @@ function bget($name){
 
 	$query="select value from dstore where name='$name' and uid='$uid' order by id desc limit 1";
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
-		if(!mysql_numrows($selectcode)){
+		if(!mysqli_num_rows($selectcode)){
 			return DEFAULTPREDICATEVALUE;
 		}
 		else{
-			while ($q = mysql_fetch_array($selectcode)){
+			while ($q = mysqli_fetch_array($selectcode)){
 				return $q[0];
 			}
 		}
@@ -325,17 +324,17 @@ function bget($name){
 
 }
 
-/** 
+/**
 * Set the value for an AIML variable
 *
-* Function to store the variable name and it's contents into the dstore table. It doens't 
+* Function to store the variable name and it's contents into the dstore table. It doens't
 * update the table, just the first insert.
 *
-* @global integer 
+* @global integer
 *
 * @param string $name     The name in which the value should be stored
 * @param string $value    The contents of the variable.
-* 
+*
 * @return void      doesn't return anything
 */
 function bset($name,$value){
@@ -347,7 +346,7 @@ function bset($name,$value){
 	$value=addslashes($value);
 
 	$query="insert into dstore (uid,name,value) values ('$uid','$name','$value')";
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
 	}
 
@@ -356,10 +355,10 @@ function bset($name,$value){
 /**
 * Store the clients inputs into the database.
 *
-* This is an array because it separates on .'s and other sentence splitters. Stores these in the 
+* This is an array because it separates on .'s and other sentence splitters. Stores these in the
 * dstore table of the database.
 *
-* @global integer 
+* @global integer
 *
 * @param array $inputsarray   Contains multiple inputs (i.e. sentences) of a user
 *
@@ -380,7 +379,7 @@ function addinputs($inputsarray){
 	}
 
 	$query=substr($query,0,(strlen($query)-1));
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
 	}
 
@@ -392,7 +391,7 @@ function addinputs($inputsarray){
 * This is an array because it separates on .'s and other sentence splitters. Stores these in the
 * thatindex table of the database.
 *
-* @global integer 
+* @global integer
 *
 * @param array $inputsarray   Contains multiple inputs (sentences) of the bot
 *
@@ -405,10 +404,10 @@ function addthats($inputsarray){
 
 	$query="insert into thatindex (uid) values ('$uid')";
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
 	}
-	$thatidx=mysql_insert_id();
+	$thatidx=mysqli_insert_id($GLOBALS['SITE_DB']->connection_write[0]);
 
 	$query="insert into thatstack (thatid,value) values ";
 
@@ -425,7 +424,7 @@ function addthats($inputsarray){
 
 	$query=substr($query,0,(strlen($query)-1));
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
 	}
 
@@ -439,8 +438,8 @@ function addthats($inputsarray){
 * @param string $input      The user's input.
 * @param string $reponse    The bot's response to the user's input.
 *
-* @global integer 
-* @global integer 
+* @global integer
+* @global integer
 
 * @return void              nothing
 */
@@ -452,7 +451,7 @@ function logconversation($input,$response){
 	$response=addslashes($response);
 
 	$query="insert into conversationlog (uid,input,response,bot) values ('$uid','$input','$response',$selectbot)";
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
 	}
 
@@ -462,9 +461,9 @@ function logconversation($input,$response){
 * Get the previous thing the bot said
 *
 * Retrieve from the thatindex table the previous output, per sentence, of what the bot said from the thatindex en thatstack table.
-* 
-* @global integer 
-* 
+*
+* @global integer
+*
 * @param integer $index      Number between 1-5, 1 representing the previous bot output and 5 the 5th last bot output.
 * @param integer $offset     Bot output is saved per sentence. So 1 would be last sentence, 3 would be third last sentence of that bot output.
 *
@@ -480,13 +479,13 @@ function getthat($index,$offset){
 	$query="select id from thatindex where uid='$uid' order by id desc limit $index,1";
 
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
-		if(!mysql_numrows($selectcode)){
+		if(!mysqli_num_rows($selectcode)){
 			return "";
 		}
 		else{
-			while ($q = mysql_fetch_array($selectcode)){
+			while ($q = mysqli_fetch_array($selectcode)){
 				$thatid=$q[0];
 			}
 		}
@@ -496,13 +495,13 @@ function getthat($index,$offset){
 	$query="select value from thatstack where thatid=$thatid order by id desc limit $offset,1";
 
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
-		if(!mysql_numrows($selectcode)){
+		if(!mysqli_num_rows($selectcode)){
 			return "";
 		}
 		else{
-			while ($q = mysql_fetch_array($selectcode)){
+			while ($q = mysqli_fetch_array($selectcode)){
 				return $q[0];
 			}
 		}
@@ -515,10 +514,10 @@ function getthat($index,$offset){
 * Get the previous thing the client said
 *
 * Retrieve the entire previous input of the user from the dstore table.
-* 
+*
 * @global integer
-* 
-* @return string         The previous input of the user. 
+*
+* @return string         The previous input of the user.
 */
 function getinput($index){
 
@@ -528,13 +527,13 @@ function getinput($index){
 
 	$query="select value from dstore where uid='$uid' and name='input' order by id desc limit $index,$offset";
 
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
-		if(!mysql_numrows($selectcode)){
+		if(!mysqli_num_rows($selectcode)){
 			return "";
 		}
 		else{
-			while ($q = mysql_fetch_array($selectcode)){
+			while ($q = mysqli_fetch_array($selectcode)){
 				return $q[0];
 			}
 		}
@@ -546,11 +545,11 @@ function getinput($index){
 /**
 * Take the user input and do all substitutions and split it into sentences
 *
-* The matching process searches a match for every sentence and in the end combines all 
+* The matching process searches a match for every sentence and in the end combines all
 * those individual matches into one reply. This funtion splits the sentences of the user's
 * input, replaces the words that need to be subtituted (found in startup.xml).
-* 
-* 
+*
+*
 * @global array contractsearch
 * @global array contractreplace
 * @global mixed abbrevsearch             not used in this function
@@ -563,7 +562,7 @@ function getinput($index){
 *
 * @param string $input                   The unchanged user input.
 *
-* @return array                          each individual sentence, ready for matching. 
+* @return array                          each individual sentence, ready for matching.
 */
 function normalsentences($input){
 
@@ -573,7 +572,7 @@ function normalsentences($input){
 
 	//$cfull=preg_replace($contractsearch,$contractreplace,$cfull);
 
-	$cfull=str_replace($aftersearch,$afterreplace,$cfull);	
+	$cfull=str_replace($aftersearch,$afterreplace,$cfull);
 
 	$replacecounter=1;
 	$aftersearch=array();
@@ -608,12 +607,12 @@ function normalsentences($input){
 *
 * @global array gendersearch
 * @global array genderreplace
-* @global array 
-* @global array 
+* @global array
+* @global array
 * @global integer
 *
 * @param string $input           The string where the gender related words/phrases need to be replaced
-* 
+*
 * @return string                 The string containing where the gender related words have been replaced.
 */
 function gender($input){
@@ -632,12 +631,12 @@ function gender($input){
 
 }
 
-/** 
+/**
 * Do a first to third person replacement
 *
 * Replaces, for example, "I was" to "he or she was". he gender related words and phrases that are used
 * can be found in subs.inc and originally in the startup.xml
-* 
+*
 * @global array firstthirdsearch
 * @global array firstthirdreplace
 * @global array
@@ -647,7 +646,7 @@ function gender($input){
 * @global integer
 *
 * @param string $input           The string where the first->third related words/phrases need to be replaced
-* 
+*
 * @return string                 The string containing where the first->third related words have been replaced.
 */
 function firstthird($input){
@@ -679,7 +678,7 @@ function firstthird($input){
 * @global integer
 *
 * @param string $input           The string where the first->second related words/phrases need to be replaced
-* 
+*
 * @return string                 The string containing where the first->second related words have been replaced.
 */
 function firstsecond($input){
@@ -716,7 +715,7 @@ function insertgossip($gossip){
 	$gossip=addslashes($gossip);
 
 	$query="insert into gossip (gossip,bot) values ('$gossip'," . $selectbot . ")";
-	$selectcode = mysql_query($query);
+	$selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $query);
 	if ($selectcode){
 	}
 
@@ -728,20 +727,20 @@ function insertgossip($gossip){
 * Retrieve the child nodes of the XML tree. This is a recursive function.
 *
 * @uses GetChildren()
-* 
-* @param array $vals               
+*
+* @param array $vals
 * @param integer &$i                  call-by-reference variable for, most likely, GetXMLTree()
 *
 * @return array                       The child nodes in an array.
 */
-function GetChildren($vals, &$i) { 
+function GetChildren($vals, &$i) {
 
-	$children = array(); 
+	$children = array();
 
-	if (isset($vals[$i]['value'])) 
-		array_push($children, $vals[$i]['value']); 
+	if (isset($vals[$i]['value']))
+		array_push($children, $vals[$i]['value']);
 
-	while (++$i < count($vals)) { 
+	while (++$i < count($vals)) {
 
 	if (!isset($vals[$i]['attributes'])){
 		$vals[$i]['attributes']="";
@@ -750,29 +749,29 @@ function GetChildren($vals, &$i) {
 		$vals[$i]['value']="";
 	}
 
-		switch ($vals[$i]['type']) { 
-			case 'cdata': 
-			array_push($children, $vals[$i]['value']); 
-			break; 
+		switch ($vals[$i]['type']) {
+			case 'cdata':
+			array_push($children, $vals[$i]['value']);
+			break;
 
-			case 'complete': 
-			array_push($children, array('tag' => $vals[$i]['tag'], 'attributes' => $vals[$i]['attributes'], 'value' => $vals[$i]['value'])); 
-			break; 
+			case 'complete':
+			array_push($children, array('tag' => $vals[$i]['tag'], 'attributes' => $vals[$i]['attributes'], 'value' => $vals[$i]['value']));
+			break;
 
-			case 'open': 
-			array_push($children, array('tag' => $vals[$i]['tag'],'attributes' => $vals[$i]['attributes'], 'children' => GetChildren($vals,$i))); 
-			break; 
+			case 'open':
+			array_push($children, array('tag' => $vals[$i]['tag'],'attributes' => $vals[$i]['attributes'], 'children' => GetChildren($vals,$i)));
+			break;
 
-			case 'close': 
-			return $children; 
-		} 
-	} 
-} 
+			case 'close':
+			return $children;
+		}
+	}
+}
 
 /**
 * Get an XML tree
 *
-* Create an XML tree in array form from a large string. 
+* Create an XML tree in array form from a large string.
 *
 * @uses GetChildren()
 *
@@ -780,31 +779,31 @@ function GetChildren($vals, &$i) {
 *
 * @return array                     Multi dimensional array in an XML way containing XML data.
 */
-function GetXMLTree($data) { 
+function GetXMLTree($data) {
 
-	$p = xml_parser_create(); 
+	$p = xml_parser_create();
 	xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,0);
 
-	xml_parse_into_struct($p, $data, $vals, $index); 
-	xml_parser_free($p); 
+	xml_parse_into_struct($p, $data, $vals, $index);
+	xml_parser_free($p);
 
-	$tree = array(); 
-	$i = 0; 
+	$tree = array();
+	$i = 0;
 
 	if (!isset($vals[$i]['attributes'])){
 		$vals[$i]['attributes']="";
 	}
 
-	array_push($tree, array('tag' => $vals[$i]['tag'], 'attributes' => $vals[$i]['attributes'], 'children' => GetChildren($vals, $i))); 
-	return $tree; 
+	array_push($tree, array('tag' => $vals[$i]['tag'], 'attributes' => $vals[$i]['attributes'], 'children' => GetChildren($vals, $i)));
+	return $tree;
 
-} 
+}
 
 /**
 * Start a timer
 *
 * Save the start time of the to be timed script
-* 
+*
 * @global array ss_timing_start_times          contains the start moments of the script
 *
 * @param string $name                          default value is 'default' Makes it possibe to time more than
@@ -821,7 +820,7 @@ function ss_timing_start ($name = 'default') {
 * Stop a timer
 *
 * Save the stop time of the to be timed script
-* 
+*
 * @global array ss_timing_stop_times          contains the stop moments of a script
 *
 * @param string $name                          default value is 'default' Makes it possibe to time more than
@@ -838,7 +837,7 @@ function ss_timing_stop ($name = 'default') {
 * Retrieve timer data
 *
 * Get the running time the timed script
-* 
+*
 * @global array ss_timing_start_times          contains the start and finish moments of the script
 * @global array ss_timing_stop_times          contains the stop moments of a script
 *
@@ -867,7 +866,7 @@ function ss_timing_current ($name = 'default') {
 /**
 * Change the case of the keys of an array to all uppercase
 *
-* Array keys can be number or strings. If strings then it's a good habit to use only uppercase. 
+* Array keys can be number or strings. If strings then it's a good habit to use only uppercase.
 * This is sadly not always the case. This function makes sure that they are.
 *
 * @param array              Array suspected of having mixed case array keys.
@@ -894,18 +893,18 @@ if (!function_exists('upperkeysarray'))
 /**
 * Check to see if a tag is a custom tag.
 *
-* Program E supports additional, non AIML 1.0x specified, custom tags. This function checks to see if 
+* Program E supports additional, non AIML 1.0x specified, custom tags. This function checks to see if
 * the encountered XML tag is indeed a custom AIML tag. If it is a custom tag, it will then the
 * appropriate function to use in &$functicall.
 *
 * @global array cttags            contains all the custom tags. Array is created by loadcustomtags()
 *
 * @see loadcustomtags()
-* 
+*
 * @param string $tagname          name of the tag to be checked
 * @param &$functocall             call-by-reference variable used to send back the function name that
 *                                 needs to be called to process the tag's contents.
-* 
+*
 * @return boolean				  true/false
 */
 function iscustomtag($tagname,&$functocall){
@@ -929,7 +928,7 @@ function iscustomtag($tagname,&$functocall){
 *
 * @see customtags.php
 *
-* @return void 
+* @return void
 */
 function loadcustomtags(){
 
@@ -962,9 +961,9 @@ function lookupbotid($botname){
 
 	$name=addslashes($botname);
     $q="select id from bots where botname='$name'";
-    $selectcode = mysql_query($q);
+    $selectcode = mysqli_query($GLOBALS['SITE_DB']->connection_write[0], $q);
     if ($selectcode) {
-        while ($q = mysql_fetch_array($selectcode)){
+        while ($q = mysqli_fetch_array($selectcode)){
                 return $q["id"];
         }
     }
@@ -977,7 +976,7 @@ function lookupbotid($botname){
 * Which bot is selected
 *
 * Returns the bit of SQL query that limits the results to the selected bot.
-* 
+*
 * @global string selectbot              The currently selected bot. The bot the user is chatting to.
 *
 * @return string                        The bit of SQL query that limits the results to the selected bot.

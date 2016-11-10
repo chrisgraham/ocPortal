@@ -1551,7 +1551,7 @@ function get_param($name,$default=false,$no_security=false)
  */
 function __param($array,$name,$default,$integer=false,$posted=false)
 {
-	if ((!isset($array[$name])) || (($integer) && ($array[$name]=='')))
+	if ((!isset($array[$name])) || ($array[$name]===false) || (($integer) && ($array[$name]=='')))
 	{
 		if ($default!==false) return $default;
 
