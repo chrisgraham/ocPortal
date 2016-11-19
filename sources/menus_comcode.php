@@ -186,7 +186,8 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 		$i++;
 	}
 
-	for ($x=0;$x<count($stack);$x++)
+	$stack_size=count($stack);
+	for ($x=0;$x<$stack_size;$x++)
 	{
 		$this_level=$current_level;
 		$current_level=array_pop($stack);

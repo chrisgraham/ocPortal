@@ -341,6 +341,7 @@ iframe {
 {+START,IF,{$MOBILE}}
 	select {
 		max-width: 100px;
+		white-space: nowrap !important;
 	}
 
 	/* On mobiles we want maximum fluidity */

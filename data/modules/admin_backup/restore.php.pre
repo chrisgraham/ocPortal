@@ -159,7 +159,7 @@ while (($line=fgets($myfile,10000000))!==false)
 		}
 		if ((time()>=$time_start+20) && ($sql_buildup==''))
 		{
-			$refresh_url='restore.php?start='.strval($i+$start_line+get_param_integer('start',0)).'&start_offset='.strval(ftell($myfile));
+			$refresh_url='restore.php?start='.strval($i+$start_line+get_param_integer('start',0)).'&start_offset='.strval($offset);
 			echo '<meta http-equiv="refresh" content="0;url='.$refresh_url.'" /> Please wait, continuing.';
 			//header('Location: '.$refresh_url);	Can result in "This web page has a redirect loop" error
 			exit();
@@ -168,6 +168,8 @@ while (($line=fgets($myfile,10000000))!==false)
 		$sql_buildup.=$line.chr(10);
 
 		$i++;
+
+		$offset = ftell($myfile);
 	}
 }
 fclose($myfile);

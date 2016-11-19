@@ -249,6 +249,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$hot_topic_definition=intval(get_option('hot_topic_definition'));
 		$topic_filter_sup=' AND t_cache_num_posts/((t_cache_last_time-t_cache_first_time)/60/60/24+1)>'.strval($hot_topic_definition);
 	} else $topic_filter_sup='';
+    $topic_filter_sup.=' AND t_validated=1';
 	global $SITE_INFO;
 	if (!(((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old')))))
 	{
