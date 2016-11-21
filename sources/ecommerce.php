@@ -165,7 +165,7 @@ function get_transaction_fee($amount,$via)
 	if ($via=='') return 0.0;
 	if ($via=='manual') return 0.0;
 
-	if ((file_exists(get_file_base().'/sources/hooks/systems/ecommerce_via/'.$via)) || (file_exists(get_file_base().'/sources_custom/hooks/systems/ecommerce_via/'.$via)))
+	if ((file_exists(get_file_base().'/sources/hooks/systems/ecommerce_via/'.$via.'.php')) || (file_exists(get_file_base().'/sources_custom/hooks/systems/ecommerce_via/'.$via.'.php')))
 	{
 		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 		$object=object_factory('Hook_'.$via);

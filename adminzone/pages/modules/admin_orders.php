@@ -214,8 +214,14 @@ class Module_admin_orders
 			$actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array('_GUID'=>'19ad8393aa5dba3f2f768818f22d8837','ORDER_TITLE'=>$order_title,'ORDER_ACTUALISE_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
 
 			$submitted_by=$GLOBALS['FORUM_DRIVER']->get_username($row['c_member']);
-			$member_url=build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
-			$member=hyperlink($member_url,$submitted_by,false,true,do_lang('CUSTOMER'));
+			if (($submitted_by===null) || (is_guest($row['c_member'])))
+			{
+				$member=do_lang('UNKNOWN');
+			} else
+			{
+				$member_url=build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
+				$member=hyperlink($member_url,$submitted_by,false,true,do_lang('CUSTOMER'));
+			}
 
 			$view_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
