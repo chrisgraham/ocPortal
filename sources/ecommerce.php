@@ -141,7 +141,7 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_lastname'),'','last_name',get_ocp_cpf('last_name'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_building_name_or_number'),'','address1',get_ocp_cpf('building_name_or_number'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_city'),'','city',get_ocp_cpf('city'),true));
-	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_state'),'','zip',get_ocp_cpf('state'),true));
+	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_state'),'','state',get_ocp_cpf('state'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_post_code'),'','zip',get_ocp_cpf('post_code'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_country'),'','country',get_ocp_cpf('country'),true));
 

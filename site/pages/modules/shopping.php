@@ -553,8 +553,6 @@ class Module_shopping
 				}
 			}
 
-			attach_message(do_lang_tempcode('SUCCESS'),'inform');
-
 			if (count($_POST)!=0)
 			{
 				$order_id=handle_transaction_script();
