@@ -36,7 +36,7 @@ class Hook_ocf_cpf_filter_ecommerce
 
 		// Local payment
 		if (get_option('use_local_payment',true)==='1')
-			$cpf=array_merge($cpf,array('payment_type'=>1,'payment_cardholder_name'=>1,'payment_card_type'=>1,'payment_card_number'=>1,'payment_card_start_date'=>1,'payment_card_expiry_date'=>1,'payment_card_issue_number'=>1,'payment_card_cv2'=>1,));
+			$cpf=array_merge($cpf,array('payment_type'=>1,'payment_cardholder_name'=>1,'payment_card_type'=>1,'payment_card_number'=>1,'payment_card_start_date'=>1,'payment_card_expiry_date'=>1,'payment_card_issue_number'=>1,));
 
 		return $cpf;
 	}

@@ -37,7 +37,7 @@ function backend_cloud_script()
 	if ($protocol=='soap') exit('false');
 	if ($protocol=='http-post') exit('false');
 	if (($protocol=='xml-rpc') && (!function_exists('xmlrpc_encode'))) exit('false');
-	$port=post_param_integer('port','80');
+	$port=post_param_integer('port',80);
 //	$watching_channel=$_POST['channels'];
 	$status=register_them($path,$procedure,$protocol,$port,get_param('type',''));
 	if (!$status) exit('false');

@@ -121,7 +121,7 @@ class Module_purchase
 			$cpf=array('currency'=>array(3,'list',implode('|',array_keys(get_currency_map()))));
 			foreach ($cpf as $f=>$l)
 				$GLOBALS['FORUM_DRIVER']->install_create_custom_field($f,$l[0],1,0,1,0,'',$l[1],0,$l[2]);
-			$cpf=array('payment_cardholder_name'=>array(100,'short_text',''),'payment_type'=>array(26,'list','American Express|Delta|Diners Card|JCB|Master Card|Solo|Switch|Visa'),'payment_card_number'=>array(20,'integer',''),'payment_card_start_date'=>array(5,'short_text','mm/yy'),'payment_card_expiry_date'=>array(5,'short_text','mm/yy'),'payment_card_issue_number'=>array(2,'short_text',''),'payment_card_cv2'=>array(4,'short_text',''));
+			$cpf=array('payment_cardholder_name'=>array(100,'short_text',''),'payment_type'=>array(26,'list','American Express|Delta|Diners Card|JCB|Master Card|Solo|Switch|Visa'),'payment_card_number'=>array(20,'integer',''),'payment_card_start_date'=>array(5,'short_text','mm/yy'),'payment_card_expiry_date'=>array(5,'short_text','mm/yy'),'payment_card_issue_number'=>array(2,'short_text',''));
 			foreach ($cpf as $f=>$l)
 				$GLOBALS['FORUM_DRIVER']->install_create_custom_field($f,$l[0],1,0,1,0,'',$l[1],1,$l[2]);
 
@@ -529,6 +529,15 @@ class Module_purchase
 				$cv2=post_param('cv2');
 
 				list($success,,$message,$message_raw)=$object->do_transaction($trans_id,$name,$card_number,$amount,$expiry_date,$issue_number,$start_date,$card_type,$cv2,$length,$length_units);
+
+				$item_name=$transaction_row['e_item_name'];
+				if (addon_installed('shopping'))
+				{
+					if (preg_match('#'.str_replace('xxx','.*',preg_quote(do_lang('shopping:CART_ORDER','xxx'),'#')).'#',$item_name)!=0)
+					{
+						$this->store_shipping_address($purchase_id);
+					}
+				}
 
 				if (($success) || (!is_null($length)))
 				{
