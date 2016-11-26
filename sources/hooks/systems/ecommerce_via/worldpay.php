@@ -195,12 +195,12 @@ class Hook_worldpay
 	}
 
 	/**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-id).
+	 * Find whether the hook auto-cancels (if it does, auto cancel the given subscription).
 	 *
-	 * @param  string		Transaction ID to cancel
+	 * @param  ID_TEXT	Subscription ID to cancel
 	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
 	 */
-	function auto_cancel($trans_id)
+	function auto_cancel($subscription_id)
 	{
 		return false;
 	}
