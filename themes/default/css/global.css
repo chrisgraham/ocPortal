@@ -183,6 +183,7 @@ form { /* For IE6 */
 {+START,IF,{$MOBILE}}
 	select {
 		max-width: 100px;
+		white-space: nowrap !important;
 	}
 {+END}
 

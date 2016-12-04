@@ -245,7 +245,19 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 			var url="{$FIND_SCRIPT,messages}?action=post";
 			element.disabled=true;
 			top_window.currently_sending_message=true;
-			var result=do_ajax_request(maintain_theme_in_link(url)+top_window.keep_stub(false),null,"room_id="+window.encodeURIComponent(current_room_id)+"&message="+window.encodeURIComponent(message_text)+"&font="+window.encodeURIComponent(font_name)+"&colour="+window.encodeURIComponent(font_colour)+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false));
+			var full_url=maintain_theme_in_link(url+top_window.keep_stub(false));
+			var post_data="room_id="+window.encodeURIComponent(current_room_id)+"&message="+window.encodeURIComponent(message_text)+"&font="+window.encodeURIComponent(font_name)+"&colour="+window.encodeURIComponent(font_colour)+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id);
+			var result=do_ajax_request(full_url,null,post_data);
+			if (result==null)
+			{
+				window.top_window.currently_sending_message=false;
+				element.disabled=false;
+
+				// Reschedule the next check
+				top_window.cc_timer=top_window.setTimeout("chat_check(false,"+top_window.last_message_id+","+top_window.last_event_id+");",10000);
+
+				return false;
+			}
 			top_window.currently_sending_message=false;
 			element.disabled=false;
 
@@ -312,7 +324,11 @@ function chat_check(backlog,message_id,event_id)
 				url="{$FIND_SCRIPT*,messages}?action=new&room_id="+window.encodeURIComponent(load_from_room_id)+"&message_id="+window.encodeURIComponent(message_id)+"&event_id="+window.encodeURIComponent(event_id);
 			}
 			if (window.location.href.indexOf('no_reenter_message=1')!=-1) url=url+'&no_reenter_message=1';
-			do_ajax_request(maintain_theme_in_link(url+keep_stub(false)),chat_check_response,false);
+			var full_url=maintain_theme_in_link(url+keep_stub(false));
+			var error_func=function() {
+				chat_check_response(null,null);
+			};
+			do_ajax_request(full_url,[chat_check_response,error_func],false);
 			return false;
 		}
 		return null;
@@ -340,12 +356,15 @@ function chat_check_timeout(backlog,message_id,event_id)
 // Deal with the new messages response
 function chat_check_response(ajax_result_frame,ajax_result)
 {
-	var temp=_handle_signals(true,false,ajax_result);
-	if (temp==-2) return false;
-	//if (!window.current_room_id) window.current_room_id=temp;
+	if (ajax_result!=null)
+	{
+		var temp=_handle_signals(true,false,ajax_result);
+		if (temp==-2) return false;
+		//if (!window.current_room_id) window.current_room_id=temp;
+	}
 
 	// Schedule the next check
-	if (window.cc_timer) {	window.clearTimeout(window.cc_timer); window.cc_timer=null; }
+	if (window.cc_timer) { window.clearTimeout(window.cc_timer); window.cc_timer=null; }
 	window.cc_timer=window.setTimeout("chat_check(false,"+window.last_message_id+","+window.last_event_id+");",10000);
 
 	window.message_checking=false; // All must be ok so say we are happy we got a response and scheduled the next check

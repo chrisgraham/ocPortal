@@ -143,7 +143,7 @@ class Module_invoices
 	}
 
 	/**
-	 * Show my invoices.
+	 * Form to pay an invoice
 	 *
 	 * @return tempcode	The interface.
 	 */

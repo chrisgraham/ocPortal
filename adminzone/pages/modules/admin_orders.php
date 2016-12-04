@@ -217,9 +217,15 @@ class Module_admin_orders
 
 			$actions	=	do_template('ADMIN_ORDER_ACTIONS',array('ORDER_TITLE'=>$order_title,'ORDR_ACT_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
 
-			$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
+			if (($submitted_by===null) || (is_guest($row['c_member'])))
+			{
+				$member=do_lang('UNKNOWN');
+			} else
+			{
+				$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
 
-			$member		=	hyperlink($url,$submitted_by,false,true,do_lang('CUSTOMER'));
+				$member		=	hyperlink($url,$submitted_by,false,true,do_lang('CUSTOMER'));
+			}
 
 			$view_url	=	build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 

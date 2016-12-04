@@ -1611,6 +1611,8 @@ class Module_calendar
 				$to=cal_utctime_to_usertime($_to,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			}
 
+			require_code('temporal2');
+
 			syndicate_described_activity('calendar:ACTIVITY_SUBSCRIBED_EVENT',get_translated_text($event['e_title']),date_range($from,$to,!is_null($event['e_start_hour'])),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 		}
 

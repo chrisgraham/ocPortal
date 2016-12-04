@@ -368,10 +368,10 @@ function areaedit_init(element)
 		window.scrollTo(0,0); // Otherwise jumps to last editor
 	} , 500);*/
 
-	editor.on('key', function (event) {
+	editor.on('change', function (event) {
+		element.value=editor.getData();
 		if (typeof element.externalonKeyPress!='undefined')
 		{
-			element.value=editor.getData();
 			element.externalonKeyPress(event,element);
 		}
 	} );

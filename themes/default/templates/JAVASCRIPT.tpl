@@ -759,7 +759,7 @@ function browser_matches(code)
 	var is_safari=browser.indexOf('applewebkit')!=-1;
 	var is_chrome=browser.indexOf('chrome/')!=-1;
 	var is_gecko=(browser.indexOf('gecko')!=-1) && !_is_opera && !is_konqueror && !is_safari;
-	var _is_ie=((browser.indexOf('msie')!=-1) || (browser.indexOf('trident')!=-1)) && !_is_opera;
+	var _is_ie=((browser.indexOf('msie')!=-1) || (browser.indexOf('trident')!=-1) || (browser.indexOf('edge/')!=-1)) && !_is_opera;
 	var is_ie_old=((browser.indexOf('msie 6')!=-1) || (browser.indexOf('msie 5')!=-1)) && _is_ie;
 	var is_ie_decent=(!is_ie_old) && (browser.indexOf('msie 7')==-1) && _is_ie;
 	var is_ie5=(browser.indexOf('msie 5')!=-1) && _is_ie;
@@ -1740,7 +1740,7 @@ function resizeFrame(name,minHeight)
 		}
 		if (h+'px'!=frame_element.style.height)
 		{
-			if (frame_element.scrolling!='auto')
+			if ((frame_element.scrolling!='auto' && frame_element.scrolling!='yes') || (frame_element.style.height=='0') || (frame_element.style.height=='0px'))
 			{
 				frame_element.style.height=((h>=minHeight)?h:minHeight)+'px';
 				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);

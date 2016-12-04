@@ -45,7 +45,7 @@
 			</tr>
 			{+START,IF_NON_EMPTY,{NOTE}}
 				<tr>
-					<td class="dottedborder_barrier_b_nonrequired" colspan="5">
+					<td class="dottedborder_barrier_b_nonrequired" colspan="{$?,{$MOBILE},4,5}">
 						{NOTE*}
 					</td>
 				</tr>

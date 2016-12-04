@@ -128,7 +128,7 @@ class Hook_catalogue_items
 		if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0)) return true;
 
 		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
-		if ($fields[3]['effective_value']!='')
+		if ($fields[3]['effective_value']!='' && $fields[3]['effective_value']!=do_lang('NA'))
 		{
 			$available_stock=intval($fields[3]['effective_value']);
 
@@ -169,7 +169,7 @@ class Hook_catalogue_items
 		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 		if ((is_null($fields[3]['effective_value'])) || (intval($fields[3]['effective_value'])==0)) return NULL;
 
-		if ($fields[3]['effective_value']!='')
+		if ($fields[3]['effective_value']!='' && $fields[3]['effective_value']!=do_lang('NA'))
 		{
 			$available_stock=intval($fields[3]['effective_value']);
 
@@ -576,7 +576,7 @@ class Hook_catalogue_items
 		{
 			if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 
-			if ($fields[3]['effective_value']=='')	return;
+			if ($fields[3]['effective_value']=='' || $fields[3]['effective_value']==do_lang('NA'))	return;
 
 			$stock_field=$fields[3]['id'];
 			$current_stock=intval($fields[3]['effective_value']);
@@ -588,7 +588,7 @@ class Hook_catalogue_items
 
 			if (is_null($fields[5]['effective_value'])) return;
 
-			$stock_maintained=($fields[5]['effective_value']==do_lang('YES',null,null,null,get_site_default_lang()));
+			$stock_maintained=($fields[5]['effective_value']==do_lang('YES'));
 		}
 
 		if (array_key_exists(4,$fields))	//Stock level warn threshold

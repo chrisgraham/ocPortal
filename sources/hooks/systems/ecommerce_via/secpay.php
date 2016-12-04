@@ -79,7 +79,7 @@ class Hook_secpay
 			'e_length_units'=>'',
 		));
 		$digest=md5($trans_id.float_to_raw_string($amount).get_option('ipn_password'));
-		return do_template('ECOM_BUTTON_VIA_SECPAY',array('_GUID'=>'e68e80cb637f8448ef62cd7d73927722','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>strval($purchase_id),'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
+		return do_template('ECOM_BUTTON_VIA_SECPAY',array('_GUID'=>'e68e80cb637f8448ef62cd7d73927722','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Hook_secpay
 			'e_length'=>$length,
 			'e_length_units'=>$length_units,
 		));
-		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY',array('_GUID'=>'e5e6d6835ee6da1a6cf02ff8c2476aa6','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'FIRST_REPEAT'=>$first_repeat,'LENGTH'=>strval($length),'LENGTH_UNITS_2'=>$length_units_2,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>strval($purchase_id),'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
+		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY',array('_GUID'=>'e5e6d6835ee6da1a6cf02ff8c2476aa6','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'FIRST_REPEAT'=>$first_repeat,'LENGTH'=>strval($length),'LENGTH_UNITS_2'=>$length_units_2,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
 	}
 
 	/**
@@ -169,21 +169,15 @@ class Hook_secpay
 	}
 
 	/**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-id).
+	 * Find whether the hook auto-cancels (if it does, auto cancel the given subscription).
 	 *
-	 * @param  string		Transaction ID to cancel
+	 * @param  ID_TEXT	Subscription ID to cancel
 	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
 	 */
-	/*function auto_cancel($trans_id)
+	function auto_cancel($subscription_id)
 	{
-		require_lang('ecommerce');
-		$username=$this->_get_username();
-		$password=get_option('ipn_password');
-		$password_2=get_option('vpn_password');
-		$result=$this->_xml_rpc('https://www.secpay.com:443/secxmlrpc/make_call','SECVPN.repeatCardFullAddr',array($username,$password_2,$trans_id,-1,$password,'','','','','','repeat_change=true,repeat=false'),true);
-		if (is_null($result)) return false;
-		return (strpos($result,'&code=A&')!==false);
-	}*/
+		return false;
+	}
 
 	/**
 	 * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
@@ -266,11 +260,7 @@ class Hook_secpay
 		$message_raw=array_key_exists('message',$map)?$map['message']:'';
 		$message=$success?do_lang('ACCEPTED_MESSAGE',$message_raw):do_lang('DECLINED_MESSAGE',$message_raw);
 
-		$purchase_id	=	post_param_integer('customfld1','-1');
-		if(addon_installed('shopping'))
-		{
-			$this->store_shipping_address($purchase_id);
-		}
+		$purchase_id=post_param('customfld1','-1');
 
 		return array($success,$trans_id,$message,$message_raw);
 	}
@@ -404,7 +394,10 @@ class Hook_secpay
 
 		if(addon_installed('shopping'))
 		{
-			$this->store_shipping_address($purchase_id);
+			if (preg_match('#'.str_replace('xxx','.*',preg_quote(do_lang('shopping:CART_ORDER','xxx'),'#')).'#',$item_name)!=0)
+			{
+				$this->store_shipping_address($purchase_id);
+			}
 		}
 
 		return array($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,'');
