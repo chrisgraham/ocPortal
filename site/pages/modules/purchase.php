@@ -535,7 +535,7 @@ class Module_purchase
 				{
 					if (preg_match('#'.str_replace('xxx','.*',preg_quote(do_lang('shopping:CART_ORDER','xxx'),'#')).'#',$item_name)!=0)
 					{
-						$this->store_shipping_address($purchase_id);
+						$this->store_shipping_address($transaction_row['e_purchase_id']);
 					}
 				}
 

@@ -228,7 +228,8 @@ function fatal_exit($text)
 	}
 	require_code('tempcode_compiler');
 	$css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-	if (running_script('restore')) {
+	if (running_script('restore'))
+	{
 		$out_final=do_template('RESTORE_HTML_WRAP',array('_GUID'=>'190e78523cee0b6782e1e09d73a700a7','CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>$echo,'ERROR'=>true));
 	} else
 	{
@@ -425,7 +426,8 @@ function warn_exit($text)
 	}
 	require_code('tempcode_compiler');
 	$css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-	if (running_script('restore')) {
+	if (running_script('restore'))
+	{
 		$out_final=do_template('RESTORE_HTML_WRAP',array('_GUID'=>'190e78523cee0b6782e1e09d73a700a7','CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>$echo,'ERROR'=>true));
 	} else
 	{
