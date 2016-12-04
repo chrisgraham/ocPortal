@@ -79,7 +79,7 @@ class Hook_secpay
 			'e_length_units'=>'',
 		));
 		$digest=md5($trans_id.float_to_raw_string($amount).get_option('ipn_password'));
-		return do_template('ECOM_BUTTON_VIA_SECPAY',array('_GUID'=>'e68e80cb637f8448ef62cd7d73927722','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>strval($purchase_id),'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
+		return do_template('ECOM_BUTTON_VIA_SECPAY',array('_GUID'=>'e68e80cb637f8448ef62cd7d73927722','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Hook_secpay
 			'e_length'=>$length,
 			'e_length_units'=>$length_units,
 		));
-		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY',array('_GUID'=>'e5e6d6835ee6da1a6cf02ff8c2476aa6','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'FIRST_REPEAT'=>$first_repeat,'LENGTH'=>strval($length),'LENGTH_UNITS_2'=>$length_units_2,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>strval($purchase_id),'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
+		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY',array('_GUID'=>'e5e6d6835ee6da1a6cf02ff8c2476aa6','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'TRANS_ID'=>$trans_id,'FIRST_REPEAT'=>$first_repeat,'LENGTH'=>strval($length),'LENGTH_UNITS_2'=>$length_units_2,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
 	}
 
 	/**

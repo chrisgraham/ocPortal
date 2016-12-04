@@ -558,7 +558,7 @@ class Module_purchase
 			{
 				if (count($_POST)!=0)
 				{
-					handle_transaction_script();
+					//handle_transaction_script();
 				}
 
 				$object=find_product($product);

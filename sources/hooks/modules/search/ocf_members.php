@@ -242,7 +242,7 @@ class Hook_search_ocf_members
 				}
 				if (($row['cf_type']=='short_trans') || ($row['cf_type']=='long_trans'))
 				{
-					$where_clause.=preg_replace('#\?#','t'.strval(count($trans_fields)+1).'.text_original',$temp);
+					$where_clause.=preg_replace('#\?#','t'.strval(count($trans_fields)+2).'.text_original',$temp);
 				} else
 				{
 					if ($index_issue) // MySQL limit for fulltext index querying
