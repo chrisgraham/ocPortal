@@ -228,7 +228,7 @@ function get_bookable_details_from_form()
 	$bookable_details=array(
 		'title'=>post_param('title'),
 		'description'=>post_param('description'),
-		'price'=>floatval(str_replace(ecommerce_get_currency_symbol(),'',post_param('price'))),
+		'price'=>float_unformat(str_replace(ecommerce_get_currency_symbol(),'',post_param('price'))),
 		'categorisation'=>post_param('categorisation'),
 		'cycle_type'=>post_param('cycle_type'),
 		'cycle_pattern'=>post_param('cycle_pattern'),
@@ -304,7 +304,7 @@ function get_bookable_supplement_details_from_form()
 	$bookables=array_map('intval',$_POST['bookables']);
 
 	return array(array(
-		'price'=>floatval(post_param('price')),
+		'price'=>float_unformat(post_param('price')),
 		'price_is_per_period'=>post_param_integer('price_is_per_period',0),
 		'supports_quantities'=>post_param_integer('supports_quantities',0),
 		'title'=>post_param('title'),

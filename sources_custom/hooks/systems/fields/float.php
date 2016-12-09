@@ -144,7 +144,15 @@ class Hook_fields_float
 		{
 			$default=post_param('longitude',STRING_MAGIC_NULL);
 		}
-		return post_param($tmp_name,$default);
+
+		$ret = post_param($tmp_name,$default);
+
+		if (($ret!=STRING_MAGIC_NULL) && ($ret!=''))
+		{
+			$ret=float_to_raw_string(float_unformat($ret,(get_translated_text($field['cf_name'])=='Latitude') || (get_translated_text($field['cf_name'])=='Longitude')));
+		}
+
+		return $ret;
 	}
 
 }

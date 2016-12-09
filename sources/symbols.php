@@ -2350,6 +2350,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=(get_option('ssw')=='1')?'1':'0';
 				break;
 
+			case 'DECIMAL_POINT':
+				$locale=localeconv();
+				$value=$locale['decimal_point'];
+				break;
+
 			case 'RATING':
 				if (isset($param[1]))
 				{
