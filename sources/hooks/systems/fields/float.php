@@ -119,7 +119,7 @@ class Hook_fields_float
 
 		if (($ret!=STRING_MAGIC_NULL) && ($ret!=''))
 		{
-			$ret=float_to_raw_string(float_unformat($ret));
+			$ret=float_to_raw_string(float_unformat($ret),30);
 		}
 
 		return $ret;

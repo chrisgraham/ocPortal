@@ -149,7 +149,7 @@ class Hook_fields_float
 
 		if (($ret!=STRING_MAGIC_NULL) && ($ret!=''))
 		{
-			$ret=float_to_raw_string(float_unformat($ret,(get_translated_text($field['cf_name'])=='Latitude') || (get_translated_text($field['cf_name'])=='Longitude')));
+			$ret=float_to_raw_string(float_unformat($ret,(get_translated_text($field['cf_name'])=='Latitude') || (get_translated_text($field['cf_name'])=='Longitude')),30);
 		}
 
 		return $ret;
