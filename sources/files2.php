@@ -32,7 +32,7 @@ function init__files2()
 	$HTTP_DOWNLOAD_MTIME=NULL;
 	$HTTP_MESSAGE=NULL;
 	$HTTP_MESSAGE_B=NULL;
-	$HTTP_NEW_COOKIES=NULL;
+	$HTTP_NEW_COOKIES=array();
 	$HTTP_FILENAME=NULL;
 	$HTTP_CHARSET=NULL;
 }
@@ -636,6 +636,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	$use_curl=(($url_parts['scheme']!='http') && (function_exists('curl_version'))) || ((function_exists('get_value')) && (get_value('prefer_curl')==='1'));
 
 	// Prep cookies and post data
+	$sent_http_post_content=false;
 	if (!is_null($post_params))
 	{
 		if ($is_xml)
@@ -664,6 +665,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 							}
 						}
 						$_postdetails_params.='?'.http_build_query($post_params_copy);
+
+						$sent_http_post_content=true;
 					} else
 					{
 						$first=true;
@@ -676,6 +679,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 							$_postdetails_params.=((array_key_exists('query',$url_parts)) || (!$first))?('&'.$param_key.'='.rawurlencode($param_value)):($param_key.'='.rawurlencode($param_value));
 							$first=false;
 						}
+						$sent_http_post_content=false;
 					}
 				}
 			}
@@ -827,7 +831,28 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						}
 						if (preg_match("#^Set-Cookie: ([^\r\n=]*)=([^\r\n]*)\r\n#i",$_line,$matches)!=0)
 						{
-							$HTTP_NEW_COOKIES[trim(rawurldecode($matches[1]))]=trim($matches[2]);
+							$cookie_key=trim(rawurldecode($matches[1]));
+
+							$cookie_value=trim($matches[2]);
+							$_cookie_parts=explode('; ',$cookie_value);
+
+							$cookie_parts=array();
+
+							$cookie_parts['key']=$cookie_key;
+							$cookie_parts['value']=trim(rawurldecode(array_shift($_cookie_parts)));
+
+							foreach ($_cookie_parts as $i=>$part)
+							{
+								$temp=explode('=',$part,2);
+								if (array_key_exists(1,$temp))
+								{
+									$cookie_parts[trim($temp[0])]=trim(rawurldecode($temp[1]));
+								}
+							}
+							if (function_exists('get_cookie_domain'))
+								$cookie_parts['domain']=get_cookie_domain();
+
+							$HTTP_NEW_COOKIES[$cookie_key]=$cookie_parts;
 						}
 						if (preg_match("#^Location: (.*)\r\n#i",$_line,$matches)!=0)
 						{
@@ -837,7 +862,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 							if ($matches[1]!=$url)
 							{
 								$bak=$HTTP_FILENAME;
-								$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
+								$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,collapse_2d_complexity('key','value',$HTTP_NEW_COOKIES)+$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 								if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 								$DOWNLOAD_LEVEL--;
 								return _detect_character_encoding($text);
@@ -979,7 +1004,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 			}
 		}
-		$out.="Connection: Close\r\n\r\n";
+		if ((!$sent_http_post_content) || (!is_null($files)))
+		{
+			$out.="Connection: Close\r\n\r\n";
+		}
 
 		@fwrite($mysock,$out);
 		$data_started=false;
@@ -1064,7 +1092,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						@fclose($mysock);
 						if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url);
 						$bak=$HTTP_FILENAME;
-						$text=$no_redirect?mixed():_http_download_file($matches[2],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
+						$text=$no_redirect?mixed():_http_download_file($matches[2],$byte_limit,$trigger_error,false,$ua,NULL,collapse_2d_complexity('key','value',$HTTP_NEW_COOKIES)+$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 						$DOWNLOAD_LEVEL--;
 						return _detect_character_encoding($text);
@@ -1078,7 +1106,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						if ($matches[1]!=$url)
 						{
 							$bak=$HTTP_FILENAME;
-							$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
+							$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,collapse_2d_complexity('key','value',$HTTP_NEW_COOKIES)+$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 							$DOWNLOAD_LEVEL--;
 							return _detect_character_encoding($text);
@@ -1276,7 +1304,28 @@ function _read_in_headers($line)
 	}
 	if (preg_match("#^Set-Cookie: ([^\r\n=]*)=([^\r\n]*)\r\n#i",$line,$matches)!=0)
 	{
-		$HTTP_NEW_COOKIES[trim(rawurldecode($matches[1]))]=trim($matches[2]);
+		$cookie_key=trim(rawurldecode($matches[1]));
+
+		$cookie_value=trim($matches[2]);
+		$_cookie_parts=explode('; ',$cookie_value);
+
+		$cookie_parts=array();
+
+		$cookie_parts['key']=$cookie_key;
+		$cookie_parts['value']=trim(rawurldecode(array_shift($_cookie_parts)));
+
+		foreach ($_cookie_parts as $i=>$part)
+		{
+			$temp=explode('=',$part,2);
+			if (array_key_exists(1,$temp))
+			{
+				$cookie_parts[trim($temp[0])]=trim(rawurldecode($temp[1]));
+			}
+		}
+		if (function_exists('get_cookie_domain'))
+			$cookie_parts['domain']=get_cookie_domain();
+
+		$HTTP_NEW_COOKIES[$cookie_key]=$cookie_parts;
 	}
 	if (preg_match("#^Content-Length: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
 	{

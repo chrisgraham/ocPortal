@@ -354,7 +354,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 
 			if ((count($_bit)==2)/* && (substr($_bit[0],0,5)!='keep_')*/)
 			{
-				$attributes[$_bit[0]]=$_bit[1];
+				$attributes[$_bit[0]]=ocp_url_decode_post_process($_bit[1]);
 				if (strpos($attributes[$_bit[0]],':')!==false)
 				{
 					if ($perfect_only) return ''; // Could not convert this URL to a page-link, because it contains a colon
@@ -367,12 +367,12 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 	// Put it together
 	$page_link=$zone.':'.$attributes['page'];
 	if (array_key_exists('type',$attributes)) $page_link.=':'.$attributes['type']; elseif (array_key_exists('id',$attributes)) $page_link.=':';
-	if (array_key_exists('id',$attributes)) $page_link.=':'.urldecode($attributes['id']);
+	if (array_key_exists('id',$attributes)) $page_link.=':'.$attributes['id'];
 	foreach ($attributes as $key=>$val)
 	{
 		if (!is_string($val)) $val=strval($val);
 		if (($key!='page') && ($key!='type') && ($key!='id'))
-			$page_link.=':'.$key.'='.urldecode($val);
+			$page_link.=':'.$key.'='.ocp_url_encode($val);
 	}
 
 	// Hash bit?
