@@ -709,7 +709,7 @@
 
 	<div class="box box___w_main_screen">
 		<h2 class="toggleable_tray_title">
-			<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); set_cookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;">{!W_ENVIRONMENT_MODIFICATIONS}</a>
+			<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); return false;">{!W_ENVIRONMENT_MODIFICATIONS}</a>
 			{+START,IF,{$JS_ON}}
 				<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); set_cookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG*;,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 			{+END}

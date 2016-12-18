@@ -1,4 +1,4 @@
-<div class="accessibility_hidden"><label for="post_template">{!POST_TEMPLATE}</label></div>
+{+START,IF,IF_NON_PASSED_OR_FALSE}<div class="accessibility_hidden"><label for="post_template">{!POST_TEMPLATE}</label></div>{+END}
 <select tabindex="{TABINDEX*}" id="post_template" name="post_template">
 	{LIST}
 </select>

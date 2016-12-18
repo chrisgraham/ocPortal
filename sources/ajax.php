@@ -466,7 +466,7 @@ function ajax_tree_script()
 
 	header('Content-Type: text/xml; charset='.get_charset());
 	$hook=filter_naughty_harsh(get_param('hook'));
-	require_code('hooks/systems/ajax_tree/'.$hook);
+	require_code('hooks/systems/ajax_tree/'.$hook,true);
 	$object=object_factory('Hook_'.$hook);
 	convert_data_encodings(true);
 	$id=get_param('id','',true);

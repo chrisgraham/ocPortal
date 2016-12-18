@@ -53,7 +53,7 @@
 
 	<div class="float_surrounder">
 		<form style="float: left; margin-top: 3px" title="{!SORT_BY}" action="{$SELF_URL*,,,,category=<null>,start=0}" method="post">
-			<p>
+			<div>
 				<label for="category">{!CATEGORY}</label>
 				<select id="category" name="category">
 					<option value="">{!ALL_EM}</option>
@@ -63,7 +63,7 @@
 				</select>
 
 				<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!FILTER}" />
-			</p>
+			</div>
 		</form>
 
 		{+START,IF_NON_EMPTY,{PAGINATION}}

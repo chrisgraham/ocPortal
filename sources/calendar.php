@@ -717,7 +717,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	$event_count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
 	if ($event_count>2000)
 	{
-		attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'inform');
+		attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'notice');
 		return array();
 	}
 	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
