@@ -2358,7 +2358,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'DECIMAL_POINT':
-				$locale=localeconv();
+				$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
 				$value=$locale['decimal_point'];
 				break;
 

@@ -512,7 +512,7 @@ function float_format($val,$decs_wanted=2,$only_needed_decs=false)
  */
 function float_unformat($str,$no_thousands_sep=false)
 {
-	$locale=localeconv();
+	$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
 
 	// Simplest case?
 	if (preg_match('#^\d+$#',$str)!=0) // E.g. "123"
