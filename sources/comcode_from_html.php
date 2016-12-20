@@ -306,6 +306,11 @@ function semihtml_to_comcode($semihtml,$force=false)
 		$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU','_img_tag_fixup_raw',$semihtml); // Resolve relative URLs
 		$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*)>#siU','_img_tag_fixup_raw',$semihtml); // Resolve relative URLs
 
+		// We really need anything inside <kbd> to go back to [tt] so it doesn't get parsed within semihtml
+		$array_html_preg_replace=array();
+		$array_html_preg_replace[]=array('#^<kbd>(.*)</kbd>$#siU',"[tt]\${1}[/tt]");
+		$semihtml=array_html_preg_replace('kbd',$array_html_preg_replace,$semihtml);
+
 		if (strpos($semihtml,'data:')===false)
 		{
 			$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');

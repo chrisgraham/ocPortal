@@ -74,7 +74,7 @@ class Hook_orphaned_uploads
 				{
 					if (substr($url,0,strlen($base_url))==$base_url)
 					{
-						$known_urls[substr($url,strlen($base_url)+1)]=1;
+						$known_urls[rawurldecode(substr($url,strlen($base_url)+1))]=1;
 					}
 				}
 			}
@@ -116,7 +116,7 @@ class Hook_orphaned_uploads
 				{
 					if (is_file($_dir.'/'.$file))
 					{
-						$out[]=$_dir.'/'.$file;
+						$out[]=$dir.'/'.$file;
 					}
 					elseif (is_dir($_dir.'/'.$file))
 					{

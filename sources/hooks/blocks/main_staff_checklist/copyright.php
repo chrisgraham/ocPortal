@@ -34,7 +34,7 @@ class Hook_checklist_copyright
 		if ((preg_match('#[^\d]\d\d\d\d-(\d\d(\d\d)?)([^\d]|$)#',$copyright,$matches)==0) && (preg_match('#[^\d](\d\d(\d\d)?)([^\d]|$)#',$copyright,$matches)==0))
 			return array();
 
-		if (strpos($copyright,'$CURRENT_YEAR=')===false)
+		if (strpos($copyright,'$CURRENT_YEAR=')!==false)
 			return array();
 
 		if ((intval($matches[1])<intval(date('Y'))) && (intval($matches[1])<intval(substr(date('Y'),2))))

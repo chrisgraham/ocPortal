@@ -119,11 +119,11 @@ function get_realtime_events($from,$to)
  * Make a realtime event bubble's title fit in the available space.
  *
  * @param  string			Idealised title.
- * @return string			Cropped title, with tooltip for full title.
+ * @return tempcode		Cropped title, with tooltip for full title.
  */
 function rain_truncate_for_title($text)
 {
-	return symbol_truncator(array($text,'40','1'),'left');
+	return protect_from_escaping(symbol_truncator(array($text,'40','1'),'left'));
 }
 
 /**

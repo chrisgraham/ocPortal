@@ -118,11 +118,13 @@ function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_
  */
 function delete_menu_item_simple($url)
 {
-	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$url));
+	$_id=$GLOBALS['SITE_DB']->query_select('menu_items',array('id'),array('i_url'=>$url));
+	foreach ($_id as $id)
+		delete_menu_item($id['id']);
 
 	$_id=$GLOBALS['SITE_DB']->query_select('translate',array('id'),array('text_original'=>$url));
 	foreach ($_id as $id)
-		$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_caption'=>$id['id']));
+		delete_menu_item($id['id']);
 }
 
 /**

@@ -198,7 +198,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 						if ($subforum['intro_answer']=='')
 						{
 							$keep=keep_symbol(array());
-							$intro_rules_url=find_script('rules').'?id='.rawurlencode(strval($subforum['id'])).$keep;
+							$forum_rules_url=find_script('rules').'?id='.rawurlencode(strval($subforum['id'])).$keep;
 						} else
 						{
 							$keep=keep_symbol(array());

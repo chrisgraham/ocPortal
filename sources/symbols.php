@@ -1581,14 +1581,21 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'REM':
 				if (isset($param[1]))
 				{
-					$value=strval(intval($param[0])%intval($param[1]));
+					if (intval($param[1])!=0)
+						$value=strval(intval($param[0])%intval($param[1]));
 				}
 				break;
 
 			case 'DIV_FLOAT':
 				if (isset($param[1]))
 				{
-					$value=float_to_raw_string(floatval($param[0])/floatval($param[1]),2,true);
+					if (floatval($param[1])==0.0)
+					{
+						$value='divide-by-zero';
+					} else
+					{
+						$value=float_to_raw_string(floatval($param[0])/floatval($param[1]),20,true);
+					}
 				}
 				break;
 
@@ -2001,6 +2008,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'SSW':
 				$value=(get_option('ssw')=='1')?'1':'0';
+				break;
+
+			case 'DECIMAL_POINT':
+				$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
+				$value=$locale['decimal_point'];
 				break;
 
 			case 'RATING':

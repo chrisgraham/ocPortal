@@ -37,7 +37,13 @@ class Hook_checklist_forum
 				$_url=build_url(array('page'=>'vforums','type'=>'unread'),get_module_zone('vforums'));
 			} else
 			{
-				$_url=make_string_tempcode(get_forum_base_url());
+				if (get_option('forum_in_portal')=='1')
+				{
+					$url=build_url(array('page'=>'forums'),get_module_zone('forums'));
+				} else
+				{
+					$url=make_string_tempcode(get_forum_base_url().'/');
+				}
 			}
 			$url=escape_html_tempcode($_url);
 			$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'a2cdfc2ea5db2d8c13a4d9eafa9b644b','URL'=>'','STATUS'=>$status,'TASK'=>urlise_lang(do_lang('NAG_FORUMS'),$url),'INFO'=>''));

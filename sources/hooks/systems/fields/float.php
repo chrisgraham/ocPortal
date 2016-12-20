@@ -115,7 +115,14 @@ class Hook_fields_float
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+		$ret = post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+
+		if (($ret!=STRING_MAGIC_NULL) && ($ret!=''))
+		{
+			$ret=float_to_raw_string(float_unformat($ret),30);
+		}
+
+		return $ret;
 	}
 
 }

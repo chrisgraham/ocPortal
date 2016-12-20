@@ -131,8 +131,8 @@ class Block_main_google_map
 				$all_output='';
 				foreach ($two_d_list as $index=>$l)
 				{
-					if ($l['NAME']==$longitude_key) $longitude=$l['VALUE'];
-					if ($l['NAME']==$latitude_key) $latitude=$l['VALUE'];
+					if ($l['NAME']==$longitude_key) $longitude=$l['VALUE_PLAIN'];
+					if ($l['NAME']==$latitude_key) $latitude=$l['VALUE_PLAIN'];
 					if ($index==0) $entry_title=$l['VALUE'];
 					$all_output.=(is_object($l['VALUE'])?$l['VALUE']->evaluate():$l['VALUE']).' ';
 				}

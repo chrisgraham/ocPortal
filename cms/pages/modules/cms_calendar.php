@@ -655,7 +655,7 @@ class Module_cms_calendar extends standard_aed_module
 				$members[]=get_member();
 			if (count($members)!=0) // Now add their reminders
 			{
-				$secs_before=floatval(post_param('hours_before','1.0'))*3600.0;
+				$secs_before=float_unformat(post_param('hours_before','1.0'))*3600.0;
 
 				$filled1=array();
 				for ($i=0;$i<count($members);$i++) $filled1[]=$id;
@@ -684,7 +684,7 @@ class Module_cms_calendar extends standard_aed_module
 				$members=array_diff($members,array(get_member(),$GLOBALS['FORUM_DRIVER']->get_guest_id()));
 				foreach ($members as $member) // Now add their reminders. Can't do this as multi-insert as there may be dupes, so we need to skip over errors individually
 				{
-					$secs_before=floatval(post_param('hours_before','1.0'))*3600.0;
+					$secs_before=float_unformat(post_param('hours_before','1.0'))*3600.0;
 					$GLOBALS['SITE_DB']->query_insert('calendar_reminders',array(
 						'e_id'=>$id,
 						'n_member_id'=>$member,

@@ -1561,7 +1561,7 @@ function form_input_float($pretty_name,$description,$name,$default,$required,$ta
 	$default=($_default=='')?NULL:floatval($_default);
 
 	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_FLOAT',array('TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>is_null($default)?'':strval($default)));
+	$input=do_template('FORM_SCREEN_INPUT_FLOAT',array('TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>is_null($default)?'':float_format($default,10,true)));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
