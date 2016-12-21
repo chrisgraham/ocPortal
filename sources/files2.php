@@ -530,6 +530,8 @@ function check_shared_space_usage($extra)
  */
 function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
 {
+	if ($cookies===null) $cookies=array();
+
 	// Normalise the URL
 	require_code('urls');
 	$url=str_replace(' ','%20',$url);
@@ -685,7 +687,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			}
 		}
 	} else $_postdetails_params='';
-	if ((!is_null($cookies)) && (count($cookies)!=0))
+	if (count($cookies)!=0)
 	{
 		$_cookies='';
 		$done_one_cookie=false;
@@ -745,7 +747,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						@curl_setopt($ch,CURLOPT_POSTFIELDS,$post_params); // PHP5.5 gives a deprecation warning
 					}
 				}
-				if ((!is_null($cookies)) && (count($cookies)!=0)) curl_setopt($ch,CURLOPT_COOKIE,$_cookies);
+				if (count($cookies)!=0) curl_setopt($ch,CURLOPT_COOKIE,$_cookies);
 				$crt_path=get_file_base().'/data/curl-ca-bundle.crt';
 				curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,!((function_exists('get_value')) && (get_value('disable_ssl_for__'.$url_parts['host'])==='1')));
 				if (ini_get('curl.cainfo')=='')
@@ -940,7 +942,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$out=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url2))." HTTP/1.1\r\n";
 		}
 		$out.="Host: ".$url_parts['host']."\r\n";
-		if ((!is_null($cookies)) && (count($cookies)!=0)) $out.='Cookie: '.$_cookies."\r\n";
+		if (count($cookies)!=0) $out.='Cookie: '.$_cookies."\r\n";
 		$out.="User-Agent: ".rawurlencode($ua)."\r\n";
 		if (!is_null($auth))
 		{
