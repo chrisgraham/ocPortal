@@ -841,7 +841,7 @@ function _js_parse_variable_actual()
 			$next_2=parser_peek(true);
 			if ($next_2[0]!='IDENTIFIER')
 			{
-				js_parser_error('Expected variable/identifier to be dereferenced from object variable but got '.$next_2);
+				js_parser_error('Expected variable/identifier to be dereferenced from object variable but got '.$next_2[0]);
 				return NULL;
 			}
 			if (is_null(parser_expect('IDENTIFIER'))) return NULL;

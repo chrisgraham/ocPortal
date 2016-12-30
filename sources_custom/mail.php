@@ -121,6 +121,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		}
 	}
 	if ($from_email=='') $from_email=get_option('staff_address');
+	require_code('type_validation');
+	if (!is_email_address($from_email)) $from_email='';
 	if ($from_name=='') $from_name=get_site_name();
 
 	ocp_profile_start_for('mail_wrap');
@@ -139,6 +141,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 	// Misc settings
 	$website_email=get_option('website_email');
+	if (!is_email_address($website_email)) $website_email='';
 	if ($website_email=='') $website_email=$from_email;
 	$cc_address=$no_cc?'':get_option("cc_address");
 

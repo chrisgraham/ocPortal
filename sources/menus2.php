@@ -210,8 +210,11 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
  */
 function delete_menu_item($id)
 {
-	$_caption=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption',array('id'=>$id));
-	$_caption_long=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption_long',array('id'=>$id));
+	$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('i_caption','i_caption_long'),array('id'=>$id),'',1);
+	if (!array_key_exists(0, $rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+	$_caption=$rows[0]['i_caption'];
+	$_caption_long=$rows[0]['i_caption_long'];
+
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('id'=>$id),'',1);
 	$caption=get_translated_text($_caption);
 	delete_lang($_caption);

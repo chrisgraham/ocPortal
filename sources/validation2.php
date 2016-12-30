@@ -336,9 +336,9 @@ function init__validation2()
 		'z-index'=>'(auto|(\d+))',
 		'content'=>'.+',
 		'quotes'=>'.+ .+',
-		'max-width'=>$enforce_auto_or_length,
+		'max-width'=>'(none|'.$enforce_auto_or_length.')',
 		'min-width'=>$enforce_auto_or_length,
-		'max-height'=>$enforce_auto_or_length,
+		'max-height'=>'(none|'.$enforce_auto_or_length.')',
 		'min-height'=>$enforce_auto_or_length,
 		'marker-offset'=>$enforce_auto_or_length,
 		'caption-side'=>'top|bottom|left|right',
@@ -1822,6 +1822,11 @@ function _validate_css_sheet($data)
 				if (($alpha_numeric) || ($next==':') || ($next=='#'))
 				{
 					$class_name.=$next;
+				}
+				elseif ($comment_starting)
+				{
+					$status=CSS_IN_COMMENT;
+					$class_before_comment=CSS_EXPECTING_IDENTIFIER;
 				} else
 				{
 					// Test class name

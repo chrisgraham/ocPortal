@@ -1780,14 +1780,14 @@ function key_pressed(event,key,no_error_if_bad)
 	}
 
 	/* Special cases, we remap what we accept if we detect an alternative was pressed */
-	if ((key=='-') && (event.keyCode==173)) key=173; /* Firefox '-' */
-	if ((key=='-') && (event.keyCode==189)) key=189; /* Safari '-' */
-	if (key=='-') key=109; /* Other browsers '-' */
-	if ((key=='.') && (event.keyCode==190)) key=190; /* Normal '.' */
-	if ((key=='.') && (event.keyCode==110)) key=110; /* Keypad '.' */
-	if ((key=='_') && (event.keyCode==173) && (event.shiftKey)) key=173; /* Firefox '_' */
-	if ((key=='_') && (event.keyCode==189) && (event.shiftKey)) key=189; /* Safari '_' */
-	if (key=='_') key=0; /* Other browsers '_'; This one is a real shame as the key code 0 is shared by lots of symbols */
+	if ((key==='-') && (event.keyCode==173)) key=173; /* Firefox '-' */
+	if ((key==='-') && (event.keyCode==189)) key=189; /* Safari '-' */
+	if (key==='-') key=109; /* Other browsers '-' */
+	if ((key==='.') && (event.keyCode==190)) key=190; /* Normal '.' */
+	if ((key==='.') && (event.keyCode==110)) key=110; /* Keypad '.' */
+	if ((key==='_') && (event.keyCode==173) && (event.shiftKey)) key=173; /* Firefox '_' */
+	if ((key==='_') && (event.keyCode==189) && (event.shiftKey)) key=189; /* Safari '_' */
+	if (key==='_') key=0; /* Other browsers '_'; This one is a real shame as the key code 0 is shared by lots of symbols */
 
 	/* Where we have an ASCII correspondance or can automap to one */
 	if (key.constructor==String) /* NB we are not case sensitive on letters. And we cannot otherwise pass in characters that need shift pressed. */
@@ -1872,7 +1872,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 {
 	if (typeof win=='undefined') var win=window;
 
-	if (!page_loaded) return;
+	if (!window.page_loaded) return;
 	if ((typeof tooltip!='function') && (tooltip=='')) return;
 
 	// Delete other tooltips, which due to browser bugs can get stuck
@@ -1994,7 +1994,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 			ac.parentNode.setAttribute('title',''); /* Do not want second tooltips that are not useful */
 	}
 
-	if (!page_loaded) return;
+	if (!window.page_loaded) return;
 	if (!ac.tooltipId) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  /* Should not happen but written as a fail-safe */
 
 	if ((typeof tooltip_element=='undefined') || (!tooltip_element)) var tooltip_element=document.getElementById(ac.tooltipId);
@@ -2222,7 +2222,7 @@ function add_event_listener_abstract(element,the_event,func,capture)
 {
 	if (element)
 	{
-		if ((element==window) && ((the_event=='load') && ((page_fully_loaded) || (document.readyState=='interactive') || (document.readyState=='complete'))) || ((the_event=='real_load') && (document.readyState=='complete')))
+		if ((element==window) && ((the_event=='load') && ((window.page_fully_loaded) || (document.readyState=='interactive') || (document.readyState=='complete'))) || ((the_event=='real_load') && (document.readyState=='complete')))
 		{
 			window.setTimeout(func,0);
 			return true;

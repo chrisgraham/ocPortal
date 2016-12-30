@@ -64,6 +64,7 @@ function init__js_validator()
 		'TypeError'=>array('Error',array()),
 		'URIError'=>array('Error',array()),
 		'Null'=>array('Object',array()),
+		'Infinity'=>array('Object',array()),
 		'Undefined'=>array('Object',array()),
 		// ArgumentError, AttributeError, ConstantError, DefinitionError, UninitializedError: exist in Mozilla javascript
 
@@ -98,6 +99,7 @@ function init__js_validator()
 		'Navigator'=>array('Object',array(array('String','appCodeName'),array('String','appName'),array('Number','appVersion'),array('Boolean','cookieEnabled'),array('String','platform'),array('String','userAgent'),array('function','javaEnabled','Boolean'),array('StringArray','plugins'),)),
 		'XMLHttpRequest'=>array('Object',array(array('function','abort'),array('function','getAllResponseHeaders','String'),array('function','getResponseHeader','String'),array('function','open'),array('function','send'),array('function','setRequestHeader'),array('Function','onreadystatechange'),array('Number','readyState'),array('String','responseText'),array('XMLDocument','responseXML'),array('Number','status'),array('String','statusText'),)),
 		'ActiveXObject'=>array('Object',array()),
+		'DOMParser'=>array('Object',array(array('function','parseFromString','String'))),
 		'Selection'=>array('Object',array(array('function','createRange','TextRange'),)), // IE style (document.selection)
 		'TextRange'=>array('Object',array(array('String','text'),array('function','collapse'),array('function','findText','Boolean'),array('function','move','Number'),array('function','moveEnd','Number'),array('function','moveStart','Number'),array('function','select'),array('function','moveToElementText'),)), // IE style
 		'Range'=>array('Object',array(array('Number','endOffset'),array('Number','startOffset'),array('function','setStart'),array('function','setEnd'),array('function','collapse'),array('Boolean','collapsed'),)), // Mozilla Style
@@ -456,8 +458,20 @@ function js_check_command($command,$depth)
 				js_check_command($c[3],$depth+1);
 				break;
 			case 'FOR':
-				if (!is_null($c[1])) js_check_command(array($c[1]),$depth+1);
-				if (!is_null($c[3])) js_check_command(array($c[3]),$depth+1);
+				if (!is_null($c[1]))
+				{
+					foreach ($c[1] as $init_command)
+					{
+						js_check_command(array($init_command),$depth+1);
+					}
+				}
+				if (!is_null($c[3]))
+				{
+					foreach ($c[3] as $control_command)
+					{
+						js_check_command(array($control_command),$depth+1);
+					}
+				}
 				$passes=js_ensure_type(array('Boolean'),js_check_expression($c[2]),$c_pos,'Loop conditionals must be Boolean (for)');
 				//if ($passes) js_infer_expression_type_to_variable_type('Boolean',$c[2]);
 				if (!is_null($c[4])) js_check_command($c[4],$depth+1);
@@ -656,7 +670,11 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 		js_ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symmetric operands ('.$type_a.' vs '.$type_b.')');
 		return 'Boolean';
 	}
-	if (in_array($e[0],array('IS_EQUAL','IS_IDENTICAL','IS_NOT_IDENTICAL','IS_NOT_EQUAL')))
+	if (in_array($e[0],array('IS_IDENTICAL','IS_NOT_IDENTICAL')))
+	{
+		return 'Boolean';
+	}
+	if (in_array($e[0],array('IS_EQUAL','IS_NOT_EQUAL')))
 	{
 		$type_a=js_check_expression($e[1],false,$is_guarded);
 		$type_b=js_check_expression($e[2]);
@@ -665,9 +683,15 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 		//if ($passes) js_infer_expression_type_to_variable_type($type_a,$e[2]);
 		return 'Boolean';
 	}
-	if ($e[0]=='INSTANCEOF')
+	if (($e[0]=='INSTANCEOF') || ($e[0]=='IN'))
 	{
-		js_check_variable($e[1],false,$is_guarded);
+		if (($e[0]=='IN') && ($e[1][0]=='LITERAL'))
+		{
+			js_ensure_type(array('String'),js_check_expression($e[1],false,$is_guarded),$c_pos,'Can only use \'in\' on strings');
+		} else
+		{
+			js_check_variable($e[1],false,$is_guarded);
+		}
 		return 'Boolean';
 	}
 	$inner=$e;
@@ -804,7 +828,7 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 	$identifier=$variable[1];
 	if (is_array($identifier)) // Normally just a string, but JS is awkward and allows expression :S
 	{
-		$exp_type=js_check_expression($identifier);
+		$exp_type=js_check_expression($identifier,false,true);
 		$variable[1]=$exp_type;
 		return js_check_variable($variable,$reference,$function_duality,NULL,false,$is_call);
 	}
@@ -924,8 +948,14 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 			if (is_null($_class)) $_class=js_check_variable(array('VARIABLE',$identifier,array(),$variable[count($variable)-1]));
 			return js_check_variable(array('VARIABLE',$variable[2][1][1],$variable[2][2],$variable[count($variable)-1]),$reference,$function_duality,$_class,$_class==$identifier);
 		}
+		if ($variable[2][0]=='CALL')
+		{
+			$ret=js_check_call($variable[2],$variable[3],js_get_variable_type($variable));
+			if ($ret===null) return '!Object';
+			return $ret;
+		}
 
-		exit(':( wrt '.$variable[2][0]);
+		return '!Object';
 	}
 
 	$function_return=isset($JS_LOCAL_VARIABLES[$identifier]['function_return'])?$JS_LOCAL_VARIABLES[$identifier]['function_return']:NULL;
@@ -1007,7 +1037,7 @@ function js_add_variable_reference($identifier,$first_mention,$instantiation=tru
 	{
 		$JS_LOCAL_VARIABLES[$identifier]=array('function_return'=>$function_return,'is_global'=>false,'types'=>array(),'unused_value'=>!$reference && !$instantiation,'first_mention'=>$first_mention);
 
-		if ((!$instantiation) && ($identifier!='__return') && (!is_numeric($identifier)) && (!$is_call))
+		if ((!$instantiation) && ($identifier!='this') && ($identifier!='__return') && ($identifier!='jQuery') && (!is_numeric($identifier)) && (!$is_call))
 		{
 			js_log_warning('CHECKER','A variable ('.$identifier.') was used without being declared',$first_mention);
 		}
@@ -1050,7 +1080,7 @@ function js_ensure_type($_allowed_types,$actual_type,$pos,$alt_error=NULL)
 	global $JS_PROTOTYPES;
 
 	// Tidy up our allow list to be a nice map
-	$allowed_types=array('Undefined'=>1,'Null'=>1);
+	$allowed_types=array('Undefined'=>1,'Null'=>1,'Infinity'=>1);
 	foreach ($_allowed_types as $type)
 	{
 		if ($type=='') continue; // Weird
