@@ -139,10 +139,8 @@ class Hook_Profiles_Tabs_Edit_settings
 				$username=($is_ldap)?NULL:post_param('edit_username',NULL/*May not be passed if username not editable for member type*/);
 			} else $username=NULL;
 
-			$email=post_param('email_address',NULL);
+			$email=post_param('email_address',STRING_MAGIC_NULL);
 			if (!is_null($email)) $email=trim($email);
-
-			$theme=post_param('theme',NULL);
 
 			if (fractional_edit())
 			{
@@ -151,28 +149,34 @@ class Hook_Profiles_Tabs_Edit_settings
 				$auto_monitor_contrib_content=NULL;
 				$views_signatures=NULL;
 				$timezone=NULL;
+				$theme=NULL;
+
+				$dob_day=INTEGER_MAGIC_NULL;
+				$dob_month=INTEGER_MAGIC_NULL;
+				$dob_year=INTEGER_MAGIC_NULL;
 			} else
 			{
+				$theme=post_param('theme',NULL);
 				$preview_posts=post_param_integer('preview_posts',0);
 				$zone_wide=post_param_integer('zone_wide',0);
 				$auto_monitor_contrib_content=NULL;//post_param_integer('auto_monitor_contrib_content',0);	Moved to notifications tab
 				$views_signatures=post_param_integer('views_signatures',0);
 				$timezone=post_param('timezone',get_site_timezone());
+
+				if (post_param('dob_day',NULL)==='' || post_param('dob_month',NULL)==='' || post_param('dob_year',NULL)==='')
+				{
+					$dob_day=-1;
+					$dob_month=-1;
+					$dob_year=-1;
+				} else
+				{
+					$dob_day=post_param_integer('dob_day',NULL);
+					$dob_month=post_param_integer('dob_month',NULL);
+					$dob_year=post_param_integer('dob_year',NULL);
+				}
 			}
 
-			if (post_param('dob_day',NULL)==='' || post_param('dob_month',NULL)==='' || post_param('dob_year',NULL)==='')
-			{
-				$dob_day=-1;
-				$dob_month=-1;
-				$dob_year=-1;
-			} else
-			{
-				$dob_day=post_param_integer('dob_day',NULL);
-				$dob_month=post_param_integer('dob_month',NULL);
-				$dob_year=post_param_integer('dob_year',NULL);
-			}
-
-			ocf_edit_member($member_id_of,$email,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+			ocf_edit_member($member_id_of,$email,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',fractional_edit()?INTEGER_MAGIC_NULL:0),$views_signatures,$auto_monitor_contrib_content,post_param('language',fractional_edit()?STRING_MAGIC_NULL:NULL),post_param_integer('allow_emails',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('allow_emails_from_staff',fractional_edit()?INTEGER_MAGIC_NULL:0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 
 			// Secondary groups
 			//if (array_key_exists('secondary_groups',$_POST)) Can't use this line, because deselecting all will result in it not being passed
