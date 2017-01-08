@@ -274,6 +274,7 @@ function handle_quiz_answers($id,$text,$type)
 function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
+	if ($open_time===null) $open_time=time();
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$id=$GLOBALS['SITE_DB']->query_insert('quizzes',array(
@@ -332,6 +333,8 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
  */
 function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing=0,$tied_newsletter=NULL)
 {
+	if ($open_time===null) $open_time=time();
+
 	$rows=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$rows))
 	{
