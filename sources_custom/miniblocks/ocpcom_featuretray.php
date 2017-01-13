@@ -298,7 +298,7 @@ $featuretree=array(
 			),
 		),
 		'quizzes'=>array(
-			'Quizzes <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Galleries" href="http://shareddemo.myocp.com/site/index.php?page=quiz"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
+			'Quizzes <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Quizzes" href="http://shareddemo.myocp.com/site/index.php?page=quiz"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
 			array(
 				array('Run a competition','Give members a chance to win'),
 				array('Surveys','Gather data and find trends'),

@@ -780,6 +780,9 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		if (strpos($raw_type,'_trans')!==false)
 			check_comcode($val);
 	}
+
+	static $done_one_posting_field=false;
+
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_entries',$imap,true);
 	$title=NULL;
 	foreach ($map as $field_id=>$val)
@@ -795,8 +798,9 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 		if (strpos($raw_type,'_trans')!==false)
 		{
-			if ($type=='posting_field')
+			if (($type=='posting_field') && (!$done_one_posting_field))
 			{
+				$done_one_posting_field=true;
 				require_code('attachments2');
 				$val=insert_lang_comcode_attachments(3,$val,'catalogue_entry',strval($id));
 			} else
@@ -890,6 +894,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 
 	@ignore_user_abort(true);
 
+	static $done_one_posting_field=false;
+
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
 	require_code('fields');
 	$title=NULL;
@@ -910,8 +916,9 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 				$_val=insert_lang_comcode($val,3);
 			} else
 			{
-				if ($type=='posting_field')
+				if (($type=='posting_field') && (!$done_one_posting_field))
 				{
+					$done_one_posting_field=true;
 					require_code('attachments2');
 					require_code('attachments3');
 					$_val=update_lang_comcode_attachments($_val,$val,'catalogue_entry',strval($id),NULL,false,$original_submitter);

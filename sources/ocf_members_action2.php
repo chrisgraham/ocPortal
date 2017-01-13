@@ -1207,6 +1207,8 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 	$ob=get_fields_hook($type);
 	list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>$field,'cf_default'=>'','cf_type'=>$type));
 
+	static $done_one_posting_field=false;
+
 	if (strpos($storage_type,'_trans')!==false)
 	{
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
@@ -1214,8 +1216,9 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 		$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
 		if (is_null($current))
 		{
-			if ($type=='posting_field')
+			if (($type=='posting_field') && (!$done_one_posting_field))
 			{
+				$done_one_posting_field=true;
 				require_code('attachments2');
 				$current=insert_lang_comcode_attachments(3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
 			} else
@@ -1226,8 +1229,9 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',array('field_'.strval(intval($field))=>$current),array('mf_member_id'=>$member_id),'',1);
 		} else
 		{
-			if ($type=='posting_field')
+			if (($type=='posting_field') && (!$done_one_posting_field))
 			{
+				$done_one_posting_field=true;
 				require_code('attachments2');
 				require_code('attachments3');
 				update_lang_comcode_attachments($current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);

@@ -113,6 +113,7 @@ class Hook_fields_content_link
 
 		require_code('content');
 		list($title,,$info)=content_get_details($type,$ev);
+		if ($info===null) return new Tempcode();
 
 		$page_link=str_replace('_WILD',$ev,$info['view_pagelink_pattern']);
 		list($zone,$map)=page_link_decode($page_link);
