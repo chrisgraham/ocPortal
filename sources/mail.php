@@ -756,7 +756,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			if (get_option('enveloper_override')=='1')
 			{
 				require_code('type_validation');
-				if (is_email_address($website_email)) $additional='-f '.$website_email;
+				if (is_valid_email_address($website_email)) $additional='-f '.$website_email;
 			}
 			$_to_name=preg_replace('#@.*$#','',is_array($to_name)?$to_name[$i]:$to_name); // preg_replace is because some servers may reject sending names that look like e-mail addresses. ocP tries this from recommend module.
 			if (($_to_name=='') || (strtoupper(substr(PHP_OS,0,3))=='WIN'))

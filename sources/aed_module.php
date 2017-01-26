@@ -181,7 +181,7 @@ class standard_aed_module
 			global $BREADCRUMB_SET_PARENTS;
 			if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
 			{
-				breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label)),array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE')),$BREADCRUMB_SET_PARENTS));
+				breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label)),array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))),$BREADCRUMB_SET_PARENTS));
 			} else
 			{
 				if (($this->catalogue) && (either_param('catalogue_name','')!=''))
@@ -189,17 +189,17 @@ class standard_aed_module
 					$_catalogue_title=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>either_param('catalogue_name')));
 					if (is_null($_catalogue_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 					$catalogue_title=get_translated_text($_catalogue_title);
-					breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title),$BREADCRUMB_SET_PARENTS));
+					breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title)),$BREADCRUMB_SET_PARENTS));
 				} else
 				{
-					breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label)),$BREADCRUMB_SET_PARENTS));
+					breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label))),$BREADCRUMB_SET_PARENTS));
 				}
 			}
 		} else
 		{
 			if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
 			{
-				breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE')),$BREADCRUMB_SET_PARENTS));
+				breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))),$BREADCRUMB_SET_PARENTS));
 			}
 		}
 
