@@ -196,8 +196,19 @@ function upgrade_script()
 					break;
 
 				case 'file_upgrade':
+					require_code('version2');
+					$personal_upgrader_url='http://compo.sr/uploads/website_specific/compo.sr/scripts/build_personal_upgrader.php?from='.urlencode(get_version_dotted());
+					$hooks=find_all_hooks('systems','addon_registry');
+					foreach (array_keys($hooks) as $hook)
+					{
+						if (is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.$hook.'.php'))
+						{
+							$personal_upgrader_url.='&addon_'.$hook.'=1';
+						}
+					}
+
 					if (get_param('tar_url','')=='') echo do_lang('FU_FILE_UPGRADE_INFO');
-					echo do_lang('FU_FILE_UPGRADE_INFO_MANUAL');
+					echo do_lang('FU_FILE_UPGRADE_INFO_MANUAL',escape_html($personal_upgrader_url));
 					echo '<form title="'.do_lang('PROCEED').'" enctype="multipart/form-data" action="upgrader.php?type=_file_upgrade" method="post">'.post_fields_relay();
 					echo '<label for="url">'.do_lang('URL').'</label> <input type="text" id="url" name="url" value="'.escape_html(base64_decode(get_param('tar_url',''))).'" /> ';
 					if ((ocp_srv('HTTP_HOST')=='ocportal.com') || ($GLOBALS['DEBUG_MODE'])) // for ocProducts to use on own site, for testing
@@ -220,9 +231,17 @@ function upgrade_script()
 						if (post_param('url','')=='') warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
 						$temp_path=ocp_tempnam('ocpfu');
-						$myfile=fopen($temp_path,'wb');
-						http_download_file(post_param('url'),NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
-						fclose($myfile);
+						$url=post_param('url');
+						if (substr($url,0,strlen(get_base_url().'/'))==get_base_url().'/')
+						{
+							unlink($temp_path);
+							copy(get_custom_file_base().'/'.rawurldecode(substr($url,strlen(get_base_url().'/'))),$temp_path);
+						} else
+						{
+							$myfile=fopen($temp_path,'wb');
+							http_download_file($url,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
+							fclose($myfile);
+						}
 					}
 					$upgrade_resource=tar_open($temp_path,'rb');
 					//tar_extract_to_folder($upgrade_resource,'',true);

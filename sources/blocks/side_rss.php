@@ -65,7 +65,7 @@ class Block_side_rss
 		require_css('side_blocks');
 		require_code('obfuscate');
 
-		$url=array_key_exists('param',$map)?$map['param']:'http://ocportal.com/backend.php?type=rss&mode=news&filter=16,17,18,19,20'; // http://channel9.msdn.com/Feeds/RSS/
+		$url=array_key_exists('param',$map)?$map['param']:'http://ocportal.com/backend.php?type=rss&mode=news';
 
 		if (strpos($url,'{')!==false)
 		{
@@ -137,7 +137,7 @@ class Block_side_rss
 
 			$_title=$item['title'];
 			$_title=array_key_exists('title',$item)?$item['title']:'';
-			$date=array_key_exists('clean_add_date',$item)?get_timezoned_date($item['clean_add_date']):(array_key_exists('add_date',$item)?$item['add_date']:'');
+			$date=array_key_exists('clean_add_date',$item)?get_timezoned_date($item['clean_add_date'],false):(array_key_exists('add_date',$item)?$item['add_date']:'');
 
 			$content->attach(do_template('BLOCK_SIDE_RSS_SUMMARY',array('_GUID'=>'18f6d1ccfe980cc01bbdd2ee178c2410','TICKER'=>$ticker,'FEED_URL'=>$url,'FULL_URL'=>$full_url,'NEWS_TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>array_key_exists('clean_add_date',$item)?strval($item['clean_add_date']):'','SUMMARY'=>array_key_exists('news',$item)?$item['news']:(array_key_exists('news_article',$item)?$item['news_article']:''))));
 		}

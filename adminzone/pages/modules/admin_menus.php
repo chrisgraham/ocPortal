@@ -385,7 +385,7 @@ class Module_admin_menus
 		// Erase old stuff
 		foreach ($old_menu_bits as $menu_item_id=>$lang_code)
 		{
-			$GLOBALS['SITE_DB']->query_delete('menu_items',array('id'=>$menu_item_id));
+			$GLOBALS['SITE_DB']->query_delete('menu_items',array('id'=>$menu_item_id),'',1);
 			delete_lang($lang_code['i_caption']);
 			delete_lang($lang_code['i_caption_long']);
 		}

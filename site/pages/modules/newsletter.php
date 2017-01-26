@@ -506,7 +506,8 @@ class Module_newsletter
 
 		$code_confirm=get_param_integer('confirm');
 		$email=trim(get_param('email'));
-		$correct_confirm=$GLOBALS['SITE_DB']->query_value('newsletter','code_confirm',array('email'=>$email));
+		$correct_confirm=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter','code_confirm',array('email'=>$email));
+		if ($correct_confirm===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		if ($correct_confirm==$code_confirm)
 		{
 			$GLOBALS['SITE_DB']->query_update('newsletter',array('code_confirm'=>0),array('email'=>$email),'',1);

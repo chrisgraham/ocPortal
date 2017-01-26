@@ -19,3 +19,11 @@
  */
 
 // TODO (can optionally take a filter of what bookables to allow choosing from) - for date ranges
+
+class Block_side_book_date_range
+{
+    function run()
+    {
+        return new Tempcode();
+    }
+}

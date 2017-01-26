@@ -3512,6 +3512,9 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	height: 18px;
 	font-size: 0.88em;
 }
+.global_side_panel .force_margin {
+	margin-top: 1em !important;
+}
 
 /*
 =========================
@@ -3980,6 +3983,9 @@ body a.link_exempt2 {background-image:none;}
 
 a[title="{!VIRTUAL_ROOT}"]:hover {
 	color: #d91522; /* {$,red_highlights, 80% FF0000 + 20% seed} */
+}
+.ticker * {
+	text-indent: 0;
 }
 
 /*

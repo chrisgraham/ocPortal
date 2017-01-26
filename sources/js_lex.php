@@ -117,7 +117,7 @@ function init__js_lex()
 	$TOKENS['false']='false';
 	$TOKENS['null']='null';
 	$TOKENS['undefined']='undefined';
-	$TOKENS['infinity']='infinity';
+	$TOKENS['Infinity']='Infinity';
 	$TOKENS['NaN']='NaN';
 	// Reserved
 	$TOKENS['abstract']='abstract';
@@ -391,7 +391,7 @@ function js_lex($text)
 				if ($reached_end) break 2;
 
 				// Exit case
-				if (($char=='/') && (($i<2) || ($JS_TEXT[$i-2]!='\\') || ($JS_TEXT[$i-3]=='\\')))
+				if (($char=='/') && (($i<2) || ($JS_TEXT[$i-2]!='\\') || ($JS_TEXT[$i-3]=='\\') && ($JS_TEXT[$i-4]!='\\')))
 				{
 					do
 					{

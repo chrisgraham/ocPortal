@@ -1531,14 +1531,14 @@ function key_pressed(event,key,no_error_if_bad)
 	}
 
 	/* Special cases, we remap what we accept if we detect an alternative was pressed */
-	if ((key=='-') && (event.keyCode==173)) key=173; /* Firefox '-' */
-	if ((key=='-') && (event.keyCode==189)) key=189; /* Safari '-' */
-	if (key=='-') key=109; /* Other browsers '-' */
-	if ((key=='.') && (event.keyCode==190)) key=190; /* Normal '.' */
-	if ((key=='.') && (event.keyCode==110)) key=110; /* Keypad '.' */
-	if ((key=='_') && (event.keyCode==173) && (event.shiftKey)) key=173; /* Firefox '_' */
-	if ((key=='_') && (event.keyCode==189) && (event.shiftKey)) key=189; /* Safari '_' */
-	if (key=='_') key=0; /* Other browsers '_'; This one is a real shame as the key code 0 is shared by lots of symbols */
+	if ((key==='-') && (event.keyCode==173)) key=173; /* Firefox '-' */
+	if ((key==='-') && (event.keyCode==189)) key=189; /* Safari '-' */
+	if (key==='-') key=109; /* Other browsers '-' */
+	if ((key==='.') && (event.keyCode==190)) key=190; /* Normal '.' */
+	if ((key==='.') && (event.keyCode==110)) key=110; /* Keypad '.' */
+	if ((key==='_') && (event.keyCode==173) && (event.shiftKey)) key=173; /* Firefox '_' */
+	if ((key==='_') && (event.keyCode==189) && (event.shiftKey)) key=189; /* Safari '_' */
+	if (key==='_') key=0; /* Other browsers '_'; This one is a real shame as the key code 0 is shared by lots of symbols */
 
 	{$,Where we have an ASCII correspondance or can automap to one}
 	if (key.constructor==String) {$,NB we are not case sensitive on letters. And we cannot otherwise pass in characters that need shift pressed.}

@@ -1,4 +1,5 @@
 {+START,BOX,{TITLE*}}
+
 {+START,IF,{$EQ,{EXTRA},side}}
 	<div class="banner_side"{SET_HEIGHT}>
 		{ASSEMBLE}

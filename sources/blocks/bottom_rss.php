@@ -60,7 +60,7 @@ class Block_bottom_rss
 	 */
 	function run($map)
 	{
-		$url=array_key_exists('param',$map)?$map['param']:'http://ocportal.com/backend.php?type=rss&mode=news&filter=16,17,18,19,20'; // http://channel9.msdn.com/Feeds/RSS/
+		$url=array_key_exists('param',$map)?$map['param']:'http://ocportal.com/backend.php?type=rss&mode=news';
 
 		require_code('rss');
 		$rss=new rss($url);

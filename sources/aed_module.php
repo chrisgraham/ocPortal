@@ -172,25 +172,26 @@ class standard_aed_module
 
 		if ((method_exists($this,'misc')) && ($type!='misc'))
 		{
+			global $BREADCRUMB_SET_PARENTS;
 			if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
 			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label)),array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))));
+				breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label)),array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))),$BREADCRUMB_SET_PARENTS));
 			} else
 			{
 				if (($this->catalogue) && (either_param('catalogue_name','')!=''))
 				{
 					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>either_param('catalogue_name'))));
-					breadcrumb_set_parents(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title)));
+					breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title)),$BREADCRUMB_SET_PARENTS));
 				} else
 				{
-					breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label))));
+					breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label))),$BREADCRUMB_SET_PARENTS));
 				}
 			}
 		} else
 		{
 			if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
 			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))));
+				breadcrumb_set_parents(array_merge(array(array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))),$BREADCRUMB_SET_PARENTS));
 			}
 		}
 

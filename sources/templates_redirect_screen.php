@@ -47,7 +47,7 @@ function _redirect_screen($title,$url,$text,$intermediatory_hop=false,$msg_type=
 			));
 		}
 		$_message=is_object($text)?$text->evaluate():escape_html($text);
-		if (($_message!='') && ((count($ATTACHED_MESSAGES_RAW)==0) || (($_message!=do_lang('SUCCESS')) && ($_message!=do_lang('REDIRECTING')))))
+		if (($_message!='') && ((count($ATTACHED_MESSAGES_RAW)==0) || (($_message!=do_lang('SUCCESS')) && ($_message!=do_lang('REDIRECTING') && (strpos($_message,'cancel_sw_warn')===false)))))
 		{
 			$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
 				'r_session_id'=>get_session_id(),

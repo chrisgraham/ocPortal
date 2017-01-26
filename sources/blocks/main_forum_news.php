@@ -69,8 +69,6 @@ class Block_main_forum_news
 		$num_topics=array_key_exists('param',$map)?intval($map['param']):14;
 		$forum_name=array_key_exists('forum',$map)?$map['forum']:do_lang('NEWS');
 
-		$num_topics=intval($num_topics);
-
 		$date_key=array_key_exists('date_key',$map)?$map['date_key']:'lasttime';
 
 		$rows=array();

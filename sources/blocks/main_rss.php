@@ -100,7 +100,7 @@ class Block_main_rss
 		require_css('news');
 		require_code('obfuscate');
 
-		$url=array_key_exists('param',$map)?$map['param']:'http://ocportal.com/backend.php?type=rss&mode=news&filter=1,2,17,18,29,30'; // http://news.google.co.uk/news?hs=UTT&tab=wn&topic=w&output=atom
+		$url=array_key_exists('param',$map)?$map['param']:'http://ocportal.com/backend.php?type=rss&mode=news';
 
 		require_code('rss');
 		$rss_feeds=array();

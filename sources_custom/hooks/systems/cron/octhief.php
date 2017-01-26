@@ -149,8 +149,8 @@ class Hook_cron_octhief
 
 					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-					send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member_id);
+					send_pt_notification($post_id,$subject,$topic_id,$member_id,$give_to_member);
 				}
 			}
 
@@ -188,8 +188,8 @@ class Hook_cron_octhief
 
 					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-					send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member['id']);
+					send_pt_notification($post_id,$subject,$topic_id,$member['id'],$give_to_member);
 				}
 			}
 

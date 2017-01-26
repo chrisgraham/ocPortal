@@ -102,6 +102,16 @@ class Hook_fields_posting_field
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new,$last=true)
 	{
+		static $done_one=false;
+		if ($done_one)
+		{
+			if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
+
+			return form_input_text_comcode($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
+		}
+
+		$done_one=true;
+
 		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
 
 		require_lang('javascript');

@@ -141,7 +141,7 @@ class Hook_fields_just_date
 		*/
 		$min_year=NULL;
 		$years_to_show=NULL;
-		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),false,$time,$years_to_show,$min_year);
+		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),false,$time,$years_to_show,$min_year,null,true,true,null,false);
 	}
 
 	/**
