@@ -50,7 +50,7 @@ class Hook_rss_ocf_birthdays
 		$join='';
 		if ($filters!='(1=1 OR 1=1)')
 			$join=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members d ON (d.gm_member_id=p.id AND d.gm_validated=1)';
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT id,m_dob_day,m_dob_month,m_dob_year,m_username,m_reveal_age,m_join_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members p'.$join.' WHERE m_validated=1 AND '.$filters.' AND m_dob_day IS NOT NULL ORDER BY m_join_time DESC',$max*3/*for inbalances*/*intval(360.0/floatval(get_param_integer('days',30))));
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT id,m_dob_day,m_dob_month,m_dob_year,m_username,m_reveal_age,m_join_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members p'.$join.' WHERE m_validated=1 AND '.$filters.' AND m_dob_day IS NOT NULL ORDER BY m_last_visit_time DESC',10000);
 
 		$done=0;
 

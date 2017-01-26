@@ -58,6 +58,7 @@ function init__global2()
 	@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	@header('Cache-Control: no-cache, max-age=0');
 	@header('Pragma: no-cache'); // for proxies, and also IE
+	if (php_function_allowed('session_cache_limiter')) @session_cache_limiter('');
 
 	if ((is_file('closed.html')) && (get_param_integer('keep_force_open',0)==0))
 	{

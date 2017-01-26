@@ -721,7 +721,7 @@ if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS)))
 }
 if ($filesize>100*1024)
 {
-	echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang_local('XHTML_BLOAT'))."\n";
+	echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang_local('XHTML_BLOATED'))."\n";
 }
 
 global $WITHIN_PHP;

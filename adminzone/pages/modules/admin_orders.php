@@ -339,7 +339,7 @@ class Module_admin_orders
 
 		$data=$rows[0];
 
-		$results_table=results_table(do_lang_tempcode('PRODUCTS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL);
+		$results_table=results_table(do_lang_tempcode('catalogues:DEFAULT_CATALOGUE_PRODUCTS_TITLE'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL);
 
 		$ordered_by_member_id=$data['c_member'];
 		$ordered_by_username=$GLOBALS['FORUM_DRIVER']->get_username($data['c_member']);

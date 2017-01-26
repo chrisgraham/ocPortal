@@ -132,7 +132,7 @@ class Hook_pointstore_bank
 		// Actuate
 		require_code('points2');
 		charge_member(get_member(),$amount,do_lang('BANKING'));
-		$GLOBALS['SITE_DB']->query_insert('bank',array('add_time'=>time(),'user_id'=>get_member(),'amount'=>strval($amount),'divident'=>$bank_dividend));
+		$GLOBALS['SITE_DB']->query_insert('bank',array('add_time'=>time(),'user_id'=>get_member(),'amount'=>$amount,'divident'=>$bank_dividend));
 
 		// Show message
 		$result=do_lang_tempcode('BANKING_CONGRATULATIONS',integer_format($amount),integer_format($bank_dividend));
