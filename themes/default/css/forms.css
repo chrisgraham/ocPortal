@@ -473,7 +473,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .skip_step_button_wrap {
-	height: 35px;
+	overflow: hidden;
 }
 
 .skip_step_button_wrap div {
