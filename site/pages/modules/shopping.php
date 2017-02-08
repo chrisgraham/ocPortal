@@ -566,7 +566,7 @@ class Module_shopping
 			{
 				$order_id=handle_transaction_script();
 
-				$object=find_product(do_lang('CART_ORDER',$order_id));
+				$object=find_product(do_lang('CART_ORDER',$order_id),null,null,get_site_default_lang());
 
 				if (method_exists($object,'get_finish_url'))
 				{
@@ -597,6 +597,8 @@ class Module_shopping
 	{
 		$title=get_screen_title('MY_ORDERS');
 
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
 		$member_id=get_member();
 
 		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
@@ -611,7 +613,7 @@ class Module_shopping
 			{
 				$order_det_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
-				$order_title=do_lang('CART_ORDER',$row['id']);
+				$order_title=do_lang('CART_ORDER',strval($row['id']));
 			}
 			else
 			{
@@ -644,6 +646,16 @@ class Module_shopping
 		$id=get_param_integer('id');
 
 		$title=get_screen_title('_MY_ORDER_DETAILS',true,array(escape_html(strval($id))));
+
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
+		if (!has_privilege(get_member(), 'assume_any_member'))
+		{
+			$member_id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','member_id',array('id'=>$id));
+			if ($member_id===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+			if ($member_id!=get_member()) access_denied('I_ERROR');
+		}
 
 		$products=array();
 

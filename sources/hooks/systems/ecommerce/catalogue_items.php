@@ -618,7 +618,7 @@ class Hook_catalogue_items
 			$stock_level_warn_threshold=intval($fields[4]['effective_value']);
 		}
 
-		$product_name=get_translated_text($row['cc_id']);
+		$product_name=$fields[0]['effective_value_pure'];
 
 		if ($current_stock<$quantity && !$stock_maintained)
 		{

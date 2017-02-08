@@ -471,7 +471,8 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 	if ($event_id==-1) $event_id=NULL;
 
 	require_lang('chat');
-	require_lang('submitban');
+
+	if (addon_installed('securitylogging')) require_lang('submitban');
 
 	$room_check=NULL;
 	if ($room_id>=0)
@@ -545,7 +546,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			$moderator=false;
 		}
 
-		if ((addon_installed('actionlog')) && (has_actual_page_access(get_member(),'admin_actionlog')) && (preg_match('#[:\.]#',$_message['ip_address'])!=0))
+		if ((addon_installed('actionlog')) && (addon_installed('securitylogging')) && (has_actual_page_access(get_member(),'admin_actionlog')) && (preg_match('#[:\.]#',$_message['ip_address'])!=0))
 		{
 			if (is_guest($_message['member_id']))
 			{

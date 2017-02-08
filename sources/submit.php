@@ -184,7 +184,11 @@ function ban_ip($ip,$descrip='')
 	}
 	elseif (compare_ip_address($ban,get_ip_address()))
 	{
-		attach_message(do_lang_tempcode('AVOIDING_BANNING_SELF'),'warn');
+		if (addon_installed('securitylogging'))
+		{
+			require_lang('submitban');
+			attach_message(do_lang_tempcode('AVOIDING_BANNING_SELF'),'warn');
+		}
 	}
 }
 

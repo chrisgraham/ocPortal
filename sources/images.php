@@ -373,8 +373,11 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 
 				if (is_video($from))
 				{
-					require_code('galleries2');
-					create_video_thumb($full_url,$thumb_path);
+					if (addon_installed('galleries'))
+					{
+						require_code('galleries2');
+						create_video_thumb($full_url,$thumb_path);
+					}
 				} else
 				{
 					convert_image($from,$thumb_path,-1,-1,intval($thumb_width),false);
@@ -415,8 +418,11 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	{
 		if (is_video($from))
 		{
-			require_code('galleries2');
-			create_video_thumb($full_url,$thumb_path);
+			if (addon_installed('galleries'))
+			{
+				require_code('galleries2');
+				create_video_thumb($full_url,$thumb_path);
+			}
 		} else
 		{
 			convert_image($from,$thumb_path,-1,-1,intval($thumb_width),false);

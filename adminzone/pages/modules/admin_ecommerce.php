@@ -455,7 +455,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		{
 			if ($transaction['t_time']>$from)
 			{
-				$types['TRANS']['AMOUNT']+=get_transaction_fee($transaction['amount'],$transaction['t_via']);
+				$types['TRANS']['AMOUNT']+=get_transaction_fee(floatval($transaction['amount']),$transaction['t_via']);
 			}
 
 			if ($unpaid_invoices_count)
@@ -470,33 +470,33 @@ class Module_admin_ecommerce extends standard_aed_module
 
 			$transaction['amount']=currency_convert($transaction['amount'],$transaction['t_currency'],get_option('currency'));
 
-			$types['CLOSING']['AMOUNT']+=$transaction['amount'];
+			$types['CLOSING']['AMOUNT']+=floatval($transaction['amount']);
 
 			if ($transaction['t_time']<$from)
 			{
-				$types['OPENING']['AMOUNT']+=$transaction['amount']-get_transaction_fee($transaction['amount'],$transaction['t_via']);
+				$types['OPENING']['AMOUNT']+=floatval($transaction['amount'])-get_transaction_fee(floatval($transaction['amount']),$transaction['t_via']);
 				continue;
 			}
 
-			if (($transaction['item']=='OTHER') && ($transaction['amount']<0))
+			if (($transaction['item']=='OTHER') && (floatval($transaction['amount'])<0))
 			{
-				$types['COST']['AMOUNT']+=$transaction['amount'];
+				$types['COST']['AMOUNT']+=floatval($transaction['amount']);
 			}
 			elseif ($transaction['item']=='TAX')
 			{
-				$types['TAX']['AMOUNT']+=$transaction['amount'];
+				$types['TAX']['AMOUNT']+=floatval($transaction['amount']);
 			}
 			elseif ($transaction['item']=='INTEREST')
 			{
-				$types[$product][($transaction['amount']<0)?'INTEREST_MINUS':'INTEREST_PLUS']['AMOUNT']+=$transaction['amount'];
+				$types[$product][(floatval($transaction['amount'])<0)?'INTEREST_MINUS':'INTEREST_PLUS']['AMOUNT']+=floatval($transaction['amount']);
 			}
 			elseif ($transaction['item']=='WAGE')
 			{
-				$types['WAGE']['AMOUNT']+=$transaction['amount'];
+				$types['WAGE']['AMOUNT']+=floatval($transaction['amount']);
 			} else
 			{
 				if (!array_key_exists($product,$types)) $types[$product]=array('TYPE'=>$product,'AMOUNT'=>0,'SPECIAL'=>false); // In case product no longer exists
-				$types[$product]['AMOUNT']+=$transaction['amount'];
+				$types[$product]['AMOUNT']+=floatval($transaction['amount']);
 			}
 		}
 

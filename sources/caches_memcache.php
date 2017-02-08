@@ -24,7 +24,7 @@
  * Cache Driver.
  * @package		core
  */
-class memcachecache extends Memcache
+class memcachecache
 {
 	protected $object;
 

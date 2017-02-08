@@ -51,6 +51,7 @@ function occle_script()
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
+		require_lang('permissions');
 		if (!has_actual_page_access(get_member(),'admin_occle')) fatal_exit(do_lang_tempcode('ACCESS_DENIED__PAGE_ACCESS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
 	}
 

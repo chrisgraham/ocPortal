@@ -135,7 +135,7 @@ class Module_invoices
 			{
 				$transaction_button=make_transaction_button(substr(get_class($object),5),$invoice_title,strval($row['id']),floatval($row['i_amount']),get_option('currency'));
 			}
-			$invoices[]=array('TRANSACTION_BUTTON'=>$transaction_button,'INVOICE_TITLE'=>$invoice_title,'ID'=>strval($row['id']),'AMOUNT'=>$row['i_amount'],'TIME'=>$time,'STATE'=>$state,'DELIVERABLE'=>$deliverable,'PAYABLE'=>$payable,'NOTE'=>$row['i_note'],'TYPE_CODE'=>$row['i_type_code']);
+			$invoices[]=array('TRANSACTION_BUTTON'=>$transaction_button,'INVOICE_TITLE'=>$invoice_title,'ID'=>strval($row['id']),'AMOUNT'=>float_format($row['i_amount']),'TIME'=>$time,'STATE'=>$state,'DELIVERABLE'=>$deliverable,'PAYABLE'=>$payable,'NOTE'=>$row['i_note'],'TYPE_CODE'=>$row['i_type_code']);
 		}
 		if (count($invoices)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
