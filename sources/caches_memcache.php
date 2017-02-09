@@ -26,15 +26,15 @@
  */
 class memcachecache
 {
-	protected $object;
+	protected $ob;
 
 	/**
 	 * Constructor.
 	 */
 	public function memcachecache()
 	{
-		$this->object=new Memcache();
-		$this->object->connect('localhost',11211);
+		$this->ob=new Memcache();
+		$this->ob->connect('localhost',11211);
 	}
 
 	/**
@@ -48,7 +48,7 @@ class memcachecache
 	{
 		$key=serialize($_key);
 
-		$_data=$this->object->get($key);
+		$_data=$this->ob->get($key);
 		if ($_data===false) return NULL;
 		$data=unserialize($_data);
 		if ((!is_null($min_cache_date)) && ($data[0]<$min_cache_date)) return NULL;
@@ -75,7 +75,7 @@ class memcachecache
 			$this->set(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0,0);
 		}
 
-		$this->object->set($key,serialize(array(time(),$data)),$flags,$expire_secs);
+		$this->ob->set($key,serialize(array(time(),$data)),$flags,$expire_secs);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class memcachecache
 
 		//$this->set(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0,0);
 
-		$this->object->delete($key);
+		$this->ob->delete($key);
 	}
 
 	/**
@@ -101,6 +101,6 @@ class memcachecache
 	 */
 	function flush()
 	{
-		$this->object->flush();
+		$this->ob->flush();
 	}
 }

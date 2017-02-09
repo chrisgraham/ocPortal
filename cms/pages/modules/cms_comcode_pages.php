@@ -749,7 +749,7 @@ class Module_cms_comcode_pages
 
 		$hidden_fields=new ocp_tempcode();
 
-		if ((addon_installed('page_management')) && (has_actual_page_access(get_member(),'adminzone')))
+		if ((addon_installed('page_management')) && (has_actual_page_access(get_member(),'admin_sitetree','adminzone')))
 		{
 			$delete_url=build_url(array('page'=>'admin_sitetree','type'=>'_delete','page__'.$file=>1,'zone'=>$zone),get_module_zone('admin_sitetree'));
 		} else

@@ -28,6 +28,8 @@ class css_and_js_test_set extends ocp_test_case
 		require_code('validation2');
 		require_lang('validation');
 
+		disable_php_memory_limit();
+
 		global $VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL,$MAIL_MODE;
 		$VALIDATION_JAVASCRIPT=true;
 		$VALIDATION_CSS=true;

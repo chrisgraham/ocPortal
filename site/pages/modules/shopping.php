@@ -566,7 +566,7 @@ class Module_shopping
 			{
 				$order_id=handle_transaction_script();
 
-				$object=find_product(do_lang('CART_ORDER',$order_id),null,null,get_site_default_lang());
+				$object=find_product(do_lang('CART_ORDER',$order_id,null,null,get_site_default_lang()));
 
 				if (method_exists($object,'get_finish_url'))
 				{
@@ -649,7 +649,7 @@ class Module_shopping
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		if (!has_privilege(get_member(), 'assume_any_member'))
+		if (!has_specific_permission(get_member(), 'assume_any_member'))
 		{
 			$member_id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','member_id',array('id'=>$id));
 			if ($member_id===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

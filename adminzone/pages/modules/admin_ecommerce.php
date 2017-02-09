@@ -430,22 +430,22 @@ class Module_admin_ecommerce extends standard_aed_module
 	function get_types($from,$to,$unpaid_invoices_count=false)
 	{
 		$types=array(
-					'OPENING'=>array('TYPE'=>do_lang_tempcode('OPENING_BALANCE'),'AMOUNT'=>0,'SPECIAL'=>true),
-					'INTEREST_PLUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_PLUS'),'AMOUNT'=>0,'SPECIAL'=>false),
+					'OPENING'=>array('TYPE'=>do_lang_tempcode('OPENING_BALANCE'),'AMOUNT'=>0.0,'SPECIAL'=>true),
+					'INTEREST_PLUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_PLUS'),'AMOUNT'=>0.0,'SPECIAL'=>false),
 					);
 		$products=find_all_products();
 		foreach ($products as $product=>$details)
 		{
-			$types[$product]=array('TYPE'=>$details[4],'AMOUNT'=>0,'SPECIAL'=>false);
+			$types[$product]=array('TYPE'=>$details[4],'AMOUNT'=>0.0,'SPECIAL'=>false);
 		}
 		$types+=array(
-					'COST'=>array('TYPE'=>do_lang_tempcode('EXPENSES'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'TRANS'=>array('TYPE'=>do_lang_tempcode('TRANSACTION_FEES'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'WAGE'=>array('TYPE'=>do_lang_tempcode('WAGES'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'INTEREST_MINUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_MINUS'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'TAX'=>array('TYPE'=>do_lang_tempcode('TAX_GENERAL'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'CLOSING'=>array('TYPE'=>do_lang_tempcode('CLOSING_BALANCE'),'AMOUNT'=>0,'SPECIAL'=>true),
-					'PROFIT'=>array('TYPE'=>do_lang_tempcode('NET_PROFIT'),'AMOUNT'=>0,'SPECIAL'=>true),
+					'COST'=>array('TYPE'=>do_lang_tempcode('EXPENSES'),'AMOUNT'=>0.0,'SPECIAL'=>false),
+					'TRANS'=>array('TYPE'=>do_lang_tempcode('TRANSACTION_FEES'),'AMOUNT'=>0.0,'SPECIAL'=>false),
+					'WAGE'=>array('TYPE'=>do_lang_tempcode('WAGES'),'AMOUNT'=>0.0,'SPECIAL'=>false),
+					'INTEREST_MINUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_MINUS'),'AMOUNT'=>0.0,'SPECIAL'=>false),
+					'TAX'=>array('TYPE'=>do_lang_tempcode('TAX_GENERAL'),'AMOUNT'=>0.0,'SPECIAL'=>false),
+					'CLOSING'=>array('TYPE'=>do_lang_tempcode('CLOSING_BALANCE'),'AMOUNT'=>0.0,'SPECIAL'=>true),
+					'PROFIT'=>array('TYPE'=>do_lang_tempcode('NET_PROFIT'),'AMOUNT'=>0.0,'SPECIAL'=>true),
 					);
 
 		require_code('currency');
@@ -478,7 +478,7 @@ class Module_admin_ecommerce extends standard_aed_module
 				continue;
 			}
 
-			if (($transaction['item']=='OTHER') && (floatval($transaction['amount'])<0))
+			if (($transaction['item']=='OTHER') && (floatval($transaction['amount'])<0.0))
 			{
 				$types['COST']['AMOUNT']+=floatval($transaction['amount']);
 			}
@@ -488,14 +488,14 @@ class Module_admin_ecommerce extends standard_aed_module
 			}
 			elseif ($transaction['item']=='INTEREST')
 			{
-				$types[$product][(floatval($transaction['amount'])<0)?'INTEREST_MINUS':'INTEREST_PLUS']['AMOUNT']+=floatval($transaction['amount']);
+				$types[$product][(floatval($transaction['amount'])<0.0)?'INTEREST_MINUS':'INTEREST_PLUS']['AMOUNT']+=floatval($transaction['amount']);
 			}
 			elseif ($transaction['item']=='WAGE')
 			{
 				$types['WAGE']['AMOUNT']+=floatval($transaction['amount']);
 			} else
 			{
-				if (!array_key_exists($product,$types)) $types[$product]=array('TYPE'=>$product,'AMOUNT'=>0,'SPECIAL'=>false); // In case product no longer exists
+				if (!array_key_exists($product,$types)) $types[$product]=array('TYPE'=>$product,'AMOUNT'=>0.0,'SPECIAL'=>false); // In case product no longer exists
 				$types[$product]['AMOUNT']+=floatval($transaction['amount']);
 			}
 		}
