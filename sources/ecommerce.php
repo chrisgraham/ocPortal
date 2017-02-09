@@ -477,7 +477,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_state'=>'pending'),array('id'=>intval($purchase_id)),'',1);
 		if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$product,true)); // Run cancel code
 	}
-	elseif (($payment_status=='Pending') && ($item_name==do_lang('CART_ORDER',$purchase_id))) // Cart orders have special support for tracking the order status
+	elseif (($payment_status=='Pending') && ($item_name==do_lang('shopping:CART_ORDER',$purchase_id))) // Cart orders have special support for tracking the order status
 	{
 		$found['ORDER_STATUS']='ORDER_STATUS_awaiting_payment';
 
@@ -796,7 +796,7 @@ function make_cart_payment_button($order_id,$currency)
 	if (!method_exists($object,'make_cart_transaction_button'))
 	{
 		$amount	=	$GLOBALS['SITE_DB']->query_value('shopping_order','tot_price',array('id'=>$order_id));
-		return $object->make_transaction_button($order_id,do_lang('CART_ORDER',$order_id),strval($order_id),$amount,$currency);
+		return $object->make_transaction_button($order_id,do_lang('CART_ORDER',strval($order_id)),strval($order_id),$amount,$currency);
 	}
 
 	return $object->make_cart_transaction_button($items,$currency,$order_id);

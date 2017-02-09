@@ -281,7 +281,7 @@ class Module_admin_orders
 
 		$title		=	get_page_title('MY_ORDER_DETAILS');
 
-		$order_title	=	do_lang('CART_ORDER',$id);
+		$order_title	=	do_lang('CART_ORDER',strval($id));
 
 		//pagination
 		$start		=	get_param_integer('start',0);

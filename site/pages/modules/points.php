@@ -384,7 +384,7 @@ class Module_points
 			}
 			if ($trans_type=='charge')
 			{
-				if (has_actual_page_access($member_id_viewing,'adminzone'))
+				if (has_actual_page_access($member_id_viewing,'admin_points','adminzone'))
 				{
 					require_code('points2');
 					charge_member($member_id_of,$amount,$reason);

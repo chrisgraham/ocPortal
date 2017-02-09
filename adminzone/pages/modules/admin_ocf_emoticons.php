@@ -161,6 +161,8 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	{
 		post_param('test'); // To pick up on max file size exceeded errors
 
+		require_lang('dearchive');
+
 		require_code('uploads');
 		require_code('images');
 		is_swf_upload(true);

@@ -56,18 +56,19 @@ function check_input_field_string($name,&$val,$posted=false)
 			// Don't allow external redirections
 			if (!$posted)
 			{
-				$_val=str_replace('https://','http://',$val);
-				if (looks_like_url($_val))
+				if (looks_like_url($val))
 				{
 					$bus=array(
 						get_base_url(false),
+						get_base_url(true),
 						get_forum_base_url(),
 						'http://ocportal.com/',
+						'https://ocportal.com/',
 					);
 					$ok=false;
 					foreach ($bus as $bu)
 					{
- 						if (substr($_val,0,strlen($bu))==$bu)
+ 						if (substr($val,0,strlen($bu))==$bu)
 						{
 							$ok=true;
 							break;

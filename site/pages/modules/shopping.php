@@ -625,6 +625,8 @@ class Module_shopping
 	{
 		$title=get_page_title('MY_ORDERS');
 
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
 		$member_id=get_member();
 
 		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
@@ -639,7 +641,7 @@ class Module_shopping
 			{
 				$order_det_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
-				$order_title=do_lang('CART_ORDER',$row['id']);
+				$order_title=do_lang('CART_ORDER',strval($row['id']));
 			}
 			else
 			{
@@ -672,6 +674,16 @@ class Module_shopping
 		$id=get_param_integer('id');
 
 		$title=get_page_title('_MY_ORDER_DETAILS',true,array($id));
+
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
+		if (!has_specific_permission(get_member(), 'assume_any_member'))
+		{
+			$member_id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','member_id',array('id'=>$id));
+			if ($member_id===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+			if ($member_id!=get_member()) access_denied('I_ERROR');
+		}
 
 		$products=array();
 
