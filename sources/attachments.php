@@ -109,7 +109,7 @@ function attachments_script()
 	{
 		if ((strpos($full,chr(10))!==false) || (strpos($full,chr(13))!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-		header('Location: '.$full);
+		header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$full)));
 		return;
 	}
 

@@ -33,7 +33,7 @@ function do_netlink($redir_url='')
 	{
 		if ((strpos($redir_url,chr(10))!==false) || (strpos($redir_url,chr(13))!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-		header('Location: '.$redir_url);
+		header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$redir_url)));
 		exit();
 	}
 
