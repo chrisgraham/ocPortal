@@ -291,14 +291,20 @@ function attach_message($message,$type='inform')
 		'MESSAGE'=>is_string($message)?escape_html($message):$message
 	));
 
-	if (headers_sent())
+	if ((headers_sent()) && (get_page_name() != 'members'))
 	{
-		$LATE_ATTACHED_MESSAGES_RAW[]=array($message,$type);
-		$LATE_ATTACHED_MESSAGES->attach($message_tpl);
+		if (!isset($LATE_ATTACHED_MESSAGES_RAW[is_object($message)?$message->evaluate():$message]))
+		{
+			$LATE_ATTACHED_MESSAGES_RAW[is_object($message)?$message->evaluate():$message]=array($message,$type);
+			$LATE_ATTACHED_MESSAGES->attach($message_tpl);
+		}
 	} else
 	{
-		$ATTACHED_MESSAGES_RAW[]=array($message,$type);
-		$ATTACHED_MESSAGES->attach($message_tpl);
+		if (!isset($ATTACHED_MESSAGES_RAW[is_object($message)?$message->evaluate():$message]))
+		{
+			$ATTACHED_MESSAGES_RAW[is_object($message)?$message->evaluate():$message]=array($message,$type);
+			$ATTACHED_MESSAGES->attach($message_tpl);
+		}
 	}
 
 	$ATTACH_MESSAGE_CALLED--;

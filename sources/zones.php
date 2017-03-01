@@ -178,7 +178,7 @@ function get_zone_name()
 			{
 				$VIRTUALISED_ZONES=true;
 				if (($host==$val[0]) && (preg_match('#^'.(($val[1]=='')?'':('/'.preg_quote($val[1]))).'(/|$)#',$url_path)!=0))
-					return substr($key,13);
+					return @strval(substr($key,13));
 			}
 		}
 		if (($VIRTUALISED_ZONES) && (substr($host,0,4)=='www.'))
