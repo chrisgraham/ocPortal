@@ -44,7 +44,7 @@ class Hook_cron_backups
 				$max_size=get_value('backup_max_size');
 				$b_type=get_value('backup_b_type');
 				global $MB2_FILE,$MB2_B_TYPE,$MB2_MAX_SIZE;
-				$end=((get_option('backup_overwrite')!='1') || ($b_type=='incremental'))?uniqid('',true):'scheduled';
+				$end=((get_option('backup_overwrite')!='1') || ($b_type=='incremental'))?get_rand_password():'scheduled';
 				if ($b_type=='full') $file='restore_'.$end;
 				elseif ($b_type=='incremental') $file='dif_'.$end;
 				elseif ($b_type=='sql') $file='database_'.$end;

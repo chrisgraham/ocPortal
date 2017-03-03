@@ -320,36 +320,36 @@ class Module_admin_backup
 		$b_type=post_param('b_type','full');
 		if ($b_type=='full')
 		{
-			$file='Backup_full_'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_full_'.date('Y-m-d',utctime_to_usertime()).'__'.get_rand_password(); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.tar')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.gz'))
 				)
-				$file='Backup_full_'.uniqid('',true);*/
+				$file='Backup_full_'.get_rand_password();*/
 		}
 		elseif ($b_type=='incremental')
 		{
-			$file='Backup_incremental'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_incremental'.date('Y-m-d',utctime_to_usertime()).'__'.get_rand_password(); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.tar')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.gz'))
 				)
-				$file='Backup_incremental_'.uniqid('',true);*/
+				$file='Backup_incremental_'.get_rand_password();*/
 		}
 		elseif ($b_type=='sql')
 		{
-			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.get_rand_password(); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.tar')) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.gz'))
 				)
-				$file='Backup_database_'.uniqid('',true);*/
+				$file='Backup_database_'.get_rand_password();*/
 		}
 		else exit();
 
