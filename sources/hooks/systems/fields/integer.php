@@ -116,6 +116,17 @@ class Hook_fields_integer
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
 		$ret=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+		if (is_numeric($ret))
+		{
+			$test=intval($ret);
+			if ($test>2147483647)
+			{
+				$ret='2147483647';
+			} elseif ($test<-2147483648)
+			{
+				$ret='-2147483648';
+			}
+		}
 		if ($ret!=STRING_MAGIC_NULL && $ret!='') $ret=str_pad($ret,10,'0',STR_PAD_LEFT);
 		return $ret;
 	}

@@ -401,7 +401,7 @@ function check_field(the_element,the_form,for_preview)
 	}
 	my_value=clever_find_value(the_form,the_element);
 
-	if ((required) && ((my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (my_value=='****')))
+	if ((required) && ((my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (my_value=='****') || (my_value==the_element.alt)))
 	{
 		error_msg='{!REQUIRED_NOT_FILLED_IN;^}';
 	} else

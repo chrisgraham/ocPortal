@@ -13,7 +13,7 @@
 	<input type="hidden" name="src" value="1" />
 	<input type="hidden" name="sra" value="1" />
 	<input type="hidden" value="1" name="no_note" />
-	<input type="hidden" value="{!SUBSCRIPTION_FOR,{$USERNAME}}" name="item_name" />
+	<input type="hidden" value="{!SUBSCRIPTION_FOR,{$USERNAME*}}" name="item_name" />
 	<input type="hidden" name="rm" value="2" />
 
 	<div class="purchase_button">

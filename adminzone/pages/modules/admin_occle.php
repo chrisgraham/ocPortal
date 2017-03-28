@@ -96,6 +96,8 @@ class Module_admin_occle
 
 		delete_config_option('occle_chat_announce');
 		delete_config_option('bottom_show_occle_button');
+
+		$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>'admin_occle'));
 	}
 
 	/**

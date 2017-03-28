@@ -46,7 +46,7 @@ function download_licence_script()
 }
 
 /**
- * Get tempcode for a download 'feature box' for the sgiven row
+ * Get tempcode for a download 'feature box' for the given row
  *
  * @param  array			The database field row of this download
  * @param  boolean		Whether to show a picture

@@ -87,7 +87,7 @@ class Hook_rss_ocf_birthdays
 				$category=do_lang('BIRTHDAY');
 				$category_raw=do_lang('BIRTHDAY');
 
-				$view_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'],false,true);
+				$view_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'],true,false);
 
 				$if_comments=new ocp_tempcode();
 

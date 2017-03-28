@@ -156,7 +156,8 @@ class Hook_paypal
 		$mc_currency=post_param('mc_currency',''); // May be blank for subscription
 		$txn_id=post_param('txn_id',''); // May be blank for subscription
 		$parent_txn_id=post_param('parent_txn_id','-1');
-		$receiver_email=post_param('receiver_email');
+		$receiver_email=post_param('receiver_email',null);
+		if ($receiver_email===null) $receiver_email=post_param('business');
 
 		// post back to PayPal system to validate
 		if ((!ecommerce_test_mode()) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())/*allow debugging if your test IP was intentionally back-doored*/))

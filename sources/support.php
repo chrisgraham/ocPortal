@@ -2111,8 +2111,8 @@ function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 
 			$tags[]=array(
 				'TAG'=>$tag,
-				'LINK_LIMITEDSCOPE'=>build_url(array('page'=>'search','type'=>'results','content'=>$tag,'only_search_meta'=>'1')+$search_limiter_yes,get_module_zone('search')),
-				'LINK_FULLSCOPE'=>build_url(array('page'=>'search','type'=>'results','content'=>$tag,'only_search_meta'=>'1')+$search_limiter_no,get_module_zone('search')),
+				'LINK_LIMITEDSCOPE'=>build_url(array('page'=>'search','type'=>'results','content'=>'"'.$tag.'"','only_search_meta'=>'1')+$search_limiter_yes,get_module_zone('search')),
+				'LINK_FULLSCOPE'=>build_url(array('page'=>'search','type'=>'results','content'=>'"'.$tag.'"','only_search_meta'=>'1')+$search_limiter_no,get_module_zone('search')),
 			);
 		}
 	}

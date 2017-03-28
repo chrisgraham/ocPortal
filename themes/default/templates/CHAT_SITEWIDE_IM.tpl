@@ -1,5 +1,5 @@
 <script type="text/javascript">// <![CDATA[
-	{+START,IF,{$NOT,{$MATCH_KEY_MATCH,_WILD:chat:room}}}
+	{+START,IF,{$NOT,{$MATCH_KEY_MATCH,_WILD:chat:misc}}}
 		var im_area_template='{IM_AREA_TEMPLATE;^/}';
 		var im_participant_template='{IM_PARTICIPANT_TEMPLATE;^/}';
 		var all_conversations=[];

@@ -1252,10 +1252,30 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$php_errormsg=mixed();
 			if ((is_null($byte_limit)) && (is_null($write_to_file)))
 			{
-				$read_file=@file_get_contents($url,false,$context);
+				if ($trigger_error)
+				{
+					global $SUPPRESS_ERROR_DEATH;
+					$bak=$SUPPRESS_ERROR_DEATH;
+					$SUPPRESS_ERROR_DEATH=true; // Errors will be attached instead. We don't rely on only $php_errormsg because stream errors don't go into that fully.
+					$read_file=file_get_contents($url,false,$context);
+					$SUPPRESS_ERROR_DEATH=$bak;
+				} else
+				{
+					$read_file=@file_get_contents($url,false,$context);
+				}
 			} else
 			{
-				$_read_file=@fopen($url,'rb',false,$context);
+				if ($trigger_error)
+				{
+					global $SUPPRESS_ERROR_DEATH;
+					$bak=$SUPPRESS_ERROR_DEATH;
+					$SUPPRESS_ERROR_DEATH=true; // Errors will be attached instead. We don't rely on only $php_errormsg because stream errors don't go into that fully.
+					$_read_file=fopen($url,'rb',false,$context);
+					$SUPPRESS_ERROR_DEATH=$bak;
+				} else
+				{
+					$_read_file=@fopen($url,'rb',false,$context);
+				}
 				if ($_read_file!==false)
 				{
 					$read_file='';

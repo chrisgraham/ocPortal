@@ -284,6 +284,8 @@ class Module_cms_galleries extends standard_aed_module
 				$last_time=$there[$temp_keys[0]];
 				foreach ($there as $file=>$time)
 				{
+					if (!is_string($file)) $file = strval($file);
+
 					if ((!in_array('uploads/galleries/'.str_replace('%2F','/',rawurlencode($file)),$test1)) && (!in_array('uploads/galleries/'.str_replace('%2F','/',rawurlencode($file)),$test2)))
 					{
 						$orphaned_content->attach(form_input_list_entry($file,($time>=$last_time-60*60*3) || (strpos($file,'/')!==false),$file));

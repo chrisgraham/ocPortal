@@ -1253,8 +1253,11 @@ class Hook_ocp_merge
 				continue;
 			}
 
+			$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
+			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
 			$titlemap[$id]=$title;
-			$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>array_key_exists('submitter',$row)?$row['submitter']:get_member(),'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,'seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,'notes'=>$row['notes'],'description'=>insert_lang_comcode($this->get_lang_string($db,$row['description']),2),'add_date'=>$row['add_date'],'title'=>insert_lang($title,2)),true);
+			$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>$submitter,'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,'seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,'notes'=>$row['notes'],'description'=>insert_lang_comcode($this->get_lang_string($db,$row['description']),2),'add_date'=>$row['add_date'],'title'=>insert_lang($title,2)),true);
 
 			import_id_remap_put('cedi_page',strval($row['id']),$id);
 		}
@@ -1385,13 +1388,7 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			if (is_null($row['taskisdone']))
-			{
-				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery']));
-			} else
-			{
-				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery'],'taskisdone'=>$row['taskisdone']));
-			}
+			$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery'],'taskisdone'=>$row['taskisdone']));
 		}
 	}
 
@@ -1429,13 +1426,13 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
+			if (import_check_if_imported('event_type',strval($row['id']))) continue;
+
 			if ($row['id']==db_get_first_id())
 			{
 				import_id_remap_put('event_type',strval($row['id']),db_get_first_id());
 				continue;
 			}
-
-			if (import_check_if_imported('event_type',strval($row['id']))) continue;
 
 			$id_new=add_event_type($this->get_lang_string($db,$row['t_title']),$row['t_logo'],array_key_exists('t_external_feed',$row)?$row['t_external_feed']:'');
 
@@ -1698,7 +1695,7 @@ class Hook_ocp_merge
 				if (!array_key_exists('c_send_view_reports',$row)) $row['c_send_view_reports']=0;
 				unset($row['c_own_template']);
 				$GLOBALS['SITE_DB']->query_insert('catalogues',$row);
-				import_id_remap_put('catalogue',$row['c_name'],$row['c_name']);
+				import_id_remap_put('catalogue',$row['c_name'],1);
 
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'catalogue_fields WHERE '.db_string_equal_to('c_name',$row['c_name']));
 				foreach ($rows2 as $row2)
@@ -2064,7 +2061,7 @@ class Hook_ocp_merge
 			if (is_numeric($row['category_name']))
 			{
 				$import_type=$row['module_the_name'];
-				$is_str=false;
+				$str=false;
 				switch ($import_type)
 				{
 					case 'galleries':
@@ -2166,7 +2163,7 @@ class Hook_ocp_merge
 				if (is_numeric($row['category_name']))
 				{
 					$import_type=$row['module_the_name'];
-					$is_str=false;
+					$str=false;
 					switch ($import_type)
 					{
 						case 'galleries':
@@ -2452,7 +2449,7 @@ class Hook_ocp_merge
 					}
 					$only_group2=$only_group;
 				}
-				$id_new=ocf_make_custom_field($name,$row['cf_locked'],$this->get_lang_string($db,$row['cf_description']),$row['cf_default'],$row['cf_public_view'],$row['cf_owner_view'],$row['cf_owner_set'],array_key_exists('cf_encrypted',$row)?$row['cf_encrypted']:0,$row['cf_type'],$row['cf_required'],$row['cf_show_in_posts'],$row['cf_show_in_post_previews'],$row['cf_order'],(!is_string($only_group))?(is_null($only_group)?'':strval($only_group)):$only_group);
+				$id_new=ocf_make_custom_field($name,$row['cf_locked'],$this->get_lang_string($db,$row['cf_description']),$row['cf_default'],$row['cf_public_view'],$row['cf_owner_view'],$row['cf_owner_set'],array_key_exists('cf_encrypted',$row)?$row['cf_encrypted']:0,$row['cf_type'],$row['cf_required'],$row['cf_show_in_posts'],$row['cf_show_in_post_previews'],$row['cf_order'],(!is_string($only_group))?(is_null($only_group)?'':strval($only_group)):$only_group,$row['cf_show_on_join_form']);
 			} else
 			{
 				$id_new=$existing[0]['id'];
@@ -2562,7 +2559,7 @@ class Hook_ocp_merge
 
 			$category_id=import_id_remap_get('category',strval($row['f_category_id']),true);
 
-			$id_new=ocf_make_forum($row['f_name'],$this->get_lang_string($db,$row['f_description']),$category_id,array(),db_get_first_id(),$row['f_position'],$row['f_post_count_increment'],$row['f_order_sub_alpha'],$this->get_lang_string($db,$row['f_intro_question']),$row['f_intro_answer'],$row['f_redirection'],array_key_exists('f_order',$row)?$row['f_order']:'last_post');
+			$id_new=ocf_make_forum($row['f_name'],$this->get_lang_string($db,$row['f_description']),$category_id,array(),db_get_first_id(),$row['f_position'],$row['f_post_count_increment'],$row['f_order_sub_alpha'],$this->get_lang_string($db,$row['f_intro_question']),$row['f_intro_answer'],$row['f_redirection'],array_key_exists('f_order',$row)?$row['f_order']:'last_post',array_key_exists('f_is_threaded',$row)?$row['f_is_threaded']:0);
 			import_id_remap_put('forum',strval($row['id']),$id_new);
 		}
 

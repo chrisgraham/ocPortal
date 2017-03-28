@@ -39,6 +39,7 @@ error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 
 safe_ini_set('display_errors','1');
 safe_ini_set('assert.active','0');
+safe_ini_set('opcache.revalidate_freq', '1'); // Bitnami WAMP puts it to 60 by default, breaking reading of _config.php
 
 global $MOBILE;
 $MOBILE=0;

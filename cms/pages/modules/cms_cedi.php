@@ -143,7 +143,7 @@ class Module_cms_cedi
 		require_code('fields');
 		if (has_tied_catalogue('seedy_page'))
 		{
-			append_form_custom_fields('seedy_page',($page_id==-1)?NULL:strval($page_id),$fields,$hidden);
+			append_form_custom_fields('seedy_page',($page_id==-1)?NULL:strval($page_id),$fields2,$hidden);
 		}
 
 		require_code('permissions2');

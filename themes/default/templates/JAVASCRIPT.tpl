@@ -454,7 +454,7 @@ function check_field_for_blankness(field,event)
 
 	var ee=document.getElementById('error_'+field.id);
 
-	if ((value.replace(/\s/g,'')=='') || (value=='****') || (value=='{!POST_WARNING;^}') || (value=='{!THREADED_REPLY_NOTICE;^,{!POST_WARNING}}'))
+	if ((value.replace(/\s/g,'')=='') || (value=='****') || (value==field.alt) || (value=='{!POST_WARNING;^}') || (value=='{!THREADED_REPLY_NOTICE;^,{!POST_WARNING}}'))
 	{
 		if (event)
 		{
@@ -1872,6 +1872,8 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 {
 	if (typeof win=='undefined') var win=window;
 
+	if (!ac) return;
+
 	if (!window.page_loaded) return;
 	if ((typeof tooltip!='function') && (tooltip=='')) return;
 
@@ -2480,7 +2482,8 @@ function inner_html_load(xml_string) {
 	{
 		try
 		{
-			xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
+			xml=(new DOMParser()).parseFromString(xml_string,'application/xml');
+			if (xml.documentElement.nodeName=='parsererror') xml=null;
 		}
 		catch (e) { xml=null; };
 
