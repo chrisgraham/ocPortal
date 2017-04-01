@@ -251,7 +251,7 @@ You may customise the appearance of the store in the usual way of editing catalo
 From the catalogue you can add the item to the cart, and go to the cart ([tt]site:shopping[/tt] module) to finalise and then pay for your order.
 
 When orders are purchased, an e-mail is sent out to the staff so they can fulfil the order, and the stock level is adjusted.
-Orders may be reviewed by the purchaser from their [tt]site:orders[/tt] module. Order status can be changed (e.g. to dispatched) from the Admin Zone.
+Orders may be reviewed by the purchaser from their [tt]site:shopping[/tt] module. Order status can be changed (e.g. to dispatched) from the Admin Zone.
 
 The ocPortal store has intentionally been kept lightweight. We're not trying to compete with the dedicated eCommerce systems on features, we're trying to provide something with fantastic ocPortal integration and extendibility that meets the majority of people's needs. This way we are able to compete by providing eCommerce as a part of the full ocPortal package, rather than a standalone eCommerce system that is bloated in it's own way but lacking the features needed for a wider website.
 

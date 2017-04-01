@@ -55,4 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	echo http_download_file('https://example.com/');
 }

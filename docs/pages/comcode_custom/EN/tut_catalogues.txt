@@ -241,7 +241,6 @@ ocPortal can have special eCommerce catalogues, which integrate with the ocPorta
  - special templating for tidy product display
  - easy adding to the shopping cart
  - tax calculation
- - discounting
  - stock counting
  - view tracking
 
