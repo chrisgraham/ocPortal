@@ -294,6 +294,7 @@ function install_ocf($upgrade_from=NULL)
 
 	if ((!is_null($upgrade_from)) && ($upgrade_from<7.2))
 	{
+		$GLOBALS['FORUM_DB']->query('SET sql_mode=\'\'',NULL,NULL,true); // MySQL (via alter_table_field) doesn't like that it is converting nulls to blanks
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT m_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'db_meta WHERE ('.db_string_equal_to('m_type','?INTEGER').' OR '.db_string_equal_to('m_type','BINARY').') AND '.db_string_equal_to('m_table','f_member_custom_fields'));
 		foreach ($rows as $row)
 		{
