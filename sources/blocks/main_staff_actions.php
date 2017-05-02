@@ -94,6 +94,8 @@ class Block_main_staff_actions
 	{
 		unset($map);
 
+		if (!addon_installed('actionlog')) return new ocp_tempcode();
+
 		require_all_lang();
 
 		require_css('adminzone_frontpage');

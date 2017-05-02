@@ -299,7 +299,13 @@ class Module_admin_zones
 				$comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON',array('_GUID'=>'1acc5dcf299325d0cf55871923148a54','DIVIDER'=>false,'FIELD_NAME'=>$field_name,'TITLE'=>do_lang_tempcode('INPUT_COMCODE_'.$button),'B'=>$button)));
 			}
 
-			$preview=(substr($page_info[0],0,6)=='MODULE')?NULL:request_page($for,false,$id,NULL,true);
+			if ((substr($page_info[0],0,6)=='MODULE') || ($redirecting_to!==NULL))
+			{
+				$preview=NULL;
+			} else
+			{
+				$preview=request_page($for,false,$id,NULL,true);
+			}
 			if (!is_null($preview))
 			{
 				$_preview=$preview->evaluate();

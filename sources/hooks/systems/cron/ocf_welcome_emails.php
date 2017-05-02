@@ -64,7 +64,7 @@ class Hook_cron_ocf_welcome_emails
 				// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
 				$where=' WHERE m_join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND m_join_time<='.strval($time_now-$send_seconds_after_joining);
 				if (get_option('allow_email_from_staff_disable')=='1') $where.=' AND m_allow_emails=1';
-				$query='SELECT m_email_address,m_username,id,m_join_time FROM '.get_table_prefix().'f_members'.$where;
+				$query='SELECT m_email_address,m_username,id,m_join_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members'.$where;
 				$members=$GLOBALS['FORUM_DB']->query($query);
 			}
 //var_dump($members);exit();

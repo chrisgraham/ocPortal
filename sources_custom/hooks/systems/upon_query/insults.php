@@ -38,7 +38,7 @@ class upon_query_insults
 
 			$first_post=$first_post_data[0]['p_post'];
 
-			$first_post=get_translated_text($first_post);
+			$first_post=get_translated_text($first_post,$GLOBALS['FORUM_DB']);
 
 			$_insult=explode('[b]',$first_post);
 			$insult=(isset($_insult[1]) && strlen($_insult[1])>0)?$_insult[1]:'';

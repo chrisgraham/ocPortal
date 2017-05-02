@@ -950,10 +950,11 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 				$bits=page_link_decode($redirect['r_to_zone'].':'.$redirect['r_to_page']);
 			} else $bits=array($redirect['r_to_zone'],array('page'=>$redirect['r_to_page']));
 			// Transparent redirection?
-			if ($redirect['r_is_transparent']==1)
+			if (($redirect['r_is_transparent']==1) || ($being_included))
 			{
 				if (($being_included) && (!has_page_access(get_member(),$redirect['r_to_page'],$redirect['r_to_zone'],true)))
 				{
+					if ($being_included) return new ocp_tempcode();
 					access_denied('PAGE_ACCESS');
 				}
 
@@ -961,7 +962,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 					if ($key!='page') $_GET[$key]=get_magic_quotes_gpc()?addslashes($val):$val;
 				if (($redirect['r_to_page']!=$codename) || ($redirect['r_to_zone']!=$zone))
 				{
-					$ret=request_page($redirect['r_to_page'],$required,$redirect['r_to_zone'],NULL,$being_included,$redirect['r_is_transparent']==1);
+					$ret=request_page($redirect['r_to_page'],$required,$redirect['r_to_zone'],NULL,true);
 					$REQUEST_PAGE_NEST_LEVEL--;
 					return $ret;
 				}

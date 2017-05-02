@@ -829,7 +829,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						if (isset($GLOBALS['NON_CACHEABLE_SYMBOLS']['SET_RAND'])) // Normal operation
 						{
 							$_value=banners_script(true,'','',$b_type,'');
-							$value=$_value->evaluate();
+							$value=trim($_value->evaluate());
 						} else // Been told to behave statically
 						{
 							$value='Banner goes here';

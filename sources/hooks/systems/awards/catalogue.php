@@ -55,7 +55,7 @@ class Hook_awards_catalogue
 	 */
 	function run($row,$zone)
 	{
-		if ($row['c_is_tree'])
+		if ($row['c_is_tree']==1)
 		{
 			$url=build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$row['c_name']),$zone);
 		} else

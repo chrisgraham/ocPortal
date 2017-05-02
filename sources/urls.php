@@ -766,7 +766,7 @@ function page_link_decode($param)
 		} else $zone='';
 	} elseif (($zone=='site') && (get_option('collapse_user_zones')=='1')) $zone='';
 	elseif ($zone=='_SELF') $zone=get_zone_name();
-	if (isset($bits[1]))
+	if ((isset($bits[1])) && (strpos($bits[1],'=')!==false))
 	{
 		if ($bits[1]!='')
 		{

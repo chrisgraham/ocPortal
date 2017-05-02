@@ -2545,9 +2545,9 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 					switch (a_name) {
 						case "class": this_node.className=a_value; break;
 						case "for": this_node.htmlFor=a_value; break;
-						default: this_node.setAttribute(a_name,a_value);
+						default: try { this_node.setAttribute(a_name,a_value); } catch (e) {} ;
 					}
-				} else this_node[a_name]=eval('var x=function(event) { '+a_value+' }; x;');
+				} else try { this_node[a_name]=eval('var x=function(event) { '+a_value+' }; x;'); } catch (e) {};
 			}
 
 			// append node

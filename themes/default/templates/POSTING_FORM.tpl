@@ -48,8 +48,10 @@
 
 {+START,IF,{$IS_A_COOKIE_LOGIN}}
 	<script type="text/javascript">// <![CDATA[
-		add_event_listener_abstract(window,'load',function () {
-			if (typeof init_form_saving!='undefined') init_form_saving('posting_form');
+		add_event_listener_abstract(window,'real_load',function () {
+			window.setTimeout(function() {
+				if (typeof init_form_saving!='undefined') init_form_saving('posting_form');
+			}, 3000);
 		} );
 	//]]></script>
 {+END}
