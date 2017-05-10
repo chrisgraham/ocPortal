@@ -66,6 +66,11 @@ class Hook_paypal
 			$user_details['state']=get_ocp_cpf('state');
 			$user_details['zip']=get_ocp_cpf('post_code');
 			$user_details['country']=get_ocp_cpf('country');
+
+			if (($user_details['country']!='') && (($user_details['address1']=='') || ($user_details['city']=='') || ($user_details['zip']=='')))
+			{
+				$user_details['country']=''; // Causes error on PayPal due to it crashing when trying to validate the address
+			}
 		}
 
 		return do_template('ECOM_BUTTON_VIA_PAYPAL',array('_GUID'=>'b0d48992ed17325f5e2330bf90c85762','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'MEMBER_ADDRESS'=>$user_details));
@@ -252,6 +257,11 @@ class Hook_paypal
 			$user_details['state']=get_ocp_cpf('state');
 			$user_details['zip']=get_ocp_cpf('post_code');
 			$user_details['country']=get_ocp_cpf('country');
+
+			if (($user_details['country']!='') && (($user_details['address1']=='') || ($user_details['city']=='') || ($user_details['zip']=='')))
+			{
+				$user_details['country']=''; // Causes error on PayPal due to it crashing when trying to validate the address
+			}
 		}
 
 		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array('_GUID'=>'89b7edf976ef0143dd8dfbabd3378c95','ITEMS'=>$items,'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'ORDER_ID'=>strval($order_id),'NOTIFICATION_TEXT'=>$notification_text,'MEMBER_ADDRESS'=>$user_details));

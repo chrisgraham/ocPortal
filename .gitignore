@@ -42,7 +42,8 @@ gibberish
 php.ini
 /*.shtml
 /.project
-uploads/auto_thumbs/*
+/uploads/incoming/*.dat
+/uploads/auto_thumbs/*
 *__*.png
 *__*.jpg
 *__*.jpeg

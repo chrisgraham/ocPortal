@@ -53,6 +53,8 @@ function show_block_html(new_html,target_div,append)
 
 function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params)
 {
+	if (!block) return;
+
 	var _links=get_elements_by_class_name(block,'ajax_block_wrapper_links');
 	var links=[];
 	for (var i=0;i<_links.length;i++)
