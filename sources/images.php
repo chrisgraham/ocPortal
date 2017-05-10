@@ -618,8 +618,6 @@ function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tr
 	}
 
 	list($source,$reorientated)=adjust_pic_orientation($source,$exif);
-	if ((!is_null($thumb_options)) || (!$only_make_smaller))
-		unset($from_file);
 
 	// Derive actual width x height, for the given maximum box (maintain aspect ratio)
 	// ===============================================================================
@@ -664,7 +662,7 @@ function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tr
 			$_height=$height;
 			$_width=intval($height/($sy/$sx));
 		}
-		if (($_width>$sx) && ($only_make_smaller))
+		if (($_width>=$sx) && ($only_make_smaller))
 		{
 			$_width=$sx;
 			$_height=$sy;
@@ -862,6 +860,32 @@ function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tr
 			$dest_y=($pad_axis=='y')?  $pad_amount : 0;
 		}
 	}
+
+if (($_width == $sx) && ($_height == $sy))
+{
+	// Null op...
+
+	imagedestroy($source);
+
+	if (($using_path) && ($from==$to))
+		return true;
+
+	if ($using_path)
+	{
+		copy($from,$to);
+	} else
+	{
+		$_to=@fopen($to,'wb') OR intelligent_write_error($to);
+		fwrite($_to,$from_file);
+		fclose($_to);
+	}
+	fix_permissions($to);
+	sync_file($to);
+	return true;
+}
+
+unset($from_file);
+
 	// Resample/copy
 	$gd_version=get_gd_version();
 	if ($gd_version>=2.0) // If we have GD2
