@@ -67,9 +67,9 @@ class Hook_paypal
 			$user_details['zip']=get_ocp_cpf('post_code');
 			$user_details['country']=get_ocp_cpf('country');
 
-			if (($user_details['country']!='') && (($user_details['address1']=='') || ($user_details['city']=='') || ($user_details['zip']=='')))
+			if (($user_details['address1']=='') || ($user_details['city']=='') || ($user_details['zip']=='') || ($user_details['country']==''))
 			{
-				$user_details['country']=''; // Causes error on PayPal due to it crashing when trying to validate the address
+				$user_details=array(); // Causes error on PayPal due to it crashing when trying to validate the address
 			}
 		}
 
@@ -258,9 +258,9 @@ class Hook_paypal
 			$user_details['zip']=get_ocp_cpf('post_code');
 			$user_details['country']=get_ocp_cpf('country');
 
-			if (($user_details['country']!='') && (($user_details['address1']=='') || ($user_details['city']=='') || ($user_details['zip']=='')))
+			if (($user_details['address1']=='') || ($user_details['city']=='') || ($user_details['zip']=='') || ($user_details['country']==''))
 			{
-				$user_details['country']=''; // Causes error on PayPal due to it crashing when trying to validate the address
+				$user_details=array(); // Causes error on PayPal due to it crashing when trying to validate the address
 			}
 		}
 

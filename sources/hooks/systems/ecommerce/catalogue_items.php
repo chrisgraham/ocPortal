@@ -714,11 +714,11 @@ class Hook_catalogue_items
 /**
  * Update order status,transaction ID after transaction
  *
- * @param  AUTO_LINK		Purchase/Order ID.
+ * @param  ID_TEXT		Purchase/Order ID.
  * @param  array			Details of product.
  */
 function handle_catalogue_items($entry_id,$details)
 {
 	$object=object_factory('Hook_catalogue_items');
-	$object->update_stock($entry_id,1);
+	$object->update_stock(intval($entry_id),1);
 }

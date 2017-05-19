@@ -184,7 +184,7 @@ class Module_admin_orders
 
 		$pagination=pagination(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT t1.*,(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT t1.*,SUM(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start);
 
 		$order_entries=new ocp_tempcode();
 

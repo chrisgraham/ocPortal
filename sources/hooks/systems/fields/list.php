@@ -80,7 +80,15 @@ class Hook_fields_list
 		unset($field);
 		if (!is_null($required))
 		{
-			if (($required) && ($default=='')) $default=preg_replace('#\|.*#','',$default);
+			if ((($default=='') && ($required)) || ($default==$field['cf_default']))
+			{
+				$default=$field['cf_default'];
+				if ($required)
+				{
+					$default=preg_replace('#^(=.*)?\|#U','',$default); // Get key of blank option
+				}
+				$default=preg_replace('#\|.*$#','',$default); // Remove all the non-first list options
+			}
 		}
 		return array('long_unescaped',$default,'long');
 	}

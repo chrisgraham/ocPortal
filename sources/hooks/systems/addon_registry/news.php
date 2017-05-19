@@ -180,7 +180,6 @@ class Hook_addon_registry_news
 			'RECENT_BLOG_POSTS'=>lorem_paragraph_html(),
 			'RSS_URL'=>placeholder_url(),
 			'ADD_BLOG_POST_URL'=>placeholder_url(),
-			'PAGINATION'=>placeholder_pagination()
 		));
 		return array(
 			lorem_globalise($tab_content, NULL, '', true)

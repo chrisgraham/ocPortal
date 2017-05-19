@@ -270,7 +270,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 			return $zone;
 		}
 	}
-	$zones=find_all_zones();
+	$zones=find_all_zones(false,false,true);
 	foreach ($zones as $zone)
 	{
 		if (!in_array($zone,$first_zones))

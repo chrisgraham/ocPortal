@@ -50,7 +50,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		if (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages'))
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
-		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
+		$through_queue=(!$bypass_queue) && (((cron_installed()) && (get_option('mail_queue')==='1'))) || (get_option('mail_queue_debug')==='1');
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
 			'm_subject'=>$subject_line,

@@ -213,7 +213,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 
 	$source_member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
-	if ((is_null($id)) && (multi_lang())) // Needed as MySQL auto-increment works separately for each combo of other key values (i.e. language in this case). We can't let a language string ID get assigned to something entirely different in another language. This MySQL behaviour is not well documented, it may work differently on different versions.
+	if ((is_null($id)) && (multi_lang()) && (strpos(get_db_type(),'mysql')!==false)) // Needed as MySQL auto-increment works separately for each combo of other key values (i.e. language in this case). We can't let a language string ID get assigned to something entirely different in another language. This MySQL behaviour is not well documented, it may work differently on different versions.
 	{
 		$id=$connection->query_value('translate','MAX(id)');
 		$id=is_null($id)?NULL:($id+1);

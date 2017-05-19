@@ -392,7 +392,7 @@ function do_work()
 	require_code('tickets2');
 	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
 	{
-		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid('',true),db_get_first_id(),random_line(),random_text(),'','');
+		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),strval(get_member()).'_'.uniqid('',true),db_get_first_id(),random_line(),random_text(),'','');
 	}
 	echo 'done tickets stuff'.chr(10);
 

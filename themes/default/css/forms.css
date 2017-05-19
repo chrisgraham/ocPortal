@@ -490,6 +490,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 
 .fields_set_contents {
 	margin-bottom: 1.3em;
+	overflow: hidden;
 }
 
 .fields_set_contents .associated_details {

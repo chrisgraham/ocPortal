@@ -469,7 +469,7 @@ function float_to_raw_string($num,$decs_wanted=2,$only_needed_decs=false)
 		$str=substr($str,0,strlen($str)-$decs_here+$decs_wanted);
 		if ($decs_wanted==0) $str=rtrim($str,'.');
 	}
-	if ($only_needed_decs) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
+	if ($only_needed_decs && $decs_wanted!=0) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
 	return $str;
 }
 

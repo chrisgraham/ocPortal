@@ -118,7 +118,7 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 
 	_check_attachment_count();
 
-	$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$id,'language'=>user_lang()));
+	$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$lang_id,'language'=>user_lang()));
 
 	if ($backup_string)
 	{

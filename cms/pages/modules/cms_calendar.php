@@ -641,12 +641,12 @@ class Module_cms_calendar extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry for which the cat is sought
 	 * @return mixed			The cat
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events','e_type',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events','e_type',array('id'=>intval($id)));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return $temp;
 	}

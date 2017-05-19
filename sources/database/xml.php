@@ -2024,7 +2024,6 @@ class Database_Static_xml
 					{
 						case '+':
 						case '-':
-						case '*':
 						case '/':
 						case '>':
 						case '<':
@@ -2034,6 +2033,10 @@ class Database_Static_xml
 						case '<>':
 						case 'LIKE':
 							$expr=array($token,$expr,$this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok));
+							break;
+
+						case 'MULTI':
+							$expr=array('*',$expr,$this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok));
 							break;
 
 						case 'IS':
@@ -2392,6 +2395,8 @@ class Database_Static_xml
 	 */
 	function _do_query_select($tokens,$query,$db,$max,$start,$fail_ok,&$at,$do_end_check=true)
 	{
+		$at=NULL;
+
 		// Parse
 		if (!$this->_parsing_expects($at,$tokens,'SELECT',$query)) return NULL;
 		$select=array();
