@@ -268,7 +268,7 @@ class Module_cms_catalogues extends standard_aed_module
 		}
 
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_entries','catalogue_name'=>$catalogue_name),get_module_zone('search'));
-		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('news'));
+		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues'));
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
@@ -469,12 +469,12 @@ class Module_cms_catalogues extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry for which the cat is sought
 	 * @return string			The cat
 	 */
 	function get_cat_b($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','cc_id',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','cc_id',array('id'=>intval($id)));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return strval($temp);
 	}
@@ -482,7 +482,7 @@ class Module_cms_catalogues extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry for which the cat is sought
 	 * @return string			The cat
 	 */
 	function get_cat($id)

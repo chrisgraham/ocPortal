@@ -108,6 +108,7 @@ function find_installed_addons()
 				} else
 				{
 					$file_list=is_array($_hook_bits[1])?call_user_func_array($_hook_bits[1][0],$_hook_bits[1][1]):@eval($_hook_bits[1]);
+					if (!is_array($file_list)) $file_list=array();
 				}
 				if (is_null($_hook_bits[2]))
 				{

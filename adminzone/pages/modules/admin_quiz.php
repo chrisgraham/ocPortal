@@ -123,7 +123,7 @@ class Module_admin_quiz
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * UI to export quiz CSV
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -146,7 +146,7 @@ class Module_admin_quiz
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Actualiser to export quiz CSV
 	 */
 	function _export_quiz()
 	{

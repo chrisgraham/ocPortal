@@ -112,7 +112,7 @@ function dload_script()
 		if (url_is_local($full)) $full=get_custom_base_url().'/'.$full;
 		if ((strpos($full,chr(10))!==false) || (strpos($full,chr(13))!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-		header('Location: '.$full);
+		header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$full)));
 		log_download($id,0,!is_null($got_before)); // Bandwidth used is 0 for an external download
 		return;
 	}

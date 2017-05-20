@@ -75,7 +75,8 @@ class Block_main_custom_gfx
 		if (!array_key_exists('data',$map)) $map['data']=do_lang('FILL_IN_DATA_PARAM');
 
 		// Cache to auto_thumbs
-		if ((!file_exists(get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png')) || (get_option('is_on_block_cache')=='0'))
+		$thumb_path=get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png';
+		if ((!file_exists($thumb_path)) || (get_option('is_on_block_cache')=='0'))
 		{
 			// Ok so not cached yet
 
@@ -127,8 +128,10 @@ class Block_main_custom_gfx
 				imagettftext($img,floatval($map['font_size']),0.0,$pos_x,$pos_y,$colour,$file_base.$font.'.ttf',$text);
 			}
 
-			imagepng($img,get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png');
+			imagepng($img,$thumb_path);
 			imagedestroy($img);
+			fix_permissions($thumb_path);
+			sync_file($thumb_path);
 		}
 
 		$url=get_custom_base_url().'/uploads/auto_thumbs/'.$cache_id.'.png';

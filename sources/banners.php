@@ -110,7 +110,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 
 		if ((strpos($url,chr(10))!==false) || (strpos($url,chr(13))!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-		header('Location: '.$url);
+		header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$url)));
 	}
 
 	// Being called to display a banner

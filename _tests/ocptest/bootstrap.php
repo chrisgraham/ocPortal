@@ -26,7 +26,7 @@ function unit_testing_run()
 	global $SCREEN_TEMPLATE_CALLED;
 	$SCREEN_TEMPLATE_CALLED='';
 
-	header('Content-Type: text/html');
+	@header('Content-Type: text/html');
 
 	@ini_set('ocproducts.type_strictness','0');
 	@ini_set('ocproducts.xss_detect','0');

@@ -1024,6 +1024,7 @@ function ocf_ban_member($member_id)
 	$email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>1),array('id'=>$member_id),'',1);
 	log_it('BAN_MEMBER',strval($member_id),$username);
+	require_lang('ocf');
 	$mail=do_lang('BAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
 	mail_wrap(do_lang('BAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2);
 }
@@ -1041,6 +1042,7 @@ function ocf_unban_member($member_id)
 	$email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>0),array('id'=>$member_id),'',1);
 	log_it('UNBAN_MEMBER',strval($member_id),$username);
+	require_lang('ocf');
 	$mail=do_lang('UNBAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
 	mail_wrap(do_lang('UNBAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2);
 }

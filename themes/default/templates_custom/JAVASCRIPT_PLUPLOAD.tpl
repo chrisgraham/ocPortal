@@ -5252,7 +5252,7 @@ function doSubmit(e,ob,recurse) {
 	var txtID = document.getElementById(ob.settings.txtFileDbID);
 	if (txtID.value == '-1')
 	{
-		btnSubmit.disabled = true;
+		//btnSubmit.disabled = true;	This is annoying, changing the upload mid-flight is legitimate
 		ob.start();
 		smooth_scroll(find_pos_y(txtFileName,true));
 	} else
@@ -5322,7 +5322,7 @@ function fireFakeChangeFor(name,value)
 			var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
 			if (clearBtn) clearBtn.style.display='none';
 			var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
-			if (uploadBtn) uploadBtn.disabled=true;
+			//if (uploadBtn) uploadBtn.disabled=true;	This is annoying, changing the upload mid-flight is legitimate
 		}
 	}
 }
@@ -5870,6 +5870,9 @@ function FileProgress(file, targetID) {
 		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
 	} else {
 		this.fileProgressElement = this.fileProgressWrapper.firstChild;
+
+		this.appear();
+
 		if (file && typeof file.name!='undefined')
 			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
 	}
@@ -5889,7 +5892,7 @@ FileProgress.prototype.setComplete = function () {
 	this.fileProgressElement.childNodes[3].style.width = "";
 
 	var oSelf = this;
-	setTimeout(function () {
+	this.fileProgressElement.fader = setTimeout(function () {
 		oSelf.disappear();
 	}, 10000);
 };
@@ -5900,7 +5903,7 @@ FileProgress.prototype.setError = function () {
 	this.fileProgressElement.childNodes[3].style.width = "";
 
 	var oSelf = this;
-	setTimeout(function () {
+	this.fileProgressElement.fader = setTimeout(function () {
 		oSelf.disappear();
 	}, 5000);
 };
@@ -5911,7 +5914,7 @@ FileProgress.prototype.setCancelled = function () {
 	this.fileProgressElement.childNodes[3].style.width = "";
 
 	var oSelf = this;
-	setTimeout(function () {
+	this.fileProgressElement.fader = setTimeout(function () {
 		oSelf.disappear();
 	}, 2000);
 };
@@ -5932,6 +5935,10 @@ FileProgress.prototype.appear = function () {
 		this.fileProgressWrapper.style.opacity = 1;
 	}
 
+	if ((typeof this.fileProgressElement.fader != 'undefined') && (this.fileProgressElement.fader)) {
+		window.clearTimeout(this.fileProgressElement.fader);
+		this.fileProgressElement.fader = null;
+	}
 	this.fileProgressWrapper.style.height = "";
 	this.height = this.fileProgressWrapper.offsetHeight;
 	this.opacity = 100;
@@ -5974,7 +5981,7 @@ FileProgress.prototype.disappear = function () {
 
 	if (this.height > 0 || this.opacity > 0) {
 		var oSelf = this;
-		setTimeout(function () {
+		this.fileProgressElement.fader = setTimeout(function () {
 			oSelf.disappear();
 		}, rate);
 	} else {

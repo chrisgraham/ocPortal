@@ -26,6 +26,7 @@ tt, kbd, samp {
 
 abbr,acronym {
 	border-bottom: 1px dotted; /* For Safari, which does not have it by default */
+	text-decoration: none;
 }
 
 {+START,IF,{$VALUE_OPTION,html5}}
@@ -3978,7 +3979,7 @@ a[onclick$="window.open"], body div a.external_link {background: url('{$IMG;,fil
 body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] {background-image:none; padding:0px;}
 body a.link_exempt2 {background-image:none;}
 {+START,IF,{$ADDON_INSTALLED,recommend}}
-.print_icon {background: url('{$IMG;,recommend/print}') no-repeat left top !important; padding: 0 0 5px 22px !important;}
+.print_icon {background: url('{$IMG;,recommend/print}') no-repeat left top !important; padding: 0 0 5px 22px !important; display: inline-block;}
 {+END}
 
 a[title="{!VIRTUAL_ROOT}"]:hover {

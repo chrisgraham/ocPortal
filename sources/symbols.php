@@ -592,7 +592,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						if (isset($GLOBALS['NON_CACHEABLE_SYMBOLS']['SET_RAND'])) // Normal operation
 						{
 							$_value=banners_script(true,'','',$b_type,$internal_only,'');
-							$value=$_value->evaluate();
+							$value=trim($_value->evaluate());
 						} else // Been told to behave statically
 						{
 							$value='Banner goes here';
@@ -2550,18 +2550,18 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 		switch ($type)
 		{
 			case 'left':
-				$temp=(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,$amount-3,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,$amount-3)));
+				$temp=(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,max($amount-3,1),$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,max($amount-3,1))));
 				if ($temp!=$html && in_array(substr($temp,-1),array('.','?','!'))) $temp.='<br />'; // so the "..." does not go right after the sentence terminator
 				$truncated=($temp==$html)?$temp:str_replace(array('</p>&hellip;','</div>&hellip;'),array('&hellip;</p>','&hellip;</div>'),(rtrim($temp).'&hellip;'));
 				break;
 			case 'expand':
-				$temp=(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,$amount-3,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,$amount-3)));
+				$temp=(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,max($amount-3,1),$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,max($amount-3,1))));
 				if ($temp!=$html && in_array(substr($temp,-1),array('.','?','!'))) $temp.='<br />'; // so the "..." does not go right after the sentence terminator
 				$_truncated=do_template('COMCODE_HIDE',array('TEXT'=>protect_from_escaping($temp),'CONTENT'=>protect_from_escaping($html)));
 				$truncated=$_truncated->evaluate();
 				break;
 			case 'right':
-				$truncated=str_replace(array('</p>&hellip;','</div>&hellip;'),array('&hellip;</p>','&hellip;</div>'),('&hellip;'.ltrim(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,-$amount-3,NULL,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,-$amount-3)))));
+				$truncated=str_replace(array('</p>&hellip;','</div>&hellip;'),array('&hellip;</p>','&hellip;</div>'),('&hellip;'.ltrim(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,-max($amount-3,1),NULL,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,-max($amount-3,1))))));
 				break;
 			case 'spread':
 				$pos=intval(floor(floatval($amount)/2.0))-1;

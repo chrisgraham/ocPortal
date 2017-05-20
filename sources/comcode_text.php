@@ -1033,6 +1033,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 									// Pick up correctly, including permission filtering
 									if (is_null($ADVERTISING_BANNERS))
 									{
+										$ADVERTISING_BANNERS=array();
+
 										$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'banners b LEFT JOIN '.get_table_prefix().'banner_types t ON b.b_type=t.id WHERE t_comcode_inline=1 AND '.db_string_not_equal_to('b_title_text',''),NULL,NULL,true);
 										if (!is_null($rows))
 										{
@@ -1053,7 +1055,6 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												}
 											}
 
-											$ADVERTISING_BANNERS=array();
 											foreach ($rows as $row)
 											{
 												$trigger_text=$row['b_title_text'];

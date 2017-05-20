@@ -535,7 +535,7 @@ function calculate_category_child_count_cache($cat_id,$recursive_updates=true)
 
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$cat_id));
 
-	$num_rec_children=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache','COUNT(*)',array('cc_ancestor_id'=>$cat_id))-1;
+	$num_rec_children=max(0,$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache','COUNT(*)',array('cc_ancestor_id'=>$cat_id))-1);
 	$num_rec_entries=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache t JOIN '.get_table_prefix().'catalogue_entries e ON e.cc_id=t.cc_id','COUNT(*)',array('ce_validated'=>1,'t.cc_ancestor_id'=>$cat_id,'c_name'=>$catalogue_name/*important, else custom field cats could be included*/));
 
 	$GLOBALS['SITE_DB']->query_insert('catalogue_childcountcache',array(
@@ -805,7 +805,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 			$subject=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),array($catalogue_title));
 			$self_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'),NULL,false,false,true);
 			$mail=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(strip_comcode($title)),array(comcode_escape($self_url->evaluate()),comcode_escape($catalogue_title)));
-			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($id),$subject,$mail);
+			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($category_id),$subject,$mail);
 		}
 
 		log_it('ADD_CATALOGUE_ENTRY',strval($id),$title);
@@ -931,7 +931,7 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 			require_code('notifications');
 			$subject=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),array($catalogue_title));
 			$mail=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(strip_comcode($title)),array(comcode_escape($self_url->evaluate()),comcode_escape($catalogue_title)));
-			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($id),$subject,$mail);
+			dispatch_notification('catalogue_entry__'.$catalogue_name,strval($category_id),$subject,$mail);
 		}
 	}
 

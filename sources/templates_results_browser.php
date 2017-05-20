@@ -106,7 +106,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>strval(max($start-$max,0)));
 			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
-			$part->attach(do_template('RESULTS_BROWSER_PREVIOUS_LINK',array('_GUID'=>'ec4d4da9677b5b9c8cea08676337c6eb','TITLE'=>$title,'P'=>integer_format(intval($start/$max)),'URL'=>$cat_url)));
+			$part->attach(do_template('RESULTS_BROWSER_PREVIOUS_LINK',array('_GUID'=>'ec4d4da9677b5b9c8cea08676337c6eb','TITLE'=>$title,'P'=>integer_format(($max==0)?1:intval($start/$max)),'URL'=>$cat_url)));
 		} else $part->attach(do_template('RESULTS_BROWSER_PREVIOUS'));
 
 		// CALCULATIONS FOR CROPPING OF SEQUENCE

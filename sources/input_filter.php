@@ -120,12 +120,6 @@ function check_posted_field($name,&$val)
 
 		$is_true_referer=(substr($referer,0,7)=='http://') || (substr($referer,0,8)=='https://');
 
-		if ($is_true_referer)
-		{
-			require_code('users_active_actions');
-			ocp_setcookie('has_referers','1'); // So we know for later requests that "blank" means a malicious external request (from third-party HTTPS URL, or a local file being executed)
-		}
-
 		if ((strtolower(ocp_srv('REQUEST_METHOD'))=='post') && (!is_guest()))
 		{
 			if ($is_true_referer)
@@ -143,7 +137,7 @@ function check_posted_field($name,&$val)
 						{
 							$partner=trim($partner);
 
-							if (($partner!='') && ($canonical_referer_domain==$partner))
+							if (($partner!='') && (($canonical_referer_domain=='www.'.$partner) || ($canonical_referer_domain==$partner)))
 							{
 								$found=true;
 								break;
@@ -155,9 +149,6 @@ function check_posted_field($name,&$val)
 						}
 					}
 				}
-			} elseif (ocp_admirecookie('has_referers')==='1')
-			{
-				$evil=true;
 			}
 		}
 
@@ -262,7 +253,7 @@ function hard_filter_input_data__html(&$val)
 	while ($old_val!=$val);
 
 	// Tag vectors
-	$bad_tags='noscript|script|link|style|meta|iframe|frame|object|embed|applet|html|xml|body|head|form|base|layer|v:vmlframe';
+	$bad_tags='noscript|script|link|style|meta|iframe|frame|object|embed|applet|html|xml|body|head|form|base|layer|v:vmlframe|svg';
 	$val=preg_replace('#\<('.$bad_tags.')#i','<span',$val); // Intentionally does not strip so as to avoid attacks like <<scriptscript --> <script
 	$val=preg_replace('#\</('.$bad_tags.')#i','</span',$val);
 

@@ -177,7 +177,7 @@ class Hook_addon_registry_tickets
 
 		$comments = new ocp_tempcode();
 
-		$comment_form = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST_URL'=>placeholder_url(),'FIRST_POST'=>lorem_paragraph_html(),'USE_CAPTCHA'=>false,'ATTACHMENTS'=>lorem_phrase(),'ATTACH_SIZE_FIELD'=>lorem_phrase(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>lorem_word(),'EMAIL_OPTIONAL'=>lorem_word(),'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>lorem_phrase(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
+		$comment_form = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST_URL'=>placeholder_url(),'FIRST_POST'=>lorem_paragraph_html(),'USE_CAPTCHA'=>false,'ATTACHMENTS'=>lorem_phrase(),'ATTACH_SIZE_FIELD'=>lorem_phrase(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>lorem_word(),'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>lorem_phrase(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
 
 		return array(
 			lorem_globalise(

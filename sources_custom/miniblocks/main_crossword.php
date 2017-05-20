@@ -27,7 +27,7 @@ if (is_null($cached))
 
 	$success = $pc->generate();
 
-	if (!$success) warn_exit('Sorry, unable to generate demo crossword - try with more area or less words.');
+	if (!$success) return paragraph('Sorry, unable to generate demo crossword - try with more area or less words.','','red_alert');
 
 	$params = array(
 		'colors'	=> 0,

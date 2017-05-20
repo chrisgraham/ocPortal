@@ -498,7 +498,10 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 
 	// Check completed: if not, proceed no further
 	elseif (($payment_status!='Completed') && ($payment_status!='SCancelled') && (get_option('ecommerce_test_mode')!='1'))
+	{
+		if ((get_page_name()=='purchase') || (get_page_name()=='shopping')) return;
 		my_exit(do_lang('TRANSACTION_NOT_COMPLETE',$product.':'.strval($purchase_id),$payment_status),true);
+	}
 
 	// Invoice: Check price
 	if ($found[0]==PRODUCT_INVOICE)

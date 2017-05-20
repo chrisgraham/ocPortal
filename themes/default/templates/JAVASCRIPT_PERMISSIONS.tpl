@@ -353,13 +353,14 @@ function update_permission_box(setting)
 						group=known_groups[k];
 
 						element=document.getElementById('access_'+group+'_sp_'+sp);
-						if (!element) // We haven't added it yet for one of the resources we're doing permissions for
+						if ((!element) && (!document.getElementById('sp_cell_'+group+'_'+sp))) // We haven't added it yet for one of the resources we're doing permissions for
 						{
-							if (k==0)
+							if ((k==0) && (!document.getElementById('sp_header_'+sp)))
 							{
 								row=matrix.getElementsByTagName('tr')[0];
 								new_cell=row.insertBefore(document.createElement('th'),row.cells[row.cells.length-1]);
 								new_cell.className='sp_header';
+								new_cell.id='sp_header_'+sp;
 								setInnerHTML(new_cell,'<img src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
 
 								num_sp_total++;
@@ -369,6 +370,7 @@ function update_permission_box(setting)
 							row=document.getElementById('access_'+group+'_sp_container');
 							new_cell=row.insertBefore(document.createElement('td'),row.cells[row.cells.length-1]);
 							new_cell.className='dottedborder_barrier_b_nonrequired sp_cell';
+							new_cell.id='sp_cell_'+group+'_'+sp;
 							setInnerHTML(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!OVERRIDE^;}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&nbsp;</option><option value="0">{!NO_COMPACT^;}</option><option value="1">{!YES_COMPACT^;}</option></select>');
 
 							element=document.getElementById('access_'+group+'_sp_'+sp);

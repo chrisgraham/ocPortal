@@ -49,6 +49,7 @@ if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
 if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
 @ini_set('display_errors','1');
 @ini_set('assert.active','0');
+@ini_set('opcache.revalidate_freq', '1'); // Bitnami WAMP puts it to 60 by default, breaking reading of _config.php
 
 global $MOBILE;
 $MOBILE=0;
@@ -2120,7 +2121,7 @@ function handle_self_referencing_embedment()
 				exit();
 			}
 			$conn=false;
-			$domain=trim(get_param('ftp_domain'));
+			$domain=trim(post_param('ftp_domain'));
 			$port=21;
 			if (strpos($domain,':')!==false)
 			{
@@ -2129,8 +2130,8 @@ function handle_self_referencing_embedment()
 			}
 			if (function_exists('ftp_ssl_connect')) $conn=@ftp_ssl_connect($domain,$port);
 			$ssl=($conn!==false);
-			$username=get_param('ftp_username');
-			$password=get_param('ftp_password');
+			$username=post_param('ftp_username');
+			$password=post_param('ftp_password');
 			$ssl=($conn!==false);
 			if (($ssl) && (!@ftp_login($conn,$username,$password)))
 			{
@@ -2149,7 +2150,7 @@ function handle_self_referencing_embedment()
 				ftp_close($conn);
 				exit();
 			}
-			$ftp_folder=get_param('ftp_folder');
+			$ftp_folder=post_param('ftp_folder');
 			if (substr($ftp_folder,-1)!='/') $ftp_folder.='/';
 			if (!@ftp_chdir($conn,$ftp_folder))
 			{
@@ -2173,14 +2174,14 @@ function handle_self_referencing_embedment()
 			header('Content-Type: text/plain');
 			global $SITE_INFO;
 			if (!isset($SITE_INFO)) $SITE_INFO=array();
-			$SITE_INFO['db_type']=get_param('db_type');
+			$SITE_INFO['db_type']=post_param('db_type');
 			require_code('database');
-			if (get_param('db_site')=='')
+			if (post_param('db_site')=='')
 			{
-				$db=new database_driver(get_param('db_forums'),get_param('db_forums_host'),get_param('db_forums_user'),get_param('db_forums_password'),'',true);
+				$db=new database_driver(post_param('db_forums'),post_param('db_forums_host'),post_param('db_forums_user'),post_param('db_forums_password'),'',true);
 			} else
 			{
-				$db=new database_driver(get_param('db_site'),get_param('db_site_host'),get_param('db_site_user'),get_param('db_site_password'),'',true);
+				$db=new database_driver(post_param('db_site'),post_param('db_site_host'),post_param('db_site_user'),post_param('db_site_password'),'',true);
 			}
 			$connection=&$db->connection_write;
 			if (count($connection)>4) // Okay, we can't be lazy anymore

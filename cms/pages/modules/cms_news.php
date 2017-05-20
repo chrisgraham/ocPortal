@@ -350,12 +350,12 @@ class Module_cms_news extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry for which the cat is sought
 	 * @return string			The cat
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('news','news_category',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('news','news_category',array('id'=>intval($id)));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return strval($temp);
 	}

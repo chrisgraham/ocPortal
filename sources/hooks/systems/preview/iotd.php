@@ -42,6 +42,8 @@ class Hook_Preview_iotd
 	{
 		require_code('uploads');
 
+		require_lang('iotds');
+
 		$urls=get_url('','file','uploads/iotds',0,OCP_UPLOAD_IMAGE,true,'','file2');
 		if ($urls[0]=='')
 		{

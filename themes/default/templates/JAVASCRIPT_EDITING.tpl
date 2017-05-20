@@ -368,13 +368,19 @@ function areaedit_init(element)
 		window.scrollTo(0,0); // Otherwise jumps to last editor
 	} , 500);*/
 
-	editor.on('change', function (event) {
+	var sync=function (event) {
 		element.value=editor.getData();
 		if (typeof element.externalonKeyPress!='undefined')
 		{
 			element.externalonKeyPress(event,element);
 		}
-	} );
+	};
+	editor.on('change', sync);
+	editor.on('mode',function() {
+		var ta=editor.container.$.getElementsByTagName('textarea');
+		if (typeof ta[0]!='undefined')
+			ta[0].onchange=sync; // The source view doesn't fire the 'change' event and we don't want to use the 'key' event
+	});
 
 	editor.on('instanceReady', function (event) {
 		findTagsInEditor(editor,element);
@@ -441,7 +447,7 @@ function findTagsInEditor(editor,element)
 					if (event.pageY) eventCopy.pageY=3000;
 					if (event.clientY) eventCopy.clientY=3000;
 
-					if (typeof window.activateTooltip!='undefined')
+					if (typeof window.activateTooltip!='undefined' && typeof this.orig_title!='undefined')
 					{
 						repositionTooltip(this,eventCopy);
 						this.title=this.orig_title;

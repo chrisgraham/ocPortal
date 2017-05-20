@@ -425,7 +425,7 @@ function do_set()
 	// info.php
 	global $FILE_BASE;
 	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
-	$path=$FILE_BASE.'/exports/file_backups/'.$info_file.'.'.strval(time());
+	$path=$FILE_BASE.'/exports/file_backups/'.$info_file.'.'.strval(time()).'_'.strval(mt_rand(0,mt_getrandmax()));
 	$copied_ok=@copy($FILE_BASE.'/'.$info_file,$path);
 	if ($copied_ok!==false) co_sync_file($path);
 	$info=fopen($FILE_BASE.'/'.$info_file,'wt');

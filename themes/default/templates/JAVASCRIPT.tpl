@@ -1566,6 +1566,8 @@ function key_pressed(event,key,no_error_if_bad)
 {$, force_width is set to true if you want width to not be a max width}
 function activateTooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lights_off,force_width)
 {
+	if (!ac) return;
+
 	if (!pageLoaded) return;
 	if ((typeof tooltip!='function') && (tooltip=='')) return;
 
@@ -2228,7 +2230,8 @@ function Load(xmlString) {
 	var xml;
 	if (typeof DOMParser!="undefined")
 	{
-		xml=(new DOMParser()).parseFromString(xmlString,"text/xml");
+		xml=(new DOMParser()).parseFromString(xmlString,'application/xml');
+		if (xml.documentElement.nodeName=='parsererror') xml=null;
 	}
 	else {
 		var ieDOM=["MSXML2.DOMDocument","MSXML.DOMDocument","Microsoft.XMLDOM"];
@@ -2278,14 +2281,17 @@ function Copy(domNode,xmlDoc,level,script_tag_dependencies) {
 					switch (aName) {
 						case "class": thisNode.className=aValue; break;
 						case "for": thisNode.htmlFor=aValue; break;
-						default: thisNode.setAttribute(aName,aValue);
+						default: try { thisNode.setAttribute(aName,aValue); } catch (e) {} ;
 					}
-				} else thisNode[aName]=eval('var x=function(event) { '+aValue+' }; x;');
+				} else try { thisNode[aName]=eval('var x=function(event) { '+aValue+' }; x;'); } catch (e) {};
 			}
 
 			// append node
 			if ((node_upper=='SCRIPT') || (node_upper=='LINK')/* || (node_upper=='STYLE') Causes weird IE bug*/)
 			{
+				if ((node_upper=='SCRIPT') && (document.querySelector('script[src="'+thisNode.src+'"]'))) return;
+				if ((node_upper=='LINK') && (document.querySelector('link[href="'+thisNode.href+'"]'))) return;
+
 				if (node_upper=='SCRIPT')
 				{
 					script_tag_dependencies['to_load'].push(thisNode);
@@ -2591,7 +2597,7 @@ function click_link(link)
 	if ((!cancelled) && (link.href))
 	{
 		if (link.getAttribute('target')) window.open(link.href,link.getAttribute('target'));
-		window.location=link.href;
+		else window.location=link.href;
 	}
 }
 

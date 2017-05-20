@@ -119,7 +119,7 @@ class Module_admin_emaillog
 
 			$to_email=unserialize($row['m_to_email']);
 			if (is_string($to_email)) $to_email=array($to_email);
-			if ((is_null($to_email)) || (!array_key_exists(0,$to_email))) $to_email[0]=get_option('staff_address');
+			if ((is_null($to_email)) || (!array_key_exists(0,$to_email))) $to_email=array(get_option('staff_address'));
 			$to_name=unserialize($row['m_to_name']);
 			if (is_string($to_name)) $to_name=array($to_name);
 			if ((is_null($to_name)) || ($to_name==array(NULL)) || ($to_name==array(''))) $to_name=array(get_site_name());
@@ -166,7 +166,7 @@ class Module_admin_emaillog
 
 		$to_email=unserialize($row['m_to_email']);
 		if (is_string($to_email)) $to_email=array($to_email);
-		if (!array_key_exists(0,$to_email)) $to_email[0]=get_option('staff_address');
+		if ((is_null($to_email)) || (!array_key_exists(0,$to_email))) $to_email=array(get_option('staff_address'));
 		$to_name=unserialize($row['m_to_name']);
 		if ((is_null($to_name)) || ($to_name==array(NULL)) || ($to_name==array(''))) $to_name=array(get_site_name());
 		if (is_string($to_name)) $to_name=array($to_name);

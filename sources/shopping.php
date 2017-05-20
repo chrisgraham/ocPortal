@@ -241,7 +241,7 @@ function find_products_in_cart()
  */
 function stock_maintain_warn_mail($product_name,$product_id)
 {
-	$product_info_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$product_id),get_module_zone('catalogues'));
+	$product_info_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$product_id),get_module_zone('catalogues'),null,false,false,true);
 
 	$subject=do_lang('STOCK_LEVEL_MAIL_SUBJECT',get_site_name(),$product_name,NULL,get_site_default_lang());
 	$message=do_lang('STOCK_MAINTENANCE_WARN_MAIL',comcode_escape(get_site_name()),comcode_escape($product_name),array($product_info_url->evaluate()),get_site_default_lang());

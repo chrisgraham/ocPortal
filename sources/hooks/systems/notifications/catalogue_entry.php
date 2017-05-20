@@ -104,8 +104,10 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 	{
 		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 		$members=$this->_all_members_who_have_enabled_with_page_access($members,'catalogues',$notification_code,$category,$to_member_ids,$start,$max);
-		$members=$this->_all_members_who_have_enabled_with_category_access($members,'catalogues_category',$notification_code,$category,$to_member_ids,$start,$max);
-
+		$catalogue_category_id=intval($category);
+		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$catalogue_category_id));
+		$members=$this->_all_members_who_have_enabled_with_category_access($members,'catalogues_catalogue',$notification_code,$catalogue_name,$to_member_ids,$start,$max);
+		$members=$this->_all_members_who_have_enabled_with_category_access($members,'catalogues_category',$notification_code,strval($catalogue_category_id),$to_member_ids,$start,$max);
 		return $members;
 	}
 }

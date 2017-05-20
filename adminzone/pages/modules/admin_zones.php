@@ -299,7 +299,13 @@ class Module_admin_zones
 			{
 				$TEMPCODE_SETGET['in_panel']='1';
 			}
-			$preview=(substr($page_info[0],0,6)=='MODULE')?NULL:request_page($for,false,$id,NULL,true);
+			if ((substr($page_info[0],0,6)=='MODULE') || ($redirecting_to!==NULL))
+			{
+				$preview=NULL;
+			} else
+			{
+				$preview=request_page($for,false,$id,NULL,true);
+			}
 			if (!is_null($preview))
 			{
 				$_preview=$preview->evaluate();

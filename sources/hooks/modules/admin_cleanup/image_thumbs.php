@@ -58,7 +58,8 @@ class Hook_image_thumbs
 		{
 			while (($file=readdir($dh))!==false)
 			{
-				@unlink($full.'/'.$file);
+				if (!in_array($file,array('index.html','.htaccess')))
+					@unlink($full.'/'.$file);
 			}
 			closedir($dh);
 		}

@@ -52,10 +52,10 @@ class Hook_choose_filedump_file
 
 				if ((isset($options['attachment_ready'])) && ($options['attachment_ready']))
 				{
-					$entry_id='url_'.'uploads/filedump/'.(($id=='')?'':(rawurlencode($id).'/')).rawurlencode($f);
+					$entry_id='url_'.'uploads/filedump/'.(($id=='')?'':(str_replace('%2F','/',rawurlencode($id)).'/')).str_replace('%2F','/',rawurlencode($f));
 				} else
 				{
-					$entry_id='uploads/filedump/'.(($id=='')?'':(rawurlencode($id).'/')).rawurlencode($f);
+					$entry_id='uploads/filedump/'.(($id=='')?'':(str_replace('%2F','/',rawurlencode($id)).'/')).str_replace('%2F','/',rawurlencode($f));
 				}
 
 				if (is_dir($fullpath.'/'.$f))
@@ -72,7 +72,7 @@ class Hook_choose_filedump_file
 							$_description='';
 							if (is_image($f))
 							{
-								$url=get_custom_base_url().'/uploads/filedump/'.(($id=='')?'':($id.'/')).$f;
+								$url=get_custom_base_url().'/'.$entry_id;
 								$_description=static_evaluate_tempcode(do_image_thumb($url,'',true,true));
 							}
 						} else

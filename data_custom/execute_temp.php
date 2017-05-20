@@ -67,7 +67,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('zones');
-	require_code('zones2');
-	@var_dump(extract_module_functions(_get_module_path('site','chat'),array('install')));
 }

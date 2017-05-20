@@ -285,7 +285,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 		$semihtml_before=$semihtml;
 		$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml_before);
 	}
-	while ($semihtml!=$semihtml_before);
+	while (preg_replace('#\s#','',$semihtml)!=preg_replace('#\s#','',$semihtml_before));
 	$array_html_preg_replace=array();
 	$semihtml=str_replace('&#8203;','',$semihtml);
 	if (strtolower(get_charset())=='utf-8')
@@ -440,7 +440,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$old_semihtml=$semihtml;
 		$semihtml=preg_replace('#(<[^>]* style="(?U)[^">]*(?-U))-\w+-[^";>]*(;\s*)?#s','${1}',$semihtml);
 	}
-	while ($semihtml!=$old_semihtml);
+	while (preg_replace('#\s#','',$semihtml)!=preg_replace('#\s#','',$old_semihtml));
 
 	// Perform lots of conversions. We can't convert everything. Sometimes we reverse-convert what Comcode forward-converts; sometimes we match generic HTML; sometimes we match Microsoft Word or Open Office; sometimes we do lossy match
 	$array_html_preg_replace=array();
@@ -668,7 +668,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		}
 		$semihtml=preg_replace('#(&nbsp;|</CDATA\_\_space>|\s)*<br\s*/>#i','<br />',$semihtml); // Spaces on end of line -> (Remove)
 	}
-	while ($semihtml!=$old_semihtml);
+	while (preg_replace('#\s#','',$semihtml)!=preg_replace('#\s#','',$old_semihtml));
 
 	// Undone center tagging
 	$semihtml=comcode_preg_replace('left','#^\[left\]\[center\](.*)\[/center\]\[/left\]$#si','[left]${1}[/left]',$semihtml);
@@ -746,7 +746,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		if (strpos($semihtml,'[code')===false)
 		{
 			$array_html_preg_replace=array();
-			$array_html_preg_replace[]=array('#^<pre>(.*)</pre>$#siU',"[code]\${1}[/code]");
+			$array_html_preg_replace[]=array('#^<pre[^>]*>(.*)</pre>$#siU',"[code]\${1}[/code]");
 			$semihtml2=array_html_preg_replace('pre',$array_html_preg_replace,$semihtml2);
 		}
 		$array_html_preg_replace=array();

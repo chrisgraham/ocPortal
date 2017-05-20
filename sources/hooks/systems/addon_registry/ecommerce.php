@@ -722,7 +722,7 @@ class Hook_addon_registry_ecommerce
 		$invoices = array();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$invoices[] = array('TRANSACTION_BUTTON'=>placeholder_button(),'INVOICE_TITLE'=>lorem_phrase(),'ID'=>placeholder_id(),'AMOUNT'=>placeholder_number(),'TIME'=>placeholder_date(),'STATE'=>lorem_word(),'DELIVERABLE'=>lorem_word(),'PAYABLE'=>lorem_word(),'NOTE'=>lorem_phrase(),'TYPE_CODE'=>lorem_word());
+			$invoices[] = array('TRANSACTION_BUTTON'=>placeholder_button(),'INVOICE_TITLE'=>lorem_phrase(),'ID'=>placeholder_id(),'AMOUNT'=>placeholder_number(),'TIME'=>placeholder_date(),'STATE'=>lorem_word(),'DELIVERABLE'=>true,'PAYABLE'=>lorem_word(),'NOTE'=>lorem_phrase(),'TYPE_CODE'=>lorem_word());
 		}
 
 		return array(

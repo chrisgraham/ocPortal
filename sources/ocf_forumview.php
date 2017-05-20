@@ -654,7 +654,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 		if (($forum_info[0]['f_redirection']!='') && (looks_like_url($forum_info[0]['f_redirection'])))
 		{
-			header('Location: '.$forum_info[0]['f_redirection']);
+			header('Location: '.str_replace(chr(13),'',str_replace(chr(10),'',$forum_info[0]['f_redirection'])));
 			exit();
 		}
 	}

@@ -179,7 +179,7 @@ class Hook_search_catalogue_entries
 				break;
 
 			case 'title':
-				$remapped_orderer='cv_value'; // short table
+				$remapped_orderer='b_cv_value'; // short table
 				break;
 
 			case 'add_date':

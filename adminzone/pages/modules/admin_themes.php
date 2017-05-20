@@ -487,6 +487,14 @@ class Module_admin_themes
 
 		$theme=get_param('theme',false,true);
 
+		if (($theme=='default') || ($theme=='admin'))
+		{
+			if ($GLOBALS['CURRENT_SHARE_USER']!==null)
+			{
+				warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+			}
+		}
+
 		$ini_file=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.$theme.'/theme.ini';
 		if (!file_exists($ini_file)) warn_exit(do_lang('MISSING_RESOURCE').' [theme.ini]');
 		$details=better_parse_ini_file($ini_file);
@@ -520,11 +528,20 @@ class Module_admin_themes
 	 */
 	function _edit_theme()
 	{
+		$theme=get_param('old_theme',false,true);
+
+		if (($theme=='default') || ($theme=='admin'))
+		{
+			if ($GLOBALS['CURRENT_SHARE_USER']!==null)
+			{
+				warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+			}
+		}
+
 		if (post_param_integer('delete',0)==1)
 		{
 			$title=get_page_title('DELETE_THEME');
 
-			$theme=get_param('old_theme',false,true);
 			require_code('themes3');
 			actual_delete_theme($theme);
 
@@ -533,7 +550,6 @@ class Module_admin_themes
 		{
 			$title=get_page_title('COPY_THEME');
 
-			$theme=get_param('old_theme',false,true);
 			$to=post_param('theme',$theme); // Can't rename the default theme, so there's no such field for it
 			if ($theme==$to) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($to)));
 
@@ -545,7 +561,6 @@ class Module_admin_themes
 		{
 			$title=get_page_title('EDIT_THEME');
 
-			$theme=get_param('old_theme',false,true);
 			$to=post_param('theme',$theme); // Can't rename the default theme, so there's no such field for it
 			if ($theme!=$to)
 			{

@@ -198,14 +198,14 @@ class Hook_catalogue_items
 	/**
 	 * Get the message for use in the purchase wizard
 	 *
-	 * @param  AUTO_LINK		The product in question.
+	 * @param  ID_TEXT		The product in question.
 	 * @return tempcode		The message.
 	 */
 	function get_message($product)
 	{
 		require_code('catalogues');
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$product));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>intval($product)));
 
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 
@@ -213,13 +213,13 @@ class Hook_catalogue_items
 
 		$catalogue=$catalogues[0];
 
-		$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$product),'',1);
+		$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($product)),'',1);
 
 		if (!array_key_exists(0,$entries)) return warn_screen(get_page_title('CATALOGUES'),do_lang_tempcode('MISSING_RESOURCE'));
 
 		$entry=$entries[0];
 
-		$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$catalogue_name,$product,NULL,NULL,true,true);
+		$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$catalogue_name,intval($product),NULL,NULL,true,true);
 
 		return do_template('ECOMMERCE_ITEM_DETAILS',$map,NULL,false,'ECOMMERCE_ITEM_DETAILS');
 	}
@@ -696,11 +696,11 @@ class Hook_catalogue_items
 /**
  * Update order status,transaction id after transaction
  *
- * @param  AUTO_LINK	Purchase/Order id.
+ * @param  ID_TEXT	Purchase/Order id.
  * @param  array		Details of product.
  */
 function handle_catalogue_items($entry_id,$details)
 {
 	$object=object_factory('Hook_catalogue_items');
-	$object->update_stock($entry_id,1);
+	$object->update_stock(strval($entry_id),1);
 }

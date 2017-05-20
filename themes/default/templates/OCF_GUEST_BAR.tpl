@@ -8,7 +8,7 @@
 					<div>
 						<div class="accessibility_hidden"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
 						<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
-						<input accesskey="l" maxlength="80" size="15" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
+						<input accesskey="l" maxlength="80" size="15" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" alt="{!USERNAME}" value="{!USERNAME}" id="login_username" name="login_username" />
 						<input maxlength="255" size="15" type="password" value="password" name="password" id="s_password" />
 						<label for="remember">{!REMEMBER_ME}</label> <input {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) t.checked=false; } );  }" {+END}type="checkbox" value="1" id="remember" name="remember" />
 						<input class="button_pageitem" type="submit" value="{!_LOGIN}" />
@@ -21,22 +21,22 @@
 					{+START,IF,{$EQ,{$PAGE},forumview}}
 						{+START,IF,{$EQ,{$_GET,type},pt}}
 							<div class="ocf_search_box">
-								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_own_pt,1}}" method="get">
+								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_own_pt,1}}" method="get" onsubmit="if (this.elements['content'].value==this.elements['content'].alt) this.elements['content'].value='';">
 									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_own_pt,1}}
 
 									<div>
-										<label class="accessibility_hidden" for="search">{!SEARCH_PERSONAL_TOPICS}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_PERSONAL_TOPICS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_PERSONAL_TOPICS;}'; this.className='input_box_label_within'; };" class="input_box_label_within" value="{!SEARCH_PERSONAL_TOPICS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_own_pt}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
+										<label class="accessibility_hidden" for="search">{!SEARCH_PERSONAL_TOPICS}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_PERSONAL_TOPICS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_PERSONAL_TOPICS;}'; this.className='input_box_label_within'; };" class="input_box_label_within" alt="{!SEARCH_PERSONAL_TOPICS}" value="{!SEARCH_PERSONAL_TOPICS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_own_pt}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
 									</div>
 								</form>
 							</div>
 						{+END}
 						{+START,IF,{$NEQ,{$_GET,type},pt}}
 							<div class="ocf_search_box">
-								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}" method="get">
+								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}" method="get" onsubmit="if (this.elements['content'].value==this.elements['content'].alt) this.elements['content'].value='';">
 									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}
 
 									<div>
-										<label class="accessibility_hidden" for="search">{!SEARCH_FORUM_POSTS}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_FORUM_POSTS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_FORUM_POSTS;}'; this.className='input_box_label_within'; };" class="input_box_label_within" value="{!SEARCH_FORUM_POSTS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_posts:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
+										<label class="accessibility_hidden" for="search">{!SEARCH_FORUM_POSTS}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_FORUM_POSTS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_FORUM_POSTS;}'; this.className='input_box_label_within'; };" class="input_box_label_within" value="{!SEARCH_FORUM_POSTS}" alt="{!SEARCH_FORUM_POSTS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_posts:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
 									</div>
 								</form>
 							</div>
@@ -44,11 +44,11 @@
 					{+END}
 					{+START,IF,{$EQ,{$PAGE},topicview}}
 						<div class="ocf_search_box">
-							<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}" method="get">
+							<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}" method="get" onsubmit="if (this.elements['content'].value==this.elements['content'].alt) this.elements['content'].value='';">
 								{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}
 
 								<div>
-									<label class="accessibility_hidden" for="search">{!SEARCH_POSTS_WITHIN_TOPIC}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_POSTS_WITHIN_TOPIC;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_POSTS_WITHIN_TOPIC;}'; this.className='input_box_label_within'; };" class="input_box_label_within" value="{!SEARCH_POSTS_WITHIN_TOPIC}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_within_topic:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
+									<label class="accessibility_hidden" for="search">{!SEARCH_POSTS_WITHIN_TOPIC}</label><input maxlength="255" type="text" name="content" id="search" onfocus="if (this.value=='{!SEARCH_POSTS_WITHIN_TOPIC;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_POSTS_WITHIN_TOPIC;}'; this.className='input_box_label_within'; };" class="input_box_label_within" alt="{!SEARCH_POSTS_WITHIN_TOPIC}" value="{!SEARCH_POSTS_WITHIN_TOPIC}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> &nbsp;<span class="associated_link_to_small">[<a href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_within_topic:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>]</span>
 								</div>
 							</form>
 						</div>

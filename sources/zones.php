@@ -177,7 +177,7 @@ function get_zone_name()
 			{
 				$VIRTUALISED_ZONES=true;
 				if ((preg_replace('#:\d+$#','',ocp_srv('HTTP_HOST'))==$val[0]) && (preg_match('#^'.(($val[1]=='')?'':('/'.preg_quote($val[1]))).'(/|$)#',$url_path)!=0))
-					return substr($key,13);
+					return @strval(substr($key,13));
 			}
 		}
 	}
@@ -251,7 +251,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 			return $zone;
 		}
 	}
-	$zones=find_all_zones();
+	$zones=find_all_zones(false,false,true);
 	foreach ($zones as $zone)
 	{
 		if (!in_array($zone,$first_zones))

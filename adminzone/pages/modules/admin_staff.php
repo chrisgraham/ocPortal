@@ -50,6 +50,8 @@ class Module_admin_staff
 		delete_config_option('staff_text');
 		delete_config_option('is_on_staff_filter');
 		delete_config_option('is_on_sync_staff');
+
+		$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>'admin_staff'));
 	}
 
 	/**

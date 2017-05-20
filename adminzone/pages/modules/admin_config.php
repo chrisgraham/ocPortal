@@ -676,7 +676,7 @@ class Module_admin_config
 					/*if (strpos($myrow['the_name'],'password')!==false)  password fields can't take defaults
 						$out.=static_evaluate_tempcode(form_input_password($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
 					else
-						*/$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
+						*/$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false,null,100000));
 					}
 					break;
 				case 'list':

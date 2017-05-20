@@ -219,7 +219,7 @@ class Block_main_multi_content
 		if (!is_null($days))
 		{
 			if ($where!='') $where.=' AND ';
-			$where.=$info['date_field'].'>='.strval(time()-60*60*24*$days);
+			$where.='r.'.$info['date_field'].'>='.strval(time()-60*60*24*$days);
 		}
 
 		if (is_array($info['id_field'])) $lifetime=NULL; // Cannot join on this

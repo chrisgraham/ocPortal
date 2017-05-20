@@ -34,6 +34,8 @@ class modularisation_test_set extends ocp_test_case
 	{
 		global $GFILE_ARRAY,$DIR_ARRAY;
 
+		disable_php_memory_limit();
+
 		// Volatile files not in git that are referenced by addons
 		@touch('site/pages/html_custom/EN/download_tree_made.htm');
 		@touch('ocp_sitemap.xml');

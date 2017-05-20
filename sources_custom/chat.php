@@ -17,7 +17,7 @@ if (!function_exists('init__chat'))
 		global $EFFECT_SETTINGS_ROWS;
 		$EFFECT_SETTINGS_ROWS=NULL;
 
-		if (!defined('CHAT_ACTIVITY_PRUNE'))
+		if (!defined('CHAT_EVENT_PRUNE'))
 		{
 			define('CHAT_ACTIVITY_PRUNE',25);
 			define('CHAT_BACKLOG_TIME',60*5); // 5 minutes of messages if you enter an existing room

@@ -284,6 +284,8 @@ class Module_cms_galleries extends standard_aed_module
 				$last_time=$there[$temp_keys[0]];
 				foreach ($there as $file=>$time)
 				{
+					if (!is_string($file)) $file = strval($file);
+
 					if ((!in_array('uploads/galleries/'.str_replace('%2F','/',rawurlencode($file)),$test1)) && (!in_array('uploads/galleries/'.str_replace('%2F','/',rawurlencode($file)),$test2)))
 					{
 						$orphaned_content->attach(form_input_list_entry($file,($time>=$last_time-60*60*3) || (strpos($file,'/')!==false),$file));
@@ -938,12 +940,12 @@ class Module_cms_galleries extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry for which the cat is sought
 	 * @return mixed			The cat
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('images','cat',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('images','cat',array('id'=>intval($id)));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return $temp;
 	}
@@ -1348,12 +1350,12 @@ class Module_cms_galleries_alt extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry for which the cat is sought
 	 * @return mixed			The cat
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('videos','cat',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('videos','cat',array('id'=>intval($id)));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return $temp;
 	}

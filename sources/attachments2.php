@@ -502,15 +502,16 @@ function insert_lang_comcode_attachments($level,$text,$type,$id,$connection=NULL
 	$lang_id=NULL;
 	if (user_lang()=='Gibb') // Debug code to help us spot language layer bugs. We expect &keep_lang=EN to show EnglishEnglish content, but otherwise no EnglishEnglish content.
 	{
-		$lang_id=$connection->query_insert('translate',array('source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'),true);
+		$lang_id=$GLOBALS['SITE_DB']->query_value('translate','MAX(id)');
+		$lang_id=($lang_id===null)?null:($lang_id+1);
+		$connection->query_insert('translate',array('id'=>$lang_id,'source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'));
 	}
 	if (is_null($lang_id))
 	{
-		$lang_id=$connection->query_insert('translate',array('source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>$_info['comcode'],'text_parsed'=>$text2,'language'=>user_lang()),true);
-	} else
-	{
-		$connection->query_insert('translate',array('id'=>$lang_id,'source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>$_info['comcode'],'text_parsed'=>$text2,'language'=>user_lang()));
+		$lang_id=$GLOBALS['SITE_DB']->query_value('translate','MAX(id)');
+		$lang_id=($lang_id===null)?null:($lang_id+1);
 	}
+	$connection->query_insert('translate',array('id'=>$lang_id,'source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>$_info['comcode'],'text_parsed'=>$text2,'language'=>user_lang()));
 
 	final_attachments_from_preview($id,$connection);
 
