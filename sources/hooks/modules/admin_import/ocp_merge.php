@@ -1239,6 +1239,8 @@ class Hook_ocp_merge
 		if (!import_check_if_imported('cedi_page',strval(db_get_first_id())))
 			import_id_remap_put('cedi_page',strval(db_get_first_id()),db_get_first_id());
 
+		$on_same_msn=($this->on_same_msn($file_base));
+
 		$rows_pages=$db->query('SELECT * FROM '.$table_prefix.'seedy_pages',NULL,NULL,true);
 		if (is_null($rows_pages)) return;
 		$titlemap=array();
@@ -1264,7 +1266,6 @@ class Hook_ocp_merge
 		$this->_import_catalogue_entry_linkage($db,$table_prefix,'cedi_page','cedi_page');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'seedy_posts');
-		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('cedi_post',strval($row['id']))) continue;
