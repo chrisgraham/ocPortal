@@ -165,7 +165,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$_css=$css->evaluate($lang);
 		if (get_option('allow_ext_images')!='1')
 		{
-			$_css=preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$_css);
+			$_css=preg_replace_callback('#url\(["\']?(https?://[^"]*)["\']?\)#U','_mail_css_rep_callback',$_css);
 		}
 		$html_evaluated=$message_html->evaluate($lang);
 		$html_evaluated=str_replace('{CSS}',$_css,$html_evaluated);
@@ -184,14 +184,14 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	// CID attachments
 	if (get_option('allow_ext_images')!='1')
 	{
-		$html_evaluated=preg_replace_callback('#<img\s([^>]*)src="(http://[^"]*)"#U','_mail_img_rep_callback',$html_evaluated);
+		$html_evaluated=preg_replace_callback('#<img\s([^>]*)src="(https?://[^"]*)"#U','_mail_img_rep_callback',$html_evaluated);
 		$matches=array();
 		foreach (array('#<([^"<>]*\s)style="([^"]*)"#','#<style( [^<>]*)?'.'>(.*)</style>#Us') as $over)
 		{
 			$num_matches=preg_match_all($over,$html_evaluated,$matches);
 			for ($i=0;$i<$num_matches;$i++)
 			{
-				$altered_inner=preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$matches[2][$i]);
+				$altered_inner=preg_replace_callback('#url\(["\']?(https?://[^"]*)["\']?\)#U','_mail_css_rep_callback',$matches[2][$i]);
 				if ($matches[2][$i]!=$altered_inner)
 				{
 					$altered_outer=str_replace($matches[2][$i],$altered_inner,$matches[0][$i]);
