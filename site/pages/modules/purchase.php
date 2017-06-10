@@ -620,6 +620,8 @@ class Module_purchase
 
 				require_code('ocf_join');
 
+				check_joining_allowed();
+
 				$url=get_self_url();
 
 				list($javascript,$form)=ocf_join_form($url,true,false,false,false);

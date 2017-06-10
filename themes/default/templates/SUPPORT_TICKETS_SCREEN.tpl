@@ -20,7 +20,7 @@
 	</div></div>
 
 	{+START,IF_EMPTY,{LINKS}}
-		<p>{!SUPPORT_NO_TICKETS}</p>
+		{$PARAGRAPH,{!SUPPORT_NO_TICKETS}}
 	{+END}
 	{+START,IF_NON_EMPTY,{LINKS}}
 		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table support_tickets autosized_table">

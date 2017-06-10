@@ -47,13 +47,9 @@ function _enforce_sessioned_url($url)
 
 	if (strpos($url,'?')===false)
 	{
-		if (get_option('htm_short_urls')=='1')
-		{
-			$url.='?';
-		} else
-		{
-			$url.='/index.php?';
-		}
+		if ((get_option('htm_short_urls')!='1') && (substr($url,-strlen('/index.php'))!='/index.php'))
+			$url.='/index.php';
+		$url.='?';
 	} else $url.='&';
 	$url=preg_replace('#keep\_session=\d+&#','',$url);
 	$url=preg_replace('#&keep\_session=\d+#','',$url);

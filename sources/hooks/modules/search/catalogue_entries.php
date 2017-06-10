@@ -113,7 +113,8 @@ class Hook_search_catalogue_entries
 	function get_fields()
 	{
 		$fields=array();
-		$catalogue_name=get_param('catalogue_name');
+		$catalogue_name=get_param('catalogue_name','');
+		if ($catalogue_name=='') return array();
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name'=>$catalogue_name,'cf_searchable'=>1,'cf_visible'=>1),'ORDER BY cf_order');
 		require_code('fields');
 		foreach ($rows as $row)
