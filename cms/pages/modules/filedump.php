@@ -326,7 +326,7 @@ class Module_filedump
 		if (post_param_integer('confirmed',0)!=1)
 		{
 			$url=get_self_url();
-			$text=do_lang_tempcode('CONFIRM_DELETE',$file);
+			$text=do_lang_tempcode('CONFIRM_DELETE',escape_html($file));
 
 			breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
 
@@ -372,7 +372,7 @@ class Module_filedump
 		if (post_param_integer('confirmed',0)!=1)
 		{
 			$url=get_self_url();
-			$text=do_lang_tempcode('CONFIRM_DELETE',$file);
+			$text=do_lang_tempcode('CONFIRM_DELETE',escape_html($file));
 
 			breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
 

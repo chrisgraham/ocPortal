@@ -628,8 +628,8 @@ function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tr
 
 	if (is_null($thumb_options))
 	{
-		if ($width==0) $width=1;
-		if ($height==0) $height=1;
+		if ($width===0) $width=1;
+		if ($height===0) $height=1;
 
 		// If we're not sure if this is gonna stretch to fit a width or stretch to fit a height
 		if (($width==-1) && ($height==-1))

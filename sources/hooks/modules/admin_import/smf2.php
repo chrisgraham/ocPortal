@@ -462,7 +462,7 @@ class Hook_smf2
 				foreach ($cpf_rows as $cpf_row)
 				{
 					$cpf_id=import_id_remap_get('cpf',strval($cpf_row['id_field']));
-					$cpf_value=$db->query('SELECT value FROM '.$table_prefix.'themes WHERE id_member='.$row['id_member'].' AND variable=\''.$cpf_row['col_name'].'\'');
+					$cpf_value=$db->query('SELECT value FROM '.$table_prefix.'themes WHERE id_member='.strval($row['id_member']).' AND variable=\''.$cpf_row['col_name'].'\'');
 					if (!isset($cpf_value[0])) continue;
 					$value=isset($cpf_value[0]['value'])?$cpf_value[0]['value']:'';
 					ocf_set_custom_field($id_new,$cpf_id,$value);
