@@ -1116,7 +1116,7 @@ class ocp_tempcode
 						{
 							//$out->bits[]=array($bit[0],$bit_1,$bit_2,$bit[3]);
 							require_code('site');
-							if (!$under_loop) attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$bit_2,$codename),'warn');
+							if (!$under_loop) attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',escape_html($bit_2),escape_html($codename)),'warn');
 							continue;
 						}
 					}

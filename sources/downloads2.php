@@ -101,7 +101,7 @@ function dload_script()
 
 	// Filename
 	$full=$myrow['url'];
-	$breakdown=@pathinfo($full) OR warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',$full));
+	$breakdown=@pathinfo($full) OR warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($full)));
 //	$filename=$breakdown['basename'];
 	if (!array_key_exists('extension',$breakdown)) $extension=''; else $extension=strtolower($breakdown['extension']);
 	if (url_is_local($full)) $_full=get_custom_file_base().'/'.rawurldecode(/*filter_naughty*/($full)); else $_full=rawurldecode($full);

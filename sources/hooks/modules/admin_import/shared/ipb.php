@@ -418,7 +418,7 @@ class Hook_ipb_base
 							sync_file($photo_url);
 						} else
 						{
-							if ($STRICT_FILE) warn_exit(do_lang_tempcode('MISSING_PHOTO',$filename));
+							if ($STRICT_FILE) warn_exit(do_lang_tempcode('MISSING_PHOTO',escape_html($filename)));
 							$photo_url='';
 						}
 					} else
@@ -463,7 +463,7 @@ class Hook_ipb_base
 								sync_file($avatar_url);
 							} else
 							{
-								if ($STRICT_FILE) warn_exit(do_lang_tempcode('MISSING_AVATAR',$filename));
+								if ($STRICT_FILE) warn_exit(do_lang_tempcode('MISSING_AVATAR',escape_html($filename)));
 								$avatar_url='';
 							}
 						}
@@ -485,7 +485,7 @@ class Hook_ipb_base
 									sync_file($avatar_url);
 								} else
 								{
-									if ($STRICT_FILE) warn_exit(do_lang_tempcode('MISSING_AVATAR',$filename));
+									if ($STRICT_FILE) warn_exit(do_lang_tempcode('MISSING_AVATAR',escape_html($filename)));
 									$avatar_url='';
 								}
 							}

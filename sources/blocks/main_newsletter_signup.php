@@ -86,7 +86,7 @@ class Block_main_newsletter_signup
 			if (file_exists(get_custom_file_base().'/'.$map['path']))
 			{
 				$url=(url_is_local($map['path'])?(get_custom_base_url().'/'):'').$map['path'];
-				mail_wrap(array_key_exists('subject',$map)?$map['subject']:do_lang('WELCOME'),convert_to_internal_encoding(http_download_file($url)),array($address),array_key_exists('to',$map)?$map['to']:'','','',3,NULL,false,NULL,true);
+				mail_wrap(array_key_exists('subject',$map)?$map['subject']:do_lang('_WELCOME'),convert_to_internal_encoding(http_download_file($url)),array($address),array_key_exists('to',$map)?$map['to']:'','','',3,NULL,false,NULL,true);
 			}
 
 			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array('_GUID'=>'9953c83685df4970de8f23fcd5dd15bb','NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'PASSWORD'=>$password));

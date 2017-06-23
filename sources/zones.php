@@ -282,7 +282,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		$MODULES_ZONES[$module_name]=NULL;
 		return NULL;
 	}
-	warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$module_name));
+	warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',escape_html($module_name)));
 	return NULL;
 }
 
@@ -301,7 +301,7 @@ function get_comcode_zone($page_name,$error=true)
 	if (!is_null($test)) return $test;
 	$test=get_module_zone($page_name,'comcode',fallback_lang(),'txt',false);
 	if (!is_null($test)) return $test;
-	if ($error) warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$page_name));
+	if ($error) warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',escape_html($page_name)));
 	return NULL;
 }
 
@@ -326,7 +326,7 @@ function get_page_zone($page_name,$error=true)
 	if (!is_null($test)) return $test;
 	$test=get_module_zone($page_name,'minimodules',NULL,'php',false);
 	if (!is_null($test)) return $test;
-	if ($error) warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$page_name));
+	if ($error) warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',escape_html($page_name)));
 	return NULL;
 }
 

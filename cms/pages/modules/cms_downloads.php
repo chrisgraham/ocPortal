@@ -197,9 +197,9 @@ class Module_cms_downloads extends standard_aed_module
 
 		// Failsafe check
 		if ((@ftp_nlist($conn_id,$directory.'/dev')!==false) && (@ftp_nlist($conn_id,$directory.'/etc')!==false) && (@ftp_nlist($conn_id,$directory.'/sbin')!==false))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$directory));
+			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',escape_html($directory)));
 		if ((@ftp_nlist($conn_id,$directory.'/Program files')!==false) && ((@ftp_nlist($conn_id,$directory.'/Users')!==false) || (@ftp_nlist($conn_id,$directory.'/Documents and settings')!==false)) && (@ftp_nlist($conn_id,$directory.'/Windows')!==false))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$directory));
+			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',escape_html($directory)));
 
 		// Actually start the scanning
 		$num_added=$this->ftp_recursive_downloads_scan($conn_id,$server_url,$directory,$destination,$subfolders);
@@ -323,14 +323,14 @@ class Module_cms_downloads extends standard_aed_module
 		$base_url=get_custom_base_url().'/'.$server_path;
 		$subfolders=post_param_integer('subfolders',0);
 
-		if (!file_exists($base_path)) warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND',$server_path));
+		if (!file_exists($base_path)) warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND',escape_html($server_path)));
 
 		/*	Needless because it's relative to ocPortal directory anyway
 		// Failsafe check
 		if ((file_exists($base_path.'/dev')) && (file_exists($base_path.'/etc')) && (file_exists($base_path.'/sbin')))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
+			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',escape_html($server_path)));
 		if ((file_exists($base_path.'/Program files')) && ((file_exists($base_path.'/Users')) || (file_exists($base_path.'/Documents and settings'))) && (file_exists($base_path.'/Windows')))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
+			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',escape_html($server_path)));
 		*/
 
 		// Actually start the scanning

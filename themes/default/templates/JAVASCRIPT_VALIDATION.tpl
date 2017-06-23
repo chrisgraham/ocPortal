@@ -383,7 +383,7 @@ function checkField(theElement,theForm,forPreview)
 	}
 	myValue=cleverFindValue(theForm,theElement);
 
-	if ((required) && ((myValue.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (myValue=='****') || (my_value==the_element.alt)))
+	if ((required) && ((myValue.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (myValue=='****') || (myValue==theElement.alt)))
 	{
 		errorMsg="{!REQUIRED_NOT_FILLED_IN^#}";
 	} else

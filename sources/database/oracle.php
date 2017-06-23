@@ -405,7 +405,7 @@ class Database_Static_oracle
 		{
 			$old_query=$query;
 
-			if (is_null($start)) $start=0;
+			if (!is_null($start)) $start=0;
 
 			$pos=strpos($old_query,'FROM ');
 			$pos2=strpos($old_query,' ',$pos+5);

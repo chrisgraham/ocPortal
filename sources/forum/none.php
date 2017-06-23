@@ -881,7 +881,7 @@ class forum_driver_none extends forum_driver_base
 
 		if (($username!=$this->get_admin_username()) && ($userid!=1)) // All hands to lifeboats
 		{
-			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
+			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
 			return $out;
 		}
 

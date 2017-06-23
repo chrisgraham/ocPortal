@@ -62,7 +62,7 @@ function import_id_remap_get($type,$id_old,$fail_ok=false)
 	if (is_null($value))
 	{
 		if ($fail_ok) return NULL;
-		warn_exit(do_lang_tempcode('IMPORT_NOT_IMPORTED',$type,$id_old));
+		warn_exit(do_lang_tempcode('IMPORT_NOT_IMPORTED',escape_html($type),escape_html($id_old)));
 	}
 	$REMAP_CACHE[$type][$id_old]=$value;
 	return $value;

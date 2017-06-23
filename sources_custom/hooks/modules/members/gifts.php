@@ -55,7 +55,7 @@ class Hook_members_gifts
 				{
 					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_user_id']);
 					$sender_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_user_id']);
-					$gift_explanation=do_lang('GIFT_EXPLANATION1',$sender_name,$gift_info[0]['name'],$sender_link);
+					$gift_explanation=do_lang('GIFT_EXPLANATION1',escape_html($sender_name),escape_html($gift_info[0]['name']),$sender_link);
 				} else
 				{
 					$gift_explanation=do_lang('GIFT_EXPLANATION2',$gift_info[0]['name']);

@@ -87,7 +87,7 @@ class Block_main_content
 		if ($title===NULL) $title=do_lang('RANDOM_CONTENT');
 
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($type_id,true).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($type_id,true).'.php')))
-			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id));
+			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',escape_html($type_id)));
 
 		require_code('hooks/systems/awards/'.filter_naughty_harsh($type_id,true),true);
 		$object=object_factory('Hook_awards_'.$type_id);

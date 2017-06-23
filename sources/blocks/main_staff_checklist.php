@@ -121,6 +121,9 @@ class Block_main_staff_checklist
 		unset($map);
 
 		require_javascript('javascript_ajax');
+		require_lang('staff_checklist');
+		require_css('adminzone');
+		require_lang('dates');
 
 		// Handle custom tasks
 		$newtask=post_param('newtask',NULL);
@@ -132,7 +135,6 @@ class Block_main_staff_checklist
 			decache('main_staff_checklist');
 		}
 		$custasks=new ocp_tempcode();
-		require_lang('dates');
 		$rows = $GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
 		foreach($rows as $r)
 		{
@@ -174,9 +176,6 @@ class Block_main_staff_checklist
 		}
 		$notes=get_long_value('note_text_'.$file);
 		if (is_null($notes)) $notes='';
-
-		require_lang('staff_checklist');
-		require_css('adminzone');
 
 		// Handle built in items
 

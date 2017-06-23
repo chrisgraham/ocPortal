@@ -356,7 +356,7 @@ class Database_Static_access
 	{
 		if (!is_null($max))
 		{
-			if (is_null($start)) $max+=$start;
+			if (!is_null($start)) $max+=$start;
 
 			if (strtoupper(substr($query,0,7))=='SELECT ') // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
 			{

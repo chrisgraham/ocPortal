@@ -882,7 +882,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
-			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
+			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
 			return $out;
 		}
 		$row=$rows[0];

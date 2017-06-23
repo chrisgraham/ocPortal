@@ -114,7 +114,7 @@ class Block_main_multi_content
 		$pinned=((array_key_exists('pinned',$map)) && ($map['pinned']!=''))?explode(',',$map['pinned']):array();
 
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($type_id).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($type_id).'.php')))
-			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id));
+			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',escape_html($type_id)));
 
 		require_code('hooks/systems/awards/'.filter_naughty_harsh($type_id),true);
 		$object=object_factory('Hook_awards_'.$type_id);

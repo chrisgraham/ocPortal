@@ -589,7 +589,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 				if((!is_null($ev)) && ($dereference_ev!=''))
 				{
 					require_code('images');
-					$map['FIELD_'.strval($i).'_THUMB']=do_image_thumb($dereference_ev,($i==0)?'':(is_object($map['FIELD_0'])?$map['FIELD_0']->evaluate():$map['FIELD_0']),false,false,100,100);
+					$map['FIELD_'.strval($i).'_THUMB']=do_image_thumb($dereference_ev,($i==0)?'':(is_object($map['FIELD_0'])?$map['FIELD_0']->evaluate():protect_from_escaping(escape_html($map['FIELD_0']))),false,false,100,100);
 				} else
 				{
 					$map['FIELD_'.strval($i).'_THUMB']= new ocp_tempcode();
@@ -1282,7 +1282,7 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 	{
 		$title=get_translated_text($PT_PAIR_CACHE[$category_id]['cc_title']);
    	if (!$below->is_empty()) $tpl_url=do_template('BREADCRUMB_ESCAPED'); else $tpl_url=new ocp_tempcode();
-   	$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
+   	$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($title)),NULL,NULL,'up'));
 	} else $tpl_url=new ocp_tempcode();
 
 	$below->attach($tpl_url);
@@ -1355,7 +1355,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 
 	$catalogue_name=$category['c_name'];
 	$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-	if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',$catalogue_name));
+	if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',escape_html($catalogue_name)));
 	$catalogue=$catalogues[0];
 
 	// Permission for here?

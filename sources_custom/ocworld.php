@@ -106,6 +106,8 @@ function get_loc_details($member_id,$null_ok=false)
  */
 function merge_items($from,$to)
 {
+	if ($from==$to) warn_exit('Cannot merge item into itself.');
+
 	$GLOBALS['SITE_DB']->query_delete('w_itemdef',array('name'=>$from),'',1);
 
 	$rows=$GLOBALS['SITE_DB']->query_select('w_items',array('*'),array('name'=>$from));
@@ -125,7 +127,7 @@ function merge_items($from,$to)
 	$rows=$GLOBALS['SITE_DB']->query_select('w_inventory',array('*'),array('item_name'=>$from));
 	foreach ($rows as $myrow)
 	{
-		$amount=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_count',array('item_owner'=>$myrow['item_owner'],'item_name='=>$to));
+		$amount=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_count',array('item_owner'=>$myrow['item_owner'],'item_name'=>$to));
 		if (is_null($amount))
 		{
 			$GLOBALS['SITE_DB']->query_update('w_inventory',array('item_name'=>$to),array('item_owner'=>$myrow['item_owner'],'item_name'=>$from));

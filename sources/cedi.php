@@ -357,7 +357,7 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			$title=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>intval($token)));
 			if (is_null($title)) continue;
 			$token_title=get_translated_text($title);
-			$content=($links)?hyperlink($url,escape_html($token_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$token_title),NULL,NULL,'up'):make_string_tempcode(escape_html($token_title));
+			$content=($links)?hyperlink($url,escape_html($token_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($token_title)),NULL,NULL,'up'):make_string_tempcode(escape_html($token_title));
 			if ($instree->is_empty())
 			{
 				$instree->attach($content);
@@ -380,7 +380,7 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			}
 			if ($final_link)
 			{
-				$instree->attach(hyperlink($url,escape_html($current_title),false,false,$this_link_virtual_root?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',$current_title),NULL,NULL,'up'));
+				$instree->attach(hyperlink($url,escape_html($current_title),false,false,$this_link_virtual_root?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',escape_html($current_title)),NULL,NULL,'up'));
 			} else
 			{
 				$instree->attach($current_title);

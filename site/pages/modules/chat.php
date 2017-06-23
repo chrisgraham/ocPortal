@@ -734,7 +734,7 @@ class Module_chat
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_blocked']);
 			if (!is_null($username))
-				$fields->attach(form_input_tick(do_lang_tempcode('BLOCK_THEM',escape_html($username)),do_lang_tempcode('_BLOCK_MEMBER',$username),'block_'.strval($row['member_blocked']),true));
+				$fields->attach(form_input_tick(do_lang_tempcode('BLOCK_THEM',escape_html($username)),do_lang_tempcode('_BLOCK_MEMBER',escape_html($username)),'block_'.strval($row['member_blocked']),true));
 		}
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADD_BLOCK'))));

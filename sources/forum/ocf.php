@@ -1401,7 +1401,7 @@ class forum_driver_ocf extends forum_driver_base
 			// Doesn't exist any more? This is a special case - the 'LDAP member' exists in our DB, but not LDAP. It has been deleted from LDAP or LDAP server has jumped
 			/*if (is_null($rows[0]['m_pass_hash_salted']))
 			{
-				$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
+				$out['error']=(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
 				return $out;
 			} No longer appropriate with new authentication mode - instead we just have to give an invalid password message  */
 
