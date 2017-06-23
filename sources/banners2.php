@@ -414,7 +414,7 @@ function delete_banner($name)
 function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline)
 {
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('banner_types','id',array('id'=>$id));
-	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',$id));
+	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($id)));
 
 	$GLOBALS['SITE_DB']->query_insert('banner_types',array(
 		'id'=>$id,

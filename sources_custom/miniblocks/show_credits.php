@@ -37,7 +37,7 @@ if (is_guest())
 	if (is_object($login_url)) $login_url=$login_url->evaluate();
 	$join_url=build_url(array('page'=>'join','redirect'=>get_self_url(true,true)),'');
 	if (is_object($join_url)) $join_url=$join_url->evaluate();
-	$guest_msg = do_lang_tempcode('SHOW_CREDITS_NOT_LOGGED_IN_MESSAGE',$login_url,$join_url);
+	$guest_msg = do_lang_tempcode('SHOW_CREDITS_NOT_LOGGED_IN_MESSAGE',escape_html($login_url->evaluate()),escape_html($join_url->evaluate()));
 }
 
 $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
@@ -65,7 +65,7 @@ $username_link=hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url(get_member
 $username_link=$username_link->evaluate();
 $logout_url=build_url(array('page'=>'login','type'=>'logout','redirect'=>get_self_url(true,true)),'');
 if (is_object($logout_url)) $logout_url=$logout_url->evaluate();
-$welcome_msg = do_lang_tempcode('SHOW_CREDITS_WELCOME_MESSAGE',$username_link,$logout_url);
+$welcome_msg = do_lang_tempcode('SHOW_CREDITS_WELCOME_MESSAGE',$username_link,escape_html($logout_url->evaluate()));
 if ($credits_available==0)
 {
 	if (!$existing_customer)

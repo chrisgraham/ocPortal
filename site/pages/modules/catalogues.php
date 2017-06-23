@@ -794,7 +794,7 @@ class Module_catalogues
 
 		$_title=get_translated_text($category['cc_title']);
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',$catalogue_name));
+		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',escape_html($catalogue_name)));
 
 		$catalogue=$catalogues[0];
 		$tpl_set=$catalogue_name;

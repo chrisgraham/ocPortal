@@ -2496,7 +2496,7 @@ function check_suhosin_request_size($size)
 	{
 		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))-500<$size))
 		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VALUE_TOO_SHORT',$setting),'warn');
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VALUE_TOO_SHORT',escape_html($setting)),'warn');
 		}
 	}
 }
@@ -2519,7 +2519,7 @@ function check_suhosin_request_quantity($inc=1,$name_length=0)
 	{
 		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count))
 		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',escape_html($setting)),'warn');
 			$failed_already=true;
 		}
 	}
@@ -2528,7 +2528,7 @@ function check_suhosin_request_quantity($inc=1,$name_length=0)
 	{
 		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$name_length))
 		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',escape_html($setting)),'warn');
 			$failed_already=true;
 		}
 	}

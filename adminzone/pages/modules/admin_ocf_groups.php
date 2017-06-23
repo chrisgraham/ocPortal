@@ -579,7 +579,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 		if ($_group_leader!='')
 		{
 			$group_leader=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_group_leader);
-			if (is_null($group_leader)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$_group_leader));
+			if (is_null($group_leader)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($_group_leader)));
 		} else $group_leader=NULL;
 
 		$promotion_target=post_param_integer('promotion_target',-1);

@@ -253,7 +253,7 @@ class Hook_pointstore_forwarding
 		require_code('notifications');
 		dispatch_notification('pointstore_request_forwarding','forw_'.strval($sale_id),do_lang('MAIL_REQUEST_FORWARDING',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
-		$text=do_lang_tempcode('ORDER_FORWARDER_DONE',$email,escape_html($prefix.'@'.$_suffix));
+		$text=do_lang_tempcode('ORDER_FORWARDER_DONE',escape_html($email),escape_html($prefix.'@'.$_suffix));
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,$text);
 	}

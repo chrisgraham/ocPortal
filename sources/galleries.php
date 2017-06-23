@@ -677,7 +677,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 	{
 		if ($no_link_for_me_sir) return new ocp_tempcode();
 		$title=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$category_id)));
-		return hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up');
+		return hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($title)),NULL,NULL,'up');
 	}
 
 	global $PT_PAIR_CACHE_G;
@@ -692,7 +692,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 	if (!$no_link_for_me_sir)
 	{
 		$tpl_url=do_template('BREADCRUMB_SEPARATOR');
-		$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
+		$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($title)),NULL,NULL,'up'));
 	} else $tpl_url=new ocp_tempcode();
 
 	if ($PT_PAIR_CACHE_G[$category_id]['parent_id']==$category_id) fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN',escape_html($category_id)));
@@ -710,7 +710,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 				if (get_page_name()=='galleries') $map+=propagate_ocselect();
 				$url=build_url($map,$zone,NULL,false,false,false,$hash);
 				if ($i!=0) $below->attach(do_template('BREADCRUMB_SEPARATOR'));
-				$below->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
+				$below->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($title)),NULL,NULL,'up'));
 			}
 			$below->attach($tpl_url);
 			return $below;

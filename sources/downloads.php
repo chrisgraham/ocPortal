@@ -396,7 +396,7 @@ function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$
 	{
 		if ($no_link_for_me_sir) return new ocp_tempcode();
 		$title=get_translated_text($GLOBALS['SITE_DB']->query_value('download_categories','category',array('id'=>$category_id)));
-		return hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up');
+		return hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($title)),NULL,NULL,'up');
 	}
 
 	global $PT_PAIR_CACHE_D;
@@ -411,7 +411,7 @@ function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$
 	if (!$no_link_for_me_sir)
 	{
 		$tpl_url=do_template('BREADCRUMB_SEPARATOR');
-		$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
+		$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($title)),NULL,NULL,'up'));
 	} else $tpl_url=new ocp_tempcode();
 
 	if ($PT_PAIR_CACHE_D[$category_id]['parent_id']==$category_id) fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN',strval($category_id)));

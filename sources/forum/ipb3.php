@@ -920,7 +920,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 
 		if (!array_key_exists(0,$rows) || $rows[0]==null) // All hands to lifeboats
 		{
-			$out['error']=do_lang_tempcode('_USER_NO_EXIST',$username);
+			$out['error']=do_lang_tempcode('_USER_NO_EXIST',escape_html($username));
 			return $out;
 		}
 		$row=$rows[0];

@@ -215,7 +215,7 @@ class Hook_catalogue_items
 
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 
-		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',$catalogue_name));
+		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',escape_html($catalogue_name)));
 
 		$catalogue=$catalogues[0];
 
@@ -623,7 +623,7 @@ class Hook_catalogue_items
 		if ($current_stock<$quantity && !$stock_maintained)
 		{
 			require_code('site');
-			attach_message(do_lang_tempcode('LOW_STOCK_DISPATCH_FAILED',$product_name));
+			attach_message(do_lang_tempcode('LOW_STOCK_DISPATCH_FAILED',escape_html($product_name)));
 		}
 
 		$stock_after_dispatch=$current_stock-$quantity;

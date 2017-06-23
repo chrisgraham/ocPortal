@@ -335,7 +335,7 @@ function step_1()
 				{
 					foreach ($missing as $file)
 					{
-						$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('MISSING_INSTALLATION_FILE',$file))));
+						$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('MISSING_INSTALLATION_FILE',escape_html($file)))));
 					}
 				}
 				if (count($corrupt)>4)
@@ -345,7 +345,7 @@ function step_1()
 				{
 					foreach ($corrupt as $file)
 					{
-						$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('CORRUPT_INSTALLATION_FILE',$file))));
+						$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('CORRUPT_INSTALLATION_FILE',escape_html($file)))));
 					}
 				}
 			}

@@ -654,8 +654,8 @@ class Module_ocworld
 			if ($command=='teleport-person')
 			{
 				$ast=strpos($param,':');
-				$b=strpos($param,':',$ast+1);
-				$realm=substr($param,0,$ast);
+				$b=@strpos($param,':',$ast+1);
+				$realm=intval(substr($param,0,$ast));
 				$x=intval(substr($param,$ast+1,$b-$ast-1));
 				$y=intval(substr($param,$b+1));
 				basic_enter_room($dest_member_id,$realm,$x,$y);

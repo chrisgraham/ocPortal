@@ -42,7 +42,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		require_code('ocf_forumview_pt');
 		$details=ocf_get_private_topics($start,$max,$of_member_id);
 		$root_forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$root));
-		$breadcrumbs=hyperlink(build_url(array('page'=>'_SELF','id'=>($root==db_get_first_id())?NULL:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),NULL,NULL,'up');
+		$breadcrumbs=hyperlink(build_url(array('page'=>'_SELF','id'=>($root==db_get_first_id())?NULL:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($root_forum_name)),NULL,NULL,'up');
 		$breadcrumbs->attach(' &gt; ');
 		$pt_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
 		if (is_null($pt_username)) $pt_username=do_lang('UNKNOWN');

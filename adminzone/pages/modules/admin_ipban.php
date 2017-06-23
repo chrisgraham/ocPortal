@@ -181,16 +181,16 @@ class Module_admin_ipban
 			$ip=$matches[1];
 			if (preg_match('#^[a-f0-9\.\*:]+$#U',$ip)==0)
 			{
-				attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',$ban),'warn');
+				attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',escape_html($ban)),'warn');
 			} else
 			{
 				if ($ip==get_ip_address())
 				{
-					attach_message(do_lang_tempcode('WONT_BAN_SELF',$ban),'warn');
+					attach_message(do_lang_tempcode('WONT_BAN_SELF',escape_html($ban)),'warn');
 				}
 				elseif ($ip==ocp_srv('SERVER_ADDR'))
 				{
-					attach_message(do_lang_tempcode('WONT_BAN_SERVER',$ban),'warn');
+					attach_message(do_lang_tempcode('WONT_BAN_SERVER',escape_html($ban)),'warn');
 				}
 				if (!in_array($ip,$old_bans))
 				{

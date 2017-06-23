@@ -317,7 +317,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 			}
 		}
 		if (is_null($name))
-			warn_exit(do_lang_tempcode('COMCODE_ERROR',$message,integer_format($line)));
+			warn_exit(do_lang_tempcode('COMCODE_ERROR',$message,escape_html(integer_format($line))));
 	}
 
 	if (!running_script('comcode_convert')) // Don't want it running in background
@@ -393,7 +393,7 @@ function test_url($url_full,$tag_type,$given_url,$source_member)
 		$test=($GLOBALS['COMCODE_PARSE_URLS_CHECKED']>=MAX_URLS_TO_READ)?'':http_download_file($url_full,0,false);
 		if ((is_null($test)) && (in_array($GLOBALS['HTTP_MESSAGE'],array('404','could not connect to host'))))
 		{
-			$temp_tpl=do_template('WARNING_BOX',array('HIDE_FOR_GUESTS'=>false,'WARNING'=>do_lang_tempcode('MISSING_URL_COMCODE',$tag_type,escape_html($url_full))));
+			$temp_tpl=do_template('WARNING_BOX',array('HIDE_FOR_GUESTS'=>false,'WARNING'=>do_lang_tempcode('MISSING_URL_COMCODE',escape_html($tag_type),escape_html($url_full))));
 			if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 			{
 				$GLOBALS['COMCODE_BROKEN_URLS'][]=array($url_full,NULL);

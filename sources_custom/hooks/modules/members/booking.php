@@ -43,7 +43,7 @@ class Hook_members_booking
 			$to=get_timezoned_date(mktime(0,0,0,$r['end_month'],$r['end_day'],$r['end_year']),false);
 			$links[]=array(
 				'content',
-				do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$r['bookable_id'])))),
+				do_lang_tempcode('BOOKING_EDIT',escape_html($from),escape_html($to),get_translated_tempcode($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$r['bookable_id'])))),
 				build_url(array('page'=>'cms_booking','type'=>'_eb','id'=>strval($member_id).'_'.strval($i)),$zone),
 			);
 		}

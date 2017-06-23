@@ -842,7 +842,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 	if ($REQUEST_PAGE_NEST_LEVEL>20)
 	{
 		$REQUEST_PAGE_NEST_LEVEL=0;
-		attach_message(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE',$codename),'warn');
+		attach_message(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE',escape_html($codename)),'warn');
 		return new ocp_tempcode();
 	}
 

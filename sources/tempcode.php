@@ -131,7 +131,7 @@ function output_tempcode_parameter($var,$parameter,$template_name)
 	switch (gettype($var))
 	{
 		case 'NULL':
-			return attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$parameter,$template_name),'warn');
+			return attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',escape_html($parameter),escape_html($template_name)),'warn');
 		case 'string':
 			return $var;
 		case 'object':
