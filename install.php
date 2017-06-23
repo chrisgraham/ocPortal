@@ -973,6 +973,11 @@ function step_5()
 {
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
+	if (isset($_POST['table_prefix']))
+		$_POST['table_prefix']=preg_replace('#[^\w]#','',$_POST['table_prefix']);
+	if (isset($_POST['ocf_table_prefix']))
+		$_POST['ocf_table_prefix']=preg_replace('#[^\w]#','',$_POST['ocf_table_prefix']);
+
 	if (function_exists('set_time_limit')) @set_time_limit(180);
 
 	$url='install.php?step=6';
