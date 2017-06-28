@@ -999,10 +999,10 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	{
 		$login_zone=get_module_zone('login');
 		$path=zone_black_magic_filterer($login_zone.(($login_zone=='')?'':'/').'pages/modules_custom/'.$codename.'.php',true);
-		if (is_file(get_file_base().'/'.$path))
+		if (@is_file(get_file_base().'/'.$path))
 			return array('MODULES_CUSTOM',$login_zone,$codename,$path);
 		$path=zone_black_magic_filterer($login_zone.(($login_zone=='')?'':'/').'pages/modules/'.$codename.'.php',true);
-		if (is_file(get_file_base().'/'.$path))
+		if (@is_file(get_file_base().'/'.$path))
 			return array('MODULES',$login_zone,$codename,$path);
 	}
 
@@ -1032,13 +1032,13 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 				if (!in_safe_mode())
 				{
 					$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/modules_custom/'.$codename.'.php',true);
-					if (is_file(get_file_base().'/'.$path))
+					if (@is_file(get_file_base().'/'.$path))
 						return array('MODULES_CUSTOM',$zone,$codename,$path);
 				}
 				break;
 			case 'modules':
 				$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/modules/'.$codename.'.php',true);
-				if (is_file(get_file_base().'/'.$path))
+				if (@is_file(get_file_base().'/'.$path))
 					return array('MODULES',$zone,$codename,$path);
 				break;
 			case 'comcode_custom':
@@ -1047,52 +1047,52 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 					if (get_param_integer('keep_theme_test',0)==1)
 					{
 						$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$GLOBALS['FORUM_DRIVER']->get_theme().'__'.$codename.'.txt',true);
-						if (is_file(get_custom_file_base().'/'.$path))
+						if (@is_file(get_custom_file_base().'/'.$path))
 						{
 							return array('COMCODE_CUSTOM',$zone,$GLOBALS['FORUM_DRIVER']->get_theme().'__'.$codename,$lang,$path);
 						}
 					}
 
 					$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
-					if (is_file(get_custom_file_base().'/'.$path))
+					if (@is_file(get_custom_file_base().'/'.$path))
 						return array('COMCODE_CUSTOM',$zone,$codename,$lang,$path);
 					if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's custom Comcode pages
 					{
 						$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
-						if (is_file(get_file_base().'/'.$path))
+						if (@is_file(get_file_base().'/'.$path))
 							return array('COMCODE_CUSTOM_PURE',$zone,$codename,$lang,$path);
 					}
 				}
 				//break;
 			case 'comcode':
 				$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode/'.$lang.'/'.$codename.'.txt',true);
-				if (is_file(get_file_base().'/'.$path))
+				if (@is_file(get_file_base().'/'.$path))
 					return array('COMCODE',$zone,$codename,$lang,$path);
 				break;
 			case 'html_custom':
 				if (!in_safe_mode())
 				{
 					$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/html_custom/'.$lang.'/'.$codename.'.htm',true);
-					if (is_file(get_custom_file_base().'/'.$path))
+					if (@is_file(get_custom_file_base().'/'.$path))
 						return array('HTML_CUSTOM',$zone,$codename,$lang,$path);
 				}
 				break;
 			case 'html':
 				$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/html/'.$lang.'/'.$codename.'.htm',true);
-				if (is_file(get_file_base().'/'.$path))
+				if (@is_file(get_file_base().'/'.$path))
 					return array('HTML',$zone,$codename,$lang,$path);
 				break;
 			case 'minimodules_custom':
 				if (!in_safe_mode())
 				{
 					$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/minimodules_custom/'.$lang.'/'.$codename.'.php',true);
-					if (is_file(get_file_base().'/'.$path))
+					if (@is_file(get_file_base().'/'.$path))
 						return array('MINIMODULES_CUSTOM',$zone,$codename,$path);
 				}
 				break;
 			case 'minimodules':
 				$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/minimodules/'.$lang.'/'.$codename.'.php',true);
-				if (is_file(get_file_base().'/'.$path))
+				if (@is_file(get_file_base().'/'.$path))
 					return array('MINIMODULES',$zone,$codename,$path);
 				break;
 		}
@@ -1104,53 +1104,53 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	if (!in_safe_mode())
 	{
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/modules_custom/'.$codename.'.php',true);
-		if (is_file(get_file_base().'/'.$path))
+		if (@is_file(get_file_base().'/'.$path))
 			return array('MODULES_CUSTOM',$zone,$codename,$path);
 	}
 	$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/modules/'.$codename.'.php',true);
-	if (is_file(get_file_base().'/'.$path))
+	if (@is_file(get_file_base().'/'.$path))
 		return array('MODULES',$zone,$codename,$path);
 	if (!in_safe_mode())
 	{
 		if (get_param_integer('keep_theme_test',0)==1)
 		{
 			$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$GLOBALS['FORUM_DRIVER']->get_theme().'__'.$codename.'.txt',true);
-			if (is_file(get_custom_file_base().'/'.$path))
+			if (@is_file(get_custom_file_base().'/'.$path))
 			{
 				return array('COMCODE_CUSTOM',$zone,$GLOBALS['FORUM_DRIVER']->get_theme().'__'.$codename,$lang,$path);
 			}
 		}
 
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
-		if (is_file(get_custom_file_base().'/'.$path))
+		if (@is_file(get_custom_file_base().'/'.$path))
 			return array('COMCODE_CUSTOM',$zone,$codename,$lang,$path);
 		if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's custom Comcode pages
 		{
 			$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
-			if (is_file(get_file_base().'/'.$path))
+			if (@is_file(get_file_base().'/'.$path))
 				return array('COMCODE_CUSTOM_PURE',$zone,$codename,$lang,$path);
 		}
 	}
 	$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode/'.$lang.'/'.$codename.'.txt',true);
-	if (is_file(get_file_base().'/'.$path))
+	if (@is_file(get_file_base().'/'.$path))
 		return array('COMCODE',$zone,$codename,$lang,$path);
 	if (!in_safe_mode())
 	{
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/html_custom/'.$lang.'/'.$codename.'.htm',true);
-		if (is_file(get_custom_file_base().'/'.$path))
+		if (@is_file(get_custom_file_base().'/'.$path))
 			return array('HTML_CUSTOM',$zone,$codename,$lang,$path);
 	}
 	$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/html/'.$lang.'/'.$codename.'.htm',true);
-	if (is_file(get_file_base().'/'.$path))
+	if (@is_file(get_file_base().'/'.$path))
 		return array('HTML',$zone,$codename,$lang,$path);
 	if (!in_safe_mode())
 	{
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/minimodules_custom/'.$codename.'.php',true);
-		if (is_file(get_file_base().'/'.$path))
+		if (@is_file(get_file_base().'/'.$path))
 			return array('MINIMODULES_CUSTOM',$zone,$codename,$path);
 	}
 	$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/minimodules/'.$codename.'.php',true);
-	if (is_file(get_file_base().'/'.$path))
+	if (@is_file(get_file_base().'/'.$path))
 		return array('MINIMODULES',$zone,$codename,$path);
 
 	// As a last resort, consider it might not yet have been translated
@@ -1164,26 +1164,26 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 		if (!in_safe_mode())
 		{
 			$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$fallback_lang.'/'.$codename.'.txt',true);
-			if (is_file(get_custom_file_base().'/'.$path))
+			if (@is_file(get_custom_file_base().'/'.$path))
 				return array('COMCODE_CUSTOM',$zone,$codename,$fallback_lang,$path);
 			if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's custom Comcode pages
 			{
 				$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$fallback_lang.'/'.$codename.'.txt',true);
-				if (is_file(get_file_base().'/'.$path))
+				if (@is_file(get_file_base().'/'.$path))
 					return array('COMCODE_CUSTOM_PURE',$zone,$codename,$fallback_lang,$path);
 			}
 		}
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode/'.$fallback_lang.'/'.$codename.'.txt',true);
-		if (is_file(get_file_base().'/'.$path))
+		if (@is_file(get_file_base().'/'.$path))
 			return array('COMCODE',$zone,$codename,$fallback_lang,$path);
 		if (!in_safe_mode())
 		{
 			$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/html_custom/'.$fallback_lang.'/'.$codename.'.htm',true);
-			if (is_file(get_custom_file_base().'/'.$path))
+			if (@is_file(get_custom_file_base().'/'.$path))
 				return array('HTML_CUSTOM',$zone,$codename,$fallback_lang,$path);
 		}
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/html/'.$fallback_lang.'/'.$codename.'.htm',true);
-		if (is_file(get_file_base().'/'.$path))
+		if (@is_file(get_file_base().'/'.$path))
 			return array('HTML',$zone,$codename,$fallback_lang,$path);
 	}
 

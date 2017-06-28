@@ -105,7 +105,7 @@ class Block_main_staff_links
 			foreach ($default_links as $link_title=>$url)
 			{
 				$GLOBALS['SITE_DB']->query_insert('stafflinks',array(
-					'link'=>$url,
+					'link'=>substr($url,0,255),
 					'link_title'=>$link_title,
 					'link_desc'=>$link_title,
 				));
