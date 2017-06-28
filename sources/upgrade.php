@@ -351,10 +351,18 @@ function upgrade_script()
 								if ((!is_null($found)) && (file_exists(get_file_base().'/imports/mods/'.$found.'.tar')))
 								{
 									$old_mod_file=tar_open(get_file_base().'/imports/mods/'.$found.'.tar','rb');
-									$new_mod_file=tar_open(get_file_base().'/imports/mods/'.$found.'.new.tar','wb');
 									$directory2=tar_get_directory($old_mod_file,true);
 									if (!is_null($directory2))
 									{
+										$old_file_data=tar_get_file($old_mod_file,$upgrade_file['path']);
+										$file_data=tar_get_file($upgrade_resource,$upgrade_file['path']);
+										if ($old_file_data['data']==$file_data['data'])
+										{
+											// No change needed, maybe already packed
+											continue;
+										}
+										$new_mod_file=tar_open(get_file_base().'/imports/mods/'.$found.'.new.tar','wb');
+
 										foreach ($directory2 as $d)
 										{
 											if ($d['path']==$upgrade_file['path']) continue;
