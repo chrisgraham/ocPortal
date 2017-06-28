@@ -852,7 +852,7 @@ function form_to_email_entry_script()
  */
 function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 {
-	if (is_null($subject)) $subject=post_param('subject',get_site_name());
+	if (empty($subject)) $subject=post_param('subject',get_site_name());
 	if (is_null($fields))
 	{
 		$fields=array();
