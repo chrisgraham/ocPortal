@@ -2513,9 +2513,10 @@ function min($arg1,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=
  *
  * @param  PATH		The path to the directory to make.
  * @param  integer	The mode (e.g. 0777).
+ * @param  boolean	Operate recursively.
  * @return boolean	Success status.
  */
-function mkdir($path,$mode)
+function mkdir($path,$mode,$recursive=false)
 {
 	return false;
 }
@@ -2733,10 +2734,10 @@ function pack($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$ar
  * Parse a URL and return its components.
  *
  * @param  string		The URL to parse.
- * @param  integer	The component to get (-1 get all in an array).
+ * @param  integer	$component The component to get (-1 get all in an array).
  * @return ~mixed		A map of details about the URL (false: URL cannot be parsed).
  */
-function parse_url($url,$component=-1)
+function parse_url($url, $component = -1)
 {
 	return array();
 }

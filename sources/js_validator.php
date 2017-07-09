@@ -809,7 +809,7 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 	$identifier=$variable[1];
 	if (is_array($identifier)) // Normally just a string, but JS is awkward and allows expression :S
 	{
-		$exp_type=js_check_expression($identifier,false,true);
+		$exp_type=js_check_expression($identifier,false);
 		$variable[1]=$exp_type;
 		return js_check_variable($variable,$reference,$function_duality);
 	}

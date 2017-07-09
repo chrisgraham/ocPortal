@@ -55,7 +55,8 @@ function parse_file($to_use,$verbose=false,$very_verbose=false,$i=NULL,$count=NU
 
 function cnl()
 {
-	return !isset($_SERVER['argv'])?'<br />':"\n";
+	$cli=(php_sapi_name()=='cli' && empty($_SERVER['REMOTE_ADDR']));
+	return $cli?"\n":'<br />';
 }
 
 function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)

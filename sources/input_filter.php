@@ -68,7 +68,7 @@ function check_input_field_string($name,&$val,$posted=false)
 					$ok=false;
 					foreach ($bus as $bu)
 					{
- 						if (substr($val,0,strlen($bu))==$bu)
+						if (substr($val,0,strlen($bu))==$bu)
 						{
 							$ok=true;
 							break;
@@ -108,7 +108,6 @@ function check_input_field_string($name,&$val,$posted=false)
  *
  * @param  string			The name of the parameter
  * @param  string			The value retrieved
- * @return string			The filtered value
  */
 function check_posted_field($name,&$val)
 {

@@ -153,8 +153,8 @@ class Module_admin_pointstore
 
 		$content=do_template('TABLE_TABLE',array('_GUID'=>'d87800ff26e9e5b8f7593fae971faa73','HEADER_ROW'=>$header_row,'ROWS'=>$out));
 
-		require_code('templates_pagination');
-		$pagination=pagination(do_lang('POINTSTORE_MANAGE_SALES'),NULL,$start,'start',$max,'max',$max_rows,NULL,'misc');
+		require_code('templates_results_browser');
+		$pagination=results_browser(do_lang('POINTSTORE_MANAGE_SALES'),NULL,$start,'start',$max,'max',$max_rows,NULL,'misc');
 
 		return do_template('POINTSTORE_LOG_SCREEN',array('_GUID'=>'014cf9436ece951edb55f2f7b0efb597','TITLE'=>$title,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}

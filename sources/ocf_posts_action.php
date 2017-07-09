@@ -180,15 +180,15 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		}
 	}
 
- 	// Ensure parent post is from the same topic
- 	if (!is_null($parent_id))
- 	{
- 		$test_topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_topic_id',array('id'=>$parent_id),' AND '.ocf_get_topic_where($topic_id,$poster));
- 		if (is_null($test_topic_id))
- 		{
- 			$parent_id=NULL;
- 		}
- 	}
+	// Ensure parent post is from the same topic
+	if (!is_null($parent_id))
+	{
+		$test_topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_topic_id',array('id'=>$parent_id),' AND '.ocf_get_topic_where($topic_id,$poster));
+		if (is_null($test_topic_id))
+		{
+			$parent_id=NULL;
+		}
+	}
 
 	if ((is_null($validated)) || (($validated==1) && ($check_permissions)))
 	{

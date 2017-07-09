@@ -197,7 +197,7 @@ function upgrade_script()
 
 				case 'file_upgrade':
 					require_code('version2');
-					$personal_upgrader_url='http://compo.sr/uploads/website_specific/compo.sr/scripts/build_personal_upgrader.php?from='.urlencode(get_version_dotted());
+					$personal_upgrader_url='http://compo.sr/uploads/website_specific/compo.sr/scripts/build_personal_upgrader.php?from='.urlencode(strval(ocp_version()) . '.' . ocp_version_minor());
 					$hooks=find_all_hooks('systems','addon_registry');
 					foreach (array_keys($hooks) as $hook)
 					{

@@ -30,7 +30,7 @@ class Hook_css_compile
 	{
 		if (has_actual_page_access(get_member(),'admin_themes'))
 		{
-			safe_ini_set('ocproducts.xss_detect','0');
+			ini_set('ocproducts.xss_detect','0');
 
 			require_code('tempcode_compiler');
 			return template_to_tempcode(post_param('css'));

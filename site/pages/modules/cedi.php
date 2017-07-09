@@ -372,6 +372,7 @@ class Module_cedi
 		{
 			$id=$num_pages;
 		} else
+		{
 			$pages=array();
 			do // Loop. picking random pages between 0 and max-id till we find one that exists
 			{

@@ -1071,10 +1071,10 @@ function check_command($command,$depth,$function_guard='',$nogo_parameters=NULL)
 				add_variable_reference($c[2][1],$c_pos,false);
 				add_variable_reference($c[3][1],$c_pos,false);
 
-				if (in_array($c[2][1],$nogo_parameters))
+				/*Too many issues in v8 if (in_array($c[2][1],$nogo_parameters))
 					log_warning('Re-using a loop variable, '.$c[2][1],$c_pos);
 				if (in_array($c[3][1],$nogo_parameters))
-					log_warning('Re-using a loop variable, '.$c[3][1],$c_pos);
+					log_warning('Re-using a loop variable, '.$c[3][1],$c_pos);*/
 
 				check_command($c[4],$depth+1,$function_guard,array_merge($nogo_parameters,array($c[2][1],$c[3][1])));
 				break;
@@ -1083,8 +1083,8 @@ function check_command($command,$depth,$function_guard='',$nogo_parameters=NULL)
 				if ($passes) infer_expression_type_to_variable_type('array',$c[1]);
 				add_variable_reference($c[2][1],$c_pos,false);
 
-				if (in_array($c[2][1],$nogo_parameters))
-					log_warning('Re-using a loop variable, '.$c[2][1],$c_pos);
+				/*if (in_array($c[2][1],$nogo_parameters))
+					log_warning('Re-using a loop variable, '.$c[2][1],$c_pos);*/
 
 				check_command($c[3],$depth+1,$function_guard,array_merge($nogo_parameters,array($c[2][1])));
 				break;
@@ -1840,7 +1840,10 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 			global $FUNCTION_SIGNATURES;
 			if ((!isset($FUNCTION_SIGNATURES[$inner[1]])) && ($FUNCTION_SIGNATURES!=array()) && (strpos($function_guard,','.$inner[1].',')===false))
 			{
-				if (!is_null($inner[1])) log_warning('Unknown class, '.$inner[1],$c_pos);
+				if (((is_null($GLOBALS['OK_EXTRA_FUNCTIONS'])) || (preg_match('#^'.$GLOBALS['OK_EXTRA_FUNCTIONS'].'#',$inner[1])==0)))
+				{
+					if (!is_null($inner[1])) log_warning('Unknown class, '.$inner[1],$c_pos);
+				}
 			}
 			foreach ($inner[2] as $param)
 			{
