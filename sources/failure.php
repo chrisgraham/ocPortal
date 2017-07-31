@@ -397,7 +397,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	if (($count>=$hack_threshold) && (get_option('autoban')!='0'))
 	{
 		// Test we're not banning a good bot
-		$se_ip_lists=array('http://www.iplists.com.nyud.net/nw/google.txt','http://www.iplists.com.nyud.net/nw/msn.txt','http://www.iplists.com.nyud.net/infoseek.txt','http://www.iplists.com.nyud.net/nw/inktomi.txt','http://www.iplists.com.nyud.net/nw/lycos.txt','http://www.iplists.com.nyud.net/nw/askjeeves.txt','http://www.iplists.com.nyud.net/northernlight.txt','http://www.iplists.com.nyud.net/nw/altavista.txt','http://www.iplists.com.nyud.net/nw/misc.txt');
+		$se_ip_lists=array('http://www.iplists.com/nw/google.txt','http://www.iplists.com/nw/misc.txt');
 		$ip_stack=array();
 		$ip_bits=explode((strpos($alt_ip?$ip2:$ip,'.')!==false)?'.':':',$alt_ip?$ip2:$ip);
 		foreach ($ip_bits as $i=>$ip_bit)

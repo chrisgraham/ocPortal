@@ -485,6 +485,7 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 	{
 		if ($entry['path']==$target_path)
 		{
+			tar_close($resource);
 			warn_exit(do_lang_tempcode('FILE_IN_ARCHIVE_TWICE',escape_html($target_path)));
 		}
 	}

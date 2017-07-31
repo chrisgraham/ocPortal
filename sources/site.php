@@ -1668,7 +1668,7 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
  * Log statistics for the page view.
  *
  * @param  string			The string to the page file
- * @param  integer		The time taken for page loading in milliseconds
+ * @param  float			The time taken for page loading in seconds
  */
 function log_stats($string,$pg_time)
 {

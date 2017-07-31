@@ -222,6 +222,7 @@ function upgrade_script()
 
 				case '_file_upgrade':
 					require_code('tar');
+					$local_temp_path=false;
 					if (function_exists('set_time_limit')) @set_time_limit(0);
 					if ((post_param('url','')=='') && ((ocp_srv('HTTP_HOST')=='ocportal.com') || ($GLOBALS['DEBUG_MODE'])))
 					{
@@ -230,14 +231,14 @@ function upgrade_script()
 					{
 						if (post_param('url','')=='') warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
-						$temp_path=ocp_tempnam('ocpfu');
 						$url=post_param('url');
 						if (substr($url,0,strlen(get_base_url().'/'))==get_base_url().'/')
 						{
-							unlink($temp_path);
-							copy(get_custom_file_base().'/'.rawurldecode(substr($url,strlen(get_base_url().'/'))),$temp_path);
+							$local_temp_path=true;
+							$temp_path=get_custom_file_base().'/'.rawurldecode(substr($url,strlen(get_base_url().'/')));
 						} else
 						{
+							$temp_path=ocp_tempnam('ocpfu');
 							$myfile=fopen($temp_path,'wb');
 							http_download_file($url,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
 							fclose($myfile);
@@ -263,8 +264,13 @@ function upgrade_script()
 						}
 					}
 					// Process files
+					$i=0;
+					$cnt=count($directory);
 					foreach ($directory as $offset=>$upgrade_file)
 					{
+						$i++;
+						echo '<!-- Looking at '.escape_html($upgrade_file['path']).' ('.strval($i).' / '.strval($cnt).') -->';
+
 						// skip over these, from manually installer package (which may be used for an upgrade)
 						if ($upgrade_file['path']=='info.php') continue;
 						if ($upgrade_file['path']=='install.php') continue;
@@ -389,9 +395,12 @@ function upgrade_script()
 					tar_close($upgrade_resource);
 					if ($popup_simple_extract)
 					{
-						copy($temp_path,get_custom_file_base().'/data_custom/upgrader.tar.tmp');
-						@unlink($temp_path);
-						$temp_path=get_custom_file_base().'/data_custom/upgrader.tar.tmp';
+						if (!$local_temp_path)
+						{
+							copy($temp_path,get_custom_file_base().'/data_custom/upgrader.tar.tmp');
+							@unlink($temp_path);
+							$temp_path=get_custom_file_base().'/data_custom/upgrader.tar.tmp';
+						}
 						$tmp_data_path=get_custom_file_base().'/data_custom/upgrader.tmp';
 						$tmp_data_file=fopen($tmp_data_path,'wb');
 						fwrite($tmp_data_file,serialize($data));
@@ -403,7 +412,7 @@ function upgrade_script()
 					} else
 					{
 						echo '<p>'.do_lang('SUCCESS').'</p>';
-						@unlink($temp_path);
+						if (!$local_temp_path) @unlink($temp_path);
 					}
 
 					unset($_POST['news_id']);

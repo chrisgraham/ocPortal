@@ -49,7 +49,7 @@ php_flag suhosin.sql.union off
 # php_value open_basedir "/tmp:/home/blah/public_html/ocportal/"		But needs customising for your server and only works outside php.ini in PHP6+
 
 # Set ocPortal to handle 404 errors. Assume ocPortal is in the root
-<FilesMatch !"\.(jpg|jpeg|gif|png|ico)$">
+<FilesMatch "(?<!\.jpg|\.jpeg|\.gif|\.png|\.ico|\.svg)$">
 ErrorDocument 404 /index.php?page=404
 </FilesMatch>
 
