@@ -549,7 +549,7 @@ class Module_admin_permissions
 		$title=get_page_title('PAGE_MATCH_KEY_ACCESS');
 
 		// Delete to cleanup
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE page_name LIKE \''.db_encode_like('%:%').'\'');
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE '.db_string_equal_to('zone_name','/'));
 		$mkeylang=collapse_2d_complexity('id','k_message',$GLOBALS['SITE_DB']->query_select('match_key_messages',array('id','k_message')));
 		$GLOBALS['SITE_DB']->query_delete('match_key_messages');
 
@@ -568,6 +568,7 @@ class Module_admin_permissions
 				{
 					if (post_param_integer('p_'.substr($key,4).'__'.strval($gid),0)==1)
 					{
+						$GLOBALS['SITE_DB']->query_delete('group_page_access',array('zone_name'=>'/','page_name'=>$val,'group_id'=>$gid),'',1);
 						$GLOBALS['SITE_DB']->query_insert('group_page_access',array('zone_name'=>'/','page_name'=>$val,'group_id'=>$gid));
 					}
 				}

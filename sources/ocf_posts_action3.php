@@ -238,7 +238,14 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	}
 
 	// Update member post counts
-	$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_value('f_forums','f_post_count_increment',array('id'=>$forum_id));
+	if (is_null($forum_id))
+	{
+		$post_counts=1;
+	} else
+	{
+		$post_counts=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_post_count_increment',array('id'=>$forum_id));
+		if ($post_counts===null) $post_counts=1;
+	}
 	if ($post_counts==1)
 	{
 		$sql='SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list.')';

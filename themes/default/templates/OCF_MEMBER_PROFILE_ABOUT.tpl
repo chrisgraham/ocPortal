@@ -39,8 +39,8 @@
 		{+START,IF_NON_EMPTY,{ACTIONS_contact}{$GET,messenger_fields}}
 			<div>
 				<h3>
-					<a class="hide_button" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;"><img alt="{!CONTRACT}: {!CONTACT}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
-					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!CONTACT}</a>
+					<a class="hide_button" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;"><img alt="{!CONTRACT}: {!menus:CONTACT}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
+					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!menus:CONTACT}</a>
 				</h3>
 
 				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: block"{$?,{$VALUE_OPTION,html5}, role="navigation"}>

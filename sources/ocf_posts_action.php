@@ -404,11 +404,11 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
  */
 function ocf_decache_ocp_blocks($updated_forum_id,$forum_name=NULL,$member=NULL)
 {
-	if (is_null($forum_name)) $forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$updated_forum_id));
+	if (is_null($forum_name)) $forum_name=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>$updated_forum_id));
 	decache('main_forum_news');
 	decache('main_forum_topics');
 	decache('side_forum_news');
-	decache('bottom_news',array($forum_name));
+	decache('bottom_news',($forum_name===NULL)?NULL:array($forum_name));
 	if (!is_null($member))
 	{
 		decache('side_ocf_personal_topics',array($member));

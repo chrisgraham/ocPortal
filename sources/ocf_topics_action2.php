@@ -159,6 +159,8 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	{
 		// Update member post counts if we've switched between post-count countable forums
 		$post_count_info=$GLOBALS['FORUM_DB']->query('SELECT id,f_post_count_increment FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval((integer)$forum_id).(!is_null($post_target_topic_id)?(' OR id='.strval((integer)$to)):''),2);
+		if (!array_key_exists(0,$post_count_info))
+			$post_count_info=array(array('id'=>$forum_id,'f_post_count_increment'=>1));
 		if ($post_count_info[0]['id']==$forum_id)
 		{
 			$from_cnt=$post_count_info[0]['f_post_count_increment'];
