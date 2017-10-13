@@ -84,7 +84,7 @@ class Block_bottom_rss
 			elseif (array_key_exists('comment_url',$item)) $full_url=$item['comment_url'];
 			else $full_url='';
 
-			$_title=$item['title'];
+			$_title=array_key_exists('title',$item)?$item['title']:do_lang('UNKNOWN');
 			$date=array_key_exists('clean_add_date',$item)?get_timezoned_date($item['clean_add_date']):array_key_exists('add_date',$item)?$item['add_date']:'';
 
 			$_postdetailss[]=array('DATE'=>$date,'FULL_URL'=>$full_url,'NEWS_TITLE'=>$_title);

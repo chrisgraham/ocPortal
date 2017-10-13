@@ -1583,7 +1583,7 @@ class forum_driver_ocf extends forum_driver_base
 		if (($wait_time>0) && (addon_installed('stats')))
 		{
 			require_code('site');
-			log_stats('/flood',0);
+			log_stats('/flood',0.0);
 
 			$time_threshold=30;
 			$count_threshold=50;

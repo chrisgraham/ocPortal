@@ -946,7 +946,7 @@ function do_site()
 	}
 
 	// Finally, stats
-	if ($PAGE_STRING!==NULL) log_stats($PAGE_STRING,intval($page_generation_time));
+	if ($PAGE_STRING!==NULL) log_stats($PAGE_STRING,$page_generation_time);
 
 	// When someone hits the Admin Zone front page.
 	if (($ZONE['zone_name']=='adminzone') && (get_page_name()=='start'))

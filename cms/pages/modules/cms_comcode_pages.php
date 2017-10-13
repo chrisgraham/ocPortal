@@ -854,7 +854,7 @@ class Module_cms_comcode_pages
 		list($warning_details,$ping_url)=handle_conflict_resolution($page_link);
 
 		if (!$simple_add)
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang='.$lang,do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang='.$lang,do_lang_tempcode('COMCODE_PAGES'))));
 
 		return do_template('COMCODE_EDIT_SCREEN',array('_GUID'=>'ec1d773684757f5bf6f39cf931555bf2','NEW'=>$new,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TEXT'=>$text,'TITLE'=>$title,'DELETE_URL'=>$delete_url,'ZONE'=>$zone,'FILE'=>$file,'EXPORT_URL'=>$export_url,'POSTING_FORM'=>$posting_form,'REVISION_HISTORY'=>$revision_history));
 	}
@@ -1117,7 +1117,7 @@ class Module_cms_comcode_pages
 		{
 			return redirect_screen($title,$url,$completion_text);
 		}
-		return $this->do_next_manager($title,$file,$zone,$completion_text);
+		return $this->do_next_manager($title,$new_file,$zone,$completion_text);
 	}
 
 	/**
@@ -1160,7 +1160,7 @@ class Module_cms_comcode_pages
 			$export=str_replace($matches[0][$i],$replace,$export);
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_ed:pagelink='.$page_link,do_lang_tempcode('COMCODE_PAGE_EDIT'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('COMCODE_PAGES')),array('_SELF:_SELF:_ed:pagelink='.$page_link,do_lang_tempcode('COMCODE_PAGE_EDIT'))));
 
 		return do_template('COMCODE_PAGE_EXPORT_SCREEN',array('_GUID'=>'2bbae0dad2dd559b68b628cecdf610fc','TITLE'=>$title,'EXPORT'=>$export));
 	}

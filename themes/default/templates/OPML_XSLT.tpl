@@ -21,7 +21,7 @@
 
 				<div class="rss_main_internal">
 					{+START,BOX,<span name="decodeable"><xsl:value-of disable-output-escaping="yes" select="/opml/head/title" /></span>}
-						<p id="xslt_introduction">{!OPML_INDEX_DESCRIPTION}</p>
+						<p id="xslt_introduction">{$COMCODE,{!OPML_INDEX_DESCRIPTION}}</p>
 						<xsl:apply-templates select="/opml/body" />
 						<p class="rss_copyright"><span name="decodeable"><xsl:value-of select="/opml/head/ownerName" disable-output-escaping="yes" /></span></p>
 					{+END}

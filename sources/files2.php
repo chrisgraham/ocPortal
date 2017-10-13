@@ -775,7 +775,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						{
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=basename($matches[1]);
 
-							if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url);
+							if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url,true);
 							if ($matches[1]!=$url)
 							{
 								$bak=$HTTP_FILENAME;
@@ -1051,7 +1051,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=basename($matches[1]);
 
 						@fclose($mysock);
-						if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url);
+						if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url,true);
 						$bak=$HTTP_FILENAME;
 						$text=$no_redirect?mixed():_http_download_file($matches[2],$byte_limit,$trigger_error,false,$ua,NULL,collapse_2d_complexity('key','value',$HTTP_NEW_COOKIES)+$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
@@ -1063,7 +1063,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=basename($matches[1]);
 
 						@fclose($mysock);
-						if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url);
+						if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url,true);
 						if ($matches[1]!=$url)
 						{
 							$bak=$HTTP_FILENAME;

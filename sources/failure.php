@@ -1022,7 +1022,7 @@ function _access_denied($class,$param,$force_login)
 	}
 
 	require_code('site');
-	log_stats('/access_denied',0);
+	log_stats('/access_denied',0.0);
 
 	if (((is_guest()) && ((running_script('attachment')) || (running_script('dload')) || ($GLOBALS['NON_PAGE_SCRIPT']==0))) || ($force_login))
 	// We do want to supply a nice login screen for attachment/dload scripts because they are sometimes externally linked to (e.g. in emails or hotlinks)

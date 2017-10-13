@@ -181,7 +181,7 @@ function closed_site()
 			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
 		}
 
-		log_stats('/closed',0);
+		log_stats('/closed',0.0);
 
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 

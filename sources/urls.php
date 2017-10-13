@@ -437,7 +437,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 			if (!is_string($val)) continue;
 
 			$is_keep=false;
-			$appears_keep=(($key[0]=='k') && (substr($key,0,5)=='keep_'));
+			$appears_keep=((isset($key[0])) && ($key[0]=='k') && (substr($key,0,5)=='keep_'));
 			if ($appears_keep)
 			{
 				if ((!$skip_keep) && (!skippable_keep($key,$val)))
@@ -699,12 +699,13 @@ function url_to_filename($url_full)
  *
  * @param  URLPATH		The URL to fully qualified
  * @param  URLPATH		The base-URL
+ * @param  boolean		Whether the base-URL is actually a full URL which needs stripping back
  * @return URLPATH		Fully qualified URL
  */
-function qualify_url($url,$url_base)
+function qualify_url($url,$url_base,$base_url_is_full=false)
 {
 	require_code('urls2');
-	return _qualify_url($url,$url_base);
+	return _qualify_url($url,$url_base,$base_url_is_full);
 }
 
 /**

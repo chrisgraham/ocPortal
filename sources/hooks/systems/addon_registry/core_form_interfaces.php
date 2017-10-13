@@ -580,6 +580,7 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		require_lang('comcode');
 		require_lang('dates');
+		require_javascript('javascript_swfupload');
 
 		$fields	= new ocp_tempcode();
 		$list =	new ocp_tempcode();

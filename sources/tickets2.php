@@ -357,7 +357,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 		if ($email!='')
 		{
 			require_code('mail');
-			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',($title=='')?do_lang('UNKNOWN'):$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),NULL,'','',3,NULL,false,get_member());
+			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',($title=='')?do_lang('UNKNOWN'):$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),$username,'','',3,NULL,false,get_member());
 		}
 	}
 }
