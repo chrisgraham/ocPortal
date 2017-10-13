@@ -524,7 +524,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -581,7 +584,10 @@ class Module_topics
 		$success=0;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -618,7 +624,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -644,7 +653,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -670,7 +682,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -696,7 +711,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -722,7 +740,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -748,7 +769,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -774,7 +798,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -800,7 +827,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -826,7 +856,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -928,7 +961,10 @@ class Module_topics
 		$forum_id=NULL;
 		foreach ($topics as $i=>$topic_id)
 		{
-			if ($i==0)
+			$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+			if ($id===NULL) continue;
+
+			if ($forum_id===NULL)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
@@ -947,6 +983,9 @@ class Module_topics
 	{
 		$topics=$this->get_markers();
 		if (count($topics)==0) warn_exit(do_lang_tempcode('NO_MARKERS_SELECTED'));
+
+		$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topics[0]));
+		if ($id===NULL) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topics[0]));
 
@@ -2286,7 +2325,12 @@ END;
 	function mark_unread_topic() // Type
 	{
 		$topic_id=get_param_integer('id');
+
+		$id=$GLOBALS['FORUM_DB']->query_value('f_topics','id',array('id'=>$topic_id));
+		if ($id===NULL) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
 		$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
+
 		if (is_null($forum_id))
 		{
 			decache('side_ocf_personal_topics',array(get_member()));

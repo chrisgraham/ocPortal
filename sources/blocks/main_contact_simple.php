@@ -83,7 +83,7 @@ class Block_main_contact_simple
 
 			if ($email_from!='')
 			{
-				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',post_param('title')),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),NULL,'','',3,NULL,false,get_member());
+				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',post_param('title')),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'','',3,NULL,false,get_member());
 			}
 		} else
 		{

@@ -694,7 +694,7 @@ class Module_admin_import
 		log_it('IMPORT');
 		post_import_cleanup();
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer='.$importer.':session='.get_param('session'),do_lang_tempcode('IMPORT'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer='.$importer.':session='.get_param('session'),do_lang_tempcode('ACTIONS'))));
 		breadcrumb_set_self(do_lang_tempcode('START'));
 
 		$back_url=build_url(array('page'=>'_SELF','type'=>'hook','importer'=>get_param('importer'),'just'=>$import_last),'_SELF');

@@ -39,7 +39,7 @@ Note that:
 
 EXAMPLE CALLS...
 $results=ocfilter_to_sqlfragment('1,3-10,!6,12*','id','download_categories','parent_id','cat','id');
-$results=ocfilter_to_idlist_using_db('1,3-10,!6,12*','downloads','id','download_categories','parent_id','cat','id');
+$results=ocfilter_to_idlist_using_db('1,3-10,!6,12*','id','downloads','download_categories','parent_id','cat','id');
 $results=ocfilter_to_idlist_using_memory('1,3-10,!6,12*',array(1=>2,2=>2,3=>2,4=>3),'download_categories','parent_id','cat','id');
 $results=ocfilter_to_idlist_using_callback('1,3-10,!6,12*','_callback_get_download_structure','download_categories','parent_id','cat','id');
 */
@@ -276,12 +276,15 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 		{
 			for ($i=intval($matches[1]);$i<=intval($matches[2]);$i++)
 			{
-				if ($numeric_record_set_ids)
+				if (($ids_and_parents===null) || (isset($ids_and_parents[$i])))
 				{
-					$out_accept[]=$i;
-				} else
-				{
-					$out_accept[]=strval($i);
+					if ($numeric_record_set_ids)
+					{
+						$out_accept[]=$i;
+					} else
+					{
+						$out_accept[]=strval($i);
+					}
 				}
 			}
 		}

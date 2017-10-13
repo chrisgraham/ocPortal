@@ -477,7 +477,9 @@ class standard_aed_module
 
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$_catalogue_title = $GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>get_param('catalogue_name')));
+			if ($_catalogue_title===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$catalogue_title=get_translated_text($_catalogue_title);
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
@@ -536,6 +538,12 @@ class standard_aed_module
 		// Add in custom fields
 		if ($this->has_tied_catalogue())
 		{
+			if ($this->posting_form_title!==null)
+			{
+				global $BLOCK_EXTRA_POSTING_FIELDS;
+				$BLOCK_EXTRA_POSTING_FIELDS=true;
+			}
+
 			require_code('fields');
 			append_form_custom_fields($this->award_type,NULL,$fields,$hidden,true);
 		}
@@ -632,7 +640,9 @@ class standard_aed_module
 		$doing='ADD_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$_catalogue_title = $GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>get_param('catalogue_name')));
+			if ($_catalogue_title===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$catalogue_title=get_translated_text($_catalogue_title);
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
@@ -824,7 +834,9 @@ class standard_aed_module
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$_catalogue_title = $GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>get_param('catalogue_name')));
+			if ($_catalogue_title===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$catalogue_title=get_translated_text($_catalogue_title);
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
@@ -941,7 +953,9 @@ class standard_aed_module
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$_catalogue_title = $GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>get_param('catalogue_name')));
+			if ($_catalogue_title===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$catalogue_title=get_translated_text($_catalogue_title);
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
@@ -1020,6 +1034,12 @@ class standard_aed_module
 		// Add in custom fields
 		if ($this->has_tied_catalogue())
 		{
+			if ($this->posting_form_title!==null)
+			{
+				global $BLOCK_EXTRA_POSTING_FIELDS;
+				$BLOCK_EXTRA_POSTING_FIELDS=true;
+			}
+
 			require_code('fields');
 			append_form_custom_fields($this->award_type,$id,$fields,$hidden,true);
 		}
@@ -1166,7 +1186,9 @@ class standard_aed_module
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$_catalogue_title = $GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>get_param('catalogue_name')));
+			if ($_catalogue_title===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$catalogue_title=get_translated_text($_catalogue_title);
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
@@ -1226,7 +1248,9 @@ class standard_aed_module
 			$doing='DELETE_'.$this->lang_type;
 			if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 			{
-				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+				$_catalogue_title = $GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>get_param('catalogue_name')));
+				if ($_catalogue_title===null) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+				$catalogue_title=get_translated_text($_catalogue_title);
 				if ($this->type_code=='d')
 				{
 					$doing=do_lang('CATALOGUE_GENERIC_DELETE',escape_html($catalogue_title));

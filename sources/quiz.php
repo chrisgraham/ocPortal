@@ -506,6 +506,8 @@ function render_quiz($questions)
 {
 	require_code('form_templates');
 
+	$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=true;
+
 	// Sort out qa input
 	$fields=new ocp_tempcode();
 	foreach ($questions as $i=>$question)

@@ -278,6 +278,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 	if ((!is_null($wrap_pos)) && (strtolower(get_charset())=='utf-8'))
 		$wrap_pos*=2;
 
+	$b_all=(get_option('admin_banners',true)==='1');
+
 	$stupidity_mode=get_value('stupidity_mode'); // bork or leet
 	if ($comcode_dangerous) $stupidity_mode=get_param('stupidity_mode','');
 	if ($stupidity_mode=='leet')
@@ -1129,7 +1131,6 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								}
 
 								// Advertising
-								$b_all=true; // leave true - for test purposes only
 								if ((!$differented) && (!$semiparse_mode) && (!$in_code_tag) && (addon_installed('banners')) && (($b_all) || (!has_specific_permission($source_member,'banner_free'))))
 								{
 									// Pick up correctly, including permission filtering

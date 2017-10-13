@@ -160,7 +160,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	{
 		$_html_content=$html_content->evaluate($lang);
 		$_html_content=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',$_html_content);
-		$message_html=(strpos($_html_content,'<html')!==false)?make_string_tempcode($_html_content):do_template($mail_template,array('_GUID'=>'b23069c20202aa59b7450ebf8d49cde1','CSS'=>'{CSS}','LOGOURL'=>get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG'=>$lang,'TITLE'=>$subject,'CONTENT'=>$_html_content),$lang,false,NULL,'.tpl','templates',$theme);
+		$message_html=(strpos($_html_content,'<html')!==false)?make_string_tempcode($_html_content):do_template($mail_template,array('_GUID'=>'b23069c20202aa59b7450ebf8d49cde1','CSS'=>'{CSS}','LOGOURL'=>get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG'=>$lang,'TITLE'=>$subject,'CONTENT'=>$_html_content),$lang,false,'MAIL','.tpl','templates',$theme);
 		$css=css_tempcode(true,true,$message_html->evaluate($lang),$theme);
 		$_css=$css->evaluate($lang);
 		if (get_option('allow_ext_images')!='1')

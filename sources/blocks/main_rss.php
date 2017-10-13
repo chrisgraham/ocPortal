@@ -168,8 +168,7 @@ class Block_main_rss
 			elseif (array_key_exists('comment_url',$item)) $_full_url=$item['comment_url'];
 			else $_full_url='';
 
-			$_title=$item['title'];
-			$_title=array_key_exists('title',$item)?$item['title']:'';
+			$_title=array_key_exists('title',$item)?$item['title']:do_lang('UNKNOWN');
 
 			$full_url=($_full_url!='')?hyperlink($_full_url,do_lang_tempcode('VIEW'),true,false,$_title):new ocp_tempcode();
 

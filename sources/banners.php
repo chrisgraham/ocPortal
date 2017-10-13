@@ -59,7 +59,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 
 		// Find the information about the dest
 		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('site_url','hits_to','campaign_remaining'),array('name'=>$dest));
-		if (!array_key_exists(0,$rows)) fatal_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$myrow=$rows[0];
 		$url=$myrow['site_url'];
 		$page_link=url_to_pagelink($url);
@@ -91,7 +91,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		if (($source!='') && ($unique))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('banners',array('hits_from','campaign_remaining'),array('name'=>$source));
-			if (!array_key_exists(0,$rows)) fatal_exit(do_lang_tempcode('BANNER_MISSING_SOURCE'));
+			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('BANNER_MISSING_SOURCE'));
 			$myrow=$rows[0];
 			if (get_db_type()!='xml')
 				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET hits_from=(hits_from+1) WHERE '.db_string_equal_to('name',$source),1);

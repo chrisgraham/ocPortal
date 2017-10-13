@@ -433,7 +433,7 @@ function parse_ocselect($filter)
 	{
 		if ($bit!='')
 		{
-			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|<|>|=|==|~=|~)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
+			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|<|>|==|~=|=|~)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
 			if (count($parts)==3) $parsed[]=$parts;
 		}
 	}
