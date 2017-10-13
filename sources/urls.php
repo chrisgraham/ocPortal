@@ -726,7 +726,7 @@ function url_to_filename($url_full)
 function qualify_url($url,$url_base,$base_url_is_full=false)
 {
 	require_code('urls2');
-	return _qualify_url($url,$url_base,$base_is_full_url);
+	return _qualify_url($url,$url_base,$base_url_is_full);
 }
 
 /**

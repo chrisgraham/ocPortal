@@ -166,9 +166,9 @@ function _url_to_filename($url_full)
  * @param  boolean		Whether the base-URL is actually a full URL which needs stripping back
  * @return URLPATH		Fully qualified URL
  */
-function qualify_url($url,$url_base,$base_url_is_full=false)
+function _qualify_url($url,$url_base,$base_url_is_full=false)
 {
-	if ($base_is_full_url) $url_base=dirname($url_base);
+	if ($base_url_is_full) $url_base=dirname($url_base);
 
 	require_code('obfuscate');
 	if (($url!='') && ($url[0]!='#') && (substr($url,0,5)!='data:') && (substr($url,0,7)!='mailto:') && (substr($url,0,strlen(mailto_obfuscated()))!=mailto_obfuscated()))
