@@ -250,6 +250,7 @@ class Hook_addon_registry_newsletter
 				do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array(
 					'PASSWORD'=>lorem_phrase(),
 					'NEWSLETTER_TITLE'=>lorem_word(),
+					'PATH_EXISTS' => true,
 						)
 			),NULL,'',true),
 		);

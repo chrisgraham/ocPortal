@@ -201,8 +201,8 @@ class Module_cms_booking extends standard_aed_module
 		$hidden->attach(form_input_hidden('timezone',get_server_timezone()));
 
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',is_null($details['title'])?'':get_translated_text($details['title']),true));
-		$fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',is_null($details['description'])?'':get_translated_text($details['description']),false));
+		$fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',is_null($details['title'])?'':get_translated_text($details['title']),true));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',is_null($details['description'])?'':get_translated_text($details['description']),false));
 		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),do_lang_tempcode('DESCRIPTION_BOOKABLE_PRICE'),'price',float_to_raw_string($details['price'],2),true));
 		$categorisation=is_null($details['categorisation'])?'':get_translated_text($details['categorisation']);
 		if ($categorisation=='')

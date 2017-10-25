@@ -66,7 +66,7 @@ class Hook_rss_ocf_personal_topics
 
 			$_view_url=build_url(array('page'=>'topicview','id'=>$row['t_id']),get_module_zone('forumview'));
 			$view_url=$_view_url->evaluate();
-			$view_url.='#'.strval($row['p_id']);
+			$view_url.='#post_'.strval($row['p_id']);
 
 			if ($prefix=='RSS_')
 			{

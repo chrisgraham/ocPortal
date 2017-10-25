@@ -59,39 +59,42 @@ class Hook_rss_galleries
 		$rows=array_merge($rows1,$rows2);
 		foreach ($rows as $row)
 		{
-			$id=strval($row['id']);
-			$author=$GLOBALS['FORUM_DRIVER']->get_username($row['submitter']);
-			if (is_null($author)) $author='';
-
-			$news_date=date($date_string,$row['add_date']);
-			$edit_date=is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
-
-			$news_title=xmlentities(do_lang('THIS_WITH_SIMPLE',(array_key_exists('video_views',$row)?do_lang('VIDEO'):do_lang('IMAGE')),strval($row['id'])));
-			$_summary=get_translated_tempcode($row['comments']);
-			$summary=xmlentities($_summary->evaluate());
-			$news='';
-
-			if (!array_key_exists($row['cat'],$galleries))
+			if (has_category_access(get_member(),'galleries',$row['cat']))
 			{
-				$_fullname=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
-				if (is_null($_fullname)) continue;
-				$galleries[$row['cat']]=get_translated_text($_fullname);
+				$id=strval($row['id']);
+				$author=$GLOBALS['FORUM_DRIVER']->get_username($row['submitter']);
+				if (is_null($author)) $author='';
+
+				$news_date=date($date_string,$row['add_date']);
+				$edit_date=is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
+
+				$news_title=xmlentities(do_lang('THIS_WITH_SIMPLE',(array_key_exists('video_views',$row)?do_lang('VIDEO'):do_lang('IMAGE')),strval($row['id'])));
+				$_summary=get_translated_tempcode($row['comments']);
+				$summary=xmlentities($_summary->evaluate());
+				$news='';
+
+				if (!array_key_exists($row['cat'],$galleries))
+				{
+					$_fullname=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
+					if (is_null($_fullname)) continue;
+					$galleries[$row['cat']]=get_translated_text($_fullname);
+				}
+				$category=$galleries[$row['cat']];
+				$category_raw=$row['cat'];
+
+				$view_url=build_url(array('page'=>'galleries','type'=>array_key_exists('video_views',$row)?'video':'image','id'=>$row['id']),get_module_zone('galleries'),NULL,false,false,true);
+
+				if (($prefix=='RSS_') && (get_option('is_on_comments')=='1') && ($row['allow_comments']>='1'))
+				{
+					$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'65dc0cec8c75f565c58c95fa1667aa1e','COMMENT_URL'=>$view_url,'ID'=>strval($row['id'])));
+				} else $if_comments=new ocp_tempcode();
+
+				require_code('images');
+				$enclosure_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries',array_key_exists('video_views',$row)?'videos':'images',$row['id']);
+				list($enclosure_length,$enclosure_type)=get_enclosure_details($row['url'],$enclosure_url);
+
+				$content->attach(do_template($prefix.'ENTRY',array('ENCLOSURE_URL'=>$enclosure_url,'ENCLOSURE_LENGTH'=>$enclosure_length,'ENCLOSURE_TYPE'=>$enclosure_type,'VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
-			$category=$galleries[$row['cat']];
-			$category_raw=$row['cat'];
-
-			$view_url=build_url(array('page'=>'galleries','type'=>array_key_exists('video_views',$row)?'video':'image','id'=>$row['id']),get_module_zone('galleries'),NULL,false,false,true);
-
-			if (($prefix=='RSS_') && (get_option('is_on_comments')=='1') && ($row['allow_comments']>='1'))
-			{
-				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'65dc0cec8c75f565c58c95fa1667aa1e','COMMENT_URL'=>$view_url,'ID'=>strval($row['id'])));
-			} else $if_comments=new ocp_tempcode();
-
-			require_code('images');
-			$enclosure_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries',array_key_exists('video_views',$row)?'videos':'images',$row['id']);
-			list($enclosure_length,$enclosure_type)=get_enclosure_details($row['url'],$enclosure_url);
-
-			$content->attach(do_template($prefix.'ENTRY',array('ENCLOSURE_URL'=>$enclosure_url,'ENCLOSURE_LENGTH'=>$enclosure_length,'ENCLOSURE_TYPE'=>$enclosure_type,'VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 		}
 
 		require_lang('galleries');
