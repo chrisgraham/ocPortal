@@ -406,6 +406,8 @@ class Module_cms_galleries extends standard_aed_module
 							if ($slash===false) $slash=strrpos($_file,"\\");
 							if ($slash!==false) $_file=substr($_file,$slash+1);
 
+							if (empty($_file)) continue;
+
 							if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$tmp_name_2,$cat);
 
 							zip_entry_close($entry);
