@@ -108,6 +108,8 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
  */
 function js_compile($j,$js_cache_path,$minify=true)
 {
+	if (function_exists('set_time_limit')) @set_time_limit(30);
+
 	require_lang('javascript');
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	$temp_keep_markers=$KEEP_MARKERS;
