@@ -258,7 +258,7 @@ function my_strftime($format,$timestamp=NULL)
 {
 	if (is_null($timestamp)) $timestamp=time();
 
-	$ret=strftime(str_replace('%i',date('g',$timestamp),str_replace('%k',date('S',$timestamp),$format)),$timestamp);
+	$ret=@strftime(str_replace('%i',date('g',$timestamp),str_replace('%k',date('S',$timestamp),$format)),$timestamp);
 	if ($ret===false) $ret='';
 	return $ret;
 }

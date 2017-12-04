@@ -16,7 +16,7 @@ cacls lang_cached /e /g %user%:F
 cacls lang_cached\* /e /g %user%:F
 cacls lang_custom /e /g %user%:F
 cacls lang_custom\* /e /g %user%:F
-cacls lang_custom\*\* /e /g %user%:F
+cacls lang_custom\EN\* /e /g %user%:F
 cacls themes\map.ini /e /g %user%:F
 cacls themes\default /e /g %user%:F
 cacls themes\default\css_custom /e /g %user%:F
@@ -147,6 +147,7 @@ icacls lang_cached /grant %user%:(M)
 icacls lang_cached\* /grant %user%:(M)
 icacls lang_custom /grant %user%:(M)
 icacls lang_custom\* /grant %user%:(M)
+icacls lang_custom\EN\* /grant %user%:(M)
 icacls themes\map.ini /grant %user%:(M)
 icacls themes\default /grant %user%:(M)
 icacls themes\default\css_custom /grant %user%:(M)

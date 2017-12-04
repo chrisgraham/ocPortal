@@ -916,14 +916,14 @@ class forum_driver_ocf extends forum_driver_base
 		} else
 		{
 			$base_url=get_base_url();
-			if (substr($avatar,0,strlen($base_url)+1)==$base_url.'/') // So we can do an is_file check
+			if (($GLOBALS['SITE_DB']->connection_write==$GLOBALS['FORUM_DB']->connection_write) && (substr($avatar,0,strlen($base_url)+1)==$base_url.'/')) // So we can do an is_file check
 			{
 				$avatar=substr($avatar,strlen($base_url)+1);
 			}
 
 			if ((url_is_local($avatar)) && ($avatar!=''))
 			{
-				if ((is_file(get_file_base().'/'.rawurldecode($avatar))) || (is_file(get_custom_file_base().'/'.rawurldecode($avatar))))
+				if (($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) || (is_file(get_file_base().'/'.rawurldecode($avatar))) || (is_file(get_custom_file_base().'/'.rawurldecode($avatar))))
 				{
 					$avatar=get_complex_base_url($avatar).'/'.$avatar;
 				} else
