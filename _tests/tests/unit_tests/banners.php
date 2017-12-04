@@ -38,6 +38,7 @@ class banners_test_set extends ocp_test_case
 	function testAddBannerTypes()
 	{
 		$this->banner_type='Welcome';
+		$GLOBALS['SITE_DB']->query_delete('banner_types',array('id'=>$this->banner_type),'',1); // Cleanup
 		//Add banner type
 		add_banner_type($this->banner_type,0,100,100,100,0);
 
@@ -65,13 +66,13 @@ class banners_test_set extends ocp_test_case
 	}
 
 	function testDeleteitems()
-	{	
+	{
 		delete_banner_type($this->banner_type);
 		delete_banner($this->banner_name);
 	}
 
 	function tearDown()
-	{		
+	{
 		parent::tearDown();
 	}
 }
