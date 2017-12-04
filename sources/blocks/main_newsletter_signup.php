@@ -69,11 +69,12 @@ class Block_main_newsletter_signup
 			}
 
 			if (!array_key_exists('path',$map)) $map['path']='uploads/website_specific/signup.txt';
+			$path_exists=file_exists(get_custom_file_base().'/'.$map['path']);
 
 			require_code('character_sets');
 			$forename=post_param('firstname'.strval($newsletter_id),'');
 			$surname=post_param('lastname'.strval($newsletter_id),'');
-			$password=basic_newsletter_join($address,4,NULL,!file_exists(get_custom_file_base().'/'.$map['path'])/*Send confirm if we're not sending an intro email through this block*/,$newsletter_id,$forename,$surname);
+			$password=basic_newsletter_join($address,4,NULL,!$path_exists/*Send confirm if we're not sending an intro email through this block*/,$newsletter_id,$forename,$surname);
 			if ($password=='')
 			{
 				return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('NEWSLETTER_THIS_ALSO')));
@@ -85,7 +86,7 @@ class Block_main_newsletter_signup
 			}
 
 			require_code('mail');
-			if (file_exists(get_custom_file_base().'/'.$map['path']))
+			if ($path_exists)
 			{
 				$url=(url_is_local($map['path'])?(get_custom_base_url().'/'):'').$map['path'];
 				$subject=array_key_exists('subject',$map)?$map['subject']:do_lang('_WELCOME');
@@ -94,10 +95,10 @@ class Block_main_newsletter_signup
 				$body=str_replace('{email}',$address,$body);
 				$body=str_replace('{forename}',$forename,$body);
 				$body=str_replace('{surname}',$surname,$body);
-				mail_wrap($subject,$body,array($address),array_key_exists('to',$map)?$map['to']:'','','',3,NULL,false,NULL,true);
+				mail_wrap($subject,$body,array($address),empty($map['to'])?'':$map['to'],'','',3,NULL,false,NULL,true);
 			}
 
-			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array('_GUID'=>'9953c83685df4970de8f23fcd5dd15bb','NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'PASSWORD'=>$password));
+			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array('_GUID'=>'9953c83685df4970de8f23fcd5dd15bb','NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'PASSWORD'=>$password, 'PATH_EXISTS' => $path_exists));
 		} else
 		{
 			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array('_GUID'=>'c0e6f9cdab3d624bf3d27b745e3de38f','NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'URL'=>get_self_url()));

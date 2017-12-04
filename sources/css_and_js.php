@@ -113,6 +113,8 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
  */
 function js_compile($j,$js_cache_path,$minify=true)
 {
+	if (function_exists('set_time_limit')) @set_time_limit(30);
+
 	ocp_profile_start_for('js_compile');
 
 	require_lang('javascript');
@@ -346,16 +348,16 @@ function js_minify($js)
 /**
  * cssmin.php - A simple CSS minifier.
  * --
- * 
+ *
  * <code>
  * include("cssmin.php");
  * file_put_contents("path/to/target.css", cssmin::minify(file_get_contents("path/to/source.css")));
  * </code>
  * --
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING 
- * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * --
@@ -373,7 +375,7 @@ function js_minify($js)
  * @param 	string		Stylesheet definitions as string
  * @return 	string		Minified stylesheet definitions
  */
-function css_minify($v) 
+function css_minify($v)
 {
 	$search=array('/\/\*[\d\D]*?\*\/|\t+/', '/\s+/');
 	$replace=array('', ' ');
@@ -382,6 +384,6 @@ function css_minify($v)
 	$replace=array(';', '{', ':#', ',', ':\'', ':$1');
 	$v=preg_replace($search, $replace, $v);
 	$v=str_replace("\n", '', $v);
-	return trim($v);	
+	return trim($v);
 }
 

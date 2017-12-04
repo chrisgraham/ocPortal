@@ -53,43 +53,46 @@ class Hook_rss_downloads
 		$rows=$GLOBALS['SITE_DB']->query($query,$max);
 		foreach ($rows as $row)
 		{
-			$id=strval($row['id']);
-			$author=$GLOBALS['FORUM_DRIVER']->get_username($row['submitter']);
-			if (is_null($author)) $author='';
-
-			$news_date=date($date_string,$row['add_date']);
-			$edit_date=is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
-
-			$news_title=xmlentities(escape_html(get_translated_text($row['name'])));
-			$_summary=get_translated_tempcode($row['description']);
-			$summary=xmlentities($_summary->evaluate());
-			$news='';
-
-			if (!array_key_exists($row['category_id'],$categories))
+			if (has_category_access(get_member(),'downloads',strval($row['category_id'])))
 			{
-				$c=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','category',array('id'=>$row['category_id']));
-				if (is_null($c)) continue; // Slight corruption
-				$categories[$row['category_id']]=get_translated_text($c);
+				$id=strval($row['id']);
+				$author=$GLOBALS['FORUM_DRIVER']->get_username($row['submitter']);
+				if (is_null($author)) $author='';
+
+				$news_date=date($date_string,$row['add_date']);
+				$edit_date=is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
+
+				$news_title=xmlentities(escape_html(get_translated_text($row['name'])));
+				$_summary=get_translated_tempcode($row['description']);
+				$summary=xmlentities($_summary->evaluate());
+				$news='';
+
+				if (!array_key_exists($row['category_id'],$categories))
+				{
+					$c=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','category',array('id'=>$row['category_id']));
+					if (is_null($c)) continue; // Slight corruption
+					$categories[$row['category_id']]=get_translated_text($c);
+				}
+				if (!array_key_exists($row['category_id'],$categories)) continue;
+				$category=$categories[$row['category_id']];
+				$category_raw=strval($row['category_id']);
+
+				$view_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$row['id']),get_module_zone('downloads'),NULL,false,false,true);
+
+				if (($prefix=='RSS_') && (get_option('is_on_comments')=='1') && ($row['allow_comments']>=1))
+				{
+					$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'2a3615d747190e5268df1e7d9eaee7be','COMMENT_URL'=>$view_url,'ID'=>strval($row['id'])));
+				} else $if_comments=new ocp_tempcode();
+
+				$keep=symbol_tempcode('KEEP');
+				$enclosure_url=find_script('dload').'?id='.strval($row['id']).$keep->evaluate();
+				$full_url=$row['url'];
+				if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
+				list($enclosure_length,)=get_enclosure_details($row['url'],$full_url);
+				$enclosure_type='application/octet-stream';
+
+				$content->attach(do_template($prefix.'ENTRY',array('ENCLOSURE_URL'=>$enclosure_url,'ENCLOSURE_LENGTH'=>$enclosure_length,'ENCLOSURE_TYPE'=>$enclosure_type,'VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
-			if (!array_key_exists($row['category_id'],$categories)) continue;
-			$category=$categories[$row['category_id']];
-			$category_raw=strval($row['category_id']);
-
-			$view_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$row['id']),get_module_zone('downloads'),NULL,false,false,true);
-
-			if (($prefix=='RSS_') && (get_option('is_on_comments')=='1') && ($row['allow_comments']>=1))
-			{
-				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'2a3615d747190e5268df1e7d9eaee7be','COMMENT_URL'=>$view_url,'ID'=>strval($row['id'])));
-			} else $if_comments=new ocp_tempcode();
-
-			$keep=symbol_tempcode('KEEP');
-			$enclosure_url=find_script('dload').'?id='.strval($row['id']).$keep->evaluate();
-			$full_url=$row['url'];
-			if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
-			list($enclosure_length,)=get_enclosure_details($row['url'],$full_url);
-			$enclosure_type='application/octet-stream';
-
-			$content->attach(do_template($prefix.'ENTRY',array('ENCLOSURE_URL'=>$enclosure_url,'ENCLOSURE_LENGTH'=>$enclosure_length,'ENCLOSURE_TYPE'=>$enclosure_type,'VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 		}
 
 		require_lang('downloads');

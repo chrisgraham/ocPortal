@@ -597,7 +597,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 /**
  * Add an IP-ban.
  *
- * @param  IP				The IP address to ban
+ * @param  IP				The IP address to ban (potentially encoded with *'s)
  * @param  LONG_TEXT		Explanation for ban
  * @param  ?TIME			When to ban until (NULL: no limit)
  * @param  boolean		Whether this is a positive ban (as opposed to a cached negative)
@@ -652,7 +652,7 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 /**
  * Remove an IP-ban.
  *
- * @param  IP				The IP address to unban
+ * @param  IP				The IP address to unban (potentially encoded with *'s, although this will only unban an exact matching wildcard ban)
  */
 function remove_ip_ban($ip)
 {
@@ -917,64 +917,64 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),str_replace(array('[html','[/html'),array('&#91;html','&#91;/html'),$text),NULL,get_site_default_lang());
 	dispatch_notification($notification_type,NULL,do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,A_FROM_SYSTEM_PRIVILEGED);
 	if (
-		($ocproducts) && 
-		(get_option('send_error_emails_ocproducts',true)=='1') && 
-		(!running_script('cron_bridge')) && 
-		(strpos($text,'_custom/')===false) && 
-		(strpos($text,'_custom\\')===false) && 
+		($ocproducts) &&
+		(get_option('send_error_emails_ocproducts',true)=='1') &&
+		(!running_script('cron_bridge')) &&
+		(strpos($text,'_custom/')===false) &&
+		(strpos($text,'_custom\\')===false) &&
 		(strpos($text,'Search: Operations error')===false) && // LDAP error, misconfiguration
 		(strpos($text,'Can\'t contact LDAP server')===false) && // LDAP error, network issue
 		(strpos($text,'Unknown: failed to open stream')===false) && // Comes up on some free web hosts
 		(strpos($text,'failed with: Connection refused')===false) && // Memcache error
-		(strpos($text,'data/occle.php')===false) && 
-		(strpos($text,'/mini')===false) && 
-		(strpos($text,'A transaction for the wrong IPN e-mail went through')===false) && 
-		(strpos($text,'XCache var cache was not initialized properly')===false) && 
-		(strpos($text,'has been disabled for security reasons')===false) && 
-		(strpos($text,'max_questions')/*mysql limit*/===false) && 
-		(strpos($text,'Error at offset')===false) && 
-		(strpos($text,'No word lists can be found for the language &quot;en&quot;')===false) && 
-		(strpos($text,'Unable to allocate memory for pool')===false) && 
+		(strpos($text,'data/occle.php')===false) &&
+		(strpos($text,'/mini')===false) &&
+		(strpos($text,'A transaction for the wrong IPN e-mail went through')===false) &&
+		(strpos($text,'XCache var cache was not initialized properly')===false) &&
+		(strpos($text,'has been disabled for security reasons')===false) &&
+		(strpos($text,'max_questions')/*mysql limit*/===false) &&
+		(strpos($text,'Error at offset')===false) &&
+		(strpos($text,'No word lists can be found for the language &quot;en&quot;')===false) &&
+		(strpos($text,'Unable to allocate memory for pool')===false) &&
 		(strpos($text,'gd-png: fatal libpng error')===false) &&
-		(strpos($text,'Out of memory')===false) && 
-		(strpos($text,'Can\'t open file')===false) && 
-		(strpos($text,'INSERT command denied to user')===false) && 
-		(strpos($text,'Disk is full writing')===false) && 
-		(strpos($text,'Disk quota exceeded')===false) && 
-		(strpos($text,'No space left on device')===false) && 
-		(strpos($text,'from storage engine')===false) && 
-		(strpos($text,'The MySQL server is running with the --read-only option so it cannot execute this statement')===false) && 
+		(strpos($text,'Out of memory')===false) &&
+		(strpos($text,'Can\'t open file')===false) &&
+		(strpos($text,'INSERT command denied to user')===false) &&
+		(strpos($text,'Disk is full writing')===false) &&
+		(strpos($text,'Disk quota exceeded')===false) &&
+		(strpos($text,'No space left on device')===false) &&
+		(strpos($text,'from storage engine')===false) &&
+		(strpos($text,'The MySQL server is running with the --read-only option so it cannot execute this statement')===false) &&
 		(strpos($text,'Deadlock found when trying to get lock; try restarting transaction')===false) &&
-		(strpos($text,'Lost connection to MySQL server')===false) && 
-		(strpos($text,'Unable to save result set')===false) && 
+		(strpos($text,'Lost connection to MySQL server')===false) &&
+		(strpos($text,'Unable to save result set')===false) &&
 		(strpos($text,'.MAI')===false) && // MariaDB
 		(strpos($text,'.MAD')===false) && // MariaDB
 		(strpos($text,'.MYI')===false) && // MySQL
-		(strpos($text,'.MYD')===false) && // MySQL 
-		(strpos($text,'MySQL server has gone away')===false) && 
-		(strpos($text,'Incorrect key file')===false) && 
-		(strpos($text,'Too many connections')===false) && 
-		(strpos($text,'Incorrect string value')===false) && 
+		(strpos($text,'.MYD')===false) && // MySQL
+		(strpos($text,'MySQL server has gone away')===false) &&
+		(strpos($text,'Incorrect key file')===false) &&
+		(strpos($text,'Too many connections')===false) &&
+		(strpos($text,'Incorrect string value')===false) &&
 		(strpos($text,'Can\'t create/write to file')===false) &&  // MySQL
 		(strpos($text,'Error writing file')===false) && // E.g. cannot PHP create a temporary file
-		(strpos($text,'possibly out of free disk space')===false) && 
-		(strpos($text,'Illegal mix of collations')===false) && 
-		(strpos($text,'duplicate key in table')===false) && 
-		(strpos($text,'marked as crashed and should be repaired')===false) && 
-		(strpos($text,'Query execution was interrupted')===false) && 
-		(strpos($text,'connect to')===false) && 
-		(strpos($text,'Access denied for')===false) && 
-		(strpos($text,'Unknown database')===false) && 
-		(strpos($text,'Broken pipe')===false) && 
-		(strpos($text,'headers already sent')===false) && 
+		(strpos($text,'possibly out of free disk space')===false) &&
+		(strpos($text,'Illegal mix of collations')===false) &&
+		(strpos($text,'duplicate key in table')===false) &&
+		(strpos($text,'marked as crashed and should be repaired')===false) &&
+		(strpos($text,'Query execution was interrupted')===false) &&
+		(strpos($text,'connect to')===false) &&
+		(strpos($text,'Access denied for')===false) &&
+		(strpos($text,'Unknown database')===false) &&
+		(strpos($text,'Broken pipe')===false) &&
+		(strpos($text,'headers already sent')===false) &&
 		(preg_match('#php\.net.*SSL3_GET_SERVER_CERTIFICATE:certificate #',$text)==0) && // Missing certificates on server
-		(preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && 
-		(preg_match('#Out of memory \(allocated (1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)\d{6}\)#',$text)==0) && 
-		(strpos($text,'is marked as crashed and last')===false) && 
-		(strpos($text,'failed to open stream: Permission denied')===false) && 
-		((strpos($text,'Maximum execution time')===false) || ((strpos($text,'/js_')===false) && (strpos($text,'/caches_filesystem.php')===false) && (strpos($text,'/files2.php')===false))) && 
-		((strpos($text,'doesn\'t exist')===false) || ((strpos($text,'import')===false))) && 
-		((strpos($text,'No such file or directory')===false) || ((strpos($text,'admin_setupwizard')===false))) && 
+		(preg_match('#Maximum execution time of \d+ seconds#',$text)==0) &&
+		(preg_match('#Out of memory \(allocated (1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)\d{6}\)#',$text)==0) &&
+		(strpos($text,'is marked as crashed and last')===false) &&
+		(strpos($text,'failed to open stream: Permission denied')===false) &&
+		((strpos($text,'Maximum execution time')===false) || ((strpos($text,'/js_')===false) && (strpos($text,'/caches_filesystem.php')===false) && (strpos($text,'/files2.php')===false))) &&
+		((strpos($text,'doesn\'t exist')===false) || ((strpos($text,'import')===false))) &&
+		((strpos($text,'No such file or directory')===false) || ((strpos($text,'admin_setupwizard')===false))) &&
 		(strpos($text,'File(/tmp/) is not within the allowed path')===false)
 	)
 	{

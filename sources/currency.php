@@ -127,7 +127,7 @@ function currency_convert($amount,$from_currency,$to_currency=NULL,$string=false
 		{
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'long_values WHERE the_name LIKE \''.db_encode_like('currency_%').'\' AND date_and_time<'.strval(time()-60*60*24*2)); // Cleanup
 
-			$google_url='http://www.google.com/finance/converter?a='.(is_float($amount)?float_to_raw_string($amount):strval($amount)).'&from='.$from_currency.'&to='.strtoupper($to_currency);
+			$google_url='http://finance.google.com/finance/converter?a='.(is_float($amount)?float_to_raw_string($amount):strval($amount)).'&from='.$from_currency.'&to='.strtoupper($to_currency);
 			$result=http_download_file($google_url,NULL,false);
 			if (is_string($result))
 			{

@@ -277,6 +277,7 @@ class Hook_addon_registry_newsletter
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP', array(
 				'URL'=>placeholder_url(),
 				'NEWSLETTER_TITLE'=>lorem_word(),
+				'PATH_EXISTS' => true,
 				'NID'=>placeholder_id()
 			)), NULL, '', true)
 		);

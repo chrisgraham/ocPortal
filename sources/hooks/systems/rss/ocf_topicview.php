@@ -55,7 +55,7 @@ class Hook_rss_ocf_topicview
 			$category=$categories[$row['p_topic_id']]['t_cache_first_title'];
 			if (((!is_null($row['p_cache_forum_id'])) || ($categories[$row['p_topic_id']]['t_pt_from']==get_member()) || ($categories[$row['p_topic_id']]['t_pt_to']==get_member())) && ((is_null($row['p_intended_solely_for']) || ($row['p_intended_solely_for']==get_member()))) && (has_category_access(get_member(),'forums',strval($row['p_cache_forum_id']))))
 			{
-				$id=strval($row['id']);
+				$id=strval($row['p_topic_id']);
 				$author=$row['p_poster_name_if_guest'];
 
 				$news_date=date($date_string,$row['p_time']);

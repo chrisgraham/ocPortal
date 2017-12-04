@@ -142,6 +142,9 @@ function comcode_to_clean_text($message_plain)
 		// Change username links to plain username namings
 		$message_plain=preg_replace('#\{\{([^\}\{]*)\}\}#','\1',$message_plain);
 
+		$message_plain=str_replace('{$SITE_NAME}',get_site_name(),$message_plain);
+		$message_plain=str_replace('{$SITE_NAME*}',get_site_name(),$message_plain);
+
 		// Remove directives etc
 		do
 		{
@@ -178,7 +181,7 @@ function comcode_to_clean_text($message_plain)
 	$message_plain=preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us','${1}',$message_plain);
 	$message_plain=preg_replace('#\[abbr="([^"]*)"[^\]]*\].*\[/abbr\]#Us','${1}',$message_plain);
 	$message_plain=preg_replace_callback('#\[indent[^\]]*\](.*)\[/indent\]#Us','_indent_callback',$message_plain);
-	$message_plain=preg_replace_callback('#\[title([^\]])*\](.*)\[/title\]#Us','_title_callback',$message_plain);
+	$message_plain=preg_replace_callback('#\[title([^\]]*)\](.*)\[/title\]#Us','_title_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[box="([^"]*)"[^\]]*\](.*)\[/box\]#Us','_box_callback',$message_plain);
 	$tags_to_strip_inards=array('if_in_group','snapback','post','thread','topic','include','staff_note','attachment','attachment_safe','contents','block','random');
 	foreach ($tags_to_strip_inards as $s)

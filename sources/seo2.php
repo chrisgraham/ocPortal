@@ -204,6 +204,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 
 	require_code('xhtml');
 	$description=strip_comcode($description);
+	$description=trim(preg_replace('#\n(-+|=+)\n#',"\n",$description));
 	$description=trim(preg_replace('#\s+---+\s+#',' ',$description));
 	seo_meta_set_for_explicit($type,$id,$imp,(strlen($description)>1000)?(substr($description,0,1000).'...'):$description);
 

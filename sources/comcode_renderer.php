@@ -1923,7 +1923,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$rel=str_replace('nofollow nofollow','nofollow',$rel);
 			if ($attributes['target']=='_blank')
 			{
-				$title=(is_object($caption)?static_evaluate_tempcode($caption):$caption).' '.do_lang('LINK_NEW_WINDOW');
+				$title=trim(is_object($caption)?static_evaluate_tempcode($caption):$caption).' '.do_lang('LINK_NEW_WINDOW');
 			} else $title='';
 			$temp_tpl->attach(do_template('COMCODE_URL',array('_GUID'=>'d1657530e6d3d57e6a4791fb3bfa0dd7','TITLE'=>$title,'REL'=>$rel,'TARGET'=>$attributes['target'],'URL'=>$url_full,'CAPTION'=>$caption)));
 			break;

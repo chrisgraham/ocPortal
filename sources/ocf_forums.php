@@ -212,18 +212,25 @@ function ocf_may_moderate_forum($forum_id,$member_id=NULL)
  */
 function ocf_get_forum_parent_or_list($forum_id,$parent_id=-1)
 {
-	if (is_null($forum_id)) return '';
+	if (is_null($forum_id)) return ''; // Should never happen
 
 	if ($parent_id==-1)
 	{
 		$parent_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_parent_forum',array('id'=>$forum_id));
-		if (is_null($parent_id)) return '';
 	}
 
-	$from_below=ocf_get_forum_parent_or_list($parent_id);
-	$term='t_forum_id='.strval((integer)$forum_id);
+	$out = 't_forum_id=' . strval($forum_id);
 
-	return $term.(($from_below!='')?(' OR '.$from_below):'');
+	if ($parent_id!==NULL)
+	{
+		$from_below=ocf_get_forum_parent_or_list($parent_id);
+		if ($from_below!='')
+		{
+			$out.=' OR '.$from_below;
+		}
+	}
+
+	return $out;
 }
 
 /**

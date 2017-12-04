@@ -48,7 +48,7 @@ class Hook_rss_ocf_unread_topics
 		{
 			if (((!is_null($row['t_forum_id'])) || ($row['t_pt_to']==get_member())) && (has_category_access(get_member(),'forums',strval($row['t_forum_id']))))
 			{
-				$id=strval($row['id']);
+				$id=strval($row['t_id']);
 				$author=$row['t_cache_first_username'];
 
 				$news_date=date($date_string,$row['t_cache_first_time']);
