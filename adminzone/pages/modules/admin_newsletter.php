@@ -236,6 +236,8 @@ class Module_admin_newsletter extends standard_aed_module
 			$count=0;
 			$count2=0;
 
+			$j=0;
+
 			do
 			{
 				$i=0;
@@ -248,9 +250,9 @@ class Module_admin_newsletter extends standard_aed_module
 				}
 
 				// Process data
-				foreach ($_csv_data as $i=>$csv_line)
+				foreach ($_csv_data as $csv_line)
 				{
-					if (($i<=1) && (count($csv_line)>=1) && (!is_null($csv_line[$email_index])) && (strpos($csv_line[$email_index],'@')===false))
+					if (($j==0) && (count($csv_line)>=1) && (!is_null($csv_line[$email_index])) && (strpos($csv_line[$email_index],'@')===false))
 					{
 						foreach ($csv_line as $j=>$val)
 						{
@@ -264,8 +266,11 @@ class Module_admin_newsletter extends standard_aed_module
 							if (in_array(strtolower($val),array('confirm code',strtolower(do_lang('CONFIRM_CODE'))))) $code_confirm_index=$j;
 							if ((strpos(strtolower($val),'time')!==false) || (strpos(strtolower($val),'date')!==false) || (strtolower($val)==do_lang('JOIN_DATE'))) $jointime_index=$j;
 						}
+						$j++;
 						continue;
 					}
+
+					$j++;
 
 					if ((count($csv_line)>=1) && (!is_null($csv_line[$email_index])) && (strpos($csv_line[$email_index],'@')!==false))
 					{
