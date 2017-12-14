@@ -59,7 +59,7 @@ class Block_main_comcode_page_children
 	 * @return tempcode	The result of execution.
 	 */
 	function run($map)
-	{	
+	{
 		$page=((array_key_exists('param',$map)) && ($map['param']!=''))?$map['param']:get_page_name();
 		$zone=array_key_exists('zone',$map)?$map['zone']:post_param('zone',get_comcode_zone($page,false));
 		if ($zone=='_SEARCH') $zone=NULL;
@@ -86,7 +86,10 @@ class Block_main_comcode_page_children
 
 				if (get_option('is_on_comcode_page_cache')=='1') // Try and force a parse of the page
 				{
+					global $COMCODE_PARSE_TITLE;
+					$temp_comcode_parse_title=$COMCODE_PARSE_TITLE;
 					request_page($child['the_page'],false,$child['the_zone'],NULL,true);
+					$COMCODE_PARSE_TITLE=$temp_comcode_parse_title;
 					$_title=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
 					if (!is_null($_title))
 					{
