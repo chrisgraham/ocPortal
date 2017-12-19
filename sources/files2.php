@@ -536,7 +536,6 @@ function check_shared_space_usage($extra)
 function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
 {
 	if ($cookies===null) $cookies=array();
-	if ($files===null) $files=array();
 
 	// Normalise the URL
 	require_code('urls');

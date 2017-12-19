@@ -440,7 +440,7 @@ class OCP_Topic
 				$other_ids[]=strval($u['id']);
 			}
 		}
-		$ret->attach(do_template('POST_CHILD_LOAD_LINK',array('NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),'OTHER_IDS'=>$other_ids,'ID'=>'','CHILDREN'=>(count($other_ids)==0)?'':'1')));
+		$ret->attach(do_template('POST_CHILD_LOAD_LINK',array('NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),'OTHER_IDS'=>$other_ids,'ID'=>'','CHILDREN'=>empty($other_ids)?'':'1')));
 
 		if (!is_null($this->topic_id))
 		{

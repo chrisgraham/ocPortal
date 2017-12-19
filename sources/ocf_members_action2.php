@@ -349,9 +349,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	require_code('encryption');
 	if (($special_type=='') && (!is_null($member_id)))
 	{
-		if (ocf_is_ldap_member($member_id)) $special_type='ldap';
-		if (ocf_is_httpauth_member($member_id)) $special_type='httpauth';
-		$special_type=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme');
+		$special_type=get_member_special_type($member_id);
 	}
 
 	if (is_null($groups)) $groups=is_null($member_id)?ocf_get_all_default_groups(true):$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);

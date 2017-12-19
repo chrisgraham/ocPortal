@@ -47,7 +47,7 @@ function is_swf_upload($fake_prepopulation=false)
 	$swfupload=false;
 	foreach ($_POST as $key=>$value)
 	{
-		if (!is_string($value)) continue;	
+		if (!is_string($value)) continue;
 		if (!is_string($key)) $key=strval($key);
 
 		if ((preg_match('#^hidFileID\_#i',$key)!=0) && ($value!='-1'))
@@ -318,7 +318,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			} else
 			{
 				$_file=$HTTP_FILENAME;
-				$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;
+				$place=get_custom_file_base().'/'.$upload_folder.'/'.shorten_urlencoded_filename($_file);
 			}
 			if (!has_specific_permission(get_member(),'exceed_filesize_limit'))
 			{
@@ -537,8 +537,8 @@ function _get_specify_url($specify_name,$upload_folder,$enforce_type=0,$accept_e
 		// Its not in the upload folder, so maybe we aren't allowed to download it
 		if (
 			(
-				(substr($url[0],0,strlen($upload_folder)+1)!=$upload_folder.'/') && 
-				(substr($url[0],0,strlen('data/images/')+1)!='data/images/') && 
+				(substr($url[0],0,strlen($upload_folder)+1)!=$upload_folder.'/') &&
+				(substr($url[0],0,strlen('data/images/')+1)!='data/images/') &&
 				(preg_match('#^[^\?\.]*\.(m4v|mp4|flv|f4v|mpeg|mpg|webm|ogv|png|gif|jpg|jpeg|jpe)$#',$url[0])==0)/*Streaming/compression plugins can mess up our script detection so whitelist some formats*/
 			) ||
 			(strpos($url[0],'..')!==false)
@@ -620,7 +620,7 @@ function _check_enforcement_of_type($file,$enforce_type,$accept_errors=false)
  */
 function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=0,$accept_errors=false)
 {
-	$file=$_FILES[$attach_name]['name'];
+	$file=shorten_urlencoded_filename($_FILES[$attach_name]['name']);
 	if (get_magic_quotes_gpc()) $file=stripslashes($file);
 
 	if (!check_extension($file,$obfuscate==2,NULL,$accept_errors))
@@ -707,6 +707,45 @@ function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=
 	$url[0]=$upload_folder.'/'.rawurlencode($_file);
 	$url[1]=$file;
 	return $url;
+}
+
+/**
+ * Shorten a filename so it will fit in the database.
+ *
+ * @param  string $filename The filename
+ * @param  integer $length The length
+ * @return string The shortened filename
+ */
+function shorten_urlencoded_filename($filename, $length = 226)
+{
+	// Default length is... maxDBFieldSize - maxUploadDirSize - suffixingLeeWay = 255 - (7 + 1 + 23 + 1) - 6 = 230
+	// (maxUploadDirSize is LEN('uploads') + LEN('/') + LEN(maxUploadSubdirSize) + LEN('/')
+	// Suffixing leeway is so we can have up to ~99999 different files with the same base filename, varying by auto-generated suffixes
+
+	$matches=array();
+	if (preg_match('#^(.*)\.(.*)$#',$filename,$matches)!=0)
+	{
+		$filename_suffix=$matches[2];
+		$_filename_stem=$matches[1];
+
+		$i=0;
+		$mb_len=ocp_mb_strlen($_filename_stem);
+		$filename_stem='';
+		do
+		{
+			$next_mb_char=ocp_mb_substr($_filename_stem,$i,1);
+			if (strlen(urlencode($filename_stem.$next_mb_char.'.'.$filename_suffix))>$length)
+			{
+				break;
+			}
+			$filename_stem.=$next_mb_char;
+			$i++;
+		}
+		while ($i<$mb_len);
+
+		$filename=$filename_stem.'.'.$filename_suffix;
+	}
+	return $filename;
 }
 
 

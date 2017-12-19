@@ -1596,7 +1596,7 @@ function check_assignment($c,$c_pos,$function_guard='')
 	}
 	if ($target[0]=='ARRAY_APPEND')
 	{
-		if (count($target[2][2])==0) // Simple variable, meaning we can test to see if it's an array
+		if (empty($target[2][2])) // Simple variable, meaning we can test to see if it's an array
 		{
 			$v_type=check_variable($target[1],true);
 			$passes=ensure_type(array('array'),$v_type,$c_pos,'Can only append to an array (not '.$v_type.')');

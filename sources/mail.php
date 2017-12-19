@@ -289,7 +289,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		if ($through_queue) return NULL;
 	}
 
-	if (count($attachments)==0) $attachments=NULL;
+	if (empty($attachments)) $attachments=NULL;
 
 	global $SENDING_MAIL;
 	if ($SENDING_MAIL) return NULL;

@@ -139,8 +139,17 @@ class Hook_Profiles_Tabs_Edit_settings
 				$username=($is_ldap)?NULL:post_param('edit_username',NULL/*May not be passed if username not editable for member type*/);
 			} else $username=NULL;
 
-			$email=post_param('email_address',STRING_MAGIC_NULL);
-			if (!is_null($email)) $email=trim($email);
+			require_code('ocf_field_editability');
+
+			$special_type=get_member_special_type($member_id_of);
+
+			if (ocf_field_editable('email',$special_type))
+			{
+				$email=post_param('email_address',STRING_MAGIC_NULL);
+				if (!is_null($email)) $email=trim($email);
+			} else {
+				$email=STRING_MAGIC_NULL;
+			}
 
 			if (fractional_edit())
 			{
@@ -163,16 +172,23 @@ class Hook_Profiles_Tabs_Edit_settings
 				$views_signatures=post_param_integer('views_signatures',0);
 				$timezone=post_param('timezone',get_site_timezone());
 
-				if (post_param('dob_day',NULL)==='' || post_param('dob_month',NULL)==='' || post_param('dob_year',NULL)==='')
+				if (ocf_field_editable('dob',$special_type))
 				{
-					$dob_day=-1;
-					$dob_month=-1;
-					$dob_year=-1;
-				} else
-				{
-					$dob_day=post_param_integer('dob_day',NULL);
-					$dob_month=post_param_integer('dob_month',NULL);
-					$dob_year=post_param_integer('dob_year',NULL);
+					if (post_param('dob_day',NULL)==='' || post_param('dob_month',NULL)==='' || post_param('dob_year',NULL)==='')
+					{
+						$dob_day=-1;
+						$dob_month=-1;
+						$dob_year=-1;
+					} else
+					{
+						$dob_day=post_param_integer('dob_day',NULL);
+						$dob_month=post_param_integer('dob_month',NULL);
+						$dob_year=post_param_integer('dob_year',NULL);
+					}
+				} else {
+					$dob_day=INTEGER_MAGIC_NULL;
+					$dob_month=INTEGER_MAGIC_NULL;
+					$dob_year=INTEGER_MAGIC_NULL;
 				}
 			}
 
