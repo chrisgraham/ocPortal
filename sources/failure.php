@@ -277,7 +277,7 @@ function _generic_exit($text,$template)
 
 	$text_eval=is_object($text)?$text->evaluate():$text;
 
-	if ($GLOBALS['HTTP_STATUS_CODE']=='200')
+	if (($GLOBALS['HTTP_STATUS_CODE']=='200') && (function_exists('do_lang')))
 	{
 		if (($text_eval==do_lang('ocf:NO_MARKERS_SELECTED')) || ($text_eval==do_lang('NOTHING_SELECTED')))
 		{
@@ -316,9 +316,9 @@ function _generic_exit($text,$template)
 	}
 
 	global $EXITING;
-	if ((running_script('upgrader')) || (!function_exists('get_screen_title'))) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
+	if ((running_script('upgrader')) || (!function_exists('get_screen_title')) || (!function_exists('get_member')) || (!function_exists('do_lang'))) critical_error('PASSON',is_object($text)?$text->evaluate():escape_html($text));
 
-	if (($EXITING>=1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
+	if ($EXITING>=1) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 	$EXITING++;
 	if (!function_exists('do_header')) require_code('site');
 
