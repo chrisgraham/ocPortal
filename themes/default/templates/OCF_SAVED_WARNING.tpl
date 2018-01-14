@@ -4,9 +4,9 @@
 	</h3>
 	<ul role="navigation" class="actions_list">
 		<li>
-			<form title="{!LOAD} {$STRIP_TAGS,{TITLE|}}" action="#" method="post" class="inline" id="saved_use__{TITLE|}">
+			<form title="{!LOAD} {TITLE*}" action="#" method="post" class="inline" id="saved_use__{TITLE|}">
 				<div class="inline">
-					<input class="button_hyperlink" type="submit" value="{!LOAD} {$STRIP_TAGS,{TITLE|}}" />
+					<input class="button_hyperlink" type="submit" value="{!LOAD} {TITLE*}" />
 				</div>
 			</form>
 		</li>
