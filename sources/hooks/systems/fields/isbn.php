@@ -77,7 +77,7 @@ class Hook_fields_isbn
 	{
 		if (is_object($ev)) $ev=$ev->evaluate();
 
-		return hyperlink('http://isbndb.com/search-all.html?kw='.$ev,$ev,true,true);
+		return hyperlink('https://isbndb.com/search/books/'.$ev,$ev,true,true);
 	}
 
 	// ======================

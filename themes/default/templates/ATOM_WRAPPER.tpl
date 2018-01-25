@@ -2,7 +2,7 @@
 <?xml-stylesheet href="{$FIND_SCRIPT*,backend}?type=xslt-atom{$KEEP*,0,1}" type="text/xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 	<title>{$SITE_NAME*}: {MODE_NICE*}</title>
-	<link rel="alternate" type="html" href="{$BASE_URL*}" title="{$SITE_NAME*}" />
+	<link rel="alternate" type="text/html" href="{$BASE_URL*}" title="{$SITE_NAME*}" />
 	<link rel="self" href="{$FIND_SCRIPT*,backend}?type=atom&amp;mode={MODE*}&amp;cutoff={CUTOFF*}&amp;filter={FILTER*}{$KEEP*,0,1}" />
 	<updated>{DATE*}</updated>
 	<author>

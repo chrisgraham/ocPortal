@@ -161,7 +161,7 @@ function rain_get_special_icons($ip_address,$timestamp,$user_agent=NULL,$news=NU
 	$icon=NULL;
 	$tooltip='';
 	$multiplicity=1;
-	$bot=get_bot_type();
+	$bot=get_bot_type($user_agent);
 	if (!is_null($bot))
 	{
 		$icon='searchengine-icon';
