@@ -4,7 +4,7 @@ $ie_needed=array_key_exists('ie_needed',$map)?floatval($map['ie_needed']):7.0; /
 $firefox_needed=array_key_exists('firefox_needed',$map)?floatval($map['firefox_needed']):8.0;
 $safari_needed=array_key_exists('safari_needed',$map)?floatval($map['safari_needed']):5.0;
 $chrome_needed=array_key_exists('chrome_needed',$map)?floatval($map['chrome_needed']):15.0;
-$opera_needed=array_key_exists('firefox_needed',$map)?floatval($map['firefox_needed']):11.0;
+$opera_needed=array_key_exists('opera_needed',$map)?floatval($map['opera_needed']):11.0;
 
 require_code('browser_detect');
 require_lang('browser_upgrade_suggest');
