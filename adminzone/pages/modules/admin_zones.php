@@ -249,8 +249,8 @@ class Module_admin_zones
 			$default_parsed=NULL;
 			if ($is_comcode)
 			{
-				$fullpath=zone_black_magic_filterer((($page_info[0]=='comcode' || $pure)?get_file_base():get_custom_file_base()).'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.$lang.'/'.$current_for.'.txt');
-				if (!file_exists($fullpath)) $fullpath=zone_black_magic_filterer((($page_info[0]=='comcode' || $pure)?get_file_base():get_custom_file_base()).'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.get_site_default_lang().'/'.$current_for.'.txt');
+				$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.$page_info[3].'/'.$current_for.'.txt');
+				if (!file_exists($fullpath)) $fullpath=zone_black_magic_filterer(get_file_base().'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.$page_info[3].'/'.$current_for.'.txt');
 				if (file_exists($fullpath))
 				{
 					$tmp=fopen($fullpath,'rb');

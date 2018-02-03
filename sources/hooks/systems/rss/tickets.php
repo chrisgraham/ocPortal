@@ -41,6 +41,7 @@ class Hook_rss_tickets
 
 		require_code('tickets');
 		require_code('tickets2');
+		require_lang('tickets');
 
 		$ticket_types=ocfilter_to_idlist_using_callback($_filters,'',NULL,NULL,NULL,NULL,false);
 		if (count($ticket_types)!=0)
