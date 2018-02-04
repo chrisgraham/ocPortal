@@ -1825,20 +1825,30 @@ function is_mobile($user_agent=NULL,$truth=false)
 /**
  * Get the name of a webcrawler bot, or NULL if no bot detected
  *
+ * @param  ?string			User agent (NULL: read from environment)
  * @return ?string			Webcrawling bot name (NULL: not a bot)
  */
-function get_bot_type()
+function get_bot_type($agent=NULL)
 {
-	global $CACHE_BOT_TYPE;
-	if ($CACHE_BOT_TYPE!==false) return $CACHE_BOT_TYPE;
+	$agent_given=($agent!==NULL);
 
-	$agent=ocp_srv('HTTP_USER_AGENT');
+	if (!$agent_given)
+	{
+		global $CACHE_BOT_TYPE;
+		if ($CACHE_BOT_TYPE!==false) return $CACHE_BOT_TYPE;
+
+		$agent=ocp_srv('HTTP_USER_AGENT');
+	}
+
 	if (strpos($agent,'WebKit')!==false || strpos($agent,'Trident')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false)
 	{
 		if (strpos($agent,'bot')===false)
 		{
 			// Quick exit path
-			$CACHE_BOT_TYPE=NULL;
+			if (!$agent_given)
+			{
+				$CACHE_BOT_TYPE=NULL;
+			}
 			return NULL;
 		}
 	}
@@ -1881,7 +1891,10 @@ function get_bot_type()
 		if ($name=='') continue;
 		if (strpos($agent,$id)!==false)
 		{
-			$CACHE_BOT_TYPE=$name;
+			if (!$agent_given)
+			{
+				$CACHE_BOT_TYPE=$name;
+			}
 			return $name;
 		}
 	}
@@ -1891,10 +1904,17 @@ function get_bot_type()
 		if ($to_a===false) $to_a=strlen($agent);
 		$to_b=strpos($agent,'/');
 		if ($to_b===false) $to_b=strlen($agent);
-		$CACHE_BOT_TYPE=substr($agent,0,min($to_a,$to_b));
-		return $agent;
+		$name=substr($agent,0,min($to_a,$to_b));
+		if (!$agent_given)
+		{
+			$CACHE_BOT_TYPE=$name;
+		}
+		return $name;
 	}
-	$CACHE_BOT_TYPE=NULL;
+	if (!$agent_given)
+	{
+		$CACHE_BOT_TYPE=NULL;
+	}
 	return NULL;
 }
 

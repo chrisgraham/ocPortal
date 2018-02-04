@@ -841,9 +841,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
  */
 function _boolean_search_prepare($search_filter)
 {
-	$search_filter=str_replace('?','_',$search_filter);
-	$search_filter=str_replace('*','%',$search_filter);
-
 	$content_explode=explode(' ',$search_filter);
 
 	$body_words=array();
@@ -972,8 +969,6 @@ function is_under_radar($test)
  */
 function build_content_where($content,$boolean_search,&$boolean_operator,$full_coverage=false)
 {
-	$content=str_replace('?','',$content);
-
 	list($body_words,$include_words,$disclude_words)=_boolean_search_prepare($content);
 
 	$under_radar=false;
@@ -1022,6 +1017,9 @@ function build_content_where($content,$boolean_search,&$boolean_operator,$full_c
  */
 function db_like_assemble($content,$boolean_operator='AND',$full_coverage=false)
 {
+	$content=str_replace('?','_',$content);
+	$content=str_replace('*','%',$content);
+
 	list($body_words,$include_words,$disclude_words)=_boolean_search_prepare($content);
 
 	$fc_before=$full_coverage?'':'%';

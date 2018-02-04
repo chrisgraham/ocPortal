@@ -1735,7 +1735,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1])) // Hard coding array
 				{
 					$array=array_slice($param,1);
-					$value=in_array($param[0],$array)?'1':'0';
+					if (is_array($array)) $value=in_array($param[0],$array)?'1':'0';
 				}
 				break;
 
@@ -2543,16 +2543,19 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$key=$param[0]->evaluate();
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
 					$value='';
-					$i=1;
-					while (array_key_exists($i+1,$param))
+					if (is_array($array))
 					{
-						$checking_in=$param[$i]->evaluate();
-						if (in_array($checking_in,$array))
+						$i=1;
+						while (array_key_exists($i+1,$param))
 						{
-							$value=$param[count($param)-2]->evaluate();
-							break;
+							$checking_in=$param[$i]->evaluate();
+							if (in_array($checking_in,$array))
+							{
+								$value=$param[count($param)-2]->evaluate();
+								break;
+							}
+							$i++;
 						}
-						$i++;
 					}
 				}
 				break;
@@ -2563,19 +2566,22 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$key=$param[0]->evaluate();
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
 					$value='';
-					$ok=true;
-					$i=1;
-					while (array_key_exists($i+1,$param))
+					if (is_array($array))
 					{
-						$checking_in=$param[$i]->evaluate();
-						if (in_array($checking_in,$array))
+						$ok=true;
+						$i=1;
+						while (array_key_exists($i+1,$param))
 						{
-							$ok=false;
-							break;
+							$checking_in=$param[$i]->evaluate();
+							if (in_array($checking_in,$array))
+							{
+								$ok=false;
+								break;
+							}
+							$i++;
 						}
-						$i++;
+						if ($ok) $value=$param[$i]->evaluate();
 					}
-					if ($ok) $value=$param[$i]->evaluate();
 				}
 				break;
 
@@ -2604,7 +2610,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$key=$param[0]->evaluate();
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
-					$value=strval(count($array));
+					if (is_array($array)) $value=strval(count($array));
 				}
 				break;
 
@@ -2690,7 +2696,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$looking_at=$param[0]->evaluate();
 					if (array_key_exists($looking_at,$param['vars']))
-						if (count($param['vars'][$looking_at])==0) $value=$param[1]->evaluate();
+						if ((is_array($param['vars'][$looking_at])) && (count($param['vars'][$looking_at])==0)) $value=$param[1]->evaluate();
 				}
 				break;
 
@@ -2699,7 +2705,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$looking_at=$param[0]->evaluate();
 					if (array_key_exists($looking_at,$param['vars']))
-						if (count($param['vars'][$looking_at])!=0) $value=$param[1]->evaluate();
+						if ((is_array($param['vars'][$looking_at])) && (count($param['vars'][$looking_at])!=0)) $value=$param[1]->evaluate();
 				}
 				break;
 

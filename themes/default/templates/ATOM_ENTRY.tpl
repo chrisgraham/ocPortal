@@ -6,7 +6,12 @@
 			<published>{DATE*}</published>
 		{+END}
 		{+START,IF_NON_EMPTY,{EDIT_DATE}}
-			<updated>{EDIT_DATE*}</updated>
+			{+START,IF_NON_EMPTY,{DATE}}
+				<updated>{DATE*}</updated>
+			{+END}
+			{+START,IF_EMPTY,{DATE}}
+				<updated>{$FROM_TIMESTAMP*,Y-m-d\TH:i:s+00:00}</updated>
+			{+END}
 		{+END}
 		{+START,IF_EMPTY,{EDIT_DATE}}
 			<updated>{DATE*}</updated>
