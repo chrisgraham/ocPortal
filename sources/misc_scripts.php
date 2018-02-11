@@ -176,6 +176,13 @@ function cron_bridge_script($caller)
 		exit();
 	}
 
+	// Upgrade pending?
+	$version_files=float_to_raw_string(cms_version_number(),10,true);
+	if ((get_value('version')!=$version_files) || (get_value('ocf_version')!=$version_files))
+	{
+		return;
+	}
+
 	global $CURRENT_SHARE_USER,$SITE_INFO;
 	if ((is_null($CURRENT_SHARE_USER)) && (array_key_exists('custom_share_domain',$SITE_INFO)))
 	{

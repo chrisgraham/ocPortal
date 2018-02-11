@@ -160,7 +160,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 					if (($i-$from)>=3)
 					{
 						$this_word=substr($source,$from,$i-$from);
-						if (!array_key_exists($this_word,$common_words_flip))
+						if (!array_key_exists(strtolower($this_word),$common_words_flip))
 						{
 							if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
 							$keywords[$this_word]++;
