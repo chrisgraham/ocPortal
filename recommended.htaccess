@@ -59,6 +59,10 @@ php_value auto_append_file none
 ErrorDocument 404 /index.php?page=404
 </FilesMatch>
 
+# Security fix https://compo.sr/news/view/security-issues/xss-via-mime-sniffing.htm
+AddType application/octet-stream .dat
+Header set X-Content-Type-Options "nosniff"
+
 <IfModule mod_rewrite.c>
 # Needed for mod_rewrite. Disable this line if your server does not have AllowOverride permission (can be one cause of Internal Server Errors)
 Options +SymLinksIfOwnerMatch -MultiViews
