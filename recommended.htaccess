@@ -65,6 +65,9 @@ Options +SymLinksIfOwnerMatch -MultiViews
 
 RewriteEngine on
 
+# Security for https://compo.sr/news/view/security-issues/illicit-access-to-stats.htm
+RewriteRule ^data_custom/modules/admin_stats/(.*)\.xml adminzone/stats_graph.php?file=$1 [L,QSA]
+
 # Redirect away from modules called directly by URL. Helpful as it allows you to "run" a module file in a debugger and still see it running.
 RewriteRule ^([^=]*)webdav.php/([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ - [L]
 RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,QSA,R]
