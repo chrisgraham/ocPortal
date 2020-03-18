@@ -269,7 +269,7 @@ function post_comment_script()
 	// Read in context of what we're doing
 	$options=isset($_POST['options'])?$_POST['options']:(isset($_GET['options'])?$_GET['options']:'');
 	secure_serialized_data($options);
-	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time)=unserialize($options);
+	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time)=unserialize($options,array('allowed_classes'=>false));
 
 	// Check security
 	$hash=post_param('hash');

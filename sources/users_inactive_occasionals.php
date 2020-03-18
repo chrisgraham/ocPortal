@@ -315,7 +315,7 @@ function try_cookie_login()
 
 			secure_serialized_data($the_cookie,array());
 
-			$unserialize=@unserialize($the_cookie);
+			$unserialize=@unserialize($the_cookie,array('allowed_classes'=>false));
 
 			if (is_array($unserialize))
 			{
