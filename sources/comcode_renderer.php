@@ -403,7 +403,7 @@ function test_url($url_full,$tag_type,$given_url,$source_member)
 				foreach ($_POST as $val)
 				{
 					if (is_array($_POST)) continue;
-					if (get_magic_quotes_gpc()) $val=stripslashes($val);
+					if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 					if ((is_string($val)) && (strpos($val,$given_url)!==false)) $found_in_post=true;
 				}
 				if (!$found_in_post)
@@ -1168,7 +1168,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					is_swf_upload(true);
 					$_size=$_FILES['file'.$_id]['size'];
 					$original_filename=$_FILES['file'.$_id]['name'];
-					if (get_magic_quotes_gpc()) $original_filename=stripslashes($original_filename);
+					if (@get_magic_quotes_gpc()) $original_filename=stripslashes($original_filename);
 
 					// Special code to re-orientate JPEG images if required (browsers cannot do this)
 					if (($attributes['type']=='inline') || ($attributes['type']=='island'))
@@ -1187,7 +1187,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$url=remove_url_mistakes(substr($id,4));
 
 					$_POST['_specify_url']=$url; // Little hack, as we need to read it from a POST
-					if (get_magic_quotes_gpc()) $_POST['_specify_url']=addslashes($_POST['_specify_url']);
+					if (@get_magic_quotes_gpc()) $_POST['_specify_url']=addslashes($_POST['_specify_url']);
 					$urls=get_url('_specify_url','','uploads/filedump',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true);
 					if ($urls[0]=='') return new ocp_tempcode();
 					$original_filename=rawurldecode(substr($url,strrpos($url,'/')+1));

@@ -433,6 +433,8 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		foreach ($this->MEMBER_ROWS_CACHED as $i=>$row)
 		{
+            if ($row === null) continue;
+
 			if ($row['m_username']==$name) return $row;
 		}
 		$rows=$this->connection->query_select('f_members',array('*'),array('m_username'=>$name),'',1);
@@ -1130,6 +1132,8 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		foreach ($this->MEMBER_ROWS_CACHED as $id=>$row)
 		{
+            if ($row === null) continue;
+
 			if ($row['m_username']==$name) return $id;
 		}
 		$row=$this->connection->query_select('f_members',array('*'),array('m_username'=>$name),'',1);
@@ -1149,6 +1153,8 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		foreach ($this->MEMBER_ROWS_CACHED as $id=>$row)
 		{
+            if ($row === null) continue;
+
 			if ($row['m_email_address']==$email_address) return $id;
 		}
 		$row=$this->connection->query_select('f_members',array('*'),array('m_email_address'=>$email_address),'',1);

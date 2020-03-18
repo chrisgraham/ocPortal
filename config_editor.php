@@ -27,7 +27,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 }
 @chdir($FILE_BASE);
 
-if (get_magic_quotes_gpc())
+if (@get_magic_quotes_gpc())
 {
 	foreach ($_POST as $key=>$val)
 	{

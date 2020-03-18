@@ -460,7 +460,7 @@ class Module_filedump
 		}
 
 		$file=$_FILES['file']['name'];
-		if (get_magic_quotes_gpc()) $file=stripslashes($file);
+		if (@get_magic_quotes_gpc()) $file=stripslashes($file);
 
 		if ((!has_specific_permission(get_member(),'upload_anything_filedump')) || (get_file_base()!=get_custom_file_base()/*myocp*/))
 			check_extension($file);

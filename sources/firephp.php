@@ -388,7 +388,7 @@ class FirePHP {
 	/**
 	 * The object constructor
 	 */
-	function FirePHP() {
+	function __construct() {
 	}
 
 

@@ -101,7 +101,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 	if (is_null($text))
 	{
 		$text=$_REQUEST['content'];
-		if (get_magic_quotes_gpc()) $text=stripslashes($text);
+		if (@get_magic_quotes_gpc()) $text=stripslashes($text);
 	}
 
 	switch ($type)

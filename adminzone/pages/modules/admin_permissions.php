@@ -572,7 +572,7 @@ class Module_admin_permissions
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		foreach ($_POST as $key=>$val)
 		{
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 			// See if we can tidy it back to a page-link (assuming it's not one already)
 			$page_link=url_to_pagelink($val,true);

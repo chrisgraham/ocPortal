@@ -366,7 +366,7 @@ class standard_aed_module
 					$this->do_next_editing_categories?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_label)?$this->add_one_label:NULL),									 // Add one
 					$this->do_next_editing_categories?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_specific_permission(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:NULL)),					  // Edit this
 					$this->do_next_editing_categories?NULL:(((!is_null($this->permissions_require)) && (!has_specific_permission(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:NULL)),									 // Edit one
-					$this->do_next_editing_categories?NULL:(is_null($id))?NULL:$view_url,																				 // View this
+					$this->do_next_editing_categories?NULL:((is_null($id))?NULL:$view_url),																				 // View this
 					$archive_url,																			 // View archive
 					NULL,																						 // Add to category
 					(!$this->do_next_editing_categories)?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_cat_label)?$this->add_one_cat_label:NULL),									 // Add one category

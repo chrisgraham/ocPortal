@@ -53,7 +53,7 @@ function site_tree_script()
 		$map=array();
 		foreach (array_merge($_GET,$_POST) as $i=>$page_link)
 		{
-			if (get_magic_quotes_gpc()) $page_link=stripslashes($page_link);
+			if (@get_magic_quotes_gpc()) $page_link=stripslashes($page_link);
 
 			if (substr($i,0,4)=='map_')
 			{

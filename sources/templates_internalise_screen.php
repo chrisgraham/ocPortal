@@ -41,7 +41,7 @@ function internalise_own_screen($title,$refresh_time=NULL,$refresh_if_changed=NU
 	{
 		if (!is_string($param)) continue;
 		if ((substr($key,0,5)=='keep_') && (skippable_keep($key,$param))) continue;
-		if (get_magic_quotes_gpc()) $param=stripslashes($param);
+		if (@get_magic_quotes_gpc()) $param=stripslashes($param);
 		$url.='&'.$key.'='.urlencode($param);
 	}
 
@@ -53,7 +53,7 @@ function internalise_own_screen($title,$refresh_time=NULL,$refresh_if_changed=NU
 		{
 			if (!is_string($param)) continue;
 			if ((substr($key,0,5)=='keep_') && (skippable_keep($key,$param))) continue;
-			if (get_magic_quotes_gpc()) $param=stripslashes($param);
+			if (@get_magic_quotes_gpc()) $param=stripslashes($param);
 			$change_detection_url.='&'.$key.'='.urlencode($param);
 		}
 	} else

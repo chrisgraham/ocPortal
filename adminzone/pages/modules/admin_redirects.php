@@ -171,7 +171,7 @@ class Module_admin_redirects
 		{
 			if (!is_string($val)) continue;
 
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 			if ((substr($key,0,10)=='from_page_') && ($val!=''))
 			{

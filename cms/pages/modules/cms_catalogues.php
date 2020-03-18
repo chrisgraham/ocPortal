@@ -1934,7 +1934,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		{
 			if ((!is_string($val)) && (!is_integer($val))) continue;
 
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 			$matches=array();
 			if (preg_match('#new_field_(\d*)_(.*)#A',$key,$matches)!=0)
@@ -2082,7 +2082,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 			{
 				if (!is_string($val)) continue;
 
-				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+				if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 				$matches=array();
 				if (preg_match('#new\_field\_(\d+)\_(.*)#A',$key,$matches)!=0)

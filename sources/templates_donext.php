@@ -297,6 +297,8 @@ function _do_next_section($list,$title)
 	$num_siblings=0;
 	foreach ($list as $i=>$_option)
 	{
+        if ($_option === null) continue;
+
 		$url=$_option[1];
 		if (!is_null($url))
 		{

@@ -155,7 +155,7 @@ class Module_recommend
 		{
 			if (substr($key,0,14)!='email_address_') continue;
 
-			if (get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
+			if (@get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
 
 			$already[]=$email_address;
 		}
@@ -310,7 +310,7 @@ class Module_recommend
 		foreach ($_POST as $key=>$input_value)
 		{
 			//stripslashes if necessary
-			if (get_magic_quotes_gpc()) $input_value=stripslashes($input_value);
+			if (@get_magic_quotes_gpc()) $input_value=stripslashes($input_value);
 
 			if (substr($key,0,14)=='email_address_')
 			{
@@ -597,7 +597,7 @@ class Module_recommend
 			if (substr($key,0,14)!='email_address_') continue;
 			if ($email_address=='') continue;
 
-			if (get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
+			if (@get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
 
 			if (!is_valid_email_address($email_address))
 			{
@@ -620,7 +620,7 @@ class Module_recommend
 			if (preg_match('#details_email_|details_name_|^use_details_#',$key)==0) continue;
 			if (preg_match('#details_email_#',$key)!=0)
 			{
-				if (get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
+				if (@get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
 
 				if (is_valid_email_address($email_address))
 				{
@@ -659,7 +659,7 @@ class Module_recommend
 
 		foreach ($email_adrs_to_send as $key=>$email_address)
 		{
-			if (get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
+			if (@get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
 
 			if (post_param_integer('wrap_message',0)==1)
 			{

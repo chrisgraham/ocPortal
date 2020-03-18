@@ -776,7 +776,7 @@ function do_site()
 	if ($PAGE_STRING!==NULL) log_stats($PAGE_STRING,intval($page_generation_time));
 
 	// When someone hits the Admin Zone front page.
-	if (($ZONE['zone_name']=='adminzone') && (get_page_name()=='start'))
+	if (($ZONE !== null) && ($ZONE['zone_name']=='adminzone') && (get_page_name()=='start'))
 	{
 		// Security feature admins can turn on
 		require_code('notifications');
@@ -959,7 +959,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 				}
 
 				foreach ($bits[1] as $key=>$val)
-					if ($key!='page') $_GET[$key]=get_magic_quotes_gpc()?addslashes($val):$val;
+					if ($key!='page') $_GET[$key]=@get_magic_quotes_gpc()?addslashes($val):$val;
 				if (($redirect['r_to_page']!=$codename) || ($redirect['r_to_zone']!=$zone))
 				{
 					$ret=request_page($redirect['r_to_page'],$required,$redirect['r_to_zone'],NULL,true);

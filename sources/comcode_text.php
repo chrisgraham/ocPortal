@@ -394,7 +394,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								{
 									$tag_raw='';
 								}
-								continue;
+								continue 2;
 							}
 						}
 					} else
@@ -405,7 +405,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							if ($ahc!==false)
 							{
 								$pos+=$ahc+1;
-								continue;
+								continue 2;
 							}
 						}
 					}
@@ -443,7 +443,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						{
 							// $next='&lt;';  //OLD STYLE
 							if ($close!==false) $pos=$close+1; // NEW STYLE
-							continue;
+							continue 2;
 						}
 					}
 
@@ -555,7 +555,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 									$pos=$scan_pos+1;
 									$just_ended=true;
 									$none_wrap_length=0;
-									continue;
+									continue 2;
 								}
 							}
 						}

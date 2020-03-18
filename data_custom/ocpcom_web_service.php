@@ -38,7 +38,7 @@ require_code('ocpcom');
 header('Content-type: text/plain; charset='.get_charset());
 
 $parameters=isset($_POST['parameters'])?$_POST['parameters']:array();
-if (get_magic_quotes_gpc()) $parameters=array_map('stripslashes',$parameters);
+if (@get_magic_quotes_gpc()) $parameters=array_map('stripslashes',$parameters);
 
 $password_given=post_param('password',NULL);
 if ($password_given===NULL)

@@ -621,7 +621,7 @@ function _check_enforcement_of_type($file,$enforce_type,$accept_errors=false)
 function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=0,$accept_errors=false)
 {
 	$file=$_FILES[$attach_name]['name'];
-	if (get_magic_quotes_gpc()) $file=stripslashes($file);
+	if (@get_magic_quotes_gpc()) $file=stripslashes($file);
 
 	if (!check_extension($file,$obfuscate==2,NULL,$accept_errors))
 	{

@@ -860,8 +860,8 @@ class Module_admin_workflow extends standard_aed_module
 		{
 			if (!in_array($p,$all_points) &&												// This point has not been defined previously...
 				(
-					!@in_array(get_magic_quotes_gpc()?addslashes($p):$p,$_POST) ||													// ... and we are not defining it now...
-					($_POST['points']==get_magic_quotes_gpc()?addslashes($p):$p && count(array_keys($_POST,get_magic_quotes_gpc()?addslashes($p):$p))==1)	// ... or our definition is restricted to just the approval point list
+					!@in_array(@get_magic_quotes_gpc()?addslashes($p):$p,$_POST) ||													// ... and we are not defining it now...
+					($_POST['points']==@get_magic_quotes_gpc()?addslashes($p):$p && count(array_keys($_POST,@get_magic_quotes_gpc()?addslashes($p):$p))==1)	// ... or our definition is restricted to just the approval point list
 				)
 			)
 			{

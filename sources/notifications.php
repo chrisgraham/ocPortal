@@ -168,7 +168,7 @@ class Notification_dispatcher
 	 * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
 	 * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
 	 */
-	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category)
+	function __construct($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category)
 	{
 		$this->notification_code=$notification_code;
 		$this->code_category=$code_category;

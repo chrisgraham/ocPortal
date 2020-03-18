@@ -1354,7 +1354,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						if (is_array($val)) continue;
 
-						if (get_magic_quotes_gpc()) $val=stripslashes($val);
+						if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 						if ((substr($key,0,5)=='keep_') && (!skippable_keep($key,$val)) && (strpos($key,'_expand_')===false))
 						{
@@ -3031,7 +3031,7 @@ function keep_symbol($param)
 		{
 			if (!is_string($key)) $key=strval($key);
 
-			if ((get_magic_quotes_gpc()) && (is_string($val))) $val=stripslashes($val);
+			if ((@get_magic_quotes_gpc()) && (is_string($val))) $val=stripslashes($val);
 
 			if ((substr($key,0,5)=='keep_') && ((!skippable_keep($key,$val)) || (($key=='keep_session') && (is_null(get_bot_type())) && (isset($param[1])) && ($param[1]=='1'))) && (is_string($val)))
 			{

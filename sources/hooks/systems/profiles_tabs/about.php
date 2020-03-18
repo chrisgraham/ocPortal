@@ -163,6 +163,8 @@ class Hook_Profiles_Tabs_about
 			$links=new ocp_tempcode();
 			foreach ($modules as $module)
 			{
+                if ($module === null) continue;
+
 				if (count($module)==3)
 				{
 					list($_section_code,$lang,$url)=$module;

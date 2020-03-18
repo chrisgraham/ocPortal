@@ -57,7 +57,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 		foreach ($_POST as $key=>$val)
 		{
 			if (is_array($val)) continue;
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 			$post_array[$key]=$val;
 		}
 	}

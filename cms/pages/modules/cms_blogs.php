@@ -339,7 +339,7 @@ class Module_cms_blogs extends standard_aed_module
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array('text_original'=>$schedule_code),'',1);
 			$scheduled=array_key_exists(0,$past_event)?array($past_event[0]['e_start_minute'],$past_event[0]['e_start_hour'],$past_event[0]['e_start_month'],$past_event[0]['e_start_day'],$past_event[0]['e_start_year']):NULL;
-			if ((!is_null($scheduled)) && ($scheduled<time())) $scheduled=NULL;
+			if ((!is_null($scheduled)) && (mktime($scheduled[1],$scheduled[0],0,$scheduled[2],$scheduled[3],$scheduled[4])<time())) $scheduled=NULL;
 		} else
 		{
 			$scheduled=NULL;
@@ -563,7 +563,7 @@ class Module_cms_blogs extends standard_aed_module
 					NULL,	  // Add to category
 					has_specific_permission(get_member(),'submit_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
 					has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-					is_null($cat)?NULL:has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
+					is_null($cat)?NULL:(has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL),			 // Edit this category
 					NULL																						 // View this category
 		);
 	}

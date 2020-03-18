@@ -95,13 +95,11 @@ function generate_text_summary($_temp_summary,$words_searched)
 					{
 						if ($occ[0]>$last_pos)
 						{
-							$all_occurrences[$i][0]+=strlen($extra_pre)+strlen($extra_post);
-							$all_occurrences[$i][1]+=strlen($extra_pre)+strlen($extra_post);
+							$all_occurrences[$i] = array($all_occurrences[$i][0] + strlen($extra_pre) + strlen($extra_post), $all_occurrences[$i][0] + strlen($extra_pre) + strlen($extra_post));
 						}
 						elseif ($occ[0]>$content_bit_pos)
 						{
-							$all_occurrences[$i][0]+=strlen($extra_pre);
-							$all_occurrences[$i][1]+=strlen($extra_pre);
+							$all_occurrences[$i] = array($all_occurrences[$i][0] + strlen($extra_pre), $all_occurrences[$i][0] + strlen($extra_pre));
 						}
 					}
 
@@ -771,6 +769,8 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 	// Clean results and return
 	// NB: We don't use the count_query's any more (except when using huge data sets, see above), because you can't actually just add them because they overlap. So instead we fetch all results and throw some away.
+
+    if ($t_main_search_rows === null) $t_main_search_rows = array();
 
 	$t_rows=array_merge($t_rows,$t_main_search_rows);
 	if (count($t_rows)>0)

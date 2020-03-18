@@ -61,7 +61,7 @@ if ($type=='')
 END;
 } else
 {
-	if (get_magic_quotes_gpc())
+	if (@get_magic_quotes_gpc())
 	{
 		foreach ($_POST as $key=>$val)
 		{

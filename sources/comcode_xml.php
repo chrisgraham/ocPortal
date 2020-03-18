@@ -90,7 +90,7 @@ class comcode_xml_to_tempcode
 	 * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
 	 * @return tempcode		The tempcode tree.
 	 */
-	function comcode_xml_to_tempcode($comcode,$source_member,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$on_behalf_of_member=NULL)
+	function __construct($comcode,$source_member,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$on_behalf_of_member=NULL)
 	{
 		if (is_null($pass_id)) $pass_id=strval(mt_rand(0,32000)); // This is a unique ID that refers to this specific piece of comcode
 

@@ -109,7 +109,7 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
 		foreach ($_POST as $key=>$val)
 		{
 			if (is_array($val)) continue;
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 			$post_array[$key]=$val;
 		}
 		$extra_params=array_merge($post_array,$extra_params);
@@ -429,7 +429,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	$keep_actual=array();
 	if (($HAS_KEEP_IN_URL===NULL) || ($HAS_KEEP_IN_URL) || ($keep_all))
 	{
-		$mc=get_magic_quotes_gpc();
+		$mc=@get_magic_quotes_gpc();
 
 		$keep_cant_use=array();
 		$HAS_KEEP_IN_URL=false;

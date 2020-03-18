@@ -84,12 +84,6 @@ function restrictify()
 	error_reporting(E_ALL & ~(defined('E_DEPRECATED')?E_DEPRECATED:0));
 	if (function_exists('set_time_limit')) @set_time_limit(25);
 	if (get_forum_type()=='ocf') $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES',NULL,NULL,true);
-	if ($GLOBALS['DEV_MODE'])
-	{
-		//safe_ini_set('ocproducts.type_strictness','1');
-		global $PREVIOUS_XSS_STATE;
-		@safe_ini_set('ocproducts.xss_detect',array_pop($PREVIOUS_XSS_STATE));
-	}
 	safe_ini_set('include_path','');
 	safe_ini_set('allow_url_fopen','0');
 	safe_ini_set('suhosin.executor.disable_emodifier','1');

@@ -425,7 +425,7 @@ class Module_admin_themes
 		{
 			foreach ($_POST['mapping'] as $val)
 			{
-				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+				if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 				$new_map[$val]=$theme;
 			}
 		}

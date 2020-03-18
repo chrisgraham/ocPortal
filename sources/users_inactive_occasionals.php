@@ -308,7 +308,7 @@ function try_cookie_login()
 			$real_pass_cookie=substr(get_pass_cookie(),$colon_pos+1);
 
 			$the_cookie=$_COOKIE[$base];
-			if (get_magic_quotes_gpc())
+			if (@get_magic_quotes_gpc())
 			{
 				$the_cookie=stripslashes($_COOKIE[$base]);
 			}
@@ -322,13 +322,13 @@ function try_cookie_login()
 				if (array_key_exists($real_member_cookie,$unserialize))
 				{
 					$the_member=$unserialize[$real_member_cookie];
-					if (get_magic_quotes_gpc()) $the_member=addslashes(@strval($the_member));
+					if (@get_magic_quotes_gpc()) $the_member=addslashes(@strval($the_member));
 					$_COOKIE[get_member_cookie()]=$the_member;
 				}
 				if (array_key_exists($real_pass_cookie,$unserialize))
 				{
 					$the_pass=$unserialize[$real_pass_cookie];
-					if (get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
+					if (@get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
 					$_COOKIE[get_pass_cookie()]=$the_pass;
 				}
 			}
@@ -343,7 +343,7 @@ function try_cookie_login()
 			$real_pass_cookie=substr(get_pass_cookie(),$bar_pos+1);
 
 			$the_cookie=$_COOKIE[$base];
-			if (get_magic_quotes_gpc())
+			if (@get_magic_quotes_gpc())
 			{
 				$the_cookie=stripslashes($_COOKIE[$base]);
 			}
@@ -351,11 +351,11 @@ function try_cookie_login()
 			$cookie_contents=explode('||',$the_cookie);
 
 			$the_member=$cookie_contents[intval($real_member_cookie)];
-			if (get_magic_quotes_gpc()) $the_member=addslashes($the_member);
+			if (@get_magic_quotes_gpc()) $the_member=addslashes($the_member);
 			$_COOKIE[get_member_cookie()]=$the_member;
 
 			$the_pass=$cookie_contents[intval($real_pass_cookie)];
-			if (get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
+			if (@get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
 			$_COOKIE[get_pass_cookie()]=$the_pass;
 		}
 	}
@@ -364,7 +364,7 @@ function try_cookie_login()
 	{
 		$store=$_COOKIE[get_member_cookie()];
 		$pass=$_COOKIE[get_pass_cookie()];
-		if (get_magic_quotes_gpc())
+		if (@get_magic_quotes_gpc())
 		{
 			$store=stripslashes($store);
 			$pass=stripslashes($pass);

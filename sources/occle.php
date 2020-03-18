@@ -144,7 +144,7 @@ class virtual_bash
 	 * @param  ?array	An array of prior output to be prepended (NULL: none)
 	 * @param  ?array	An array of prior parameters (NULL: none)
 	 */
-	function virtual_bash($inputted_command,$prior_output=NULL,$parameters=NULL)
+	function __construct($inputted_command,$prior_output=NULL,$parameters=NULL)
 	{
 		if (!defined('MODE_NORMAL'))
 		{
@@ -1354,7 +1354,7 @@ class virtual_fs
 	/**
 	 * Constructor function. Setup a virtual filesystem, but do nothing with it.
 	 */
-	function virtual_fs()
+	function __construct()
 	{
 		//Initialise a new virtual filesystem; setup the vfs array, and fetch the pwd from a cookie
 

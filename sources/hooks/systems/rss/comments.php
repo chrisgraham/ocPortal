@@ -113,7 +113,7 @@ class Hook_rss_comments
 
 					$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>new ocp_tempcode(),'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 				}
-			}
+			} else break;
 
 			$start+=1000;
 		}

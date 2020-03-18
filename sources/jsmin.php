@@ -88,7 +88,7 @@ class JSMin
 	 *
 	 * @param 	string		Javascript to minimise
 	 */
-	function JSMin($input)
+	function __construct($input)
 	{
 		$this->input = str_replace("\r\n", "\n", $input);
 		$this->inputLength = strlen($this->input);

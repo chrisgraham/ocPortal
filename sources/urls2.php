@@ -51,7 +51,7 @@ function _build_keep_form_fields($page='',$keep_all=false,$exclude=NULL)
 			{
 				foreach ($val as $_key=>$_val) // We'll only support one level deep. Also no keep parameter array support.
 				{
-					if (get_magic_quotes_gpc()) $_val=stripslashes($_val);
+					if (@get_magic_quotes_gpc()) $_val=stripslashes($_val);
 
 					if ($process_for_key)
 						$out->attach(form_input_hidden($key.'['.$_key.']',$_val));
@@ -60,7 +60,7 @@ function _build_keep_form_fields($page='',$keep_all=false,$exclude=NULL)
 			{
 				if (!is_string($val)) continue;
 
-				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+				if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 				if ($process_for_key)
 					$out->attach(form_input_hidden($key,$val));
@@ -99,7 +99,7 @@ function _fixed_post_parser($key,$value)
 		}
 	} else
 	{
-		if (get_magic_quotes_gpc()) $value=stripslashes($value);
+		if (@get_magic_quotes_gpc()) $value=stripslashes($value);
 
 		$out.=static_evaluate_tempcode(form_input_hidden($key,is_string($value)?$value:strval($value)));
 	}

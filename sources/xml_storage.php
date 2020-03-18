@@ -674,7 +674,7 @@ class ocp_simple_xml_reader
 	 *
 	 * @param  string			The XML data
 	 */
-	function ocp_simple_xml_reader($xml_data)
+	function __construct($xml_data)
 	{
 		$this->gleamed=array();
 		$this->error=NULL;

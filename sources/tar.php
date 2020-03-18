@@ -114,7 +114,7 @@ function tar_get_directory(&$resource,$tolerate_errors=false)
 			if (strtoupper(substr(PHP_OS,0,3))==='WIN')
 				$path=utf8_decode($path);
 
-			$mode=octdec(substr($header,100,8));
+			$mode=octdec(trim(substr($header,100,8)));
 			$size=octdec(trim(substr($header,124,12)));
 			$mtime=octdec(trim(substr($header,136,12)));
 			$chksum=octdec(trim(substr($header,148,8)));

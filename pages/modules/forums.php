@@ -68,7 +68,7 @@ class Module_forums
 			{
 				foreach ($val as $_key=>$_val) // We'll only support one level deep.
 				{
-					if (get_magic_quotes_gpc()) $_val=stripslashes($_val);
+					if (@get_magic_quotes_gpc()) $_val=stripslashes($_val);
 
 					if (strpos($access_url,'?')===false)
 					{
@@ -81,7 +81,7 @@ class Module_forums
 				}
 			} else
 			{
-				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+				if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 				if (strpos($access_url,'?')===false)
 				{

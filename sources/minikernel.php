@@ -79,8 +79,6 @@ function init__minikernel()
 	safe_ini_set('track_errors','1');
 	$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 
-	//safe_ini_set('ocproducts.type_strictness','1');
-
 	safe_ini_set('date.timezone','UTC');
 
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
@@ -638,7 +636,7 @@ function __param($array,$name,$default,$must_integer=false,$is_post=false)
 	unset($must_integer);
 	if (!array_key_exists($name,$array)) return $default;
 	$val=trim($array[$name]);
-	if (get_magic_quotes_gpc()) $val=stripslashes($val);
+	if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 	return $val;
 }

@@ -705,7 +705,7 @@ class ocp_tempcode
 	 *
 	 * @param  ?array			Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
 	 */
-	function ocp_tempcode($details=NULL)
+	function __construct($details=NULL)
 	{
 		if (!isset($details))
 		{

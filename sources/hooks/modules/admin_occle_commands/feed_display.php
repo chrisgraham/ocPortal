@@ -73,7 +73,7 @@ class Hook_feed_display
 				else $full_url='';
 
 				$_title=$item['title'];
-				$date=array_key_exists('clean_add_date',$item)?get_timezoned_date($item['clean_add_date']):array_key_exists('add_date',$item)?$item['add_date']:'';
+				$date=array_key_exists('clean_add_date',$item)?get_timezoned_date($item['clean_add_date']):(array_key_exists('add_date',$item)?$item['add_date']:'');
 
 				$content->attach(do_template('OCCLE_RSS_ITEM',array('_GUID'=>'d6b811d17956ebd82c9911fbda19eeec','FULL_URL'=>$full_url,'NEWS_TITLE'=>$_title,'DATE'=>$date,'SUMMARY'=>xhtmlise_html($item['news']))));
 			}

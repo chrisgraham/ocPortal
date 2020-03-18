@@ -164,10 +164,10 @@ class Module_cms_galleries extends standard_aed_module
 						has_specific_permission(get_member(),'submit_cat_midrange_content','cms_galleries')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_GALLERY')):NULL,
 						has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_GALLERY')):NULL,
 						has_specific_permission(get_member(),'mass_import','cms_galleries')?array('import',array('_SELF',array('type'=>'gimp'),'_SELF'),do_lang('GALLERY_IMPORT'),('DOC_GALLERY_IMPORT')):NULL,
-						(!$allow_images)?NULL:has_specific_permission(get_member(),'submit_midrange_content','cms_galleries')?array('add_one_image',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IMAGE')):NULL,
-						(!$allow_images)?NULL:has_specific_permission(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_image',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_IMAGE')):NULL,
-						(!$allow_videos)?NULL:has_specific_permission(get_member(),'submit_midrange_content','cms_galleries')?array('add_one_video',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_VIDEO')):NULL,
-						(!$allow_videos)?NULL:has_specific_permission(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_video',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_VIDEO')):NULL,
+						(!$allow_images)?NULL:(has_specific_permission(get_member(),'submit_midrange_content','cms_galleries')?array('add_one_image',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IMAGE')):NULL),
+						(!$allow_images)?NULL:(has_specific_permission(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_image',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_IMAGE')):NULL),
+						(!$allow_videos)?NULL:(has_specific_permission(get_member(),'submit_midrange_content','cms_galleries')?array('add_one_video',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_VIDEO')):NULL),
+						(!$allow_videos)?NULL:(has_specific_permission(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_video',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_VIDEO')):NULL),
 					),manage_custom_fields_donext_link('image'),manage_custom_fields_donext_link('video'),manage_custom_fields_donext_link('gallery')),
 					do_lang('MANAGE_GALLERIES')
 		);

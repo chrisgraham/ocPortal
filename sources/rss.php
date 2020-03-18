@@ -50,7 +50,7 @@ class rss
 	 * @param  URLPATH		The URL to the RSS we will be reading
 	 * @param  boolean		Whether the 'url' is actually a filesystem path
 	 */
-	function rss($url,$is_filesystem_path=false)
+	function __construct($url,$is_filesystem_path=false)
 	{
 		require_lang('rss');
 

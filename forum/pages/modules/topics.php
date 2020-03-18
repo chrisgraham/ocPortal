@@ -1951,7 +1951,7 @@ class Module_topics
 				if ($key=='to_member_id_0') continue;
 				if ($_invited_member=='') continue;
 
-				if (get_magic_quotes_gpc()) $_invited_member=stripslashes($_invited_member);
+				if (@get_magic_quotes_gpc()) $_invited_member=stripslashes($_invited_member);
 
 				$invited_member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_invited_member);
 				if (is_null($invited_member))
@@ -2656,7 +2656,7 @@ END;
 
 			if (substr($key,0,7)=='answer_')
 			{
-				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+				if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 				if ($val!='') $answers[]=array($val,0);
 			}
 		}
@@ -3243,7 +3243,7 @@ END;
 
 				if (substr($key,0,7)=='answer_')
 				{
-					if (get_magic_quotes_gpc()) $val=stripslashes($val);
+					if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 					if ($val!='') $answers[]=$val;
 				}
 			}
@@ -3640,7 +3640,7 @@ END;
 			return do_template('REDIRECT_SCREEN',array('_GUID'=>'f457a6d28fd6e494662e5b82e80e9fa2','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING_TO_BIRTHDAY_TOPIC')));
 		}
 		$_POST['title']=do_lang('HAPPY_BIRTHDAY_PERSON',$id);
-		if (get_magic_quotes_gpc()) $_POST['title']=addslashes($_POST['title']);
+		if (@get_magic_quotes_gpc()) $_POST['title']=addslashes($_POST['title']);
 		$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array('f_name'=>get_option('main_forum_name')));
 		if (is_null($forum_id)) $forum_id=db_get_first_id();
 		$_GET['id']=strval($forum_id);

@@ -232,7 +232,7 @@ function read_in_chat_perm_fields()
 		if (substr($key,0,strlen('allow_list'))!='allow_list') continue;
 		if ($key=='allow_list_0') continue;
 		if ($key=='allow_list_groups') continue;
-		if (get_magic_quotes_gpc()) $_x=stripslashes($_x);
+		if (@get_magic_quotes_gpc()) $_x=stripslashes($_x);
 		if ($_x=='') continue;
 		$x=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_x);
 		if (!is_null($x))
@@ -251,7 +251,7 @@ function read_in_chat_perm_fields()
 		if (substr($key,0,strlen('disallow_list'))!='disallow_list') continue;
 		if ($key=='disallow_list_0') continue;
 		if ($key=='disallow_list_groups') continue;
-		if (get_magic_quotes_gpc()) $_x=stripslashes($_x);
+		if (@get_magic_quotes_gpc()) $_x=stripslashes($_x);
 		if ($_x=='') continue;
 		$x=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_x);
 		if (!is_null($x))

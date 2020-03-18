@@ -1927,7 +1927,7 @@ function flatten_slashed_array($array,$already_stripped=false)
 	{
 		if (is_array($val)) $val=flatten_slashed_array($val);
 
-		if (!$already_stripped && get_magic_quotes_gpc()) $val=stripslashes($val);
+		if (!$already_stripped && @get_magic_quotes_gpc()) $val=stripslashes($val);
 
 		$ret.='<param>'.(is_integer($key)?strval($key):$key).'='.$val.'</param>'."\n"; // $key may be integer, due to recursion line for list fields, above
 	}
@@ -2135,7 +2135,7 @@ function get_zone_default_page($zone_name)
 		return $p_test['zone_default_page'];
 
 	global $ZONE;
-	if (($ZONE['zone_name']==$zone_name) && ($ZONE['zone_default_page']!==NULL))
+	if (($ZONE !== null) && ($ZONE['zone_name']==$zone_name) && ($ZONE['zone_default_page']!==NULL))
 	{
 		return $ZONE['zone_default_page'];
 	} else

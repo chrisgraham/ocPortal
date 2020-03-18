@@ -230,8 +230,6 @@ function init__global2()
 	if ($GLOBALS['DEV_MODE'])
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(10);
-		//safe_ini_set('ocproducts.type_strictness','1');
-		//safe_ini_set('ocproducts.xss_detect','1');
 	}
 	if ($GLOBALS['DEV_MODE'])
 	{
@@ -1562,7 +1560,7 @@ function __param($array,$name,$default,$integer=false,$posted=false)
 
 	$val=$array[$name];
 	if (is_array($val)) $val=implode(',',$val);
-	if (get_magic_quotes_gpc()) $val=stripslashes($val);
+	if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 	return $val;
 }
@@ -2153,11 +2151,6 @@ function convert_data_encodings($known_utf8=false)
 		$encoding=$known_utf8?'UTF-8':$charset;
 		if (!function_exists('iconv_set_encoding') || @iconv_set_encoding('input_encoding',$encoding))
 		{
-			if (function_exists('iconv_set_encoding'))
-			{
-				@iconv_set_encoding('output_encoding',$charset);
-				@iconv_set_encoding('internal_encoding',$charset);
-			}
 			ini_set('default_charset',$charset);
 			foreach ($_GET as $key=>$val)
 			{

@@ -306,7 +306,7 @@ class Module_search
 			{
 				if ($key!='save_title')
 				{
-					if (get_magic_quotes_gpc()) $val=stripslashes($val);
+					if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 					$hidden->attach(form_input_hidden($key,$val));
 				}
 			}

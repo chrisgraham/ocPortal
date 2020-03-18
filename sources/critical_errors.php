@@ -182,13 +182,11 @@ echo <<<END
 END;
 		}
 		echo '<h1 class="screen_title">Critical error &ndash; bailing out</h1>'.chr(10).'<div class="red_alert" role="error">'.$error.'</div>'.chr(10);
-		flush();
 		if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')!==false) && (strpos($error,'Allowed memory')===false))
 		{
 			require_code('upgrade');
 			echo '<div class="box guid_{_GUID}"><div class="box_inner"><h2>Integrity check</h2><p><strong>If you think this problem could be due to corruption caused by a failed upgrade (e.g. time-out during extraction), check the following integrity check&hellip;</strong></p>',run_integrity_check(true),'</div></div><br />';
 		}
-		flush();
 		echo $extra,chr(10);
 		echo '<p>Details here are intended only for the website/system-administrator, not for regular website users.<br />&raquo; <strong>If you are a regular website user, please let the website staff deal with this problem.</strong></p>'.chr(10).'<p class="associated_details">Depending on the error, and only if the website installation finished, you may need to <a href="#" onclick="if (!window.confirm(\'Are you staff on this site?\')) return false; this.href=\''.htmlentities($edit_url).'\';">edit the installation options</a> (the <kbd>info.php</kbd> file).</p>'.chr(10).'<p class="associated_details">ocProducts maintains full documentation for all procedures and tools. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p>'.chr(10).'<hr />'.chr(10).'<p style="font-size: 0.8em"><a href="http://ocportal.com/">ocPortal</a> is a <abbr title="Content Management System">CMS</abbr> for building websites, developed by ocProducts.</p>'.chr(10);
 		echo '</div></body>'.chr(10).'</html>';

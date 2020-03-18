@@ -831,7 +831,7 @@ class Module_admin_addons
 		{
 			if (!is_string($val)) continue;
 
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
+			if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 
 			if (substr($key,0,5)=='file_')
 			{

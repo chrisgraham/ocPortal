@@ -430,7 +430,7 @@ class database_driver
 	 * @param boolean			Whether to on error echo an error and return with a NULL, rather than giving a critical error
 	 * @param ?object			Static call object (NULL: use global static call object)
 	 */
-	function database_driver($db_name,$db_host,$db_user,$db_password,$table_prefix,$fail_ok=false,$static=NULL)
+	function __construct($db_name,$db_host,$db_user,$db_password,$table_prefix,$fail_ok=false,$static=NULL)
 	{
 		$this->text_lookup_original_cache=array();
 		$this->text_lookup_cache=array();

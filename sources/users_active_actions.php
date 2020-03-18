@@ -304,7 +304,7 @@ function ocp_setcookie($name,$value,$session=false,$http_only=false)
 		}
 	}
 	if ($name!='has_cookies')
-		$_COOKIE[$name]=get_magic_quotes_gpc()?addslashes($value):$value;
+		$_COOKIE[$name]=@get_magic_quotes_gpc()?addslashes($value):$value;
 
 	$cache[$sz]=$output;
 

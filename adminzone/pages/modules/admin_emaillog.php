@@ -221,7 +221,7 @@ class Module_admin_emaillog
 				foreach ($_POST as $key=>$input_value)
 				{
 					//stripslashes if necessary
-					if (get_magic_quotes_gpc()) $input_value=stripslashes($input_value);
+					if (@get_magic_quotes_gpc()) $input_value=stripslashes($input_value);
 
 					if (substr($key,0,8)=='to_name_')
 					{

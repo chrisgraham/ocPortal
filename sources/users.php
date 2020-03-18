@@ -468,7 +468,7 @@ function ocp_admirecookie($name,$default=NULL)
 {
 	if (!isset($_COOKIE[$name])) return $default;
 	$the_cookie=$_COOKIE[$name];
-	if (get_magic_quotes_gpc()) $the_cookie=stripslashes($the_cookie);
+	if (@get_magic_quotes_gpc()) $the_cookie=stripslashes($the_cookie);
 	return $the_cookie;
 }
 

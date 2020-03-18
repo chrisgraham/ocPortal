@@ -49,12 +49,12 @@ function reprocess_url($url,$operation_base_url)
 				$cookies_relayed[$key]=array();
 				foreach ($val as $_val)
 				{
-					if (get_magic_quotes_gpc()) $_val=stripslashes($_val);
+					if (@get_magic_quotes_gpc()) $_val=stripslashes($_val);
 					$cookies_relayed[$key][]=$_val;
 				}
 			} else
 			{
-				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+				if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 				$cookies_relayed[$key]=$val;
 			}
 		}
@@ -80,12 +80,12 @@ function reprocess_url($url,$operation_base_url)
 				$post_relayed[$key]=array();
 				foreach ($val as $_val)
 				{
-					if (get_magic_quotes_gpc()) $_val=stripslashes($_val);
+					if (@get_magic_quotes_gpc()) $_val=stripslashes($_val);
 					$post_relayed[$key]=$val;
 				}
 			} else
 			{
-				if (get_magic_quotes_gpc()) $val=stripslashes($val);
+				if (@get_magic_quotes_gpc()) $val=stripslashes($val);
 				$post_relayed[$key]=$val;
 			}
 		}
