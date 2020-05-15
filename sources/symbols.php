@@ -647,7 +647,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$comcodeless=strip_comcode($SEO_TITLE); // This is not HTML
 
 					// Strip 'Welcome to' off if it's there
-					$value=preg_replace('#'.str_replace('#','\#',preg_quote(do_lang('WELCOME_TO_STRIPPABLE').' '.get_site_name())).'([^-]+\s*-\s*)?#','',$comcodeless);
+					$value=preg_replace('#'.str_replace('#','\#',preg_quote(do_lang('WELCOME_TO_STRIPPABLE').' '.get_site_name())).'([^\-]+\s*-\s*)?#','',$comcodeless);
 					// Strip site name off it it's there (it'll be put on in the templates, so we don't want it twice)
 					$stub=get_site_name().' - ';
 					if (substr($value,strlen($stub))==$stub) $value=substr($value,strlen($stub));

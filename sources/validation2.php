@@ -244,7 +244,7 @@ function init__validation2()
 	$enforce_id='[a-zA-Z][\w\-\:\.]*';
 	$enforce_name='[\w\-\:\.]+(\[\])?';
 	$enforce_link=((get_forum_type()=='none')?'(mailto:.*)?':'').'('.str_replace('#','\#',preg_quote(mailto_obfuscated())).'.*)?[^\s\#]*(\#[^\s\#]*)?';
-	$enforce_class='[ \w-]*';
+	$enforce_class='[ \w\-]*';
 	$_counter_increment='((\w+( \d+)?)+)';
 	$enforce_counter_increment=$_counter_increment.'( '.$_counter_increment.')*';
 	$enforce_transition_timing_function='(linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier\('.$enforce_fraction.' '.$enforce_fraction.' '.$enforce_fraction.' '.$enforce_fraction.'\))';
@@ -1834,7 +1834,7 @@ function _validate_css_sheet($data)
 					if ($cnt>0)
 					{
 						$matches=array();
-						$num_matches=preg_match_all('#:([\w-]+)#',$class_name,$matches);
+						$num_matches=preg_match_all('#:([\w\-]+)#',$class_name,$matches);
 						for ($j=0;$j<$num_matches;$j++)
 						{
 							$pseudo=$matches[1][$j];

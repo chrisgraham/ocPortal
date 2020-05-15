@@ -212,7 +212,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 		'</a>',
 		'<span>',
 		'<span style="color:\s*\#[A-Fa-f0-9]+;?">',
-		'<span style="font-family:\s*[\w-\s,]+;?">',
+		'<span style="font-family:\s*[\w\-\s,]+;?">',
 		'<span style="font-size:\s*[\d\.]+(em|px|pt)?;?">',
 		'</span>',
 	);
