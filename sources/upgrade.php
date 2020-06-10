@@ -363,7 +363,7 @@ function upgrade_script()
 									{
 										$old_file_data=tar_get_file($old_mod_file,$upgrade_file['path']);
 										$file_data=tar_get_file($upgrade_resource,$upgrade_file['path']);
-										if ($old_file_data['data']==$file_data['data'])
+										if (($old_file_data!==NULL) && ($old_file_data['data']==$file_data['data']))
 										{
 											// No change needed, maybe already packed
 											continue;
