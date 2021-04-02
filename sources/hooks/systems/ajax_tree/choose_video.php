@@ -70,7 +70,7 @@ class Hook_choose_video
 			$cat=$GLOBALS['SITE_DB']->query_value_null_ok('videos','cat',array('id'=>intval($default)));
 			while ((!is_null($cat)) && ($cat!=''))
 			{
-				$out.='<expand>'.$cat.'</expand>';
+				$out.='<expand>'.xmlentities($cat).'</expand>';
 				$cat=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','parent_id',array('name'=>$cat));
 			}
 		}
