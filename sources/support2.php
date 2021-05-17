@@ -50,13 +50,13 @@ function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=fa
 		}
 		foreach ($members as $member_id=>$at_details)
 		{
-			$username=$at_details['mt_cache_username'];
-
 			if (is_guest($member_id))
 			{
 				$num_guests+=$at_details/*is integer for guest*/;
 			} else
 			{
+				$username=$at_details['mt_cache_username'];
+
 				$num_members++;
 				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 				$map=array('PROFILE_URL'=>$profile_url,'USERNAME'=>$username,'MEMBER_ID'=>strval($member_id));
