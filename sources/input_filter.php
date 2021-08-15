@@ -269,8 +269,8 @@ function hard_filter_input_data__html(&$val)
 	do
 	{
 		$before=$val;
-		$val=preg_replace('#([<"\'].*\s)o([nN])(.*=)#s','${1}&#111;${2}${3}',$val);
-		$val=preg_replace('#([<"\'].*\s)O([nN])(.*=)#s','${1}&#79;${2}${3}',$val);
+		$val=preg_replace('#([<"\'].*[\s/])o([nN])(.*=)#s','${1}&#111;${2}${3}',$val);
+		$val=preg_replace('#([<"\'].*[\s/])O([nN])(.*=)#s','${1}&#79;${2}${3}',$val);
 	}
 	while ($before!=$val);
 
