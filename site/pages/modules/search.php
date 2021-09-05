@@ -365,7 +365,8 @@ class Module_search
 				$title=get_screen_title('_SEARCH_TITLE',true,array($info['lang']));
 
 			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('SEARCH_FOR'))));
-			breadcrumb_set_self($info['lang']);
+			if (!is_null($info))
+				breadcrumb_set_self($info['lang']);
 
 			$under=get_param('search_under','!',true);
 			if ((!is_null($info)) && (method_exists($object,'get_tree'))) $object->get_tree($under);
