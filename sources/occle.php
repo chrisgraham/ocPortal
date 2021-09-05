@@ -1011,7 +1011,7 @@ class virtual_bash
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 			$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],NULL,NULL,true,true);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=false;
-			if (count($occle_output)>100)
+			if ((is_array($occle_output)) && (count($occle_output)>100))
 			{
 				$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],100,NULL,true,true);
 				$occle_output[]=array('...'=>'...');
