@@ -720,7 +720,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	// CURL method
 	if ($use_curl)
 	{
-		if (!is_null($files))
+		if (!empty($files))
 		{
 			if (is_null($post_params)) $post_params=array();
 			foreach ($files as $upload_field=>$file_path)
